@@ -7,11 +7,10 @@ import { ClipboardButton } from "@/Components/Clipboard";
 import { Icon, type IconName } from "@/Components/Icon";
 import { Link } from "@/Components/Link";
 import { Popover } from "@/Components/Popover";
-import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
+import { PortfolioBreakdownLine, usePortfolioBreakdown } from "@/Components/PortfolioBreakdown";
 import { TokenActions } from "@/Components/Tokens/TokenActions";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
-import { usePortfolioBreakdownContext } from "@/Contexts/PortfolioBreakdownContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
 import { FormatFiat } from "@/Utils/Currency";
 import { formatAddress } from "@/Utils/format-address";
@@ -32,7 +31,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
     const { setTransactionAsset, setTransactionSliderDirection } = useTransactionSliderContext();
 
-    const { breakdownAssets } = usePortfolioBreakdownContext();
+    const { assets } = usePortfolioBreakdown();
 
     return (
         <Popover className="sm:relative">
@@ -94,7 +93,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                             />
                                         </div>
                                         <div>
-                                            <PortfolioBreakdownLine assets={breakdownAssets} />
+                                            <PortfolioBreakdownLine assets={assets} />
                                             <div className="mt-2 flex items-center justify-between">
                                                 <p className="text-sm font-medium leading-5.5 text-theme-secondary-700">
                                                     {t("common.tokens")}:{" "}

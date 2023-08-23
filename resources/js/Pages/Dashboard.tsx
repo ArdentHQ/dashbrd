@@ -5,12 +5,11 @@ import { useTranslation } from "react-i18next";
 import { type HeaderGroup } from "react-table";
 import { BalanceHeader } from "@/Components/BalanceHeader";
 import { DashboardHeader } from "@/Components/DashboardHeader";
-import { DonutChart, PortfolioBreakdownTable } from "@/Components/PortfolioBreakdown";
+import { DonutChart, PortfolioBreakdownTable, usePortfolioBreakdown } from "@/Components/PortfolioBreakdown";
 import { type TokensListSortBy, useTokensList } from "@/Components/PortfolioBreakdown/Hooks/useTokensList";
 import { Slider, useSliderContext } from "@/Components/Slider";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import { WalletTokensTable } from "@/Components/WalletTokens/WalletTokensTable";
-import { usePortfolioBreakdownContext } from "@/Contexts/PortfolioBreakdownContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
 import { useAuth } from "@/Hooks/useAuth";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
@@ -159,7 +158,7 @@ const Dashboard = ({ auth }: PageProps): JSX.Element => {
         updateSort,
     } = useTokensList();
 
-    const { breakdownAssets, loadingBreakdown } = usePortfolioBreakdownContext();
+    const { assets, isLoading } = usePortfolioBreakdown();
 
     const { setTransactionAsset, setTransactionSliderDirection } = useTransactionSliderContext();
 
@@ -225,10 +224,10 @@ const Dashboard = ({ auth }: PageProps): JSX.Element => {
 
                 <DashboardContent
                     onLoadMore={onLoadMore}
-                    loadingBreakdown={loadingBreakdown}
+                    loadingBreakdown={isLoading}
                     loading={loading}
                     assets={tokens}
-                    breakdownAssets={breakdownAssets}
+                    breakdownAssets={assets}
                     onSort={({ isSortedDesc, id, sortDescFirst, isSorted }) => {
                         if (sortDescFirst === false && !isSorted) {
                             updateSort(id as TokensListSortBy, "desc");
