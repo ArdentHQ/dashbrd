@@ -67,37 +67,24 @@ void createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        if (props.initialPage.props.isLandingPage) {
-            root.render(
+        root.render(
+            <QueryClientProvider client={queryClient}>
                 <EnvironmentContextProvider
                     environment={props.initialPage.props.environment}
                     features={props.initialPage.props.features}
                 >
                     <I18nextProvider i18n={i18n}>
-                        <App {...props} />
+                        <ActiveUserContextProvider initialAuth={props.initialPage.props.auth}>
+                            <MetaMaskContextProvider initialAuth={props.initialPage.props.auth}>
+                                <TransactionSliderProvider>
+                                    <App {...props} />
+                                </TransactionSliderProvider>
+                            </MetaMaskContextProvider>
+                        </ActiveUserContextProvider>
                     </I18nextProvider>
-                </EnvironmentContextProvider>,
-            );
-        } else {
-            root.render(
-                <QueryClientProvider client={queryClient}>
-                    <EnvironmentContextProvider
-                        environment={props.initialPage.props.environment}
-                        features={props.initialPage.props.features}
-                    >
-                        <I18nextProvider i18n={i18n}>
-                            <ActiveUserContextProvider initialAuth={props.initialPage.props.auth}>
-                                <MetaMaskContextProvider initialAuth={props.initialPage.props.auth}>
-                                    <TransactionSliderProvider>
-                                        <App {...props} />
-                                    </TransactionSliderProvider>
-                                </MetaMaskContextProvider>
-                            </ActiveUserContextProvider>
-                        </I18nextProvider>
-                    </EnvironmentContextProvider>
-                </QueryClientProvider>,
-            );
-        }
+                </EnvironmentContextProvider>
+            </QueryClientProvider>,
+        );
     },
     progress: {
         color: "#4B5563",

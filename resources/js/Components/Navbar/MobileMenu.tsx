@@ -79,7 +79,7 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                                             setMenuOpen(false);
                                         }}
                                     />
-                                    <PortfolioBreakdown tokenCount={Math.max(wallet.totalTokens, 1)} />
+                                    <PortfolioBreakdown wallet={wallet} />
                                     <Footer address={wallet.address} />
                                 </div>
                             )}
@@ -263,10 +263,11 @@ const TransactionActions = ({
     );
 };
 
-const PortfolioBreakdown = ({ tokenCount }: { tokenCount: number }): JSX.Element => {
+const PortfolioBreakdown = ({ wallet }: { wallet: App.Data.Wallet.WalletData }): JSX.Element => {
     const { t } = useTranslation();
+    const { assets } = usePortfolioBreakdown(wallet);
 
-    const { assets } = usePortfolioBreakdown();
+    const tokenCount = Math.max(wallet.totalTokens, 1);
 
     return (
         <>

@@ -1,15 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
+import { type QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { GRAPH_BACKGROUND_COLORS } from "@/Components/PortfolioBreakdown/PortfolioBreakdown.contracts";
+import { useWalletPollingInterval } from "@/Hooks/useWalletPollingIntervals";
+import { isTruthy } from "@/Utils/is-truthy";
 
-export const usePortfolioBreakdown = (): {
+export const usePortfolioBreakdown = (
+    wallet?: App.Data.Wallet.WalletData | null,
+): {
     assets: App.Data.TokenPortfolioData[];
     isLoading: boolean;
 } => {
+    const { calculateInterval } = useWalletPollingInterval();
+
+    const queryClient = useQueryClient();
+    const queryKey: QueryKey = ["breakdown"];
+
     const { data, isLoading } = useQuery({
-        queryKey: ["breakdown"],
-        staleTime: 300000, // 5 minutes
-        refetchInterval: 300000, // 5 minutes
+        enabled: isTruthy(wallet),
+        queryKey,
+        refetchInterval: () => calculateInterval(wallet, queryClient.getQueryState(queryKey)?.dataUpdateCount),
+        staleTime: Number.POSITIVE_INFINITY,
         refetchOnWindowFocus: false,
         select: ({ data }) => data,
         queryFn: async () =>

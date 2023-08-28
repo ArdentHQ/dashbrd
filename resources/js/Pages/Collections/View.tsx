@@ -193,10 +193,7 @@ const CollectionsView = ({
 
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
-            <DefaultLayout
-                auth={auth}
-                toastMessage={props.toast}
-            >
+            <DefaultLayout toastMessage={props.toast}>
                 <Head title={title} />
 
                 {isHidden && (

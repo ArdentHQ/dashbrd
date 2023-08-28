@@ -1,4 +1,3 @@
-import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -14,7 +13,6 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 interface Properties {
     title: string;
     stats: App.Data.Gallery.GalleriesStatsData;
-    auth: PageProps["auth"];
 }
 
 interface Galleries {
@@ -23,7 +21,7 @@ interface Galleries {
     mostValuable: App.Data.Gallery.GalleryData[];
 }
 
-const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
+const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     const { props } = usePage();
@@ -44,10 +42,7 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
     }, []);
 
     return (
-        <DefaultLayout
-            auth={auth}
-            toastMessage={props.toast}
-        >
+        <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
             <div>
                 <div className="mx-6 sm:mx-8 2xl:mx-0">

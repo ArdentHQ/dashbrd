@@ -31,7 +31,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
     const { setTransactionAsset, setTransactionSliderDirection } = useTransactionSliderContext();
 
-    const { assets } = usePortfolioBreakdown();
+    const { assets } = usePortfolioBreakdown(wallet);
 
     return (
         <Popover className="sm:relative">
