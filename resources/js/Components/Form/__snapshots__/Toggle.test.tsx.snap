@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Toggle > should render as checked 1`] = `
+<DocumentFragment>
+  <button
+    aria-checked="true"
+    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300 bg-theme-hint-600 hover:bg-theme-hint-700 active:bg-theme-hint-800"
+    data-headlessui-state="checked"
+    data-testid="Toggle"
+    id="headlessui-switch-:r0:"
+    role="switch"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="sr-only"
+    >
+      Disable
+    </span>
+    <span
+      class="inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out bg-white translate-x-[1.375rem]"
+    />
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Toggle > should render as disabled 1`] = `
+<DocumentFragment>
+  <button
+    aria-checked="true"
+    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300 bg-theme-secondary-200"
+    data-headlessui-state="checked"
+    data-testid="Toggle"
+    disabled=""
+    id="headlessui-switch-:r2:"
+    role="switch"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="sr-only"
+    >
+      Disable
+    </span>
+    <span
+      class="inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out bg-theme-secondary-400 translate-x-[1.375rem]"
+    />
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Toggle > should render as unchecked 1`] = `
+<DocumentFragment>
+  <button
+    aria-checked="false"
+    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300 bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400"
+    data-headlessui-state=""
+    data-testid="Toggle"
+    id="headlessui-switch-:r1:"
+    role="switch"
+    tabindex="0"
+    type="button"
+  >
+    <span
+      class="sr-only"
+    >
+      Enable
+    </span>
+    <span
+      class="inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out bg-white translate-x-0.5"
+    />
+  </button>
+</DocumentFragment>
+`;

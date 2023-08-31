@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd" bootstrap="vendor/autoload.php" colors="true" cacheDirectory=".phpunit.cache">
+  <coverage/>
+  <testsuites>
+    <testsuite name="Analysis">
+      <directory suffix="Test.php">./tests/Analysis</directory>
+    </testsuite>
+    <testsuite name="App">
+      <directory suffix="Test.php">./tests/App</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="APP_ENV" value="testing"/>
+    <env name="BCRYPT_ROUNDS" value="4"/>
+    <env name="CACHE_DRIVER" value="array"/>
+    <env name="DB_CONNECTION" value="pgsql"/>
+    <env name="DB_HOST" value="127.0.0.1"/>
+    <env name="DB_PORT" value="5432"/>
+    <env name="DB_DATABASE" value="test_db"/>
+    <env name="DB_USERNAME" value="test_db"/>
+    <env name="MAIL_MAILER" value="array"/>
+    <env name="QUEUE_CONNECTION" value="sync"/>
+    <env name="FILESYSTEM_DISK" value="local"/>
+    <env name="SESSION_DRIVER" value="array"/>
+    <env name="TELESCOPE_ENABLED" value="false"/>
+    <env name="TOKEN_SPAM_FILTER_TYPE=strict" value="default"/>
+    <env name="GALLERIES_ENABLED" value="true"/>
+    <env name="PORTFOLIO_ENABLED" value="true"/>
+    <env name="COLLECTIONS_ENABLED" value="true"/>
+    <env name="PENNANT_STORE" value="array"/>
+  </php>
+  <source>
+    <include>
+      <directory suffix=".php">./app</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">./app/Actions/Fortify</directory>
+      <directory suffix=".php">./app/Actions/Jetstream</directory>
+      <directory suffix=".php">./app/Exceptions</directory>
+      <directory suffix=".php">./app/Http/Middleware</directory>
+      <directory suffix=".php">./app/Providers</directory>
+      <file>./app/Console/Kernel.php</file>
+      <file>./app/Http/Kernel.php</file>
+      <directory suffix=".php">./app/Filament</directory>
+      <file>./app/Console/Commands/MakeAdminCommand.php</file>
+      <directory suffix=".php">./app/Data</directory>
+    </exclude>
+  </source>
+</phpunit>

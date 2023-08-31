@@ -1,0 +1,14 @@
+@import "react-loading-skeleton/dist/skeleton.css";
+
+.react-loading-skeleton {
+    background-color: rgb(var(--theme-color-secondary-200));
+}
+
+.react-loading-skeleton::after {
+    background-image: linear-gradient(
+        90deg,
+        rgb(var(--theme-color-secondary-200)),
+        rgb(var(--theme-color-secondary-100)),
+        rgb(var(--theme-color-secondary-200))
+    );
+}

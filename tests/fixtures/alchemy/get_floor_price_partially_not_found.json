@@ -1,0 +1,11 @@
+{
+  "openSea": {
+    "error": "unable to fetch floor price"
+  },
+  "looksRare": {
+    "floorPrice": 1.2472,
+    "priceCurrency": "ETH",
+    "retrievedAt": "2023-03-30T03:59:09.707Z",
+    "collectionUrl": "https://looksrare.org/collections/0xe785e82358879f061bc3dcac6f0444462d4b5330"
+  }
+}

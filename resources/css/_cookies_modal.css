@@ -1,0 +1,32 @@
+#cm {
+    @apply max-w-xl border p-7 shadow-2xl !important;
+}
+
+body {
+    --cc-bg: #fff;
+    --cc-text: #112954;
+    --cc-btn-primary-bg: theme("colors.theme-hint-700");
+    --cc-btn-primary-text: var(--cc-bg);
+    --cc-font-family: theme("fontFamily.sans");
+    --cc-btn-primary-hover-bg: theme("colors.theme-hint-800");
+    --cc-btn-secondary-bg: theme("colors.theme-secondary-100");
+    --cc-btn-secondary-text: theme("colors.theme-hint-900");
+    --cc-btn-secondary-hover-bg: theme("colors.theme-secondary-200");
+    --cc-toggle-bg-off: theme("colors.theme-secondary-500");
+    --cc-toggle-bg-on: theme("colors.theme-hint-700");
+    --cc-toggle-bg-readonly: theme("colors.theme-secondary-300");
+    --cc-toggle-knob-bg: #fff;
+    --cc-toggle-knob-icon-color: theme("colors.theme-secondary-300");
+    --cc-block-text: var(--cc-text);
+    --cc-cookie-category-block-bg: theme("colors.theme-secondary-50");
+    --cc-cookie-category-block-bg-hover: theme("colors.theme-secondary-100");
+    --cc-section-border: theme("colors.theme-secondary-100");
+    --cc-cookie-table-border: theme("colors.theme-secondary-300");
+    --cc-overlay-bg: theme("colors.theme-secondary-900 / 50%");
+    --cc-webkit-scrollbar-bg: theme("colors.theme-secondary-50");
+    --cc-webkit-scrollbar-bg-hover: theme("colors.theme-hint-700");
+}
+
+body .cc_div .c-bn {
+    @apply rounded-full;
+}

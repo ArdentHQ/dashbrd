@@ -1,0 +1,10 @@
+build/
+coverage/
+dist/
+public/
+*.blade.php
+*.d.ts
+resources/fonts
+resources/css
+resources/icons
+resources/images

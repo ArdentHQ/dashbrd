@@ -1,0 +1,39 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Skeleton > should render 1`] = `
+<DocumentFragment>
+  <span
+    aria-busy="true"
+    aria-live="polite"
+    class="flex w-auto max-w-full items-center leading-none"
+    data-testid="Skeleton"
+  >
+    <span
+      class="react-loading-skeleton z-0 rounded-lg"
+      style="--animation-duration: 1.3s;"
+    >
+      ‌
+    </span>
+    <br />
+  </span>
+</DocumentFragment>
+`;
+
+exports[`Skeleton > should render circle 1`] = `
+<DocumentFragment>
+  <span
+    aria-busy="true"
+    aria-live="polite"
+    class="flex w-auto max-w-full items-center leading-none"
+    data-testid="Skeleton"
+  >
+    <span
+      class="react-loading-skeleton z-0"
+      style="--animation-duration: 1.3s; border-radius: 50%;"
+    >
+      ‌
+    </span>
+    <br />
+  </span>
+</DocumentFragment>
+`;

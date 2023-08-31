@@ -1,0 +1,97 @@
+{
+    "paginated": {
+        "data": [
+            {
+                "guid": 1,
+                "symbol": "BRDY2",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 3.11, "percentChange24h": 51.463 }
+                }
+            },
+            {
+                "guid": 2,
+                "symbol": "MATIC",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 1.052, "percentChange24h": 11.45012289177 }
+                }
+            },
+            {
+                "guid": 3,
+                "symbol": "USDC",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 0.997976, "percentChange24h": 12.14523944371 }
+                }
+            },
+            {
+                "guid": 4,
+                "symbol": "BNB",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 287.18, "percentChange24h": 0.037649102008985 }
+                }
+            },
+            {
+                "guid": 5,
+                "symbol": "LINK",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 6.81, "percentChange24h": 1.6126721894621 }
+                }
+            },
+            {
+                "guid": 6,
+                "symbol": "RNDR",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 1.21, "percentChange24h": 9.8083345433425 }
+                }
+            },
+            {
+                "guid": 7,
+                "symbol": "BAT",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 0.249281, "percentChange24h": 76.543367256606 }
+                }
+            },
+            {
+                "guid": 8,
+                "symbol": "COMP",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 2.03e-6, "percentChange24h": -100.00187827362 }
+                }
+            },
+            {
+                "guid": 9,
+                "symbol": "BAL",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 6.33, "percentChange24h": 1.7370843726695 }
+                }
+            },
+            {
+                "guid": 10,
+                "symbol": "SAND",
+                "chainId": 137,
+                "price": {
+                    "USD": { "price": 0.00085123, "percentChange24h": -100.79384478625 }
+                }
+            }
+        ],
+        "links": [],
+        "meta": {
+            "current_page": 1,
+            "first_page_url": "http://dashbrd.test/api/tokens/price?page=1",
+            "from": 1,
+            "next_page_url": null,
+            "path": "http://dashbrd.test/api/tokens/price",
+            "per_page": 50,
+            "prev_page_url": null,
+            "to": 10
+        }
+    }
+}

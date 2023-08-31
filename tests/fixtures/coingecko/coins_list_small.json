@@ -1,0 +1,226 @@
+[
+    {
+        "id": "01coin",
+        "symbol": "zoc",
+        "name": "01coin",
+        "platforms": {}
+    },
+    {
+        "id": "0chain",
+        "symbol": "zcn",
+        "name": "Zus",
+        "platforms": {
+            "ethereum": "0xb9ef770b6a5e12e45983c5d80545258aa38f3b78",
+            "polygon-pos": "0x8bb30e0e67b11b978a5040144c410e1ccddcba30"
+        }
+    },
+    {
+        "id": "0vix-protocol",
+        "symbol": "vix",
+        "name": "0VIX Protocol",
+        "platforms": {}
+    },
+    {
+        "id": "0x",
+        "symbol": "zrx",
+        "name": "0x",
+        "platforms": {
+            "ethereum": "0xe41d2489571d322189246dafa5ebde1f4699f498",
+            "energi": "0x591c19dc0821704bedaa5bbc6a66fee277d9437e",
+            "harmony-shard-0": "0x8143e2a1085939caa9cef6665c2ff32f7bc08435",
+            "avalanche": "0x596fa47043f99a4e0f122243b841e55375cde0d2"
+        }
+    },
+    {
+        "id": "0x0-ai-ai-smart-contract",
+        "symbol": "0x0",
+        "name": "0x0.ai: AI Smart Contract",
+        "platforms": {
+            "ethereum": "0x5a3e6a77ba2f983ec0d371ea3b475f8bc0811ad5"
+        }
+    },
+    {
+        "id": "0xdao",
+        "symbol": "oxd",
+        "name": "0xDAO",
+        "platforms": {
+            "fantom": "0xc165d941481e68696f43ee6e99bfb2b23e0e3114"
+        }
+    },
+    {
+        "id": "0xdao-v2",
+        "symbol": "oxd v2",
+        "name": "0xDAO V2",
+        "platforms": {
+            "fantom": "0xc5a9848b9d145965d821aaec8fa32aaee026492d"
+        }
+    },
+    {
+        "id": "0xmonero",
+        "symbol": "0xmr",
+        "name": "0xMonero",
+        "platforms": {
+            "ethereum": "0x035df12e0f3ac6671126525f1015e47d79dfeddf",
+            "fantom": "0xab41861399eb56896b24fbaabaa8bce45e4a626b",
+            "aurora": "0x7ea2be2df7ba6e54b1a9c70676f668455e329d29",
+            "polygon-pos": "0x52ede6bba83b7b4ba1d738df0df713d6a2036b71",
+            "binance-smart-chain": "0x22a213852cee93eb6d41601133414d180c5684c2",
+            "xdai": "0x8c88ea1fd60462ef7004b9e288afcb4680a3c50c"
+        }
+    },
+    {
+        "id": "0xpad",
+        "symbol": "0xpad",
+        "name": "0xPAD",
+        "platforms": {
+            "binance-smart-chain": "0x94733910a43d412ddad505a8772839aa77ac1b6d"
+        }
+    },
+    {
+        "id": "0xtrade",
+        "symbol": "0xt",
+        "name": "0xTrade",
+        "platforms": {
+            "binance-smart-chain": "0x735c09d9e6c68faaa8562e7316b34a8d89f4a3b8"
+        }
+    },
+    {
+        "id": "0xwallet-token",
+        "symbol": "0xw",
+        "name": "0xWallet Token",
+        "platforms": {
+            "binance-smart-chain": "0x2a92467e6b9fa6191f3290d21a221d6664865775"
+        }
+    },
+    {
+        "id": "11957-olga",
+        "symbol": "realt-s-11957-olga-st-detroit-mi",
+        "name": "RealT - 11957 Olga St, Detroit, MI 48213",
+        "platforms": {
+            "xdai": "0xdd833d0eef6d5d7cec781b03c19f3b425f3039df",
+            "ethereum": "0xdd833d0eef6d5d7cec781b03c19f3b425f3039df"
+        }
+    },
+    {
+        "id": "12405-santa-rosa",
+        "symbol": "realt-s-12405-santa-rosa-dr-detroit-mi",
+        "name": "RealT - 12405 Santa Rosa Dr, Detroit, MI 48204",
+        "platforms": {
+            "xdai": "0x9d918ee39a356be8ef99734599c7e70160db4db6",
+            "ethereum": "0x9d918ee39a356be8ef99734599c7e70160db4db6"
+        }
+    },
+    {
+        "id": "12ships",
+        "symbol": "tshp",
+        "name": "12Ships",
+        "platforms": {
+            "ethereum": "0x525794473f7ab5715c81d06d10f52d11cc052804"
+        }
+    },
+    {
+        "id": "1337",
+        "symbol": "1337",
+        "name": "Elite",
+        "platforms": {}
+    },
+    {
+        "id": "14066-santa-rosa",
+        "symbol": "realt-s-14066-santa-rosa-dr-detroit-mi",
+        "name": "RealT - 14066 Santa Rosa Dr, Detroit, MI 48238",
+        "platforms": {
+            "xdai": "0xe887dc4fcb5240c0c080aeab8870421d3ebd0b28",
+            "ethereum": "0xe887dc4fcb5240c0c080aeab8870421d3ebd0b28"
+        }
+    },
+    {
+        "id": "1617-s-avers",
+        "symbol": "realt-s-1617-s.avers-ave-chicago-il",
+        "name": "RealT - 1617 S Avers Ave, Chicago, IL 60623",
+        "platforms": {
+            "xdai": "0xf4657ab08681214bcb1893aa8e9c7613459250ec",
+            "ethereum": "0xf4657ab08681214bcb1893aa8e9c7613459250ec"
+        }
+    },
+    {
+        "id": "1815-s-avers",
+        "symbol": "realt-s-1815-s.avers-ave-chicago-il",
+        "name": "RealT - 1815 S Avers Ave, Chicago, IL 60623",
+        "platforms": {
+            "xdai": "0x8fcb39a25e639c8fbd28e8a018227d6570e02352",
+            "ethereum": "0x8fcb39a25e639c8fbd28e8a018227d6570e02352"
+        }
+    },
+    {
+        "id": "1art",
+        "symbol": "1art",
+        "name": "OneArt",
+        "platforms": {
+            "binance-smart-chain": "0xd3c325848d7c6e29b574cb0789998b2ff901f17e",
+            "ethereum": "0xd3c325848d7c6e29b574cb0789998b2ff901f17e",
+            "fantom": "0xd3c325848d7c6e29b574cb0789998b2ff901f17e"
+        }
+    },
+    {
+        "id": "1bch",
+        "symbol": "1bch",
+        "name": "1BCH",
+        "platforms": {
+            "smartbch": "0x77d4b6e44a53bbda9a1d156b32bb53a2d099e53d"
+        }
+    },
+    {
+        "id": "1box",
+        "symbol": "1box",
+        "name": "1BOX",
+        "platforms": {
+            "binance-smart-chain": "0x82160113b730fc0b36c18795cc976fda93ccc1e1"
+        }
+    },
+    {
+        "id": "1doge",
+        "symbol": "1doge",
+        "name": "1Doge",
+        "platforms": {
+            "binance-smart-chain": "0x40619dc9f00ea34e51d96b6ec5d8a6ad75457434"
+        }
+    },
+    {
+        "id": "1eco",
+        "symbol": "1eco",
+        "name": "1eco",
+        "platforms": {
+            "ethereum": "0x1af2eaeaf2b1d9dda800861268e6bbb3995a6c3b"
+        }
+    },
+    {
+        "id": "1eth",
+        "symbol": "1eth",
+        "name": "1ETH",
+        "platforms": {
+            "binance-smart-chain": "0x408e95e474dd37e0ef659e389c84abaea18c3676"
+        }
+    },
+    {
+        "id": "1hive-water",
+        "symbol": "water",
+        "name": "1Hive Water",
+        "platforms": {
+            "xdai": "0x4291f029b9e7acb02d49428458cf6fceac545f81"
+        }
+    },
+    {
+        "id": "1inch",
+        "symbol": "1inch",
+        "name": "1inch",
+        "platforms": {
+            "ethereum": "0x111111111117dc0aa78b770fa6a738034120c302",
+            "near-protocol": "111111111117dc0aa78b770fa6a738034120c302.factory.bridge.near",
+            "energi": "0xdda6205dc3f47e5280eb726613b27374eee9d130",
+            "avalanche": "0xd501281565bf7789224523144fe5d98e8b28f267",
+            "harmony-shard-0": "0x58f1b044d8308812881a1433d9bbeff99975e70c",
+            "polygon-pos": "0x9c2c5fd7b07e95ee044ddeba0e97a665f142394f",
+            "binance-smart-chain": "0x111111111117dc0aa78b770fa6a738034120c302"
+        }
+    }
+]

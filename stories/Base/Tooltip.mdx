@@ -1,0 +1,58 @@
+import { Meta } from "@storybook/blocks";
+import { Tooltip } from "@/Components/Tooltip";
+
+import "../Documentation/styling.css";
+
+<Meta
+    title="Base/Tooltip"
+    component={Tooltip}
+/>
+
+# Tooltip
+
+## Usage
+
+To add tooltip to an HTML element, wrap the element into a `Tooltip` component. For example:
+
+```jsx
+import { Tooltip } from "@/Components/Tooltip";
+
+<Tooltip content="This is a tooltip">
+    <button type="button">Hover me</button>
+</Tooltip>;
+```
+
+Default placement is `top`, but this can be customized:
+
+```jsx
+<Tooltip
+    content="This is a tooltip"
+    placement="bottom"
+>
+    <button type="button">Hover me</button>
+</Tooltip>
+```
+
+Under the hood, Tooltip component uses [Tippy.js](https://atomiks.github.io/tippyjs/), and is a wrapper around Tippy's React component, so it extends all the default props that Tippy provides: https://github.com/atomiks/tippyjs-react
+
+### Using components as children
+
+If you're trying to wrap Tooltip component around another React component, you may see an error. That's because Tooltip needs to use the ref for the component, but React component doesn't expose ref by default. Example:
+
+```jsx
+<Tooltip content="Hello World">
+    <SomeComponent>Hover me</SomeComponent>
+</Tooltip>
+```
+
+To make this work, make sure to forward the ref from the component to parent. Read more about this here: https://beta.reactjs.org/reference/react/forwardRef. You can also wrap the child component into an empty `span` to get around the ref forwarding. For example:
+
+```jsx
+<Tooltip content="Hello World">
+    <span tabIndex={-1}>
+        <SomeComponent>Hover me</SomeComponent>
+    </span>
+</Tooltip>
+```
+
+Read more: https://github.com/atomiks/tippyjs-react

@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Ethereum",
+        "symbol": "ETH",
+        "balance": "7708498255383000",
+        "decimals": "18",
+        "fiat_balance": "13.636487583737635",
+        "percentage": "0.8824967896798629"
+    },
+    {
+        "name": "Polygon",
+        "symbol": "MATIC",
+        "balance": "1725930802239761249",
+        "decimals": "18",
+        "fiat_balance": "1.8156792039562288",
+        "percentage": "0.11750321032013707"
+    },
+    {
+        "name": "Polygon",
+        "symbol": "MATIC",
+        "balance": "0",
+        "decimals": "18",
+        "fiat_balance": "0",
+        "percentage": "0"
+    },
+    {
+        "name": "Ethereum",
+        "symbol": "ETH",
+        "balance": "0",
+        "decimals": "18",
+        "fiat_balance": "0",
+        "percentage": "0"
+    }
+]

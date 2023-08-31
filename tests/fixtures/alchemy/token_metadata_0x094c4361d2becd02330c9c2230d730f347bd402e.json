@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "decimals": 2,
+    "logo": null,
+    "name": "USDCToken",
+    "symbol": "USDC"
+  }
+}

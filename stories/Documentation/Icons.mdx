@@ -1,0 +1,65 @@
+import { Meta } from "@storybook/blocks";
+
+import { SvgCollection } from "@/icons";
+import { Icon } from "@/Components/Icon";
+import { Heading } from "@/Components/Heading";
+
+<Meta title="Documentation/Iconography" />
+
+# Iconography
+
+<div className="flex w-full min-w-0 flex-col">
+    <Heading
+        level={2}
+        weight="bold"
+        className="mb-3"
+    >
+        20x20px Icons
+    </Heading>
+    <div className="grid w-full grid-cols-[repeat(auto-fill,_minmax(7rem,_1fr))] gap-1 text-theme-primary-600">
+        {Object.keys(SvgCollection)
+            .filter((element) => !element.endsWith("Small"))
+            .map((name) => {
+                return (
+                    <div
+                        key={name}
+                        className="flex w-full min-w-[4rem] flex-col items-center p-2"
+                    >
+                        <Icon
+                            name={name}
+                            size="lg"
+                        />
+                        <span className="mt-3 break-all text-sm text-theme-secondary-900">{name}</span>
+                    </div>
+                );
+            })}
+    </div>
+</div>
+
+<div className="mt-10 flex w-full min-w-0 flex-col">
+    <Heading
+        level={2}
+        weight="bold"
+        className="mb-3"
+    >
+        12x12px Icons
+    </Heading>
+    <div className="grid w-full grid-cols-[repeat(auto-fill,_minmax(7rem,_1fr))] gap-1 text-theme-primary-600">
+        {Object.keys(SvgCollection)
+            .filter((element) => element.endsWith("Small"))
+            .map((name) => {
+                return (
+                    <div
+                        key={name}
+                        className="flex w-full min-w-[4rem] flex-col items-center p-2"
+                    >
+                        <Icon
+                            name={name}
+                            size="sm"
+                        />
+                        <span className="mt-3 break-all text-sm text-theme-secondary-900">{name}</span>
+                    </div>
+                );
+            })}
+    </div>
+</div>

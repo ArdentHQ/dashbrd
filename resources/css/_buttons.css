@@ -1,0 +1,117 @@
+@layer components {
+    .button-primary,
+    .button-icon-primary {
+        @apply transition-default inline-flex items-center rounded-3xl bg-theme-hint-600 px-5 py-2 font-medium text-white outline-none outline-3 outline-offset-0 hover:bg-theme-hint-700 focus-visible:bg-theme-hint-600 focus-visible:outline-theme-hint-300 active:bg-theme-hint-800;
+    }
+
+    .button-bordered {
+        @apply transition-default inline-flex h-10 items-center rounded-3xl border border-theme-secondary-300 bg-white px-5 py-2 font-medium outline-none outline-3 outline-offset-0 hover:bg-theme-secondary-300 focus-visible:outline-theme-hint-300 active:border-theme-secondary-400 active:bg-theme-secondary-400;
+    }
+
+    .button-secondary,
+    .button-icon-secondary {
+        @apply transition-default inline-flex items-center rounded-3xl bg-theme-secondary-100 px-5 py-2 font-medium outline-none outline-3 outline-offset-0 hover:bg-theme-secondary-300 focus-visible:bg-theme-secondary-300 focus-visible:outline-theme-hint-300 active:bg-theme-secondary-400;
+    }
+
+    .button-danger,
+    .button-icon-danger {
+        @apply transition-default inline-flex items-center rounded-3xl bg-theme-danger-400 px-5 py-2 font-medium text-white outline-none outline-3 outline-offset-0 hover:bg-theme-danger-600 focus-visible:bg-theme-danger-400 focus-visible:outline-theme-hint-300 active:bg-theme-danger-700;
+    }
+
+    .button-icon {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-theme-secondary-300 bg-white p-0;
+    }
+
+    .button-icon-primary {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-theme-hint-600 bg-theme-hint-600 p-0;
+    }
+
+    .button-icon-secondary {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-full bg-theme-secondary-100 p-0 text-theme-hint-900;
+    }
+
+    .button-icon-danger {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-full p-0;
+    }
+
+    .button-with-icon {
+        @apply whitespace-nowrap;
+    }
+
+    .button-secondary,
+    .button-icon {
+        @apply transition-default inline-flex items-center text-theme-hint-900 outline-none outline-3 outline-offset-0 hover:bg-theme-secondary-300 focus-visible:outline-theme-hint-300 active:border-theme-secondary-400 active:bg-theme-secondary-400;
+    }
+
+    .button-primary[disabled],
+    .button-secondary[disabled],
+    .button-danger[disabled] {
+        @apply cursor-default bg-theme-secondary-200 text-theme-secondary-500;
+    }
+
+    .button-icon[disabled],
+    .button-icon-primary[disabled],
+    .button-icon-secondary[disabled],
+    .button-icon-danger[disabled],
+    .button-with-icon[disabled] {
+        @apply border-theme-secondary-100 bg-theme-secondary-100 text-theme-secondary-500;
+    }
+
+    .button-icon[disabled] {
+        @apply border-0 bg-theme-secondary-100 text-theme-secondary-500;
+    }
+
+    /* Icon Buttons */
+    /* Like */
+    .button-like svg path,
+    .button-save svg path {
+        @apply transition-default;
+    }
+
+    .button-like:not([disabled]) {
+        @apply hover:border-theme-danger-100 hover:bg-theme-danger-100 hover:text-theme-danger-400 active:border-theme-danger-200 active:bg-theme-danger-200;
+    }
+    .button-like:not(.button-like-selected) svg path {
+        @apply fill-transparent stroke-theme-hint-900;
+    }
+    .button-like:not(.button-like-selected):not([disabled]):hover svg path {
+        @apply stroke-theme-danger-400;
+    }
+
+    .button-like-selected {
+        @apply border-theme-danger-100 bg-theme-danger-50 text-theme-danger-400;
+    }
+    .button-like-selected svg path {
+        @apply fill-theme-danger-100 stroke-theme-danger-400;
+    }
+
+    /* Save */
+    .button-save:not([disabled]) {
+        @apply hover:border-theme-hint-100 hover:bg-theme-hint-100 hover:text-theme-hint-600 active:border-theme-secondary-400 active:bg-theme-secondary-400;
+    }
+    .button-save:not(.button-save-selected) svg path {
+        @apply fill-transparent stroke-theme-hint-900;
+    }
+    .button-save:not(.button-save-selected):not([disabled]):hover svg path {
+        @apply stroke-theme-hint-600;
+    }
+    .button-save:not([disabled]):active {
+        @apply border-theme-secondary-400 bg-theme-secondary-400;
+    }
+
+    .button-save-selected {
+        @apply border-theme-hint-100 bg-theme-hint-50 text-theme-hint-600;
+    }
+    .button-save-selected svg path {
+        @apply fill-theme-hint-200 stroke-theme-hint-600;
+    }
+
+    .button-like[disabled] svg path,
+    .button-save[disabled] svg path {
+        @apply fill-transparent stroke-theme-secondary-500;
+    }
+    .button-like:not([disabled]):active svg path,
+    .button-save:not([disabled]):active svg path {
+        @apply fill-transparent;
+    }
+}

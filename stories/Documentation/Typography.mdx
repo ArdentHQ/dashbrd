@@ -1,0 +1,89 @@
+import { Meta, Typeset, Canvas } from "@storybook/blocks";
+
+<Meta title="Documentation/Typography" />
+
+export const typography = {
+    type: {
+        primary: '"Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif',
+    },
+    weight: {
+        regular: "400",
+        medium: "500",
+        semibold: "600",
+        bold: "700",
+    },
+    size: {
+        h1: 32,
+        h2: 24,
+        h3: 20,
+        h4: 18,
+        base: 16,
+        sm: 14,
+        xs: 12,
+    },
+};
+
+export const SampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+# Typography
+
+**Font:** Ubuntu
+
+**Weights:** 700(bold), 600(Semibold), 500(Medium), 400(regular),
+
+<Typeset
+    fontSizes={[
+        Number(typography.size.h1),
+        Number(typography.size.h2),
+        Number(typography.size.h3),
+        Number(typography.size.h4),
+    ]}
+    fontWeight={typography.weight.bold}
+    sampleText={SampleText}
+    fontFamily={typography.type.primary}
+/>
+
+<Typeset
+    fontSizes={[
+        Number(typography.size.h1),
+        Number(typography.size.h2),
+        Number(typography.size.h3),
+        Number(typography.size.h4),
+        Number(typography.size.base),
+        Number(typography.size.sm),
+        Number(typography.size.xs),
+    ]}
+    fontWeight={typography.weight.semibold}
+    sampleText={SampleText}
+    fontFamily={typography.type.primary}
+/>
+
+<Typeset
+    fontSizes={[
+        Number(typography.size.h1),
+        Number(typography.size.h2),
+        Number(typography.size.h3),
+        Number(typography.size.h4),
+        Number(typography.size.base),
+        Number(typography.size.sm),
+        Number(typography.size.xs),
+    ]}
+    fontWeight={typography.weight.medium}
+    sampleText={SampleText}
+    fontFamily={typography.type.primary}
+/>
+
+<Typeset
+    fontSizes={[
+        Number(typography.size.h1),
+        Number(typography.size.h2),
+        Number(typography.size.h3),
+        Number(typography.size.h4),
+        Number(typography.size.base),
+        Number(typography.size.sm),
+        Number(typography.size.xs),
+    ]}
+    fontWeight={typography.weight.regular}
+    sampleText={SampleText}
+    fontFamily={typography.type.primary}
+/>

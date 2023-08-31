@@ -1,0 +1,4 @@
+#!/bin/bash
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx eslint --no-error-on-unmatched-pattern $(git diff --name-only --diff-filter=ACMRTUXB origin/$(git rev-parse --abbrev-ref HEAD) $(git rev-parse --abbrev-ref HEAD) | grep -E "resources/**/*.(tsx|ts|jsx|js)")

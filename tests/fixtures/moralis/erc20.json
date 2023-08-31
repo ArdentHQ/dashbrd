@@ -1,0 +1,29 @@
+[
+    {
+        "token_address": "0xcab66b484123ecc93673b30d9e543b2204bf0369",
+        "name": "Balancer",
+        "symbol": "BalancerV2.io",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 2,
+        "balance": "44000"
+    },
+    {
+        "token_address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+        "name": "Dai Stablecoin",
+        "symbol": "DAI",
+        "logo": "https://example.com/dai-logo.png",
+        "thumbnail": "https://example.com/dai-thumbnail.png",
+        "decimals": 18,
+        "balance": "20000"
+    },
+    {
+        "token_address": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+        "name": "Aave",
+        "symbol": "AAVE",
+        "logo": "https://example.com/aave-logo.png",
+        "thumbnail": "https://example.com/aave-thumbnail.png",
+        "decimals": 18,
+        "balance": "500"
+    }
+]

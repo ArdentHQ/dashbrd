@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "decimals": 4,
+    "logo": "https://static.alchemyapi.io/images/assets/5135.png",
+    "name": "AfroDex",
+    "symbol": "AfroX"
+  }
+}

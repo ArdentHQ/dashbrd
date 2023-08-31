@@ -1,0 +1,253 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+  pull_request:
+    types: [ready_for_review, synchronize, opened]
+    paths-ignore:
+      - "**.ts"
+      - "**.tsx"
+      - "**.mdx"
+      - "**.svg"
+      - "**.css"
+
+jobs:
+  rector:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-rector
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite
+          coverage: none
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Prepare Application
+        run: cp .env.example .env && php artisan key:generate
+
+      - name: Run Rector
+        run: ./vendor/bin/rector process
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "refactor: code quality assurance"
+          commit_author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          commit_user_name: ${{ github.actor }}
+          commit_user_email: ${{ github.actor }}@users.noreply.github.co
+          branch: ${{ github.head_ref }}
+
+  format:
+    needs: [rector]
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-format
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite
+          coverage: none
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Prepare Application
+        run: cp .env.example .env && php artisan key:generate
+
+      - name: Run Laravel Pint
+        run: ./vendor/bin/pint
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "style: resolve style guide violations"
+          commit_author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          commit_user_name: ${{ github.actor }}
+          commit_user_email: ${{ github.actor }}@users.noreply.github.co
+          branch: ${{ github.head_ref }}
+
+  analyse:
+    needs: [format]
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-analyse
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite
+          coverage: none
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Prepare the application
+        run: cp .env.example .env && php artisan key:generate
+
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
+  unit:
+    needs: [analyse]
+
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-unit
+      cancel-in-progress: true
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_db
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+      redis:
+        image: redis
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - "127.0.0.1:6379:6379"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite, pcov
+          coverage: pcov
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Restore Build Output
+        id: restore_build_output
+        uses: actions/cache@v3
+        with:
+          path: public/build
+          # Notice that the cache key include all the files that may affect the
+          # build results, currently those files include:
+          # - `resources` folder that contains frontend stuff
+          # - `lang` folder that adds frontend lang files
+          # - `pnpm-lock.yml` file
+          #
+          # In case another file need to be added, dont forget to update the
+          # reference to `hashFiles` in "Cache Build Output"
+          # Also update the related code on `ui.yml`
+          key: ${{ runner.os }}-build-output-${{ hashFiles('**/pnpm-lock.yml', 'resources/**', 'lang/**') }}
+          restore-keys: |
+            ${{ runner.os }}-build-output-
+
+      # The following five steps only run if the build cache was not restored
+      # (see `steps.restore_build_output.outputs.cache-hit != 'true'` condition)
+      - name: Cache pnpm dependencies
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Prepare Application
+        run: cp .env.example .env && php artisan key:generate
+
+      - name: Clear Config
+        run: php artisan config:clear && php artisan route:clear
+
+      - name: Install pnpm dependencies
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        run: pnpm i --frozen-lockfile
+
+      - name: Build pnpm dependencies
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        run: pnpm build
+
+      - name: Cache Build Output
+        uses: actions/cache@v3
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        with:
+          path: public/build
+          key: ${{ runner.os }}-build-output-${{ hashFiles('**/pnpm-lock.yml', 'resources/**', 'lang/**') }}
+
+      - name: Run Tests
+        run: ./vendor/bin/pest --parallel --coverage --min=100 --coverage-html=.coverage --coverage-clover=coverage.xml
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: test_db
+          DB_USERNAME: test_db
+          DB_PASSWORD: password
+          PDO_ATTR_PERSISTENT: false

@@ -1,0 +1,43 @@
+{
+  "type": 0,
+  "code": "MJyWKkCJ5k",
+  "inviter": {
+      "id": "352170447682666496",
+      "username": "rayalva",
+      "avatar": "7913ab730fe8b68077db9545c9ef86f7",
+      "discriminator": "0",
+      "public_flags": 0,
+      "flags": 0,
+      "banner": null,
+      "accent_color": null,
+      "global_name": "Ray Alva",
+      "avatar_decoration": null,
+      "banner_color": null
+  },
+  "expires_at": null,
+  "guild": {
+      "id": "1138864041738125442",
+      "name": "Dashbrd",
+      "splash": null,
+      "banner": null,
+      "description": null,
+      "icon": "9aea6949c473f57bbad2403749f93d07",
+      "features": [
+          "COMMUNITY",
+          "NEWS"
+      ],
+      "verification_level": 1,
+      "vanity_url_code": null,
+      "nsfw_level": 0,
+      "nsfw": false,
+      "premium_subscription_count": 1
+  },
+  "guild_id": "1138864041738125442",
+  "channel": {
+      "id": "1138864042358874234",
+      "type": 0,
+      "name": "general"
+  },
+  "approximate_member_count": 2,
+  "approximate_presence_count": 0
+}

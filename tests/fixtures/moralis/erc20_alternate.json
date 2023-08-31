@@ -1,0 +1,146 @@
+[
+    {
+        "token_address": "0xe1a5fdaa7986923680cf497c7c1d72525aefc663",
+        "name": "Binance USD",
+        "symbol": "BUSD",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "10000000000000"
+    },
+    {
+        "token_address": "0xb042a3d7ae4c9a8ff250f8152a08375f09cd981c",
+        "name": "Como",
+        "symbol": "COMO",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "6000000000000000000"
+    },
+    {
+        "token_address": "0x9b7827169ece3e84b7e69f3d9646db566ffed196",
+        "name": "Wrapped Ethereum Gen 2",
+        "symbol": "WETH2.4",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "450000000000000000"
+    },
+    {
+        "token_address": "0x99f5bdce733652c73c7f43f2a112200513e1b025",
+        "name": "NaughtCoin",
+        "symbol": "0x0",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "1000000000000000000000000"
+    },
+    {
+        "token_address": "0x0fa8781a83e46826621b3bc094ea2a0212e71b23",
+        "name": "USD Coin (PoS)",
+        "symbol": "USDC",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 6,
+        "balance": "24858346"
+    },
+    {
+        "token_address": "0xe11a86849d99f524cac3e7a0ec1241828e332c62",
+        "name": "USDC",
+        "symbol": "USDC",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "20000010000000"
+    },
+    {
+        "token_address": "0xef9f20f2188bf884a0eeb095d9c8ceda7d0eda07",
+        "name": "ZED RUN",
+        "symbol": "ZED",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "10000000000000000"
+    },
+    {
+        "token_address": "0x207a421a2a5d631b4f3038b0fa6c95de82227e8b",
+        "name": "MundoCryptoToken",
+        "symbol": "MCT",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "280000000000000000000000000"
+    },
+    {
+        "token_address": "0xd2e8b1d415b4f998ca9d445320c1af821832a3bc",
+        "name": "MundoCryptoToken",
+        "symbol": "MCT",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "252000000000000000000000000"
+    },
+    {
+        "token_address": "0xa3f2ba60353b9af0a3524ee4a7c206d4335a9784",
+        "name": "TestSisyphus",
+        "symbol": "TSS",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "300000000000080000"
+    },
+    {
+        "token_address": "0xac41570f4967d1956aef982ca96deeb48e0145e9",
+        "name": "VToken",
+        "symbol": "VTLK",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "100000000000000000000"
+    },
+    {
+        "token_address": "0x326c977e6efc84e512bb9c30f76e30c160ed06fb",
+        "name": "ChainLink Token",
+        "symbol": "LINK",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "22345691254"
+    },
+    {
+        "token_address": "0x5811d060252d85f386b22b94845ace8851a47668",
+        "name": "NaughtCoin",
+        "symbol": "0x0",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "1000000000000000000000000"
+    },
+    {
+        "token_address": "0x0e9ecda645a2e2c5a957b780017137ecb25f5821",
+        "name": " %heyvitalikplscontactme@protonmail.com",
+        "symbol": "SendEmailMe",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "10000000000000000000000000"
+    },
+    {
+        "token_address": "0xe1dc0361b1c675c6ebfec543763ba2776e1c3803",
+        "name": "Wrapped Ethereum Gen 2",
+        "symbol": "WETH2",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "15000000000000000000"
+    },
+    {
+        "token_address": "0xd55e57e0ed1df5beecb90557aba0acc411e90be2",
+        "name": "VToken",
+        "symbol": "VTLK",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 18,
+        "balance": "100000000000000000000"
+    }
+]

@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "decimals": 18,
+    "logo": null,
+    "name": "Ethereum2Proof-of-stake",
+    "symbol": "ETH2POS"
+  }
+}

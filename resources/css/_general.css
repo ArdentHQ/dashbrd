@@ -1,0 +1,70 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    @apply text-theme-secondary-900;
+}
+
+@layer components {
+    .form-checkbox:checked:disabled {
+        background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 16 16" fill="%23B2B5CC" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"/%3E%3C/svg%3E');
+    }
+
+    .form-radio:checked:disabled {
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='%23B2B5CC' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+    }
+}
+
+@layer utilities {
+    .hidden-arrows::-webkit-outer-spin-button,
+    .hidden-arrows::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .hidden-arrows {
+        -moz-appearance: textfield;
+    }
+}
+
+/* Custom scrollbar */
+@layer utilities {
+    .custom-scroll::-webkit-scrollbar {
+        @apply rounded-lg;
+        width: 0px;
+        height: 4px;
+    }
+
+    .custom-scroll-active::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track-piece:start {
+        background: transparent;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+        @apply rounded-lg bg-theme-hint-200;
+    }
+
+    .custom-scroll {
+        scrollbar-color: rgb(var(--theme-color-hint-200)) transparent;
+    }
+}
+
+/* Hide Scrollbar */
+@layer utilities {
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Legacy break-word feature */
+.break-word-legacy {
+    word-break: break-word;
+}

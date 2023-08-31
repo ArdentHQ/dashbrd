@@ -1,0 +1,11 @@
+[
+    {
+        "token_address": "0x1231231231231231231231231231231231231231",
+        "name": "Spam",
+        "symbol": "SPAM",
+        "logo": null,
+        "thumbnail": null,
+        "decimals": 2,
+        "balance": null
+    }
+]

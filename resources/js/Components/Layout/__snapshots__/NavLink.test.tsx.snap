@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NavLink > should render as active 1`] = `
+<DocumentFragment>
+  <a
+    class="inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none border-indigo-400 focus:border-indigo-700 text-theme-secondary-900"
+    data-testid="NavLink"
+    href="/"
+  >
+    <span
+      data-testid="test"
+    />
+  </a>
+</DocumentFragment>
+`;

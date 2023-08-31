@@ -1,0 +1,107 @@
+import { Meta } from "@storybook/blocks";
+import "./styling.css";
+
+<Meta title="Documentation/Styling" />
+
+# Code Styling Guidelines
+
+This document serves to highlight certain coding aspects that you may run into. These range from UI-focused items to code styling. If you notice something is missing in this document that can be helpful to others to know, make sure to add it!
+
+## Checking Nullable States
+
+By defining properties and parameters with their proper types, we try to avoid scenarios where we don't know the exact values that can be passed along. However, we may still run into scenarios where an argument is optional or where we can pass a variety of `null` and `undefined`. When checking for these scenarios, keep the following in mind:
+
+-   If you're certain that a value can only be `null` or `undefined` specifically, you should check for that type with `===`. For example: `if (variable === undefined)`
+-   If you're uncertain or if a value can be both `null` and `undefined`, you should check for null with `==` to catch both. This avoids having the more explicit check for both ( `if (variable !== null && variable !== undefined)` ). We're all adults and we should know the difference between `==` and `===`, so in this specific scenario it's allowed to add a `variable == null` check instead as that will catch both `null` and `undefined` in a single check.
+
+## Focus State
+
+When working with focus states, mind the following:
+
+-   You should use `focus-visible` when working with styling for components that should focus the action of tabbing to a component (accessibilty). Using this approach will avoid issues with buttons and inputs that get a `focus` state when they are clicked or typed into.
+-   You should use `focus` when you want to target the focus state of a component, e.g. when a button is clicked or when a user is typing in an input field.
+
+## Component Props
+
+When defining props for a component, consider extending the native props from the main HTML element that wraps your component. For example, you can extend `React.ButtonHTMLAttributes<HTMLButtonElement>` for a button, `React.HTMLAttributes<HTMLDivElement>` for a div, and so on. Then, include the "custom" props. You can add the props using the spread operator, like `<button {...props} />`. This allows you to use any native props that the HTML element accepts, while still allowing you to define the "custom" props.
+
+Here's an example implementation:
+
+```tsx
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    customProp?: boolean;
+}
+
+function SomeButton({ customProp = false, ...props }: Props): JSX.Element {
+    if (customProp) {
+        // do something
+    }
+
+    return <button {...props} />;
+}
+```
+
+With this implementation, you can pass your custom prop along with any other prop that the HTML element accepts.
+
+For example:
+
+```tsx
+<SomeButton id="my-id" onClick={clickHandler} customProp>Press me</button>
+```
+
+## SVGs
+
+In general we want to avoid adding SVG elements in the code directly, e.g. including the actual `<svg .../>` tags. One exception to this is made for elements like radio buttons or checkboxes, where you will have to reference an image directly to handle certain states. For everything else, use the `Icon` class instead.
+
+### Adding SVGs
+
+When adding new SVGs or updating existing ones, there are a few things to note to avoid common issues that we highlight here. Note that these rules do not apply to larger "images" that are also in SVG format (e.g. landing page images, backgrounds, etc). Instead these are aimed at `icons` that are used throughout the UI in various places.
+
+-   Make sure the SVGs adhere to a default size, this is either a 20x20px icon with a `stroke-width` of 2, or a 12x12 icon with a `stroke-width` below 2.
+-   Always remove any hardcoded `height` and `width` attributes from the SVG element and replace this by a `viewBox` attribute instead. This will ensure we don't run into issues when resizing the SVGs
+-   Always remove any hardcoded colors and replace them with `currentColor` instead to allow customization of colors through code. If your SVG requires more than one color, you can rely on two options:
+    -   Adding an `opacity` attribute to the part that needs a slight change in color, see for example the `icons/opacity` folder for an overview
+    -   Adding variables to the SVGs for colors, e.g. `var(--stroke-color, #000)`. This will allow you to later customize these colors through CSS by targeting the required SVG through a specific class. This will allow you to have finer controls over various parts of the SVG itself. Make sure to default to a sensible color here to avoid the SVG from showing up as a blank image in GitHub (it needs the fallbacks there).
+
+### Sizes
+
+We have a predefined list of sizes that icons will be mostly used in. This is currently set to 12, 16 and 20px. Other sizes are possible through the `Icon` component as well (32 and 40px), but not used very often in the current designs. If you need a size that differs from these values, make sure to double check that we really need it or if it could make use of one of the predefined sizes instead. If a custom size is really needed, you can override it but we should try to avoid this for consistency reasons (don't make it a habit to override).
+
+When you notice a custom size is needed more often, consider adding it to the `Icon` component as one of the default sizes instead.
+
+## Font Weights
+
+The main font weights that are used in the design are:
+
+-   Medium (500), this is mainly for text in the UI and the default font weight for most elements
+-   Semibold (600), this is used to highlight texts and for certain states (e.g. hoverable elements)
+-   Bold (700), used for titles and headings
+
+## Transitions
+
+When working with elements that change in their UI based on an action (think hover states of links or other hoverable elements, opening a dropdown, changing an icon when clicking a button, etc), you should always consider adding a basic transition to make it appear more smooth. For this we have a default class `transition-default` that will add a very short transition effect to the element. Having this applied to elements that change their shape/form/color will keep the application have a consistent feel when using it.
+
+If the default transition doesn't cut it (e.g. it's too fast for a dropdown menu or a menu has to "slide in" from the side), you're free to use a better suited transition effect. The `transition-default` class is only there to have a baseline transition that can be used everywhere a transition is needed.
+
+## HTML Elements
+
+This should be straightforward, but make sure to use the right HTML element where possible to benefit from browser defaults for screen readers and accessibility in general. This means that you should pay special attention to using a `button` or `a` tag for clickable elements, wrapping navigation items in `nav` and using header or `p` tags when working with texts (don't put them in `div` tags directly).
+
+More will be added to this section when things come up.
+
+## TODOs
+
+You are allowed to add TODOs to the code for a variety of reasons, for example:
+
+-   you found an issue in another part of the codebase that you don't want to forget, but it's not directly related to what you're working on
+-   you are aware that your current solution needs to be relooked at at another point in time
+-   a piece of code is using a deprecated/soon to be deprecated/temporary solution until a new version of a dependency comes around and should be updated as soon as that happens
+-   you noticed that the feature you are working on is growing and want to split things up into separate tasks
+-   something else
+
+Whatever the reason, when you add a TODO somewhere make sure to adhere to the following:
+
+-   add a corresponding task for it on ClickUp. The reason for this is that it can 1) be tracked for things like QA and to ensure it's on the radar and 2) it allows you to add additional information without littering the codebase
+-   use a proper TODO format by following one of the available [Conditions](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/expiring-todo-comments.md#conditions). You always have to set one that has a sensible expiry (either a date, or a semver version of the package)
+
+TODOs are not bad per se, and can actually be helpful to keep things going, but we should make sure that they get resolved at some point as well.

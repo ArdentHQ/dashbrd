@@ -1,0 +1,89 @@
+import { Meta, Typeset, Canvas } from "@storybook/blocks";
+
+<Meta title="Documentation/I18n" />
+
+# Internationalisation
+
+All translation strings should be defined inside `php` files located in the `lang/{language}` directory, e.g. the english words and phrases commonly used throughout the app can be found at `lang/en/common.php`. A custom vite plugin is responsible for parsing the `php` files and generating `json` files which can be loaded and used by the frontend.
+
+The downside of this approach is that in it's current form pluralization cannot be used. Plural forms need to be explicitly defined as standalone translation strings.
+
+## Formatting
+
+The keys used for the translations should all adhere to snake casing.
+
+```php
+// ✓ do
+
+'welcome_friend' => 'Welcome Friend',
+
+// ✗ don't
+
+'welcomeFriend'  => 'Welcome Friend',
+```
+
+Interpolation can be achieved by using placeholders in the translation strings, which have to be prepended by a colon (`:`).
+
+```php
+'hello' => 'Hello :name',
+```
+
+## Usage
+
+### Limitations
+
+Currently pluralization does not work out of the box. This means that writing `:count comment|:count comments` will not produce a translation on the TypeScript end that can be used to switch between one and multiple instances. A card exists to bring pluralization to the TypeScript side through a helper method.
+
+### PHP
+
+Translations can be retrieved either through the `trans(key)` or `__(key)` helper methods, where the key corresponds to the translation string using dot syntax.
+
+#### Without interpolation
+
+```php
+trans('messages.welcome_friend');
+```
+
+#### With interpolation
+
+```php
+trans('messages.hello', ['name' => 'friend']);
+```
+
+### Typescript
+
+The frontend uses the `react-i18next` package and the `useTranslation()` hook it provides.
+
+```ts
+import { useTranslation } from "react-i18next";
+
+const Component = () => {
+  const { t } = useTranslation();
+  ...
+};
+```
+
+#### Without interpolation
+
+```ts
+t("messages.welcome_friend");
+```
+
+#### With Interpolation
+
+```ts
+t("messages.hello", { name: "friend" });
+```
+
+#### Using as Parameter
+
+When passing a translation as a parameter to a component, make sure you add `.toString()` at the end to pass a `string` along. For example:
+
+```jsx
+<Toast
+    type="info"
+    message={t("auth.wallet.connect_subtitle").toString()}
+    isExpanded
+    iconDimensions={{ width: 18, height: 18 }}
+/>
+```

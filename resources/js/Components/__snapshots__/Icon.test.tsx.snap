@@ -1,0 +1,67 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Icon > should render 1`] = `
+<DocumentFragment>
+  <svg
+    data-testid="icon-ArrowUp"
+    fill="none"
+    height="16"
+    id="arrow-up"
+    viewBox="0 0 8 12"
+    width="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.028 11V1.6m3.107 3.108L4.028 1.6.92 4.708"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Icon > should render with dimensions 1`] = `
+<DocumentFragment>
+  <svg
+    data-testid="icon-ArrowUp"
+    fill="none"
+    height="10"
+    id="arrow-up"
+    viewBox="0 0 8 12"
+    width="10"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.028 11V1.6m3.107 3.108L4.028 1.6.92 4.708"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Icon > should render with dimensions and default size 1`] = `
+<DocumentFragment>
+  <svg
+    data-testid="icon-ArrowUp"
+    fill="none"
+    height="10"
+    id="arrow-up"
+    viewBox="0 0 8 12"
+    width="10"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4.028 11V1.6m3.107 3.108L4.028 1.6.92 4.708"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+    />
+  </svg>
+</DocumentFragment>
+`;

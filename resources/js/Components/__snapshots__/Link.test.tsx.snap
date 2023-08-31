@@ -1,0 +1,105 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Link > should render 1`] = `
+<DocumentFragment>
+  <a
+    href="/test-link"
+  >
+    <span
+      data-testid="test"
+    />
+  </a>
+</DocumentFragment>
+`;
+
+exports[`Link > should render as external 1`] = `
+<DocumentFragment>
+  <a
+    data-testid="Link__anchor"
+    href="/test-link"
+    rel="noreferrer"
+    target="_blank"
+  >
+    <span
+      data-testid="test"
+    />
+    <svg
+      class="text-base"
+      data-testid="icon-ArrowExternalSmall"
+      fill="none"
+      height="12"
+      viewBox="0 0 12 12"
+      width="12"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.4 3.9V.6H8.1m3.3 0L4.2 7.8m1.7-5.4H1.4c-.4 0-.8.4-.8.7v7.5c0 .4.4.8.7.8h7.5c.4 0 .7-.4.7-.8V6.1"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.2"
+      />
+    </svg>
+  </a>
+</DocumentFragment>
+`;
+
+exports[`Link > should render with link variant classname 1`] = `
+<DocumentFragment>
+  <a
+    class="transition-default rounded-full font-medium leading-5.5 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300 text-sm text-theme-secondary-700"
+    data-testid="Link__anchor"
+    href="/test-link"
+    rel="noreferrer"
+    target="_blank"
+  >
+    <span
+      data-testid="test"
+    />
+    <svg
+      class="ml-1 text-theme-secondary-500"
+      data-testid="icon-ArrowExternalSmall"
+      fill="none"
+      height="12"
+      viewBox="0 0 12 12"
+      width="12"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.4 3.9V.6H8.1m3.3 0L4.2 7.8m1.7-5.4H1.4c-.4 0-.8.4-.8.7v7.5c0 .4.4.8.7.8h7.5c.4 0 .7-.4.7-.8V6.1"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.2"
+      />
+    </svg>
+  </a>
+</DocumentFragment>
+`;
+
+exports[`LinkButton > should render 1`] = `
+<DocumentFragment>
+  <button
+    data-testid="Link__button"
+    type="button"
+  >
+    <span
+      data-testid="test"
+    />
+  </button>
+</DocumentFragment>
+`;
+
+exports[`LinkButton > should render with link variant classname 1`] = `
+<DocumentFragment>
+  <button
+    class="transition-default rounded-full font-medium leading-5.5 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300 text-sm text-theme-secondary-700"
+    data-testid="Link__button"
+    type="button"
+  >
+    <span
+      data-testid="test"
+    />
+  </button>
+</DocumentFragment>
+`;

@@ -1,0 +1,144 @@
+import { Meta } from "@storybook/blocks";
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+
+import "../Documentation/styling.css";
+
+<Meta
+    title="Base/ConfirmationDialog"
+    component={ConfirmationDialog}
+/>
+
+# Confirmation Dialog
+
+Confirmation dialog is a type of modal that has close and submit buttons in the footer. The component will wrap the entire body of the dialog (including footer) into a `form` element to keep things accessible and semantic. Confirmation dialog can also contain form controls, such as radios and inputs, as everything is wrapped into a `form` element.
+
+## Usage
+
+```jsx
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+
+<ConfirmationDialog
+    confirmLabel="Submit"
+    title="Dialog Title"
+    isOpen={true}
+    onClose={() => console.log("Closed")}
+    onConfirm={() => console.log("Confirmed")}
+>
+    Dialog body
+</ConfirmationDialog>;
+```
+
+You can customize the title and button labels. When "submit" button is pressed, the `onConfirm` callback is called.
+
+## Overriding initial focus
+
+By default, the component will place focus on the submit button. That means that you can press Enter when modal is opened to confirm the action. You can override the initial focus by adding a `focus` prop with a ref to a focusable object. For example:
+
+```jsx
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+
+const ref = useRef()
+
+<ConfirmationDialog focus={ref}>
+    <input type="text" ref={ref} />
+</ConfirmationDialog>
+```
+
+## Disabling the submit button
+
+Typical flow of the form is that upon confirmation, you'll be performing an AJAX call to API or do some processing. To disable the submit button when the form is processing, override the `isDisabled` prop of the component. Typical example (simplified):
+
+```jsx
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+
+const [processing, setProcessing] = useState(false)
+
+<ConfirmationDialog
+    onConfirm={() => setProcessing(true)}
+    isDisabled={processing}
+>
+    Are you sure you want to do something?
+</ConfirmationDialog>
+```
+
+## Static dialog
+
+Sometimes, you may wish to have a "static" dialog, one that you can't close unless "Confirmation" button is pressed. An example is a typical dialog where user needs to acknowledge some action, like to acknowledge they saved their 2FA recovery codes. To accomplish that, add the `isStatic` property to the component.
+
+```jsx
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+
+const [onboarded, setOnboarded] = useState(false)
+
+<ConfirmationDialog
+    title="Download something"
+    isOpen={! onboarded}
+    onConfirm={() => setOnboarded(true)}
+    confirmLabel="Got it, thanks"
+    isStatic
+>
+    Please click the file to download something.
+</ConfirmationDialog>
+```
+
+## Inertia.js example
+
+An Inertia.js example containing the "change username" form in a dialog, including managing open/closed states, "disabled" state, etc.
+
+```jsx
+import { TextInput } from "@/Components/TextInput";
+import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+import { useState } from "react";
+import { useForm } from "@inertiajs/react";
+
+export default function ChangeName() {
+    const [open, setOpen] = useState(false);
+
+    const { data, setData, post, processing, reset } = useForm({
+        name: "John Doe",
+    });
+
+    const closeModal = () => {
+        setOpen(false);
+
+        // Reset the form after transition animation, so it's not visible to the user...
+        setTimeout(() => {
+            reset("name");
+        }, 200);
+    };
+
+    const submit = () => {
+        post("/users", {
+            onSuccess: () => {
+                closeModal();
+            },
+        });
+    };
+
+    return (
+        <>
+            <button
+                type="button"
+                onClick={() => setOpen(true)}
+            >
+                Change your name
+            </button>
+
+            <ConfirmationDialog
+                title="Change your name"
+                isOpen={open}
+                onClose={closeModal}
+                onConfirm={submit}
+                isDisabled={processing}
+                confirmLabel="Save changes"
+            >
+                <TextInput
+                    value={data.name}
+                    onChange={(e) => setData("name", e.target.value)}
+                />
+                // Show validation errors and stuff
+            </ConfirmationDialog>
+        </>
+    );
+}
+```

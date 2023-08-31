@@ -1,0 +1,96 @@
+.custom-table-cell {
+    height: inherit;
+}
+
+@supports (height: -moz-available) {
+    .custom-table-cell {
+        height: 100%;
+    }
+}
+
+.doc-table {
+    @apply relative z-0 text-left;
+}
+
+.doc-table thead {
+    @apply text-sm font-semibold leading-5 text-theme-secondary-700;
+}
+.doc-table thead tr {
+    @apply border-b border-theme-secondary-300;
+}
+.doc-table th {
+    @apply relative p-3;
+}
+.doc-table th:not(:last-child)::after {
+    @apply absolute right-0 border-l border-theme-secondary-300 bg-theme-secondary-300;
+    content: "";
+    height: 50%;
+}
+.doc-table tbody tr {
+    @apply border-b border-dashed border-theme-secondary-300;
+}
+
+.doc-table td {
+    @apply px-4 py-3 leading-5;
+}
+
+.table-list {
+    /* 12 px + 3px for the outline */
+    @apply -mx-[3px] px-[15px];
+}
+
+.table-list table {
+    @apply border-separate border-spacing-y-3;
+}
+
+.table-list thead tr th:first-child {
+    @apply pl-1 md:ml-px md:pl-2.5;
+}
+
+.table-list thead tr th:last-child {
+    @apply pr-1 md:mr-px md:pr-2.5;
+}
+
+.table-list thead tr th:first-child::before {
+    content: "";
+    @apply pointer-events-none absolute left-0 top-0 z-10 -ml-3 block h-full w-3 rounded-l-xl bg-theme-secondary-50;
+}
+
+.table-list thead tr th:last-child::after {
+    content: "";
+    @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl bg-theme-secondary-50;
+}
+
+.table-list tbody tr {
+    @apply relative z-0;
+}
+
+.table-list tbody tr::after {
+    content: "";
+    @apply transition-default pointer-events-none absolute inset-0 -mx-3 rounded-xl outline outline-3 outline-transparent;
+}
+
+.table-list tbody tr:hover::after {
+    content: "";
+    @apply outline-theme-hint-100;
+}
+
+.table-list tbody tr td:first-child::before {
+    content: "";
+    @apply pointer-events-none absolute left-0 top-0 z-10 -ml-3 block h-full w-3 rounded-l-xl border-y border-l border-theme-secondary-300;
+}
+
+.table-list tbody tr td:last-child::before {
+    content: "";
+    @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl border-y border-r border-theme-secondary-300;
+}
+
+.table-list tbody > tr,
+.table-list tbody > tr > td {
+    @apply relative z-0;
+}
+
+.table-list tbody tr td.custom-table-cell:after {
+    content: "";
+    @apply pointer-events-none absolute top-0 z-10 block h-full w-full border-y border-theme-secondary-300;
+}

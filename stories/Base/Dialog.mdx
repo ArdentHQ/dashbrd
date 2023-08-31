@@ -1,0 +1,59 @@
+import { Meta } from "@storybook/blocks";
+import { Dialog } from "@/Components/Dialog";
+
+import "../Documentation/styling.css";
+
+<Meta
+    title="Base/Dialog"
+    component={Dialog}
+/>
+
+# Dialog
+
+Dialog is a typical "modal" component. The component scaffolds transitions and base layout, but it's up to you to handle open/closed states and the content.
+
+## Usage
+
+```jsx
+import { Dialog } from "@/Components/Dialog";
+
+const [open, setOpen] = useState(true)
+
+<Dialog
+    title="Dialog Title"
+    isOpen={open}
+    onClose={() => setOpen(false)}
+>
+    Dialog body
+</Dialog>
+```
+
+## Overriding initial focus
+
+By default, the component will place focus on the X (close) button. That means that you can press Enter when modal is opened to close it immediately. You can override the initial focus by adding a `focus` prop with a ref to a focusable object. For example:
+
+```jsx
+import { Dialog } from "@/Components/Dialog";
+
+const ref = useRef()
+
+<Dialog focus={ref}>
+    <input type="text" ref={ref} />
+</Dialog>
+```
+
+## Static dialog
+
+This is mostly paired with a Confirmation Dialog component, but sometimes you may wish to have a static dialog, or dialog you can't close. To accomplish this, add the `isStatic` property to the component and all "close" buttons are hidden and actions are dismissed.
+
+```jsx
+import { Dialog } from "@/Components/Dialog";
+
+<Dialog
+    title="Action required"
+    isOpen={true}
+    isStatic
+>
+    Please do something before progressing.
+</Dialog>;
+```

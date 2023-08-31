@@ -1,0 +1,112 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+  pull_request:
+    paths:
+      - "**.css"
+      - "**.js"
+      - "**.ts"
+      - "**.tsx"
+      - "**.svg"
+
+jobs:
+  components:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-test-components
+      cancel-in-progress: true
+
+    steps:
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install pnpm dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Test Components
+        env:
+          LARAVEL_BYPASS_ENV_CHECK: 1
+          COVERAGE_THRESHOLD_LINES: 100
+          COVERAGE_THRESHOLD_FUNCTIONS: 100
+          COVERAGE_THRESHOLD_STATEMENTS: 100
+          COVERAGE_THRESHOLD_BRANCHES: 100
+          COVERAGE_INCLUDE_PATH: resources/js/Components
+        run: pnpm test:coverage resources/js/Components
+
+  utils:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-test-utils
+      cancel-in-progress: true
+
+    steps:
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install pnpm dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Test Utils
+        env:
+          LARAVEL_BYPASS_ENV_CHECK: 1
+          COVERAGE_THRESHOLD_LINES: 100
+          COVERAGE_THRESHOLD_FUNCTIONS: 100
+          COVERAGE_THRESHOLD_STATEMENTS: 100
+          COVERAGE_THRESHOLD_BRANCHES: 100
+          COVERAGE_INCLUDE_PATH: resources/js/Utils
+        run: pnpm test:coverage resources/js/Utils
+
+  pages:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-test-pages
+      cancel-in-progress: true
+
+    steps:
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install pnpm dependencies
+        run: pnpm i --frozen-lockfile
+
+      - name: Test Pages
+        env:
+          LARAVEL_BYPASS_ENV_CHECK: 1
+        run: pnpm test resources/js/Pages

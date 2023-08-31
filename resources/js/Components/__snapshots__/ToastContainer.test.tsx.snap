@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ToastContainer > should render and not listen for inertia toast service by default 1`] = `<DocumentFragment />`;
+
+exports[`ToastContainer > should render info 1`] = `<DocumentFragment />`;

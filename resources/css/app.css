@@ -1,0 +1,32 @@
+@import "./_fonts.css";
+@import "./_general.css";
+@import "./_variables.css";
+@import "./_animations.css";
+@import "./_buttons.css";
+@import "./_skeletons.css";
+@import "./_tables.css";
+@import "./_carousel.css";
+@import "./_collection.css";
+@import "./_cookies_modal";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes slideDown {
+    from {
+        height: 0;
+    }
+    to {
+        height: var(--radix-accordion-content-height);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        height: var(--radix-accordion-content-height);
+    }
+    to {
+        height: 0;
+    }
+}

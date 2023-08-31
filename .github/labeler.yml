@@ -1,0 +1,23 @@
+version: 1
+
+labels:
+    - label: "bugfix"
+      title: "^fix.*"
+    - label: "feature"
+      title: "^feat.*"
+    - label: "build"
+      title: "^build.*"
+    - label: "chore"
+      title: "^chore.*"
+    - label: "ci"
+      title: "^ci.*"
+    - label: "docs"
+      title: "^docs.*"
+    - label: "style"
+      title: "^style.*"
+    - label: "refactor"
+      title: "^refactor.*"
+    - label: "performance"
+      title: "^perf.*"
+    - label: "test"
+      title: "^test.*"

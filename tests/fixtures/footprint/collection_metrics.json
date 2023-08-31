@@ -1,0 +1,37 @@
+{
+  "message": "success",
+  "code": 0,
+  "data": [
+      {
+          "collection_slug": "moonbirds",
+          "on_date": "2023-08-01",
+          "chain": "Ethereum",
+          "collection_contract_address": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+          "collection_name": "Moonbirds",
+          "number_of_holders": 6205,
+          "number_of_buyers": 35,
+          "number_of_sellers": 27,
+          "number_of_transactions": 87,
+          "number_of_mint_transactions": 0,
+          "number_of_burn_transactions": 0,
+          "number_of_sales_transactions": 42,
+          "number_of_transfer_transactions": 87,
+          "total_minted": 10000,
+          "liquidity_rate": 0.0042,
+          "amount_currency": "ETH",
+          "volume_amount": 113.61039800000002,
+          "max_price_amount": 2.9,
+          "avg_price_amount": 1.6001464507042256,
+          "min_price_amount": 1.52,
+          "floor_price_amount": 1.5400000000000003,
+          "market_cap_amount": 15400.000000000002,
+          "volume": 208490.78671249398,
+          "max_price": 5428.60907878593,
+          "avg_price": 2995.3688102344977,
+          "min_price": 2845.3399309498673,
+          "floor_price": 2882.77861425184,
+          "market_cap": 28827786.142518394
+      }
+  ],
+  "latest_time": "2023-08-01"
+}

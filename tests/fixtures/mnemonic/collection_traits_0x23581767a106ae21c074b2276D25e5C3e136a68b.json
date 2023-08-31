@@ -1,0 +1,124 @@
+{
+  "traits": [
+    {
+      "name": "Background",
+      "value": "Blue",
+      "nftsCount": "1636",
+      "nftsPercentage": 16.36
+    },
+    {
+      "name": "Background",
+      "value": "Cosmic Purple",
+      "nftsCount": "6",
+      "nftsPercentage": 0.06
+    },
+    {
+      "name": "Background",
+      "value": "Enlightened Purple",
+      "nftsCount": "6",
+      "nftsPercentage": 0.06
+    },
+    {
+      "name": "Background",
+      "value": "Glitch Red",
+      "nftsCount": "6",
+      "nftsPercentage": 0.06
+    },
+    {
+      "name": "Background",
+      "value": "Gray",
+      "nftsCount": "1663",
+      "nftsPercentage": 16.63
+    },
+    {
+      "name": "Background",
+      "value": "Green",
+      "nftsCount": "1744",
+      "nftsPercentage": 17.44
+    },
+    {
+      "name": "Background",
+      "value": "Jade Green",
+      "nftsCount": "6",
+      "nftsPercentage": 0.06
+    },
+    {
+      "name": "Background",
+      "value": "Pink",
+      "nftsCount": "1608",
+      "nftsPercentage": 16.08
+    },
+    {
+      "name": "Background",
+      "value": "Purple",
+      "nftsCount": "1656",
+      "nftsPercentage": 16.56
+    },
+    {
+      "name": "Background",
+      "value": "Yellow",
+      "nftsCount": "1669",
+      "nftsPercentage": 16.69
+    },
+    {
+      "name": "Beak",
+      "value": "Long",
+      "nftsCount": "1612",
+      "nftsPercentage": 16.12
+    },
+    {
+      "name": "Beak",
+      "value": "Short",
+      "nftsCount": "4149",
+      "nftsPercentage": 41.49
+    },
+    {
+      "name": "Beak",
+      "value": "Small",
+      "nftsCount": "4215",
+      "nftsPercentage": 42.15
+    },
+    {
+      "name": "Body",
+      "value": "Brave",
+      "nftsCount": "695",
+      "nftsPercentage": 6.95
+    },
+    {
+      "name": "Body",
+      "value": "Cosmic",
+      "nftsCount": "6",
+      "nftsPercentage": 0.06
+    },
+    {
+      "name": "Body",
+      "value": "Crescent",
+      "nftsCount": "3538",
+      "nftsPercentage": 35.38
+    },
+    {
+      "name": "Body",
+      "value": "Emperor",
+      "nftsCount": "309",
+      "nftsPercentage": 3.09
+    },
+    {
+      "name": "Body",
+      "value": "Enlightened",
+      "nftsCount": "6",
+      "nftsPercentage": 0.06
+    },
+    {
+      "name": "Body",
+      "value": "Glitch",
+      "nftsCount": "6",
+      "nftsPercentage": 0.06
+    },
+    {
+      "name": "Body",
+      "value": "Golden",
+      "nftsCount": "25",
+      "nftsPercentage": 0.25
+    }
+  ]
+}

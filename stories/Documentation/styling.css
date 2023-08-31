@@ -1,0 +1,96 @@
+h1 {
+    margin-bottom: 1rem;
+    line-height: 44px;
+    font-size: 2rem;
+    @apply font-sans font-bold;
+}
+
+h2,
+h3,
+h4 {
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+h2 {
+    @apply text-2xl leading-8;
+}
+
+h3 {
+    @apply text-xl;
+    line-height: 30px;
+}
+
+h4 {
+    @apply text-lg leading-7;
+}
+
+code {
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    background-color: #ecedf9;
+    color: #31333f;
+    border-radius: 0.5rem;
+}
+
+pre {
+    margin-bottom: 0 !important;
+}
+
+pre code {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    color: inherit !important;
+    display: block;
+    white-space: pre;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: scroll;
+    max-width: 100%;
+    min-width: 100px;
+}
+
+p {
+    line-height: 1.75rem;
+}
+
+ul {
+    line-height: 1.75rem;
+    list-style-type: disc;
+    padding-left: 1rem;
+    list-style-position: outside;
+}
+
+ol {
+    list-style-type: decimal;
+    list-style-position: outside;
+    padding-left: 1rem;
+}
+
+ul ul,
+ol ul {
+    margin-left: 1rem;
+    margin-bottom: 0;
+    list-style-position: outside;
+    list-style-type: circle;
+}
+
+ol ol,
+ul ol {
+    margin-left: 1rem;
+    margin-bottom: 0;
+    list-style-position: outside;
+    list-style-type: lower-latin;
+}
+
+ul > li,
+ol > li {
+    padding-bottom: 0.25rem;
+}
+
+a {
+    font-weight: 600;
+    color: #007dff;
+}
+
+a:hover {
+    color: #075af2;
+}

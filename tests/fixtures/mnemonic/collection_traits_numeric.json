@@ -1,0 +1,34 @@
+{
+  "traits": [
+    {
+      "name": "Created Date",
+      "displayType": "DISPLAY_TYPE_DATE",
+      "valueMin": 1494328939,
+      "valueMax": 1683646751
+    },
+    {
+      "name": "Expiration Date",
+      "displayType": "DISPLAY_TYPE_DATE",
+      "valueMin": -8921203020.709553,
+      "valueMax": 9096800472
+    },
+    {
+      "name": "Length",
+      "displayType": "DISPLAY_TYPE_STAT",
+      "valueMin": 3,
+      "valueMax": 14842
+    },
+    {
+      "name": "Registration Date",
+      "displayType": "DISPLAY_TYPE_DATE",
+      "valueMin": 1580345271,
+      "valueMax": 1683646775
+    },
+    {
+      "name": "Segment Length",
+      "displayType": "DISPLAY_TYPE_STAT",
+      "valueMin": 1,
+      "valueMax": 14842
+    }
+  ]
+}

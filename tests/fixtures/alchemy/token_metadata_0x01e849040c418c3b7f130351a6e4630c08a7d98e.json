@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "decimals": 6,
+    "logo": "https://static.alchemyapi.io/images/assets/3408.png",
+    "name": "USD Coin",
+    "symbol": "USDC"
+  }
+}

@@ -1,0 +1,24 @@
+@layer utilities {
+    .transition-default {
+        transition: all 0.1s ease-in;
+    }
+
+    .animate-ping-slow {
+        animation-name: ping-slow;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    @keyframes ping-slow {
+        20% {
+            transform: scale(2);
+            opacity: 0;
+        }
+
+        21% {
+            transform: scale(1);
+            opacity: 0;
+        }
+    }
+}

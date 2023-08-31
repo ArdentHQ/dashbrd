@@ -1,0 +1,100 @@
+{
+    "ownedNfts": [
+        {
+            "contract": {
+                "address": "0xe3589ae55bbd7697c76c510a5335eb31d972a17e"
+            },
+            "id": {
+                "tokenId": "0x0000000000000000000000000000000000000000000000000000000000000c84",
+                "tokenMetadata": {
+                    "tokenType": "ERC721"
+                }
+            },
+            "balance": "1",
+            "title": "BROADSIDE #3204 - Analiza",
+            "description": [
+                "A decentralized tale of 7,290 anonymous heroes\nA multi-part journey that unfolds from launch\nCC0 or Full Commercial Rights\n11 Episode NFTs telling the story of your specific character dropped to Broadsiders in the months following mint\nOnce final chapter drops, merge and burn Episode NFTs into a 1/1 Book NFT, featuring your character on the 1/1 cover art, with the ability to print and sell copies\nCollection features rare traits (both cc0 and licensed from other projects) contributed by guest artists and from projects including XCOPY, Cryptopunk #5046, OSF / Rektguy, Moonbirds, Eclectic Method, Goblintown, Nouns, Blitmaps, Kristy Glas, Grillz Gang, Cryptoadz, Robness and more."
+            ],
+            "tokenUri": {
+                "gateway": "https://alchemy.mypinata.cloud/ipfs/QmQ1mfrt8pMCZ8jMmm3SaBZQ6aM4kSeA5BsZWbotfnts8w/3204",
+                "raw": "ipfs://QmQ1mfrt8pMCZ8jMmm3SaBZQ6aM4kSeA5BsZWbotfnts8w/3204"
+            },
+            "media": [
+                {
+                    "gateway": "https://nft-cdn.alchemy.com/eth-mainnet/3c7fb8caad2ca82b848ad200a35f2a24",
+                    "thumbnail": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/3c7fb8caad2ca82b848ad200a35f2a24",
+                    "raw": "https://nervous.mypinata.cloud/ipfs/QmeM7izZckUWmCPRAiMgxwFdjtoeBifx8T3c1Rkf9kVW9P/3204.png",
+                    "format": "png",
+                    "bytes": 6727951
+                }
+            ],
+            "metadata": {
+                "name": "BROADSIDE #3204 - Analiza",
+                "description": [
+                    "A decentralized tale of 7,290 anonymous heroes\nA multi-part journey that unfolds from launch\nCC0 or Full Commercial Rights\n11 Episode NFTs telling the story of your specific character dropped to Broadsiders in the months following mint\nOnce final chapter drops, merge and burn Episode NFTs into a 1/1 Book NFT, featuring your character on the 1/1 cover art, with the ability to print and sell copies\nCollection features rare traits (both cc0 and licensed from other projects) contributed by guest artists and from projects including XCOPY, Cryptopunk #5046, OSF / Rektguy, Moonbirds, Eclectic Method, Goblintown, Nouns, Blitmaps, Kristy Glas, Grillz Gang, Cryptoadz, Robness and more."
+                ],
+                "image": "https://nervous.mypinata.cloud/ipfs/QmeM7izZckUWmCPRAiMgxwFdjtoeBifx8T3c1Rkf9kVW9P/3204.png",
+                "attributes": [
+                    {
+                        "value": "Analiza",
+                        "trait_type": "Name"
+                    },
+                    {
+                        "value": "Broadside 1 Snipes Bay Blue",
+                        "trait_type": "Background"
+                    },
+                    {
+                        "value": "Embattled",
+                        "trait_type": "Body"
+                    },
+                    {
+                        "value": "Neeky",
+                        "trait_type": "Eyes"
+                    },
+                    {
+                        "value": "White",
+                        "trait_type": "Teeth"
+                    },
+                    {
+                        "value": "Exposure Camo T-Shirt",
+                        "trait_type": "Top Clothing"
+                    },
+                    {
+                        "value": "Energy 2 Cap",
+                        "trait_type": "Head"
+                    },
+                    {
+                        "value": "Hench Jaw Mask Aqua",
+                        "trait_type": "Jaw"
+                    },
+                    {
+                        "value": "FCR",
+                        "trait_type": "Rights"
+                    }
+                ],
+                "external_url": "https://br0ads1de.com",
+                "tokenId": "3204"
+            },
+            "timeLastUpdated": "2023-01-11T12:27:03.548Z",
+            "contractMetadata": {
+                "name": "Broadside",
+                "symbol": "BSIDE",
+                "totalSupply": "7290",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xb5dee69feaa5fc089cdef6cbe6c4a8fb2dae4dc4",
+                "deployedBlockNumber": 15936824,
+                "openSea": {
+                    "floorPrice": 0.0476,
+                    "collectionName": "Broadside",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gcs/files/f7f51b6b8f500e57e96f6f402c77670e.png?w=500&auto=format",
+                    "description": "Each Broadside hero has a story to mint - https://mint.broadside.wtf/\n\nBroadside is a new culture, community and storyworld, purpose-built for web3. It begins with a decentralized tale of 7,290 anonymous heroes, coming with either cc0 or full commercial rights, each the star of their own story.\n\nBones Up Fam. \u2620\ufe0f",
+                    "externalUrl": "https://www.br0ads1de.com/",
+                    "twitterUsername": "BroadsideNFT",
+                    "discordUrl": "https://discord.gg/broadside",
+                    "lastIngestedAt": "2023-03-21T20:10:35.000Z"
+                }
+            }
+        }
+    ]
+}

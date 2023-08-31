@@ -1,0 +1,253 @@
+name: UI
+
+on:
+  pull_request:
+    paths:
+      - "**.css"
+      - "**.js"
+      - "**.ts"
+      - "**.php"
+      - "**.svg"
+      - "**.tsx"
+      - "**.mdx"
+      - "**.md"
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-eslint
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install
+        run: pnpm i --frozen-lockfile
+
+      - name: Run eslint
+        run: pnpm run lint
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "style: resolve linting violations"
+          branch: ${{ github.head_ref }}
+
+  tsc:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-tsc
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install
+        run: pnpm i --frozen-lockfile
+
+      - name: Run tsc
+        run: pnpm check-types
+
+  prettier:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-prettier
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install
+        run: pnpm i --frozen-lockfile
+
+      - name: Run prettier
+        run: pnpm run prettier --write 'resources/**/*.{css,js,vue}'
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "style: resolve style guide violations"
+          branch: ${{ github.head_ref }}
+
+  rustywind:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-rustywind
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Format
+        run: |
+          pnpm add -g rustywind
+          rustywind --write resources/views
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "style: resolve style guide violations"
+          branch: ${{ github.head_ref }}
+
+  svg:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: ${{ github.head_ref }}-svg
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Optimize SVGs
+        uses: ericcornelissen/svgo-action@v3
+        id: svgo
+        with:
+          ignore: public/vendor/**/*.svg
+          repo-token: ${{ secrets.GH_TOKEN }}
+          svgo-config: .svgo.js
+
+      - name: Commit optimizations
+        uses: stefanzweifel/git-auto-commit-action@v4
+        if: ${{steps.svgo.outputs.DID_OPTIMIZE}}
+        with:
+          commit_message: Optimize ${{steps.svgo.outputs.OPTIMIZED_COUNT}} SVG(s)
+
+  build:
+    needs: [prettier, rustywind, svg, eslint, tsc]
+
+    concurrency:
+      group: ${{ github.head_ref }}-build
+      cancel-in-progress: true
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite
+          coverage: none
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Restore Build Output
+        id: restore_build_output
+        uses: actions/cache@v3
+        with:
+          path: public/build
+          # @see same step `ci.yml` for details
+          key: ${{ runner.os }}-build-output-${{ hashFiles('**/pnpm-lock.yml', 'resources/**', 'lang/**') }}
+          restore-keys: |
+            ${{ runner.os }}-build-output-
+
+      - name: Cache pnpm dependencies
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Prepare Application
+        run: cp .env.example .env && php artisan key:generate
+
+      - name: Clear Config
+        run: php artisan config:clear && php artisan route:clear
+
+      - name: Install pnpm dependencies
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        run: pnpm i --frozen-lockfile
+
+      - name: Build pnpm dependencies
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        run: pnpm build
+
+      - name: Cache Build Output
+        uses: actions/cache@v3
+        if: steps.restore_build_output.outputs.cache-hit != 'true'
+        with:
+          path: public/build
+          key: ${{ runner.os }}-build-output-${{ hashFiles('**/pnpm-lock.yml', 'resources/**', 'lang/**') }}
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: rebuild assets"
+          branch: ${{ github.head_ref }}

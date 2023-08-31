@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+    postgres:
+        image: postgres:15-alpine3.17@sha256:207a30515abe9fe51666e1821617ce83324690f3d3fc3183e23f301d35a75815
+        tmpfs: /pgtmpfs
+        logging:
+            driver: "none"
+        environment:
+            POSTGRES_DB: test_db
+            POSTGRES_USER: test_db
+            POSTGRES_PASSWORD: password
+            PGDATA: /pgtmpfs
+        ports:
+            - "127.0.0.1:5432:5432"
+
+    redis:
+        image: redis:7.0.9-alpine3.17@sha256:bef17825e8f1224b2956d84b7110cad7eb23601df441d2912c1b283d821f2045
+        ports:
+            - "127.0.0.1:6379:6379"

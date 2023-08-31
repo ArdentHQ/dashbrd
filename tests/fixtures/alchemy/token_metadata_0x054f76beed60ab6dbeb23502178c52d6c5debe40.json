@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "decimals": 18,
+    "logo": "https://static.alchemyapi.io/images/assets/7225.png",
+    "name": "DeFiner",
+    "symbol": "FIN"
+  }
+}

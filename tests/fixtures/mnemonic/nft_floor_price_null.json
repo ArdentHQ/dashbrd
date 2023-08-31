@@ -1,0 +1,8 @@
+{
+  "price": {
+    "totalNative": null,
+    "totalUsd": null,
+    "fungibleAddress": "",
+    "fungibleValue": null
+  }
+}

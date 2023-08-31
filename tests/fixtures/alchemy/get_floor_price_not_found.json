@@ -1,0 +1,8 @@
+{
+  "openSea": {
+    "error": "unable to fetch floor price"
+  },
+  "looksRare": {
+    "error": "unable to fetch floor price"
+  }
+}

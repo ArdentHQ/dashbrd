@@ -1,0 +1,41 @@
+{
+    "name": "Moonbirds",
+    "types": ["TYPE_ERC721"],
+    "tokensCount": "0",
+    "ownersCount": "0",
+    "salesVolume": "",
+    "metadata": [
+        {
+            "type": "TYPE_BANNER_IMAGE_URL",
+            "value": "https://ethereum.cdn.mnemonichq.com/0x23581767a106ae21c074b2276d25e5c3e136a68b/collection_metadata/banner/7625304375c00782fbc7a8a0ce794f0a0677e1244029989cbd4f73933c630ba6.png"
+        },
+        {
+            "type": "TYPE_DISCORD_URL",
+            "value": "https://discord.gg/proof"
+        },
+        {
+            "type": "TYPE_TWITTER_USERNAME",
+            "value": "moonbirds"
+        },
+        {
+            "type": "TYPE_ORIGINAL_BANNER_IMAGE_URL",
+            "value": "https://i.seadn.io/gcs/files/f0d3006fb5a1f09d1619a024762f5aee.png?w=500&auto=format"
+        },
+        {
+            "type": "TYPE_DESCRIPTION",
+            "value": ""
+        },
+        {
+            "type": "TYPE_EXTERNAL_URL",
+            "value": "https://proof.xyz/moonbirds"
+        },
+        {
+            "type": "TYPE_IMAGE_URL",
+            "value": "https://ethereum.cdn.mnemonichq.com/0x23581767a106ae21c074b2276d25e5c3e136a68b/collection_metadata/collection/daa729499bd97e27c530c45184a2f54cc23593c0a754e25307530ec231cfbfa4.png"
+        },
+        {
+            "type": "TYPE_ORIGINAL_IMAGE_URL",
+            "value": "https://i.seadn.io/gcs/files/4bce6187fea476154b311dafaf327c89.png?w=500&auto=format"
+        }
+    ]
+}

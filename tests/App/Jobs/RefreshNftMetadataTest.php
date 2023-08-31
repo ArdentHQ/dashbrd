@@ -1,0 +1,122 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Jobs\Middleware\RecoverProviderErrors;
+use App\Jobs\RefreshNftMetadata;
+use App\Models\Collection;
+use App\Models\Network;
+use App\Models\Nft;
+use App\Models\SpamContract;
+use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
+use App\Support\CryptoUtils;
+use App\Support\Facades\Alchemy;
+use Illuminate\Queue\Middleware\RateLimited;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Http;
+
+it('should refresh NFT metadata', function () {
+    Bus::fake();
+
+    $user = createUser();
+    $network = Network::polygon()->firstOrFail();
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
+        'name' => 'Unrevealed Collection',
+    ]);
+
+    /** @var Nft $nft */
+    $nft = Nft::factory()->create([
+        'name' => 'Unrevealed Token',
+        'token_number' => CryptoUtils::hexToBigIntStr('0x0000000000000000000000000000000000000000000000000000000000000000'),
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection->id,
+    ]);
+
+    expect($collection['name'])->toEqual('Unrevealed Collection');
+    expect($nft['name'])->toEqual('Unrevealed Token');
+
+    $startToken = $nft['token_number'];
+    Alchemy::fake([
+        "https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&startToken=$startToken&limit=1" => Http::response(fixtureData('alchemy.refresh_nft_metadata'), 200),
+    ]);
+
+    (new RefreshNftMetadata($collection, $nft))->handle(app(AlchemyWeb3DataProvider::class));
+
+    expect($collection->fresh()['name'])->toEqual('Moonbirds');
+    expect($nft->fresh()['name'])->toEqual('#0');
+});
+
+it('should skip refreshing NFT metadata for a spam collection', function () {
+    $network = Network::polygon()->firstOrFail();
+
+    $collectionAddress = '0x000000000a42c2791eec307fff43fa5c640e3ef7';
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'address' => $collectionAddress,
+        'name' => 'Unrevealed Collection',
+    ]);
+
+    SpamContract::query()->insert([
+        'address' => $collectionAddress,
+        'network_id' => $network->id,
+    ]);
+
+    $nft = Nft::factory()->create([
+        'token_number' => '8304',
+        'collection_id' => $collection->id,
+        'name' => 'Unrevealed NFT',
+    ]);
+
+    expect($collection['name'])->toEqual('Unrevealed Collection')
+        ->and($nft['name'])->toEqual('Unrevealed NFT');
+
+    (new RefreshNftMetadata($collection, $nft))->handle(app(AlchemyWeb3DataProvider::class));
+
+    expect($collection->fresh()['name'])->toEqual('Unrevealed Collection')
+        ->and($nft->fresh()['name'])->toEqual('Unrevealed NFT');
+
+    Alchemy::assertNothingSent();
+});
+
+it('should use the nft id as a unique job identifier', function () {
+    $user = createUser();
+    $network = Network::polygon()->firstOrFail();
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
+        'name' => 'Unrevealed Collection',
+    ]);
+
+    /** @var Nft $nft */
+    $nft = Nft::factory()->create([
+        'name' => 'Unrevealed Token',
+        'token_number' => CryptoUtils::hexToBigIntStr('0x0000000000000000000000000000000000000000000000000000000000000000'),
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection->id,
+    ]);
+
+    expect((new RefreshNftMetadata($collection, $nft))->uniqueId())->toBeString();
+});
+
+it('should return rate limited middleware', function () {
+    $collection = Collection::factory()->create();
+    $nft = Nft::factory()->create();
+
+    $middleware = (new RefreshNftMetadata($collection, $nft))->middleware();
+
+    expect($middleware)->toHaveCount(2)
+        ->and($middleware[0])->toBeInstanceOf(RateLimited::class)
+        ->and($middleware[1])->toBeInstanceOf(RecoverProviderErrors::class);
+});
+
+it('has a retry until', function () {
+    $collection = Collection::factory()->create();
+    $nft = Nft::factory()->create();
+
+    $job = new RefreshNftMetadata($collection, $nft);
+
+    expect($job->retryUntil())->toBeInstanceOf(DateTime::class);
+});
