@@ -22,4 +22,4 @@ Make sure to open your PRs against the `develop` branch and that the PRs are com
 
 ## Code of Conduct
 
-To ensure the community is welcoming to all, please review and abide by [ARK's Code of Conduct](https://ark.dev/docs/program-incentives/guidelines/code-of-conduct).
+To ensure the community is welcoming to all, please review and abide by our [Code of Conduct](/CODE_OF_CONDUCT.md).
