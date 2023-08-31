@@ -22,4 +22,4 @@ Make sure to open your PRs against the `develop` branch and that the PRs are com
 
 ## Code of Conduct
 
-To ensure the community is welcoming to all, please review and abide by our [Code of Conduct](/CODE_OF_CONDUCT.md).
+To ensure the community is welcoming to all, please review and abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
