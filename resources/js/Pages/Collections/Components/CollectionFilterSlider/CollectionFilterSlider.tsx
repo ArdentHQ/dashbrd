@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
 import { Slider } from "@/Components/Slider";
@@ -39,6 +39,10 @@ export const CollectionFilterSlider = ({
     const selectedTraitsChangedHandler = (groupName: string, value: string, displayType: string): void => {
         setSelectedTraits((previous) => selectedTraitsSetHandler(previous, groupName, value, displayType));
     };
+
+    useEffect(() => {
+        setSelectedTraits(defaultSelectedTraits);
+    }, [defaultSelectedTraits]);
 
     const resetFilters = (): void => {
         setShowOnlyOwned(defaultShowOnlyOwned);
