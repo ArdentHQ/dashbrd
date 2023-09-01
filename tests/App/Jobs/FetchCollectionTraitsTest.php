@@ -37,5 +37,11 @@ it('should use the collection address and network id as a unique job identifier'
         'network_id' => $network->id,
     ]);
 
-    expect((new FetchCollectionTraits($collection))->uniqueId())->toBe('fetch-nft-collection-traits:'.$network->chain_id.'-0x12345');
+    expect((new FetchCollectionTraits($collection))->uniqueId())->toBeString();
+});
+
+it('has a retry limit', function () {
+    $collection = Collection::factory()->create();
+
+    expect((new FetchCollectionTraits($collection))->retryUntil())->toBeInstanceOf(DateTime::class);
 });

@@ -53,6 +53,7 @@ class Collection extends Model
         'fiat_value' => 'json',
         'minted_block' => 'int',
         'minted_at' => 'datetime',
+        'last_viewed_at' => 'datetime',
     ];
 
     /**
@@ -395,5 +396,14 @@ class Collection extends Model
     public function activities(): HasManyThrough
     {
         return $this->hasManyThrough(NftActivity::class, Nft::class);
+    }
+
+    public function recentlyViewed(): bool
+    {
+        if ($this->last_viewed_at === null) {
+            return false;
+        }
+
+        return $this->last_viewed_at->gte(now()->subDays(1));
     }
 }

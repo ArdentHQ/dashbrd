@@ -3,11 +3,13 @@
 declare(strict_types=1);
 
 use App\Enums\TraitDisplayType;
+use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Nft;
 use App\Models\Token;
+use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('can render the collections overview page', function () {
@@ -41,10 +43,13 @@ it('should render collections overview page with collections and NFTs', function
 it('can render the collections view page', function () {
     $user = createUser();
 
+    Bus::fake();
+
     $network = Network::polygon()->firstOrFail();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
+        'last_viewed_at' => null,
     ]);
 
     Token::factory()->create([
@@ -57,6 +62,41 @@ it('can render the collections view page', function () {
     $this->actingAs($user)
         ->get(route('collections.view', $collection->slug))
         ->assertStatus(200);
+
+    expect($collection->fresh()->last_viewed_at)->not->toBeNull();
+
+    Bus::assertDispatched(SyncCollection::class);
+});
+
+it('does not dispatch the job to sync collection if it has been recently viewed', function () {
+    $user = createUser();
+
+    $network = Network::polygon()->firstOrFail();
+
+    Bus::fake();
+
+    $now = now()->subMinutes(5);
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => $now,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+
+    // Time is newer than $now..
+    expect($collection->fresh()->last_viewed_at->gte($now))->toBeTrue();
+
+    Bus::assertNotDispatched(SyncCollection::class);
 });
 
 it('should render user owned NFTs first ', function ($owned) {

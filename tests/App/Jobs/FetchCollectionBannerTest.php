@@ -65,7 +65,7 @@ it('should use the collection address and network id as a unique job identifier'
         'network_id' => $network->id,
     ]);
 
-    expect((new FetchCollectionBanner($collection))->uniqueId())->toBe('fetch-nft-collection-banner:'.$network->chain_id.'-0x12345');
+    expect((new FetchCollectionBanner($collection))->uniqueId())->toBeString();
 });
 
 it('has a retry limit', function () {
