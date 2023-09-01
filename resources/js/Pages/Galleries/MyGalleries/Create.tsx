@@ -85,8 +85,6 @@ const Create = ({
         [gallery],
     );
 
-    console.log({ selectedNfts });
-
     return (
         <LayoutWrapper
             withSlider
