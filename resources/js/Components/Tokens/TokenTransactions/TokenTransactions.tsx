@@ -56,6 +56,7 @@ export const TokenTransactions = ({
                         chainId={asset.chain_id}
                         address={wallet?.address}
                         tokenAddress={asset.address}
+                        isNativeToken={asset.is_native_token}
                     />
                 </div>
             </div>
@@ -82,6 +83,7 @@ export const TokenTransactions = ({
                         chainId={asset.chain_id}
                         address={wallet?.address}
                         tokenAddress={asset.address}
+                        isNativeToken={asset.is_native_token}
                     />
                 </div>
             )}
