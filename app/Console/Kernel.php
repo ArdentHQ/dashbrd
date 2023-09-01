@@ -163,26 +163,26 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command(FetchTokens::class)
             ->withoutOverlapping()
-            ->hourlyAt(15); // offset by 15 mins from FetchEnsDetails so they dont run at the same time...
+            ->dailyAt('14:15'); // offset by 15 mins from FetchEnsDetails so they dont run at the same time...
 
         $schedule
             ->command(FetchNativeBalances::class)
             ->withoutOverlapping()
-            ->hourlyAt(45); // offset by 30 mins from FetchTokens so they dont run at the same time...
+            ->dailyAt('14:45'); // offset by 30 mins from FetchTokens so they dont run at the same time...
 
         $schedule
             ->command(FetchNativeBalances::class, [
                 '--only-online',
             ])
             ->withoutOverlapping()
-            ->everyMinute();
+            ->everyFiveMinutes();
 
         $schedule
             ->command(FetchTokens::class, [
                 '--only-online',
             ])
             ->withoutOverlapping()
-            ->everyMinute();
+            ->everyFiveMinutes();
     }
 
     private function maxCoingeckoJobsInInterval(): int
