@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
 
-interface UseGalleryFormProperties {
+interface UseGalleryFormProperties extends Record<string, unknown> {
     id: number | null;
     name: string;
     nfts: number[];
