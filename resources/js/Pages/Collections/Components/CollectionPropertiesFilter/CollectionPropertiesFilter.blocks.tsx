@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { Checkbox } from "@/Components/Form/Checkbox";
@@ -23,6 +23,12 @@ const CollectionPropertiesFilterItem = ({
     initiallyExpanded?: boolean;
 }): JSX.Element => {
     const [expanded, setExpanded] = useState(initiallyExpanded);
+
+    useEffect(() => {
+        if (initiallyExpanded) {
+            setExpanded(initiallyExpanded);
+        }
+    }, [initiallyExpanded]);
 
     return (
         <div className="flex flex-col border-t border-theme-secondary-300 px-6 py-4">

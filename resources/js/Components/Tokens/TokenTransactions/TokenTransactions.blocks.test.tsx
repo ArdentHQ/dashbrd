@@ -210,6 +210,19 @@ describe("ExplorerButton", () => {
         expect(screen.getByTestId("ExplorerButton")).toHaveProperty("href", "https://etherscan.io/token/test?a=1");
     });
 
+    it("should render for etherscan for native token", () => {
+        render(
+            <ExplorerButton
+                chainId={1}
+                address="1"
+                tokenAddress="test"
+                isNativeToken
+            />,
+        );
+
+        expect(screen.getByTestId("ExplorerButton")).toHaveProperty("href", "https://etherscan.io/address/1");
+    });
+
     it("should render for polygonscan", () => {
         render(
             <ExplorerButton
@@ -220,6 +233,19 @@ describe("ExplorerButton", () => {
         );
 
         expect(screen.getByTestId("ExplorerButton")).toBeInTheDocument();
+    });
+
+    it("should render for polygonscan for native token", () => {
+        render(
+            <ExplorerButton
+                chainId={137}
+                address="1"
+                tokenAddress="test"
+                isNativeToken
+            />,
+        );
+
+        expect(screen.getByTestId("ExplorerButton")).toHaveProperty("href", "https://polygonscan.com/address/1");
     });
 
     it("should not render for unknown chain", () => {
