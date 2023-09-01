@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Jobs\FetchCollectionNfts;
 use App\Models\Collection;
+use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
 
 it('dispatches a job for all collections', function () {
@@ -72,3 +73,21 @@ it('uses the start token from the collection', function () {
 
     Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->startToken === '1000');
 });
+
+it('dispatches multiple jobs in chunks for non-spam collections', function () {
+    Bus::fake();
+
+    $collections = Collection::factory()->count(102)->create();
+
+    SpamContract::query()->insert([
+        'address' => $collections->first()->address,
+        'network_id' => $collections->first()->network_id,
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 0);
+
+    $this->artisan('collections:fetch-nfts');
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 101);
+});
+

@@ -37,7 +37,7 @@ trait InteractsWithCollections
             ->withoutSpamContracts()
             ->chunkById(
                 100,
-                static fn ($collections) => $collections->each($callback)
-            );
+                static fn($collections) => $collections->each($callback),
+                'collections.id', 'id');
     }
 }
