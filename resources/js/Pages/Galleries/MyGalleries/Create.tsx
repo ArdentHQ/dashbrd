@@ -1,7 +1,7 @@
-import { type PageProps, type VisitOptions } from "@inertiajs/core";
-import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { PageProps, VisitOptions } from "@inertiajs/core";
+import { Head, router, usePage } from "@inertiajs/react";
 import uniqBy from "lodash/uniqBy";
-import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
@@ -13,10 +13,10 @@ import { EditableGalleryHook } from "@/Components/Galleries/Hooks/useEditableGal
 import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
-import { useToasts } from "@/Hooks/useToasts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
+import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -39,7 +39,6 @@ const Create = ({
     assertWallet(auth.wallet);
 
     const { t } = useTranslation();
-    const { showToast } = useToasts();
     const { props } = usePage();
 
     const [isGalleryFormSliderOpen, setIsGalleryFormSliderOpen] = useState(false);
@@ -49,24 +48,12 @@ const Create = ({
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
 
-    const [selectedNfts, setSelectedNfts] = useState<App.Data.Gallery.GalleryNftData[]>([]);
+    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({ gallery });
 
     /* TODO (@alfonsobries) [2023-09-01]: calculate the value (https://app.clickup.com/t/862jkb9e2) */
     const totalValue = 0;
 
     assertUser(auth.user);
-
-    const { data, setData, post, processing, errors, ...form } = useForm<{
-        id: number | null;
-        name: string;
-        nfts: number[];
-        coverImage: File | string | null;
-    }>({
-        id: gallery?.id ?? null,
-        name: gallery?.name ?? "",
-        nfts: [],
-        coverImage: gallery?.coverImage ?? null,
-    });
 
     const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "website" | "name" | "image">>>(
         () =>
@@ -77,65 +64,6 @@ const Create = ({
             })),
         [selectedNfts],
     );
-
-    useEffect(() => {
-        if (selectedNfts.length === data.nfts.length) {
-            return;
-        }
-
-        setData(
-            "nfts",
-            [...selectedNfts].map((nft) => nft.id),
-        );
-    }, [selectedNfts, setData]);
-
-    const validate = ({ name, nfts }: { nfts: number[]; name: string }): boolean => {
-        let isValid = true;
-
-        if (!validateName(name)) {
-            isValid = false;
-        }
-
-        if (nfts.length === 0) {
-            isValid = false;
-            form.setError("nfts", t("validation.nfts_required"));
-        }
-
-        return isValid;
-    };
-
-    const validateName = (name: string): boolean => {
-        let isValid = true;
-
-        if (!isTruthy(name.trim())) {
-            isValid = false;
-            form.setError("name", t("validation.gallery_title_required"));
-        }
-
-        if (name.length > 50) {
-            isValid = false;
-            form.setError("name", t("pages.galleries.create.title_too_long", { max: 50 }));
-        }
-
-        return isValid;
-    };
-
-    const submit = (event: FormEvent): void => {
-        event.preventDefault();
-
-        if (!validate(data)) {
-            return;
-        }
-
-        post(route("my-galleries.store"), {
-            onError: (errors) => {
-                showToast({
-                    message: Object.values(errors)[0],
-                    type: "error",
-                });
-            },
-        });
-    };
 
     const handleGalleryDelete = useCallback(
         (slug: string) => {
@@ -157,16 +85,7 @@ const Create = ({
         [gallery],
     );
 
-    const handleNameChange = useCallback(
-        (name: string) => {
-            setData("name", name);
-
-            if (validateName(name)) {
-                form.setError("name", "");
-            }
-        },
-        [form],
-    );
+    console.log({ selectedNfts });
 
     return (
         <LayoutWrapper
@@ -180,14 +99,14 @@ const Create = ({
                     maxLength={50}
                     error={errors.name}
                     name={data.name}
-                    onChange={handleNameChange}
+                    onChange={(name) => setData("name", name)}
                 />
 
                 <EditableGalleryHook selectedNfts={gallery?.nfts.paginated.data}>
                     {/* TODO (@alexbarnsley) [2023-09-01] calculate gallery value on the fly - https://app.clickup.com/t/862jkb9e2 */}
                     <GalleryHeading
                         value={totalValue}
-                        nftsCount={selectedNfts.length}
+                        nftsCount={data.nfts.length}
                         collectionsCount={collections.length}
                         currency={auth.user.attributes.currency}
                     />
@@ -215,7 +134,7 @@ const Create = ({
                             }}
                         >
                             <NftGridEditable
-                                onChange={setSelectedNfts}
+                                onChange={updateSelectedNfts}
                                 error={errors.nfts}
                             />
                         </GalleryNfts>
