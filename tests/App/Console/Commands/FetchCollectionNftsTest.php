@@ -90,4 +90,3 @@ it('dispatches multiple jobs in chunks for non-spam collections', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionNfts::class, 101);
 });
-
