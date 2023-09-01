@@ -1,7 +1,7 @@
-import { PageProps, VisitOptions } from "@inertiajs/core";
+import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import uniqBy from "lodash/uniqBy";
-import { MouseEvent, useCallback, useMemo, useState } from "react";
+import { type MouseEvent, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
@@ -14,9 +14,9 @@ import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext"
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
+import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -99,7 +99,9 @@ const Create = ({
                     maxLength={50}
                     error={errors.name}
                     name={data.name}
-                    onChange={(name) => setData("name", name)}
+                    onChange={(name) => {
+                        setData("name", name);
+                    }}
                 />
 
                 <EditableGalleryHook selectedNfts={gallery?.nfts.paginated.data}>

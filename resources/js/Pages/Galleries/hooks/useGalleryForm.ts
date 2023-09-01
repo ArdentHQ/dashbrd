@@ -1,15 +1,15 @@
 import { useForm } from "@inertiajs/react";
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
 
-type UseGalleryFormProperties = {
+interface UseGalleryFormProperties {
     id: number | null;
     name: string;
     nfts: number[];
     coverImage: File | string | null;
-};
+}
 
 export const useGalleryForm = ({
     gallery,
@@ -84,7 +84,7 @@ export const useGalleryForm = ({
         });
     };
 
-    const updateSelectedNfts = (nfts: App.Data.Gallery.GalleryNftData[]) => {
+    const updateSelectedNfts = (nfts: App.Data.Gallery.GalleryNftData[]): void => {
         // Convert them to strings to compare ordering too.
         const selectedNftsOrder = data.nfts.join();
         const nftsOrder = nfts.map((nft) => nft.id).join();
@@ -109,13 +109,11 @@ export const useGalleryForm = ({
         errors,
         processing,
         setData: (field, value) => {
-            if (field === "name") {
-                if (validateName(field)) {
-                    form.setError("name", "");
-                }
-            }
-
             setData(field, value);
+
+            if (field === "name" && validateName(field)) {
+                form.setError("name", "");
+            }
         },
     };
 };
