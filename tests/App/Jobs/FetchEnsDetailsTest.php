@@ -7,6 +7,7 @@ use App\Models\Wallet;
 use App\Support\Facades\Moralis;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 it('should fetch ens domain and the avatar', function () {
@@ -33,6 +34,45 @@ it('should fetch ens domain and the avatar', function () {
     expect($wallet->fresh()->details->domain)->toBe('something.eth');
 
     expect($wallet->fresh()->details->media()->exists())->toBeTrue();
+});
+
+it('should handle a new ens domain', function () {
+    Bus::fake();
+
+    Http::fake([
+        'https://metadata.ens.domains/*' => Http::response(
+            UploadedFile::fake()->image('avatar.png')->get(),
+            200,
+            [
+                'Content-Type' => 'image/png',
+            ]
+        ),
+    ]);
+
+    Moralis::fake([
+        'https://deep-index.moralis.io/api/v2/*' => Http::sequence()
+            ->push(['name' => 'other.eth'], 200)
+            ->push(['name' => 'test.eth'], 200)
+            ->push(fixtureData('moralis.ens_resolve'), 200),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+
+    $wallet2 = Wallet::factory()->create();
+
+    (new FetchEnsDetails($wallet))->handle();
+
+    (new FetchEnsDetails($wallet2))->handle();
+
+    Cache::flush();
+
+    expect($wallet->fresh()->details->domain)->toBe('other.eth');
+    expect($wallet2->fresh()->details->domain)->toBe('test.eth');
+
+    (new FetchEnsDetails($wallet))->handle();
+
+    expect($wallet->fresh()->details->domain)->toBe('something.eth');
+    expect($wallet2->fresh()->details->domain)->toBe('test.eth');
 });
 
 it('should not store the same avatar twice', function () {
