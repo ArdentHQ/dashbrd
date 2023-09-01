@@ -16,5 +16,8 @@ export const getSampleMetaMaskState = (overrides: Partial<MetaMaskState> = {}): 
     getBlock: vi.fn(),
     getTransactionReceipt: vi.fn(),
     account: "0xE68cDB02e9453DD7c66f53AceA5CEeAD2ecd637A",
+    hideConnectOverlay: vi.fn(),
+    showConnectOverlay: vi.fn(),
+    isShowConnectOverlay: false,
     ...overrides,
 });

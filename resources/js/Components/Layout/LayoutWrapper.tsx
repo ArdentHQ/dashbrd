@@ -24,7 +24,7 @@ export const LayoutWrapper = ({
     toastMessage,
     isMaintenanceModeActive,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user } = useAuth();
+    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth();
 
     const { setAuthData } = useActiveUser();
 
@@ -55,7 +55,11 @@ export const LayoutWrapper = ({
                 />
             </header>
 
-            <AuthOverlay />
+            <AuthOverlay
+                showAuthOverlay={showAuthOverlay}
+                showCloseButton={showCloseButton}
+                closeOverlay={closeOverlay}
+            />
 
             <div className={cn("flex flex-1 flex-col", { blur: showAuthOverlay })}>
                 <main

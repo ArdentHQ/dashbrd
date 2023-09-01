@@ -5,6 +5,8 @@ import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
 import { useLikes, type UseLikesReturnType } from "@/Hooks/useLikes";
 
 export const GalleryControls = ({
@@ -15,7 +17,6 @@ export const GalleryControls = ({
     reportAvailableIn = null,
     isDisabled = false,
     showEditAction = true,
-    network,
     reportReasons = {},
 }: {
     likesCount?: number;
@@ -25,10 +26,13 @@ export const GalleryControls = ({
     showEditAction?: boolean;
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
-    network?: App.Data.NetworkData;
     reportReasons?: Record<string, string>;
 }): JSX.Element => {
     const { t } = useTranslation();
+
+    const { authenticated } = useAuth();
+
+    const { showConnectOverlay } = useMetaMaskContext();
 
     let { likes, hasLiked, like }: Partial<UseLikesReturnType> = {
         likes: 0,
@@ -51,7 +55,6 @@ export const GalleryControls = ({
         >
             <div className="flex">
                 <GalleryCurator
-                    network={network}
                     wallet={wallet}
                     className="mr-3 hidden md:flex"
                 />
@@ -67,6 +70,10 @@ export const GalleryControls = ({
                         icon="Heart"
                         className={cn(hasLiked && "button-like-selected")}
                         onClick={() => {
+                            if (!authenticated) {
+                                showConnectOverlay();
+                                return;
+                            }
                             if (like !== undefined) {
                                 void like(gallery.slug);
                             }

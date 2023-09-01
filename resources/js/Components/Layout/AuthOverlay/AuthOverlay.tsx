@@ -12,13 +12,17 @@ import {
 import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
 import { AuthConnectWallet } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties): JSX.Element => {
+export const AuthOverlay = ({
+    className,
+    showAuthOverlay,
+    showCloseButton,
+    closeOverlay,
+    ...properties
+}: AuthOverlayProperties): JSX.Element => {
     const { t } = useTranslation();
-    const { showAuthOverlay } = useAuth();
 
     const {
         needsMetaMask,
@@ -39,6 +43,10 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
         } else {
             disableBodyScroll(reference.current);
         }
+
+        return () => {
+            clearAllBodyScrollLocks();
+        };
     }, [showAuthOverlay, reference]);
 
     const showSignMessage = useMemo(
@@ -74,7 +82,12 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
                     </p>
                 </div>
 
-                {needsMetaMask && <InstallMetamask />}
+                {needsMetaMask && (
+                    <InstallMetamask
+                        closeOverlay={closeOverlay}
+                        showCloseButton={showCloseButton}
+                    />
+                )}
 
                 {!needsMetaMask && (
                     <>
@@ -84,11 +97,11 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
                             {errorMessage === undefined && (
                                 <>
                                     {switching && <SwitchingNetwork />}
-
                                     {connecting && <ConnectingWallet isWaitingSignature={waitingSignature} />}
-
                                     {!connecting && !switching && (
                                         <ConnectWallet
+                                            closeOverlay={closeOverlay}
+                                            showCloseButton={showCloseButton}
                                             isWalletInitialized={initialized}
                                             shouldRequireSignature={requiresSignature}
                                             shouldShowSignMessage={showSignMessage}
@@ -102,6 +115,8 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
 
                             {isTruthy(errorMessage) && (
                                 <ConnectionError
+                                    closeOverlay={closeOverlay}
+                                    showCloseButton={showCloseButton}
                                     errorMessage={errorMessage}
                                     onConnect={() => {
                                         void connectWallet();

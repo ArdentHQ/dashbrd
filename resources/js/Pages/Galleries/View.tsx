@@ -1,14 +1,11 @@
 import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
-import { useEffect } from "react";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
 import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryHeading } from "@/Components/Galleries/GalleryPage/GalleryHeading";
 import { GalleryNfts } from "@/Components/Galleries/GalleryPage/GalleryNfts";
-import { useNetworks } from "@/Hooks/useNetworks";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { assertUser } from "@/Utils/assertions";
 
 interface Properties {
     title: string;
@@ -29,14 +26,7 @@ const GalleriesView = ({
     alreadyReported,
     reportAvailableIn,
 }: Properties): JSX.Element => {
-    assertUser(auth.user);
-
-    const { getByChainId, network } = useNetworks();
     const { props } = usePage();
-
-    useEffect(() => {
-        void getByChainId(gallery.nfts.paginated.data.at(0)?.chainId);
-    }, []);
 
     return (
         <DefaultLayout
@@ -51,12 +41,11 @@ const GalleriesView = ({
                     value={gallery.value}
                     nftsCount={stats.nfts}
                     collectionsCount={stats.collections}
-                    currency={auth.user.attributes.currency}
+                    currency={auth.user?.attributes.currency ?? "USD"}
                 />
 
                 <GalleryControls
                     reportReasons={props.reportReasons}
-                    network={network}
                     likesCount={stats.likes}
                     wallet={gallery.wallet}
                     gallery={gallery}
@@ -68,7 +57,6 @@ const GalleriesView = ({
 
                 <div className="mt-4 hidden justify-center sm:flex md:hidden">
                     <GalleryCurator
-                        network={network}
                         wallet={gallery.wallet}
                         truncate={false}
                         className="w-auto"

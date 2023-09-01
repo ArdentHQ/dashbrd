@@ -59,6 +59,7 @@ class HandleInertiaRequests extends Middleware
                 $walletData,
                 $user !== null,
             ),
+            'allowsGuests' => false,
             'features' => Feature::all(),
             'reportReasons' => Report::reasons(),
             'allowedExternalDomains' => config('dashbrd.allowed_external_domains'),

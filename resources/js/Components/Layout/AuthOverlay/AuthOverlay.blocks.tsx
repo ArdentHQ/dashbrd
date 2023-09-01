@@ -7,31 +7,67 @@ import { Toast } from "@/Components/Toast";
 import { AuthInstallWallet } from "@/images";
 const metamaskDownloadUrl = "https://metamask.io/download/";
 
-export const InstallMetamask = (): JSX.Element => {
+export const InstallMetamask = ({
+    showCloseButton,
+    closeOverlay,
+}: {
+    closeOverlay: () => void;
+    showCloseButton: boolean;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <>
             <AuthInstallWallet />
 
-            <ButtonLink
-                href={metamaskDownloadUrl}
-                target="_blank"
-                icon="Metamask"
-                rel="noopener nofollow noreferrer"
-            >
-                {t("auth.wallet.install")}
-            </ButtonLink>
+            <div className="flex space-x-3">
+                {showCloseButton && (
+                    <Button
+                        data-testid="AuthOverlay__close-button"
+                        variant="secondary"
+                        onClick={closeOverlay}
+                        className="flex-1"
+                    >
+                        {t("common.close")}
+                    </Button>
+                )}
+
+                <ButtonLink
+                    href={metamaskDownloadUrl}
+                    target="_blank"
+                    icon="Metamask"
+                    rel="noopener nofollow noreferrer"
+                >
+                    {t("auth.wallet.install")}
+                </ButtonLink>
+            </div>
         </>
     );
 };
 
-export const ConnectionError = ({ errorMessage, onConnect }: ConnectionErrorProperties): JSX.Element => {
+export const ConnectionError = ({
+    errorMessage,
+    onConnect,
+    showCloseButton,
+    closeOverlay,
+}: ConnectionErrorProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <>
-            <Button onClick={onConnect}>{t("common.retry")}</Button>
+            <div className="flex flex-row space-x-3">
+                {showCloseButton && (
+                    <Button
+                        data-testid="AuthOverlay__close-button"
+                        variant="secondary"
+                        onClick={closeOverlay}
+                        className="flex-1"
+                    >
+                        {t("common.close")}
+                    </Button>
+                )}
+                <Button onClick={onConnect}>{t("common.retry")}</Button>
+            </div>
 
             <Toast
                 type="error"
@@ -96,17 +132,32 @@ export const ConnectWallet = ({
     shouldRequireSignature,
     onConnect,
     shouldShowSignMessage,
+    showCloseButton,
+    closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <>
-            <Button
-                disabled={!isWalletInitialized}
-                onClick={onConnect}
-            >
-                {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
-            </Button>
+            <div className="flex w-full space-x-3">
+                {showCloseButton && (
+                    <Button
+                        data-testid="AuthOverlay__close-button"
+                        variant="secondary"
+                        onClick={closeOverlay}
+                        className="flex-1"
+                    >
+                        {t("common.close")}
+                    </Button>
+                )}
+
+                <Button
+                    disabled={!isWalletInitialized}
+                    onClick={onConnect}
+                >
+                    {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
+                </Button>
+            </div>
 
             {shouldShowSignMessage && (
                 <Toast

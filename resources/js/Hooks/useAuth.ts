@@ -1,10 +1,14 @@
 import { usePage } from "@inertiajs/react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
 export const useAuth = (): App.Data.AuthData & {
     showAuthOverlay: boolean;
+    showCloseButton: boolean;
+    closeOverlay: () => void;
 } => {
+    const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { props } = usePage();
 
@@ -13,16 +17,43 @@ export const useAuth = (): App.Data.AuthData & {
 
     const error = props.error;
 
+    const allowsGuests = props.allowsGuests;
+
     const { wallet, authenticated, user } = auth;
 
-    const { connecting, switching, errorMessage: metamaskErrorMessage, requiresSignature } = useMetaMaskContext();
+    const {
+        connecting,
+        switching,
+        errorMessage: metamaskErrorMessage,
+        requiresSignature,
+        isShowConnectOverlay,
+        hideConnectOverlay,
+    } = useMetaMaskContext();
+
+    const closeOverlay = (): void => {
+        hideConnectOverlay();
+
+        setManuallyClosed(true);
+    };
+
+    useEffect(() => {
+        setManuallyClosed(false);
+    }, [connecting]);
 
     const showAuthOverlay = useMemo<boolean>(() => {
+        if (isShowConnectOverlay) {
+            return true;
+        }
+
+        if (manuallyClosed) {
+            return false;
+        }
+
         if (error === true) {
             return false;
         }
 
-        if (!authenticated) {
+        if (!authenticated && !allowsGuests) {
             return true;
         }
 
@@ -43,12 +74,26 @@ export const useAuth = (): App.Data.AuthData & {
         }
 
         return requiresSignature;
-    }, [authenticated, connecting, metamaskErrorMessage, requiresSignature, switching, error]);
+    }, [
+        authenticated,
+        connecting,
+        metamaskErrorMessage,
+        requiresSignature,
+        switching,
+        error,
+        allowsGuests,
+        manuallyClosed,
+        isShowConnectOverlay,
+    ]);
+
+    const showCloseButton = allowsGuests || isShowConnectOverlay;
 
     return {
         authenticated,
         user,
         wallet,
         showAuthOverlay,
+        showCloseButton,
+        closeOverlay,
     };
 };

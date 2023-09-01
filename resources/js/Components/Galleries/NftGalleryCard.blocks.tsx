@@ -11,7 +11,6 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useAuth } from "@/Hooks/useAuth";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
-import { assertUser } from "@/Utils/assertions";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
@@ -249,6 +248,8 @@ export const GalleryHeading = ({
 const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { likes, hasLiked, like } = useLikes({ count: gallery.likes, hasLiked: gallery.hasLiked });
 
+    const { authenticated } = useAuth();
+
     const likeButtonHandler: MouseEventHandler<HTMLElement> = (event): void => {
         event.preventDefault();
         event.stopPropagation();
@@ -262,11 +263,12 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
                 type="button"
                 onClick={likeButtonHandler}
                 data-testid="GalleryStats__like-button"
+                disabled={!authenticated}
             >
                 <Icon
                     className={cn("transition-all", {
-                        "fill-theme-danger-100 text-theme-danger-400": hasLiked,
-                        "hover:fill-theme-danger-100 hover:text-theme-danger-400": !hasLiked,
+                        "fill-theme-danger-100 text-theme-danger-400": hasLiked && authenticated,
+                        "hover:fill-theme-danger-100 hover:text-theme-danger-400": !hasLiked && authenticated,
                     })}
                     name="Heart"
                     size="lg"
@@ -286,7 +288,6 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
 export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
-    assertUser(user);
 
     return (
         <div
@@ -305,7 +306,7 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                         {gallery.value !== null ? (
                             <DynamicBalance
                                 balance={gallery.value.toString()}
-                                currency={user.attributes.currency}
+                                currency={user?.attributes.currency ?? "USD"}
                             />
                         ) : (
                             "-"

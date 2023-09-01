@@ -106,6 +106,9 @@ export interface MetaMaskState {
     switchToNetwork: (c: Chains) => Promise<void>;
     getTransactionReceipt: (hash: string) => Promise<ProviderResponse<ethers.providers.TransactionReceipt>>;
     getBlock: (blockHash: string) => Promise<ProviderResponse<ethers.providers.Block>>;
+    hideConnectOverlay: () => void;
+    showConnectOverlay: () => void;
+    isShowConnectOverlay: boolean;
 }
 
 enum ErrorType {
@@ -167,6 +170,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [requiresSwitch, setRequiresSwitch] = useState<boolean>(false);
     const [waitingSignature, setWaitingSignature] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
+    const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
     const supportsMetaMask = isMetaMaskSupportedBrowser();
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
 
@@ -260,9 +264,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
             setEthereumProvider(provider);
 
-            if (account === undefined) {
-                await logout();
-            } else {
+            if (account !== undefined) {
                 const currentWalletIsSigned = getWalletIsSigned({
                     ...initialAuth,
                     metamaskWallet: account,
@@ -386,6 +388,16 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
         setConnecting(false);
     }, []);
+
+    const showConnectOverlay = (): void => {
+        setShowConnectOverlay(true);
+    };
+
+    const hideConnectOverlay = (): void => {
+        setShowConnectOverlay(false);
+
+        setErrorMessage(undefined);
+    };
 
     const connectWallet = useCallback(async () => {
         setConnecting(true);
@@ -612,6 +624,9 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         switchToNetwork,
         getTransactionReceipt,
         getBlock,
+        showConnectOverlay,
+        hideConnectOverlay,
+        isShowConnectOverlay,
     };
 };
 

@@ -6,10 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Data\Gallery\GalleriesData;
 use App\Data\Gallery\GalleryData;
+use App\Enums\CurrencyCode;
 use App\Models\Gallery;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,17 +24,18 @@ class GalleryFiltersController extends Controller
             return $this->list($request, $filter);
         }
 
-        return Inertia::render('Galleries/FilterView', ['type' => $filter]);
+        return Inertia::render('Galleries/FilterView', ['type' => $filter, 'allowsGuests' => true])->withViewData([
+            'title' => trans(sprintf('metatags.galleries.%s.title', Str::slug($filter, '_'))),
+        ]);
     }
 
     private function list(Request $request, string $filter): JsonResponse
     {
-        /** @var User $user */
         $user = $request->user();
 
         $queries = [
             'most-popular' => Gallery::popular(),
-            'most-valuable' => Gallery::mostValuable($user->currency()),
+            'most-valuable' => Gallery::mostValuable($user?->currency() ?? CurrencyCode::USD),
             'newest' => Gallery::latest(),
         ];
 

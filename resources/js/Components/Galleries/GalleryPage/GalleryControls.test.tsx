@@ -1,14 +1,42 @@
 import React from "react";
+import { type SpyInstance } from "vitest";
 import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
+import * as useAuth from "@/Hooks/useAuth";
 import * as useLikes from "@/Hooks/useLikes";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
-
 const gallery = new GalleryDataFactory().create();
 
+const user = new UserDataFactory().create();
+const wallet = new WalletFactory().create();
+
+let useAuthSpy: SpyInstance;
+let useMetamaskSpy: SpyInstance;
+
+const defaultMetamaskConfig = getSampleMetaMaskState();
+
 describe("GalleryControls", () => {
+    beforeEach(() => {
+        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user,
+            wallet,
+            authenticated: true,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+    });
+
     afterEach(() => {
+        useMetamaskSpy.mockRestore();
+        useAuthSpy.mockRestore();
         vi.clearAllMocks();
     });
 
@@ -157,6 +185,47 @@ describe("GalleryControls", () => {
         await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
 
         expect(likeMock).toHaveBeenCalled();
+    });
+
+    it("opens auth overlay if no authenticated", async () => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        const showConnectOverlay = vi.fn();
+
+        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
+            getSampleMetaMaskState({
+                showConnectOverlay,
+            }),
+        );
+
+        const likeMock = vi.fn();
+
+        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+            likes: 0,
+            hasLiked: false,
+            like: likeMock,
+        });
+
+        render(
+            <GalleryControls
+                likesCount={3}
+                wallet={gallery.wallet}
+                gallery={gallery}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
+
+        expect(showConnectOverlay).toHaveBeenCalled();
+
+        expect(likeMock).not.toHaveBeenCalled();
     });
 
     it("can show disabled buttons if disabled", () => {

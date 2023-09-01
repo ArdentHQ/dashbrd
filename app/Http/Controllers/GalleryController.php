@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Data\Gallery\GalleriesStatsData;
 use App\Data\Gallery\GalleryData;
 use App\Data\Gallery\GalleryStatsData;
+use App\Enums\CurrencyCode;
 use App\Models\GalleriesStats;
 use App\Models\Gallery;
 use App\Models\User;
@@ -31,19 +32,22 @@ class GalleryController extends Controller
                 $stats->totalDistinctCollections(),
                 $stats->totalDistinctNfts(),
             ),
+            'allowsGuests' => true,
+        ])
+        ->withViewData([
+            'title' => trans('metatags.galleries.title'),
         ]);
     }
 
     public function galleries(Request $request): JsonResponse
     {
-        /** @var User $user */
         $user = $request->user();
 
         $popular = Gallery::popular()->limit(8)->get();
 
         $newest = Gallery::latest()->limit(8)->get();
 
-        $mostValuable = Gallery::mostValuable($user->currency())->limit(8)->get();
+        $mostValuable = Gallery::mostValuable($user?->currency() ?? CurrencyCode::USD)->limit(8)->get();
 
         return response()->json([
             'popular' => GalleryData::collection($popular),
@@ -56,7 +60,6 @@ class GalleryController extends Controller
     {
         $galleryCache = new GalleryCache($gallery);
 
-        /** @var User $user */
         $user = $request->user();
 
         $reportAvailableIn = RateLimiterHelpers::galleryReportAvailableInHumanReadable($request, $gallery);
@@ -72,9 +75,12 @@ class GalleryController extends Controller
                 nfts: $galleryCache->nftsCount(),
                 likes: $gallery->likes()->count(),
             ),
-            'collections' => $galleryCache->collections($user->currency()),
-            'alreadyReported' => $gallery->wasReportedByUserRecently($user),
+            'collections' => $galleryCache->collections($user?->currency() ?? CurrencyCode::USD),
+            'alreadyReported' => $user === null ? false : $gallery->wasReportedByUserRecently($user),
             'reportAvailableIn' => $reportAvailableIn,
+            'allowsGuests' => true,
+        ])->withViewData([
+            'title' => trans('metatags.galleries.view.title', ['name' => $gallery->name]),
         ]);
     }
 
