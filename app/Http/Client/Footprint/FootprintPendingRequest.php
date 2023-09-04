@@ -96,9 +96,14 @@ class FootprintPendingRequest extends PendingRequest
          *  floor_price_amount: float,
          *  amount_currency: string,
          *  on_date: string
-         * } $collectionMetaData
+         * }|null $collectionMetaData
          */
         $collectionMetaData = $data->json('data.0');
+
+        // It's possible to have a 200 response with an empty data array
+        if ($collectionMetaData === null) {
+            return null;
+        }
 
         $currency = $collectionMetaData['amount_currency'];
 
