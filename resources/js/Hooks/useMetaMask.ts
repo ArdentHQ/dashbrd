@@ -479,6 +479,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 setConnecting(false);
 
                 setRequiresSignature(false);
+
+                hideConnectOverlay();
             },
         });
     }, [requestChainAndAccount, router, getSignature]);
