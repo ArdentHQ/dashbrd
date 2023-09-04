@@ -34,10 +34,12 @@ export default defineConfig({
             input: "resources/js/app.tsx",
             refresh: true,
         }),
-        watch({
-            pattern: "app/{Data,Enums}/**/*.php",
-            command: "npm run generate:typescript",
-        }),
+        process.env.NODE_ENV !== "production"
+            ? watch({
+                  pattern: "app/{Data,Enums}/**/*.php",
+                  command: "npm run generate:typescript",
+              })
+            : null,
         react(),
         svgr(),
         markdown(),
