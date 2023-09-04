@@ -27,7 +27,7 @@ export const InstallMetamask = ({
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="flex-1"
+                        className="min-w-[193px] justify-center"
                     >
                         {t("common.close")}
                     </Button>
@@ -38,6 +38,7 @@ export const InstallMetamask = ({
                     target="_blank"
                     icon="Metamask"
                     rel="noopener nofollow noreferrer"
+                    className="min-w-[193px]"
                 >
                     {t("auth.wallet.install")}
                 </ButtonLink>
@@ -62,12 +63,17 @@ export const ConnectionError = ({
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="flex-1"
+                        className="min-w-[81px] justify-center"
                     >
                         {t("common.close")}
                     </Button>
                 )}
-                <Button onClick={onConnect}>{t("common.retry")}</Button>
+                <Button
+                    className="min-w-[81px] justify-center"
+                    onClick={onConnect}
+                >
+                    {t("common.retry")}
+                </Button>
             </div>
 
             <Toast
@@ -146,7 +152,7 @@ export const ConnectWallet = ({
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="flex-1 justify-center whitespace-nowrap"
+                        className="min-w-[154px] justify-center whitespace-nowrap"
                     >
                         {t("common.close")}
                     </Button>
@@ -155,8 +161,8 @@ export const ConnectWallet = ({
                 <Button
                     disabled={!isWalletInitialized}
                     onClick={onConnect}
-                    className={classNames({
-                        "flex-1 justify-center whitespace-nowrap": showCloseButton,
+                    className={classNames("min-w-[154px] justify-center", {
+                        "whitespace-nowrap": showCloseButton,
                     })}
                 >
                     {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
