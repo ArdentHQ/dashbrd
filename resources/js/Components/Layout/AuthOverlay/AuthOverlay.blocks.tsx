@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./AuthOverlay.contracts";
 import { Button } from "@/Components/Buttons";
@@ -139,13 +140,13 @@ export const ConnectWallet = ({
 
     return (
         <>
-            <div className="flex w-full space-x-3">
+            <div className="flex w-full justify-center space-x-3">
                 {showCloseButton && (
                     <Button
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="flex-1"
+                        className="flex-1 justify-center whitespace-nowrap"
                     >
                         {t("common.close")}
                     </Button>
@@ -154,6 +155,9 @@ export const ConnectWallet = ({
                 <Button
                     disabled={!isWalletInitialized}
                     onClick={onConnect}
+                    className={classNames({
+                        "flex-1 justify-center whitespace-nowrap": showCloseButton,
+                    })}
                 >
                     {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
                 </Button>
