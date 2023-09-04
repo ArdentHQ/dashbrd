@@ -1,5 +1,4 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
-const colors = require("tailwindcss/colors");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -121,7 +120,6 @@ module.exports = {
         colors: {
             black: "rgb(var(--theme-color-black) / <alpha-value>)",
             white: "rgb(var(--theme-color-white) / <alpha-value>)",
-            gray: colors.gray,
             transparent: "transparent",
 
             // Tailwind overrides
