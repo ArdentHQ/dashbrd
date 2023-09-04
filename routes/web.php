@@ -43,7 +43,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
-        Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
         Route::post('{collection:address}/hidden',
             [HiddenCollectionController::class, 'store'])->name('hidden-collections.store');
         Route::delete('{collection:address}/hidden',
@@ -65,6 +64,10 @@ Route::middleware('auth')->group(function () {
         Route::post('{gallery:slug}/reports',
             [GalleryReportController::class, 'store'])->name('reports.create')->middleware('throttle:gallery:reports');
     });
+});
+
+Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
+    Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
 });
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
