@@ -458,6 +458,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             replace: true,
             method: "post" as VisitOptions["method"],
             data: {
+                intendedUrl: window.location.href,
                 address,
                 signature,
                 chainId,
