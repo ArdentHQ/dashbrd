@@ -237,7 +237,7 @@ export const WalletTokensTable = ({
                 {
                     Header: t("common.last_n_days", { count: 7 }),
                     id: "chart",
-                    className: "justify-end",
+                    className: "justify-end normal-case",
                     disableSortBy: true,
                 },
             );
@@ -245,9 +245,9 @@ export const WalletTokensTable = ({
 
         if (isXlAndAbove) {
             columns.splice(-2, 0, {
-                Header: t("common.volume").toString(),
+                Header: t("common.volume", { frequency: "(24h)" }).toString(),
                 accessor: "total_volume",
-                className: "justify-end",
+                className: "justify-end w-max",
                 sortDescFirst: true,
             });
         }

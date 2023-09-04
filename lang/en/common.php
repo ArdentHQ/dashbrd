@@ -55,7 +55,7 @@ return [
     'loading' => 'Loading',
     'price' => 'Price',
     'market_cap' => 'Market Cap',
-    'volume' => 'Volume',
+    'volume' => 'Volume :frequency',
     'value' => 'Value',
     'last_n_days' => 'Last :count days',
     'details' => 'Details',
