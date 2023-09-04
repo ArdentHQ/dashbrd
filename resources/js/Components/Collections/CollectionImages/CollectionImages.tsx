@@ -13,10 +13,10 @@ export const CollectionImages = ({
         data-testid="CollectionImages"
         className="flex items-center space-x-2"
     >
-        {nfts.slice(0, maxItems - 1).map((nft, index) => (
+        {nfts.slice(0, maxItems - 1).map((nft) => (
             <div
                 className="h-20 w-20"
-                key={`${nft.id}-${index}`}
+                key={nft.id}
             >
                 <Img
                     className="block aspect-square h-full w-full grow rounded-lg object-cover"

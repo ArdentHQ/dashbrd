@@ -28,7 +28,7 @@ interface CollectionsResponse {
 
 interface CollectionsState {
     loadMore: () => void;
-    reload: ({ showHidden }?: { showHidden?: boolean }) => void;
+    reload: ({ showHidden, page }?: { showHidden?: boolean; page?: number }) => void;
     collections: App.Data.Collections.CollectionData[];
     nfts: App.Data.Collections.CollectionNftData[];
     isLoading: boolean;
@@ -142,7 +142,7 @@ export const useCollections = ({
         });
     };
 
-    const reload = (options: { showHidden?: boolean } = {}): void => {
+    const reload = (options: { showHidden?: boolean; page?: number } = {}): void => {
         setCollections([]);
 
         void fetchCollections({
