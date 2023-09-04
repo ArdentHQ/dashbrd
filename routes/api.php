@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('landing-data', LandingPageDataController::class)->name('landing-data');
+
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
     Route::get('/tokens', [Controllers\TokenController::class, 'list'])->name('tokens.list');
