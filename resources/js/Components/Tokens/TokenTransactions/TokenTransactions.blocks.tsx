@@ -260,10 +260,12 @@ export const ExplorerButton = ({
     chainId,
     address,
     tokenAddress,
+    isNativeToken = false,
 }: {
     chainId: number;
     address?: string;
     tokenAddress: string;
+    isNativeToken?: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -276,7 +278,11 @@ export const ExplorerButton = ({
             <ButtonLink
                 data-testid="ExplorerButton"
                 target="_blank"
-                href={t("urls.explorers.etherscan.token_transactions", { address, token: tokenAddress })}
+                href={
+                    isNativeToken
+                        ? t("urls.explorers.etherscan.addresses", { address })
+                        : t("urls.explorers.etherscan.token_transactions", { address, token: tokenAddress })
+                }
                 variant="primary"
                 className="mt-6"
             >
@@ -289,7 +295,11 @@ export const ExplorerButton = ({
         <ButtonLink
             data-testid="ExplorerButton"
             target="_blank"
-            href={t("urls.explorers.polygonscan.token_transactions", { address, token: tokenAddress })}
+            href={
+                isNativeToken
+                    ? t("urls.explorers.polygonscan.addresses", { address })
+                    : t("urls.explorers.polygonscan.token_transactions", { address, token: tokenAddress })
+            }
             variant="primary"
             className="mt-6"
         >

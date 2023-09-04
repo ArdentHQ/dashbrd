@@ -52,6 +52,18 @@ it('should not get floor price if unable to process request', function () {
     expect($data)->toBeNull();
 });
 
+it('should not get floor price if data array response is empty', function () {
+    Footprint::fake([
+        'https://api.footprint.network/api/v2/*' => Footprint::response(fixtureData('footprint.collection_metrics_empty_data')),
+    ]);
+
+    $contractAddress = '0x23581767a106ae21c074b2276D25e5C3e136a68b';
+
+    $data = Footprint::getNftCollectionFloorPrice(Chains::ETH, $contractAddress);
+
+    expect($data)->toBeNull();
+});
+
 it('can get floor price for the collection', function () {
     Footprint::fake([
         'https://api.footprint.network/api/v2/*' => Footprint::response(fixtureData('footprint.collection_metrics')),
