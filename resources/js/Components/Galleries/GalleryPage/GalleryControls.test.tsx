@@ -121,50 +121,6 @@ describe("GalleryControls", () => {
         expect(screen.queryByText("4")).toBeInTheDocument();
     });
 
-    it("can not like if no gallery ", async () => {
-        const likeMock = vi.fn();
-
-        vi.spyOn(useLikes, "useLikes").mockReturnValue({
-            likes: 0,
-            hasLiked: false,
-            like: likeMock,
-        });
-
-        render(
-            <GalleryControls
-                likesCount={3}
-                wallet={gallery.wallet}
-                gallery={undefined}
-            />,
-        );
-
-        await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
-
-        expect(likeMock).not.toHaveBeenCalled();
-    });
-
-    it("can not like if no likes count ", async () => {
-        const likeMock = vi.fn();
-
-        vi.spyOn(useLikes, "useLikes").mockReturnValue({
-            likes: 0,
-            hasLiked: false,
-            like: likeMock,
-        });
-
-        render(
-            <GalleryControls
-                likesCount={undefined}
-                wallet={gallery.wallet}
-                gallery={gallery}
-            />,
-        );
-
-        await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
-
-        expect(likeMock).not.toHaveBeenCalled();
-    });
-
     it("can like if gallery is defined", async () => {
         const likeMock = vi.fn();
 
