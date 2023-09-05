@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\GalleryResource\Pages;
+use App\Filament\Resources\GalleryResource\Pages\ListGalleries;
 use App\Models\Gallery;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -90,7 +90,7 @@ class GalleryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGalleries::route('/'),
+            'index' => ListGalleries::route('/'),
         ];
     }
 }
