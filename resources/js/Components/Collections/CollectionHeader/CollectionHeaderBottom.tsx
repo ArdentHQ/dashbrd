@@ -44,7 +44,7 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
                 <GridHeader
                     data-testid="CollectionHeaderBottom__volume"
                     className="lg:border-r lg:border-theme-secondary-300 lg:pl-0 lg:pr-6"
-                    title={t("common.volume")}
+                    title={t("common.volume", { frequency: "" })}
                     value={
                         <FormatCrypto
                             value={collection.volume ?? "0"}
