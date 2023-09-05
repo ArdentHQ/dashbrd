@@ -10,49 +10,49 @@ return [
     ],
 
     'error' => [
-        'title' => 'Error :code - Dashbrd',
+        'title' => 'Error :code | Dashbrd',
     ],
 
     'wallet' => [
-        'title' => 'My Wallet - Dashbrd',
+        'title' => 'My Wallet | Dashbrd',
     ],
 
     'galleries' => [
-        'title' => 'Galleries - Dashbrd',
+        'title' => 'Galleries | Dashbrd',
         'most_popular' => [
-            'title' => 'Most Popular Galleries - Dashbrd',
+            'title' => 'Most Popular Galleries | Dashbrd',
         ],
         'newest' => [
-            'title' => 'Newest Galleries - Dashbrd',
+            'title' => 'Newest Galleries | Dashbrd',
         ],
         'most_valuable' => [
-            'title' => 'Most Valuable Galleries - Dashbrd',
+            'title' => 'Most Valuable Galleries | Dashbrd',
         ],
         'view' => [
-            'title' => ':name - Dashbrd',
+            'title' => ':name | Dashbrd',
         ],
     ],
 
     'my_galleries' => [
-        'title' => 'My Galleries - Dashbrd',
+        'title' => 'My Galleries | Dashbrd',
         'create' => [
-            'title' => 'Create Gallery - Dashbrd',
+            'title' => 'Create Gallery | Dashbrd',
         ],
         'edit' => [
-            'title' => 'Edit :name - Dashbrd',
+            'title' => 'Edit :name | Dashbrd',
         ],
     ],
 
     'collections' => [
-        'title' => 'Collections - Dashbrd',
+        'title' => 'Collections | Dashbrd',
     ],
 
     'settings' => [
-        'title' => 'Settings - Dashbrd',
+        'title' => 'Settings | Dashbrd',
     ],
 
     'login' => [
-        'title' => 'Login - Dashbrd',
+        'title' => 'Login | Dashbrd',
     ],
 
     'privacy_policy' => [
