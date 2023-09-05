@@ -107,7 +107,7 @@ export interface MetaMaskState {
     getTransactionReceipt: (hash: string) => Promise<ProviderResponse<ethers.providers.TransactionReceipt>>;
     getBlock: (blockHash: string) => Promise<ProviderResponse<ethers.providers.Block>>;
     hideConnectOverlay: () => void;
-    showConnectOverlay: () => void;
+    showConnectOverlay: (onConnected?: () => void) => void;
     isShowConnectOverlay: boolean;
 }
 
@@ -173,6 +173,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
     const supportsMetaMask = isMetaMaskSupportedBrowser();
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
+    const [onConnected, setOnConnected] = useState<() => void>();
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
@@ -389,14 +390,18 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         setConnecting(false);
     }, []);
 
-    const showConnectOverlay = (): void => {
+    const showConnectOverlay = (onConnected?: () => void): void => {
         setShowConnectOverlay(true);
+
+        setOnConnected(onConnected);
     };
 
     const hideConnectOverlay = (): void => {
         setShowConnectOverlay(false);
 
         setErrorMessage(undefined);
+
+        setOnConnected(undefined);
     };
 
     const connectWallet = useCallback(async () => {
@@ -473,6 +478,10 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 onError(ErrorType.Generic, firstError);
             },
             onFinish: () => {
+                if (onConnected !== undefined) {
+                    onConnected();
+                }
+
                 setAccount(account);
 
                 setChainId(chainId);

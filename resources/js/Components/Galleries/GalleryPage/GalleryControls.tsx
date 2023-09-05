@@ -71,9 +71,14 @@ export const GalleryControls = ({
                         className={cn(hasLiked && "button-like-selected")}
                         onClick={() => {
                             if (!authenticated) {
-                                showConnectOverlay();
+                                showConnectOverlay(() => {
+                                    if (like !== undefined) {
+                                        void like(gallery.slug);
+                                    }
+                                });
                                 return;
                             }
+
                             if (like !== undefined) {
                                 void like(gallery.slug);
                             }
