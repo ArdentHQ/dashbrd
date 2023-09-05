@@ -237,7 +237,7 @@ export const WalletTokensTable = ({
                 {
                     Header: t("common.last_n_days", { count: 7 }),
                     id: "chart",
-                    className: "justify-end normal-case",
+                    className: "justify-end",
                     disableSortBy: true,
                 },
             );

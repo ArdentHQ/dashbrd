@@ -57,7 +57,7 @@ return [
     'market_cap' => 'Market Cap',
     'volume' => 'Volume :frequency',
     'value' => 'Value',
-    'last_n_days' => 'Last :count days',
+    'last_n_days' => 'Last :count Days',
     'details' => 'Details',
     'view_all' => 'View All',
     'view_more_on_polygonscan' => 'View More on PolygonScan',
