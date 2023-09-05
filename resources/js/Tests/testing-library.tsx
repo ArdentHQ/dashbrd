@@ -11,7 +11,6 @@ import { type SpyInstance } from "vitest";
 import { type Breakpoint, breakpointWidth } from "./utils";
 import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
 import EnvironmentContextProvider from "@/Contexts/EnvironmentContext";
-import { TransactionSliderProvider } from "@/Contexts/TransactionSliderContext";
 import { i18n } from "@/I18n";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
