@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import { IconButton, LikeButton } from "@/Components/Buttons";
@@ -66,27 +67,30 @@ export const GalleryControls = ({
                         data-testid="GalleryControls__like-button"
                     />
                 ) : (
-                    <LikeButton
-                        icon="Heart"
-                        className={cn(hasLiked && "button-like-selected")}
-                        onClick={() => {
-                            if (!authenticated) {
-                                showConnectOverlay(() => {
-                                    if (like !== undefined) {
-                                        void like(gallery.slug);
-                                    }
-                                });
-                                return;
-                            }
+                    <>
+                        <LikeButton
+                            icon="Heart"
+                            className={cn(hasLiked && "button-like-selected")}
+                            onClick={() => {
+                                if (!authenticated) {
+                                    showConnectOverlay(() => {
+                                        void like(gallery.slug, true);
 
-                            if (like !== undefined) {
+                                        router.reload({
+                                            only: ["stats", "gallery"],
+                                        });
+                                    });
+
+                                    return;
+                                }
+
                                 void like(gallery.slug);
-                            }
-                        }}
-                        data-testid="GalleryControls__like-button"
-                    >
-                        {likes}
-                    </LikeButton>
+                            }}
+                            data-testid="GalleryControls__like-button"
+                        >
+                            {likes}
+                        </LikeButton>
+                    </>
                 )}
             </div>
 

@@ -93,13 +93,19 @@ class GalleryController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        if ($gallery->isLikedBy($user)) {
+        $like = $request->has('like') ? $request->boolean('like') : null;
+
+        if ($like !== null) {
+            if ($like) {
+                $gallery->addLike($user);
+            } else {
+                $gallery->removeLike($user);
+            }
+        } elseif ($gallery->isLikedBy($user)) {
             $gallery->removeLike($user);
-
-            return response()->json(['likes' => $gallery->likeCount, 'hasLiked' => $gallery->isLikedBy($user)], 201);
+        } else {
+            $gallery->addLike($user);
         }
-
-        $gallery->addLike($user);
 
         return response()->json(['likes' => $gallery->likeCount, 'hasLiked' => $gallery->isLikedBy($user)], 201);
     }

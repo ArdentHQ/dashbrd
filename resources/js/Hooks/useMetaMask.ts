@@ -393,7 +393,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const showConnectOverlay = (onConnected?: () => void): void => {
         setShowConnectOverlay(true);
 
-        setOnConnected(onConnected);
+        setOnConnected(() => onConnected);
     };
 
     const hideConnectOverlay = (): void => {
@@ -478,10 +478,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 onError(ErrorType.Generic, firstError);
             },
             onFinish: () => {
-                if (onConnected !== undefined) {
-                    onConnected();
-                }
-
                 setAccount(account);
 
                 setChainId(chainId);
@@ -491,9 +487,13 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 setRequiresSignature(false);
 
                 hideConnectOverlay();
+
+                if (onConnected !== undefined) {
+                    onConnected();
+                }
             },
         });
-    }, [requestChainAndAccount, router, getSignature]);
+    }, [requestChainAndAccount, router, getSignature, onConnected]);
 
     const addNetwork = async (chainId: Chains): Promise<void> => {
         if (ethereumProvider === undefined) {
