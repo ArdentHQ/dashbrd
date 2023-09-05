@@ -27,7 +27,7 @@ class GalleryNftData extends Data
         public string $collectionName,
         public string $collectionSlug,
         public int $collectionNftCount,
-        public string $collectionWebsite,
+        public ?string $collectionWebsite,
         public ?string $collectionImage,
         public ?string $floorPrice,
         public ?string $floorPriceCurrency,

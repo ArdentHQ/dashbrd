@@ -110,17 +110,21 @@ class Collection extends Model
         return $this->extra_attributes->get('banner');
     }
 
-    public function website(): string
+    public function website(): ?string
     {
         $website = $this->extra_attributes->get('website');
 
-        if ($website !== null) {
-            return Str::startsWith($website, ['https://', 'http://'])
-                    ? $website
-                    : Str::start($website, 'https://');
+        if ($website === null) {
+            return null;
         }
 
-        return $this->explorerUrl();
+        if (Str::startsWith($website, $this->network->explorer_url)) {
+            return null;
+        }
+
+        return Str::startsWith($website, ['https://', 'http://'])
+                ? $website
+                : Str::start($website, 'https://');
     }
 
     public function twitter(): ?string

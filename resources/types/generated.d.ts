@@ -243,7 +243,7 @@ declare namespace App.Data.Gallery {
         collectionName: string;
         collectionSlug: string;
         collectionNftCount: number;
-        collectionWebsite: string;
+        collectionWebsite: string | null;
         collectionImage: string | null;
         floorPrice: string | null;
         floorPriceCurrency: string | null;
