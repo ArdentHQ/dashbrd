@@ -246,9 +246,9 @@ export const WalletTokensTable = ({
 
         if (isXlAndAbove) {
             columns.splice(-2, 0, {
-                Header: t("common.volume").toString(),
+                Header: t("common.volume", { frequency: "(24h)" }).toString(),
                 accessor: "total_volume",
-                className: "justify-end",
+                className: "justify-end w-max",
                 sortDescFirst: true,
             });
         }
