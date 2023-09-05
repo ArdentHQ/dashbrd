@@ -23,7 +23,7 @@ class NftCollectionData extends Data
         #[LiteralTypeScriptType('App.Enums.Chains')]
         public int $chainId,
         public ?string $floorPrice,
-        public ?string $website,
+        public string $website,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
     ) {

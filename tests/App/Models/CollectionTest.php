@@ -106,7 +106,7 @@ it('can retrieve the collection website', function () {
         ],
     ]);
 
-    expect($collection->website())->toBeNull();
+    expect($collection->website(defaultToExplorer: false))->toBeNull();
 
     $collection = Collection::factory()->create([
         'address' => '0xtest',
@@ -116,7 +116,17 @@ it('can retrieve the collection website', function () {
         ],
     ]);
 
-    expect($collection->website())->toBeNull();
+    expect($collection->website(defaultToExplorer: false))->toBeNull();
+
+    $collection = Collection::factory()->create([
+        'address' => '0xtest',
+        'extra_attributes' => [
+            'image' => 'test',
+            'website' => null,
+        ],
+    ]);
+
+    expect($collection->website(defaultToExplorer: true))->not->toBeNull();
 });
 
 it('can get reporting throttle duration', function () {

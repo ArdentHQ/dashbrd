@@ -31,7 +31,7 @@ class CollectionData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?string $banner,
-        public ?string $website,
+        public string $website,
         public int $nftsCount,
     ) {
     }
