@@ -1,5 +1,5 @@
-import { useForm } from "@inertiajs/react";
-import { useMemo, useRef, useState } from "react";
+import { router, useForm } from "@inertiajs/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
@@ -14,12 +14,14 @@ export const GalleryReportModal = ({
     alreadyReported = false,
     reportAvailableIn = null,
     reportReasons = {},
+    show = false,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
     isDisabled?: boolean;
     reportAvailableIn?: string | null;
     alreadyReported?: boolean;
     reportReasons?: Record<string, string>;
+    show?: boolean;
 }): JSX.Element => {
     const [open, setOpen] = useState(false);
     const [failed, setFailed] = useState(false);
@@ -62,7 +64,14 @@ export const GalleryReportModal = ({
         setOpen(false);
 
         setFailed(false);
+
         reset("reason");
+
+        router.reload({
+            data: {
+                report: undefined,
+            },
+        });
     };
 
     const submit = (): void => {
@@ -84,6 +93,12 @@ export const GalleryReportModal = ({
 
     const { showConnectOverlay } = useMetaMaskContext();
 
+    useEffect(() => {
+        if (show && canReport) {
+            setOpen(true);
+        }
+    }, [show]);
+
     return (
         <>
             <Tooltip
@@ -96,7 +111,15 @@ export const GalleryReportModal = ({
                         data-testid="GalleryControls__flag-button"
                         onClick={() => {
                             if (!authenticated) {
-                                showConnectOverlay();
+                                showConnectOverlay(() => {
+                                    setOpen(true);
+
+                                    router.reload({
+                                        data: {
+                                            report: true,
+                                        },
+                                    });
+                                });
                                 return;
                             }
 

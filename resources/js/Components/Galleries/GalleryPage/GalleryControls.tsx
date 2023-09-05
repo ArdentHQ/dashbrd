@@ -8,7 +8,7 @@ import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurato
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
-import { useLikes, type UseLikesReturnType } from "@/Hooks/useLikes";
+import { useLikes } from "@/Hooks/useLikes";
 
 export const GalleryControls = ({
     likesCount,
@@ -19,6 +19,7 @@ export const GalleryControls = ({
     isDisabled = false,
     showEditAction = true,
     reportReasons = {},
+    showReportModal = false,
 }: {
     likesCount?: number;
     gallery?: App.Data.Gallery.GalleryData;
@@ -28,6 +29,7 @@ export const GalleryControls = ({
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
+    showReportModal?: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -35,19 +37,10 @@ export const GalleryControls = ({
 
     const { showConnectOverlay } = useMetaMaskContext();
 
-    let { likes, hasLiked, like }: Partial<UseLikesReturnType> = {
-        likes: 0,
-        hasLiked: false,
-        like: undefined,
-    };
-
-    if (likesCount !== undefined && gallery !== undefined) {
-        const result = useLikes({ count: likesCount, hasLiked: gallery.hasLiked });
-
-        likes = result.likes;
-        hasLiked = result.hasLiked;
-        like = result.like;
-    }
+    const { likes, hasLiked, like } = useLikes({
+        count: likesCount ?? 0,
+        hasLiked: gallery?.hasLiked ?? false,
+    });
 
     return (
         <div
@@ -121,6 +114,7 @@ export const GalleryControls = ({
                         gallery={gallery}
                         alreadyReported={alreadyReported}
                         reportAvailableIn={reportAvailableIn}
+                        show={showReportModal}
                     />
                 )}
 

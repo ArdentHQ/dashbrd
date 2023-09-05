@@ -81,6 +81,7 @@ class GalleryController extends Controller
             'alreadyReported' => $user === null ? false : $gallery->wasReportedByUserRecently($user),
             'reportAvailableIn' => $reportAvailableIn,
             'allowsGuests' => true,
+            'showReportModal' => $request->boolean('report'),
         ])->withViewData([
             'title' => trans('metatags.galleries.view.title', ['name' => $gallery->name]),
             'description' => trans('metatags.galleries.view.description', ['name' => $gallery->name]),

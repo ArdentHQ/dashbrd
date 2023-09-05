@@ -15,6 +15,7 @@ interface Properties {
     collections: App.Data.Nfts.NftCollectionData[];
     alreadyReported: boolean;
     reportAvailableIn?: string | null;
+    showReportModal: boolean;
 }
 
 const GalleriesView = ({
@@ -25,6 +26,7 @@ const GalleriesView = ({
     title,
     alreadyReported,
     reportAvailableIn,
+    showReportModal,
 }: Properties): JSX.Element => {
     const { props } = usePage();
 
@@ -51,6 +53,7 @@ const GalleriesView = ({
                     gallery={gallery}
                     alreadyReported={alreadyReported}
                     reportAvailableIn={reportAvailableIn}
+                    showReportModal={showReportModal}
                 />
 
                 <GalleryNfts nfts={gallery.nfts.paginated.data} />
