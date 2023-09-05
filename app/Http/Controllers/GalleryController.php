@@ -36,6 +36,8 @@ class GalleryController extends Controller
         ])
         ->withViewData([
             'title' => trans('metatags.galleries.title'),
+            'image' => trans('metatags.galleries.image'),
+            'description' => trans('metatags.galleries.description'),
         ]);
     }
 
@@ -81,6 +83,8 @@ class GalleryController extends Controller
             'allowsGuests' => true,
         ])->withViewData([
             'title' => trans('metatags.galleries.view.title', ['name' => $gallery->name]),
+            'description' => trans('metatags.galleries.view.description', ['name' => $gallery->name]),
+            'image' => trans('metatags.galleries.view.image'),
         ]);
     }
 

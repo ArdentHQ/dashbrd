@@ -26,6 +26,8 @@ class GalleryFiltersController extends Controller
 
         return Inertia::render('Galleries/FilterView', ['type' => $filter, 'allowsGuests' => true])->withViewData([
             'title' => trans(sprintf('metatags.galleries.%s.title', Str::slug($filter, '_'))),
+            'image' => trans(sprintf('metatags.galleries.%s.image', Str::slug($filter, '_'))),
+            'description' => trans(sprintf('metatags.galleries.%s.description', Str::slug($filter, '_'))),
         ]);
     }
 

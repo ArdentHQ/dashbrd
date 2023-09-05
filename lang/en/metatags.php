@@ -19,17 +19,27 @@ return [
 
     'galleries' => [
         'title' => 'Galleries - Dashbrd',
+        'image' => '/images/nft-galleries-meta.png',
+        'description' => 'Explore user published NFT galleries to find custom curated PFPs, Digital Collectibles, & More.',
         'most_popular' => [
             'title' => 'Most Popular Galleries - Dashbrd',
+            'image' => '/images/most-popular-nft-galleries-meta.png',
+            'description' => 'Explore and discover Most Popular NFT Galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More.',
         ],
         'newest' => [
             'title' => 'Newest Galleries - Dashbrd',
+            'image' => '/images/newest-nft-galleries-meta.png',
+            'description' => 'Explore and discover most recent NFT galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More',
         ],
         'most_valuable' => [
             'title' => 'Most Valuable Galleries - Dashbrd',
+            'image' => '/images/most-valuable-nft-galleries-meta.png',
+            'description' => 'Explore and discover Most Valuable NFT Galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More.',
         ],
         'view' => [
             'title' => ':name - Dashbrd',
+            'description' => ':name - A Curated NFT Gallery at Dashbrd',
+            'image' => '/images/nft-gallery-meta.png',
         ],
     ],
 
