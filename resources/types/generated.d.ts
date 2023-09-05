@@ -98,7 +98,7 @@ declare namespace App.Data.Collections {
         floorPriceDecimals: number | null;
         image: string | null;
         banner: string | null;
-        website: string;
+        website: string | null;
         nftsCount: number;
     };
     export type CollectionDetailData = {
@@ -318,7 +318,7 @@ declare namespace App.Data.Nfts {
         address: string;
         chainId: App.Enums.Chains;
         floorPrice: string | null;
-        website: string;
+        website: string | null;
         image: string | null;
     };
     export type NftData = {

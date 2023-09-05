@@ -147,11 +147,6 @@ class Collection extends Model
         return self::DISCORD_URL.$discord;
     }
 
-    private function explorerUrl(): string
-    {
-        return $this->network->explorer_url.'/token/'.$this->address;
-    }
-
     public function newReportNotification(Report $report): Notification
     {
         return new CollectionReport($report);
