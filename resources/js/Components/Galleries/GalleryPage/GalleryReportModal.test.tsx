@@ -75,7 +75,7 @@ describe("GalleryReportModal", () => {
         routerSpy.mockRestore();
     });
 
-    it("opens the modal if param passed", async () => {
+    it("opens the modal if param passed", () => {
         render(
             <GalleryReportModal
                 gallery={gallery}
