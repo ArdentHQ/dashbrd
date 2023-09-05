@@ -23,27 +23,35 @@ const user = new UserDataFactory().create();
 
 const queryClient = new QueryClient();
 
+export const TestProviders = ({
+    children,
+    options,
+}: {
+    children: React.ReactElement;
+    options?: { breakpoint?: Breakpoint };
+}): JSX.Element => (
+    <QueryClientProvider client={queryClient}>
+        <EnvironmentContextProvider
+            environment="local"
+            features={{
+                collections: true,
+                galleries: true,
+                portfolio: true,
+            }}
+        >
+            <I18nextProvider i18n={i18n}>
+                <ActiveUserContextProvider initialAuth={{ wallet, user, authenticated: false }}>
+                    <ResponsiveContext.Provider value={{ width: breakpointWidth(options?.breakpoint) }}>
+                        {children}
+                    </ResponsiveContext.Provider>
+                </ActiveUserContextProvider>
+            </I18nextProvider>
+        </EnvironmentContextProvider>
+    </QueryClientProvider>
+);
+
 export const render = (component: React.ReactElement, options?: { breakpoint?: Breakpoint }): RenderResult =>
-    testRender(
-        <QueryClientProvider client={queryClient}>
-            <EnvironmentContextProvider
-                environment="local"
-                features={{
-                    collections: true,
-                    galleries: true,
-                    portfolio: true,
-                }}
-            >
-                <I18nextProvider i18n={i18n}>
-                    <ActiveUserContextProvider initialAuth={{ wallet, user, authenticated: false }}>
-                        <ResponsiveContext.Provider value={{ width: breakpointWidth(options?.breakpoint) }}>
-                            <TransactionSliderProvider>{component}</TransactionSliderProvider>
-                        </ResponsiveContext.Provider>
-                    </ActiveUserContextProvider>
-                </I18nextProvider>
-            </EnvironmentContextProvider>
-        </QueryClientProvider>,
-    );
+    testRender(<TestProviders options={options}>{component}</TestProviders>);
 
 export const userEvent = testUserEvent;
 

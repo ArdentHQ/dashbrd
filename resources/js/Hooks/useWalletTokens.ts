@@ -22,7 +22,7 @@ interface WalletTokenReturnProperties {
 }
 
 export const useWalletTokens = (wallet?: App.Data.Wallet.WalletData | null): WalletTokenReturnProperties => {
-    const { calculateInterval } = useWalletPollingInterval();
+    const { calculateInterval } = useWalletPollingInterval(wallet);
 
     const [sortOptions, setSortOptions] = useState<SortOptions>({
         sort: "fiat_balance",
@@ -37,7 +37,7 @@ export const useWalletTokens = (wallet?: App.Data.Wallet.WalletData | null): Wal
         queryKey,
         refetchOnWindowFocus: false,
         staleTime: Number.POSITIVE_INFINITY,
-        refetchInterval: () => calculateInterval(wallet, queryClient.getQueryState(queryKey)?.dataUpdateCount),
+        refetchInterval: () => calculateInterval(queryClient.getQueryState(queryKey)?.dataUpdateCount),
         queryFn: async ({ pageParam }) =>
             await axios.get<PaginationData<App.Data.TokenListItemData>>(
                 route("tokens.list", { page: pageParam as number, ...sortOptions }),

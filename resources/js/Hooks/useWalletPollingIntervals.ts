@@ -1,16 +1,31 @@
+import { DateTime } from "@ardenthq/sdk-intl";
+import { LocalStorageKey, useLocalStorage } from "./useLocalStorage";
 import { isTruthy } from "@/Utils/is-truthy";
 
-enum Interval {
+export enum Interval {
     Long = 60 * 5 * 1000, // 5 minute,
     Short = 5 * 1000, // 5 seconds
     Regular = 30 * 1000, // 30 seconds
 }
 
-interface Properties {
-    calculateInterval: (wallet?: App.Data.Wallet.WalletData | null, retries?: number) => number;
+interface CalculateIntervalProperties {
+    wallet?: App.Data.Wallet.WalletData | null;
+    lastTransactionSentAt?: number | null;
+    retries?: number;
 }
 
-export const calculateInterval = (wallet?: App.Data.Wallet.WalletData | null, retries?: number): number => {
+interface Properties {
+    calculateInterval: (retries?: number) => number;
+}
+
+export const calculateInterval = ({ wallet, retries, lastTransactionSentAt }: CalculateIntervalProperties): number => {
+    if (
+        isTruthy(lastTransactionSentAt) &&
+        DateTime.make(lastTransactionSentAt).addMinutes(1).isBefore(DateTime.make())
+    ) {
+        return Interval.Short;
+    }
+
     if (wallet?.timestamps.tokens_fetched_at !== null && wallet?.timestamps.native_balances_fetched_at !== null) {
         return Interval.Long;
     }
@@ -22,4 +37,10 @@ export const calculateInterval = (wallet?: App.Data.Wallet.WalletData | null, re
     return Interval.Short;
 };
 
-export const useWalletPollingInterval = (): Properties => ({ calculateInterval });
+export const useWalletPollingInterval = (wallet?: App.Data.Wallet.WalletData | null): Properties => {
+    const [lastTransactionSentAt] = useLocalStorage<number | null>(LocalStorageKey.LastTransactionSentAt);
+
+    return {
+        calculateInterval: (retries?: number) => calculateInterval({ wallet, retries, lastTransactionSentAt }),
+    };
+};

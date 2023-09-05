@@ -9,7 +9,7 @@ interface Properties {
 }
 
 export const useActiveWallet = (wallet?: App.Data.Wallet.WalletData | null): Properties => {
-    const { calculateInterval } = useWalletPollingInterval();
+    const { calculateInterval } = useWalletPollingInterval(wallet);
 
     const queryClient = useQueryClient();
     const queryKey: QueryKey = ["wallet-data"];
@@ -17,7 +17,7 @@ export const useActiveWallet = (wallet?: App.Data.Wallet.WalletData | null): Pro
     const { data } = useQuery({
         enabled: isTruthy(wallet),
         queryKey,
-        refetchInterval: () => calculateInterval(wallet, queryClient.getQueryState(queryKey)?.dataUpdateCount),
+        refetchInterval: () => calculateInterval(queryClient.getQueryState(queryKey)?.dataUpdateCount),
         staleTime: Number.POSITIVE_INFINITY,
         refetchOnWindowFocus: false,
         select: ({ data }) => data,

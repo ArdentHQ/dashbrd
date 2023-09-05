@@ -10,7 +10,7 @@ export const usePortfolioBreakdown = (
     assets: App.Data.TokenPortfolioData[];
     isLoading: boolean;
 } => {
-    const { calculateInterval } = useWalletPollingInterval();
+    const { calculateInterval } = useWalletPollingInterval(wallet);
 
     const queryClient = useQueryClient();
     const queryKey: QueryKey = ["breakdown"];
@@ -18,7 +18,7 @@ export const usePortfolioBreakdown = (
     const { data, isLoading } = useQuery({
         enabled: isTruthy(wallet),
         queryKey,
-        refetchInterval: () => calculateInterval(wallet, queryClient.getQueryState(queryKey)?.dataUpdateCount),
+        refetchInterval: () => calculateInterval(queryClient.getQueryState(queryKey)?.dataUpdateCount),
         staleTime: Number.POSITIVE_INFINITY,
         refetchOnWindowFocus: false,
         select: ({ data }) => data,

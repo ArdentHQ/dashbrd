@@ -11,9 +11,9 @@ describe("useWalletPollingInterval", () => {
             },
         });
 
-        const { result } = renderHook(() => useWalletPollingInterval());
+        const { result } = renderHook(() => useWalletPollingInterval(wallet));
 
-        expect(result.current.calculateInterval(wallet, 0)).toEqual(5000);
+        expect(result.current.calculateInterval(0)).toEqual(5000);
     });
 
     it("should return regular interval if user is new and has more than 12 retries", () => {
@@ -24,9 +24,9 @@ describe("useWalletPollingInterval", () => {
             },
         });
 
-        const { result } = renderHook(() => useWalletPollingInterval());
+        const { result } = renderHook(() => useWalletPollingInterval(wallet));
 
-        expect(result.current.calculateInterval(wallet, 13)).toEqual(30000);
+        expect(result.current.calculateInterval(0)).toEqual(30000);
     });
 
     it("should return long interval if the wallet was recently active", () => {
@@ -37,8 +37,8 @@ describe("useWalletPollingInterval", () => {
             },
         });
 
-        const { result } = renderHook(() => useWalletPollingInterval());
+        const { result } = renderHook(() => useWalletPollingInterval(wallet));
 
-        expect(result.current.calculateInterval(wallet, 0)).toEqual(300000);
+        expect(result.current.calculateInterval(0)).toEqual(300000);
     });
 });

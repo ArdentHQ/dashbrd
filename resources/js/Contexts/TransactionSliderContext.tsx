@@ -37,8 +37,8 @@ export const TransactionSliderProvider = ({ children }: { children: React.ReactN
     const [transactionAsset, setTransactionAsset] = useState<App.Data.TokenListItemData | undefined>();
 
     const { wallet, user } = useActiveUser();
-    const { tokens } = useWalletTokens(wallet);
     const { registerTransaction, lastTransaction } = useTransactionStatusMonitor();
+    const { tokens } = useWalletTokens(wallet);
 
     return (
         <TransactionSliderContext.Provider
