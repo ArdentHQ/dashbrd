@@ -8,9 +8,9 @@ use App\Filament\Resources\GalleryResource\Pages\ListGalleries;
 use App\Models\Gallery;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -75,7 +75,7 @@ class GalleryResource extends Resource
                             ->modalIcon('heroicon-o-photo')
                             ->modalWidth('sm'),
 
-                    Tables\Actions\DeleteAction::make(),
+                    DeleteAction::make(),
                 ]),
             ]);
     }
