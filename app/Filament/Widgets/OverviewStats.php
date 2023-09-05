@@ -28,6 +28,7 @@ class OverviewStats extends StatsOverviewWidget
                     if ($wallets === 0) {
                         return 0;
                     }
+
                     return (round(Nft::whereNotNull('wallet_id')->count() / $wallets, 2)*100).'%';
                 }
             )),
@@ -38,6 +39,7 @@ class OverviewStats extends StatsOverviewWidget
                     if ($wallets === 0) {
                         return 0;
                     }
+
                     return (round(Collection::count() / $wallets, 2)*100).'%';
                 }
             )),
