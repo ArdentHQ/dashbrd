@@ -120,6 +120,7 @@ export const GalleryReportModal = ({
                                         },
                                     });
                                 });
+
                                 return;
                             }
 

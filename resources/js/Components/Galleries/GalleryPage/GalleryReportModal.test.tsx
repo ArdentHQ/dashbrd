@@ -75,6 +75,17 @@ describe("GalleryReportModal", () => {
         routerSpy.mockRestore();
     });
 
+    it("opens the modal if param passed", async () => {
+        render(
+            <GalleryReportModal
+                gallery={gallery}
+                show={true}
+            />,
+        );
+
+        expect(screen.queryByTestId("ReportModal")).toBeInTheDocument();
+    });
+
     it("disables the button with isDisabled prop", () => {
         render(
             <GalleryReportModal
@@ -163,6 +174,38 @@ describe("GalleryReportModal", () => {
         });
 
         expect(showConnectOverlay).toHaveBeenCalled();
+    });
+
+    it("opens the modal after logged in", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        const showConnectOverlay = vi.fn().mockImplementation((callback) => {
+            callback();
+        });
+
+        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
+            getSampleMetaMaskState({
+                showConnectOverlay,
+            }),
+        );
+
+        await renderAndOpenDialog({
+            reason1: "lorem ipsum",
+            reason2: "lorem ipsum",
+        });
+
+        expect(showConnectOverlay).toHaveBeenCalled();
+
+        expect(routerSpy).toHaveBeenCalled();
     });
 
     it("can be submitted without a gallery", () => {

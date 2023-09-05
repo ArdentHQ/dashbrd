@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import React from "react";
 import { type SpyInstance } from "vitest";
 import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
@@ -182,6 +183,55 @@ describe("GalleryControls", () => {
         expect(showConnectOverlay).toHaveBeenCalled();
 
         expect(likeMock).not.toHaveBeenCalled();
+    });
+
+    it("likes and reloads the page after logged in", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        const showConnectOverlay = vi.fn().mockImplementation((callback) => {
+            callback();
+        });
+
+        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
+            getSampleMetaMaskState({
+                showConnectOverlay,
+            }),
+        );
+
+        const likeMock = vi.fn();
+
+        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+            likes: 0,
+            hasLiked: false,
+            like: likeMock,
+        });
+
+        render(
+            <GalleryControls
+                likesCount={3}
+                wallet={gallery.wallet}
+                gallery={gallery}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
+
+        expect(showConnectOverlay).toHaveBeenCalled();
+
+        expect(likeMock).toHaveBeenCalled();
+
+        expect(routerSpy).toHaveBeenCalled();
+
+        routerSpy.mockRestore();
     });
 
     it("can show disabled buttons if disabled", () => {
