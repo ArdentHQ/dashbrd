@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import React from "react";
 import { type SpyInstance } from "vitest";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
@@ -59,6 +60,8 @@ describe("GalleryReportModal", () => {
     });
 
     it("can be closed", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
         await renderAndOpenDialog();
 
         const closeButton = screen.getByTestId("ConfirmationDialog__close");
@@ -66,6 +69,10 @@ describe("GalleryReportModal", () => {
         fireEvent.click(closeButton);
 
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
+
+        expect(routerSpy).toHaveBeenCalled();
+
+        routerSpy.mockRestore();
     });
 
     it("disables the button with isDisabled prop", () => {
