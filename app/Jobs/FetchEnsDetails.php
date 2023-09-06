@@ -39,7 +39,7 @@ class FetchEnsDetails implements ShouldQueue, ShouldBeUnique
 
         $ensDomain = $provider->getEnsDomain($this->wallet);
 
-        $walletDetails = $this->wallet->details()->updateOrCreate([
+        $walletDetails = $this->wallet->details()->updateOrCreate([], [
             'domain' => $ensDomain,
         ]);
 

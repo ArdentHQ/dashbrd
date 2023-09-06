@@ -14,6 +14,7 @@ import { CollectionActivityTable } from "@/Components/Collections/CollectionActi
 import { CollectionHiddenModal } from "@/Components/Collections/CollectionHiddenModal";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
+import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { assertUser } from "@/Utils/assertions";
@@ -191,121 +192,123 @@ const CollectionsView = ({
     };
 
     return (
-        <DefaultLayout
-            auth={auth}
-            toastMessage={props.toast}
-        >
-            <Head title={title} />
+        <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
+            <DefaultLayout
+                auth={auth}
+                toastMessage={props.toast}
+            >
+                <Head title={title} />
 
-            {isHidden && (
-                <CollectionHiddenModal
-                    previousUrl={previousUrl}
-                    collection={collection}
-                />
-            )}
+                {isHidden && (
+                    <CollectionHiddenModal
+                        previousUrl={previousUrl}
+                        collection={collection}
+                    />
+                )}
 
-            <div className="mx-6 sm:mx-8 2xl:mx-0">
-                <CollectionHeading
-                    reportReasons={props.reportReasons}
-                    collection={collection}
-                    alreadyReported={alreadyReported}
-                    reportAvailableIn={reportAvailableIn}
-                />
+                <div className="mx-6 sm:mx-8 2xl:mx-0">
+                    <CollectionHeading
+                        reportReasons={props.reportReasons}
+                        collection={collection}
+                        alreadyReported={alreadyReported}
+                        reportAvailableIn={reportAvailableIn}
+                    />
 
-                <CollectionNavigation
-                    selectedTab={selectedTab}
-                    onTabChange={tabChangeHandler}
-                >
-                    <Tab.Panel>
-                        <div className="mt-6 flex lg:space-x-6">
-                            <div className="hidden w-full max-w-[304px] space-y-3 lg:block">
-                                <CollectionOwnedToggle
-                                    checked={showOnlyOwned}
-                                    onChange={ownedChangedHandler}
-                                    ownedNftsCount={collection.nftsCount}
-                                />
+                    <CollectionNavigation
+                        selectedTab={selectedTab}
+                        onTabChange={tabChangeHandler}
+                    >
+                        <Tab.Panel>
+                            <div className="mt-6 flex lg:space-x-6">
+                                <div className="hidden w-full max-w-[304px] space-y-3 lg:block">
+                                    <CollectionOwnedToggle
+                                        checked={showOnlyOwned}
+                                        onChange={ownedChangedHandler}
+                                        ownedNftsCount={collection.nftsCount}
+                                    />
 
-                                <CollectionPropertiesFilter
-                                    traits={collectionTraits}
-                                    changeHandler={traitChangedHandler}
-                                    selected={selectedTraits}
-                                />
-                            </div>
-
-                            <div className="flex-1">
-                                <div className="mb-3 flex items-center justify-between gap-x-3">
-                                    <div className="flex-1">
-                                        <SearchInput
-                                            placeholder={t("pages.galleries.create.search_by_nfts")}
-                                            query={query}
-                                            onChange={(query) => {
-                                                setQuery(query);
-                                                setFilterIsDirty(true);
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div className="order-last block md-lg:order-none lg:hidden">
-                                        <IconButton
-                                            icon="Funnel"
-                                            onClick={() => {
-                                                setShowCollectionFilterSlider(true);
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <NftsSorting
-                                            activeSort={sortByMintDate ? "minted" : "id"}
-                                            onSort={sort}
-                                        />
-                                    </div>
+                                    <CollectionPropertiesFilter
+                                        traits={collectionTraits}
+                                        changeHandler={traitChangedHandler}
+                                        selected={selectedTraits}
+                                    />
                                 </div>
 
-                                {nfts.paginated.data.length === 0 && query !== "" ? (
-                                    <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                                <div className="flex-1">
+                                    <div className="mb-3 flex items-center justify-between gap-x-3">
+                                        <div className="flex-1">
+                                            <SearchInput
+                                                placeholder={t("pages.galleries.create.search_by_nfts")}
+                                                query={query}
+                                                onChange={(query) => {
+                                                    setQuery(query);
+                                                    setFilterIsDirty(true);
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="order-last block md-lg:order-none lg:hidden">
+                                            <IconButton
+                                                icon="Funnel"
+                                                onClick={() => {
+                                                    setShowCollectionFilterSlider(true);
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <NftsSorting
+                                                activeSort={sortByMintDate ? "minted" : "id"}
+                                                onSort={sort}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {nfts.paginated.data.length === 0 && query !== "" ? (
+                                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                                    ) : (
+                                        <CollectionNftsGrid
+                                            nfts={nfts}
+                                            userNfts={collection.nfts}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </Tab.Panel>
+
+                        <Tab.Panel>
+                            <div className="mt-6">
+                                {activities.paginated.data.length === 0 ? (
+                                    <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
                                 ) : (
-                                    <CollectionNftsGrid
-                                        nfts={nfts}
-                                        userNfts={collection.nfts}
+                                    <CollectionActivityTable
+                                        collection={collection}
+                                        activities={activities}
+                                        showNameColumn
+                                        pageLimit={pageLimit}
+                                        onPageLimitChange={pageLimitChangeHandler}
+                                        nativeToken={nativeToken}
                                     />
                                 )}
                             </div>
-                        </div>
-                    </Tab.Panel>
+                        </Tab.Panel>
+                    </CollectionNavigation>
+                </div>
 
-                    <Tab.Panel>
-                        <div className="mt-6">
-                            {activities.paginated.data.length === 0 ? (
-                                <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
-                            ) : (
-                                <CollectionActivityTable
-                                    collection={collection}
-                                    activities={activities}
-                                    showNameColumn
-                                    pageLimit={pageLimit}
-                                    onPageLimitChange={pageLimitChangeHandler}
-                                    nativeToken={nativeToken}
-                                />
-                            )}
-                        </div>
-                    </Tab.Panel>
-                </CollectionNavigation>
-            </div>
-
-            <CollectionFilterSlider
-                open={showCollectionFilterSlider}
-                traits={collectionTraits}
-                ownedNftsCount={collection.nftsCount}
-                defaultShowOnlyOwned={showOnlyOwned}
-                defaultSelectedTraits={selectedTraits}
-                onClose={() => {
-                    setShowCollectionFilterSlider(false);
-                }}
-                selectedTraitsSetHandler={selectedTraitsSetHandler}
-                setFilters={setFilters}
-            />
-        </DefaultLayout>
+                <CollectionFilterSlider
+                    open={showCollectionFilterSlider}
+                    traits={collectionTraits}
+                    ownedNftsCount={collection.nftsCount}
+                    defaultShowOnlyOwned={showOnlyOwned}
+                    defaultSelectedTraits={selectedTraits}
+                    onClose={() => {
+                        setShowCollectionFilterSlider(false);
+                    }}
+                    selectedTraitsSetHandler={selectedTraitsSetHandler}
+                    setFilters={setFilters}
+                />
+            </DefaultLayout>
+        </ExternalLinkContextProvider>
     );
 };
 

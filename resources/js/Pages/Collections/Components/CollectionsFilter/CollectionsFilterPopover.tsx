@@ -25,6 +25,10 @@ export const CollectionsFilterPopover = ({
     const { t } = useTranslation();
     const [hidden, setHidden] = useState(showHidden);
 
+    useEffect(() => {
+        setHidden(showHidden);
+    }, [showHidden]);
+
     const [debouncedQuery] = useDebounce(hidden, debounceTimeout);
 
     useEffect(() => {
