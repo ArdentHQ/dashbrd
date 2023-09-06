@@ -101,7 +101,7 @@ class MyGalleryController extends Controller
             'collections' => new GalleryCollectionsData(GalleryCollectionData::collection($collections)),
             'gallery' => GalleryData::fromModel(
                 gallery: $gallery,
-                limit: 16,
+                limit: config('dashbrd.gallery.nft_limit'),
             ),
             'nftsPerPage' => $nftsPerPage,
         ]);
