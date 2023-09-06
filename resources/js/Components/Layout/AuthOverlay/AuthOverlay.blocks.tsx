@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./AuthOverlay.contracts";
 import { Button } from "@/Components/Buttons";
@@ -7,31 +8,73 @@ import { Toast } from "@/Components/Toast";
 import { AuthInstallWallet } from "@/images";
 const metamaskDownloadUrl = "https://metamask.io/download/";
 
-export const InstallMetamask = (): JSX.Element => {
+export const InstallMetamask = ({
+    showCloseButton,
+    closeOverlay,
+}: {
+    closeOverlay: () => void;
+    showCloseButton: boolean;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <>
             <AuthInstallWallet />
 
-            <ButtonLink
-                href={metamaskDownloadUrl}
-                target="_blank"
-                icon="Metamask"
-                rel="noopener nofollow noreferrer"
-            >
-                {t("auth.wallet.install")}
-            </ButtonLink>
+            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
+                {showCloseButton && (
+                    <Button
+                        data-testid="AuthOverlay__close-button"
+                        variant="secondary"
+                        onClick={closeOverlay}
+                        className="min-w-[193px] justify-center"
+                    >
+                        {t("common.close")}
+                    </Button>
+                )}
+
+                <ButtonLink
+                    href={metamaskDownloadUrl}
+                    target="_blank"
+                    icon="Metamask"
+                    rel="noopener nofollow noreferrer"
+                    className="min-w-[193px]"
+                >
+                    {t("auth.wallet.install")}
+                </ButtonLink>
+            </div>
         </>
     );
 };
 
-export const ConnectionError = ({ errorMessage, onConnect }: ConnectionErrorProperties): JSX.Element => {
+export const ConnectionError = ({
+    errorMessage,
+    onConnect,
+    showCloseButton,
+    closeOverlay,
+}: ConnectionErrorProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <>
-            <Button onClick={onConnect}>{t("common.retry")}</Button>
+            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
+                {showCloseButton && (
+                    <Button
+                        data-testid="AuthOverlay__close-button"
+                        variant="secondary"
+                        onClick={closeOverlay}
+                        className="min-w-[81px] justify-center"
+                    >
+                        {t("common.close")}
+                    </Button>
+                )}
+                <Button
+                    className="min-w-[81px] justify-center"
+                    onClick={onConnect}
+                >
+                    {t("common.retry")}
+                </Button>
+            </div>
 
             <Toast
                 type="error"
@@ -96,17 +139,35 @@ export const ConnectWallet = ({
     shouldRequireSignature,
     onConnect,
     shouldShowSignMessage,
+    showCloseButton,
+    closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <>
-            <Button
-                disabled={!isWalletInitialized}
-                onClick={onConnect}
-            >
-                {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
-            </Button>
+            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
+                {showCloseButton && (
+                    <Button
+                        data-testid="AuthOverlay__close-button"
+                        variant="secondary"
+                        onClick={closeOverlay}
+                        className="w-full min-w-[154px] justify-center whitespace-nowrap"
+                    >
+                        {t("common.close")}
+                    </Button>
+                )}
+
+                <Button
+                    disabled={!isWalletInitialized}
+                    onClick={onConnect}
+                    className={classNames("min-w-[154px] justify-center", {
+                        "whitespace-nowrap": showCloseButton,
+                    })}
+                >
+                    {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
+                </Button>
+            </div>
 
             {shouldShowSignMessage && (
                 <Toast
