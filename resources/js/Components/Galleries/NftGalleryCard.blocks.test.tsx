@@ -483,14 +483,14 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
-    it("should display auth overlay when a guest clicks the like button", () => {
+    it("should display auth overlay when a guest clicks the like button", async () => {
         const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({...useAuthState, authenticated: false});
 
         render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
 
         await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
 
-        expect(showConnectOverlay).toHaveBeenCalled();
+        expect(showConnectOverlayMock).toHaveBeenCalled();
 
         spy.mockRestore();
     });
