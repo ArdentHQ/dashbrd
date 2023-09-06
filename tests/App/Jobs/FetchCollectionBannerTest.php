@@ -65,7 +65,7 @@ it('should use the collection address and network id as a unique job identifier'
         'network_id' => $network->id,
     ]);
 
-    expect((new FetchCollectionBanner($collection))->uniqueId())->toBeString();
+    expect((new FetchCollectionBanner($collection))->uniqueId())->toBe(FetchCollectionBanner::class.':'.$collection->network->chain_id.'-'.$collection->address);
 });
 
 it('has a retry limit', function () {

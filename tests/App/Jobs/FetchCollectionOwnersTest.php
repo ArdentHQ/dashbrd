@@ -61,7 +61,7 @@ it('should handle null owner count', function () {
 it('has a unique ID', function () {
     $collection = Collection::factory()->create();
 
-    expect((new FetchCollectionOwners($collection))->uniqueId())->toBeString();
+    expect((new FetchCollectionOwners($collection))->uniqueId())->toBe(FetchCollectionOwners::class.':'.$collection->id);
 });
 
 it('has a retry limit', function () {

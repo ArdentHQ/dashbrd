@@ -44,5 +44,5 @@ it('has a retry limit', function () {
 it('has a unique ID', function () {
     $collection = Collection::factory()->create();
 
-    expect((new FetchCollectionVolume($collection))->uniqueId())->toBeString();
+    expect((new FetchCollectionVolume($collection))->uniqueId())->toBe(FetchCollectionVolume::class.':'.$collection->id);
 });
