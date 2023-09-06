@@ -10,7 +10,6 @@ import { useToasts } from "@/Hooks/useToasts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionDisplayType, CollectionsFilter } from "@/Pages/Collections/Components/CollectionsFilter";
 import { CollectionsHeading } from "@/Pages/Collections/Components/CollectionsHeading";
-import { assertUser } from "@/Utils/assertions";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
@@ -42,8 +41,6 @@ const CollectionsIndex = ({
     sortDirection: "asc" | "desc";
 }): JSX.Element => {
     const { props } = usePage();
-
-    assertUser(auth.user);
 
     const { t } = useTranslation();
     const queryParameters = getQueryParameters();
@@ -82,8 +79,12 @@ const CollectionsIndex = ({
     });
 
     useEffect(() => {
+        if (!auth.authenticated) {
+            return;
+        }
+
         reload();
-    }, []);
+    }, [auth.authenticated]);
 
     const selectDisplayTypeHandler = (displayType: CollectionDisplayType): void => {
         setDisplayType(displayType);
@@ -106,7 +107,7 @@ const CollectionsIndex = ({
                         value={stats.value}
                         collectionsCount={stats.collections}
                         nftsCount={stats.nfts}
-                        currency={auth.user.attributes.currency}
+                        currency={auth.user?.attributes.currency ?? "USD"}
                     />
 
                     <CollectionsFilter

@@ -132,14 +132,14 @@ const Nav = ({
             icon: "Wallet",
         },
         {
-            isVisible: features.collections && isAuthenticated,
+            isVisible: features.collections,
             title: t("pages.collections.title"),
-            suffix: collectionCount,
+            suffix: isAuthenticated ? collectionCount : null,
             route: "collections",
             icon: "Diamond",
         },
         {
-            isVisible: features.galleries && isAuthenticated,
+            isVisible: features.galleries,
             title: t("pages.galleries.title"),
             suffix: null,
             route: "galleries",
