@@ -14,7 +14,7 @@ import { useLikes } from "@/Hooks/useLikes";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
-import {useMetaMaskContext} from "@/Contexts/MetaMaskContext";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
 interface NftImageProperties {
     nft: App.Data.Gallery.GalleryNftData;
