@@ -6,8 +6,7 @@ import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useLikes } from "@/Hooks/useLikes";
 
 export const GalleryControls = ({
@@ -33,9 +32,7 @@ export const GalleryControls = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { authenticated } = useAuth();
-
-    const { showConnectOverlay } = useMetaMaskContext();
+    const { signedAction } = useAuthorizedAction();
 
     const { likes, hasLiked, like } = useLikes({
         count: likesCount ?? 0,
@@ -65,19 +62,13 @@ export const GalleryControls = ({
                             icon="Heart"
                             className={cn(hasLiked && "button-like-selected")}
                             onClick={() => {
-                                if (!authenticated) {
-                                    showConnectOverlay(() => {
-                                        void like(gallery.slug, true);
+                                signedAction(() => {
+                                    void like(gallery.slug);
 
-                                        router.reload({
-                                            only: ["stats", "gallery"],
-                                        });
+                                    router.reload({
+                                        only: ["stats", "gallery"],
                                     });
-
-                                    return;
-                                }
-
-                                void like(gallery.slug);
+                                });
                             }}
                             data-testid="GalleryControls__like-button"
                         >

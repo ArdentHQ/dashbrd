@@ -5,6 +5,7 @@ import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 export const useAuth = (): App.Data.AuthData & {
     showAuthOverlay: boolean;
     showCloseButton: boolean;
+    signed: boolean;
     closeOverlay: () => void;
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
@@ -22,6 +23,7 @@ export const useAuth = (): App.Data.AuthData & {
     const { wallet, authenticated, user } = auth;
 
     const {
+        signed,
         connecting,
         switching,
         errorMessage: metamaskErrorMessage,
@@ -89,6 +91,7 @@ export const useAuth = (): App.Data.AuthData & {
 
     return {
         authenticated,
+        signed,
         user,
         wallet,
         showAuthOverlay,

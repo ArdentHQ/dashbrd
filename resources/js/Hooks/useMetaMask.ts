@@ -14,7 +14,6 @@ import {
 } from "./useMetaMask.contracts";
 import Chains = App.Enums.Chains;
 import { browserLocale } from "@/Utils/browser-locale";
-import { isTruthy } from "@/Utils/is-truthy";
 
 const networkConfigs: Record<number, object> = {
     1: {
@@ -112,7 +111,7 @@ export interface MetaMaskState {
     hideConnectOverlay: () => void;
     showConnectOverlay: (onConnected?: () => void) => void;
     isShowConnectOverlay: boolean;
-    askForSignature: () => void;
+    askForSignature: (onSigned?: () => void) => void;
 }
 
 enum ErrorType {
@@ -137,26 +136,6 @@ interface Properties {
     initialAuth: App.Data.AuthData;
 }
 
-const getWalletIsSigned = ({
-    authenticated,
-    wallet,
-    metamaskWallet,
-    metamaskChainId,
-}: Pick<App.Data.AuthData, "authenticated" | "wallet"> & {
-    metamaskWallet: string;
-    metamaskChainId: number;
-}): boolean => {
-    if (!authenticated) {
-        return true;
-    }
-
-    if (wallet === null) {
-        return false;
-    }
-
-    return metamaskWallet.toLowerCase() === wallet.address.toLowerCase() && isTruthy(metamaskChainId);
-};
-
 /**
  * Note consider that the `initialAuth` property is not reactive, it contains
  * the initial auth state when page is loaded.
@@ -173,13 +152,14 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [requiresSignature, setRequiresSignature] = useState<boolean>(false);
     const [requiresSwitch, setRequiresSwitch] = useState<boolean>(false);
     const [signing, setSigning] = useState<boolean>(false);
-    const [signed, setSigned] = useState<boolean>(false);
+    const [signed, setSigned] = useState<boolean>(initialAuth.signed);
     const [waitingSignature, setWaitingSignature] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
     const supportsMetaMask = isMetaMaskSupportedBrowser();
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
     const [onConnected, setOnConnected] = useState<() => void>();
+    const [onSigned, setOnSigned] = useState<() => void>();
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
@@ -214,12 +194,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 },
             });
         });
-    };
-
-    const askForSignature = (): void => {
-        setSigned(true);
-
-        setRequiresSignature(true);
     };
 
     const logout = async (): Promise<void> => {
@@ -273,18 +247,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             setChainId(chainId);
 
             setEthereumProvider(provider);
-
-            if (account !== undefined) {
-                const currentWalletIsSigned = getWalletIsSigned({
-                    ...initialAuth,
-                    metamaskWallet: account,
-                    metamaskChainId: chainId,
-                });
-
-                if (!currentWalletIsSigned) {
-                    setRequiresSwitch(true);
-                }
-            }
 
             setInitialized(true);
 
@@ -405,6 +367,14 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         setOnConnected(() => onConnected);
     };
 
+    const askForSignature = (onSigned?: () => void): void => {
+        setSigned(true);
+
+        setRequiresSignature(true);
+
+        setOnSigned(() => onSigned);
+    };
+
     const hideConnectOverlay = (): void => {
         setShowConnectOverlay(false);
 
@@ -413,6 +383,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         setErrorMessage(undefined);
 
         setOnConnected(undefined);
+
+        setOnSigned(undefined);
     };
 
     const signWallet = useCallback(async () => {
@@ -493,9 +465,13 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 setSigned(true);
 
                 hideConnectOverlay();
+
+                if (onSigned !== undefined) {
+                    onSigned();
+                }
             },
         });
-    }, [requestChainAndAccount, router]);
+    }, [requestChainAndAccount, router, onSigned]);
 
     const connectWallet = useCallback(async () => {
         setConnecting(true);

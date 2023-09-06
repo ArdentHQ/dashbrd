@@ -9,6 +9,7 @@ declare namespace App.Data {
         user: App.Data.UserData | null;
         wallet: App.Data.Wallet.WalletData | null;
         authenticated: boolean;
+        signed: boolean;
     };
     export type CurrencyPriceData = {
         price: number;
