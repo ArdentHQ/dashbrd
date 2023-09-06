@@ -21,8 +21,9 @@ export const useLikes = (options: LikeOptions): UseLikesReturnType => {
             route("galleries.like", {
                 gallery: slug,
                 _query: {
-                    like,
-                } as unknown as QueryParams,
+                    like: like ?? false,
+                },
+
             }),
         );
 
