@@ -20,9 +20,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class FetchCollectionFloorPrice implements ShouldQueue, ShouldBeUnique
+class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, WithWeb3DataProvider, RecoversFromProviderErrors;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
 
     /**
      * Create a new job instance.
