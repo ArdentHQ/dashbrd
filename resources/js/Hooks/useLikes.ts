@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { type QueryParams } from "ziggy-js";
 interface LikeOptions {
     count: number;
     hasLiked: boolean;
@@ -20,8 +21,12 @@ export const useLikes = (options: LikeOptions): UseLikesReturnType => {
             route("galleries.like", {
                 gallery: slug,
                 _query: {
-                    like: like ?? false,
-                },
+                    // Note: like can be `undefined`, this is intentional
+                    // `undefined` toggles the like
+                    // `true` likes the gallery
+                    // `false` unlikes the gallery
+                    like,
+                } as unknown as QueryParams,
             }),
         );
 
