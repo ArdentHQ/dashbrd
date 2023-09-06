@@ -120,7 +120,7 @@ trait StoresGalleries
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:50'],
-            'nfts' => ['required', 'array', 'max:' . config('dashbrd.gallery.nft_limit')],
+            'nfts' => ['required', 'array', 'max:'.config('dashbrd.gallery.nft_limit')],
             'nfts.*' => [
                 'required',
                 // Check all user wallets as they can exist on different networks
