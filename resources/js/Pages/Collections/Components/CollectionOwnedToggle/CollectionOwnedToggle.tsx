@@ -13,7 +13,7 @@ export const CollectionOwnedToggle = ({
     const { t } = useTranslation();
 
     return (
-        <div className="flex items-center justify-between rounded-xl border border-theme-secondary-300 px-6 py-4">
+        <div className="flex items-center justify-between rounded-xl border-theme-secondary-300 px-6 py-4 xs:border">
             <div className="flex items-center space-x-2">
                 <span className="font-medium text-theme-secondary-900">
                     {t("pages.collections.show_my_collection")}
