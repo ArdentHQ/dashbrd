@@ -483,7 +483,7 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
-    it("should display auth overlay when like button clicked for a guest", () => {
+    it("should display auth overlay when a guest clicks the like button", () => {
         const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({...useAuthState, authenticated: false});
 
         render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
