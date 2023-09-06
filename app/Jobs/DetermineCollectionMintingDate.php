@@ -18,7 +18,7 @@ use Illuminate\Queue\SerializesModels;
 
 class DetermineCollectionMintingDate implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, WithWeb3DataProvider, RecoversFromProviderErrors;
 
     public function __construct(
         public Web3NftData $nft

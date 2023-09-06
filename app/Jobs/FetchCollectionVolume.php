@@ -17,7 +17,7 @@ use Illuminate\Queue\SerializesModels;
 
 class FetchCollectionVolume implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RecoversFromProviderErrors;
 
     /**
      * Create a new job instance.

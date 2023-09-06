@@ -56,7 +56,7 @@ class GalleryData extends Data
             coverImage: $gallery->cover_image,
             wallet: GalleryWalletData::fromModel($gallery->user->wallet),
             nfts: new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit))),
-            isOwner: $gallery->user->id === Auth::user()->id,
+            isOwner: Auth::user()->id === $gallery->user->id,
             hasLiked: $gallery->isLikedBy(Auth::user()),
         );
     }

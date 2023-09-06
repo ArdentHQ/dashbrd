@@ -28,7 +28,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Gallery extends Model implements Viewable
 {
-    use BelongsToUser, CanBeLiked, HasFactory, HasSlug, InteractsWithViews, Reportable;
+    use HasFactory, BelongsToUser, CanBeLiked, InteractsWithViews, HasSlug, Reportable;
 
     /**
      * @var array<string>

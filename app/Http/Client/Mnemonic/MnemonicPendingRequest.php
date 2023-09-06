@@ -336,7 +336,7 @@ class MnemonicPendingRequest extends PendingRequest
                 break;
             }
 
-        } while ($limit <= count($data));
+        } while (count($data) >= $limit);
 
         return $result;
     }

@@ -41,7 +41,7 @@ class TokenPriceHistorySeeder extends Seeder
                     'timestamp' => Carbon::createFromTimestampMs($pricePoint['timestamp']),
                 ]);
 
-                if ($maxBatchSize <= $batch->count()) {
+                if ($batch->count() >= $maxBatchSize) {
                     $flush($batch);
                     $batch = collect();
                 }

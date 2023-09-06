@@ -23,9 +23,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
-class FetchTokens implements ShouldBeUnique, ShouldQueue
+class FetchTokens implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
+    use Dispatchable, InteractsWithQueue, Queueable, WithWeb3DataProvider, SerializesModels, RecoversFromProviderErrors;
 
     /**
      * Create a new job instance.

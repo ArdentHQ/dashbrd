@@ -27,7 +27,7 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 /** @property string $token_number */
 class Nft extends Model
 {
-    use BelongsToWallet, HasFactory, Reportable, SoftDeletes;
+    use HasFactory, BelongsToWallet, SoftDeletes, Reportable;
 
     /**
      * @var array<string>

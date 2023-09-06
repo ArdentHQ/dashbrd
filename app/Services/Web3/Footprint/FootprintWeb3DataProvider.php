@@ -24,8 +24,8 @@ use Illuminate\Support\Collection;
 
 final class FootprintWeb3DataProvider extends AbstractWeb3DataProvider
 {
-    use LoadsFromCache;
     use WithFaker;
+    use LoadsFromCache;
 
     public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection
     {

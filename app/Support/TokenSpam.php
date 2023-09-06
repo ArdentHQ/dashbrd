@@ -43,12 +43,12 @@ final class TokenSpam
         $symbol = $token->symbol;
 
         $maxSymbolLength = intval(config('dashbrd.token_spam.max_symbol_length'));
-        if ($maxSymbolLength < Str::length($symbol)) {
+        if (Str::length($symbol) > $maxSymbolLength) {
             return self::spam('symbol too long');
         }
 
         $maxNameLength = intval(config('dashbrd.token_spam.max_name_length'));
-        if ($maxNameLength < Str::length($name)) {
+        if (Str::length($name) > $maxNameLength) {
             return self::spam('name too long');
         }
 

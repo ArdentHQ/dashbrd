@@ -64,7 +64,7 @@ class CoingeckoToken extends Model
 
             // either we get a single result or duplicates and if this is the last lookup,
             // return the first match either way.
-            if ($result->count() === 1 || $lookup === Arr::last($lookups)) {
+            if ($result->count() === 1 || Arr::last($lookups) === $lookup) {
                 break;
             }
         }

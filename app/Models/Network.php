@@ -15,7 +15,7 @@ use Spatie\LaravelData\WithData;
 
 class Network extends Model
 {
-    use HasFactory, WithData;
+    use WithData, HasFactory;
 
     protected $guarded = [];
 

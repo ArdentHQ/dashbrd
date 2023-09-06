@@ -16,7 +16,7 @@ use Spatie\LaravelData\WithData;
  */
 class CollectionTrait extends Model
 {
-    use HasFactory, WithData;
+    use WithData, HasFactory;
 
     protected $fillable = [
         'collection_id',

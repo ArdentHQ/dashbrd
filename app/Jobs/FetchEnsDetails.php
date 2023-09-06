@@ -18,9 +18,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class FetchEnsDetails implements ShouldBeUnique, ShouldQueue
+class FetchEnsDetails implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, WithWeb3DataProvider, RecoversFromProviderErrors;
 
     /**
      * Create a new job instance.
@@ -87,7 +87,7 @@ class FetchEnsDetails implements ShouldBeUnique, ShouldQueue
             return true;
         }
 
-        return $checksum !== $media->getCustomProperty('checksum');
+        return $media->getCustomProperty('checksum') !== $checksum;
     }
 
     private function isImage(Response $response): bool

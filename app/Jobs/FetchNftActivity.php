@@ -20,9 +20,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class FetchNftActivity implements ShouldBeUnique, ShouldQueue
+class FetchNftActivity implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RecoversFromProviderErrors;
 
     /**
      * Create a new job instance.
@@ -85,7 +85,7 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
         );
 
         // If we get the limit it may be that there are more activities to fetch
-        if ($limit === $nftActivity->count()) {
+        if ($nftActivity->count() === $limit) {
             FetchNftActivity::dispatch($this->nft)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
         }
 
