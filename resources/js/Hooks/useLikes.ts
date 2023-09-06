@@ -16,12 +16,18 @@ export const useLikes = (options: LikeOptions): UseLikesReturnType => {
     const [hasLiked, setHasLiked] = useState<boolean>();
 
     const like = async (slug: string, like?: boolean): Promise<void> => {
+        const query: {
+            like?: boolean;
+        } = {};
+
+        if (like !== undefined) {
+            query.like = like;
+        }
+
         const response = await axios.post<App.Data.Gallery.GalleryLikeData>(
             route("galleries.like", {
                 gallery: slug,
-                _query: {
-                    like: like ?? false,
-                },
+                _query: query,
             }),
         );
 
