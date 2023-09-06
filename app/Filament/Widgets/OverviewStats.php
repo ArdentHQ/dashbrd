@@ -70,7 +70,7 @@ class OverviewStats extends StatsOverviewWidget
             Stat::make('Most unique collections owned by wallet', static fn () => Cache::remember('filament:widgets:most-collections', $ttl,
                 static function () {
                     return DB::table('nfts')
-                        ->select(DB::raw("nfts.wallet_id, count(distinct(collection_id))"))
+                        ->select(DB::raw('nfts.wallet_id, count(distinct(collection_id))'))
                         ->groupBy('wallet_id')
                         ->limit(1)
                         ->first()
