@@ -164,7 +164,9 @@ const CollectionsIndex = ({
                             alreadyReportedByCollection={alreadyReportedByCollection}
                             reportReasons={props.reportReasons}
                             onLoadMore={loadMore}
-                            onChanged={reload}
+                            onChanged={() => {
+                                reload({ page: 1 });
+                            }}
                             onReportCollection={reportCollection}
                         />
                     )}
