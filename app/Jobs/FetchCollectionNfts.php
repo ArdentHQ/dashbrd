@@ -19,9 +19,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 
-class FetchCollectionNfts implements ShouldQueue, ShouldBeUnique
+class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, WithWeb3DataProvider, RecoversFromProviderErrors;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
 
     /**
      * Create a new job instance.
