@@ -334,9 +334,11 @@ describe("GalleryStats", () => {
     beforeEach(() => {
         useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
 
-        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState({
-            showConnectOverlay: showConnectOverlayMock
-        }));
+        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
+            getSampleMetaMaskState({
+                showConnectOverlay: showConnectOverlayMock,
+            }),
+        );
     });
 
     afterEach(() => {
@@ -484,7 +486,7 @@ describe("GalleryStats", () => {
     });
 
     it("should display auth overlay when a guest clicks the like button", async () => {
-        const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({...useAuthState, authenticated: false});
+        const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({ ...useAuthState, authenticated: false });
 
         render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
 
