@@ -8,13 +8,13 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
-import {useMetaMaskContext} from "@/Contexts/MetaMaskContext";
 
 interface NftImageProperties {
     nft: App.Data.Gallery.GalleryNftData;

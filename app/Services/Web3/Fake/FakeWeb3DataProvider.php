@@ -26,8 +26,8 @@ use Illuminate\Support\Facades\Cache;
 
 final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
 {
-    use WithFaker;
     use LoadsFromCache;
+    use WithFaker;
 
     public function __construct()
     {
