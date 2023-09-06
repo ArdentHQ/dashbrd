@@ -1,4 +1,5 @@
 import React from "react";
+import { type SpyInstance } from "vitest";
 import {
     GalleryHeading,
     GalleryHeadingPlaceholder,
@@ -314,15 +315,52 @@ describe("GalleryStats", () => {
 
     const user = new UserDataFactory().withUSDCurrency().create();
 
-    vi.spyOn(useAuth, "useAuth").mockReturnValue({
-        user,
-        wallet: null,
-        authenticated: true,
-        showAuthOverlay: false,
+    let useAuthSpy: SpyInstance;
+
+    beforeEach(() => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user,
+            wallet: null,
+            authenticated: true,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        useAuthSpy.mockRestore();
     });
 
     it("should display gallery stats", () => {
         const { container } = render(<GalleryStats gallery={gallery} />);
+
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+
+        expect(screen.getByTestId("GalleryStats__likes")).toHaveTextContent("12");
+        expect(screen.getByTestId("GalleryStats__views")).toHaveTextContent("45");
+
+        expect(container.getElementsByClassName("fill-theme-danger-100 text-theme-danger-400").length).toBe(0);
+    });
+
+    it("should display gallery stats if no authenticated", () => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        const { container } = render(
+            <GalleryStats
+                gallery={{
+                    ...gallery,
+                    value: 1234.56,
+                }}
+            />,
+        );
 
         expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
 
