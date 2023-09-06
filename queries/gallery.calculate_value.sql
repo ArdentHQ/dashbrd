@@ -9,14 +9,8 @@
         ) AS result
     FROM (
         SELECT
-            COALESCE(
-                SUM(
-                    COALESCE(
-                        collections.floor_price * (token_prices.value::text)::numeric / (10 ^ tokens.decimals),
-                        0
-                    )
-                ),
-                0
+            SUM(
+                CASE WHEN collections.floor_price IS NULL THEN NULL ELSE collections.floor_price * (token_prices.value::text)::numeric / (10 ^ tokens.decimals) END
             ) AS floor_price,
             token_prices.key as currency
         FROM

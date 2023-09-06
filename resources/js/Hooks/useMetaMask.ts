@@ -106,6 +106,9 @@ export interface MetaMaskState {
     switchToNetwork: (c: Chains) => Promise<void>;
     getTransactionReceipt: (hash: string) => Promise<ProviderResponse<ethers.providers.TransactionReceipt>>;
     getBlock: (blockHash: string) => Promise<ProviderResponse<ethers.providers.Block>>;
+    hideConnectOverlay: () => void;
+    showConnectOverlay: (onConnected?: () => void) => void;
+    isShowConnectOverlay: boolean;
 }
 
 enum ErrorType {
@@ -167,8 +170,10 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [requiresSwitch, setRequiresSwitch] = useState<boolean>(false);
     const [waitingSignature, setWaitingSignature] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
+    const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
     const supportsMetaMask = isMetaMaskSupportedBrowser();
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
+    const [onConnected, setOnConnected] = useState<() => void>();
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
@@ -260,9 +265,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
             setEthereumProvider(provider);
 
-            if (account === undefined) {
-                await logout();
-            } else {
+            if (account !== undefined) {
                 const currentWalletIsSigned = getWalletIsSigned({
                     ...initialAuth,
                     metamaskWallet: account,
@@ -387,6 +390,20 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         setConnecting(false);
     }, []);
 
+    const showConnectOverlay = (onConnected?: () => void): void => {
+        setShowConnectOverlay(true);
+
+        setOnConnected(() => onConnected);
+    };
+
+    const hideConnectOverlay = (): void => {
+        setShowConnectOverlay(false);
+
+        setErrorMessage(undefined);
+
+        setOnConnected(undefined);
+    };
+
     const connectWallet = useCallback(async () => {
         setConnecting(true);
 
@@ -446,6 +463,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             replace: true,
             method: "post" as VisitOptions["method"],
             data: {
+                intendedUrl: window.location.href,
                 address,
                 signature,
                 chainId,
@@ -467,9 +485,15 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 setConnecting(false);
 
                 setRequiresSignature(false);
+
+                hideConnectOverlay();
+
+                if (onConnected !== undefined) {
+                    onConnected();
+                }
             },
         });
-    }, [requestChainAndAccount, router, getSignature]);
+    }, [requestChainAndAccount, router, getSignature, onConnected]);
 
     const addNetwork = async (chainId: Chains): Promise<void> => {
         if (ethereumProvider === undefined) {
@@ -612,6 +636,9 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         switchToNetwork,
         getTransactionReceipt,
         getBlock,
+        showConnectOverlay,
+        hideConnectOverlay,
+        isShowConnectOverlay,
     };
 };
 

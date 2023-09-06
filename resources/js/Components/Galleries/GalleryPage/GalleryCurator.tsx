@@ -15,7 +15,6 @@ export const GalleryCurator = ({
     wallet: App.Data.Gallery.GalleryWalletData;
     className?: string;
     truncate?: number | false;
-    network?: App.Data.NetworkData;
 }): JSX.Element => {
     const { t } = useTranslation();
     const address = formatAddress(wallet.address);

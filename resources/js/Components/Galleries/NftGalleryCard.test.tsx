@@ -13,6 +13,8 @@ describe("NftGalleryCard", () => {
         wallet: null,
         authenticated: true,
         showAuthOverlay: false,
+        showCloseButton: false,
+        closeOverlay: vi.fn(),
     });
 
     it("shows an NFT gallery card for the user", () => {
