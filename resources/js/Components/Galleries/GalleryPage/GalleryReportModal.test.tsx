@@ -8,7 +8,7 @@ import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { fireEvent, mockInertiaUseForm, render, screen, userEvent } from "@/Tests/testing-library";
+import { fireEvent, mockInertiaUseForm, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
 const gallery = new GalleryDataFactory().create();
 
 const reportButton = (): HTMLElement => screen.getByTestId("GalleryControls__flag-button");
@@ -75,7 +75,7 @@ describe("GalleryReportModal", () => {
         routerSpy.mockRestore();
     });
 
-    it("opens the modal if param passed", () => {
+    it("opens the modal if param passed", async () => {
         render(
             <GalleryReportModal
                 gallery={gallery}
@@ -83,7 +83,9 @@ describe("GalleryReportModal", () => {
             />,
         );
 
-        expect(screen.queryByTestId("ReportModal")).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByTestId("ReportModal")).toBeInTheDocument();
+        });
     });
 
     it("disables the button with isDisabled prop", () => {
