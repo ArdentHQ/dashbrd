@@ -67,7 +67,7 @@ class LoginRequest extends FormRequest
 
         $this->updatePrimaryWallet();
 
-        Signature::forgetSessionNonce($this->chainId);
+        // Signature::forgetSessionNonce($this->chainId);
     }
 
     /**
