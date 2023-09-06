@@ -29,13 +29,14 @@ return [
         'switching_wallet' => 'Switching Wallet …',
         'connect' => 'Connect Wallet',
         'connect_long' => 'Connect Your Wallet to Get Started',
+        'sign_subtitle' => 'Connect Your Wallet to Continue',
         'disconnect' => 'Disconnect Wallet',
         'install' => 'Install MetaMask',
         'install_long' => 'Install MetaMask to Get Started',
         'sign' => 'Sign Message',
         'sign_message' => "Welcome to Dashbrd. In order to login, sign this message with your wallet. It doesn't cost you anything!\n\nSigning ID (you can ignore this): :nonce",
         'connect_subtitle' => 'Click on the MetaMask icon in your browser to confirm the action and connect your wallet.',
-        'requires_signature' => 'Changing your primary address requires a new signature. Click the Sign Message button above to connect your new address.',
+        'requires_signature' => 'To perform this action we first require you to sign a message to prove ownership of the address.',
     ],
 
     'errors' => [
