@@ -108,7 +108,7 @@ const Create = ({
 
                 <EditableGalleryHook
                     selectedNfts={gallery?.nfts.paginated.data}
-                    nftLimit={20}
+                    nftLimit={nftLimit}
                 >
                     {/* TODO (@alexbarnsley) [2023-09-01] calculate gallery value on the fly - https://app.clickup.com/t/862jkb9e2 */}
                     <GalleryHeading
