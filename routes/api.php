@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers;
+use App\Http\Controllers\LandingPageDataController;
 use App\Http\Controllers\NetworkController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('landing-data', LandingPageDataController::class)->name('landing-data');
 
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
