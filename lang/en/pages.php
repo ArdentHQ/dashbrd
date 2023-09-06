@@ -48,7 +48,7 @@ return [
         'all_collections_hidden' => 'You have hidden all your collections. Unhide and they will appear here.',
         'about_collection' => 'About Collection',
         'show_hidden' => 'Show Hidden',
-        'show_only_owned' => 'Show Only Owned',
+        'show_my_collection' => 'Show My Collection',
         'owned' => 'Owned',
         'activities' => [
             'loading_activities' => "We're fetching Activity for this NFT, please hang tight, this can take a while.",
