@@ -320,17 +320,23 @@ describe("GalleryStats", () => {
     let useAuthSpy: SpyInstance;
     let metamaskSpy: SpyInstance;
 
-    beforeEach(() => {
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user,
-            wallet: null,
-            authenticated: true,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
-        });
+    const showConnectOverlayMock = vi.fn();
 
-        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+    const useAuthState = {
+        user,
+        wallet: null,
+        authenticated: true,
+        showAuthOverlay: false,
+        showCloseButton: false,
+        closeOverlay: vi.fn(),
+    };
+
+    beforeEach(() => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
+
+        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState({
+            showConnectOverlay: showConnectOverlayMock
+        }));
     });
 
     afterEach(() => {
@@ -475,5 +481,17 @@ describe("GalleryStats", () => {
         render(<GalleryHeadingPlaceholder />);
 
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
+    });
+
+    it("should display auth overlay when like button clicked for a guest", () => {
+        const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({...useAuthState, authenticated: false});
+
+        render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
+
+        await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
+
+        expect(showConnectOverlay).toHaveBeenCalled();
+
+        spy.mockRestore();
     });
 });
