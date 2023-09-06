@@ -14,6 +14,7 @@ import { useLikes } from "@/Hooks/useLikes";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
+import {useMetaMaskContext} from "@/Contexts/MetaMaskContext";
 
 interface NftImageProperties {
     nft: App.Data.Gallery.GalleryNftData;
@@ -250,9 +251,16 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
 
     const { authenticated } = useAuth();
 
+    const { showConnectOverlay } = useMetaMaskContext();
+
     const likeButtonHandler: MouseEventHandler<HTMLElement> = (event): void => {
         event.preventDefault();
         event.stopPropagation();
+
+        if (!authenticated) {
+            showConnectOverlay();
+            return;
+        }
 
         void like(gallery.slug);
     };
@@ -263,12 +271,11 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
                 type="button"
                 onClick={likeButtonHandler}
                 data-testid="GalleryStats__like-button"
-                disabled={!authenticated}
             >
                 <Icon
                     className={cn("transition-all", {
-                        "fill-theme-danger-100 text-theme-danger-400": hasLiked && authenticated,
-                        "hover:fill-theme-danger-100 hover:text-theme-danger-400": !hasLiked && authenticated,
+                        "fill-theme-danger-100 text-theme-danger-400": hasLiked,
+                        "hover:fill-theme-danger-100 hover:text-theme-danger-400": !hasLiked,
                     })}
                     name="Heart"
                     size="lg"
