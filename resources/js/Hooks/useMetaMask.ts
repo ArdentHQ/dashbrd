@@ -368,8 +368,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     };
 
     const askForSignature = (onSigned?: () => void): void => {
-        setSigned(true);
-
         setRequiresSignature(true);
 
         setOnSigned(() => onSigned);

@@ -62,8 +62,12 @@ export const GalleryControls = ({
                             icon="Heart"
                             className={cn(hasLiked && "button-like-selected")}
                             onClick={() => {
-                                signedAction(() => {
-                                    void like(gallery.slug);
+                                signedAction(({ authenticated }) => {
+                                    // If user wasnt authenticated, for a positive like since we
+                                    // dont know if he liked it before or not
+                                    const likeValue = !authenticated ? true : undefined;
+
+                                    void like(gallery.slug, likeValue);
 
                                     router.reload({
                                         only: ["stats", "gallery"],
