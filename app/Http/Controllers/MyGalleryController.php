@@ -99,7 +99,10 @@ class MyGalleryController extends Controller
             'title' => trans('metatags.my_galleries.edit.title', ['name' => $gallery->name]),
             'nfts' => GalleryNftData::collection($nfts),
             'collections' => new GalleryCollectionsData(GalleryCollectionData::collection($collections)),
-            'gallery' => GalleryData::fromModel($gallery, null),
+            'gallery' => GalleryData::fromModel(
+                gallery: $gallery,
+                limit: config('dashbrd.gallery.nft_limit'),
+            ),
             'nftsPerPage' => $nftsPerPage,
         ]);
     }
