@@ -1,8 +1,10 @@
 import React from "react";
 import { NftGalleryCard } from "./NftGalleryCard";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen } from "@/Tests/testing-library";
 
 const user = new UserDataFactory().create();
@@ -16,6 +18,8 @@ describe("NftGalleryCard", () => {
         showCloseButton: false,
         closeOverlay: vi.fn(),
     });
+
+    vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
 
     it("shows an NFT gallery card for the user", () => {
         const gallery = new GalleryDataFactory().withCoverImage().create();
