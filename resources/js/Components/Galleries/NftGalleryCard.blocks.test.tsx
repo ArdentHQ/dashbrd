@@ -9,10 +9,12 @@ import {
 } from "./NftGalleryCard.blocks";
 import * as useAuth from "@/Hooks/useAuth";
 import * as useLikes from "@/Hooks/useLikes";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
+import {getSampleMetaMaskState} from "@/Tests/SampleData/SampleMetaMaskState";
 const collectionInfo: Pick<
     App.Data.Gallery.GalleryNftData,
     | "chainId"
@@ -316,6 +318,7 @@ describe("GalleryStats", () => {
     const user = new UserDataFactory().withUSDCurrency().create();
 
     let useAuthSpy: SpyInstance;
+    let metamaskSpy: SpyInstance;
 
     beforeEach(() => {
         useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
@@ -326,10 +329,13 @@ describe("GalleryStats", () => {
             showCloseButton: false,
             closeOverlay: vi.fn(),
         });
+
+        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
     });
 
     afterEach(() => {
         useAuthSpy.mockRestore();
+        metamaskSpy.mockRestore();
     });
 
     it("should display gallery stats", () => {
