@@ -120,7 +120,7 @@ trait StoresGalleries
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:50'],
-            'nfts' => ['required', 'array', 'size:' . config("dashbrd.gallery.nft_limit")],
+            'nfts' => ['required', 'array', 'size:'.config('dashbrd.gallery.nft_limit')],
             'nfts.*' => [
                 'required',
                 // Check all user wallets as they can exist on different networks
@@ -137,7 +137,7 @@ trait StoresGalleries
             'name.max' => trans('validation.gallery_title_max_characters'),
             'name' => trans('validation.gallery_title_invalid'),
             'nfts.required' => trans('validation.nfts_required'),
-            'nfts.size' => trans('validation.nfts_size', ['limit' => config("dashbrd.gallery.nft_limit")]),
+            'nfts.size' => trans('validation.nfts_size', ['limit' => config('dashbrd.gallery.nft_limit')]),
             'nfts.*' => trans('validation.invalid_nfts'),
             'coverImage' => trans('validation.invalid_cover'),
         ]);
