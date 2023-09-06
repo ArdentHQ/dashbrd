@@ -41,6 +41,9 @@ export const useAuth = (): App.Data.AuthData & {
     }, [connecting]);
 
     const showAuthOverlay = useMemo<boolean>(() => {
+        if (requiresSignature) {
+            return true;
+        }
         if (isShowConnectOverlay) {
             return true;
         }
@@ -69,11 +72,7 @@ export const useAuth = (): App.Data.AuthData & {
             return true;
         }
 
-        if (metamaskErrorMessage !== undefined) {
-            return true;
-        }
-
-        return requiresSignature;
+        return metamaskErrorMessage !== undefined;
     }, [
         authenticated,
         connecting,

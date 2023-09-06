@@ -95,6 +95,8 @@ export interface MetaMaskState {
     connectWallet: () => Promise<void>;
     signWallet: () => Promise<void>;
     connecting: boolean;
+    signing: boolean;
+    signed: boolean;
     initialized: boolean;
     needsMetaMask: boolean;
     supportsMetaMask: boolean;
@@ -170,6 +172,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [switching, setSwitching] = useState<boolean>(false);
     const [requiresSignature, setRequiresSignature] = useState<boolean>(false);
     const [requiresSwitch, setRequiresSwitch] = useState<boolean>(false);
+    const [signing, setSigning] = useState<boolean>(false);
+    const [signed, setSigned] = useState<boolean>(false);
     const [waitingSignature, setWaitingSignature] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
@@ -213,6 +217,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     };
 
     const askForSignature = (): void => {
+        setSigned(true);
+
         setRequiresSignature(true);
     };
 
@@ -402,13 +408,15 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const hideConnectOverlay = (): void => {
         setShowConnectOverlay(false);
 
+        setRequiresSignature(false);
+
         setErrorMessage(undefined);
 
         setOnConnected(undefined);
     };
 
     const signWallet = useCallback(async () => {
-        // setConnecting(true);
+        setSigning(true);
 
         setErrorMessage(undefined);
 
@@ -454,8 +462,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             signature = result.signature;
             address = result.address;
 
-            console.log({ signature, address });
-
             setWaitingSignature(false);
         } catch (error) {
             onError(ErrorType.UserRejected);
@@ -480,20 +486,13 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 onError(ErrorType.Generic, firstError);
             },
             onFinish: () => {
-                console.log("Signed");
-                // setAccount(account);
+                setSigning(false);
 
-                // setChainId(chainId);
+                setRequiresSignature(false);
 
-                // setConnecting(false);
-
-                // setRequiresSignature(false);
+                setSigned(true);
 
                 hideConnectOverlay();
-
-                // if (onConnected !== undefined) {
-                //     onConnected();
-                // }
             },
         });
     }, [requestChainAndAccount, router]);
@@ -510,59 +509,12 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             return;
         }
 
-        // let signMessage: string;
-
-        // try {
-        //     signMessage = await getSignMessage(chainId);
-        // } catch (error) {
-        //     if (axios.isAxiosError(error)) {
-        //         if (error.response?.status === 422) {
-        //             onError(
-        //                 ErrorType.Generic,
-        //                 (
-        //                     error.response.data as {
-        //                         message: string;
-        //                     }
-        //                 ).message,
-        //             );
-        //         } else {
-        //             onError(ErrorType.Generic);
-        //         }
-        //     } else {
-        //         onError(ErrorType.Generic);
-        //     }
-
-        //     return;
-        // }
-
-        // let signature: string;
-        // let address: string;
-
-        // setWaitingSignature(true);
-
-        // try {
-        //     const result = await getSignature(signMessage);
-        //     signature = result.signature;
-        //     address = result.address;
-
-        //     console.log({ signature, address });
-
-        //     setWaitingSignature(false);
-        // } catch (error) {
-        //     onError(ErrorType.UserRejected);
-
-        //     setWaitingSignature(false);
-        //     return;
-        // }
-
         router.visit(route("login"), {
             replace: true,
             method: "post" as VisitOptions["method"],
             data: {
                 intendedUrl: window.location.href,
                 address: account,
-                // address,
-                // signature,
                 chainId,
                 tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 locale: browserLocale(),
@@ -578,8 +530,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 setChainId(chainId);
 
                 setConnecting(false);
-
-                // setRequiresSignature(false);
 
                 hideConnectOverlay();
 
@@ -719,6 +669,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         chainId,
         connectWallet,
         connecting,
+        signing,
+        signed,
         initialized,
         needsMetaMask,
         supportsMetaMask,
