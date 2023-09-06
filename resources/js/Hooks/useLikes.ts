@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { type QueryParams } from "ziggy-js";
 interface LikeOptions {
     count: number;
     hasLiked: boolean;
@@ -23,7 +22,6 @@ export const useLikes = (options: LikeOptions): UseLikesReturnType => {
                 _query: {
                     like: like ?? false,
                 },
-
             }),
         );
 
