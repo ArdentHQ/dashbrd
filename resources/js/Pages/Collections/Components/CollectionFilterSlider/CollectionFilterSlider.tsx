@@ -73,7 +73,7 @@ export const CollectionFilterSlider = ({
                             <CollectionOwnedToggle
                                 checked={showOnlyOwned}
                                 onChange={setShowOnlyOwned}
-                                ownedNftsCount={100}
+                                ownedNftsCount={ownedNftsCount}
                             />
 
                             <CollectionPropertiesFilter
