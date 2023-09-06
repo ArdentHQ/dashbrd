@@ -136,9 +136,10 @@ export const ConnectingWallet = ({ isWaitingSignature }: { isWaitingSignature: b
 
 export const ConnectWallet = ({
     isWalletInitialized,
-    shouldRequireSignature,
+    requiresSignature,
     onConnect,
-    shouldShowSignMessage,
+    onSign,
+    showSignMessage,
     showCloseButton,
     closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
@@ -160,16 +161,16 @@ export const ConnectWallet = ({
 
                 <Button
                     disabled={!isWalletInitialized}
-                    onClick={onConnect}
+                    onClick={requiresSignature ? onSign : onConnect}
                     className={classNames("min-w-[154px] justify-center", {
                         "whitespace-nowrap": showCloseButton,
                     })}
                 >
-                    {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
+                    {requiresSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
                 </Button>
             </div>
 
-            {shouldShowSignMessage && (
+            {showSignMessage && (
                 <Toast
                     data-testid="AuthOverlay__sign"
                     type="info"

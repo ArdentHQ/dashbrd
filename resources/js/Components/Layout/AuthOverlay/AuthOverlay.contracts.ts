@@ -5,10 +5,11 @@ export interface AuthOverlayProperties extends React.HTMLAttributes<HTMLDivEleme
 }
 
 export interface ConnectWalletProperties {
-    shouldShowSignMessage: boolean;
+    showSignMessage: boolean;
     isWalletInitialized: boolean;
-    shouldRequireSignature: boolean;
+    requiresSignature: boolean;
     onConnect: () => void;
+    onSign: () => void;
     closeOverlay: () => void;
     showCloseButton: boolean;
 }

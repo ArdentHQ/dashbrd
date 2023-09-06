@@ -27,6 +27,7 @@ export const AuthOverlay = ({
     const {
         needsMetaMask,
         connectWallet,
+        signWallet,
         initialized,
         connecting,
         switching,
@@ -107,10 +108,13 @@ export const AuthOverlay = ({
                                             closeOverlay={closeOverlay}
                                             showCloseButton={showCloseButton}
                                             isWalletInitialized={initialized}
-                                            shouldRequireSignature={requiresSignature}
-                                            shouldShowSignMessage={showSignMessage}
+                                            requiresSignature={requiresSignature}
+                                            showSignMessage={showSignMessage}
                                             onConnect={() => {
                                                 void connectWallet();
+                                            }}
+                                            onSign={() => {
+                                                void signWallet();
                                             }}
                                         />
                                     )}

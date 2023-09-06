@@ -36,6 +36,16 @@ class Signature
         Session::forget('sign-message.nonce.'.$chainId);
     }
 
+    public static function setIsSigned(int $chainId): void
+    {
+        Session::put('user-is-signed.'.$chainId, true);
+    }
+
+    public static function setIsNotSigned(int $chainId): void
+    {
+        Session::forget('user-is-signed.'.$chainId);
+    }
+
     // See https://github.com/ArdentHQ/msq.io/pull/511 for further details
     public static function verify(string $signature, string $message, string $address): bool
     {

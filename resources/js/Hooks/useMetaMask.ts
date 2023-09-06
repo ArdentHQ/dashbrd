@@ -93,6 +93,7 @@ export interface MetaMaskState {
     account?: string;
     chainId?: App.Enums.Chains;
     connectWallet: () => Promise<void>;
+    signWallet: () => Promise<void>;
     connecting: boolean;
     initialized: boolean;
     needsMetaMask: boolean;
@@ -109,6 +110,7 @@ export interface MetaMaskState {
     hideConnectOverlay: () => void;
     showConnectOverlay: (onConnected?: () => void) => void;
     isShowConnectOverlay: boolean;
+    askForSignature: () => void;
 }
 
 enum ErrorType {
@@ -208,6 +210,10 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 },
             });
         });
+    };
+
+    const askForSignature = (): void => {
+        setRequiresSignature(true);
     };
 
     const logout = async (): Promise<void> => {
@@ -400,6 +406,97 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
         setOnConnected(undefined);
     };
+
+    const signWallet = useCallback(async () => {
+        // setConnecting(true);
+
+        setErrorMessage(undefined);
+
+        const { chainId, account } = await requestChainAndAccount();
+
+        if (account === undefined) {
+            onError(ErrorType.NoAccount);
+            return;
+        }
+
+        let signMessage: string;
+
+        try {
+            signMessage = await getSignMessage(chainId);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 422) {
+                    onError(
+                        ErrorType.Generic,
+                        (
+                            error.response.data as {
+                                message: string;
+                            }
+                        ).message,
+                    );
+                } else {
+                    onError(ErrorType.Generic);
+                }
+            } else {
+                onError(ErrorType.Generic);
+            }
+
+            return;
+        }
+
+        let signature: string;
+        let address: string;
+
+        setWaitingSignature(true);
+
+        try {
+            const result = await getSignature(signMessage);
+            signature = result.signature;
+            address = result.address;
+
+            console.log({ signature, address });
+
+            setWaitingSignature(false);
+        } catch (error) {
+            onError(ErrorType.UserRejected);
+
+            setWaitingSignature(false);
+            return;
+        }
+
+        router.visit(route("sign"), {
+            replace: true,
+            method: "post" as VisitOptions["method"],
+            data: {
+                address,
+                signature,
+                chainId,
+            },
+            onError: (error) => {
+                const firstError = [error.address, error.chainId, error.signature].find(
+                    (value) => typeof value === "string",
+                );
+
+                onError(ErrorType.Generic, firstError);
+            },
+            onFinish: () => {
+                console.log("Signed");
+                // setAccount(account);
+
+                // setChainId(chainId);
+
+                // setConnecting(false);
+
+                // setRequiresSignature(false);
+
+                hideConnectOverlay();
+
+                // if (onConnected !== undefined) {
+                //     onConnected();
+                // }
+            },
+        });
+    }, [requestChainAndAccount, router]);
 
     const connectWallet = useCallback(async () => {
         setConnecting(true);
@@ -636,6 +733,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         getBlock,
         showConnectOverlay,
         hideConnectOverlay,
+        askForSignature,
+        signWallet,
         isShowConnectOverlay,
     };
 };
