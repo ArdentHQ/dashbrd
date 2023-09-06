@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import { IconButton, LikeButton } from "@/Components/Buttons";
@@ -5,7 +6,9 @@ import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
-import { useLikes, type UseLikesReturnType } from "@/Hooks/useLikes";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
+import { useLikes } from "@/Hooks/useLikes";
 
 export const GalleryControls = ({
     likesCount,
@@ -15,8 +18,8 @@ export const GalleryControls = ({
     reportAvailableIn = null,
     isDisabled = false,
     showEditAction = true,
-    network,
     reportReasons = {},
+    showReportModal = false,
 }: {
     likesCount?: number;
     gallery?: App.Data.Gallery.GalleryData;
@@ -25,24 +28,19 @@ export const GalleryControls = ({
     showEditAction?: boolean;
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
-    network?: App.Data.NetworkData;
     reportReasons?: Record<string, string>;
+    showReportModal?: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    let { likes, hasLiked, like }: Partial<UseLikesReturnType> = {
-        likes: 0,
-        hasLiked: false,
-        like: undefined,
-    };
+    const { authenticated } = useAuth();
 
-    if (likesCount !== undefined && gallery !== undefined) {
-        const result = useLikes({ count: likesCount, hasLiked: gallery.hasLiked });
+    const { showConnectOverlay } = useMetaMaskContext();
 
-        likes = result.likes;
-        hasLiked = result.hasLiked;
-        like = result.like;
-    }
+    const { likes, hasLiked, like } = useLikes({
+        count: likesCount ?? 0,
+        hasLiked: gallery?.hasLiked ?? false,
+    });
 
     return (
         <div
@@ -51,7 +49,6 @@ export const GalleryControls = ({
         >
             <div className="flex">
                 <GalleryCurator
-                    network={network}
                     wallet={wallet}
                     className="mr-3 hidden md:flex"
                 />
@@ -63,18 +60,30 @@ export const GalleryControls = ({
                         data-testid="GalleryControls__like-button"
                     />
                 ) : (
-                    <LikeButton
-                        icon="Heart"
-                        className={cn(hasLiked && "button-like-selected")}
-                        onClick={() => {
-                            if (like !== undefined) {
+                    <>
+                        <LikeButton
+                            icon="Heart"
+                            className={cn(hasLiked && "button-like-selected")}
+                            onClick={() => {
+                                if (!authenticated) {
+                                    showConnectOverlay(() => {
+                                        void like(gallery.slug, true);
+
+                                        router.reload({
+                                            only: ["stats", "gallery"],
+                                        });
+                                    });
+
+                                    return;
+                                }
+
                                 void like(gallery.slug);
-                            }
-                        }}
-                        data-testid="GalleryControls__like-button"
-                    >
-                        {likes}
-                    </LikeButton>
+                            }}
+                            data-testid="GalleryControls__like-button"
+                        >
+                            {likes}
+                        </LikeButton>
+                    </>
                 )}
             </div>
 
@@ -105,6 +114,7 @@ export const GalleryControls = ({
                         gallery={gallery}
                         alreadyReported={alreadyReported}
                         reportAvailableIn={reportAvailableIn}
+                        show={showReportModal}
                     />
                 )}
 
