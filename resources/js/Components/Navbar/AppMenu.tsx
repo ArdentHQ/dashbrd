@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { AppMenuItem } from "@/Components/Navbar/AppMenuItem";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
 
 export const AppMenu = (): JSX.Element => {
@@ -10,8 +9,6 @@ export const AppMenu = (): JSX.Element => {
 
     const activeRoute = route().current();
 
-    const { authenticated } = useActiveUser();
-
     const items = [
         {
             isVisible: features.portfolio,
@@ -19,12 +16,12 @@ export const AppMenu = (): JSX.Element => {
             route: "dashboard",
         },
         {
-            isVisible: features.collections && authenticated,
+            isVisible: features.collections,
             title: t("pages.collections.title"),
             route: "collections",
         },
         {
-            isVisible: features.galleries && authenticated,
+            isVisible: features.galleries,
             title: t("pages.galleries.title"),
             route: "galleries",
         },

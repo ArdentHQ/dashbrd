@@ -2,7 +2,7 @@ export interface CollectionTableItemProperties {
     collection: App.Data.Collections.CollectionData;
     nfts: App.Data.Collections.CollectionNftData[];
     uniqueKey: string;
-    user: App.Data.UserData;
+    user: App.Data.UserData | null;
     isHidden: boolean;
     reportAvailableIn?: string | null;
     alreadyReported?: boolean | null;
@@ -15,7 +15,7 @@ export interface CollectionTableItemProperties {
 export interface CollectionTableProperties {
     collections: App.Data.Collections.CollectionData[];
     nfts: App.Data.Collections.CollectionNftData[];
-    user: App.Data.UserData;
+    user: App.Data.UserData | null;
     hiddenCollectionAddresses: string[];
     reportByCollectionAvailableIn: Record<string, string | null>;
     alreadyReportedByCollection: Record<string, boolean>;

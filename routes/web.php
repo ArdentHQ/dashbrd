@@ -43,7 +43,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
-        Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
         Route::post('{collection:address}/hidden',
             [HiddenCollectionController::class, 'store'])->name('hidden-collections.store');
         Route::delete('{collection:address}/hidden',
@@ -61,20 +60,27 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
-        Route::get('', [GalleryController::class, 'index'])->name('galleries');
-
-        Route::get('galleries', [GalleryController::class, 'galleries'])->name('galleries.galleries');
-        Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
-        Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
-        Route::get('newest', [GalleryFiltersController::class, 'index'])->name('galleries.newest');
-
-        Route::get('{gallery:slug}', [GalleryController::class, 'view'])
-            ->middleware(RecordGalleryView::class)
-            ->name('galleries.view');
 
         Route::post('{gallery:slug}/reports',
             [GalleryReportController::class, 'store'])->name('reports.create')->middleware('throttle:gallery:reports');
     });
+});
+
+Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
+    Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
+});
+
+Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
+    Route::get('', [GalleryController::class, 'index'])->name('galleries');
+
+    Route::get('galleries', [GalleryController::class, 'galleries'])->name('galleries.galleries');
+    Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
+    Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
+    Route::get('newest', [GalleryFiltersController::class, 'index'])->name('galleries.newest');
+
+    Route::get('{gallery:slug}', [GalleryController::class, 'view'])
+        ->middleware(RecordGalleryView::class)
+        ->name('galleries.view');
 });
 
 require __DIR__.'/auth.php';
