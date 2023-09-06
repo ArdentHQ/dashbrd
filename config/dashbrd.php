@@ -116,6 +116,7 @@ return [
             'collections_per_page' => env('GALLERY_COLLECTIONS_PER_PAGE', 20),
             'nfts_per_page' => env('GALLERY_NFTS_PER_PAGE', 20),
         ],
+        'nft_limit' => 16,
     ],
 
     'collections' => [
