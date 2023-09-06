@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\SignMessageRequest;
-use App\Http\Requests\Auth\SwitchAccountRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -34,13 +33,6 @@ class AuthenticatedSessionController extends Controller
     public function signMessage(SignMessageRequest $request): JsonResponse
     {
         return response()->json(['message' => $request->getMessage()]);
-    }
-
-    public function switchAccount(SwitchAccountRequest $request): RedirectResponse
-    {
-        $request->updatePrimaryWallet();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

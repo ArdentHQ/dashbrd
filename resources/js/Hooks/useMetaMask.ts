@@ -187,22 +187,19 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         setSwitching(true);
 
         await new Promise<void>((resolve) => {
-            router.visit(route("switch-account"), {
+            router.visit(route("login"), {
                 replace: true,
                 method: "post" as VisitOptions["method"],
-                // we need preserve stuff to ensure that app won't
-                // lose state when we programmatically switch networks
                 preserveState: true,
                 preserveScroll: true,
                 data: {
                     address,
                     chainId,
                 },
-                onError: () => {
-                    setRequiresSignature(true);
-                },
-                onSuccess: () => {
-                    setRequiresSignature(false);
+                onError: (error) => {
+                    const firstError = [error.address, error.chainId].find((value) => typeof value === "string");
+
+                    onError(ErrorType.Generic, firstError);
                 },
                 onFinish: () => {
                     setSwitching(false);
@@ -474,9 +471,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 locale: browserLocale(),
             },
             onError: (error) => {
-                const firstError = [error.address, error.signature, error.chainId].find(
-                    (value) => typeof value === "string",
-                );
+                const firstError = [error.address, error.chainId].find((value) => typeof value === "string");
 
                 onError(ErrorType.Generic, firstError);
             },
@@ -487,7 +482,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
                 setConnecting(false);
 
-                setRequiresSignature(false);
+                // setRequiresSignature(false);
 
                 hideConnectOverlay();
 
@@ -496,7 +491,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 }
             },
         });
-    }, [requestChainAndAccount, router, getSignature, onConnected]);
+    }, [requestChainAndAccount, router, onConnected]);
 
     const addNetwork = async (chainId: Chains): Promise<void> => {
         if (ethereumProvider === undefined) {
