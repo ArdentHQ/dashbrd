@@ -7,14 +7,14 @@ import {
     GalleryStatsPlaceholder,
     NftImageGrid,
 } from "./NftGalleryCard.blocks";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
 import * as useLikes from "@/Hooks/useLikes";
-import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { render, screen, userEvent } from "@/Tests/testing-library";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
+import { render, screen, userEvent } from "@/Tests/testing-library";
 const collectionInfo: Pick<
     App.Data.Gallery.GalleryNftData,
     | "chainId"
