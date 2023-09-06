@@ -30,7 +30,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Collection extends Model
 {
-    use HasFactory, BelongsToNetwork, SoftDeletes, Reportable, HasSlug;
+    use BelongsToNetwork, HasFactory, HasSlug, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
