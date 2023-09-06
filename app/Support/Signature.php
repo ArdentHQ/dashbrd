@@ -36,14 +36,25 @@ class Signature
         Session::forget('sign-message.nonce.'.$chainId);
     }
 
-    public static function setIsSigned(int $chainId): void
+    public static function walletIsSigned(int $walletId): bool
     {
-        Session::put('user-is-signed.'.$chainId, true);
+        info('get wallet-is-signed: '.Session::get('wallet-is-signed.'.$walletId));
+
+        return Session::get('wallet-is-signed.'.$walletId) === true;
     }
 
-    public static function setIsNotSigned(int $chainId): void
+    public static function setWalletIsSigned(int $walletId): void
     {
-        Session::forget('user-is-signed.'.$chainId);
+        info('set-wallet-is-signed: '.$walletId);
+
+        Session::put('wallet-is-signed.'.$walletId, true);
+    }
+
+    public static function setWalletIsNotSigned(int $walletId): void
+    {
+        info('set-wallet-is--not-signed: '.$walletId);
+
+        Session::forget('wallet-is-signed.'.$walletId);
     }
 
     // See https://github.com/ArdentHQ/msq.io/pull/511 for further details

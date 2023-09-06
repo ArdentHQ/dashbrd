@@ -8,6 +8,7 @@ use App\Rules\ValidChain;
 use App\Rules\WalletAddress;
 use App\Rules\WalletSignature;
 use App\Support\Facades\Signature;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -41,12 +42,14 @@ class SignRequest extends FormRequest
      *
      * @throws ValidationException
      */
-    public function validateSignature(): void
+    public function sign(): void
     {
         $credentials = $this->getAuthParams();
         $nonce = $credentials['nonce'] ?? null;
 
-        if ($nonce === null) {
+        $wallet = $this->wallet();
+
+        if ($nonce === null || $wallet === null) {
             throw ValidationException::withMessages([
                 'address' => trans('auth.session_timeout'),
             ]);
@@ -58,13 +61,24 @@ class SignRequest extends FormRequest
             message: Signature::buildSignMessage($credentials['nonce'])
         );
 
-        Signature::forgetSessionNonce($this->chainId);
-
         if (! $verified) {
+            Signature::setWalletIsNotSigned($wallet->id);
+
             throw ValidationException::withMessages([
                 'address' => trans('auth.failed'),
             ]);
         }
+
+        Signature::setWalletIsSigned($wallet->id);
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        Signature::setWalletIsNotSigned($this->chainId);
+
+        auth()->logout();
+
+        parent::failedValidation($validator);
     }
 
     /**

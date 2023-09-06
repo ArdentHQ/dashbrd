@@ -7,6 +7,7 @@ declare module "@inertiajs/core" {
     export type Method = "get" | "post" | "put" | "patch" | "delete";
 
     export interface PageProps {
+        isSigned: boolean;
         allowsGuests: boolean;
         contactEmail: string;
         analyticsTrackingCode: ?string;
