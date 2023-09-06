@@ -1,7 +1,6 @@
 import React from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
@@ -13,13 +12,6 @@ describe("AuthOverlay", () => {
 
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
-
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: false,
-            showAuthOverlay: true,
-        });
     });
 
     afterAll(() => {
@@ -27,8 +19,33 @@ describe("AuthOverlay", () => {
     });
 
     it("should connect with wallet", async () => {
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
+        expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
+        expect(screen.getAllByTestId("Button")).toHaveLength(1);
+
+        await userEvent.click(screen.getByTestId("Button"));
+
+        expect(connectWalletMock).toHaveBeenCalled();
+    });
+
+    it("should connect with wallet and show close button", async () => {
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__close-button")).toBeInTheDocument();
         expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
         expect(screen.getAllByTestId("Button")).toHaveLength(1);
 
@@ -43,8 +60,37 @@ describe("AuthOverlay", () => {
             errorMessage: "connection error",
         });
 
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
+        expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
+        expect(screen.getAllByTestId("Button")).toHaveLength(1);
+
+        await userEvent.click(screen.getByTestId("Button"));
+
+        expect(connectWalletMock).toHaveBeenCalled();
+    });
+    it("should connect with wallet after a connection error and show close button", async () => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            errorMessage: "connection error",
+        });
+
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__close-button")).toBeInTheDocument();
         expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
         expect(screen.getAllByTestId("Button")).toHaveLength(1);
 
@@ -61,9 +107,36 @@ describe("AuthOverlay", () => {
             needsMetaMask: true,
         });
 
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
         expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
+        expect(screen.getByText(needsMetamaskMessage)).toBeInTheDocument();
+    });
+
+    it("should require metamask and show close button", () => {
+        const needsMetamaskMessage = "Install MetaMask";
+
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            needsMetaMask: true,
+        });
+
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__close-button")).toBeInTheDocument();
         expect(screen.getByText(needsMetamaskMessage)).toBeInTheDocument();
     });
 
@@ -73,7 +146,13 @@ describe("AuthOverlay", () => {
             switching: true,
         });
 
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("AuthOverlay__switching-network")).toBeInTheDocument();
     });
@@ -84,7 +163,13 @@ describe("AuthOverlay", () => {
             connecting: true,
         });
 
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("AuthOverlay__connecting-network")).toBeInTheDocument();
     });
@@ -95,7 +180,13 @@ describe("AuthOverlay", () => {
             requiresSignature: true,
         });
 
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("AuthOverlay__sign")).toBeInTheDocument();
     });
@@ -107,22 +198,26 @@ describe("AuthOverlay", () => {
             waitingSignature: true,
         });
 
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("AuthOverlay__awaiting-signature")).toBeInTheDocument();
     });
 
     it("should render without auth overlay", () => {
-        const useAuthMock = vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: true,
-            showAuthOverlay: false,
-        });
-
-        render(<AuthOverlay />);
+        render(
+            <AuthOverlay
+                showAuthOverlay={false}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
 
         expect(screen.queryByTestId("AuthOverlay")).not.toBeInTheDocument();
-        useAuthMock.mockRestore();
     });
 });

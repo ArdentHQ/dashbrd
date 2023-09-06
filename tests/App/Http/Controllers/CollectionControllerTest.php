@@ -20,6 +20,11 @@ it('can render the collections overview page', function () {
         ->assertStatus(200);
 });
 
+it('can render the collections for guests', function () {
+    $this->get(route('collections'))
+        ->assertStatus(200);
+});
+
 it('should render collections overview page with collections and NFTs', function () {
     $user = createUser();
 

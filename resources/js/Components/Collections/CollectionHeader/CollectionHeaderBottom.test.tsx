@@ -26,6 +26,8 @@ describe("CollectionHeaderBottom", () => {
             wallet: null,
             authenticated: false,
             showAuthOverlay: true,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
         });
     });
 

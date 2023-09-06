@@ -36,8 +36,22 @@ class CollectionController extends Controller
 
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
-        /** @var User $user */
         $user = $request->user();
+
+        if ($user === null) {
+            return Inertia::render('Collections/Index', [
+                'title' => trans('metatags.collections.title'),
+                'stats' => new CollectionStatsData(
+                    nfts: 0,
+                    collections: 0,
+                    value: 0,
+                ),
+                'sortBy' => null,
+                'sortDirection' => 'desc',
+                'showHidden' => false,
+                'view' => 'list',
+            ]);
+        }
 
         $hiddenCollections = $user->hiddenCollections->pluck('address');
         $showHidden = $request->get('showHidden') === 'true';

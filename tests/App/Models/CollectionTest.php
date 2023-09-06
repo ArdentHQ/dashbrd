@@ -106,8 +106,27 @@ it('can retrieve the collection website', function () {
         ],
     ]);
 
-    expect($collection->website())->not->toBeNull();
-    expect($collection->website())->toContain('0xtest');
+    expect($collection->website(defaultToExplorer: false))->toBeNull();
+
+    $collection = Collection::factory()->create([
+        'address' => '0xtest',
+        'extra_attributes' => [
+            'image' => 'test',
+            'website' => 'https://mumbai.polygonscan.com/test',
+        ],
+    ]);
+
+    expect($collection->website(defaultToExplorer: false))->toBeNull();
+
+    $collection = Collection::factory()->create([
+        'address' => '0xtest',
+        'extra_attributes' => [
+            'image' => 'test',
+            'website' => null,
+        ],
+    ]);
+
+    expect($collection->website(defaultToExplorer: true))->not->toBeNull();
 });
 
 it('can get reporting throttle duration', function () {
@@ -740,7 +759,9 @@ it('queries the collections for the collection data object', function () {
     // Null attributes
     $collection2 = Collection::factory()->create([
         'floor_price' => '123456789',
-        'extra_attributes' => [],
+        'extra_attributes' => [
+            'website' => 'https://example2.com',
+        ],
     ]);
 
     // With nfts
@@ -748,7 +769,9 @@ it('queries the collections for the collection data object', function () {
         ->has(Nft::factory()->count(3))
         ->create([
             'floor_price' => '123456789',
-            'extra_attributes' => [],
+            'extra_attributes' => [
+                'website' => 'https://example2.com',
+            ],
         ]);
 
     // should not be included
@@ -787,7 +810,7 @@ it('queries the collections for the collection data object', function () {
         'floor_price_decimals' => $collection2->floorPriceToken->decimals,
         'image' => null,
         'banner' => null,
-        'website' => $collection2->website(),
+        'website' => 'https://example2.com',
         'nfts_count' => 0,
     ]);
 
