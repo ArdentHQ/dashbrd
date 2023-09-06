@@ -70,12 +70,13 @@ class OverviewStats extends StatsOverviewWidget
             Stat::make('Most unique collections owned by wallet', static fn () => Cache::remember('filament:widgets:most-collections', $ttl,
                 static function () {
 
-                    /** @var object{wallet_id: int, count: int} $result  */
+                    /** @var object{wallet_id: int, count: int} $result */
                     $result = DB::table('nfts')
                         ->select(DB::raw('nfts.wallet_id, count(distinct(collection_id))'))
                         ->groupBy('wallet_id')
                         ->limit(1)
                         ->first();
+
                     return $result->count;
                 }
             ))->description('Number of collections for a wallet that owns NFTs in the most collections'),
