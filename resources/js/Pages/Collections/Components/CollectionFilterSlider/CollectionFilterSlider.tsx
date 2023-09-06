@@ -65,8 +65,11 @@ export const CollectionFilterSlider = ({
                 <div className="flex-grow">
                     <Slider.Header className="text-lg font-medium">{t("common.filter")}</Slider.Header>
 
-                    <Slider.Content>
-                        <div className="space-y-3">
+                    <Slider.Content
+                        includePadding={false}
+                        className="pb-28 xs:px-6 xs:pt-6 sm:px-8"
+                    >
+                        <div className="xs:space-y-3">
                             <CollectionOwnedToggle
                                 checked={showOnlyOwned}
                                 onChange={setShowOnlyOwned}
