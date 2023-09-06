@@ -16,7 +16,6 @@ export const useAuthorizedAction = (): {
 
         if (!authenticated) {
             const onConnected = (): void => {
-                console.log("action fter conntec");
                 askForSignature(onAction);
             };
 
