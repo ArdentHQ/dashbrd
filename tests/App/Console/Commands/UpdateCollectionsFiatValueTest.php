@@ -9,6 +9,18 @@ use App\Models\Nft;
 use Illuminate\Support\Facades\Queue;
 
 it('dispatches onto the queue', function () {
+    [$matic] = seedTokens();
+
+    $network = Network::polygon()->firstOrFail();
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'floor_price' => 3.5 * 1e18,
+        'floor_price_token_id' => $matic->id,
+    ]);
+
+    createUser();
+
     Queue::fake();
 
     $this->artisan('collections:update-fiat-value');
