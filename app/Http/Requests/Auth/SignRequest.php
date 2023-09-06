@@ -72,7 +72,7 @@ class SignRequest extends FormRequest
         Signature::setWalletIsSigned($wallet->id);
     }
 
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         Signature::setWalletIsNotSigned($this->chainId);
 
