@@ -21,7 +21,7 @@ export const InstallMetamask = ({
         <>
             <AuthInstallWallet />
 
-            <div className="flex space-x-3">
+            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
                 {showCloseButton && (
                     <Button
                         data-testid="AuthOverlay__close-button"
@@ -57,7 +57,7 @@ export const ConnectionError = ({
 
     return (
         <>
-            <div className="flex flex-row space-x-3">
+            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
                 {showCloseButton && (
                     <Button
                         data-testid="AuthOverlay__close-button"
@@ -146,13 +146,13 @@ export const ConnectWallet = ({
 
     return (
         <>
-            <div className="flex w-full justify-center space-x-3">
+            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
                 {showCloseButton && (
                     <Button
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="min-w-[154px] justify-center whitespace-nowrap"
+                        className="w-full min-w-[154px] justify-center whitespace-nowrap"
                     >
                         {t("common.close")}
                     </Button>

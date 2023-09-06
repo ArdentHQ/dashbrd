@@ -62,8 +62,12 @@ export const AuthOverlay = ({
             ref={reference}
             {...properties}
             className={cn(
-                "fixed inset-0 z-40 flex h-screen w-screen items-center justify-center overflow-auto bg-white bg-opacity-60",
+                "fixed inset-0 z-40 flex h-screen w-screen items-center justify-center overflow-auto bg-white",
                 className,
+                {
+                    "bg-opacity-60": !showCloseButton,
+                    "bg-opacity-90": showCloseButton,
+                },
             )}
         >
             <div className="flex flex-col items-center space-y-6">
@@ -93,7 +97,7 @@ export const AuthOverlay = ({
                     <>
                         <AuthConnectWallet />
 
-                        <div className="flex max-w-sm flex-col items-center space-y-6 px-6">
+                        <div className="flex w-full flex-col items-center space-y-6 px-6 xs:max-w-sm">
                             {errorMessage === undefined && (
                                 <>
                                     {switching && <SwitchingNetwork />}
