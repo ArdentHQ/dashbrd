@@ -1,8 +1,14 @@
+import { router } from "@inertiajs/react";
 import React from "react";
+import { type SpyInstance } from "vitest";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
+import * as useAuth from "@/Hooks/useAuth";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
-import { fireEvent, mockInertiaUseForm, render, screen, userEvent } from "@/Tests/testing-library";
-
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
+import { fireEvent, mockInertiaUseForm, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
 const gallery = new GalleryDataFactory().create();
 
 const reportButton = (): HTMLElement => screen.getByTestId("GalleryControls__flag-button");
@@ -22,12 +28,40 @@ const renderAndOpenDialog = async (reportReasons?: Record<string, string>): Prom
     await userEvent.click(triggerButton);
 };
 
+const defaultMetamaskConfig = getSampleMetaMaskState();
+
+const user = new UserDataFactory().create();
+const wallet = new WalletFactory().create();
+
+let useMetamaskSpy: SpyInstance;
+let useAuthSpy: SpyInstance;
+
 describe("GalleryReportModal", () => {
+    beforeEach(() => {
+        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user,
+            wallet,
+            authenticated: true,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        useMetamaskSpy.mockRestore();
+        useAuthSpy.mockRestore();
+    });
+
     it("should render when opened", async () => {
         await renderAndOpenDialog();
     });
 
     it("can be closed", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
         await renderAndOpenDialog();
 
         const closeButton = screen.getByTestId("ConfirmationDialog__close");
@@ -35,6 +69,23 @@ describe("GalleryReportModal", () => {
         fireEvent.click(closeButton);
 
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
+
+        expect(routerSpy).toHaveBeenCalled();
+
+        routerSpy.mockRestore();
+    });
+
+    it("opens the modal if param passed", async () => {
+        render(
+            <GalleryReportModal
+                gallery={gallery}
+                show={true}
+            />,
+        );
+
+        await waitFor(() => {
+            expect(screen.queryByTestId("ReportModal")).toBeInTheDocument();
+        });
     });
 
     it("disables the button with isDisabled prop", () => {
@@ -99,6 +150,64 @@ describe("GalleryReportModal", () => {
         fireEvent.click(submitButton);
 
         expect(postFunction).toHaveBeenCalled();
+    });
+
+    it("opens auth overlay if no authenticated", async () => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        const showConnectOverlay = vi.fn();
+
+        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
+            getSampleMetaMaskState({
+                showConnectOverlay,
+            }),
+        );
+
+        await renderAndOpenDialog({
+            reason1: "lorem ipsum",
+            reason2: "lorem ipsum",
+        });
+
+        expect(showConnectOverlay).toHaveBeenCalled();
+    });
+
+    it("opens the modal after logged in", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        const showConnectOverlay = vi.fn().mockImplementation((callback) => {
+            callback();
+        });
+
+        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
+            getSampleMetaMaskState({
+                showConnectOverlay,
+            }),
+        );
+
+        await renderAndOpenDialog({
+            reason1: "lorem ipsum",
+            reason2: "lorem ipsum",
+        });
+
+        expect(showConnectOverlay).toHaveBeenCalled();
+
+        expect(routerSpy).toHaveBeenCalled();
     });
 
     it("can be submitted without a gallery", () => {

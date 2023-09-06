@@ -30,6 +30,8 @@ describe("TokenDetails", () => {
             wallet,
             authenticated: true,
             showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
         });
     });
 

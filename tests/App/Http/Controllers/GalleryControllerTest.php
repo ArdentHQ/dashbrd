@@ -112,6 +112,21 @@ it('can add a like to a gallery', function () {
     expect($gallery->fresh()->likeCount)->toBe(1);
 });
 
+it('can force a like to a gallery', function () {
+    $user = createUser();
+    $gallery = Gallery::factory()->create();
+
+    $gallery->addLike($user);
+
+    expect($gallery->likeCount)->toBe(1);
+
+    $this->actingAs($user)
+        ->post(route('galleries.like', ['gallery' => $gallery->slug, 'like' => 1]))
+        ->assertStatus(201);
+
+    expect($gallery->fresh()->likeCount)->toBe(1);
+});
+
 it('can remove a like from a gallery', function () {
     $user = createUser();
     $gallery = Gallery::factory()->create();
@@ -122,6 +137,19 @@ it('can remove a like from a gallery', function () {
 
     $this->actingAs($user)
         ->post(route('galleries.like', $gallery->slug))
+        ->assertStatus(201);
+
+    expect($gallery->fresh()->likeCount)->toBe(0);
+});
+
+it('can force remove like to a gallery', function () {
+    $user = createUser();
+    $gallery = Gallery::factory()->create();
+
+    expect($gallery->likeCount)->toBe(0);
+
+    $this->actingAs($user)
+        ->post(route('galleries.like', ['gallery' => $gallery->slug, 'like' => 0]))
         ->assertStatus(201);
 
     expect($gallery->fresh()->likeCount)->toBe(0);

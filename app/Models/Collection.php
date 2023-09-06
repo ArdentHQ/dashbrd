@@ -30,7 +30,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Collection extends Model
 {
-    use HasFactory, BelongsToNetwork, SoftDeletes, Reportable, HasSlug;
+    use BelongsToNetwork, HasFactory, HasSlug, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
@@ -110,17 +110,26 @@ class Collection extends Model
         return $this->extra_attributes->get('banner');
     }
 
-    public function website(): string
+    public function website(bool $defaultToExplorer = true): ?string
     {
         $website = $this->extra_attributes->get('website');
 
-        if ($website !== null) {
-            return Str::startsWith($website, ['https://', 'http://'])
-                    ? $website
-                    : Str::start($website, 'https://');
+        if ($website === null) {
+            return $defaultToExplorer ? $this->explorerUrl() : null;
         }
 
-        return $this->explorerUrl();
+        if (Str::startsWith($website, $this->network->explorer_url) && ! $defaultToExplorer) {
+            return null;
+        }
+
+        return Str::startsWith($website, ['https://', 'http://'])
+                ? $website
+                : Str::start($website, 'https://');
+    }
+
+    private function explorerUrl(): string
+    {
+        return $this->network->explorer_url.'/token/'.$this->address;
     }
 
     public function twitter(): ?string
@@ -141,11 +150,6 @@ class Collection extends Model
         }
 
         return self::DISCORD_URL.$discord;
-    }
-
-    private function explorerUrl(): string
-    {
-        return $this->network->explorer_url.'/token/'.$this->address;
     }
 
     public function newReportNotification(Report $report): Notification

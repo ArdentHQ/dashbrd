@@ -142,6 +142,69 @@ it('should calculate the total gallery value', function () {
     expect(round($gallery->fresh()->value(CurrencyCode::USD)))->toBe(round(2.1 * 1769.02));
 });
 
+it('should calculate the gallery value if collection floor_price is null', function () {
+    $weth = Token::factory()->wethWithPrices()->create();
+    $collection = Collection::factory()->create([
+        'floor_price' => null,
+        'floor_price_token_id' => $weth->id,
+    ]);
+    $gallery = Gallery::factory()->create();
+    $nft = Nft::factory()->create([
+        'collection_id' => $collection->id,
+    ]);
+
+    $gallery->nfts()->attach($nft, ['order_index' => 0]);
+
+    Gallery::updateValues([$gallery->id]);
+
+    expect($gallery->fresh()->value(CurrencyCode::USD))->toBe(null);
+});
+
+it('should calculate the gallery value if only one collection floor_price is null', function () {
+    $weth = Token::factory()->wethWithPrices()->create();
+    $collection = Collection::factory()->create([
+        'floor_price' => null,
+        'floor_price_token_id' => $weth->id,
+    ]);
+    $collection2 = Collection::factory()->create([
+        'floor_price' => 2.1 * 1e18,
+        'floor_price_token_id' => $weth->id,
+    ]);
+    $gallery = Gallery::factory()->create();
+    $nft = Nft::factory()->create([
+        'collection_id' => $collection->id,
+    ]);
+    $nft2 = Nft::factory()->create([
+        'collection_id' => $collection2->id,
+    ]);
+
+    $gallery->nfts()->attach($nft, ['order_index' => 0]);
+    $gallery->nfts()->attach($nft2, ['order_index' => 2]);
+
+    Gallery::updateValues([$gallery->id]);
+
+    // 1 WETH = 1769.02 USD
+    expect(round($gallery->fresh()->value(CurrencyCode::USD)))->toBe(round(2.1 * 1769.02));
+});
+
+it('should calculate the gallery value if token value is null', function () {
+    $token = Token::factory()->create();
+    $collection = Collection::factory()->create([
+        'floor_price' => 2.1 * 1e18,
+        'floor_price_token_id' => $token->id,
+    ]);
+    $gallery = Gallery::factory()->create();
+    $nft = Nft::factory()->create([
+        'collection_id' => $collection->id,
+    ]);
+
+    $gallery->nfts()->attach($nft, ['order_index' => 0]);
+
+    Gallery::updateValues([$gallery->id]);
+
+    expect($gallery->fresh()->value(CurrencyCode::USD))->toBe(null);
+});
+
 it('should get null for the total gallery value if no value found for the eth token', function () {
     Token::factory()->weth()->create();
 

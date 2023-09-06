@@ -12,13 +12,17 @@ import {
 import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
 import { AuthConnectWallet } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties): JSX.Element => {
+export const AuthOverlay = ({
+    className,
+    showAuthOverlay,
+    showCloseButton,
+    closeOverlay,
+    ...properties
+}: AuthOverlayProperties): JSX.Element => {
     const { t } = useTranslation();
-    const { showAuthOverlay } = useAuth();
 
     const {
         needsMetaMask,
@@ -39,6 +43,10 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
         } else {
             disableBodyScroll(reference.current);
         }
+
+        return () => {
+            clearAllBodyScrollLocks();
+        };
     }, [showAuthOverlay, reference]);
 
     const showSignMessage = useMemo(
@@ -54,8 +62,12 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
             ref={reference}
             {...properties}
             className={cn(
-                "fixed inset-0 z-40 flex h-screen w-screen items-center justify-center overflow-auto bg-white bg-opacity-60",
+                "fixed inset-0 z-40 flex h-screen w-screen items-center justify-center overflow-auto bg-white",
                 className,
+                {
+                    "bg-opacity-60": !showCloseButton,
+                    "bg-opacity-90": showCloseButton,
+                },
             )}
         >
             <div className="flex flex-col items-center space-y-6">
@@ -74,21 +86,26 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
                     </p>
                 </div>
 
-                {needsMetaMask && <InstallMetamask />}
+                {needsMetaMask && (
+                    <InstallMetamask
+                        closeOverlay={closeOverlay}
+                        showCloseButton={showCloseButton}
+                    />
+                )}
 
                 {!needsMetaMask && (
                     <>
                         <AuthConnectWallet />
 
-                        <div className="flex max-w-sm flex-col items-center space-y-6 px-6">
+                        <div className="flex w-full flex-col items-center space-y-6 px-6 xs:max-w-sm">
                             {errorMessage === undefined && (
                                 <>
                                     {switching && <SwitchingNetwork />}
-
                                     {connecting && <ConnectingWallet isWaitingSignature={waitingSignature} />}
-
                                     {!connecting && !switching && (
                                         <ConnectWallet
+                                            closeOverlay={closeOverlay}
+                                            showCloseButton={showCloseButton}
                                             isWalletInitialized={initialized}
                                             shouldRequireSignature={requiresSignature}
                                             shouldShowSignMessage={showSignMessage}
@@ -102,6 +119,8 @@ export const AuthOverlay = ({ className, ...properties }: AuthOverlayProperties)
 
                             {isTruthy(errorMessage) && (
                                 <ConnectionError
+                                    closeOverlay={closeOverlay}
+                                    showCloseButton={showCloseButton}
                                     errorMessage={errorMessage}
                                     onConnect={() => {
                                         void connectWallet();
