@@ -87,7 +87,7 @@ export const CollectionsTableItem = ({
                     paddingClassName="px-2 md:px-5"
                     hoverClassName=""
                 >
-                    {collection.floorPrice === null ? (
+                    {collection.floorPrice === null || user === null ? (
                         <span
                             data-testid="CollectionsTableItem__unknown-floor-price"
                             className="text-sm font-medium text-theme-secondary-500"
@@ -111,7 +111,7 @@ export const CollectionsTableItem = ({
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
-                {collection.floorPrice === null ? (
+                {collection.floorPrice === null || user === null ? (
                     <span
                         data-testid="CollectionsTableItem__unknown-value"
                         className="text-sm font-medium text-theme-secondary-500"

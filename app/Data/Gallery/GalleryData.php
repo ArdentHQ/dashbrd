@@ -6,6 +6,7 @@ namespace App\Data\Gallery;
 
 use App\Enums\CurrencyCode;
 use App\Models\Gallery;
+use App\Models\User;
 use App\Support\Cache\GalleryCache;
 use Illuminate\Support\Facades\Auth;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -39,7 +40,14 @@ class GalleryData extends Data
         $currency = CurrencyCode::USD;
 
         if (Auth::hasUser()) {
-            $currency = Auth::user()->currency();
+            /** @var User $user */
+            $user = Auth::user();
+            $currency = $user->currency();
+            $isOwner = $user->id === $gallery->user->id;
+            $hasLiked = $gallery->isLikedBy($user);
+        } else {
+            $isOwner = false;
+            $hasLiked = false;
         }
 
         $galleryCache = new GalleryCache($gallery);
@@ -56,8 +64,8 @@ class GalleryData extends Data
             coverImage: $gallery->cover_image,
             wallet: GalleryWalletData::fromModel($gallery->user->wallet),
             nfts: new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit))),
-            isOwner: Auth::user()->id === $gallery->user->id,
-            hasLiked: $gallery->isLikedBy(Auth::user()),
+            isOwner: $isOwner,
+            hasLiked: $hasLiked,
         );
     }
 }
