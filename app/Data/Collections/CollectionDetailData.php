@@ -63,7 +63,7 @@ class CollectionDetailData extends Data
             floorPriceFiat: $currencyCode !== null ? $collection->fiatValue($currencyCode) : null,
             image: $collection->extra_attributes->get('image'),
             banner: $collection->extra_attributes->get('banner'),
-            website: $collection->website(),
+            website: $collection->website(defaultToExplorer: false),
             twitter: $collection->twitter(),
             discord: $collection->discord(),
             supply: $collection->supply,
