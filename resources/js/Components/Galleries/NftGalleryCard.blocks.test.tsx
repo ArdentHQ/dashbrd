@@ -14,7 +14,7 @@ import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
-import {getSampleMetaMaskState} from "@/Tests/SampleData/SampleMetaMaskState";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 const collectionInfo: Pick<
     App.Data.Gallery.GalleryNftData,
     | "chainId"
