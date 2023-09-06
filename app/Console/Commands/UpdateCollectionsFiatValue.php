@@ -39,7 +39,7 @@ class UpdateCollectionsFiatValue extends Command
 
         Collection::query()->chunkById(50, function (EloquentCollection $collections) {
             dispatch(function () use ($collections) {
-                User::updateCollectionsValue($collections->pluck('id')->toArray());
+                Collection::updateFiatValue($collections->pluck('id')->toArray());
             })->onQueue(Queues::SCHEDULED_DEFAULT);
         });
 
