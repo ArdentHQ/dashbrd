@@ -31,7 +31,7 @@ export default defineConfig({
     plugins: [
         buildTranslations("lang", "resources/js/I18n/Locales"),
         laravel({
-            input: ["resources/js/app.tsx", 'resources/css/filament.css'],
+            input: "resources/js/app.tsx",
             refresh: true,
         }),
         process.env.NODE_ENV !== "production"
