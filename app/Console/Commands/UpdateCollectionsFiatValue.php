@@ -30,10 +30,13 @@ class UpdateCollectionsFiatValue extends Command
      */
     public function handle(): int
     {
-        dispatch(static function () {
-            Collection::updateFiatValue();
-            User::updateCollectionsValue();
-        })->onQueue(Queues::SCHEDULED_DEFAULT);
+        User::chunkById(50, function (Collection $users) {
+            dispatch(() => User::updateCollectionsValue($users->pluck('id')))->onQueue(Queues::SCHEDULED_DEFAULT));
+        });
+
+        Collection::chunkById(50, function (Collection $collections) {
+            dispatch(() => User::updateCollectionsValue($collections->pluck('id'))->onQueue(Queues::SCHEDULED_DEFAULT));
+        });
 
         return Command::SUCCESS;
     }
