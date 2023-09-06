@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { type QueryParams } from "ziggy-js";
 interface LikeOptions {
     count: number;
     hasLiked: boolean;
@@ -17,16 +16,18 @@ export const useLikes = (options: LikeOptions): UseLikesReturnType => {
     const [hasLiked, setHasLiked] = useState<boolean>();
 
     const like = async (slug: string, like?: boolean): Promise<void> => {
+        const query: {
+            like?: boolean;
+        } = {};
+
+        if (like !== undefined) {
+            query.like = like;
+        }
+
         const response = await axios.post<App.Data.Gallery.GalleryLikeData>(
             route("galleries.like", {
                 gallery: slug,
-                _query: {
-                    // Note: like can be `undefined`, this is intentional
-                    // `undefined` toggles the like
-                    // `true` likes the gallery
-                    // `false` unlikes the gallery
-                    like,
-                } as unknown as QueryParams,
+                _query: query,
             }),
         );
 
