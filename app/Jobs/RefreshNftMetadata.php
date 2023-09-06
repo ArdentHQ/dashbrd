@@ -20,9 +20,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 
-class RefreshNftMetadata implements ShouldQueue, ShouldBeUnique
+class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RecoversFromProviderErrors;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.

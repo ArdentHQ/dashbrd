@@ -28,9 +28,9 @@ use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
-class User extends Authenticatable implements HasName, FilamentUser
+class User extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, Notifiable, HasWallets, BelongsToWallet, WithData, SoftDeletes;
+    use BelongsToWallet, HasFactory, HasWallets, Notifiable, SoftDeletes, WithData;
     use HasRoles {
         assignRole as baseAssignRole;
     }
