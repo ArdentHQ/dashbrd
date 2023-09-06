@@ -70,15 +70,17 @@ class Web3UserProvider extends EloquentUserProvider
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
         /** @var User $user */
-        if ($user->wallets()->where('address', $credentials['address'])->doesntExist()) {
-            return false;
-        }
+        return $user->wallets()->where('address', $credentials['address'])->exists();
+        // /** @var User $user */
+        // if ($user->wallets()->where('address', $credentials['address'])->doesntExist()) {
+        //     return false;
+        // }
 
-        return Signature::verify(
-            signature: $credentials['signature'],
-            address: $credentials['address'],
-            message: Signature::buildSignMessage($credentials['nonce'])
-        );
+        // return Signature::verify(
+        //     signature: $credentials['signature'],
+        //     address: $credentials['address'],
+        //     message: Signature::buildSignMessage($credentials['nonce'])
+        // );
     }
 
     /**

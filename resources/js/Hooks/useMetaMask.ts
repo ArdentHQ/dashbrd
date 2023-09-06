@@ -399,55 +399,57 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             return;
         }
 
-        let signMessage: string;
+        // let signMessage: string;
 
-        try {
-            signMessage = await getSignMessage(chainId);
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response?.status === 422) {
-                    onError(
-                        ErrorType.Generic,
-                        (
-                            error.response.data as {
-                                message: string;
-                            }
-                        ).message,
-                    );
-                } else {
-                    onError(ErrorType.Generic);
-                }
-            } else {
-                onError(ErrorType.Generic);
-            }
+        // try {
+        //     signMessage = await getSignMessage(chainId);
+        // } catch (error) {
+        //     if (axios.isAxiosError(error)) {
+        //         if (error.response?.status === 422) {
+        //             onError(
+        //                 ErrorType.Generic,
+        //                 (
+        //                     error.response.data as {
+        //                         message: string;
+        //                     }
+        //                 ).message,
+        //             );
+        //         } else {
+        //             onError(ErrorType.Generic);
+        //         }
+        //     } else {
+        //         onError(ErrorType.Generic);
+        //     }
 
-            return;
-        }
+        //     return;
+        // }
 
-        let signature: string;
-        let address: string;
+        // let signature: string;
+        // let address: string;
 
-        setWaitingSignature(true);
+        // setWaitingSignature(true);
 
-        try {
-            const result = await getSignature(signMessage);
-            signature = result.signature;
-            address = result.address;
+        // try {
+        //     const result = await getSignature(signMessage);
+        //     signature = result.signature;
+        //     address = result.address;
 
-            setWaitingSignature(false);
-        } catch (error) {
-            onError(ErrorType.UserRejected);
+        //     console.log({ signature, address });
 
-            setWaitingSignature(false);
-            return;
-        }
+        //     setWaitingSignature(false);
+        // } catch (error) {
+        //     onError(ErrorType.UserRejected);
+
+        //     setWaitingSignature(false);
+        //     return;
+        // }
 
         router.visit(route("login"), {
             replace: true,
             method: "post" as VisitOptions["method"],
             data: {
-                address,
-                signature,
+                address: account,
+                // signature,
                 chainId,
                 tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 locale: browserLocale(),

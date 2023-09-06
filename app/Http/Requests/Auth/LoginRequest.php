@@ -36,7 +36,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'address' => ['required', new WalletAddress()],
-            'signature' => ['required', new WalletSignature()],
+            // 'signature' => ['required', new WalletSignature()],
             'chainId' => ['required', new ValidChain()],
         ];
     }
@@ -49,15 +49,15 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $credentials = $this->getAuthParams();
-        $nonce = $credentials['nonce'] ?? null;
+        // $nonce = $credentials['nonce'] ?? null;
 
-        if ($nonce === null) {
-            report(new RuntimeException('Nonce error is back.'));
+        // if ($nonce === null) {
+        //     report(new RuntimeException('Nonce error is back.'));
 
-            throw ValidationException::withMessages([
-                'address' => trans('auth.session_timeout'),
-            ]);
-        }
+        //     throw ValidationException::withMessages([
+        //         'address' => trans('auth.session_timeout'),
+        //     ]);
+        // }
 
         if (! Auth::attempt($credentials, remember: true)) {
             throw ValidationException::withMessages([
@@ -75,13 +75,13 @@ class LoginRequest extends FormRequest
      */
     private function getAuthParams(): array
     {
-        $nonce = Signature::getSessionNonce($this->chainId);
+        // $nonce = Signature::getSessionNonce($this->chainId);
 
         return [
             'address' => $this->address,
-            'signature' => $this->signature,
+            // 'signature' => $this->signature,
             'chainId' => $this->chainId,
-            'nonce' => $nonce,
+            // 'nonce' => $nonce,
             // Passing the `userId` in case is logged so we can associate the wallet
             // to a existing user on the web3 auth provider
             'userId' => $this->user()?->id,
