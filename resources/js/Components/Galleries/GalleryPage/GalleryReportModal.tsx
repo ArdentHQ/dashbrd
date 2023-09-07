@@ -5,8 +5,6 @@ import { IconButton } from "@/Components/Buttons";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
 import { Radio } from "@/Components/Form/Radio";
 import { Tooltip } from "@/Components/Tooltip";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 export const GalleryReportModal = ({
@@ -89,10 +87,6 @@ export const GalleryReportModal = ({
     };
 
     const radioButtonReference = useRef<HTMLInputElement>(null);
-
-    const { authenticated } = useAuth();
-
-    const { showConnectOverlay } = useMetaMaskContext();
 
     const { signedAction } = useAuthorizedAction();
 
