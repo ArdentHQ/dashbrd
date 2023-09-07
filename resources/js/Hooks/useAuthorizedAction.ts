@@ -30,7 +30,6 @@ export const useAuthorizedAction = (): {
             return;
         }
 
-        console.log("action 2");
         action({ authenticated, signed });
     };
 
