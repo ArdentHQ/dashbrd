@@ -6,10 +6,10 @@ import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
+import { Tooltip } from "@/Components/Tooltip";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 import { useLikes } from "@/Hooks/useLikes";
-import { Tooltip } from "@/Components/Tooltip";
 
 export const GalleryControls = ({
     likesCount,
