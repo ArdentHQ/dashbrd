@@ -94,7 +94,7 @@ export const AuthOverlay = ({
                         <>
                             <AuthConnectWallet />
                             <div
-                                className={cn("w-full flex-col items-center space-x-6 px-6 xs:max-w-sm", {
+                                className={cn("w-full flex-col items-center space-x-6 px-6", {
                                     hidden: !waitingSignature && !showSignMessage && errorMessage === undefined,
                                     flex: waitingSignature || showSignMessage || isTruthy(errorMessage),
                                 })}
