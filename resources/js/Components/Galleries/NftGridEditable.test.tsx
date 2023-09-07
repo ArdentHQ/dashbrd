@@ -30,7 +30,10 @@ describe("NftGridEditable", () => {
 
         render(
             <SliderContext.Provider value={{ isOpen: false, setOpen: function_ }}>
-                <EditableGalleryHook selectedNfts={[nft]}>
+                <EditableGalleryHook
+                    selectedNfts={[nft]}
+                    nftLimit={16}
+                >
                     <GalleryNfts
                         nfts={[nft]}
                         pageMeta={{
@@ -55,7 +58,10 @@ describe("NftGridEditable", () => {
 
         render(
             <SliderContext.Provider value={{ isOpen: false, setOpen: function_ }}>
-                <EditableGalleryHook selectedNfts={[]}>
+                <EditableGalleryHook
+                    selectedNfts={[]}
+                    nftLimit={16}
+                >
                     <GalleryNfts
                         nfts={[]}
                         pageMeta={{
@@ -91,6 +97,7 @@ describe("NftGridEditable", () => {
                             update: vi.fn(),
                             remove: removeNftMock,
                         },
+                        nftLimit: 16,
                     }}
                 >
                     <GalleryNfts
@@ -127,6 +134,7 @@ describe("NftGridEditable", () => {
                             update: vi.fn(),
                             remove: removeNftMock,
                         },
+                        nftLimit: 16,
                     }}
                 >
                     <GalleryNfts
@@ -162,6 +170,7 @@ describe("NftGridEditable", () => {
                             update: updateSpy,
                             remove: vi.fn(),
                         },
+                        nftLimit: 16,
                     }}
                 >
                     <GalleryNfts
