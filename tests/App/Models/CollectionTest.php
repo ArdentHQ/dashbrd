@@ -882,3 +882,23 @@ it('gets the floor price for the user currency', function () {
     // No mxn price
     expect($result[1]['floor_price_fiat'])->toBeNull();
 });
+
+it('can determine whether collection was recently viewed', function () {
+    $collection = new Collection([
+        'last_viewed_at' => null,
+    ]);
+
+    expect($collection->recentlyViewed())->toBeFalse();
+
+    $collection = new Collection([
+        'last_viewed_at' => now()->subMinutes(30),
+    ]);
+
+    expect($collection->recentlyViewed())->toBeTrue();
+
+    $collection = new Collection([
+        'last_viewed_at' => now()->subDays(1)->subHours(1),
+    ]);
+
+    expect($collection->recentlyViewed())->toBeFalse();
+});

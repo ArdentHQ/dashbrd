@@ -59,12 +59,12 @@ const Create = ({
 
     assertUser(auth.user);
 
-    const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "website" | "name" | "image">>>(
+    const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>>(
         () =>
             uniqBy(selectedNfts, (nft) => nft.tokenAddress).map((nft) => ({
                 name: nft.collectionName,
-                website: nft.collectionWebsite,
                 image: nft.collectionImage,
+                slug: nft.collectionSlug,
             })),
         [selectedNfts],
     );
