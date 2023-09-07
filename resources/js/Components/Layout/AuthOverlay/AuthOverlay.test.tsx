@@ -224,6 +224,23 @@ describe("AuthOverlay", () => {
         expect(screen.getByTestId("AuthOverlay__connecting-network")).toBeInTheDocument();
     });
 
+    it("should render signing state if signing", () => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            signing: true,
+        });
+
+        render(
+            <AuthOverlay
+                showAuthOverlay={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__connecting-network")).toBeInTheDocument();
+    });
+
     it("should require signature", () => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
             ...defaultMetamaskConfig,

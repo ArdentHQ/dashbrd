@@ -95,7 +95,7 @@ export const SwitchingNetwork = (): JSX.Element => {
     );
 };
 
-export const ConnectingWallet = ({ signing = false }: { signing?: boolean }): JSX.Element => {
+export const ConnectingWallet = ({ signing }: { signing: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
