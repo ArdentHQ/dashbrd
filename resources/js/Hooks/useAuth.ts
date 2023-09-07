@@ -87,7 +87,7 @@ export const useAuth = (): App.Data.AuthData & {
         isShowConnectOverlay,
     ]);
 
-    const showCloseButton = allowsGuests;
+    const showCloseButton = allowsGuests || requiresSignature;
 
     return {
         authenticated,

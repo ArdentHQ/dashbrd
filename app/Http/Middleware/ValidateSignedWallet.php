@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Providers\RouteServiceProvider;
 use App\Support\Facades\Signature;
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,11 @@ class ValidateSignedWallet
         $wallet = $request->wallet();
 
         if ($wallet === null || ! Signature::walletIsSigned($wallet->id)) {
-            return response()->json(['message' => 'signature_required'], 403);
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'signature_required'], 403);
+            }
+
+            return redirect()->to(RouteServiceProvider::HOME);
         }
 
         return $next($request);
