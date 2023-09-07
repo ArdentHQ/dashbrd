@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Nft;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +15,5 @@ return new class extends Migration
             $table->addColumn('numeric', 'token_number', ['numeric_type' => 'numeric'])->nullable();
             $table->unsignedBigInteger('nft_id')->nullable()->change();
         });
-
-        // TODO: set `token_number` for existing activities...
     }
 };

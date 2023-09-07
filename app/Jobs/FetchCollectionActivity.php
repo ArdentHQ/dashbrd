@@ -49,8 +49,14 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
             contractAddress: $this->collection->address,
             limit: $limit,
             from: $this->collection->activities()->latest('timestamp')->value('timestamp')
-        )->map(fn (CollectionActivity $activity) => [
-            'nft_id' => $activity->tokenId,
+        );
+
+        // At most 500 models...
+        $nfts = $this->collection->nfts()->findMany($activities->pluck('tokenId'));
+
+        $formattedActivities = $activities->map(fn (CollectionActivity $activity) => [
+            'nft_id' => $nfts->firstWhere('token_number', $activity->tokenId)?->id,
+            'token_number' => $activity->tokenId,
             'type' => $activity->type->value,
             'sender' => $activity->sender,
             'recipient' => $activity->recipient,
@@ -61,13 +67,13 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
             'extra_attributes' => json_encode($activity->extraAttributes),
         ])->toArray();
 
-        DB::transaction(function () use ($activities, $limit) {
-            NftActivity::upsert($activities, ['tx_hash', 'nft_id', 'type']);
+        DB::transaction(function () use ($formattedActivities, $limit) {
+            NftActivity::upsert($formattedActivities, ['tx_hash', 'nft_id', 'type']);
 
             $this->collection->touch('last_activity_fetched_at');
 
             // If we get the limit it be that there are more activities to fetch...
-            if ($limit === count($activities)) {
+            if ($limit === count($formattedActivities)) {
                 self::dispatch($this->collection)->afterCommit();
             }
         });
