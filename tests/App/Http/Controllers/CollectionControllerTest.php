@@ -206,7 +206,6 @@ it('can render the collections view page with falsy owned filter', function ($ow
         'collection_id' => $collection->id,
     ]);
 
-
     Token::factory()->create([
         'network_id' => $network->id,
         'symbol' => 'ETH',
@@ -684,7 +683,7 @@ it('returns nfts with traits', function () {
             'valueMax' => null,
             'nftsCount' => $dateTrait['nfts_count'],
             'nftsPercentage' => $dateTrait['nfts_percentage'],
-        ]
+        ],
     ]);
 });
 
