@@ -47,6 +47,51 @@ it('should sign a user', function () {
     ])->assertRedirect(route('galleries'));
 });
 
+it('should throw a validation exception when nonce is not available in session', function () {
+    Signature::shouldReceive('getSessionNonce')->andReturn(null)->once();
+
+    $user = User::factory()->create();
+    $wallet = Wallet::factory()->create([
+        'address' => '0x2231231231231231231231231231231231231231',
+    ]);
+    $user->wallet()->associate($wallet);
+    $user->save();
+
+    $network = Network::polygon()->first();
+
+    $this->actingAs($user)->post(route('sign'), [
+        'address' => '0x2231231231231231231231231231231231231231',
+        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
+        'chainId' => $network->chain_id,
+    ])->assertSessionHasErrors([
+        'address' => trans('auth.session_timeout'),
+    ])->assertRedirect(route('galleries'));
+});
+
+it('should throw a validation exception if signature cannot be verified', function () {
+    Signature::shouldReceive('getSessionNonce')->andReturn('')->once()
+        ->shouldReceive('buildSignMessage')->andReturnSelf()->once()
+        ->shouldReceive('verify')->andReturn(false)->once()
+        ->shouldReceive('setWalletIsNotSigned')->once();
+
+    $user = User::factory()->create();
+    $wallet = Wallet::factory()->create([
+        'address' => '0x2231231231231231231231231231231231231231',
+    ]);
+    $user->wallet()->associate($wallet);
+    $user->save();
+
+    $network = Network::polygon()->first();
+
+    $this->actingAs($user)->post(route('sign'), [
+        'address' => '0x2231231231231231231231231231231231231231',
+        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
+        'chainId' => $network->chain_id,
+    ])->assertSessionHasErrors([
+        'address' => trans('auth.failed'),
+    ])->assertRedirect(route('galleries'));
+});
+
 it('should handle an incoming authentication request for a new user', function () {
     Token::factory()->matic()->create();
 

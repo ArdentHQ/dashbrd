@@ -8,7 +8,6 @@ use App\Rules\ValidChain;
 use App\Rules\WalletAddress;
 use App\Rules\WalletSignature;
 use App\Support\Facades\Signature;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -72,15 +71,6 @@ class SignRequest extends FormRequest
         Signature::setWalletIsSigned($wallet->id);
 
         Signature::forgetSessionNonce($credentials['chainId']);
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        Signature::setWalletIsNotSigned($this->chainId);
-
-        auth()->logout();
-
-        parent::failedValidation($validator);
     }
 
     /**
