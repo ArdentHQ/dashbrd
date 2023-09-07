@@ -74,7 +74,7 @@ class CollectionController extends Controller
             $collections = $user->collections()
                 ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
-                ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
+                ->when(!$showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
                 ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
@@ -130,13 +130,25 @@ class CollectionController extends Controller
 
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
-        $filters = $this->parseFilters($request);
-
-        if (! $collection->recentlyViewed()) {
+        if (!$collection->recentlyViewed()) {
             SyncCollection::dispatch($collection);
         }
 
         $collection->touchQuietly('last_viewed_at');
+
+        $ownedNfts = $collection
+            ->nfts()
+            ->select('nfts.*')
+            ->filter([
+                'owned' => true,
+                'traits' => $this->normalizeTraits($request->get('traits', [])),
+            ], $user)
+            ->search($request->get('query'))
+            ->orderByOwnership($user)
+            ->paginate(12)
+            ->appends($request->all());
+
+        $filters = $this->parseFilters($request, $ownedNfts->count());
 
         $nfts = $collection
             ->nfts()
@@ -145,7 +157,7 @@ class CollectionController extends Controller
             ->search($request->get('query'))
             ->orderByOwnership($user)
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
-            ->when(! $sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
+            ->when(!$sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
             ->paginate(12)
             ->appends($request->all());
 
@@ -178,7 +190,7 @@ class CollectionController extends Controller
             'collectionTraits' => CollectionTraitFilterData::fromCollection($collection),
             'alreadyReported' => $collection->wasReportedByUserRecently($user),
             'reportAvailableIn' => $reportAvailableIn,
-            'appliedFilters' => $this->appliedParameters($request, $pageLimit, $tab, $filters, $paginatedNfts->count()),
+            'appliedFilters' => $this->appliedParameters($request, $pageLimit, $tab, $filters),
             'sortByMintDate' => $sortByMintDate,
             'nativeToken' => TokenData::fromModel($nativeToken),
         ]);
@@ -190,12 +202,18 @@ class CollectionController extends Controller
      *   traits: array<string, array<string, string[]>> | null,
      * }
      */
-    private function parseFilters(Request $request): array
+    private function parseFilters(Request $request, int $ownedNftsCount): array
     {
         $traits = $request->get('traits', []);
 
+        $owned = $request->get('owned') === null ? true : $request->boolean('owned');
+
+        if ($ownedNftsCount  === 0 && $request->get('owned') === null) {
+            $owned = false;
+        }
+
         return [
-            'owned' => $request->get('owned') === null ? true : $request->boolean('owned'),
+            'owned' => $owned,
             'traits' => $this->normalizeTraits($traits),
         ];
     }
@@ -205,7 +223,7 @@ class CollectionController extends Controller
      */
     private function normalizeTraits(mixed $traits): ?array
     {
-        if (! is_array($traits) || count($traits) === 0) {
+        if (!is_array($traits) || count($traits) === 0) {
             return null;
         }
 
@@ -216,7 +234,7 @@ class CollectionController extends Controller
         })->mapWithKeys(function ($groupName) use ($traits) {
             /** @var array<string, array{ value: string, displayType: string }[]> $traits */
             $values = collect($traits[$groupName])
-                ->filter(fn ($tuple) => is_string($tuple['value']) && ! is_null(TraitDisplayType::tryFrom($tuple['displayType'])))
+                ->filter(fn ($tuple) => is_string($tuple['value']) && !is_null(TraitDisplayType::tryFrom($tuple['displayType'])))
                 ->groupBy('displayType')
                 ->flatMap(fn ($x, $displayType) => [$displayType => $x->pluck('value')->toArray()]);
 
@@ -237,7 +255,7 @@ class CollectionController extends Controller
      * } $filters
      * @return array{owned: bool, traits: array<string, array<string, string[]>> | null}
      */
-    private function appliedParameters(Request $request, int $pageLimit, string $tab, mixed $filters, int $nftsCount): array
+    private function appliedParameters(Request $request, int $pageLimit, string $tab, mixed $filters): array
     {
         // transform sanitized traits back into the same format as frontend gave us
         $traits = collect($filters['traits'] ?? [])
@@ -259,7 +277,7 @@ class CollectionController extends Controller
             );
 
         return [
-            'owned' => $filters['owned'] && $nftsCount > 0,
+            'owned' => $filters['owned'],
             'traits' => $traits->isEmpty() ? null : $traits->toArray(),
             'tab' => $tab,
             'pageLimit' => $pageLimit,
