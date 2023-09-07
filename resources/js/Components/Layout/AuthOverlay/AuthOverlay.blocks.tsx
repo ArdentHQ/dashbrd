@@ -17,14 +17,13 @@ export const InstallMetamask = ({
 
     return (
         <>
-
-            <div className="flex w-full flex-col justify-center xs:items-center space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
+            <div className="flex w-full flex-col justify-center space-y-3 xs:items-center sm:flex-row sm:space-x-3 sm:space-y-0">
                 {showCloseButton && (
                     <Button
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="min-w-[193px] w-auto xs:w-[17rem] sm:w-auto justify-center"
+                        className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
                     >
                         {t("common.close")}
                     </Button>
@@ -35,7 +34,7 @@ export const InstallMetamask = ({
                     target="_blank"
                     icon="Metamask"
                     rel="noopener nofollow noreferrer"
-                    className="min-w-[193px] w-auto xs:w-[17rem] sm:w-auto justify-center"
+                    className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
                 >
                     {t("auth.wallet.install")}
                 </ButtonLink>
@@ -140,7 +139,7 @@ export const ConnectWallet = ({
                     disabled={!isWalletInitialized}
                     onClick={onConnect}
                     className={classNames("justify-center", {
-                        "whitespace-nowrap w-full": showCloseButton,
+                        "w-full whitespace-nowrap": showCloseButton,
                     })}
                 >
                     {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
