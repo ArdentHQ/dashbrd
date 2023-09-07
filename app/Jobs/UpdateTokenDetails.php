@@ -21,9 +21,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class UpdateTokenDetails implements ShouldQueue, ShouldBeUnique
+class UpdateTokenDetails implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RecoversFromProviderErrors;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.

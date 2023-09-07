@@ -18,7 +18,7 @@ use Illuminate\Queue\SerializesModels;
 
 class FetchCollectionOwners implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable, RecoversFromProviderErrors;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.

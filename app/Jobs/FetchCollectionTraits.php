@@ -18,9 +18,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class FetchCollectionTraits implements ShouldQueue, ShouldBeUnique
+class FetchCollectionTraits implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable, RecoversFromProviderErrors;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.
