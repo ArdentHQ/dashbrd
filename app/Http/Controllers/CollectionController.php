@@ -20,7 +20,6 @@ use App\Enums\TraitDisplayType;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Nft;
-use App\Models\User;
 use App\Support\Cache\UserCache;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
@@ -123,7 +122,6 @@ class CollectionController extends Controller
 
     public function view(Request $request, Collection $collection): Response
     {
-        /** @var User $user */
         $user = $request->user();
 
         if ($user === null) {
