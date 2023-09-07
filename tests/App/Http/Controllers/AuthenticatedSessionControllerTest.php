@@ -10,6 +10,7 @@ use App\Models\Wallet;
 use App\Rules\ValidChain;
 use App\Rules\WalletAddress;
 use App\Support\Facades\Signature;
+use Illuminate\Support\Facades\Auth;
 
 it('should sign a user', function () {
     Token::factory()->matic()->create();
@@ -47,6 +48,29 @@ it('should sign a user', function () {
 });
 
 it('should handle an incoming authentication request for a new user', function () {
+    Token::factory()->matic()->create();
+
+    $network = Network::polygon()->first();
+
+    $this->post(route('login'), [
+        'address' => '0x1231231231231231231231231231231231231231',
+        'chainId' => $network->chain_id,
+    ])->assertRedirect(route('galleries'));
+});
+
+it('should handle invalid credentails', function () {
+    Auth::shouldReceive('attempt')
+        ->andReturn(false)
+        ->once()
+        ->shouldReceive('userResolver')
+        ->andReturn(fn () => null)
+        ->shouldReceive('guard')
+        ->andReturnSelf()
+        ->shouldReceive('user')
+        ->andReturn(null)
+        ->shouldReceive('hasUser')
+        ->andReturn(false);
+
     Token::factory()->matic()->create();
 
     $network = Network::polygon()->first();
