@@ -52,7 +52,9 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
         );
 
         // At most 500 models...
-        $nfts = $this->collection->nfts()->findMany($activities->pluck('tokenId'));
+        $nfts = $this->collection->nfts()->whereIn(
+            'token_number', $activities->pluck('tokenId')
+        )->get();
 
         $formattedActivities = $activities->map(fn (CollectionActivity $activity) => [
             'nft_id' => $nfts->firstWhere('token_number', $activity->tokenId)?->id,
