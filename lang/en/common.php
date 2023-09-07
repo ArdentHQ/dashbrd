@@ -130,4 +130,8 @@ return [
     'home' => 'Home',
     'contact' => 'Contact',
     'menu' => 'Menu',
+    'website' => 'Website',
+    'twitter' => 'Twitter',
+    'discord' => 'Discord',
+    'sort' => 'Sort',
 ];
