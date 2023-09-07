@@ -22,6 +22,7 @@ const auth: App.Data.AuthData = {
     user,
     wallet,
     authenticated: true,
+    signed: false,
 };
 
 describe("TokenTransactions", () => {

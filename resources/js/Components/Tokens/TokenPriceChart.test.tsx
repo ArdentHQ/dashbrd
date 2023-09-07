@@ -28,6 +28,7 @@ describe("TokenPriceChart", () => {
             user,
             wallet: null,
             authenticated: true,
+            signed: false,
             showAuthOverlay: false,
             showCloseButton: false,
             closeOverlay: vi.fn(),

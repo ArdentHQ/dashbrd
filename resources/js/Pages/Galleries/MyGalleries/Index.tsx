@@ -18,6 +18,7 @@ const Index = ({
     title: string;
     children: ReactNode;
     galleries: App.Data.Gallery.GalleriesData;
+    nftCount?: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 

@@ -31,6 +31,7 @@ describe("GalleryControls", () => {
             authenticated: true,
             showAuthOverlay: false,
             showCloseButton: false,
+            signed: false,
             closeOverlay: vi.fn(),
         });
     });
@@ -149,6 +150,7 @@ describe("GalleryControls", () => {
             user: null,
             wallet: null,
             authenticated: false,
+            signed: false,
             showAuthOverlay: false,
             showCloseButton: false,
             closeOverlay: vi.fn(),
@@ -192,6 +194,7 @@ describe("GalleryControls", () => {
             user: null,
             wallet: null,
             authenticated: false,
+            signed: false,
             showAuthOverlay: false,
             showCloseButton: false,
             closeOverlay: vi.fn(),

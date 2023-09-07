@@ -318,7 +318,7 @@ describe("CollectionActivityTableItem", () => {
 
     it("should render collection activity table items with/without bottom border", () => {
         const { rerender } = render(
-            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: true }}>
+            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: true, signed: false }}>
                 <table>
                     <tbody>
                         <CollectionActivityTableItem
@@ -337,7 +337,7 @@ describe("CollectionActivityTableItem", () => {
         expect(screen.getByTestId("ActivityTable__Row")).toHaveClass("last:border-solid");
 
         rerender(
-            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: true }}>
+            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: true, signed: false }}>
                 <table>
                     <tbody>
                         <CollectionActivityTableItem

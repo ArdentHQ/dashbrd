@@ -31,7 +31,7 @@ export const render = (component: React.ReactElement, options?: { breakpoint?: B
             }}
         >
             <I18nextProvider i18n={i18n}>
-                <ActiveUserContextProvider initialAuth={{ wallet, user, authenticated: false }}>
+                <ActiveUserContextProvider initialAuth={{ wallet, user, authenticated: false, signed: false }}>
                     <ResponsiveContext.Provider value={{ width: breakpointWidth(options?.breakpoint) }}>
                         <PortfolioBreakdownProvider>{component}</PortfolioBreakdownProvider>
                     </ResponsiveContext.Provider>
