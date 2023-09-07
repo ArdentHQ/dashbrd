@@ -1,7 +1,7 @@
-import {clearAllBodyScrollLocks, disableBodyScroll} from "body-scroll-lock";
+import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
 import cn from "classnames";
-import {useEffect, useMemo, useRef} from "react";
-import {useTranslation} from "react-i18next";
+import { useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
     ConnectingWallet,
     ConnectionError,
@@ -9,21 +9,21 @@ import {
     InstallMetamask,
     SwitchingNetwork,
 } from "./AuthOverlay.blocks";
-import {type AuthOverlayProperties} from "./AuthOverlay.contracts";
-import {Heading} from "@/Components/Heading";
-import {useMetaMaskContext} from "@/Contexts/MetaMaskContext";
-import {AuthConnectWallet, AuthInstallWallet} from "@/images";
-import {isTruthy} from "@/Utils/is-truthy";
-import {Toast} from "@/Components/Toast";
+import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
+import { Heading } from "@/Components/Heading";
+import { Toast } from "@/Components/Toast";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { AuthConnectWallet, AuthInstallWallet } from "@/images";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const AuthOverlay = ({
-                                className,
-                                showAuthOverlay,
-                                showCloseButton,
-                                closeOverlay,
-                                ...properties
-                            }: AuthOverlayProperties): JSX.Element => {
-    const {t} = useTranslation();
+    className,
+    showAuthOverlay,
+    showCloseButton,
+    closeOverlay,
+    ...properties
+}: AuthOverlayProperties): JSX.Element => {
+    const { t } = useTranslation();
 
     const {
         needsMetaMask,
@@ -63,7 +63,7 @@ export const AuthOverlay = ({
             ref={reference}
             {...properties}
             className={cn(
-                "fixed inset-0 z-40 flex h-screen w-screen items-start mt-14 xs:mt-18 sm:mt-0 sm:items-center justify-center overflow-auto bg-white",
+                "fixed inset-0 z-40 mt-14 flex h-screen w-screen items-start justify-center overflow-auto bg-white xs:mt-18 sm:mt-0 sm:items-center",
                 className,
                 {
                     "bg-opacity-60": !showCloseButton,
@@ -71,8 +71,8 @@ export const AuthOverlay = ({
                 },
             )}
         >
-            <div className="bg-white auth-overlay-shadow rounded-none sm:rounded-3xl w-full sm:w-[29rem]">
-                <div className="flex flex-col items-center mt-8 space-y-6">
+            <div className="auth-overlay-shadow w-full rounded-none bg-white sm:w-[29rem] sm:rounded-3xl">
+                <div className="mt-8 flex flex-col items-center space-y-6">
                     <div className="text-center">
                         <div className="mb-1 text-theme-secondary-900">
                             <Heading
@@ -88,35 +88,37 @@ export const AuthOverlay = ({
                         </p>
                     </div>
 
-                    {needsMetaMask && <AuthInstallWallet/>}
+                    {needsMetaMask && <AuthInstallWallet />}
 
                     {!needsMetaMask && (
                         <>
-                            <AuthConnectWallet/>
+                            <AuthConnectWallet />
                             <div
                                 className={cn("w-full flex-col items-center space-x-6 px-6 xs:max-w-sm", {
-                                    "hidden ba": !waitingSignature && !showSignMessage && errorMessage === undefined,
-                                    "flex salam": waitingSignature || showSignMessage || isTruthy(errorMessage),
-                                })}>
-
+                                    "ba hidden": !waitingSignature && !showSignMessage && errorMessage === undefined,
+                                    "salam flex": waitingSignature || showSignMessage || isTruthy(errorMessage),
+                                })}
+                            >
                                 {isTruthy(errorMessage) && (
                                     <Toast
                                         type="error"
                                         message={errorMessage}
                                         isExpanded
-                                        iconDimensions={{width: 18, height: 18}}
+                                        iconDimensions={{ width: 18, height: 18 }}
                                     />
                                 )}
 
                                 {errorMessage === undefined && (
                                     <>
-                                        {waitingSignature && (<Toast
-                                            data-testid="AuthOverlay__awaiting-signature"
-                                            type="info"
-                                            message={t("auth.wallet.connect_subtitle").toString()}
-                                            isExpanded
-                                            iconDimensions={{width: 18, height: 18}}
-                                        />)}
+                                        {waitingSignature && (
+                                            <Toast
+                                                data-testid="AuthOverlay__awaiting-signature"
+                                                type="info"
+                                                message={t("auth.wallet.connect_subtitle").toString()}
+                                                isExpanded
+                                                iconDimensions={{ width: 18, height: 18 }}
+                                            />
+                                        )}
 
                                         {showSignMessage && (
                                             <Toast
@@ -124,16 +126,16 @@ export const AuthOverlay = ({
                                                 type="info"
                                                 message={t("auth.wallet.requires_signature").toString()}
                                                 isExpanded
-                                                iconDimensions={{width: 18, height: 18}}
+                                                iconDimensions={{ width: 18, height: 18 }}
                                             />
                                         )}
-                                    </>)}
+                                    </>
+                                )}
                             </div>
                         </>
                     )}
 
-                    <div
-                        className="border-t-none px-5 xs:px-8 xs:border-t pt-0 pb-5 xs:py-5 border-theme-secondary-300 space-y-6 w-full justify-center">
+                    <div className="border-t-none w-full justify-center space-y-6 border-theme-secondary-300 px-5 pb-5 pt-0 xs:border-t xs:px-8 xs:py-5">
                         {needsMetaMask && (
                             <InstallMetamask
                                 closeOverlay={closeOverlay}
@@ -145,8 +147,8 @@ export const AuthOverlay = ({
                             <>
                                 {errorMessage === undefined && (
                                     <div className="flex w-full flex-col items-center">
-                                        {switching && <SwitchingNetwork/>}
-                                        {connecting && <ConnectingWallet/>}
+                                        {switching && <SwitchingNetwork />}
+                                        {connecting && <ConnectingWallet />}
                                         {!connecting && !switching && (
                                             <ConnectWallet
                                                 closeOverlay={closeOverlay}
