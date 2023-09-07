@@ -9,6 +9,7 @@ use App\Models\Collection;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +19,7 @@ use Illuminate\Queue\SerializesModels;
 
 class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -46,11 +47,11 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return 'fetch-nft-collection-banner:'.$this->collection->network->chain_id.'-'.$this->collection->address;
+        return static::class.':'.$this->collection->network->chain_id.'-'.$this->collection->address;
     }
 
     public function retryUntil(): DateTime
     {
-        return now()->addHours(2); // This job runs every day so we have some room to allow it to run longer...
+        return now()->addMinutes(10);
     }
 }

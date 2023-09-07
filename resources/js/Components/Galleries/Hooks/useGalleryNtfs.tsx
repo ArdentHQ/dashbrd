@@ -91,9 +91,11 @@ export const useGalleryNtfs = ({
             currentPage,
         });
 
-        const { data } = await axios.get<NftsResponse>(
-            route("my-galleries.nfts", { slug: nft.collectionSlug, page: nextPage }),
-        );
+        const { data } = await axios.get<NftsResponse>(route("my-galleries.nfts", { slug: nft.collectionSlug }), {
+            params: {
+                page: nextPage,
+            },
+        });
 
         setNfts([...nfts, ...data.nfts]);
 

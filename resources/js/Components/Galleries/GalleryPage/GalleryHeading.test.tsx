@@ -45,6 +45,7 @@ describe("GalleryHeading", () => {
                         remove: vi.fn(),
                         update: vi.fn(),
                     },
+                    nftLimit: 16,
                 }}
             >
                 <GalleryHeading currency="USD" />

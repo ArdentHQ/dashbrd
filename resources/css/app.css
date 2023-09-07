@@ -7,7 +7,6 @@
 @import "./_tables.css";
 @import "./_carousel.css";
 @import "./_collection.css";
-@import "./_cookies_modal";
 
 @tailwind base;
 @tailwind components;
@@ -29,4 +28,10 @@
     to {
         height: 0;
     }
+}
+
+.auth-overlay-shadow {
+    box-shadow: 0 13px 28px 0 rgba(33, 42, 131, 0.04), 0 52px 52px 0 rgba(33, 42, 131, 0.03),
+        0 116px 70px 0 rgba(33, 42, 131, 0.02), 0 207px 83px 0 rgba(33, 42, 131, 0.01),
+        0 323px 90px 0 rgba(33, 42, 131, 0);
 }

@@ -81,8 +81,9 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                         </div>
                     )}
                     <Link
-                        external
-                        href={nft.collectionWebsite}
+                        href={route("collections.view", {
+                            slug: nft.collectionSlug,
+                        })}
                         className="outline-offset-3 transition-default mx-auto flex max-w-full items-center overflow-hidden truncate rounded-full px-2 text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300"
                         data-testid="GalleryNftsNft__website"
                     >
