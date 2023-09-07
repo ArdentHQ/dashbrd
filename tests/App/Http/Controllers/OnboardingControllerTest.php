@@ -31,5 +31,5 @@ it('redirects to dashboard if user has onboarded', function () {
 
     $response = $this->actingAs($user)->get(route('onboarding'));
 
-    $response->assertRedirect(route('dashboard'));
+    $response->assertRedirect(route('galleries'));
 });
