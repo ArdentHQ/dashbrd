@@ -4,8 +4,6 @@ import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./
 import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Icon } from "@/Components/Icon";
-import { Toast } from "@/Components/Toast";
-import { AuthInstallWallet } from "@/images";
 const metamaskDownloadUrl = "https://metamask.io/download/";
 
 export const InstallMetamask = ({
@@ -132,7 +130,7 @@ export const ConnectWallet = ({
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="w-full justify-center 1whitespace-nowrap"
+                        className="w-full justify-center whitespace-nowrap"
                     >
                         {t("common.close")}
                     </Button>
