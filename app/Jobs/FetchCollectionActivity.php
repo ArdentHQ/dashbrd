@@ -42,7 +42,7 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
         }
 
         // We add one more in the provider, to check if there are more records...
-        $limit = 499;
+        $limit = 500;
 
         $activities = $provider->getCollectionActivity(
             chain: $this->collection->network->chain(),
@@ -66,8 +66,8 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
 
             $this->collection->touch('last_activity_fetched_at');
 
-            // If we get the limit+1 it may be that there are more activities to fetch...
-            if ($limit < count($activities)) {
+            // If we get the limit it be that there are more activities to fetch...
+            if ($limit === count($activities)) {
                 self::dispatch($this->collection)->afterCommit();
             }
         });

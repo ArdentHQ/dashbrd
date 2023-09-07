@@ -359,7 +359,7 @@ class MnemonicPendingRequest extends PendingRequest
                     ->firstOrFail();
 
         $query = [
-            'limit' => $limit + 1,
+            'limit' => $limit,
             // Oldest first
             'sortDirection' => 'SORT_DIRECTION_ASC',
             'contractAddress' => $contractAddress,
