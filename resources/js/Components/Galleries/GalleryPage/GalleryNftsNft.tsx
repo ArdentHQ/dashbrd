@@ -56,8 +56,8 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
         onClick(isSelected ? undefined : `${nft.tokenNumber}_${nft.id}`);
     };
 
-    const handleCollectionNameClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-        e.stopPropagation();
+    const handleCollectionNameClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+        event.stopPropagation();
         router.visit(
             route("collections.view", {
                 slug: nft.collectionSlug,
