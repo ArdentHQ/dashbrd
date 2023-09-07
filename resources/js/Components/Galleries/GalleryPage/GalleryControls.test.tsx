@@ -183,4 +183,49 @@ describe("GalleryControls", () => {
         expect(screen.getByTestId("GalleryControls__flag-button")).toBeDisabled();
         expect(screen.queryByTestId("GalleryControls__edit-button")).not.toBeInTheDocument();
     });
+
+    it("edits after checking for signature", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        const routerSpy = vi.spyOn(router, "get").mockImplementation(() => vi.fn());
+
+        render(
+            <GalleryControls
+                wallet={gallery.wallet}
+                likesCount={3}
+                gallery={{
+                    ...gallery,
+                    isOwner: true,
+                }}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__edit-button"));
+
+        expect(routerSpy).toHaveBeenCalled();
+    });
+    it("does not edits if no validates signature", async () => {
+        signedActionMock.mockImplementation(() => {
+            // Do nothing...
+        });
+
+        const routerSpy = vi.spyOn(router, "get").mockImplementation(() => vi.fn());
+
+        render(
+            <GalleryControls
+                wallet={gallery.wallet}
+                likesCount={3}
+                gallery={{
+                    ...gallery,
+                    isOwner: true,
+                }}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__edit-button"));
+
+        expect(routerSpy).not.toHaveBeenCalled();
+    });
 });

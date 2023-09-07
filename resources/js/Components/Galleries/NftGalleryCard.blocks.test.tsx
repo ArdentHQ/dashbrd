@@ -489,15 +489,51 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
-    it("should use signed actions", async () => {
-        const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({ ...useAuthState, authenticated: false });
+    it("should force like if user was not authenticated", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
+        });
+
+        const likeMock = vi.fn();
+
+        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+            likes: 10,
+            hasLiked: true,
+            like: likeMock,
+        });
 
         render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
 
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+
+        expect(screen.getByTestId("GalleryStats__likes")).toHaveTextContent("10");
+
         await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
 
-        expect(signedActionMock).toHaveBeenCalled();
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, true);
+    });
 
-        spy.mockRestore();
+    it("should toggle like if user was authenticated", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: false });
+        });
+
+        const likeMock = vi.fn();
+
+        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+            likes: 10,
+            hasLiked: true,
+            like: likeMock,
+        });
+
+        render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
+
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+
+        expect(screen.getByTestId("GalleryStats__likes")).toHaveTextContent("10");
+
+        await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
+
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, undefined);
     });
 });
