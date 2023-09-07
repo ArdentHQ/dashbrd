@@ -63,7 +63,7 @@ export const AuthOverlay = ({
             ref={reference}
             {...properties}
             className={cn(
-                "fixed inset-0 z-40 flex h-screen w-screen items-start mt-14 xs:mt-0 xs:items-center justify-center overflow-auto bg-white",
+                "fixed inset-0 z-40 flex h-screen w-screen items-start mt-14 xs:mt-18 sm:mt-0 sm:items-center justify-center overflow-auto bg-white",
                 className,
                 {
                     "bg-opacity-60": !showCloseButton,
@@ -71,7 +71,7 @@ export const AuthOverlay = ({
                 },
             )}
         >
-            <div className="bg-white auth-overlay-shadow rounded-none xs:rounded-3xl w-full xs:w-[29rem]">
+            <div className="bg-white auth-overlay-shadow rounded-none sm:rounded-3xl w-full sm:w-[29rem]">
                 <div className="flex flex-col items-center mt-8 space-y-6">
                     <div className="text-center">
                         <div className="mb-1 text-theme-secondary-900">
@@ -132,7 +132,8 @@ export const AuthOverlay = ({
                         </>
                     )}
 
-                    <div className="border-t-none px-5 xs:px-8 xs:border-t pt-0 pb-5 xs:py-5 border-theme-secondary-300 space-y-6 w-full justify-center">
+                    <div
+                        className="border-t-none px-5 xs:px-8 xs:border-t pt-0 pb-5 xs:py-5 border-theme-secondary-300 space-y-6 w-full justify-center">
                         {needsMetaMask && (
                             <InstallMetamask
                                 closeOverlay={closeOverlay}
@@ -145,15 +146,13 @@ export const AuthOverlay = ({
                                 {errorMessage === undefined && (
                                     <div className="flex w-full flex-col items-center">
                                         {switching && <SwitchingNetwork/>}
-                                        {connecting &&
-                                            <ConnectingWallet isWaitingSignature={waitingSignature}/>}
+                                        {connecting && <ConnectingWallet/>}
                                         {!connecting && !switching && (
                                             <ConnectWallet
                                                 closeOverlay={closeOverlay}
                                                 showCloseButton={showCloseButton}
                                                 isWalletInitialized={initialized}
                                                 shouldRequireSignature={requiresSignature}
-                                                shouldShowSignMessage={showSignMessage}
                                                 onConnect={() => {
                                                     void connectWallet();
                                                 }}
@@ -166,7 +165,6 @@ export const AuthOverlay = ({
                                     <ConnectionError
                                         closeOverlay={closeOverlay}
                                         showCloseButton={showCloseButton}
-                                        errorMessage={errorMessage}
                                         onConnect={() => {
                                             void connectWallet();
                                         }}

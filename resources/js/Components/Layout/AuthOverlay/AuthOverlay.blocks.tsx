@@ -20,13 +20,13 @@ export const InstallMetamask = ({
     return (
         <>
 
-            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
+            <div className="flex w-full flex-col justify-center xs:items-center space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
                 {showCloseButton && (
                     <Button
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="min-w-[193px] justify-center"
+                        className="min-w-[193px] w-auto xs:w-[17rem] sm:w-auto justify-center"
                     >
                         {t("common.close")}
                     </Button>
@@ -37,7 +37,7 @@ export const InstallMetamask = ({
                     target="_blank"
                     icon="Metamask"
                     rel="noopener nofollow noreferrer"
-                    className="min-w-[193px]"
+                    className="min-w-[193px] w-auto xs:w-[17rem] sm:w-auto justify-center"
                 >
                     {t("auth.wallet.install")}
                 </ButtonLink>
@@ -47,7 +47,6 @@ export const InstallMetamask = ({
 };
 
 export const ConnectionError = ({
-    errorMessage,
     onConnect,
     showCloseButton,
     closeOverlay,
@@ -74,13 +73,6 @@ export const ConnectionError = ({
                     {t("common.retry")}
                 </Button>
             </div>
-
-            {/*<Toast*/}
-            {/*    type="error"*/}
-            {/*    message={errorMessage}*/}
-            {/*    isExpanded*/}
-            {/*    iconDimensions={{ width: 18, height: 18 }}*/}
-            {/*/>*/}
         </>
     );
 };
@@ -103,7 +95,7 @@ export const SwitchingNetwork = (): JSX.Element => {
     );
 };
 
-export const ConnectingWallet = ({ isWaitingSignature }: { isWaitingSignature: boolean }): JSX.Element => {
+export const ConnectingWallet = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -119,16 +111,6 @@ export const ConnectingWallet = ({ isWaitingSignature }: { isWaitingSignature: b
                 />
                 <span className="font-medium text-theme-secondary-900">{t("auth.wallet.connecting")}</span>
             </div>
-
-            {/*{isWaitingSignature && (*/}
-            {/*    <Toast*/}
-            {/*        data-testid="AuthOverlay__awaiting-signature"*/}
-            {/*        type="info"*/}
-            {/*        message={t("auth.wallet.connect_subtitle").toString()}*/}
-            {/*        isExpanded*/}
-            {/*        iconDimensions={{ width: 18, height: 18 }}*/}
-            {/*    />*/}
-            {/*)}*/}
         </>
     );
 };
@@ -137,7 +119,6 @@ export const ConnectWallet = ({
     isWalletInitialized,
     shouldRequireSignature,
     onConnect,
-    shouldShowSignMessage,
     showCloseButton,
     closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
@@ -167,16 +148,6 @@ export const ConnectWallet = ({
                     {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
                 </Button>
             </div>
-
-            {/*{shouldShowSignMessage && (*/}
-            {/*    <Toast*/}
-            {/*        data-testid="AuthOverlay__sign"*/}
-            {/*        type="info"*/}
-            {/*        message={t("auth.wallet.requires_signature").toString()}*/}
-            {/*        isExpanded*/}
-            {/*        iconDimensions={{ width: 18, height: 18 }}*/}
-            {/*    />*/}
-            {/*)}*/}
         </>
     );
 };
