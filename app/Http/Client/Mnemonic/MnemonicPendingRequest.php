@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Client\Mnemonic;
 
+use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftCollectionTrait;
-use App\Data\Web3\Web3NftTransfer;
 use App\Enums\Chains;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\CurrencyCode;
@@ -345,25 +345,23 @@ class MnemonicPendingRequest extends PendingRequest
 
     /**
      * @see https://docs.mnemonichq.com/reference/foundationalservice_getnfttransfers
-     *
-     * @return Collection<int, Web3NftTransfer>
+     * @return Collection<int, CollectionActivity>
      */
-    public function getNftActivity(Chains $chain, string $contractAddress, string $tokenId, int $limit, Carbon $from = null): Collection
+    public function getCollectionActivity(Chains $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        // grab the ETH token regardless of the chain, because  always want to report prices in ETH
-        $ethToken = Token::whereHas('network', fn ($query) => $query
-            ->where('chain_id', Chains::ETH->value)
-            ->where('is_mainnet', true)
-        )->firstOrFail();
+        // Grab the ETH token regardless of the chain, because always want to report prices in ETH...
+        $ethToken = Token::query()
+                    ->whereHas('network', fn ($query) => $query->where('chain_id', Chains::ETH->value))
+                    ->where('is_native_token', true)
+                    ->firstOrFail();
 
         $query = [
-            'limit' => $limit,
+            'limit' => $limit + 1,
             // Oldest first
             'sortDirection' => 'SORT_DIRECTION_ASC',
             'contractAddress' => $contractAddress,
-            'tokenId' => $tokenId,
         ];
 
         // I cant pass the `labelsAny` filter directly to the query array because
@@ -388,15 +386,15 @@ class MnemonicPendingRequest extends PendingRequest
             // `LABEL_BURN` transfers, so I am filtering them out here.
             // In the future we may want to add support for them.
             ->filter(fn ($transfer) => $this->extractNftTransferType($transfer['labels']) !== null)
-            ->map(function ($transfer) use ($chain, $contractAddress, $tokenId, $ethToken) {
+            ->map(function ($transfer) use ($chain, $contractAddress, $ethToken) {
                 $currency = CurrencyCode::USD;
 
                 $blockchainTimestamp = Carbon::parse($transfer['blockchainEvent']['blockTimestamp']);
                 $prices = $this->extractActivityPrices($chain, $transfer, $currency, $ethToken, $blockchainTimestamp);
 
-                return new Web3NftTransfer(
+                return new CollectionActivity(
                     contractAddress: $contractAddress,
-                    tokenId: $tokenId,
+                    tokenId: $transfer['tokenId'],
                     sender: $transfer['sender']['address'],
                     recipient: $transfer['recipient']['address'],
                     txHash: $transfer['blockchainEvent']['txHash'],

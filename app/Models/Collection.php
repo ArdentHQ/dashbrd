@@ -563,4 +563,9 @@ class Collection extends Model
     {
         return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
     }
+
+    public function isSpam(): bool
+    {
+        return SpamContract::isSpam($this->address, $this->network);
+    }
 }

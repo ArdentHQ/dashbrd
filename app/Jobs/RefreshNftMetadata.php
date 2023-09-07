@@ -40,8 +40,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
      */
     public function handle(AlchemyWeb3DataProvider $provider): void
     {
-
-        if (SpamContract::isSpam($this->collection->address, $this->collection->network)) {
+        if ($this->collection->isSpam()) {
             Log::info('RefreshNftMetadata Job: Ignored for spam contract', [
                 'address' => $this->collection->address,
                 'network' => $this->collection->network->id,

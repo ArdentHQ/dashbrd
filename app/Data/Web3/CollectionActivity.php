@@ -8,7 +8,7 @@ use App\Enums\NftTransferType;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
-class Web3NftTransfer extends Data
+class CollectionActivity extends Data
 {
     /**
      * @param  array<string, mixed>  $extraAttributes

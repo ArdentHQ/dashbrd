@@ -56,6 +56,11 @@ final class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
         );
     }
 
+    public function getCollectionActivity(Chains $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
+    {
+        return Mnemonic::getCollectionActivity($chain, $contractAddress, $limit, $from);
+    }
+
     public function getBlockTimestamp(Network $network, int $blockNumber): Carbon
     {
         throw new NotImplementedException();
