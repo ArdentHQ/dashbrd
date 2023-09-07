@@ -11,10 +11,10 @@ import {
 } from "./AuthOverlay.blocks";
 import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
+import { Toast } from "@/Components/Toast";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { AuthConnectWallet, AuthInstallWallet } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
-import { Toast } from "@/Components/Toast";
 
 export const AuthOverlay = ({
     className,
