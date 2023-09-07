@@ -19,7 +19,6 @@ export const InstallMetamask = ({
 
     return (
         <>
-            <AuthInstallWallet />
 
             <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
                 {showCloseButton && (
@@ -76,12 +75,12 @@ export const ConnectionError = ({
                 </Button>
             </div>
 
-            <Toast
-                type="error"
-                message={errorMessage}
-                isExpanded
-                iconDimensions={{ width: 18, height: 18 }}
-            />
+            {/*<Toast*/}
+            {/*    type="error"*/}
+            {/*    message={errorMessage}*/}
+            {/*    isExpanded*/}
+            {/*    iconDimensions={{ width: 18, height: 18 }}*/}
+            {/*/>*/}
         </>
     );
 };
@@ -115,21 +114,21 @@ export const ConnectingWallet = ({ isWaitingSignature }: { isWaitingSignature: b
             >
                 <Icon
                     name="Spinner"
-                    size="lg"
+                    size="xl"
                     className="animate-spin text-theme-hint-600"
                 />
                 <span className="font-medium text-theme-secondary-900">{t("auth.wallet.connecting")}</span>
             </div>
 
-            {isWaitingSignature && (
-                <Toast
-                    data-testid="AuthOverlay__awaiting-signature"
-                    type="info"
-                    message={t("auth.wallet.connect_subtitle").toString()}
-                    isExpanded
-                    iconDimensions={{ width: 18, height: 18 }}
-                />
-            )}
+            {/*{isWaitingSignature && (*/}
+            {/*    <Toast*/}
+            {/*        data-testid="AuthOverlay__awaiting-signature"*/}
+            {/*        type="info"*/}
+            {/*        message={t("auth.wallet.connect_subtitle").toString()}*/}
+            {/*        isExpanded*/}
+            {/*        iconDimensions={{ width: 18, height: 18 }}*/}
+            {/*    />*/}
+            {/*)}*/}
         </>
     );
 };
@@ -152,7 +151,7 @@ export const ConnectWallet = ({
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="w-full min-w-[154px] justify-center whitespace-nowrap"
+                        className="w-full justify-center 1whitespace-nowrap"
                     >
                         {t("common.close")}
                     </Button>
@@ -161,23 +160,23 @@ export const ConnectWallet = ({
                 <Button
                     disabled={!isWalletInitialized}
                     onClick={onConnect}
-                    className={classNames("min-w-[154px] justify-center", {
-                        "whitespace-nowrap": showCloseButton,
+                    className={classNames("justify-center", {
+                        "whitespace-nowrap w-full": showCloseButton,
                     })}
                 >
                     {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
                 </Button>
             </div>
 
-            {shouldShowSignMessage && (
-                <Toast
-                    data-testid="AuthOverlay__sign"
-                    type="info"
-                    message={t("auth.wallet.requires_signature").toString()}
-                    isExpanded
-                    iconDimensions={{ width: 18, height: 18 }}
-                />
-            )}
+            {/*{shouldShowSignMessage && (*/}
+            {/*    <Toast*/}
+            {/*        data-testid="AuthOverlay__sign"*/}
+            {/*        type="info"*/}
+            {/*        message={t("auth.wallet.requires_signature").toString()}*/}
+            {/*        isExpanded*/}
+            {/*        iconDimensions={{ width: 18, height: 18 }}*/}
+            {/*    />*/}
+            {/*)}*/}
         </>
     );
 };
