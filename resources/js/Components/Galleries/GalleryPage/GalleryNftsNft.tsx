@@ -1,6 +1,6 @@
-import { router } from "@inertiajs/react";
 import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { IconButton } from "@/Components/Buttons";
 import { GalleryCard } from "@/Components/Galleries/GalleryPage/GalleryCard";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
@@ -9,7 +9,6 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
-import { IconButton } from "@/Components/Buttons";
 
 interface Properties {
     nft: App.Data.Gallery.GalleryNftData;
