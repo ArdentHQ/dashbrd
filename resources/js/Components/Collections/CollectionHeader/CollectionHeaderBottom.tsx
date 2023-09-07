@@ -72,7 +72,7 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
                     value={
                         // User can be null when useEffect has not been triggered yet
                         // to set the ActiveUserContext, see https://app.clickup.com/t/861naue4m
-                        collection.mintedAt !== null && user !== null
+                        collection.mintedAt !== null && isTruthy(user)
                             ? toMonthYear(collection.mintedAt, user!.attributes)
                             : null
                     }
