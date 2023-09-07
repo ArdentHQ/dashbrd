@@ -33,29 +33,28 @@ interface SocialLinkProperties {
 
 export const SocialLink = ({ href, icon, tooltip, ...properties }: SocialLinkProperties): JSX.Element => (
     <>
-        {isTruthy(href) && (
-            <Tooltip
-                content={tooltip}
-                disabled={!isTruthy(tooltip)}
-            >
-                <ButtonLink
-                    icon={icon}
-                    href={href}
-                    variant="icon"
-                    target="_blank"
-                    {...properties}
-                />
-            </Tooltip>
-        )}
+        <Tooltip content={tooltip}>
+            <span>
+                {isTruthy(href) && (
+                    <ButtonLink
+                        icon={icon}
+                        href={href}
+                        variant="icon"
+                        target="_blank"
+                        {...properties}
+                    />
+                )}
 
-        {!isTruthy(href) && (
-            <Button
-                icon={icon}
-                variant="icon"
-                disabled
-                {...properties}
-            />
-        )}
+                {!isTruthy(href) && (
+                    <Button
+                        icon={icon}
+                        variant="icon"
+                        disabled
+                        {...properties}
+                    />
+                )}
+            </span>
+        </Tooltip>
     </>
 );
 
