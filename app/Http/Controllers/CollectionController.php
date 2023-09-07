@@ -142,11 +142,7 @@ class CollectionController extends Controller
             ->filter([
                 'owned' => true,
                 'traits' => $this->normalizeTraits($request->get('traits', [])),
-            ], $user)
-            ->search($request->get('query'))
-            ->orderByOwnership($user)
-            ->paginate(12)
-            ->appends($request->all());
+            ], $user);
 
         $filters = $this->parseFilters($request, $ownedNfts->count());
 
