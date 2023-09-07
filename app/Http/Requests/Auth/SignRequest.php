@@ -70,7 +70,7 @@ class SignRequest extends FormRequest
 
         Signature::setWalletIsSigned($wallet->id);
 
-        Signature::forgetSessionNonce($credentials['chainId']);
+        Signature::forgetSessionNonce((int) $credentials['chainId']);
     }
 
     /**
