@@ -155,7 +155,13 @@ describe("GalleryNftsNft", () => {
     it("should render without collection image", () => {
         const nft = new GalleryNftDataFactory().withoutCollectionImage().create();
 
-        render(<GalleryNftsNft nft={nft} />);
+        render(
+            <GalleryNftsNft
+                nft={nft}
+                isSelected={false}
+                onClick={vi.fn()}
+            />,
+        );
 
         expect(screen.queryByTestId("GalleryNftsNft__collection_image")).not.toBeInTheDocument();
     });
@@ -200,7 +206,7 @@ describe("GalleryNftsNft", () => {
 
         render(
             <GalleryNftsNft
-                nft={nft}
+                nft={polygonNft}
                 isSelected={false}
                 onClick={vi.fn()}
             />,
