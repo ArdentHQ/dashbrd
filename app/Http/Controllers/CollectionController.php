@@ -74,7 +74,7 @@ class CollectionController extends Controller
             $collections = $user->collections()
                 ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
-                ->when(!$showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
+                ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
                 ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
@@ -130,7 +130,7 @@ class CollectionController extends Controller
 
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
-        if (!$collection->recentlyViewed()) {
+        if (! $collection->recentlyViewed()) {
             SyncCollection::dispatch($collection);
         }
 
@@ -157,7 +157,7 @@ class CollectionController extends Controller
             ->search($request->get('query'))
             ->orderByOwnership($user)
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
-            ->when(!$sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
+            ->when(! $sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
             ->paginate(12)
             ->appends($request->all());
 
@@ -208,7 +208,7 @@ class CollectionController extends Controller
 
         $owned = $request->get('owned') === null ? true : $request->boolean('owned');
 
-        if ($ownedNftsCount  === 0 && $request->get('owned') === null) {
+        if ($ownedNftsCount === 0 && $request->get('owned') === null) {
             $owned = false;
         }
 
@@ -223,7 +223,7 @@ class CollectionController extends Controller
      */
     private function normalizeTraits(mixed $traits): ?array
     {
-        if (!is_array($traits) || count($traits) === 0) {
+        if (! is_array($traits) || count($traits) === 0) {
             return null;
         }
 
@@ -234,7 +234,7 @@ class CollectionController extends Controller
         })->mapWithKeys(function ($groupName) use ($traits) {
             /** @var array<string, array{ value: string, displayType: string }[]> $traits */
             $values = collect($traits[$groupName])
-                ->filter(fn ($tuple) => is_string($tuple['value']) && !is_null(TraitDisplayType::tryFrom($tuple['displayType'])))
+                ->filter(fn ($tuple) => is_string($tuple['value']) && ! is_null(TraitDisplayType::tryFrom($tuple['displayType'])))
                 ->groupBy('displayType')
                 ->flatMap(fn ($x, $displayType) => [$displayType => $x->pluck('value')->toArray()]);
 
