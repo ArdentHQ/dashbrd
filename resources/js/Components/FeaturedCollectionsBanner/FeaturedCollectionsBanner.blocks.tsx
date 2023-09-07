@@ -12,7 +12,7 @@ export const CollectionCarousel = ({
     className,
 }: {
     className?: string;
-    collections?: Array<Pick<App.Data.Nfts.NftCollectionData, "website" | "name" | "image">>;
+    collections?: Array<Pick<App.Data.Nfts.NftCollectionData, "website" | "name" | "image" | "slug">>;
 }): JSX.Element => {
     const { isSm, isMdAndAbove, isLgAndAbove, isXlAndAbove } = useBreakpoint();
     const [showButtons, setShowButtons] = useState(false);
@@ -84,9 +84,9 @@ export const CollectionCarousel = ({
                         className="flex justify-center"
                     >
                         <Link
-                            href={collection.website}
-                            external
-                            showExternalIcon={false}
+                            href={route("collections.view", {
+                                slug: collection.slug,
+                            })}
                         >
                             <Tooltip
                                 content={collection.name}
