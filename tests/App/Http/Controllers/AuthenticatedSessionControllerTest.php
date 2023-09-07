@@ -9,29 +9,39 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Rules\ValidChain;
 use App\Rules\WalletAddress;
-use App\Rules\WalletSignature;
 use App\Support\Facades\Signature;
+
+it('should sign a user', function () {
+    Token::factory()->matic()->create();
+
+    $network = Network::polygon()->first();
+
+    // Signature::shouldReceive('buildSignMessage')
+    //     ->andReturn('')
+    //     ->once()
+    //     ->shouldReceive('verify')
+    //     ->andReturn(true)
+    //     ->once()
+    //     ->shouldReceive('getSessionNonce')
+    //     ->andReturn('')
+    //     ->once()
+    //     ->shouldReceive('forgetSessionNonce')
+    //     ->once();
+
+    $this->post(route('login'), [
+        'address' => '0x1231231231231231231231231231231231231231',
+        // 'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
+        'chainId' => $network->chain_id,
+    ])->assertRedirect(route('galleries'));
+})->todo();
 
 it('should handle an incoming authentication request for a new user', function () {
     Token::factory()->matic()->create();
 
     $network = Network::polygon()->first();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('forgetSessionNonce')
-        ->once();
-
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
     ])->assertRedirect(route('galleries'));
 });
@@ -46,22 +56,9 @@ it('should handle an incoming authentication request for a user with a new walle
     $user->wallet()->associate($wallet);
     $user->save();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('forgetSessionNonce')
-        ->once();
-
     $this->actingAs($user)
         ->post(route('login'), [
             'address' => '0x0000000000000000000000000000000000001010',
-            'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
             'chainId' => $network->chain_id,
         ])->assertRedirect(route('galleries'));
 });
@@ -76,44 +73,18 @@ it('should handle an incoming authentication request for an existing user', func
     $user->wallet()->associate($wallet);
     $user->save();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('forgetSessionNonce')
-        ->once();
-
     $this->actingAs($user)
         ->post(route('login'), [
             'address' => $wallet->address,
-            'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
             'chainId' => $network->chain_id,
         ])->assertRedirect(route('galleries'));
 });
 
 it('should handle an invalid incoming authentication request', function () {
-    $nonce = 'test';
-
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn(trans('auth.wallet.sign_message', ['nonce' => $nonce]))
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(false)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn($nonce)
-        ->once();
-
     $network = Network::polygon()->first();
 
     $this->post(route('login'), [
-        'address' => '0x2231231231231231231231231231231231231231',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
+        'address' => 'invalid',
         'chainId' => $network->chain_id,
     ])->assertSessionHasErrors([
         'address' => trans('auth.failed'),
@@ -132,7 +103,7 @@ it('should throw a validation exception when nonce is not available in session',
     ])->assertSessionHasErrors([
         'address' => trans('auth.session_timeout'),
     ])->assertRedirect(route('galleries'));
-});
+})->todo(); // adapt to sign method
 
 it('should validate data on incoming authentication request', function () {
     $network = Network::polygon()->first();
@@ -140,17 +111,14 @@ it('should validate data on incoming authentication request', function () {
     $this->post(route('login'), [])
         ->assertSessionHasErrors([
             'address' => trans('validation.required', ['attribute' => 'address']),
-            'signature' => trans('validation.required', ['attribute' => 'signature']),
             'chainId' => trans('validation.required', ['attribute' => 'chain id']),
         ]);
 
     $this->post(route('login'), [
         'address' => trans('validation.required', ['attribute' => 'address']),
-        'signature' => trans('validation.required', ['attribute' => 'signature']),
         'chainId' => 999,
     ])->assertSessionHasErrors([
         'address' => (new WalletAddress)->message(),
-        'signature' => (new WalletSignature)->message(),
         'chainId' => (new ValidChain)->message(),
     ]);
 });
@@ -264,21 +232,8 @@ it('should destroy the session', function () {
 it("stores user's timezone if specified", function () {
     $network = Network::polygon()->first();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('forgetSessionNonce')
-        ->once();
-
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
         'tz' => 'Europe/Zagreb',
         'locale' => 'en-GB',
@@ -295,21 +250,8 @@ it("stores user's timezone if specified", function () {
 it("defaults user's timezone to UTC if not specified", function () {
     $network = Network::polygon()->first();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('forgetSessionNonce')
-        ->once();
-
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
     ])->assertRedirect(route('galleries'));
 
@@ -324,21 +266,8 @@ it("defaults user's timezone to UTC if not specified", function () {
 it("defaults user's timezone to UTC if timezone is not valid", function () {
     $network = Network::polygon()->first();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('forgetSessionNonce')
-        ->once();
-
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
         'tz' => 'Something/Random',
     ])->assertRedirect(route('galleries'));
@@ -354,21 +283,8 @@ it("defaults user's timezone to UTC if timezone is not valid", function () {
 it('defaults currency to USD if locale is not valid', function () {
     $network = Network::polygon()->first();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once()
-        ->shouldReceive('getSessionNonce')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('forgetSessionNonce')
-        ->once();
-
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
         'tz' => 'Europe/Zagreb',
         'locale' => 'invalid',
