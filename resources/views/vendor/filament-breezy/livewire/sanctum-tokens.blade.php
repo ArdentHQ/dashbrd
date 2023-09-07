@@ -3,7 +3,7 @@
             <div class="space-y-2 bg-warning-500">
                 <p class="text-sm">{{ __('filament-breezy::default.profile.sanctum.create.message') }}</p>
                 <input type="text" disabled @class(['w-full py-1 px-3 rounded-lg bg-gray-100 border-gray-200 dark:bg-gray-700 dark:border-gray-500']) name="plain_text_token" value="{{$plainTextToken}}" />
-                <div class="flex items-center justify-between">
+                <div class="flex justify-between items-center">
                     <div class="inline-block text-xs">
                         <x-filament-breezy::clipboard-link :data="$plainTextToken" />
                     </div>

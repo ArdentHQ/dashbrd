@@ -19,7 +19,7 @@
         @endif
 
         @unless ($user->hasEnabledTwoFactor())
-            <h3 class="flex items-center gap-2 text-lg font-medium">
+            <h3 class="flex gap-2 items-center text-lg font-medium">
                 <x-heroicon-o-exclamation-circle class="w-6"/>
                 {{__('filament-breezy::default.profile.2fa.not_enabled.title') }}
             </h3>
@@ -31,7 +31,7 @@
 
         @else
             @if ($user->hasConfirmedTwoFactor())
-                <h3 class="flex items-center gap-2 text-lg font-medium">
+                <h3 class="flex gap-2 items-center text-lg font-medium">
                     <x-heroicon-o-shield-check class="w-6" />
                     {{ __('filament-breezy::default.profile.2fa.enabled.title') }}
                 </h3>
@@ -55,7 +55,7 @@
                     {{ $this->disableAction()->color('danger') }}
                 </div>
             @else
-                <h3 class="flex items-center gap-2 text-lg font-medium">
+                <h3 class="flex gap-2 items-center text-lg font-medium">
                     <x-heroicon-o-question-mark-circle class="w-6" />
                     {{ __('filament-breezy::default.profile.2fa.finish_enabling.title') }}
                 </h3>
