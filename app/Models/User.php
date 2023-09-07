@@ -27,10 +27,11 @@ use Spatie\LaravelData\WithData;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
+use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use BelongsToWallet, HasFactory, HasWallets, Notifiable, SoftDeletes, WithData;
+    use BelongsToWallet, HasFactory, HasWallets, Notifiable, SoftDeletes, WithData, TwoFactorAuthenticatable;
     use HasRoles {
         assignRole as baseAssignRole;
     }
