@@ -20,7 +20,9 @@ use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Middleware\RecordGalleryView;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', DashboardController::class)->name('dashboard');
+Route::get('/', [GalleryController::class, 'index'])->name('galleries');
+
+Route::get('/wallet', DashboardController::class)->name('dashboard');
 
 Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-token');
 
@@ -71,8 +73,6 @@ Route::group(['prefix' => 'collections', 'middleware' => 'features:collections']
 });
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
-    Route::get('', [GalleryController::class, 'index'])->name('galleries');
-
     Route::get('galleries', [GalleryController::class, 'galleries'])->name('galleries.galleries');
     Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
     Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');

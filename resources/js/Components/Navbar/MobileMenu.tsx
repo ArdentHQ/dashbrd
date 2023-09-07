@@ -124,13 +124,13 @@ const Nav = ({
     const activeRoute = route().current();
 
     const items = [
-        {
-            isVisible: features.portfolio,
-            title: t("pages.wallet.title"),
-            suffix: null,
-            route: "dashboard",
-            icon: "Wallet",
-        },
+        // {
+        //     isVisible: features.portfolio,
+        //     title: t("pages.wallet.title"),
+        //     suffix: null,
+        //     route: "dashboard",
+        //     icon: "Wallet",
+        // },
         {
             isVisible: features.collections,
             title: t("pages.collections.title"),
