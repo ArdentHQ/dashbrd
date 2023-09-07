@@ -73,7 +73,7 @@ export const Clipboard = ({
                 </div>
                 <div
                     className={cn("transition-default grid cursor-pointer", {
-                        "opacity-100": !isCopied,
+                        "z-10 opacity-100": !isCopied,
                         "opacity-0": isCopied,
                     })}
                 >
