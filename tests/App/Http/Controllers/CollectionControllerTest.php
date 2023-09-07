@@ -180,7 +180,7 @@ it('can render the collections view page with owned filter', function ($owned) {
                 ->component('Collections/View')
                 ->has(
                     'appliedFilters',
-                    fn (Assert $page) => $page->where('owned', false)
+                    fn (Assert $page) => $page->where('owned', $owned !== null)
                         ->where('traits', null)
                         ->where('tab', 'collection')
                         ->where('pageLimit', 10)
