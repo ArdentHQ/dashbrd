@@ -7,13 +7,12 @@ import {
     GalleryStatsPlaceholder,
     NftImageGrid,
 } from "./NftGalleryCard.blocks";
-import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import * as useLikes from "@/Hooks/useLikes";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 const collectionInfo: Pick<
     App.Data.Gallery.GalleryNftData,
@@ -318,9 +317,6 @@ describe("GalleryStats", () => {
     const user = new UserDataFactory().withUSDCurrency().create();
 
     let useAuthSpy: SpyInstance;
-    let metamaskSpy: SpyInstance;
-
-    const showConnectOverlayMock = vi.fn();
 
     const useAuthState = {
         user,
@@ -332,19 +328,25 @@ describe("GalleryStats", () => {
         closeOverlay: vi.fn(),
     };
 
+    let useAuthorizedActionSpy: SpyInstance;
+    const signedActionMock = vi.fn();
+
     beforeEach(() => {
         useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
 
-        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
-            getSampleMetaMaskState({
-                showConnectOverlay: showConnectOverlayMock,
-            }),
-        );
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+        });
     });
 
     afterEach(() => {
         useAuthSpy.mockRestore();
-        metamaskSpy.mockRestore();
+
+        useAuthorizedActionSpy.mockRestore();
     });
 
     it("should display gallery stats", () => {
@@ -487,14 +489,14 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
-    it("should display auth overlay when a guest clicks the like button", async () => {
+    it("should use signed actions", async () => {
         const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({ ...useAuthState, authenticated: false });
 
         render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
 
         await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
 
-        expect(showConnectOverlayMock).toHaveBeenCalled();
+        expect(signedActionMock).toHaveBeenCalled();
 
         spy.mockRestore();
     });
