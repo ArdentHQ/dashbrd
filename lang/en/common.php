@@ -8,6 +8,7 @@ return [
     'balance' => 'Balance',
     'cancel' => 'Cancel',
     'delete' => 'Delete',
+    'edit' => 'Edit',
     'confirm' => 'Confirm',
     'connect' => 'Connect',
     'continue' => 'Continue',

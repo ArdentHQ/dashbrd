@@ -9,6 +9,7 @@ import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryRe
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 import { useLikes } from "@/Hooks/useLikes";
+import { Tooltip } from "@/Components/Tooltip";
 
 export const GalleryControls = ({
     likesCount,
@@ -119,13 +120,17 @@ export const GalleryControls = ({
                 )}
 
                 {gallery?.isOwner === true && showEditAction && (
-                    <ButtonLink
-                        data-testid="GalleryControls__edit-button"
-                        disabled={isDisabled}
-                        icon="Pencil"
-                        variant="icon-primary"
-                        href={route("my-galleries.edit", { slug: gallery.slug })}
-                    />
+                    <Tooltip content={t("common.edit")}>
+                        <span>
+                            <ButtonLink
+                                data-testid="GalleryControls__edit-button"
+                                disabled={isDisabled}
+                                icon="Pencil"
+                                variant="icon-primary"
+                                href={route("my-galleries.edit", { slug: gallery.slug })}
+                            />
+                        </span>
+                    </Tooltip>
                 )}
             </div>
         </div>
