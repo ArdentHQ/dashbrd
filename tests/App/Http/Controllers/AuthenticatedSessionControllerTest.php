@@ -33,7 +33,7 @@ it('should handle an incoming authentication request for a new user', function (
         'address' => '0x1231231231231231231231231231231231231231',
         'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('galleries'));
 });
 
 it('should handle an incoming authentication request for a user with a new wallet', function () {
@@ -63,7 +63,7 @@ it('should handle an incoming authentication request for a user with a new walle
             'address' => '0x0000000000000000000000000000000000001010',
             'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
             'chainId' => $network->chain_id,
-        ])->assertRedirect(route('dashboard'));
+        ])->assertRedirect(route('galleries'));
 });
 
 it('should handle an incoming authentication request for an existing user', function () {
@@ -93,7 +93,7 @@ it('should handle an incoming authentication request for an existing user', func
             'address' => $wallet->address,
             'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
             'chainId' => $network->chain_id,
-        ])->assertRedirect(route('dashboard'));
+        ])->assertRedirect(route('galleries'));
 });
 
 it('should handle an invalid incoming authentication request', function () {
@@ -117,7 +117,7 @@ it('should handle an invalid incoming authentication request', function () {
         'chainId' => $network->chain_id,
     ])->assertSessionHasErrors([
         'address' => trans('auth.failed'),
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('galleries'));
 });
 
 it('should throw a validation exception when nonce is not available in session', function () {
@@ -131,7 +131,7 @@ it('should throw a validation exception when nonce is not available in session',
         'chainId' => $network->chain_id,
     ])->assertSessionHasErrors([
         'address' => trans('auth.session_timeout'),
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('galleries'));
 });
 
 it('should validate data on incoming authentication request', function () {
@@ -205,7 +205,7 @@ it('should switch account', function () {
             'address' => $newWallet->address,
             'chainId' => $network->chain_id,
         ])
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(route('galleries'));
 
     expect($user->fresh()->wallet_id)->toBe($newWallet->id);
 });
@@ -258,7 +258,7 @@ it('should destroy the session', function () {
 
     $this->actingAs($user)
         ->post(route('logout'))
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(route('galleries'));
 });
 
 it("stores user's timezone if specified", function () {
@@ -282,7 +282,7 @@ it("stores user's timezone if specified", function () {
         'chainId' => $network->chain_id,
         'tz' => 'Europe/Zagreb',
         'locale' => 'en-GB',
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('galleries'));
 
     $user = User::first();
 
@@ -311,7 +311,7 @@ it("defaults user's timezone to UTC if not specified", function () {
         'address' => '0x1231231231231231231231231231231231231231',
         'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('galleries'));
 
     $user = User::first();
 
@@ -341,7 +341,7 @@ it("defaults user's timezone to UTC if timezone is not valid", function () {
         'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
         'tz' => 'Something/Random',
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('galleries'));
 
     $user = User::first();
 
@@ -372,7 +372,7 @@ it('defaults currency to USD if locale is not valid', function () {
         'chainId' => $network->chain_id,
         'tz' => 'Europe/Zagreb',
         'locale' => 'invalid',
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('galleries'));
 
     $user = User::first();
 
