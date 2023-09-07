@@ -28,8 +28,7 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
      */
     public function __construct(
         private Collection $collection
-    )
-    {
+    ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
 
@@ -68,7 +67,7 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
             $this->collection->touch('last_activity_fetched_at');
 
             // If we get the limit+1 it may be that there are more activities to fetch...
-            if (count($activities) > $limit) {
+            if ($limit < count($activities)) {
                 self::dispatch($this->collection)->afterCommit();
             }
         });

@@ -8,7 +8,6 @@ use App\Jobs\Middleware\RecoverProviderErrors;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
 use App\Models\Nft;
-use App\Models\SpamContract;
 use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Support\Web3NftHandler;
 use DateTime;

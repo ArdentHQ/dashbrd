@@ -345,9 +345,10 @@ class MnemonicPendingRequest extends PendingRequest
 
     /**
      * @see https://docs.mnemonichq.com/reference/foundationalservice_getnfttransfers
+     *
      * @return Collection<int, CollectionActivity>
      */
-    public function getCollectionActivity(Chains $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
+    public function getCollectionActivity(Chains $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
