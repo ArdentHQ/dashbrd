@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import cn from "classnames";
 import { type MouseEventHandler, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -258,7 +259,9 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
         event.stopPropagation();
 
         if (!authenticated) {
-            showConnectOverlay();
+            showConnectOverlay(() => {
+                void like(gallery.slug, true);
+            });
             return;
         }
 
