@@ -139,7 +139,7 @@ describe("GalleryReportModal", () => {
         expect(postFunction).toHaveBeenCalled();
     });
 
-    it("requires signed action to open moddal", async () => {
+    it("requires signed action to open modal", async () => {
         await renderAndOpenDialog({
             reason1: "lorem ipsum",
             reason2: "lorem ipsum",
