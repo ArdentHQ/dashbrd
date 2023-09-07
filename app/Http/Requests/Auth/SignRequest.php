@@ -20,7 +20,7 @@ class SignRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user() !== null;
     }
 
     /**
@@ -70,6 +70,8 @@ class SignRequest extends FormRequest
         }
 
         Signature::setWalletIsSigned($wallet->id);
+
+        Signature::forgetSessionNonce($credentials['chainId']);
     }
 
     protected function failedValidation(Validator $validator)
