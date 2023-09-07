@@ -143,7 +143,7 @@ class AdminPanelProvider extends PanelProvider
                     )
                     ->enableTwoFactorAuthentication(
                         force: false,
-                    )
+                    ),
             ]);
     }
 }
