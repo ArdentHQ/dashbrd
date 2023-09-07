@@ -10,11 +10,6 @@ export const AppMenu = (): JSX.Element => {
     const activeRoute = route().current();
 
     const items = [
-        // {
-        //     isVisible: features.portfolio,
-        //     title: t("pages.wallet.title"),
-        //     route: "dashboard",
-        // },
         {
             isVisible: features.collections,
             title: t("pages.collections.title"),
