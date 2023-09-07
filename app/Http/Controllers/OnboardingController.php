@@ -21,11 +21,11 @@ class OnboardingController extends Controller
         }
 
         if ($request->wallet()->onboarded()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('galleries');
         }
 
         return Inertia::render('Onboarding', [
-            'redirectTo' => $request->session()->get('onboarding:redirect', default: route('dashboard')),
+            'redirectTo' => $request->session()->get('onboarding:redirect', default: route('galleries')),
         ]);
     }
 }
