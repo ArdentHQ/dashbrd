@@ -1,8 +1,7 @@
 import { router } from "@inertiajs/react";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { IconButton, LikeButton } from "@/Components/Buttons";
-import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { Button, IconButton, LikeButton } from "@/Components/Buttons";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
@@ -114,12 +113,16 @@ export const GalleryControls = ({
                 )}
 
                 {gallery?.isOwner === true && showEditAction && (
-                    <ButtonLink
+                    <Button
                         data-testid="GalleryControls__edit-button"
                         disabled={isDisabled}
                         icon="Pencil"
                         variant="icon-primary"
-                        href={route("my-galleries.edit", { slug: gallery.slug })}
+                        onClick={() => {
+                            signedAction(() => {
+                                router.get(route("my-galleries.edit", { slug: gallery.slug }));
+                            });
+                        }}
                     />
                 )}
             </div>
