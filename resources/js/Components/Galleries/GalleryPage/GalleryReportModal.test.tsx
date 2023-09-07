@@ -140,12 +140,32 @@ describe("GalleryReportModal", () => {
     });
 
     it("requires signed action to open modal", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
         await renderAndOpenDialog({
             reason1: "lorem ipsum",
             reason2: "lorem ipsum",
         });
 
         expect(signedActionMock).toHaveBeenCalled();
+        expect(routerSpy).not.toHaveBeenCalled();
+        routerSpy.mockRestore();
+    });
+
+    it("reloads if user was not signed", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
+        });
+
+        await renderAndOpenDialog({
+            reason1: "lorem ipsum",
+            reason2: "lorem ipsum",
+        });
+
+        expect(signedActionMock).toHaveBeenCalled();
+        expect(routerSpy).toHaveBeenCalled();
+        routerSpy.mockRestore();
     });
 
     it("can be submitted without a gallery", () => {

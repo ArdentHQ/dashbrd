@@ -161,7 +161,40 @@ describe("GalleryControls", () => {
 
         await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
 
-        expect(likeMock).toHaveBeenCalled();
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, undefined);
+
+        expect(signedActionMock).toHaveBeenCalled();
+
+        expect(routerSpy).toHaveBeenCalled();
+
+        routerSpy.mockRestore();
+    });
+
+    it("forces a like if user was not authenticated", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
+        });
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        const likeMock = vi.fn();
+
+        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+            likes: 0,
+            hasLiked: true,
+            like: likeMock,
+        });
+
+        render(
+            <GalleryControls
+                likesCount={3}
+                wallet={gallery.wallet}
+                gallery={gallery}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
+
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, true);
 
         expect(signedActionMock).toHaveBeenCalled();
 
