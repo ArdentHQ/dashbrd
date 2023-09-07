@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CollectionController;
-use App\Http\Controllers\CollectionNftController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GalleryController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\HiddenCollectionController;
 use App\Http\Controllers\MyGalleryCollectionController;
 use App\Http\Controllers\MyGalleryController;
+use App\Http\Controllers\NftController;
 use App\Http\Controllers\NftReportController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\RefreshCsrfTokenController;
@@ -51,8 +51,8 @@ Route::middleware('auth')->group(function () {
         Route::post('{collection:address}/reports', [
             CollectionReportController::class, 'store',
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
-        Route::get('{collection:slug}/{nft:token_number}',
-            [CollectionNftController::class, 'view'])->name('collection-nfts.view');
+
+        Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
     });
 
     Route::group(['prefix' => 'nfts'], function () {
