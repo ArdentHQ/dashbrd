@@ -82,7 +82,7 @@ class SignRequest extends FormRequest
     }
 
     /**
-     * @return array<string, (Rule | mixed[] | string)>
+     * @return array<string, string>
      */
     private function getAuthParams(): array
     {

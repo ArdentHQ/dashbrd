@@ -38,22 +38,16 @@ class Signature
 
     public static function walletIsSigned(int $walletId): bool
     {
-        info('get wallet-is-signed: '.Session::get('wallet-is-signed.'.$walletId));
-
         return Session::get('wallet-is-signed.'.$walletId) === true;
     }
 
     public static function setWalletIsSigned(int $walletId): void
     {
-        info('set-wallet-is-signed: '.$walletId);
-
         Session::put('wallet-is-signed.'.$walletId, true);
     }
 
     public static function setWalletIsNotSigned(int $walletId): void
     {
-        info('set-wallet-is--not-signed: '.$walletId);
-
         Session::forget('wallet-is-signed.'.$walletId);
     }
 

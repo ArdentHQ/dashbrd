@@ -8,7 +8,6 @@ use App\Enums\DateFormat;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Support\Currency;
-use App\Support\Facades\Signature;
 use App\Support\Timezone;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -71,16 +70,7 @@ class Web3UserProvider extends EloquentUserProvider
     {
         /** @var User $user */
         return $user->wallets()->where('address', $credentials['address'])->exists();
-        // /** @var User $user */
-        // if ($user->wallets()->where('address', $credentials['address'])->doesntExist()) {
-        //     return false;
-        // }
 
-        // return Signature::verify(
-        //     signature: $credentials['signature'],
-        //     address: $credentials['address'],
-        //     message: Signature::buildSignMessage($credentials['nonce'])
-        // );
     }
 
     /**
