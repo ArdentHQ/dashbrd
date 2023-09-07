@@ -9,12 +9,15 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
+import { IconButton } from "@/Components/Buttons";
 
 interface Properties {
     nft: App.Data.Gallery.GalleryNftData;
+    isSelected: boolean;
+    onClick: (nft?: string) => void;
 }
 
-export const GalleryNftsNft = ({ nft }: Properties): JSX.Element => {
+export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     const nftNameReference = useRef<HTMLDivElement>(null);
@@ -44,29 +47,28 @@ export const GalleryNftsNft = ({ nft }: Properties): JSX.Element => {
     const hasNftName = isTruthy(nft.name);
 
     const handleClick = (): void => {
-        router.visit(
-            route("collection-nfts.view", {
-                collection: nft.collectionSlug,
-                nft: nft.tokenNumber,
-            }),
-        );
-    };
-
-    const handleCollectionNameClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-        event.stopPropagation();
-        router.visit(
-            route("collections.view", {
-                slug: nft.collectionSlug,
-            }),
-        );
+        onClick(isSelected ? undefined : `${nft.tokenNumber}_${nft.id}`);
     };
 
     return (
         <GalleryCard
-            isSelected={false}
+            isSelected={isSelected}
             onClick={handleClick}
         >
             <GalleryCard.Overlay>
+                {isSelected && (
+                    <div className="absolute right-3 top-3 lg:hidden">
+                        <div className="flex items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md">
+                            <IconButton
+                                data-testid="NftGalleryCardEditable__add"
+                                icon="X"
+                                className="h-8 w-8 border-white outline-offset-4"
+                                onClick={handleClick}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 <div className="flex max-w-full flex-col items-center justify-center overflow-auto font-medium">
                     {nft.collectionImage !== null && (
                         <div
@@ -79,13 +81,15 @@ export const GalleryNftsNft = ({ nft }: Properties): JSX.Element => {
                             />
                         </div>
                     )}
-                    <div
-                        onClick={handleCollectionNameClick}
+                    <Link
+                        href={route("collections.view", {
+                            slug: nft.collectionSlug,
+                        })}
                         className="outline-offset-3 transition-default mx-auto flex max-w-full items-center overflow-hidden truncate rounded-full px-2 text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300"
                         data-testid="GalleryNftsNft__website"
                     >
                         <span className="truncate">{nft.collectionName}</span>
-                    </div>
+                    </Link>
 
                     <Tooltip
                         disabled={!isTruncated}
