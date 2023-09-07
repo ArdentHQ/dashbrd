@@ -56,6 +56,7 @@ class Collection extends Model
         'fiat_value' => 'json',
         'minted_block' => 'int',
         'minted_at' => 'datetime',
+        'activity_updated_at' => 'datetime',
         'last_viewed_at' => 'datetime',
     ];
 
