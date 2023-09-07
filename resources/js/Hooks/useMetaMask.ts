@@ -382,6 +382,10 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
         setOnConnected(undefined);
 
+        setConnecting(false);
+
+        setSigning(false);
+
         setOnSigned(undefined);
     };
 

@@ -155,7 +155,7 @@ export const AuthOverlay = ({
                                 {errorMessage === undefined && (
                                     <div className="flex w-full flex-col items-center">
                                         {switching && <SwitchingNetwork />}
-                                        {(connecting || signing) && <ConnectingWallet />}
+                                        {(connecting || signing) && <ConnectingWallet signing={signing} />}
                                         {!connecting && !switching && !signing && (
                                             <ConnectWallet
                                                 closeOverlay={closeOverlay}
@@ -177,8 +177,12 @@ export const AuthOverlay = ({
                                     <ConnectionError
                                         closeOverlay={closeOverlay}
                                         showCloseButton={showCloseButton}
+                                        requiresSignature={requiresSignature}
                                         onConnect={() => {
                                             void connectWallet();
+                                        }}
+                                        onSign={() => {
+                                            void signWallet();
                                         }}
                                     />
                                 )}

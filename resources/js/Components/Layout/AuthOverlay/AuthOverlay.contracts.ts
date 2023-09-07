@@ -14,7 +14,9 @@ export interface ConnectWalletProperties {
 }
 
 export interface ConnectionErrorProperties {
+    requiresSignature: boolean;
     onConnect: () => void;
+    onSign: () => void;
     closeOverlay: () => void;
     showCloseButton: boolean;
 }

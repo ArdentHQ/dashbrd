@@ -44,7 +44,9 @@ export const InstallMetamask = ({
 };
 
 export const ConnectionError = ({
+    requiresSignature,
     onConnect,
+    onSign,
     showCloseButton,
     closeOverlay,
 }: ConnectionErrorProperties): JSX.Element => {
@@ -65,7 +67,7 @@ export const ConnectionError = ({
                 )}
                 <Button
                     className="min-w-[81px] justify-center"
-                    onClick={onConnect}
+                    onClick={requiresSignature ? onSign : onConnect}
                 >
                     {t("common.retry")}
                 </Button>
@@ -92,7 +94,7 @@ export const SwitchingNetwork = (): JSX.Element => {
     );
 };
 
-export const ConnectingWallet = (): JSX.Element => {
+export const ConnectingWallet = ({ signing = false }: { signing?: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -106,7 +108,9 @@ export const ConnectingWallet = (): JSX.Element => {
                     size="xl"
                     className="animate-spin text-theme-hint-600"
                 />
-                <span className="font-medium text-theme-secondary-900">{t("auth.wallet.connecting")}</span>
+                <span className="font-medium text-theme-secondary-900">
+                    {signing ? t("auth.wallet.waiting_for_signature") : t("auth.wallet.connecting")}
+                </span>
             </div>
         </>
     );
@@ -118,6 +122,7 @@ export const ConnectWallet = ({
     onConnect,
     onSign,
     showCloseButton,
+    closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -128,7 +133,7 @@ export const ConnectWallet = ({
                     <Button
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
-                        onClick={requiresSignature ? onSign : onConnect}
+                        onClick={closeOverlay}
                         className="w-full justify-center whitespace-nowrap"
                     >
                         {t("common.close")}
@@ -137,7 +142,7 @@ export const ConnectWallet = ({
 
                 <Button
                     disabled={!isWalletInitialized}
-                    onClick={onConnect}
+                    onClick={requiresSignature ? onSign : onConnect}
                     className={classNames("justify-center", {
                         "w-full whitespace-nowrap": showCloseButton,
                     })}

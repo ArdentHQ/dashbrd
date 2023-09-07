@@ -26,6 +26,7 @@ return [
 
     'wallet' => [
         'connecting' => 'Connecting …',
+        'waiting_for_signature' => 'Waiting for Signature …',
         'switching_wallet' => 'Switching Wallet …',
         'connect' => 'Connect Wallet',
         'connect_long' => 'Connect Your Wallet to Get Started',
