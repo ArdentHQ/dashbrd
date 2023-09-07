@@ -102,20 +102,6 @@ it('should handle an invalid incoming authentication request', function () {
     ])->assertRedirect(route('galleries'));
 });
 
-it('should throw a validation exception when nonce is not available in session', function () {
-    Signature::shouldReceive('getSessionNonce')->andReturn(null)->once();
-
-    $network = Network::polygon()->first();
-
-    $this->post(route('login'), [
-        'address' => '0x2231231231231231231231231231231231231231',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
-        'chainId' => $network->chain_id,
-    ])->assertSessionHasErrors([
-        'address' => trans('auth.session_timeout'),
-    ])->assertRedirect(route('galleries'));
-})->todo(); // adapt to sign method
-
 it('should validate data on incoming authentication request', function () {
     $network = Network::polygon()->first();
 
