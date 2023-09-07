@@ -11,8 +11,9 @@ import {
 } from "./AuthOverlay.blocks";
 import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
+import { Toast } from "@/Components/Toast";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { AuthConnectWallet } from "@/images";
+import { AuthConnectWallet, AuthInstallWallet } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const AuthOverlay = ({
@@ -64,7 +65,7 @@ export const AuthOverlay = ({
             ref={reference}
             {...properties}
             className={cn(
-                "fixed inset-0 z-40 flex h-screen w-screen items-center justify-center overflow-auto bg-white",
+                "fixed inset-0 z-40 mt-14 flex h-screen w-screen items-start justify-center overflow-auto bg-white xs:mt-18 sm:mt-0 sm:items-center",
                 className,
                 {
                     "bg-opacity-60": !showCloseButton,
@@ -72,74 +73,119 @@ export const AuthOverlay = ({
                 },
             )}
         >
-            <div className="flex flex-col items-center space-y-6">
-                <div className="text-center">
-                    <div className="mb-1 text-theme-secondary-900">
-                        <Heading
-                            level={3}
-                            weight="medium"
-                        >
-                            {t("auth.welcome")}
-                        </Heading>
+            <div className="auth-overlay-shadow w-full rounded-none bg-white sm:w-[29rem] sm:rounded-3xl">
+                <div className="mt-8 flex flex-col items-center space-y-6">
+                    <div className="text-center">
+                        <div className="mb-1 text-theme-secondary-900">
+                            <Heading
+                                level={3}
+                                weight="medium"
+                            >
+                                {t("auth.welcome")}
+                            </Heading>
+                        </div>
+
+                        <p className="font-medium text-theme-secondary-700">
+                            {needsMetaMask ? t("auth.wallet.install_long") : t("auth.wallet.connect_long")}
+                            {requiresSignature
+                                ? t("auth.wallet.sign_subtitle")
+                                : needsMetaMask
+                                ? t("auth.wallet.install_long")
+                                : t("auth.wallet.connect_long")}
+                        </p>
                     </div>
 
-                    <p className="font-medium text-theme-secondary-700">
-                        {requiresSignature
-                            ? t("auth.wallet.sign_subtitle")
-                            : needsMetaMask
-                            ? t("auth.wallet.install_long")
-                            : t("auth.wallet.connect_long")}
-                    </p>
+                    {needsMetaMask && <AuthInstallWallet />}
+
+                    {!needsMetaMask && (
+                        <>
+                            <AuthConnectWallet />
+                            <div
+                                className={cn("w-full flex-col items-center space-x-6 px-6", {
+                                    hidden: !waitingSignature && !showSignMessage && errorMessage === undefined,
+                                    flex: waitingSignature || showSignMessage || isTruthy(errorMessage),
+                                })}
+                            >
+                                {isTruthy(errorMessage) && (
+                                    <Toast
+                                        type="error"
+                                        message={errorMessage}
+                                        isExpanded
+                                        iconDimensions={{ width: 18, height: 18 }}
+                                    />
+                                )}
+
+                                {errorMessage === undefined && (
+                                    <>
+                                        {waitingSignature && (
+                                            <Toast
+                                                data-testid="AuthOverlay__awaiting-signature"
+                                                type="info"
+                                                message={t("auth.wallet.connect_subtitle").toString()}
+                                                isExpanded
+                                                iconDimensions={{ width: 18, height: 18 }}
+                                            />
+                                        )}
+
+                                        {showSignMessage && (
+                                            <Toast
+                                                data-testid="AuthOverlay__sign"
+                                                type="info"
+                                                message={t("auth.wallet.requires_signature").toString()}
+                                                isExpanded
+                                                iconDimensions={{ width: 18, height: 18 }}
+                                            />
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        </>
+                    )}
+
+                    <div className="border-t-none w-full justify-center space-y-6 border-theme-secondary-300 px-5 pb-5 pt-0 xs:border-t xs:px-8 xs:py-5">
+                        {needsMetaMask && (
+                            <InstallMetamask
+                                closeOverlay={closeOverlay}
+                                showCloseButton={showCloseButton}
+                            />
+                        )}
+
+                        {!needsMetaMask && (
+                            <>
+                                {errorMessage === undefined && (
+                                    <div className="flex w-full flex-col items-center">
+                                        {switching && <SwitchingNetwork />}
+                                        {(connecting || signing) && <ConnectingWallet />}
+                                        {!connecting && !switching && !signing && (
+                                            <ConnectWallet
+                                                closeOverlay={closeOverlay}
+                                                showCloseButton={showCloseButton}
+                                                isWalletInitialized={initialized}
+                                                requiresSignature={requiresSignature}
+                                                onConnect={() => {
+                                                    void connectWallet();
+                                                }}
+                                                onSign={() => {
+                                                    void signWallet();
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+                                )}
+
+                                {isTruthy(errorMessage) && (
+                                    <ConnectionError
+                                        closeOverlay={closeOverlay}
+                                        showCloseButton={showCloseButton}
+                                        onConnect={() => {
+                                            void connectWallet();
+                                        }}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
-
-                {needsMetaMask && (
-                    <InstallMetamask
-                        closeOverlay={closeOverlay}
-                        showCloseButton={showCloseButton}
-                    />
-                )}
-
-                {!needsMetaMask && (
-                    <>
-                        <AuthConnectWallet />
-
-                        <div className="flex w-full flex-col items-center space-y-6 px-6 xs:max-w-sm">
-                            {errorMessage === undefined && (
-                                <>
-                                    {switching && <SwitchingNetwork />}
-                                    {connecting ||
-                                        (signing && <ConnectingWallet isWaitingSignature={waitingSignature} />)}
-                                    {!connecting && !signing && !switching && (
-                                        <ConnectWallet
-                                            closeOverlay={closeOverlay}
-                                            showCloseButton={showCloseButton}
-                                            isWalletInitialized={initialized}
-                                            requiresSignature={requiresSignature}
-                                            showSignMessage={showSignMessage}
-                                            onConnect={() => {
-                                                void connectWallet();
-                                            }}
-                                            onSign={() => {
-                                                void signWallet();
-                                            }}
-                                        />
-                                    )}
-                                </>
-                            )}
-
-                            {isTruthy(errorMessage) && (
-                                <ConnectionError
-                                    closeOverlay={closeOverlay}
-                                    showCloseButton={showCloseButton}
-                                    errorMessage={errorMessage}
-                                    onConnect={() => {
-                                        void connectWallet();
-                                    }}
-                                />
-                            )}
-                        </div>
-                    </>
-                )}
             </div>
         </div>
     );

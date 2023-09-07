@@ -4,8 +4,6 @@ import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./
 import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Icon } from "@/Components/Icon";
-import { Toast } from "@/Components/Toast";
-import { AuthInstallWallet } from "@/images";
 const metamaskDownloadUrl = "https://metamask.io/download/";
 
 export const InstallMetamask = ({
@@ -19,15 +17,13 @@ export const InstallMetamask = ({
 
     return (
         <>
-            <AuthInstallWallet />
-
-            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
+            <div className="flex w-full flex-col justify-center space-y-3 xs:items-center sm:flex-row sm:space-x-3 sm:space-y-0">
                 {showCloseButton && (
                     <Button
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
                         onClick={closeOverlay}
-                        className="min-w-[193px] justify-center"
+                        className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
                     >
                         {t("common.close")}
                     </Button>
@@ -38,7 +34,7 @@ export const InstallMetamask = ({
                     target="_blank"
                     icon="Metamask"
                     rel="noopener nofollow noreferrer"
-                    className="min-w-[193px]"
+                    className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
                 >
                     {t("auth.wallet.install")}
                 </ButtonLink>
@@ -48,7 +44,6 @@ export const InstallMetamask = ({
 };
 
 export const ConnectionError = ({
-    errorMessage,
     onConnect,
     showCloseButton,
     closeOverlay,
@@ -75,13 +70,6 @@ export const ConnectionError = ({
                     {t("common.retry")}
                 </Button>
             </div>
-
-            <Toast
-                type="error"
-                message={errorMessage}
-                isExpanded
-                iconDimensions={{ width: 18, height: 18 }}
-            />
         </>
     );
 };
@@ -104,7 +92,7 @@ export const SwitchingNetwork = (): JSX.Element => {
     );
 };
 
-export const ConnectingWallet = ({ isWaitingSignature }: { isWaitingSignature: boolean }): JSX.Element => {
+export const ConnectingWallet = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -115,21 +103,11 @@ export const ConnectingWallet = ({ isWaitingSignature }: { isWaitingSignature: b
             >
                 <Icon
                     name="Spinner"
-                    size="lg"
+                    size="xl"
                     className="animate-spin text-theme-hint-600"
                 />
                 <span className="font-medium text-theme-secondary-900">{t("auth.wallet.connecting")}</span>
             </div>
-
-            {isWaitingSignature && (
-                <Toast
-                    data-testid="AuthOverlay__awaiting-signature"
-                    type="info"
-                    message={t("auth.wallet.connect_subtitle").toString()}
-                    isExpanded
-                    iconDimensions={{ width: 18, height: 18 }}
-                />
-            )}
         </>
     );
 };
@@ -139,9 +117,7 @@ export const ConnectWallet = ({
     requiresSignature,
     onConnect,
     onSign,
-    showSignMessage,
     showCloseButton,
-    closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -152,8 +128,8 @@ export const ConnectWallet = ({
                     <Button
                         data-testid="AuthOverlay__close-button"
                         variant="secondary"
-                        onClick={closeOverlay}
-                        className="w-full min-w-[154px] justify-center whitespace-nowrap"
+                        onClick={requiresSignature ? onSign : onConnect}
+                        className="w-full justify-center whitespace-nowrap"
                     >
                         {t("common.close")}
                     </Button>
@@ -161,24 +137,14 @@ export const ConnectWallet = ({
 
                 <Button
                     disabled={!isWalletInitialized}
-                    onClick={requiresSignature ? onSign : onConnect}
-                    className={classNames("min-w-[154px] justify-center", {
-                        "whitespace-nowrap": showCloseButton,
+                    onClick={onConnect}
+                    className={classNames("justify-center", {
+                        "w-full whitespace-nowrap": showCloseButton,
                     })}
                 >
                     {requiresSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
                 </Button>
             </div>
-
-            {showSignMessage && (
-                <Toast
-                    data-testid="AuthOverlay__sign"
-                    type="info"
-                    message={t("auth.wallet.requires_signature").toString()}
-                    isExpanded
-                    iconDimensions={{ width: 18, height: 18 }}
-                />
-            )}
         </>
     );
 };

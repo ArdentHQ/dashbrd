@@ -25,6 +25,7 @@ interface Properties {
     title: string;
     gallery?: App.Data.Gallery.GalleryData;
     nftsPerPage: number;
+    nftLimit: number;
 }
 
 const Create = ({
@@ -34,6 +35,7 @@ const Create = ({
     collections: paginatedCollections,
     gallery,
     nftsPerPage,
+    nftLimit,
 }: Properties): JSX.Element => {
     assertUser(auth.user);
     assertWallet(auth.wallet);
@@ -48,19 +50,21 @@ const Create = ({
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
 
-    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({ gallery });
+    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
+        gallery,
+    });
 
     /* TODO (@alfonsobries) [2023-09-01]: calculate the value (https://app.clickup.com/t/862jkb9e2) */
     const totalValue = 0;
 
     assertUser(auth.user);
 
-    const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "website" | "name" | "image">>>(
+    const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>>(
         () =>
             uniqBy(selectedNfts, (nft) => nft.tokenAddress).map((nft) => ({
                 name: nft.collectionName,
-                website: nft.collectionWebsite,
                 image: nft.collectionImage,
+                slug: nft.collectionSlug,
             })),
         [selectedNfts],
     );
@@ -102,7 +106,10 @@ const Create = ({
                     }}
                 />
 
-                <EditableGalleryHook selectedNfts={gallery?.nfts.paginated.data}>
+                <EditableGalleryHook
+                    selectedNfts={gallery?.nfts.paginated.data}
+                    nftLimit={nftLimit}
+                >
                     {/* TODO (@alexbarnsley) [2023-09-01] calculate gallery value on the fly - https://app.clickup.com/t/862jkb9e2 */}
                     <GalleryHeading
                         value={totalValue}
