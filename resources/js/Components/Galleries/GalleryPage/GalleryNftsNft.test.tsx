@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import React from "react";
 import { GalleryNftsNft } from "@/Components/Galleries/GalleryPage/GalleryNftsNft";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
@@ -19,13 +20,7 @@ describe("GalleryNftsNft", () => {
     });
 
     it("should render with eth NFT", async () => {
-        render(
-            <GalleryNftsNft
-                nft={nft}
-                isSelected={false}
-                onClick={vi.fn()}
-            />,
-        );
+        render(<GalleryNftsNft nft={nft} />);
 
         expect(screen.getByTestId("GalleryCard")).toBeInTheDocument();
         expect(screen.getByTestId("GalleryNftsNft__website")).toBeInTheDocument();
@@ -49,32 +44,6 @@ describe("GalleryNftsNft", () => {
         expect(screen.getByTestId("GalleryNftsNft__name")).toHaveTextContent(nft.name);
     });
 
-    it("should render selected", async () => {
-        render(
-            <GalleryNftsNft
-                nft={nft}
-                isSelected={true}
-                onClick={vi.fn()}
-            />,
-        );
-
-        expect(screen.getByTestId("GalleryCard")).toBeInTheDocument();
-        expect(screen.getByTestId("GalleryNftsNft__website")).toBeInTheDocument();
-
-        await waitFor(() => {
-            expect(screen.getByTestId("GalleryNftsNft__image")).toBeInTheDocument();
-        });
-
-        await waitFor(() => {
-            expect(screen.getByTestId("GalleryNftsNft__socials-opensea")).toHaveAttribute(
-                "href",
-                `https://opensea.io/assets/ethereum/${nft.tokenAddress}/${nft.tokenNumber}`,
-            );
-        });
-
-        expect(screen.getByTestId("GalleryCard")).toHaveClass("outline-theme-hint-300");
-    });
-
     it("should render without image", async () => {
         render(
             <GalleryNftsNft
@@ -82,8 +51,6 @@ describe("GalleryNftsNft", () => {
                     ...nft,
                     images: { thumb: null, small: null, large: null },
                 }}
-                isSelected={false}
-                onClick={vi.fn()}
             />,
         );
 
@@ -104,8 +71,6 @@ describe("GalleryNftsNft", () => {
                     ...nft,
                     name: null,
                 }}
-                isSelected={false}
-                onClick={vi.fn()}
             />,
         );
 
@@ -122,8 +87,6 @@ describe("GalleryNftsNft", () => {
                     floorPriceCurrency: null,
                     floorPriceDecimals: null,
                 }}
-                isSelected={false}
-                onClick={vi.fn()}
             />,
         );
 
@@ -133,13 +96,7 @@ describe("GalleryNftsNft", () => {
     it("should render with collection image", async () => {
         const nft = new GalleryNftDataFactory().withCollectionImage().create({ chainId: 1 });
 
-        render(
-            <GalleryNftsNft
-                nft={nft}
-                isSelected={false}
-                onClick={vi.fn()}
-            />,
-        );
+        render(<GalleryNftsNft nft={nft} />);
 
         expect(screen.queryByTestId("GalleryNftsNft__collection_image")).toBeInTheDocument();
 
@@ -154,44 +111,9 @@ describe("GalleryNftsNft", () => {
     it("should render without collection image", () => {
         const nft = new GalleryNftDataFactory().withoutCollectionImage().create();
 
-        render(
-            <GalleryNftsNft
-                nft={nft}
-                isSelected={false}
-                onClick={vi.fn()}
-            />,
-        );
+        render(<GalleryNftsNft nft={nft} />);
 
         expect(screen.queryByTestId("GalleryNftsNft__collection_image")).not.toBeInTheDocument();
-    });
-
-    it.each([true, false])("should execute onClick callback with isSelected = %s", async (isSelected) => {
-        const onClick = vi.fn();
-        render(
-            <GalleryNftsNft
-                nft={nft}
-                isSelected={isSelected}
-                onClick={onClick}
-            />,
-        );
-
-        expect(screen.getByTestId("GalleryCard")).toBeInTheDocument();
-        expect(screen.getByTestId("GalleryNftsNft__website")).toBeInTheDocument();
-
-        await waitFor(() => {
-            expect(screen.getByTestId("GalleryNftsNft__image")).toBeInTheDocument();
-        });
-
-        await waitFor(() => {
-            expect(screen.getByTestId("GalleryNftsNft__socials-opensea")).toHaveAttribute(
-                "href",
-                `https://opensea.io/assets/ethereum/${nft.tokenAddress}/${nft.tokenNumber}`,
-            );
-        });
-
-        await userEvent.click(screen.getByTestId("GalleryCard"));
-
-        expect(onClick).toHaveBeenCalledWith(isSelected ? undefined : `${nft.tokenNumber}_${nft.id}`);
     });
 
     it("should render with polygon NFT", async () => {
@@ -203,13 +125,7 @@ describe("GalleryNftsNft", () => {
             chainId: 137,
         });
 
-        render(
-            <GalleryNftsNft
-                nft={polygonNft}
-                isSelected={false}
-                onClick={vi.fn()}
-            />,
-        );
+        render(<GalleryNftsNft nft={polygonNft} />);
 
         expect(screen.getByTestId("GalleryCard")).toBeInTheDocument();
         expect(screen.getByTestId("GalleryNftsNft__website")).toBeInTheDocument();
@@ -231,5 +147,27 @@ describe("GalleryNftsNft", () => {
         expect(screen.getByTestId("GalleryCard")).not.toHaveClass("lg:outline-theme-hint-300");
         expect(screen.getByTestId("GalleryNftsNft__price")).toHaveTextContent("11 ETH");
         expect(screen.getByTestId("GalleryNftsNft__name")).toHaveTextContent(nft.name);
+    });
+
+    it("should redirect to nft details page when clicking the nft card", async () => {
+        const function_ = vi.fn();
+        const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
+
+        render(<GalleryNftsNft nft={nft} />);
+
+        await userEvent.click(screen.getByTestId("GalleryCard"));
+
+        expect(routerSpy).toHaveBeenCalled();
+    });
+
+    it("should redirect to collection details page when clicking the collection name", async () => {
+        const function_ = vi.fn();
+        const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
+
+        render(<GalleryNftsNft nft={nft} />);
+
+        await userEvent.click(screen.getByTestId("GalleryNftsNft__website"));
+
+        expect(routerSpy).toHaveBeenCalled();
     });
 });

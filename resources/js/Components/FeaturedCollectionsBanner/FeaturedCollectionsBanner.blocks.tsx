@@ -12,7 +12,7 @@ export const CollectionCarousel = ({
     className,
 }: {
     className?: string;
-    collections?: Array<Pick<App.Data.Nfts.NftCollectionData, "website" | "name" | "image" | "slug">>;
+    collections?: Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>;
 }): JSX.Element => {
     const { isSm, isMdAndAbove, isLgAndAbove, isXlAndAbove } = useBreakpoint();
     const [showButtons, setShowButtons] = useState(false);

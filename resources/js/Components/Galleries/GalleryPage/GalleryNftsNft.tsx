@@ -1,7 +1,6 @@
 import { router } from "@inertiajs/react";
 import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { IconButton } from "@/Components/Buttons";
 import { GalleryCard } from "@/Components/Galleries/GalleryPage/GalleryCard";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
@@ -13,11 +12,9 @@ import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
     nft: App.Data.Gallery.GalleryNftData;
-    isSelected: boolean;
-    onClick: (nft?: string) => void;
 }
 
-export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.Element => {
+export const GalleryNftsNft = ({ nft }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     const nftNameReference = useRef<HTMLDivElement>(null);
@@ -53,7 +50,6 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                 nft: nft.tokenNumber,
             }),
         );
-        onClick(isSelected ? undefined : `${nft.tokenNumber}_${nft.id}`);
     };
 
     const handleCollectionNameClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
@@ -67,23 +63,10 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
 
     return (
         <GalleryCard
-            isSelected={isSelected}
+            isSelected={false}
             onClick={handleClick}
         >
             <GalleryCard.Overlay>
-                {isSelected && (
-                    <div className="absolute right-3 top-3 lg:hidden">
-                        <div className="flex items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md">
-                            <IconButton
-                                data-testid="NftGalleryCardEditable__add"
-                                icon="X"
-                                className="h-8 w-8 border-white outline-offset-4"
-                                onClick={handleClick}
-                            />
-                        </div>
-                    </div>
-                )}
-
                 <div className="flex max-w-full flex-col items-center justify-center overflow-auto font-medium">
                     {nft.collectionImage !== null && (
                         <div
