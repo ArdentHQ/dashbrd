@@ -17,6 +17,7 @@ use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Nft;
 use App\Models\User;
@@ -130,6 +131,12 @@ class CollectionController extends Controller
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
         $filters = $this->parseFilters($request);
+
+        if (! $collection->recentlyViewed()) {
+            SyncCollection::dispatch($collection);
+        }
+
+        $collection->touchQuietly('last_viewed_at');
 
         $nfts = $collection
             ->nfts()
