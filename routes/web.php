@@ -73,6 +73,7 @@ Route::group(['prefix' => 'collections', 'middleware' => 'features:collections']
 });
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
+    Route::redirect('/', '/'); // due to the prefix it's hard to see, but it redirects from /galleries to /
     Route::get('galleries', [GalleryController::class, 'galleries'])->name('galleries.galleries');
     Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
     Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
