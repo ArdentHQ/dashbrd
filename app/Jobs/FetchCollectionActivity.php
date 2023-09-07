@@ -48,8 +48,14 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address,
             limit: $limit,
-            from: $this->collection->activities()->latest('timestamp')->value('timestamp')
+            from: $this->collection->activity_updated_at,
         );
+
+        if ($activities->isEmpty()) {
+            $this->collection->touch('activity_updated_at');
+
+            return;
+        }
 
         // At most 500 models...
         $nfts = $this->collection->nfts()->whereIn(
@@ -72,7 +78,7 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
         DB::transaction(function () use ($formattedActivities, $limit) {
             NftActivity::upsert($formattedActivities, ['tx_hash', 'nft_id', 'type']);
 
-            $this->collection->touch('last_activity_fetched_at');
+            $this->collection->touch('activity_updated_at');
 
             // If we get the limit it be that there are more activities to fetch...
             if ($limit === count($formattedActivities)) {
