@@ -140,14 +140,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 BreezyCore::make()
+                    // See https://github.com/jeffgreco13/filament-breezy
                     ->myProfile(
                         shouldRegisterUserMenu: true,
-                        shouldRegisterNavigation: true,
+                        shouldRegisterNavigation: false,
                         hasAvatars: false,
                         slug: 'my-profile',
                     )
                     ->enableTwoFactorAuthentication(
-                        force: false, // force the user to enable 2FA before they can use the application (default = false)
+                        force: false,
                     )
             ]);
     }
