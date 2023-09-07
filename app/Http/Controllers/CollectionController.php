@@ -74,7 +74,7 @@ class CollectionController extends Controller
             $collections = $user->collections()
                 ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
-                ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
+                ->when(!$showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
                 ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
@@ -132,7 +132,7 @@ class CollectionController extends Controller
 
         $filters = $this->parseFilters($request);
 
-        if (! $collection->recentlyViewed()) {
+        if (!$collection->recentlyViewed()) {
             SyncCollection::dispatch($collection);
         }
 
@@ -145,7 +145,7 @@ class CollectionController extends Controller
             ->search($request->get('query'))
             ->orderByOwnership($user)
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
-            ->when(! $sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
+            ->when(!$sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
             ->paginate(12)
             ->appends($request->all());
 
@@ -178,7 +178,7 @@ class CollectionController extends Controller
             'collectionTraits' => CollectionTraitFilterData::fromCollection($collection),
             'alreadyReported' => $collection->wasReportedByUserRecently($user),
             'reportAvailableIn' => $reportAvailableIn,
-            'appliedFilters' => $this->appliedParameters($request, $pageLimit, $tab, $filters),
+            'appliedFilters' => $this->appliedParameters($request, $pageLimit, $tab, $filters, $paginatedNfts->count()),
             'sortByMintDate' => $sortByMintDate,
             'nativeToken' => TokenData::fromModel($nativeToken),
         ]);
@@ -205,7 +205,7 @@ class CollectionController extends Controller
      */
     private function normalizeTraits(mixed $traits): ?array
     {
-        if (! is_array($traits) || count($traits) === 0) {
+        if (!is_array($traits) || count($traits) === 0) {
             return null;
         }
 
@@ -216,7 +216,7 @@ class CollectionController extends Controller
         })->mapWithKeys(function ($groupName) use ($traits) {
             /** @var array<string, array{ value: string, displayType: string }[]> $traits */
             $values = collect($traits[$groupName])
-                ->filter(fn ($tuple) => is_string($tuple['value']) && ! is_null(TraitDisplayType::tryFrom($tuple['displayType'])))
+                ->filter(fn ($tuple) => is_string($tuple['value']) && !is_null(TraitDisplayType::tryFrom($tuple['displayType'])))
                 ->groupBy('displayType')
                 ->flatMap(fn ($x, $displayType) => [$displayType => $x->pluck('value')->toArray()]);
 
@@ -237,28 +237,29 @@ class CollectionController extends Controller
      * } $filters
      * @return array{owned: bool, traits: array<string, array<string, string[]>> | null}
      */
-    private function appliedParameters(Request $request, int $pageLimit, string $tab, mixed $filters): array
+    private function appliedParameters(Request $request, int $pageLimit, string $tab, mixed $filters, int $nftsCount): array
     {
         // transform sanitized traits back into the same format as frontend gave us
         $traits = collect($filters['traits'] ?? [])
-            ->map(fn ($traits) => collect($traits)
-                ->flatMap(function ($valuePairs, string $displayType) {
-                    /** @var \Illuminate\Support\Collection<string, array<string, string[]>> $valuePairs */
-                    $valuePairs = collect($valuePairs);
+            ->map(
+                fn ($traits) => collect($traits)
+                    ->flatMap(function ($valuePairs, string $displayType) {
+                        /** @var \Illuminate\Support\Collection<string, array<string, string[]>> $valuePairs */
+                        $valuePairs = collect($valuePairs);
 
-                    return $valuePairs
-                        ->flatMap(function ($values) use ($displayType) {
-                            /** @var \Illuminate\Support\Collection<int, string> $values */
-                            $values = collect($values);
+                        return $valuePairs
+                            ->flatMap(function ($values) use ($displayType) {
+                                /** @var \Illuminate\Support\Collection<int, string> $values */
+                                $values = collect($values);
 
-                            return $values
-                                ->mapWithKeys(fn (string $value, int $index) => [$index => ['displayType' => $displayType, 'value' => $value]]);
-                        });
-                })
+                                return $values
+                                    ->mapWithKeys(fn (string $value, int $index) => [$index => ['displayType' => $displayType, 'value' => $value]]);
+                            });
+                    })
             );
 
         return [
-            'owned' => $filters['owned'],
+            'owned' => $filters['owned'] && $nftsCount > 0,
             'traits' => $traits->isEmpty() ? null : $traits->toArray(),
             'tab' => $tab,
             'pageLimit' => $pageLimit,
