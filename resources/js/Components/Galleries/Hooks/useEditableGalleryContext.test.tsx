@@ -54,7 +54,7 @@ describe("useNftSelectableContext", () => {
     };
 
     const Component = (): JSX.Element => (
-        <EditableGalleryHook>
+        <EditableGalleryHook nftLimit={16}>
             <HookTestComponent />
         </EditableGalleryHook>
     );
@@ -162,7 +162,7 @@ describe("useNftSelectableContext", () => {
         };
 
         render(
-            <EditableGalleryHook>
+            <EditableGalleryHook nftLimit={16}>
                 <HookTestComponent />
             </EditableGalleryHook>,
         );

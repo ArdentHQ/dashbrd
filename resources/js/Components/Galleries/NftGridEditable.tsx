@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 
-import { MAX_GALLERY_ITEMS, useEditableGalleryContext } from "@/Components/Galleries/Hooks/useEditableGalleryContext";
+import { useEditableGalleryContext } from "@/Components/Galleries/Hooks/useEditableGalleryContext";
 import { NftSelectionHook } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { NftCollectionSlider } from "@/Components/Galleries/NftCollection/NftCollectionSlider";
 import { NftGalleryCardEditable } from "@/Components/Galleries/NftGalleryCardEditable";
@@ -16,7 +16,7 @@ export const NftGridEditable = ({
     onChange?: (selected: App.Data.Gallery.GalleryNftData[]) => void;
 }): JSX.Element => {
     const { setOpen: setNftSliderOpen } = useSliderContext();
-    const { nfts: galleryNfts } = useEditableGalleryContext();
+    const { nfts: galleryNfts, nftLimit } = useEditableGalleryContext();
 
     const [selectedNft, setSelectedNft] = useState<string | undefined>();
 
@@ -55,7 +55,7 @@ export const NftGridEditable = ({
                     </li>
                 ))}
 
-                {Array.from({ length: MAX_GALLERY_ITEMS - galleryNfts.selected.length })
+                {Array.from({ length: nftLimit - galleryNfts.selected.length })
                     .fill(null)
                     .map((_, index) => (
                         <li

@@ -191,6 +191,7 @@ return [
     'gallery_title_max_characters' => 'The gallery name should not exceed 50 characters.',
     'gallery_title_invalid' => 'The gallery name is invalid.',
     'nfts_required' => 'Please add at least one NFT.',
+    'nfts_max_size' => 'Galleries can contain no more than :limit NFTs',
     'invalid_nfts' => 'The NFT in position :position is invalid, please select another one.',
     'invalid_cover' => 'You have selected an invalid cover image, please try another one.',
 
