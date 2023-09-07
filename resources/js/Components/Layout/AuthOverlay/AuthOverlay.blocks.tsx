@@ -53,26 +53,27 @@ export const ConnectionError = ({
     const { t } = useTranslation();
 
     return (
-        <>
-            <div className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0">
-                {showCloseButton && (
-                    <Button
-                        data-testid="AuthOverlay__close-button"
-                        variant="secondary"
-                        onClick={closeOverlay}
-                        className="min-w-[81px] justify-center"
-                    >
-                        {t("common.close")}
-                    </Button>
-                )}
+        <div
+            data-testid="ConnectionError"
+            className="flex w-full flex-col justify-center space-y-3 xs:flex-row xs:space-x-3 xs:space-y-0"
+        >
+            {showCloseButton && (
                 <Button
+                    data-testid="AuthOverlay__close-button"
+                    variant="secondary"
+                    onClick={closeOverlay}
                     className="min-w-[81px] justify-center"
-                    onClick={requiresSignature ? onSign : onConnect}
                 >
-                    {t("common.retry")}
+                    {t("common.close")}
                 </Button>
-            </div>
-        </>
+            )}
+            <Button
+                className="min-w-[81px] justify-center"
+                onClick={requiresSignature ? onSign : onConnect}
+            >
+                {t("common.retry")}
+            </Button>
+        </div>
     );
 };
 
