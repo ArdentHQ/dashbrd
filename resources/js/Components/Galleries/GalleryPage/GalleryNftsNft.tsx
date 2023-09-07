@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
@@ -46,7 +47,22 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
     const hasNftName = isTruthy(nft.name);
 
     const handleClick = (): void => {
+        router.visit(
+            route("collection-nfts.view", {
+                collection: nft.collectionSlug,
+                nft: nft.tokenNumber,
+            }),
+        );
         onClick(isSelected ? undefined : `${nft.tokenNumber}_${nft.id}`);
+    };
+
+    const handleCollectionNameClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+        e.stopPropagation();
+        router.visit(
+            route("collections.view", {
+                slug: nft.collectionSlug,
+            }),
+        );
     };
 
     return (
@@ -80,14 +96,13 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                             />
                         </div>
                     )}
-                    <Link
-                        external
-                        href={nft.collectionWebsite}
+                    <div
+                        onClick={handleCollectionNameClick}
                         className="outline-offset-3 transition-default mx-auto flex max-w-full items-center overflow-hidden truncate rounded-full px-2 text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300"
                         data-testid="GalleryNftsNft__website"
                     >
                         <span className="truncate">{nft.collectionName}</span>
-                    </Link>
+                    </div>
 
                     <Tooltip
                         disabled={!isTruncated}
