@@ -13,7 +13,7 @@ export const FeaturedCollectionsBanner = ({
     return (
         <div
             data-testid="FeaturedCollectionsBanner"
-            className="flex flex-col items-center justify-between rounded-xl bg-gradient-to-r from-[#EEEEFF] via-[#FFEDED] to-[#EEEEFF] bg-200% px-6 py-[1.625em] lg:flex-row"
+            className="flex flex-col items-center justify-between rounded-xl bg-theme-secondary-300 px-6 py-[1.625em] lg:flex-row"
         >
             <div className="text-center lg:text-left">
                 <Heading
