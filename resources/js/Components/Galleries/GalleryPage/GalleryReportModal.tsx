@@ -43,6 +43,10 @@ export const GalleryReportModal = ({
                 time: reportAvailableIn,
             });
         }
+
+        if (canReport) {
+            return t("common.report");
+        }
     }, [reportAvailableIn, alreadyReported]);
 
     if (gallery === undefined) {

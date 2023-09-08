@@ -5,6 +5,7 @@ import { Button, IconButton, LikeButton } from "@/Components/Buttons";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
+import { Tooltip } from "@/Components/Tooltip";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useLikes } from "@/Hooks/useLikes";
 
@@ -113,17 +114,21 @@ export const GalleryControls = ({
                 )}
 
                 {gallery?.isOwner === true && showEditAction && (
-                    <Button
-                        data-testid="GalleryControls__edit-button"
-                        disabled={isDisabled}
-                        icon="Pencil"
-                        variant="icon-primary"
-                        onClick={() => {
-                            signedAction(() => {
-                                router.get(route("my-galleries.edit", { slug: gallery.slug }));
-                            });
-                        }}
-                    />
+                    <Tooltip content={t("common.edit")}>
+                        <span>
+                            <Button
+                                data-testid="GalleryControls__edit-button"
+                                disabled={isDisabled}
+                                icon="Pencil"
+                                variant="icon-primary"
+                                onClick={() => {
+                                    signedAction(() => {
+                                        router.get(route("my-galleries.edit", { slug: gallery.slug }));
+                                    });
+                                }}
+                            />
+                        </span>
+                    </Tooltip>
                 )}
             </div>
         </div>
