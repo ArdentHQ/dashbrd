@@ -89,7 +89,9 @@ class Nft extends Model
      */
     public function activities(): HasMany
     {
-        return $this->hasMany(NftActivity::class);
+        return $this->hasMany(
+            NftActivity::class, foreignKey: 'token_number', localKey: 'token_number'
+        )->where('collection_id', $this->collection_id);
     }
 
     /**

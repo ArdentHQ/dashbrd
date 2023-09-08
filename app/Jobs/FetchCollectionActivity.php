@@ -12,14 +12,13 @@ use App\Services\Web3\Mnemonic\MnemonicWeb3DataProvider;
 use App\Support\Queues;
 use DateTime;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
+class FetchCollectionActivity implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
@@ -44,56 +43,54 @@ class FetchCollectionActivity implements ShouldBeUnique, ShouldQueue
         // We add one more in the provider, to check if there are more records...
         $limit = 500;
 
+        $latestActivityTimestamp = $this->collection
+                                        ->activities()
+                                        ->latest('timestamp')
+                                        ->value('timestamp');
+
         $activities = $provider->getCollectionActivity(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address,
             limit: $limit,
-            from: $this->collection->activity_updated_at,
+            from: $latestActivityTimestamp,
         );
 
         if ($activities->isEmpty()) {
-            $this->collection->touch('activity_updated_at');
-
             return;
         }
 
-        // At most 500 models...
-        $nfts = $this->collection->nfts()->whereIn(
-            'token_number', $activities->pluck('tokenId')
-        )->get();
+        $formattedActivities = $activities
+            // Sometimes the request is returning transfers that are not labeled
+            // as any of the values we expect, I was, for example getting
+            // `LABEL_BURN` transfers, so I am filtering them out here.
+            // In the future we may want to add support for them.
+            ->reject(fn ($activity) => $activity->type === null)
+            ->unique->key()
+            ->map(fn (CollectionActivity $activity) => [
+                'collection_id' => $this->collection->id,
+                'token_number' => $activity->tokenId,
+                'type' => $activity->type->value,
+                'sender' => $activity->sender,
+                'recipient' => $activity->recipient,
+                'tx_hash' => $activity->txHash,
+                'timestamp' => $activity->timestamp,
+                'total_native' => $activity->totalNative,
+                'total_usd' => $activity->totalUsd,
+                'extra_attributes' => json_encode($activity->extraAttributes),
+            ])->toArray();
 
-        $formattedActivities = $activities->map(fn (CollectionActivity $activity) => [
-            'nft_id' => $nfts->firstWhere('token_number', $activity->tokenId)?->id,
-            'token_number' => $activity->tokenId,
-            'type' => $activity->type->value,
-            'sender' => $activity->sender,
-            'recipient' => $activity->recipient,
-            'tx_hash' => $activity->txHash,
-            'timestamp' => $activity->timestamp,
-            'total_native' => $activity->totalNative,
-            'total_usd' => $activity->totalUsd,
-            'extra_attributes' => json_encode($activity->extraAttributes),
-        ])->toArray();
+        DB::transaction(function () use ($formattedActivities, $activities, $limit) {
+            NftActivity::upsert($formattedActivities, ['tx_hash', 'collection_id', 'token_number', 'type']);
 
-        DB::transaction(function () use ($formattedActivities, $limit) {
-            NftActivity::upsert($formattedActivities, ['tx_hash', 'nft_id', 'type']);
-
-            $this->collection->touch('activity_updated_at');
-
-            // If we get the limit it be that there are more activities to fetch...
-            if ($limit === count($formattedActivities)) {
+            // If we get the limit it may be that there are more activities to fetch...
+            if (count($activities) === $limit) {
                 self::dispatch($this->collection)->afterCommit();
             }
-        });
+        }, attempts: 5);
     }
 
     public function retryUntil(): DateTime
     {
-        return now()->addHours(1);
-    }
-
-    public function uniqueId(): string
-    {
-        return static::class.':'.$this->collection->id;
+        return now()->addMinutes(10); // This is retry PER JOB (i.e. per request)...
     }
 }

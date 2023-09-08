@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
@@ -56,7 +55,6 @@ class Collection extends Model
         'fiat_value' => 'json',
         'minted_block' => 'int',
         'minted_at' => 'datetime',
-        'activity_updated_at' => 'datetime',
         'last_viewed_at' => 'datetime',
     ];
 
@@ -473,11 +471,11 @@ class Collection extends Model
     }
 
     /**
-     * @return HasManyThrough<NftActivity>
+     * @return HasMany<NftActivity>
      */
-    public function activities(): HasManyThrough
+    public function activities(): HasMany
     {
-        return $this->hasManyThrough(NftActivity::class, Nft::class);
+        return $this->hasMany(NftActivity::class);
     }
 
     public function recentlyViewed(): bool
