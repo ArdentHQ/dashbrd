@@ -91,6 +91,7 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                                         className="flex w-full justify-center space-x-1"
                                         disabled={Boolean(isConnectButtonDisabled)}
                                         onClick={() => {
+                                            setMenuOpen(false);
                                             void connectWallet?.();
                                         }}
                                     >
