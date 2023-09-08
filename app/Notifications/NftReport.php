@@ -40,7 +40,7 @@ final class NftReport extends Notification implements ShouldQueue
                 $nft = $this->report->subject;
 
                 $attachment
-                    ->title(title: $nft->name)
+                    ->title(title: sprintf('%s (%s)', $nft->collection->name, $nft->name), url: route('collection-nfts.view', [$nft->collection, $nft]))
                     ->author('Reporter: '.$this->reporter())
                     ->fields($this->fields());
             });
