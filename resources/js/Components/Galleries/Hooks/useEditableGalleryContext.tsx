@@ -9,14 +9,14 @@ interface ContextNfts {
 
 interface Context {
     nfts: ContextNfts;
+    nftLimit: number;
 }
 
 interface EditableGalleryProperties {
     children: React.ReactNode;
     selectedNfts?: App.Data.Gallery.GalleryNftData[];
+    nftLimit: number;
 }
-
-export const MAX_GALLERY_ITEMS = 16;
 
 export const GalleryContext = createContext<Context | undefined>(undefined);
 
@@ -32,11 +32,17 @@ export const useEditableGalleryContext = (): Context => {
 
 export const hasEditableContext = (): boolean => useContext(GalleryContext) !== undefined;
 
-const getSelectedNftsHook = (selectedNfts?: App.Data.Gallery.GalleryNftData[]): ContextNfts => {
+const getSelectedNftsHook = ({
+    selectedNfts,
+    nftLimit,
+}: {
+    selectedNfts?: App.Data.Gallery.GalleryNftData[];
+    nftLimit: number;
+}): ContextNfts => {
     const [selected, setSelected] = useState<App.Data.Gallery.GalleryNftData[]>(selectedNfts ?? []);
 
     const add = (...nfts: App.Data.Gallery.GalleryNftData[]): void => {
-        if (selected.length === MAX_GALLERY_ITEMS) {
+        if (selected.length === nftLimit) {
             return;
         }
 
@@ -57,7 +63,7 @@ const getSelectedNftsHook = (selectedNfts?: App.Data.Gallery.GalleryNftData[]): 
                 nftsToAdd.push(nft);
             }
 
-            if (selected.length + nftsToAdd.length === MAX_GALLERY_ITEMS) {
+            if (selected.length + nftsToAdd.length === nftLimit) {
                 break;
             }
         }
@@ -81,10 +87,11 @@ const getSelectedNftsHook = (selectedNfts?: App.Data.Gallery.GalleryNftData[]): 
     };
 };
 
-export const EditableGalleryHook = ({ children, selectedNfts }: EditableGalleryProperties): JSX.Element => (
+export const EditableGalleryHook = ({ children, selectedNfts, nftLimit }: EditableGalleryProperties): JSX.Element => (
     <GalleryContext.Provider
         value={{
-            nfts: getSelectedNftsHook(selectedNfts),
+            nfts: getSelectedNftsHook({ selectedNfts, nftLimit }),
+            nftLimit,
         }}
         data-testid="EditableGallery"
     >

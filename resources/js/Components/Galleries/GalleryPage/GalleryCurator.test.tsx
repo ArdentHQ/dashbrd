@@ -1,24 +1,16 @@
 import React from "react";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
-import NetworkDataFactory from "@/Tests/Factories/NetworkDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { render, screen } from "@/Tests/testing-library";
 import { formatAddress } from "@/Utils/format-address";
 
 describe("GalleryCurator", () => {
-    const network = new NetworkDataFactory().create();
-
     it("should render", () => {
         const wallet = new WalletFactory().withoutDomain().create({
             address: "0x1234567890123456789012345678901234567890",
         });
 
-        render(
-            <GalleryCurator
-                wallet={wallet}
-                network={network}
-            />,
-        );
+        render(<GalleryCurator wallet={wallet} />);
 
         expect(screen.getByTestId("ButtonLink--anchor")).toBeInTheDocument();
 
@@ -34,12 +26,7 @@ describe("GalleryCurator", () => {
             domain: "alfonsobries.eth",
         });
 
-        render(
-            <GalleryCurator
-                wallet={wallet}
-                network={network}
-            />,
-        );
+        render(<GalleryCurator wallet={wallet} />);
 
         expect(screen.getByTestId("GalleryCurator")).toBeInTheDocument();
 
@@ -57,7 +44,6 @@ describe("GalleryCurator", () => {
             <GalleryCurator
                 wallet={wallet}
                 truncate={false}
-                network={network}
             />,
         );
 
@@ -75,7 +61,6 @@ describe("GalleryCurator", () => {
             <GalleryCurator
                 wallet={wallet}
                 truncate={false}
-                network={network}
             />,
         );
 
@@ -93,7 +78,6 @@ describe("GalleryCurator", () => {
             <GalleryCurator
                 wallet={wallet}
                 truncate={7}
-                network={network}
             />,
         );
 

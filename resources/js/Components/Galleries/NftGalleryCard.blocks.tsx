@@ -8,10 +8,10 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
-import { assertUser } from "@/Utils/assertions";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
@@ -249,9 +249,18 @@ export const GalleryHeading = ({
 const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { likes, hasLiked, like } = useLikes({ count: gallery.likes, hasLiked: gallery.hasLiked });
 
+    const { authenticated } = useAuth();
+
+    const { showConnectOverlay } = useMetaMaskContext();
+
     const likeButtonHandler: MouseEventHandler<HTMLElement> = (event): void => {
         event.preventDefault();
         event.stopPropagation();
+
+        if (!authenticated) {
+            showConnectOverlay();
+            return;
+        }
 
         void like(gallery.slug);
     };
@@ -286,7 +295,6 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
 export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
-    assertUser(user);
 
     return (
         <div
@@ -305,7 +313,7 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                         {gallery.value !== null ? (
                             <DynamicBalance
                                 balance={gallery.value.toString()}
-                                currency={user.attributes.currency}
+                                currency={user?.attributes.currency ?? "USD"}
                             />
                         ) : (
                             "-"

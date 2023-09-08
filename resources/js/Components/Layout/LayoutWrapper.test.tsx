@@ -71,7 +71,7 @@ describe("LayoutWrapper", () => {
 
         render(
             <LayoutWrapper withSlider>
-                <EditableGalleryHook>
+                <EditableGalleryHook nftLimit={16}>
                     <GalleryNfts
                         nfts={[]}
                         pageMeta={SamplePageMeta.paginated.meta}

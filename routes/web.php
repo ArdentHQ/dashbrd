@@ -21,7 +21,9 @@ use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Middleware\RecordGalleryView;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', DashboardController::class)->name('dashboard');
+Route::get('/', [GalleryController::class, 'index'])->name('galleries');
+
+Route::get('/wallet', DashboardController::class)->name('dashboard');
 
 Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-token');
 
@@ -45,17 +47,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
-        Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
         Route::post('{collection:address}/hidden',
             [HiddenCollectionController::class, 'store'])->name('hidden-collections.store');
         Route::delete('{collection:address}/hidden',
             [HiddenCollectionController::class, 'destroy'])->name('hidden-collections.destroy');
-        Route::get('{collection:slug}', [CollectionController::class, 'view'])->name('collections.view');
         Route::post('{collection:address}/reports', [
             CollectionReportController::class, 'store',
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
-        Route::get('{collection:slug}/{nft:token_number}',
-            [CollectionNftController::class, 'view'])->name('collection-nfts.view');
+        Route::get('{collection:slug}/{nft:token_number}', [CollectionNftController::class, 'view'])->name('collection-nfts.view');
     });
 
     Route::group(['prefix' => 'nfts'], function () {
@@ -63,20 +62,28 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
-        Route::get('', [GalleryController::class, 'index'])->name('galleries');
-
-        Route::get('galleries', [GalleryController::class, 'galleries'])->name('galleries.galleries');
-        Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
-        Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
-        Route::get('newest', [GalleryFiltersController::class, 'index'])->name('galleries.newest');
-
-        Route::get('{gallery:slug}', [GalleryController::class, 'view'])
-            ->middleware(RecordGalleryView::class)
-            ->name('galleries.view');
 
         Route::post('{gallery:slug}/reports',
             [GalleryReportController::class, 'store'])->name('reports.create')->middleware('throttle:gallery:reports');
     });
+});
+
+Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
+    Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
+    Route::get('{collection:slug}', [CollectionController::class, 'view'])->name('collections.view');
+
+});
+
+Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
+    Route::redirect('/', '/'); // due to the prefix it's hard to see, but it redirects from /galleries to /
+    Route::get('galleries', [GalleryController::class, 'galleries'])->name('galleries.galleries');
+    Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
+    Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
+    Route::get('newest', [GalleryFiltersController::class, 'index'])->name('galleries.newest');
+
+    Route::get('{gallery:slug}', [GalleryController::class, 'view'])
+        ->middleware(RecordGalleryView::class)
+        ->name('galleries.view');
 });
 
 require __DIR__.'/auth.php';

@@ -209,6 +209,8 @@ describe("TransactionSendForm", () => {
             wallet: null,
             authenticated: false,
             showAuthOverlay: true,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
         });
     });
 

@@ -109,6 +109,7 @@ describe("NftCollectionSlider", () => {
                                 add: addToGalleryMock,
                                 remove: removeFromGalleryMock,
                             },
+                            nftLimit: 16,
                         }}
                     >
                         <GalleryNfts

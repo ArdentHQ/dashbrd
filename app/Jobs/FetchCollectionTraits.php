@@ -9,6 +9,8 @@ use App\Models\Collection;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use App\Support\Web3NftCollectionHandler;
+use DateTime;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,9 +18,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class FetchCollectionTraits implements ShouldQueue, ShouldBeUnique
+class FetchCollectionTraits implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RecoversFromProviderErrors;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -42,8 +44,13 @@ class FetchCollectionTraits implements ShouldQueue, ShouldBeUnique
         (new Web3NftCollectionHandler())->storeTraits($this->collection->id, $traits);
     }
 
+    public function retryUntil(): DateTime
+    {
+        return now()->addMinutes(10);
+    }
+
     public function uniqueId(): string
     {
-        return 'fetch-nft-collection-traits:'.$this->collection->network->chain_id.'-'.$this->collection->address;
+        return static::class.':'.$this->collection->network->chain_id.'-'.$this->collection->address;
     }
 }
