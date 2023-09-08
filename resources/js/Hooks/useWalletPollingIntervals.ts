@@ -18,7 +18,7 @@ interface Properties {
     calculateInterval: (retries?: number) => number;
 }
 
-export const calculateInterval = ({ wallet, retries, lastTransactionSentAt }: CalculateIntervalProperties): number => {
+const calculateInterval = ({ wallet, retries, lastTransactionSentAt }: CalculateIntervalProperties): number => {
     if (
         isTruthy(lastTransactionSentAt) &&
         DateTime.make(lastTransactionSentAt).addMinutes(1).isBefore(DateTime.make())
