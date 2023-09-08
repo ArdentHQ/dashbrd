@@ -20,7 +20,6 @@ use App\Enums\TraitDisplayType;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Nft;
-use App\Models\User;
 use App\Support\Cache\UserCache;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
@@ -123,8 +122,22 @@ class CollectionController extends Controller
 
     public function view(Request $request, Collection $collection): Response
     {
-        /** @var User $user */
         $user = $request->user();
+
+        if ($user === null) {
+            return Inertia::render('Collections/Index', [
+                'title' => trans('metatags.collections.title'),
+                'stats' => new CollectionStatsData(
+                    nfts: 0,
+                    collections: 0,
+                    value: 0,
+                ),
+                'sortBy' => null,
+                'sortDirection' => 'desc',
+                'showHidden' => false,
+                'view' => 'list',
+            ]);
+        }
 
         $sortByMintDate = $request->query('sort') === 'minted';
 

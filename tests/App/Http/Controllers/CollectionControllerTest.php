@@ -73,6 +73,25 @@ it('can render the collections view page', function () {
     Bus::assertDispatched(SyncCollection::class);
 });
 
+it('can render the collection details page for guests', function () {
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => null,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+});
+
 it('does not dispatch the job to sync collection if it has been recently viewed', function () {
     $user = createUser();
 
