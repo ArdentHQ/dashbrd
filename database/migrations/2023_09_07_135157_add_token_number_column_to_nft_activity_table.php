@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignIdFor(Collection::class)->nullable()->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('nft_id')->nullable()->change();
 
+            // TODO: remove `nft_id`
+
             $table->unique(['tx_hash', 'collection_id', 'token_number', 'type']);
         });
     }
