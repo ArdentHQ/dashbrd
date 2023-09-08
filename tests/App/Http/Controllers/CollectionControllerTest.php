@@ -158,12 +158,15 @@ it('should render user owned NFTs first ', function ($owned) {
             'owned' => $owned,
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('nfts.paginated.data.2', fn (Assert $page) => $page
-                ->where('id', $nfts[0]->id)
-                ->etc()
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'nfts.paginated.data.2',
+                    fn (Assert $page) => $page
+                        ->where('id', $nfts[0]->id)
+                        ->etc()
+                )
         );
 })->with([
     false,
@@ -191,14 +194,17 @@ it('can render the collections view page with owned filter', function ($owned) {
             'owned' => $owned,
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('traits', null)
-                ->where('tab', 'collection')
-                ->where('pageLimit', 10)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', $owned !== null)
+                        ->where('traits', null)
+                        ->where('tab', 'collection')
+                        ->where('pageLimit', 10)
 
-            )
+                )
         );
 })->with([
     null,
@@ -215,6 +221,10 @@ it('can render the collections view page with falsy owned filter', function ($ow
         'network_id' => $network->id,
     ]);
 
+    Nft::factory()->create([
+        'collection_id' => $collection->id,
+    ]);
+
     Token::factory()->create([
         'network_id' => $network->id,
         'symbol' => 'ETH',
@@ -228,13 +238,16 @@ it('can render the collections view page with falsy owned filter', function ($ow
             'owned' => $owned,
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', false)
-                ->where('traits', null)
-                ->where('tab', 'collection')
-                ->where('pageLimit', 10)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('traits', null)
+                        ->where('tab', 'collection')
+                        ->where('pageLimit', 10)
+                )
         );
 })->with([
     false,
@@ -274,13 +287,16 @@ it('can render the collections view page with traits', function () {
             'traits' => $traits,
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('traits', $traits)
-                ->where('tab', 'collection')
-                ->where('pageLimit', 10)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('traits', $traits)
+                        ->where('tab', 'collection')
+                        ->where('pageLimit', 10)
+                )
         );
 });
 
@@ -306,13 +322,16 @@ it('can render the collections view page with activity tab', function () {
             'tab' => 'activity',
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('tab', 'activity')
-                ->where('traits', null)
-                ->where('pageLimit', 10)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('tab', 'activity')
+                        ->where('traits', null)
+                        ->where('pageLimit', 10)
+                )
         );
 });
 
@@ -339,13 +358,16 @@ it('can render the collections view page with custom pageLimit', function () {
             'pageLimit' => 25,
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('tab', 'activity')
-                ->where('traits', null)
-                ->where('pageLimit', 25)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('tab', 'activity')
+                        ->where('traits', null)
+                        ->where('pageLimit', 25)
+                )
         );
 });
 
@@ -372,13 +394,16 @@ it('can render the collections view page with max pageLimit of 100', function ()
             'pageLimit' => 300,
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('tab', 'activity')
-                ->where('traits', null)
-                ->where('pageLimit', 100)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('tab', 'activity')
+                        ->where('traits', null)
+                        ->where('pageLimit', 100)
+                )
         );
 });
 
@@ -404,13 +429,16 @@ it('uses collection tab if another parameter is passed', function () {
             'tab' => 'other',
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('traits', null)
-                ->where('tab', 'collection')
-                ->where('pageLimit', 10)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('traits', null)
+                        ->where('tab', 'collection')
+                        ->where('pageLimit', 10)
+                )
         );
 });
 
@@ -436,13 +464,16 @@ it('can render the collections view page with invalid traits', function ($invali
             'traits' => $invalidTraits,
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('traits', null)
-                ->where('tab', 'collection')
-                ->where('pageLimit', 10)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('traits', null)
+                        ->where('tab', 'collection')
+                        ->where('pageLimit', 10)
+                )
         );
 })->with([
     // Invalid boolean
@@ -482,13 +513,16 @@ it('can render the collections view page with empty traits', function () {
             'traits' => [],
         ]))
         ->assertStatus(200)
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Collections/View')
-            ->has('appliedFilters', fn (Assert $page) => $page->where('owned', true)
-                ->where('traits', null)
-                ->where('tab', 'collection')
-                ->where('pageLimit', 10)
-            )
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('traits', null)
+                        ->where('tab', 'collection')
+                        ->where('pageLimit', 10)
+                )
         );
 });
 
@@ -668,7 +702,8 @@ it('returns nfts with traits', function () {
             'valueMax' => null,
             'nftsCount' => $dateTrait['nfts_count'],
             'nftsPercentage' => $dateTrait['nfts_percentage'],
-        ]]);
+        ],
+    ]);
 });
 
 it('can sort by oldest collection', function () {
