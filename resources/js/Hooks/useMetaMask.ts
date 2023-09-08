@@ -112,6 +112,7 @@ export interface MetaMaskState {
     showConnectOverlay: (onConnected?: () => void) => void;
     isShowConnectOverlay: boolean;
     askForSignature: (onSigned?: () => void) => void;
+    onDisconnected: () => void;
 }
 
 enum ErrorType {
@@ -158,6 +159,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
     const supportsMetaMask = isMetaMaskSupportedBrowser();
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
+
     const [onConnected, setOnConnected] = useState<() => void>();
     const [onSigned, setOnSigned] = useState<() => void>();
 
@@ -205,6 +207,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 method: "post" as VisitOptions["method"],
                 onFinish: () => {
                     setSwitching(false);
+
+                    setSigned(false);
 
                     resolve();
                 },
@@ -642,6 +646,14 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         }
     };
 
+    const onDisconnected = (): void => {
+        setAccount(undefined);
+
+        setChainId(undefined);
+
+        setSigned(false);
+    };
+
     return {
         account,
         chainId,
@@ -658,6 +670,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         requiresSignature,
         ethereumProvider,
         sendTransaction,
+        onDisconnected,
         switchToNetwork,
         getTransactionReceipt,
         getBlock,

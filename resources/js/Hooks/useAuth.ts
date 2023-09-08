@@ -30,7 +30,14 @@ export const useAuth = (): App.Data.AuthData & {
         requiresSignature,
         isShowConnectOverlay,
         hideConnectOverlay,
+        onDisconnected,
     } = useMetaMaskContext();
+
+    useEffect(() => {
+        if (!authenticated) {
+            onDisconnected();
+        }
+    }, [authenticated]);
 
     const closeOverlay = (): void => {
         hideConnectOverlay();
