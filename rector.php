@@ -44,8 +44,9 @@ use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\ReturnAnnotationIncorrectNullableRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
+use Utils\Rector\CustomReturnAnnotationIncorrectNullableRectorA;
+
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -104,9 +105,9 @@ return static function (RectorConfig $rectorConfig): void {
         ParamTypeByMethodCallTypeRector::class,
 
         // Types...
-        ReturnAnnotationIncorrectNullableRector::class,
         ReturnTypeFromStrictTernaryRector::class,
         PropertyTypeFromStrictSetterGetterRector::class,
         ReturnNeverTypeRector::class,
+        CustomReturnAnnotationIncorrectNullableRector::class,
     ]);
 };

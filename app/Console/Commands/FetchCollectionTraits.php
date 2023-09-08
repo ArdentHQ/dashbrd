@@ -30,7 +30,7 @@ class FetchCollectionTraits extends Command
      */
     public function handle(): int
     {
-        $this->forEachCollection(function ($collection) {
+        $this->forEachCollection(static function ($collection) {
             Job::dispatch($collection);
         });
 
