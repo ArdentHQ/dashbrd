@@ -31,13 +31,13 @@ class UpdateCollectionsFiatValue extends Command
      */
     public function handle(): int
     {
-        User::query()->chunkById(50, function (EloquentCollection $users) {
+        User::query()->select('id')->chunkById(50, function (EloquentCollection $users) {
             dispatch(function () use ($users) {
                 User::updateCollectionsValue($users->pluck('id')->toArray());
             })->onQueue(Queues::SCHEDULED_DEFAULT);
         });
 
-        Collection::query()->chunkById(50, function (EloquentCollection $collections) {
+        Collection::query()->select('id')->chunkById(50, function (EloquentCollection $collections) {
             dispatch(function () use ($collections) {
                 Collection::updateFiatValue($collections->pluck('id')->toArray());
             })->onQueue(Queues::SCHEDULED_DEFAULT);
