@@ -6,7 +6,7 @@ return [
     'home' => [
         'title' => 'Dashbrd | Web3 Portfolio Management Made Simple',
         'description' => 'Simplify your Web3 journey with Dashbrd. Manage your portfolio of tokens, NFTs, and other digital collectibles across the Ethereum and Polygon blockchains.',
-        'image' =>'/images/meta/home.png',
+        'image' => '/images/meta/home.png',
     ],
 
     'error' => [
