@@ -86,7 +86,6 @@ export const AuthOverlay = ({
                         </div>
 
                         <p className="font-medium text-theme-secondary-700">
-                            {needsMetaMask ? t("auth.wallet.install_long") : t("auth.wallet.connect_long")}
                             {requiresSignature
                                 ? t("auth.wallet.sign_subtitle")
                                 : needsMetaMask
