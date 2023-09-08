@@ -143,13 +143,21 @@ class CollectionController extends Controller
 
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
-        $filters = $this->parseFilters($request);
-
         if (! $collection->recentlyViewed()) {
             SyncCollection::dispatch($collection);
         }
 
         $collection->touchQuietly('last_viewed_at');
+
+        $ownedNfts = $collection
+            ->nfts()
+            ->select('nfts.*')
+            ->filter([
+                'owned' => true,
+                'traits' => $this->normalizeTraits($request->get('traits', [])),
+            ], $user);
+
+        $filters = $this->parseFilters($request, $ownedNfts->count());
 
         $nfts = $collection
             ->nfts()
@@ -203,12 +211,18 @@ class CollectionController extends Controller
      *   traits: array<string, array<string, string[]>> | null,
      * }
      */
-    private function parseFilters(Request $request): array
+    private function parseFilters(Request $request, int $ownedNftsCount): array
     {
         $traits = $request->get('traits', []);
 
+        $owned = $request->get('owned') === null ? true : $request->boolean('owned');
+
+        if ($ownedNftsCount === 0 && $request->get('owned') === null) {
+            $owned = false;
+        }
+
         return [
-            'owned' => $request->get('owned') === null ? true : $request->boolean('owned'),
+            'owned' => $owned,
             'traits' => $this->normalizeTraits($traits),
         ];
     }
@@ -254,20 +268,21 @@ class CollectionController extends Controller
     {
         // transform sanitized traits back into the same format as frontend gave us
         $traits = collect($filters['traits'] ?? [])
-            ->map(fn ($traits) => collect($traits)
-                ->flatMap(function ($valuePairs, string $displayType) {
-                    /** @var \Illuminate\Support\Collection<string, array<string, string[]>> $valuePairs */
-                    $valuePairs = collect($valuePairs);
+            ->map(
+                fn ($traits) => collect($traits)
+                    ->flatMap(function ($valuePairs, string $displayType) {
+                        /** @var \Illuminate\Support\Collection<string, array<string, string[]>> $valuePairs */
+                        $valuePairs = collect($valuePairs);
 
-                    return $valuePairs
-                        ->flatMap(function ($values) use ($displayType) {
-                            /** @var \Illuminate\Support\Collection<int, string> $values */
-                            $values = collect($values);
+                        return $valuePairs
+                            ->flatMap(function ($values) use ($displayType) {
+                                /** @var \Illuminate\Support\Collection<int, string> $values */
+                                $values = collect($values);
 
-                            return $values
-                                ->mapWithKeys(fn (string $value, int $index) => [$index => ['displayType' => $displayType, 'value' => $value]]);
-                        });
-                })
+                                return $values
+                                    ->mapWithKeys(fn (string $value, int $index) => [$index => ['displayType' => $displayType, 'value' => $value]]);
+                            });
+                    })
             );
 
         return [
