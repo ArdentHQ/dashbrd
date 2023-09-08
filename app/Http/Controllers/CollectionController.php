@@ -20,7 +20,6 @@ use App\Enums\TraitDisplayType;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Nft;
-use App\Models\User;
 use App\Support\Cache\UserCache;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
@@ -123,20 +122,42 @@ class CollectionController extends Controller
 
     public function view(Request $request, Collection $collection): Response
     {
-        /** @var User $user */
         $user = $request->user();
+
+        if ($user === null) {
+            return Inertia::render('Collections/Index', [
+                'title' => trans('metatags.collections.title'),
+                'stats' => new CollectionStatsData(
+                    nfts: 0,
+                    collections: 0,
+                    value: 0,
+                ),
+                'sortBy' => null,
+                'sortDirection' => 'desc',
+                'showHidden' => false,
+                'view' => 'list',
+            ]);
+        }
 
         $sortByMintDate = $request->query('sort') === 'minted';
 
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
-
-        $filters = $this->parseFilters($request);
 
         if (! $collection->recentlyViewed()) {
             SyncCollection::dispatch($collection);
         }
 
         $collection->touchQuietly('last_viewed_at');
+
+        $ownedNfts = $collection
+            ->nfts()
+            ->select('nfts.*')
+            ->filter([
+                'owned' => true,
+                'traits' => $this->normalizeTraits($request->get('traits', [])),
+            ], $user);
+
+        $filters = $this->parseFilters($request, $ownedNfts->count());
 
         $nfts = $collection
             ->nfts()
@@ -190,12 +211,18 @@ class CollectionController extends Controller
      *   traits: array<string, array<string, string[]>> | null,
      * }
      */
-    private function parseFilters(Request $request): array
+    private function parseFilters(Request $request, int $ownedNftsCount): array
     {
         $traits = $request->get('traits', []);
 
+        $owned = $request->get('owned') === null ? true : $request->boolean('owned');
+
+        if ($ownedNftsCount === 0 && $request->get('owned') === null) {
+            $owned = false;
+        }
+
         return [
-            'owned' => $request->get('owned') === null ? true : $request->boolean('owned'),
+            'owned' => $owned,
             'traits' => $this->normalizeTraits($traits),
         ];
     }
@@ -241,20 +268,21 @@ class CollectionController extends Controller
     {
         // transform sanitized traits back into the same format as frontend gave us
         $traits = collect($filters['traits'] ?? [])
-            ->map(fn ($traits) => collect($traits)
-                ->flatMap(function ($valuePairs, string $displayType) {
-                    /** @var \Illuminate\Support\Collection<string, array<string, string[]>> $valuePairs */
-                    $valuePairs = collect($valuePairs);
+            ->map(
+                fn ($traits) => collect($traits)
+                    ->flatMap(function ($valuePairs, string $displayType) {
+                        /** @var \Illuminate\Support\Collection<string, array<string, string[]>> $valuePairs */
+                        $valuePairs = collect($valuePairs);
 
-                    return $valuePairs
-                        ->flatMap(function ($values) use ($displayType) {
-                            /** @var \Illuminate\Support\Collection<int, string> $values */
-                            $values = collect($values);
+                        return $valuePairs
+                            ->flatMap(function ($values) use ($displayType) {
+                                /** @var \Illuminate\Support\Collection<int, string> $values */
+                                $values = collect($values);
 
-                            return $values
-                                ->mapWithKeys(fn (string $value, int $index) => [$index => ['displayType' => $displayType, 'value' => $value]]);
-                        });
-                })
+                                return $values
+                                    ->mapWithKeys(fn (string $value, int $index) => [$index => ['displayType' => $displayType, 'value' => $value]]);
+                            });
+                    })
             );
 
         return [
