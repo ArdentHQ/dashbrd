@@ -34,7 +34,7 @@ final class NftReport extends Notification implements ShouldQueue
     {
         return (new SlackMessage)
             ->error()
-            ->content('A nft [ID: #'.$this->report->subject->id.'] has been reported.')
+            ->content('An NFT [ID: #'.$this->report->subject->id.'] has been reported.')
             ->attachment(function (SlackAttachment $attachment) {
                 /** @var Nft $nft */
                 $nft = $this->report->subject;
