@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
 import { Slider } from "@/Components/Slider";
@@ -40,6 +40,10 @@ export const CollectionFilterSlider = ({
         setSelectedTraits((previous) => selectedTraitsSetHandler(previous, groupName, value, displayType));
     };
 
+    useEffect(() => {
+        setSelectedTraits(defaultSelectedTraits);
+    }, [defaultSelectedTraits]);
+
     const resetFilters = (): void => {
         setShowOnlyOwned(defaultShowOnlyOwned);
         setSelectedTraits(defaultSelectedTraits);
@@ -61,8 +65,11 @@ export const CollectionFilterSlider = ({
                 <div className="flex-grow">
                     <Slider.Header className="text-lg font-medium">{t("common.filter")}</Slider.Header>
 
-                    <Slider.Content>
-                        <div className="space-y-3">
+                    <Slider.Content
+                        includePadding={false}
+                        className="pb-28 xs:px-6 xs:pt-6 sm:px-8"
+                    >
+                        <div className="xs:space-y-3">
                             <CollectionOwnedToggle
                                 checked={showOnlyOwned}
                                 onChange={setShowOnlyOwned}

@@ -6,53 +6,63 @@ return [
     'home' => [
         'title' => 'Dashbrd | Web3 Portfolio Management Made Simple',
         'description' => 'Simplify your Web3 journey with Dashbrd. Manage your portfolio of tokens, NFTs, and other digital collectibles across the Ethereum and Polygon blockchains.',
-        'image' => '/images/meta-image.png',
+        'image' => '/images/meta/home.png',
     ],
 
     'error' => [
-        'title' => 'Error :code - Dashbrd',
+        'title' => 'Error :code | Dashbrd',
     ],
 
     'wallet' => [
-        'title' => 'My Wallet - Dashbrd',
+        'title' => 'My Wallet | Dashbrd',
     ],
 
     'galleries' => [
-        'title' => 'Galleries - Dashbrd',
+        'title' => 'Top NFT Galleries | Dashbrd',
+        'image' => '/images/meta/nft-galleries.png',
+        'description' => 'Explore user published NFT galleries to find custom curated PFPs, Digital Collectibles, & More.',
         'most_popular' => [
-            'title' => 'Most Popular Galleries - Dashbrd',
+            'title' => 'Most Popular Galleries | Dashbrd',
+            'image' => '/images/meta/most-popular-nft-galleries.png',
+            'description' => 'Explore and discover Most Popular NFT Galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More.',
         ],
         'newest' => [
-            'title' => 'Newest Galleries - Dashbrd',
+            'title' => 'Newest Galleries | Dashbrd',
+            'image' => '/images/meta/newest-nft-galleries.png',
+            'description' => 'Explore and discover most recent NFT galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More',
         ],
         'most_valuable' => [
-            'title' => 'Most Valuable Galleries - Dashbrd',
+            'title' => 'Most Valuable Galleries | Dashbrd',
+            'image' => '/images/meta/most-valuable-nft-galleries.png',
+            'description' => 'Explore and discover Most Valuable NFT Galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More.',
         ],
         'view' => [
-            'title' => ':name - Dashbrd',
+            'title' => ':name | Dashbrd',
+            'description' => ':name | A Curated NFT Gallery at Dashbrd',
+            'image' => '/images/meta/nft-gallery.png',
         ],
     ],
 
     'my_galleries' => [
-        'title' => 'My Galleries - Dashbrd',
+        'title' => 'My Galleries | Dashbrd',
         'create' => [
-            'title' => 'Create Gallery - Dashbrd',
+            'title' => 'Create Gallery | Dashbrd',
         ],
         'edit' => [
-            'title' => 'Edit :name - Dashbrd',
+            'title' => 'Edit :name | Dashbrd',
         ],
     ],
 
     'collections' => [
-        'title' => 'Collections - Dashbrd',
+        'title' => 'Collections | Dashbrd',
     ],
 
     'settings' => [
-        'title' => 'Settings - Dashbrd',
+        'title' => 'Settings | Dashbrd',
     ],
 
     'login' => [
-        'title' => 'Login - Dashbrd',
+        'title' => 'Login | Dashbrd',
     ],
 
     'privacy_policy' => [

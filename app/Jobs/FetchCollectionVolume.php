@@ -9,6 +9,7 @@ use App\Models\Collection;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,7 +18,7 @@ use Illuminate\Queue\SerializesModels;
 
 class FetchCollectionVolume implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RecoversFromProviderErrors;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -43,8 +44,13 @@ class FetchCollectionVolume implements ShouldQueue
         ]);
     }
 
+    public function uniqueId(): string
+    {
+        return static::class.':'.$this->collection->id;
+    }
+
     public function retryUntil(): DateTime
     {
-        return now()->addHours(2); // This job runs every day so we have some room to allow it to run longer...
+        return now()->addMinutes(10);
     }
 }

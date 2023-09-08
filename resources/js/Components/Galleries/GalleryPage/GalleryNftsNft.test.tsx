@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import React from "react";
 import { GalleryNftsNft } from "@/Components/Galleries/GalleryPage/GalleryNftsNft";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
@@ -231,5 +232,22 @@ describe("GalleryNftsNft", () => {
         expect(screen.getByTestId("GalleryCard")).not.toHaveClass("lg:outline-theme-hint-300");
         expect(screen.getByTestId("GalleryNftsNft__price")).toHaveTextContent("11 ETH");
         expect(screen.getByTestId("GalleryNftsNft__name")).toHaveTextContent(nft.name);
+    });
+
+    it("should redirect to collection details page when clicking the collection name", async () => {
+        const function_ = vi.fn();
+        const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
+
+        render(
+            <GalleryNftsNft
+                nft={nft}
+                isSelected={true}
+                onClick={vi.fn()}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryNftsNft__website"));
+
+        expect(routerSpy).toHaveBeenCalled();
     });
 });

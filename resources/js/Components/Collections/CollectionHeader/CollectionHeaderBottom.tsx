@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { GridHeader } from "@/Components/GridHeader";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { useActiveUser } from "@/Contexts/ActiveUserContext";
-import { assertUser } from "@/Utils/assertions";
 import { FormatCrypto, FormatNumber } from "@/Utils/Currency";
 import { toMonthYear } from "@/Utils/dates";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -15,7 +14,6 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
     const { t } = useTranslation();
 
     const { user } = useActiveUser();
-    assertUser(user);
 
     const token: Pick<App.Data.Token.TokenData, "symbol" | "name" | "decimals"> = {
         name: "",
@@ -44,7 +42,7 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
                 <GridHeader
                     data-testid="CollectionHeaderBottom__volume"
                     className="lg:border-r lg:border-theme-secondary-300 lg:pl-0 lg:pr-6"
-                    title={t("common.volume")}
+                    title={t("common.volume", { frequency: "" })}
                     value={
                         <FormatCrypto
                             value={collection.volume ?? "0"}
@@ -71,7 +69,13 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
                     data-testid="CollectionHeaderBottom__created"
                     className="lg:px-0"
                     title={t("common.created")}
-                    value={collection.mintedAt !== null ? toMonthYear(collection.mintedAt, user.attributes) : null}
+                    value={
+                        // User can be null when useEffect has not been triggered yet
+                        // to set the ActiveUserContext, see https://app.clickup.com/t/861naue4m
+                        collection.mintedAt !== null && isTruthy(user)
+                            ? toMonthYear(collection.mintedAt, user.attributes)
+                            : null
+                    }
                 />
 
                 <div className="flex lg:flex-1 lg:justify-end">

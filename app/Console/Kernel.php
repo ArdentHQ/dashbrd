@@ -8,9 +8,6 @@ use App\Console\Commands\FetchCoingeckoTokens;
 use App\Console\Commands\FetchCollectionBanner;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionNfts;
-use App\Console\Commands\FetchCollectionOwners;
-use App\Console\Commands\FetchCollectionTraits;
-use App\Console\Commands\FetchCollectionVolume;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
 use App\Console\Commands\FetchTokens;
@@ -134,12 +131,6 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->everyThirtyMinutes();
 
-        // Fetch traits for all collections in case some have changed
-        $schedule
-            ->command(FetchCollectionTraits::class)
-            ->withoutOverlapping()
-            ->dailyAt('5:00');
-
         // Fetch banners for collections that don't have one yet
         // (More often according to config)
         $schedule
@@ -148,22 +139,6 @@ class Kernel extends ConsoleKernel
             ])
             ->withoutOverlapping()
             ->dailyAt('5:30');
-
-        // Fetch banners for all collections in case some have changed
-        $schedule
-            ->command(FetchCollectionBanner::class)
-            ->withoutOverlapping()
-            ->weeklyOn(Schedule::TUESDAY, '10:00');
-
-        $schedule
-            ->command(FetchCollectionOwners::class)
-            ->withoutOverlapping()
-            ->dailyAt('6:00');
-
-        $schedule
-            ->command(FetchCollectionVolume::class)
-            ->withoutOverlapping()
-            ->dailyAt('6:30');
 
         $schedule
             ->command(FetchCollectionNfts::class)
@@ -188,26 +163,26 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command(FetchTokens::class)
             ->withoutOverlapping()
-            ->hourlyAt(15); // offset by 15 mins from FetchEnsDetails so they dont run at the same time...
+            ->dailyAt('14:15'); // offset by 15 mins from FetchEnsDetails so they dont run at the same time...
 
         $schedule
             ->command(FetchNativeBalances::class)
             ->withoutOverlapping()
-            ->hourlyAt(45); // offset by 30 mins from FetchTokens so they dont run at the same time...
+            ->dailyAt('14:45'); // offset by 30 mins from FetchTokens so they dont run at the same time...
 
         $schedule
             ->command(FetchNativeBalances::class, [
                 '--only-online',
             ])
             ->withoutOverlapping()
-            ->everyMinute();
+            ->everyFiveMinutes();
 
         $schedule
             ->command(FetchTokens::class, [
                 '--only-online',
             ])
             ->withoutOverlapping()
-            ->everyMinute();
+            ->everyFiveMinutes();
     }
 
     private function maxCoingeckoJobsInInterval(): int

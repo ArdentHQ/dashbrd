@@ -60,6 +60,24 @@ describe("CollectionsTable", () => {
         expect(screen.getByTestId("CollectionsTableSkeleton")).toBeInTheDocument();
     });
 
+    it.each(allBreakpoints)("should render loading state if no user", (breakpoint) => {
+        render(
+            <CollectionsTable
+                nfts={nfts}
+                isLoading
+                hiddenCollectionAddresses={[]}
+                collections={collections}
+                user={null}
+                alreadyReportedByCollection={{}}
+                reportByCollectionAvailableIn={{}}
+                onChanged={vi.fn()}
+            />,
+            { breakpoint },
+        );
+
+        expect(screen.getByTestId("CollectionsTableSkeleton")).toBeInTheDocument();
+    });
+
     it.each(allBreakpoints)("renders without crashing on %s screen", (breakpoint) => {
         const { getByTestId } = render(
             <CollectionsTable

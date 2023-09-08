@@ -1,4 +1,5 @@
 import React from "react";
+import { type SpyInstance } from "vitest";
 import {
     GalleryHeading,
     GalleryHeadingPlaceholder,
@@ -6,11 +7,13 @@ import {
     GalleryStatsPlaceholder,
     NftImageGrid,
 } from "./NftGalleryCard.blocks";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
 import * as useLikes from "@/Hooks/useLikes";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 const collectionInfo: Pick<
     App.Data.Gallery.GalleryNftData,
@@ -314,15 +317,64 @@ describe("GalleryStats", () => {
 
     const user = new UserDataFactory().withUSDCurrency().create();
 
-    vi.spyOn(useAuth, "useAuth").mockReturnValue({
+    let useAuthSpy: SpyInstance;
+    let metamaskSpy: SpyInstance;
+
+    const showConnectOverlayMock = vi.fn();
+
+    const useAuthState = {
         user,
         wallet: null,
         authenticated: true,
         showAuthOverlay: false,
+        showCloseButton: false,
+        closeOverlay: vi.fn(),
+    };
+
+    beforeEach(() => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
+
+        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
+            getSampleMetaMaskState({
+                showConnectOverlay: showConnectOverlayMock,
+            }),
+        );
+    });
+
+    afterEach(() => {
+        useAuthSpy.mockRestore();
+        metamaskSpy.mockRestore();
     });
 
     it("should display gallery stats", () => {
         const { container } = render(<GalleryStats gallery={gallery} />);
+
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+
+        expect(screen.getByTestId("GalleryStats__likes")).toHaveTextContent("12");
+        expect(screen.getByTestId("GalleryStats__views")).toHaveTextContent("45");
+
+        expect(container.getElementsByClassName("fill-theme-danger-100 text-theme-danger-400").length).toBe(0);
+    });
+
+    it("should display gallery stats if no authenticated", () => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        const { container } = render(
+            <GalleryStats
+                gallery={{
+                    ...gallery,
+                    value: 1234.56,
+                }}
+            />,
+        );
 
         expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
 
@@ -431,5 +483,17 @@ describe("GalleryStats", () => {
         render(<GalleryHeadingPlaceholder />);
 
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
+    });
+
+    it("should display auth overlay when a guest clicks the like button", async () => {
+        const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({ ...useAuthState, authenticated: false });
+
+        render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
+
+        await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
+
+        expect(showConnectOverlayMock).toHaveBeenCalled();
+
+        spy.mockRestore();
     });
 });

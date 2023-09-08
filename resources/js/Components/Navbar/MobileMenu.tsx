@@ -91,6 +91,7 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                                         className="flex w-full justify-center space-x-1"
                                         disabled={Boolean(isConnectButtonDisabled)}
                                         onClick={() => {
+                                            setMenuOpen(false);
                                             void connectWallet?.();
                                         }}
                                     >
@@ -125,21 +126,14 @@ const Nav = ({
 
     const items = [
         {
-            isVisible: features.portfolio,
-            title: t("pages.wallet.title"),
-            suffix: null,
-            route: "dashboard",
-            icon: "Wallet",
-        },
-        {
-            isVisible: features.collections && isAuthenticated,
+            isVisible: features.collections,
             title: t("pages.collections.title"),
-            suffix: collectionCount,
+            suffix: isAuthenticated ? collectionCount : null,
             route: "collections",
             icon: "Diamond",
         },
         {
-            isVisible: features.galleries && isAuthenticated,
+            isVisible: features.galleries,
             title: t("pages.galleries.title"),
             suffix: null,
             route: "galleries",

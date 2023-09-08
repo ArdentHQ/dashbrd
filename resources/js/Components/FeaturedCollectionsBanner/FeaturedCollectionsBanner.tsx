@@ -6,7 +6,7 @@ import { tp } from "@/Utils/TranslatePlural";
 export const FeaturedCollectionsBanner = ({
     collections = [],
 }: {
-    collections?: Array<Pick<App.Data.Nfts.NftCollectionData, "website" | "name" | "image">>;
+    collections?: Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>;
 }): JSX.Element => {
     const { t } = useTranslation();
 
