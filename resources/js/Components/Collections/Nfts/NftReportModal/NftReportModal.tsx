@@ -28,7 +28,7 @@ export const NftReportModal = ({ nft, reportReasons, isOpen, onClose }: Properti
 
     const submit = (): void => {
         setFailed(false);
-        post(route("nft-reports.create", { nft: nft.tokenNumber }), {
+        post(route("nft-reports.create", { nft: nft.id }), {
             preserveState: true,
             preserveScroll: true,
             onSuccess: close,
