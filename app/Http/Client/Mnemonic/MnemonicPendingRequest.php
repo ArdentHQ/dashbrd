@@ -381,36 +381,30 @@ class MnemonicPendingRequest extends PendingRequest
         /** @var array<string, mixed> $data */
         $data = self::get(sprintf('/foundational/v1beta2/transfers/nft?%s', $labelsQuery), $query)->json('nftTransfers');
 
-        return collect($data)
-            // Sometimes the request is returning transfers that are not labeled
-            // as any of the values we expect, I was, for example getting
-            // `LABEL_BURN` transfers, so I am filtering them out here.
-            // In the future we may want to add support for them.
-            ->filter(fn ($transfer) => $this->extractNftTransferType($transfer['labels']) !== null)
-            ->map(function ($transfer) use ($chain, $contractAddress, $ethToken) {
-                $currency = CurrencyCode::USD;
+        return collect($data)->map(function ($transfer) use ($chain, $contractAddress, $ethToken) {
+            $currency = CurrencyCode::USD;
 
-                $blockchainTimestamp = Carbon::parse($transfer['blockchainEvent']['blockTimestamp']);
-                $prices = $this->extractActivityPrices($chain, $transfer, $currency, $ethToken, $blockchainTimestamp);
+            $blockchainTimestamp = Carbon::parse($transfer['blockchainEvent']['blockTimestamp']);
+            $prices = $this->extractActivityPrices($chain, $transfer, $currency, $ethToken, $blockchainTimestamp);
 
-                return new CollectionActivity(
-                    contractAddress: $contractAddress,
-                    tokenId: $transfer['tokenId'],
-                    sender: $transfer['sender']['address'],
-                    recipient: $transfer['recipient']['address'],
-                    txHash: $transfer['blockchainEvent']['txHash'],
-                    type: $this->extractNftTransferType($transfer['labels']),
-                    timestamp: $blockchainTimestamp,
-                    totalNative: $prices['native'],
-                    totalUsd: $prices['usd'],
-                    extraAttributes: [
-                        'recipient' => Arr::get($transfer, 'recipient'),
-                        'recipientPaid' => Arr::get($transfer, 'recipientPaid'),
-                        'sender' => Arr::get($transfer, 'sender'),
-                        'senderReceived' => Arr::get($transfer, 'senderReceived'),
-                    ]
-                );
-            })->values();
+            return new CollectionActivity(
+                contractAddress: $contractAddress,
+                tokenId: $transfer['tokenId'],
+                sender: $transfer['sender']['address'],
+                recipient: $transfer['recipient']['address'],
+                txHash: $transfer['blockchainEvent']['txHash'],
+                type: $this->extractNftTransferType($transfer['labels']),
+                timestamp: $blockchainTimestamp,
+                totalNative: $prices['native'],
+                totalUsd: $prices['usd'],
+                extraAttributes: [
+                    'recipient' => Arr::get($transfer, 'recipient'),
+                    'recipientPaid' => Arr::get($transfer, 'recipientPaid'),
+                    'sender' => Arr::get($transfer, 'sender'),
+                    'senderReceived' => Arr::get($transfer, 'senderReceived'),
+                ]
+            );
+        });
     }
 
     /**

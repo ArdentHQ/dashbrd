@@ -19,11 +19,20 @@ class CollectionActivity extends Data
         public string $sender,
         public string $recipient,
         public string $txHash,
-        public NftTransferType $type,
+        public ?NftTransferType $type,
         public Carbon $timestamp,
         public ?float $totalNative,
         public ?float $totalUsd,
         public array $extraAttributes,
     ) {
+    }
+
+    public function key(): string
+    {
+        return implode(':', [
+            $this->txHash,
+            $this->tokenId,
+            $this->type->value,
+        ]);
     }
 }
