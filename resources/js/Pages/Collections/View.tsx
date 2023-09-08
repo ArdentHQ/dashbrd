@@ -90,7 +90,7 @@ const CollectionsView = ({
 
         return {
             traits: hasSelectedTraits ? selectedTraits : undefined,
-            owned: showOnlyOwned,
+            owned: showOnlyOwned ? undefined : false,
             tab: undefined,
             sort: sortByMintDate ? "minted" : undefined,
             query: isTruthy(query) ? query : undefined,
