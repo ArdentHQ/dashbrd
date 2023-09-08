@@ -449,6 +449,7 @@ declare namespace App.Data.Web3 {
         collectionImage: string | null;
         collectionWebsite: string | null;
         collectionDescription: string | null;
+        bannerImageUrl: string | null;
         collectionSocials: Array<any> | null;
         collectionSupply: number | null;
         name: string | null;
