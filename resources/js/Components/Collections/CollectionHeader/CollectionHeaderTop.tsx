@@ -33,7 +33,10 @@ interface SocialLinkProperties {
 
 export const SocialLink = ({ href, icon, tooltip, ...properties }: SocialLinkProperties): JSX.Element => (
     <>
-        <Tooltip content={tooltip}>
+        <Tooltip
+            content={tooltip}
+            offset={[0, 20]}
+        >
             <span>
                 {isTruthy(href) && (
                     <ButtonLink
