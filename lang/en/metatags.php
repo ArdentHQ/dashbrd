@@ -6,7 +6,7 @@ return [
     'home' => [
         'title' => 'Dashbrd | Web3 Portfolio Management Made Simple',
         'description' => 'Simplify your Web3 journey with Dashbrd. Manage your portfolio of tokens, NFTs, and other digital collectibles across the Ethereum and Polygon blockchains.',
-        'image' => '/images/meta/home.png',
+        'image' => url('/images/meta/home.png'),
     ],
 
     'error' => [
@@ -19,27 +19,27 @@ return [
 
     'galleries' => [
         'title' => 'Top NFT Galleries | Dashbrd',
-        'image' => '/images/meta/nft-galleries.png',
+        'image' => url('/images/meta/nft-galleries.png'),
         'description' => 'Explore user published NFT galleries to find custom curated PFPs, Digital Collectibles, & More.',
         'most_popular' => [
             'title' => 'Most Popular Galleries | Dashbrd',
-            'image' => '/images/meta/most-popular-nft-galleries.png',
+            'image' => url('/images/meta/most-popular-nft-galleries.png'),
             'description' => 'Explore and discover Most Popular NFT Galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More.',
         ],
         'newest' => [
             'title' => 'Newest Galleries | Dashbrd',
-            'image' => '/images/meta/newest-nft-galleries.png',
+            'image' => url('/images/meta/newest-nft-galleries.png'),
             'description' => 'Explore and discover most recent NFT galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More',
         ],
         'most_valuable' => [
             'title' => 'Most Valuable Galleries | Dashbrd',
-            'image' => '/images/meta/most-valuable-nft-galleries.png',
+            'image' => url('/images/meta/most-valuable-nft-galleries.png'),
             'description' => 'Explore and discover Most Valuable NFT Galleries created by our users featuring custom curated PFPs, Digital Collectibles, & More.',
         ],
         'view' => [
             'title' => ':name | Dashbrd',
             'description' => ':name | A Curated NFT Gallery at Dashbrd',
-            'image' => '/images/meta/nft-gallery.png',
+            'image' => url('/images/meta/nft-gallery.png'),
         ],
     ],
 
