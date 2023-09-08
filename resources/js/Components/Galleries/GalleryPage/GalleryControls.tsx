@@ -63,7 +63,7 @@ export const GalleryControls = ({
                             className={cn(hasLiked && "button-like-selected")}
                             onClick={() => {
                                 signedAction(({ authenticated }) => {
-                                    // If user wasnt authenticated, foce a positive
+                                    // If user wasnt authenticated, force a positive
                                     // like since we dont know if he liked it before
                                     const likeValue = !authenticated ? true : undefined;
 
