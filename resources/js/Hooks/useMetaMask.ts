@@ -13,6 +13,7 @@ import {
     type SendTransactionResponse,
 } from "./useMetaMask.contracts";
 import Chains = App.Enums.Chains;
+import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { browserLocale } from "@/Utils/browser-locale";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -176,6 +177,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [onConnected, setOnConnected] = useState<() => void>();
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
+
+    const { setAuthData } = useActiveUser();
 
     const switchUserWallet = async ({
         account: address,
@@ -459,40 +462,77 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             return;
         }
 
-        router.visit(route("login"), {
-            replace: true,
-            method: "post" as VisitOptions["method"],
-            data: {
+        try {
+            const data = await axios.post(route("login"), {
                 intendedUrl: window.location.href,
                 address,
                 signature,
                 chainId,
                 tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 locale: browserLocale(),
-            },
-            onError: (error) => {
-                const firstError = [error.address, error.signature, error.chainId].find(
-                    (value) => typeof value === "string",
-                );
+            });
 
-                onError(ErrorType.Generic, firstError);
-            },
-            onFinish: () => {
-                setAccount(account);
+            setAuthData?.(data.data.auth);
+            router.reload();
+        } catch (error) {
+            const firstError = [error.address, error.signature, error.chainId].find(
+                (value) => typeof value === "string",
+            );
 
-                setChainId(chainId);
+            onError(ErrorType.Generic, firstError);
+        } finally {
+            setAccount(account);
 
-                setConnecting(false);
+            setChainId(chainId);
 
-                setRequiresSignature(false);
+            setConnecting(false);
 
-                hideConnectOverlay();
+            setRequiresSignature(false);
 
-                if (onConnected !== undefined) {
-                    onConnected();
-                }
-            },
-        });
+            hideConnectOverlay();
+
+            if (onConnected !== undefined) {
+                onConnected();
+            }
+        }
+
+        // router.visit(route("login"), {
+        //     replace: true,
+        //     method: "post" as VisitOptions["method"],
+        //     data: {
+        //         intendedUrl: window.location.href,
+        //         address,
+        //         signature,
+        //         chainId,
+        //         tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        //         locale: browserLocale(),
+        //     },
+        //     onSuccess: (data) => {
+        //         console.log(data);
+        //     },
+        //     onError: (error) => {
+        //         const firstError = [error.address, error.signature, error.chainId].find(
+        //             (value) => typeof value === "string",
+        //         );
+        //
+        //         onError(ErrorType.Generic, firstError);
+        //     },
+        //     onFinish: () => {
+        //         setAccount(account);
+        //
+        //         setChainId(chainId);
+        //
+        //         setConnecting(false);
+        //
+        //         setRequiresSignature(false);
+        //
+        //         hideConnectOverlay();
+        //
+        //         if (onConnected !== undefined) {
+        //             onConnected();
+        //         }
+        //     },
+        // });
     }, [requestChainAndAccount, router, getSignature, onConnected]);
 
     const addNetwork = async (chainId: Chains): Promise<void> => {
