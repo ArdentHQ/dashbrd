@@ -28,7 +28,7 @@ class Web3NftData extends Data
         public ?string $collectionImage,
         public ?string $collectionWebsite,
         public ?string $collectionDescription,
-        public ?string $bannerImageUrl,
+        public ?string $collectionBannerImageUrl,
         public ?array $collectionSocials,
         public ?int $collectionSupply,
         public ?string $name,
