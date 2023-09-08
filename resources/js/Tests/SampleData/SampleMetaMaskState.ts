@@ -23,5 +23,6 @@ export const getSampleMetaMaskState = (overrides: Partial<MetaMaskState> = {}): 
     signing: false,
     signed: false,
     isShowConnectOverlay: false,
+    onDisconnected: vi.fn(),
     ...overrides,
 });
