@@ -22,6 +22,7 @@ describe("NftCollections", () => {
                     remove: vi.fn(),
                     update: vi.fn(),
                 },
+                nftLimit: 16,
             }}
         >
             <NftSelectionContext.Provider

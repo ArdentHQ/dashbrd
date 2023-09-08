@@ -18,7 +18,7 @@ return [
     ],
 
     'galleries' => [
-        'title' => 'Galleries | Dashbrd',
+        'title' => 'Top NFT Galleries | Dashbrd',
         'image' => '/images/meta/nft-galleries.png',
         'description' => 'Explore user published NFT galleries to find custom curated PFPs, Digital Collectibles, & More.',
         'most_popular' => [
