@@ -12,11 +12,11 @@
         <meta property="og:type" content="website" />
         <meta property="og:title" content="{{ $title ?? trans('metatags.home.title') }}" />
         <meta property="og:description" content="{{ $description ?? trans('metatags.home.description') }}" />
-        <meta property="og:image" content="{{ $image ? url($image) : url(trans('metatags.home.image')) }}" />
+        <meta property="og:image" content="{{ url($image ?? trans('metatags.home.image')) }}" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:title" content="{{ $title ?? trans('metatags.home.title') }}" />
         <meta property="twitter:description" content="{{ $description ?? trans('metatags.home.description') }}" />
-        <meta property="twitter:image" content="{{ $image ? url($image) : url(trans('metatags.home.image')) }}" />
+        <meta property="twitter:image" content="{{ url($image ?? trans('metatags.home.image')) }}" />
 
         {{-- Metadata --}}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
