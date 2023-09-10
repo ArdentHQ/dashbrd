@@ -121,16 +121,20 @@ class Token extends Model
     }
 
     /**
+     * @return HasMany<Balance>
+     */
+    public function balances()
+    {
+        return $this->hasMany(Balance::class, 'token_id', 'id');
+    }
+
+    /**
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
     public function scopeWithBalancesOnMainnet(Builder $query): Builder
     {
-        return $query
-            ->select('tokens.*')
-            ->join('balances', 'balances.token_id', '=', 'tokens.id')
-            ->groupBy('tokens.id')
-            ->mainnet();
+        return $query->mainnet()->has("balances");
     }
 
     /**
