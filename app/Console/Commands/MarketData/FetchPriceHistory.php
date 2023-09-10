@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class FetchPriceHistory extends Command
 {
@@ -31,7 +32,17 @@ class FetchPriceHistory extends Command
             return;
         }
 
-        $tokens = Token::mainnet()->get();
+        $tokens = Token::select('tokens.*')
+            ->whereHas('network', function ($query) {
+                $query->where('is_mainnet', true);
+            })
+            ->join('balances', 'balances.token_id', '=', 'tokens.id')
+            ->groupBy('tokens.id')
+            ->get();
+
+        Log::info("tokens with balances", [
+            '$tokens' => $tokens->count(),
+        ]);
 
         $currencies = $this->getActiveCurrencies();
 
