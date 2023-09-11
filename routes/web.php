@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'nfts'], function () {
-        Route::post('{nft:token_number}/reports', [NftReportController::class, 'store'])->name('nft-reports.create')->middleware('throttle:nft:reports');
+        Route::post('{nft:id}/reports', [NftReportController::class, 'store'])->name('nft-reports.create')->middleware('throttle:nft:reports');
     });
 
     Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
