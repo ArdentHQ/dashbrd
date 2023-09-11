@@ -42,6 +42,7 @@ export const AuthOverlay = ({
 
     return (
         <Overlay
+            data-testid="AuthOverlay"
             {...properties}
             showOverlay={show}
             showCloseButton={showCloseButton}

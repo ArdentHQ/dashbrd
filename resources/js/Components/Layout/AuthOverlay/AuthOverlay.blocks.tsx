@@ -75,7 +75,7 @@ export const SwitchingNetwork = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <OverlayButtonsWrapper>
+        <OverlayButtonsWrapper data-testid="AuthOverlay__switching-network">
             <Icon
                 name="Spinner"
                 size="lg"
@@ -90,7 +90,7 @@ export const ConnectingWallet = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <OverlayButtonsWrapper>
+        <OverlayButtonsWrapper data-testid="AuthOverlay__connecting-network">
             <Icon
                 name="Spinner"
                 size="xl"
