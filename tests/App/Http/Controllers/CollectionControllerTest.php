@@ -12,6 +12,7 @@ use App\Models\Nft;
 use App\Models\Token;
 use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia as Assert;
+use Carbon\Carbon;
 
 it('can render the collections overview page', function () {
     $user = createUser();
@@ -102,7 +103,7 @@ it('should run FetchCollectionBanner if collection has no banner', function () {
     Bus::assertDispatched(FetchCollectionBanner::class);
 });
 
-it('should run FetchCollectionBanner if collection was updated more than a week ago', function () {
+it('should run FetchCollectionBanner if colleciton banner was updated more than a week ago', function () {
     $user = createUser();
 
     Bus::fake();
@@ -113,9 +114,10 @@ it('should run FetchCollectionBanner if collection was updated more than a week 
         'network_id' => $network->id,
         'extra_attributes' => [
             'banner' => 'https://example.com/image.png',
+            'banner_updated_at' => now()->subWeek()->subDay()->toDateTimeString(),
         ],
-        'updated_at' => now()->subWeek(),
     ]);
+
 
     Token::factory()->create([
         'network_id' => $network->id,

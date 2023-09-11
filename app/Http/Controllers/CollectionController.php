@@ -23,6 +23,7 @@ use App\Models\Collection;
 use App\Models\Nft;
 use App\Support\Cache\UserCache;
 use App\Support\RateLimiterHelpers;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -145,7 +146,9 @@ class CollectionController extends Controller
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
         if (! $collection->recentlyViewed()) {
-            if ($collection->banner() === null || $collection->updated_at->diffInDays() >= 7) {
+            $formattedDate = Carbon::parse($collection->bannerUpdatedAt());
+
+            if ($collection->banner() === null || $formattedDate->diffInDays(now()) > 7) {
                 FetchCollectionBanner::dispatch($collection);
             }
 
