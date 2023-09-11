@@ -7,7 +7,6 @@ use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection;
 use App\Models\Network;
-use App\Models\Nft;
 use App\Models\Token;
 use App\Models\TokenPriceHistory;
 use App\Support\Facades\Mnemonic;
