@@ -1,5 +1,5 @@
 import { type PageProps } from "@inertiajs/core";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,6 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
     title: string;
@@ -30,10 +29,19 @@ interface Galleries {
 const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    const { connectWallet, initialized, connecting } = useMetaMaskContext();
+    const { showConnectOverlay, initialized, connecting } = useMetaMaskContext();
 
-    const { wallet } = useAuth();
-    const isAuthenticated = isTruthy(wallet);
+    const { authenticated } = useAuth();
+
+    const guestBannerClickHandler = (): void => {
+        if (authenticated) {
+            router.visit(route("my-galleries.create"));
+        } else {
+            showConnectOverlay(() => {
+                router.visit(route("my-galleries.create"));
+            });
+        }
+    };
 
     const { props } = usePage();
     const { slidesPerView, horizontalOffset } = useGalleryCarousel();
@@ -69,10 +77,9 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
                 </div>
 
                 <GalleryGuestBanner
-                    connectWallet={connectWallet}
+                    onClick={guestBannerClickHandler}
                     initialized={initialized}
                     connecting={connecting}
-                    isAuthenticated={isAuthenticated}
                 />
 
                 {galleries === undefined ? (
