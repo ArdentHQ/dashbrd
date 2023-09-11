@@ -650,7 +650,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         showConnectOverlay,
         hideConnectOverlay,
         isShowConnectOverlay,
-        debug,
     };
 };
 
