@@ -69,10 +69,8 @@ class FetchCollectionActivity implements ShouldQueue
         }
 
         $formattedActivities = $activities
-            // Sometimes the request is returning transfers that are not labeled
-            // as any of the values we expect, I was, for example getting
-            // `LABEL_BURN` transfers, so I am filtering them out here.
-            // In the future we may want to add support for them.
+            // Sometimes the request is returning transfers that are not labeled as any of the values we expect.
+            // There were times when Mnemonic returned `LABEL_BURN` transfers, so we're filtering them here.
             ->reject(fn ($activity) => $activity->type === null)
             ->unique->key()
             ->map(fn (CollectionActivity $activity) => [
@@ -89,7 +87,7 @@ class FetchCollectionActivity implements ShouldQueue
             ])->toArray();
 
         DB::transaction(function () use ($formattedActivities, $activities, $limit) {
-            NftActivity::upsert($formattedActivities, ['tx_hash', 'collection_id', 'token_number', 'type']);
+            NftActivity::upsert($formattedActivities, uniqueBy: ['tx_hash', 'collection_id', 'token_number', 'type']);
 
             // If we get the limit it may be that there are more activities to fetch...
             if ($limit === count($activities)) {
