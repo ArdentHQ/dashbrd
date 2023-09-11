@@ -6,6 +6,7 @@ namespace App\Http\Client\Alchemy;
 
 use App\Data\NetworkData;
 use App\Data\Wallet\WalletData;
+use App\Data\Web3\Web3ContractMetadata;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -32,6 +33,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use stdClass;
 use Throwable;
@@ -294,6 +296,34 @@ class AlchemyPendingRequest extends PendingRequest
     }
 
     /**
+     * @param  array<string>  $contactAddresses
+     * @param  Network  $network
+     *
+     * @return Collection<int, Web3ContractMetadata>
+     */
+    public function getContractMetadataBatch(array $contactAddresses, Network $network): Collection
+    {
+        $this->apiUrl = $this->getNftV2ApiUrl();
+
+        $this->chain = AlchemyChain::fromChainId($network->chain_id);
+
+        $contracts = self::post('getContractMetadataBatch', ['contractAddresses' => $contactAddresses])->json();
+
+        return collect($contracts)->map(function ($contract) {
+            return new Web3ContractMetadata(
+                contractAddress: $contract['address'],
+                collectionName: arr::get($contract, 'contractMetadata.name'),
+                collectionSlug: arr::get($contract, 'contractMetadata.openSea.collectionSlug'),
+                totalSupply: arr::get($contract, 'contractMetadata.totalSupply'),
+                imageUrl: arr::get($contract, 'contractMetadata.openSea.imageUrl'),
+                floorPrice: arr::get($contract, 'contractMetadata.openSea.floorPrice'),
+                bannerImageUrl: arr::get($contract, 'contractMetadata.openSea.bannerImageUrl'),
+                description: arr::get($contract, 'contractMetadata.openSea.description'),
+            );
+        });
+    }
+
+    /**
      * @param  array<mixed>  $nft
      */
     public function parseNft(array $nft, int $networkId): Web3NftData
@@ -330,9 +360,9 @@ class AlchemyPendingRequest extends PendingRequest
             collectionImage: Arr::get($nft, 'contractMetadata.openSea.imageUrl') ?? Arr::get($nft, 'media.0.thumbnail') ?? Arr::get($nft, 'media.0.gateway'),
             collectionWebsite: Arr::get($nft, 'contractMetadata.openSea.externalUrl') ?? Arr::get($nft, 'metadata.external_url'),
             collectionDescription: Arr::get($nft, 'contractMetadata.openSea.description'),
+            collectionBannerImageUrl: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl'),
             collectionSocials: $socials,
             collectionSupply: $supply,
-            collectionBannerImageUrl: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl'),
             name: $this->getNftName($nft),
             description: $description,
             extraAttributes: $this->getNftExtraAttributes($nft),

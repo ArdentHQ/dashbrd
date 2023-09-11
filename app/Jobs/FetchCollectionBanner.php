@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Data\Web3\Web3ContractMetadata;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
-use App\Support\Facades\Mnemonic;
+use App\Models\Network;
+use App\Support\Facades\Alchemy;
 use App\Support\Queues;
 use DateTime;
 use Illuminate\Bus\Batchable;
@@ -16,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
 {
@@ -25,7 +28,8 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public Collection $collection
+        public array $collectionAddresses,
+        public Network $network,
     ) {
         $this->onQueue(Queues::SCHEDULED_COLLECTIONS);
     }
@@ -35,19 +39,25 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        $banner = Mnemonic::getNftCollectionBanner(
-            chain: $this->collection->network->chain(),
-            contractAddress: $this->collection->address
-        );
+        $metadata = Alchemy::getContractMetadataBatch($this->collectionAddresses, $this->network);
 
-        $this->collection->extra_attributes->set('banner', $banner);
+        $metadata->each(function (Web3ContractMetadata $data) {
+            Log::info("Updating collection banner", [
+                'address' => $data->contractAddress,
+                'bannerImageUrl' => $data->bannerImageUrl
+            ]);
 
-        $this->collection->save();
+            Collection::query()->where('id', $data->contractAddress)
+                ->update(['extra_attributes->banner' => $data->bannerImageUrl]);
+        });
     }
 
     public function uniqueId(): string
     {
-        return static::class.':'.$this->collection->network->chain_id.'-'.$this->collection->address;
+        $sortedAddresses = [...$this->collectionAddresses];
+        sort($sortedAddresses);
+
+        return static::class.':'.$this->network->chain_id.'-'.implode('-', $sortedAddresses);
     }
 
     public function retryUntil(): DateTime
