@@ -6,6 +6,7 @@ import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
+import { Tooltip } from "@/Components/Tooltip";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 import { useLikes } from "@/Hooks/useLikes";
@@ -119,13 +120,17 @@ export const GalleryControls = ({
                 )}
 
                 {gallery?.isOwner === true && showEditAction && (
-                    <ButtonLink
-                        data-testid="GalleryControls__edit-button"
-                        disabled={isDisabled}
-                        icon="Pencil"
-                        variant="icon-primary"
-                        href={route("my-galleries.edit", { slug: gallery.slug })}
-                    />
+                    <Tooltip content={t("common.edit")}>
+                        <span>
+                            <ButtonLink
+                                data-testid="GalleryControls__edit-button"
+                                disabled={isDisabled}
+                                icon="Pencil"
+                                variant="icon-primary"
+                                href={route("my-galleries.edit", { slug: gallery.slug })}
+                            />
+                        </span>
+                    </Tooltip>
                 )}
             </div>
         </div>

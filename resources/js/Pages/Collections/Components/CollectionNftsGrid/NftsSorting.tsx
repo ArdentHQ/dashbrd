@@ -3,6 +3,7 @@ import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Dropdown } from "@/Components/Dropdown";
+import { Tooltip } from "@/Components/Tooltip";
 
 interface Properties {
     disabled?: boolean;
@@ -29,10 +30,12 @@ export const NftsSorting = ({ disabled = false, activeSort, onSort }: Properties
         >
             <Dropdown.Trigger className="flex">
                 {() => (
-                    <IconButton
-                        icon="FunnelBars"
-                        disabled={disabled}
-                    />
+                    <Tooltip content={t("common.sort")}>
+                        <IconButton
+                            icon="FunnelBars"
+                            disabled={disabled}
+                        />
+                    </Tooltip>
                 )}
             </Dropdown.Trigger>
 

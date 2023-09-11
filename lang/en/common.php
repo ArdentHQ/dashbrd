@@ -8,6 +8,7 @@ return [
     'balance' => 'Balance',
     'cancel' => 'Cancel',
     'delete' => 'Delete',
+    'edit' => 'Edit',
     'confirm' => 'Confirm',
     'connect' => 'Connect',
     'continue' => 'Continue',
@@ -130,4 +131,8 @@ return [
     'home' => 'Home',
     'contact' => 'Contact',
     'menu' => 'Menu',
+    'website' => 'Website',
+    'twitter' => 'Twitter',
+    'discord' => 'Discord',
+    'sort' => 'Sort',
 ];
