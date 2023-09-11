@@ -44,7 +44,7 @@ class FetchCollectionBannerBatch extends Command
                 ->select(['id', 'address'])
                 ->where('network_id', '=', $network->id)
                 ->when($this->option('missing-only'), function (Builder $query) {
-                    return $query->whereNull('extra_attributes->banner');
+                    $query->whereNull('extra_attributes->banner');
                 })
                 ->chunkById(100, function (IlluminateCollection $collections) use ($network) {
                     $addresses = $collections->pluck('address')->toArray();

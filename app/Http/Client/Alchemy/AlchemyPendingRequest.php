@@ -304,18 +304,19 @@ class AlchemyPendingRequest extends PendingRequest
 
         $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
-        $contracts = self::post('getContractMetadataBatch', ['contractAddresses' => $contactAddresses])->json();
+        /** @var array<int, mixed> $collections */
+        $collections = self::post('getContractMetadataBatch', ['contractAddresses' => $contactAddresses])->json();
 
-        return collect($contracts)->map(function ($contract) {
+        return collect($collections)->map(function ($collectionMeta) {
             return new Web3ContractMetadata(
-                contractAddress: $contract['address'],
-                collectionName: arr::get($contract, 'contractMetadata.name'),
-                collectionSlug: arr::get($contract, 'contractMetadata.openSea.collectionSlug'),
-                totalSupply: arr::get($contract, 'contractMetadata.totalSupply'),
-                imageUrl: arr::get($contract, 'contractMetadata.openSea.imageUrl'),
-                floorPrice: arr::get($contract, 'contractMetadata.openSea.floorPrice'),
-                bannerImageUrl: arr::get($contract, 'contractMetadata.openSea.bannerImageUrl'),
-                description: arr::get($contract, 'contractMetadata.openSea.description'),
+                contractAddress: $collectionMeta['address'],
+                collectionName: Arr::get($collectionMeta, 'contractMetadata.name'),
+                collectionSlug: Arr::get($collectionMeta, 'contractMetadata.openSea.collectionSlug'),
+                totalSupply: Arr::get($collectionMeta, 'contractMetadata.totalSupply'),
+                imageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.imageUrl'),
+                floorPrice: Arr::get($collectionMeta, 'contractMetadata.openSea.floorPrice'),
+                bannerImageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.bannerImageUrl'),
+                description: Arr::get($collectionMeta, 'contractMetadata.openSea.description'),
             );
         });
     }

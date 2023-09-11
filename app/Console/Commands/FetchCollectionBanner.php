@@ -31,7 +31,7 @@ class FetchCollectionBanner extends Command
     public function handle(): int
     {
         if (empty($this->option('collection-id'))) {
-            $this->error('Collection ID is missing. Please either set `collection-id` flag or use `nfts:fetch-collection-banner-batch` command to fetch banner of multiple collections');
+            $this->error('The `collection-id` is missing. Please either set `collection-id` flag or use `nfts:fetch-collection-banner-batch` command to fetch banner of multiple collections');
 
             return Command::INVALID;
         }
