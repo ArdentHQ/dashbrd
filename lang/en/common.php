@@ -32,6 +32,7 @@ return [
     'publish' => 'Publish',
     'empty' => 'Empty',
     'your_address' => 'Your Address',
+    'your_nfts' => 'Your NFTs',
     'warning' => 'Warning',
     'my_address' => 'My Address',
     'my_wallet' => 'My Wallet',

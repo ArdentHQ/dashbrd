@@ -192,6 +192,11 @@ return [
             'confirmation_text' => "Are you sure you want to delete the gallery? Everything you've done will be deleted and you won't be able to get it back.",
         ],
         'consists_of_collections' => '{0} This gallery consists of :count collections|{1} This gallery consists of :count collection|[2,*] This gallery consists of :count collections',
+        'guest_banner' => [
+            'showcase' => 'Showcase',
+            'subtitle' => 'Create a Gallery to showcase your favorite NFTs to the world!',
+            'create_gallery' => 'Create Gallery',
+        ],
     ],
 
     'profile' => [
