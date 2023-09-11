@@ -308,12 +308,21 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         };
 
         const chainChangedListener = (chainId: string): void => {
+            if (!initialized) {
+                return;
+            }
+
             // Chain ID came in as a hex string, so we need to convert it to decimal
             setChainId(Number.parseInt(chainId, 16) as App.Enums.Chains);
 
             setRequiresSwitch(true);
         };
+
         const connectListener = ({ chainId }: { chainId: string }): void => {
+            if (!initialized) {
+                return;
+            }
+
             chainChangedListener(chainId);
         };
 
@@ -639,6 +648,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         showConnectOverlay,
         hideConnectOverlay,
         isShowConnectOverlay,
+        debug,
     };
 };
 
