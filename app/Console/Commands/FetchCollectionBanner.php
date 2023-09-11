@@ -51,15 +51,15 @@ class FetchCollectionBanner extends Command
                 ->chunkById(4, function (IlluminateCollection $collections) use ($network) {
                     $addresses = $collections->pluck('address')->toArray();
 
-                    Log::info("Dispatching FetchCollectionBannerJob", [
+                    Log::info('Dispatching FetchCollectionBannerJob', [
                         'network_id' => $network->id,
-                        'collection_addresses' => $addresses
+                        'collection_addresses' => $addresses,
                     ]);
 
                     if ($collections->isNotEmpty()) {
                         FetchCollectionBannerJob::dispatch($addresses, $network);
                     }
-                } );
+                });
         });
 
         return Command::SUCCESS;

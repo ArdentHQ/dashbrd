@@ -33,7 +33,6 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use stdClass;
 use Throwable;
@@ -297,8 +296,6 @@ class AlchemyPendingRequest extends PendingRequest
 
     /**
      * @param  array<string>  $contactAddresses
-     * @param  Network  $network
-     *
      * @return Collection<int, Web3ContractMetadata>
      */
     public function getContractMetadataBatch(array $contactAddresses, Network $network): Collection

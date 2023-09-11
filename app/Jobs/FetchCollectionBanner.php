@@ -42,9 +42,9 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
         $metadata = Alchemy::getContractMetadataBatch($this->collectionAddresses, $this->network);
 
         $metadata->each(function (Web3ContractMetadata $data) {
-            Log::info("Updating collection banner", [
+            Log::info('Updating collection banner', [
                 'address' => $data->contractAddress,
-                'bannerImageUrl' => $data->bannerImageUrl
+                'bannerImageUrl' => $data->bannerImageUrl,
             ]);
 
             Collection::query()->where('id', $data->contractAddress)
