@@ -1,3 +1,4 @@
+
 <?php
 
 declare(strict_types=1);
@@ -137,7 +138,7 @@ class Kernel extends ConsoleKernel
                 '--missing-only',
             ])
             ->withoutOverlapping()
-            ->weekly();
+            ->dailyAt('5:30');
 
         $schedule
             ->command(FetchCollectionNfts::class)
