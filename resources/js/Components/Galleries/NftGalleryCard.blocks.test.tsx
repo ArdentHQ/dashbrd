@@ -496,7 +496,7 @@ describe("GalleryStats", () => {
 
         const likeMock = vi.fn();
 
-        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+        const likeSpy = vi.spyOn(useLikes, "useLikes").mockReturnValue({
             likes: 10,
             hasLiked: true,
             like: likeMock,
@@ -511,6 +511,8 @@ describe("GalleryStats", () => {
         await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
 
         expect(likeMock).toHaveBeenCalledWith(gallery.slug, true);
+
+        likeSpy.mockRestore();
     });
 
     it("should toggle like if user was authenticated", async () => {
