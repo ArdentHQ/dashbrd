@@ -70,7 +70,7 @@
                         <p class="text-xs">{{ __('filament-breezy::default.profile.2fa.enabled.store_codes') }}</p>
                         <div>
                         @foreach ($this->recoveryCodes->toArray() as $code )
-                            <span class="inline-flex items-center p-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">{{ $code }}</span>
+                            <div class="inline-block p-1 px-2 text-xs font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-800 border-1">{{ $code }}</div>
                         @endforeach
                         </div>
                         <div class="inline-block text-xs">
