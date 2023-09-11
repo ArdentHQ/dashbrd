@@ -27,8 +27,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param array<string> $collectionAddresses
-     * @param Network $network
+     * @param  array<string>  $collectionAddresses
      */
     public function __construct(
         public array $collectionAddresses,
@@ -45,9 +44,9 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
         $metadata = Alchemy::getContractMetadataBatch($this->collectionAddresses, $this->network);
 
         $metadata->each(function (Web3ContractMetadata $data) {
-            Log::info("Updating collection banner", [
+            Log::info('Updating collection banner', [
                 'collection_address' => $data->contractAddress,
-                'banner' => $data->bannerImageUrl
+                'banner' => $data->bannerImageUrl,
             ]);
 
             Collection::query()->where('id', $data->contractAddress)

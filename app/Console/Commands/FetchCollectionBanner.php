@@ -6,7 +6,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionBanner as Job;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 
 class FetchCollectionBanner extends Command
 {
@@ -33,6 +32,7 @@ class FetchCollectionBanner extends Command
     {
         if (empty($this->option('collection-id'))) {
             $this->error('Collection ID is missing. Please either set `collection-id` flag or use `nfts:fetch-collection-banner-batch` command to fetch banner of multiple collections');
+
             return Command::INVALID;
         }
 
