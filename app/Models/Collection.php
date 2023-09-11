@@ -56,6 +56,8 @@ class Collection extends Model
         'minted_block' => 'int',
         'minted_at' => 'datetime',
         'last_viewed_at' => 'datetime',
+        'is_fetching_activity' => 'bool',
+        'activity_updated_at' => 'datetime',
     ];
 
     /**

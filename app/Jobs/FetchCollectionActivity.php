@@ -10,6 +10,7 @@ use App\Models\Collection;
 use App\Models\NftActivity;
 use App\Services\Web3\Mnemonic\MnemonicWeb3DataProvider;
 use App\Support\Queues;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,22 +41,27 @@ class FetchCollectionActivity implements ShouldQueue
             return;
         }
 
-        // We add one more in the provider, to check if there are more records...
-        $limit = 500;
+        if (! $this->collection->is_fetching_activity) {
+            $this->collection->update([
+                'is_fetching_activity' => true,
+            ]);
+        }
 
-        $latestActivityTimestamp = $this->collection
-                                        ->activities()
-                                        ->latest('timestamp')
-                                        ->value('timestamp');
+        $limit = 500;
 
         $activities = $provider->getCollectionActivity(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address,
             limit: $limit,
-            from: $latestActivityTimestamp,
+            from: $this->latestActivityTimestamp(),
         );
 
         if ($activities->isEmpty()) {
+            $this->collection->update([
+                'is_fetching_activity' => false,
+                'activity_updated_at' => now(),
+            ]);
+
             return;
         }
 
@@ -85,8 +91,21 @@ class FetchCollectionActivity implements ShouldQueue
             // If we get the limit it may be that there are more activities to fetch...
             if (count($activities) === $limit) {
                 self::dispatch($this->collection)->afterCommit();
+            } else {
+                $this->collection->update([
+                    'is_fetching_activity' => false,
+                    'activity_updated_at' => now(),
+                ]);
             }
         }, attempts: 5);
+    }
+
+    private function latestActivityTimestamp(): ?Carbon
+    {
+        return $this->collection
+                    ->activities()
+                    ->latest('timestamp')
+                    ->value('timestamp');
     }
 
     public function retryUntil(): DateTime
