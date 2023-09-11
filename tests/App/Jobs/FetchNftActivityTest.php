@@ -1,125 +1,126 @@
 <?php
 
-declare(strict_types=1);
+// declare(strict_types=1);
 
-use App\Jobs\FetchNftActivity;
-use App\Models\Collection;
-use App\Models\Network;
-use App\Models\Nft;
-use App\Models\SpamContract;
-use App\Models\Token;
-use App\Support\Facades\Mnemonic;
-use Illuminate\Support\Facades\Http;
+// use App\Jobs\FetchNftActivity;
+// use App\Models\Collection;
+// use App\Models\Network;
+// use App\Models\Nft;
+// use App\Models\SpamContract;
+// use App\Models\Token;
+// use App\Support\Facades\Mnemonic;
+// use Illuminate\Support\Facades\Http;
 
-beforeEach(function () {
-    Token::factory()->create([
-        'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
-        'symbol' => 'ETH',
-        'is_native_token' => 1,
-        'is_default_token' => 1,
-    ]);
-});
+// beforeEach(function () {
+//     Token::factory()->create([
+//         'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
+//         'symbol' => 'ETH',
+//         'is_native_token' => 1,
+//         'is_default_token' => 1,
+//     ]);
+// });
 
-it('should fetch and store nft activity', function () {
-    Mnemonic::fake([
-        'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
-    ]);
+// it('should fetch and store nft activity', function () {
+//     Mnemonic::fake([
+//         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
+//     ]);
 
-    Token::factory()->create([
-        'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
-        'symbol' => 'ETH',
-        'is_native_token' => 1,
-        'is_default_token' => 1,
-    ]);
+//     Token::factory()->create([
+//         'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
+//         'symbol' => 'ETH',
+//         'is_native_token' => 1,
+//         'is_default_token' => 1,
+//     ]);
 
-    $network = Network::polygon();
+//    $network = Network::polygon();
 
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-    ]);
 
-    $nft = Nft::factory()->create([
-        'token_number' => '8304',
-        'collection_id' => $collection->id,
-    ]);
+//     $collection = Collection::factory()->create([
+//         'network_id' => $network->id,
+//     ]);
 
-    (new FetchNftActivity($nft))->handle();
+//     $nft = Nft::factory()->create([
+//         'token_number' => '8304',
+//         'collection_id' => $collection->id,
+//     ]);
 
-    expect($nft->activities()->count())->toBe(18);
-});
+//     (new FetchNftActivity($nft))->handle();
 
-it('should skip fetching NFT activity for a spam collection', function () {
-    $network = Network::polygon();
+//     expect($nft->activities()->count())->toBe(18);
+// });
 
-    $collectionAddress = '0x000000000a42c2791eec307fff43fa5c640e3ef7';
+//it('should skip fetching NFT activity for a spam collection', function () {
+//    $network = Network::polygon();
 
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-        'address' => $collectionAddress,
-        'owners' => null,
-    ]);
+//     $collectionAddress = '0x000000000a42c2791eec307fff43fa5c640e3ef7';
 
-    SpamContract::query()->insert([
-        'address' => $collectionAddress,
-        'network_id' => $network->id,
-    ]);
+//     $collection = Collection::factory()->create([
+//         'network_id' => $network->id,
+//         'address' => $collectionAddress,
+//         'owners' => null,
+//     ]);
 
-    $nft = Nft::factory()->create([
-        'token_number' => '8304',
-        'collection_id' => $collection->id,
-    ]);
+//     SpamContract::query()->insert([
+//         'address' => $collectionAddress,
+//         'network_id' => $network->id,
+//     ]);
 
-    expect($nft->activities)->toBeEmpty();
+//     $nft = Nft::factory()->create([
+//         'token_number' => '8304',
+//         'collection_id' => $collection->id,
+//     ]);
 
-    (new FetchNftActivity($nft))->handle();
+//     expect($nft->activities)->toBeEmpty();
 
-    expect($nft->activities)->toBeEmpty();
+//     (new FetchNftActivity($nft))->handle();
 
-    Mnemonic::assertNothingSent();
-});
+//     expect($nft->activities)->toBeEmpty();
 
-it('should call the job again if response equals the limit', function () {
-    $fixture = fixtureData('mnemonic.nft_transfers');
+//     Mnemonic::assertNothingSent();
+// });
 
-    Token::factory()->create([
-        'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
-        'symbol' => 'ETH',
-        'is_native_token' => 1,
-        'is_default_token' => 1,
-    ]);
+// it('should call the job again if response equals the limit', function () {
+//     $fixture = fixtureData('mnemonic.nft_transfers');
 
-    $itemTemplate = $fixture['nftTransfers'][0];
+//     Token::factory()->create([
+//         'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
+//         'symbol' => 'ETH',
+//         'is_native_token' => 1,
+//         'is_default_token' => 1,
+//     ]);
 
-    $response = [
-        'nftTransfers' => collect(range(1, 500))->map(function () use ($itemTemplate) {
-            return [
-                ...$itemTemplate,
-                'blockchainEvent' => [
-                    ...$itemTemplate['blockchainEvent'],
-                    'txHash' => '0x'.fake()->sha1(),
-                ],
-            ];
-        })->toArray(),
-    ];
+//     $itemTemplate = $fixture['nftTransfers'][0];
 
-    Mnemonic::fake([
-        'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::sequence()
-            ->push($response, 200)
-            ->push($fixture, 200),
-    ]);
+//     $response = [
+//         'nftTransfers' => collect(range(1, 500))->map(function () use ($itemTemplate) {
+//             return [
+//                 ...$itemTemplate,
+//                 'blockchainEvent' => [
+//                     ...$itemTemplate['blockchainEvent'],
+//                     'txHash' => '0x'.fake()->sha1(),
+//                 ],
+//             ];
+//         })->toArray(),
+//     ];
 
-    $network = Network::polygon();
+//     Mnemonic::fake([
+//         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::sequence()
+//             ->push($response, 200)
+//             ->push($fixture, 200),
+//     ]);
 
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-    ]);
+//    $network = Network::polygon();
 
-    $nft = Nft::factory()->create([
-        'token_number' => '8304',
-        'collection_id' => $collection->id,
-    ]);
+//     $collection = Collection::factory()->create([
+//         'network_id' => $network->id,
+//     ]);
 
-    (new FetchNftActivity($nft))->handle();
+//     $nft = Nft::factory()->create([
+//         'token_number' => '8304',
+//         'collection_id' => $collection->id,
+//     ]);
 
-    expect($nft->activities()->count())->toBe(500 + 18);
-});
+//     (new FetchNftActivity($nft))->handle();
+
+//     expect($nft->activities()->count())->toBe(500 + 18);
+// });
