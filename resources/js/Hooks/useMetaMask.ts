@@ -303,7 +303,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
     // Initialize the Web3Provider when the page loads
     useEffect(() => {
-        if (!initialized) {
+        if (!initialized || !supportsMetaMask || needsMetaMask) {
             return;
         }
 
