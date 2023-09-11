@@ -34,10 +34,6 @@ class FetchPriceHistory extends Command
 
         $tokens = Token::withBalancesOnMainnet()->get();
 
-        Log::info("tokens with balances", [
-            '$tokens' => $tokens->count(),
-        ]);
-
         $currencies = $this->getActiveCurrencies();
 
         $progressBar = $this->output->createProgressBar($tokens->count() * $currencies->count());
