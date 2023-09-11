@@ -145,7 +145,7 @@ class CollectionController extends Controller
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
         if (! $collection->recentlyViewed()) {
-            if($collection->banner() === null) {
+            if ($collection->banner() === null) {
                 FetchCollectionBanner::dispatch($collection);
             }
 

@@ -74,7 +74,7 @@ it('can render the collections view page', function () {
     Bus::assertDispatched(SyncCollection::class);
 });
 
-it('should run FetchCollectionBanner if collection has no banner', function() {
+it('should run FetchCollectionBanner if collection has no banner', function () {
     $user = createUser();
 
     Bus::fake();
@@ -102,7 +102,7 @@ it('should run FetchCollectionBanner if collection has no banner', function() {
     Bus::assertDispatched(FetchCollectionBanner::class);
 });
 
-it('should not run FetchCollectionBanner if collection has banner', function() {
+it('should not run FetchCollectionBanner if collection has banner', function () {
     $user = createUser();
 
     Bus::fake();
