@@ -142,7 +142,7 @@ class AdminPanelProvider extends PanelProvider
                         slug: 'my-profile',
                     )
                     ->enableTwoFactorAuthentication(
-                        force: false,
+                        force: config("filament.enabled"),
                     ),
             ]);
     }
