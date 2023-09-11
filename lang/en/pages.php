@@ -193,8 +193,8 @@ return [
         ],
         'consists_of_collections' => '{0} This gallery consists of :count collections|{1} This gallery consists of :count collection|[2,*] This gallery consists of :count collections',
         'guest_banner' => [
-            'showcase' => 'Showcase',
-            'subtitle' => 'Create a Gallery to showcase your favorite NFTs to the world!',
+            'title' => 'Craft the ultimate',
+            'subtitle' => 'Pick your favorites, curate your gallery, & share it with the world.',
             'create_gallery' => 'Create Gallery',
         ],
     ],
