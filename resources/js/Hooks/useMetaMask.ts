@@ -174,7 +174,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const supportsMetaMask = isMetaMaskSupportedBrowser();
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
     const [onConnected, setOnConnected] = useState<() => void>();
-    const [debug, setDebug] = useState("");
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
     const switchUserWallet = async ({
