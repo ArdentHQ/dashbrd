@@ -31,7 +31,7 @@ class FetchPriceHistory extends Command
             return;
         }
 
-        $tokens = Token::mainnet()->get();
+        $tokens = Token::withBalancesOnMainnet()->get();
 
         $currencies = $this->getActiveCurrencies();
 
