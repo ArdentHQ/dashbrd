@@ -14,10 +14,12 @@ interface LayoutWrapperProperties extends HTMLAttributes<HTMLDivElement> {
     withSlider?: boolean;
     toastMessage?: ToastMessage;
     isMaintenanceModeActive?: boolean;
+    belowHeader?: React.ReactNode;
 }
 
 export const LayoutWrapper = ({
     children,
+    belowHeader,
     className,
     useVerticalOffset = true,
     withSlider = false,
@@ -61,7 +63,12 @@ export const LayoutWrapper = ({
                 closeOverlay={closeOverlay}
             />
 
-            <div className={cn("flex flex-1 flex-col", { blur: showAuthOverlay })}>
+            {belowHeader}
+
+            <div
+                id="layout"
+                className={cn("flex flex-1 flex-col")}
+            >
                 <main
                     className={cn(
                         "mx-auto flex w-full max-w-content flex-1 flex-col",

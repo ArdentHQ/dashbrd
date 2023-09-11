@@ -94,10 +94,9 @@ const Create = ({
         <LayoutWrapper
             withSlider
             toastMessage={props.toast}
+            belowHeader={<NoNftsOverlay show={paginatedNfts.length === 0} />}
         >
             <Head title={title} />
-
-            <NoNftsOverlay show={paginatedNfts.length === 0} />
 
             <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <GalleryNameInput

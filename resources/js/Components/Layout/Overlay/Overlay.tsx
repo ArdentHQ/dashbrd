@@ -16,8 +16,12 @@ export const Overlay = ({
     useEffect(() => {
         if (!showOverlay || reference.current === null) {
             clearAllBodyScrollLocks();
+
+            document.querySelector("#layout")?.classList.remove("blur");
         } else {
             disableBodyScroll(reference.current);
+
+            document.querySelector("#layout")?.classList.add("blur");
         }
 
         return () => {
