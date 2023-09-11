@@ -1,7 +1,6 @@
 import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import axios from "axios";
-import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GalleriesHeading } from "./Components/GalleriesHeading";
@@ -69,21 +68,15 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
                     />
                 </div>
 
-                {!isAuthenticated && (
-                    <GalleryGuestBanner
-                        connectWallet={connectWallet}
-                        initialized={initialized}
-                        connecting={connecting}
-                    />
-                )}
+                <GalleryGuestBanner
+                    connectWallet={connectWallet}
+                    initialized={initialized}
+                    connecting={connecting}
+                    isAuthenticated={isAuthenticated}
+                />
 
                 {galleries === undefined ? (
-                    <div
-                        className={cn("space-y-9", {
-                            "mt-5": !isAuthenticated,
-                            "mt-7": isAuthenticated,
-                        })}
-                    >
+                    <div className="mt-5 space-y-9">
                         <GallerySkeleton
                             title={t("pages.galleries.most_popular_galleries")}
                             viewAllPath={route("galleries.most-popular")}
