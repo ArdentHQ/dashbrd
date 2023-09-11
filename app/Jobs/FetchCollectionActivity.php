@@ -92,7 +92,7 @@ class FetchCollectionActivity implements ShouldQueue
             NftActivity::upsert($formattedActivities, ['tx_hash', 'collection_id', 'token_number', 'type']);
 
             // If we get the limit it may be that there are more activities to fetch...
-            if (count($activities) === $limit) {
+            if ($limit === count($activities)) {
                 self::dispatch($this->collection, forced: true)->afterCommit();
             } else {
                 $this->collection->update([
