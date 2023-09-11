@@ -108,46 +108,44 @@ export const AuthOverlay = ({
                 </>
             )}
 
-            <div className="border-t-none w-full justify-center space-y-6 border-theme-secondary-300 px-5 pb-5 pt-0 xs:border-t xs:px-8 xs:py-5">
-                {needsMetaMask && (
-                    <InstallMetamask
-                        closeOverlay={closeOverlay}
-                        showCloseButton={showCloseButton}
-                    />
-                )}
+            {needsMetaMask && (
+                <InstallMetamask
+                    closeOverlay={closeOverlay}
+                    showCloseButton={showCloseButton}
+                />
+            )}
 
-                {!needsMetaMask && (
-                    <>
-                        {errorMessage === undefined && (
-                            <div className="flex w-full flex-col items-center">
-                                {switching && <SwitchingNetwork />}
-                                {connecting && <ConnectingWallet />}
-                                {!connecting && !switching && (
-                                    <ConnectWallet
-                                        closeOverlay={closeOverlay}
-                                        showCloseButton={showCloseButton}
-                                        isWalletInitialized={initialized}
-                                        shouldRequireSignature={requiresSignature}
-                                        onConnect={() => {
-                                            void connectWallet();
-                                        }}
-                                    />
-                                )}
-                            </div>
-                        )}
+            {!needsMetaMask && (
+                <>
+                    {errorMessage === undefined && (
+                        <div className="flex w-full flex-col items-center">
+                            {switching && <SwitchingNetwork />}
+                            {connecting && <ConnectingWallet />}
+                            {!connecting && !switching && (
+                                <ConnectWallet
+                                    closeOverlay={closeOverlay}
+                                    showCloseButton={showCloseButton}
+                                    isWalletInitialized={initialized}
+                                    shouldRequireSignature={requiresSignature}
+                                    onConnect={() => {
+                                        void connectWallet();
+                                    }}
+                                />
+                            )}
+                        </div>
+                    )}
 
-                        {isTruthy(errorMessage) && (
-                            <ConnectionError
-                                closeOverlay={closeOverlay}
-                                showCloseButton={showCloseButton}
-                                onConnect={() => {
-                                    void connectWallet();
-                                }}
-                            />
-                        )}
-                    </>
-                )}
-            </div>
+                    {isTruthy(errorMessage) && (
+                        <ConnectionError
+                            closeOverlay={closeOverlay}
+                            showCloseButton={showCloseButton}
+                            onConnect={() => {
+                                void connectWallet();
+                            }}
+                        />
+                    )}
+                </>
+            )}
         </Overlay>
     );
 };

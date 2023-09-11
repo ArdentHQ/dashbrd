@@ -186,6 +186,8 @@ return [
             'load_more_collections_one' => 'Load {{count}} More Collection',
             'load_more_collections_other' => 'Load {{count}} More Collections',
             'load_more_nfts' => 'Load More NFTs',
+            'must_own_one_nft' => 'You must own at least one (1) NFT in order to create a gallery.',
+            'back_to_galleries' => 'Back to Galleries',
         ],
         'delete_modal' => [
             'title' => 'Delete Gallery',
