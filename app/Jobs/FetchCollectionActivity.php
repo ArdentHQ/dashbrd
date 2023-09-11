@@ -27,7 +27,8 @@ class FetchCollectionActivity implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private Collection $collection
+        private Collection $collection,
+        public bool $forced = false,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -41,11 +42,13 @@ class FetchCollectionActivity implements ShouldQueue
             return;
         }
 
-        if (! $this->collection->is_fetching_activity) {
-            $this->collection->update([
-                'is_fetching_activity' => true,
-            ]);
+        if ($this->collection->is_fetching_activity && ! $this->forced) {
+            return;
         }
+
+        $this->collection->update([
+            'is_fetching_activity' => true,
+        ]);
 
         $limit = 500;
 
@@ -90,7 +93,7 @@ class FetchCollectionActivity implements ShouldQueue
 
             // If we get the limit it may be that there are more activities to fetch...
             if (count($activities) === $limit) {
-                self::dispatch($this->collection)->afterCommit();
+                self::dispatch($this->collection, forced: true)->afterCommit();
             } else {
                 $this->collection->update([
                     'is_fetching_activity' => false,
