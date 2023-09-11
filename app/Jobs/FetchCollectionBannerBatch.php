@@ -49,7 +49,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
                 'banner' => $data->bannerImageUrl,
             ]);
 
-            Collection::query()->where('id', $data->contractAddress)
+            Collection::query()->where('address', $data->contractAddress)
                 ->update(['extra_attributes->banner' => $data->bannerImageUrl]);
         });
     }
