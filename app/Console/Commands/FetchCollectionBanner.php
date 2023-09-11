@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionBanner as FetchCollectionBannerJob;
-use App\Models\Collection;
-use App\Models\Network;
+use App\Jobs\FetchCollectionBanner as Job;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection as IlluminateCollection;
-use Illuminate\Support\Facades\Log;
 
 class FetchCollectionBanner extends Command
 {
@@ -21,45 +17,27 @@ class FetchCollectionBanner extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-banner {--missing-only}';
+    protected $signature = 'nfts:fetch-collection-banner {--collection-id=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Fetch the latest banner for collections';
+    protected $description = 'Fetch the latest banner for a collection';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $networks = Network::query()->whereIn('id', function ($query) {
-            $query->select('network_id')
-                ->from('collections')
-                ->groupBy('network_id');
-        })->get();
+        if (empty($this->option('collection-id'))) {
+            $this->error('Collection ID is missing. Please either set `collection-id` flag or use `nfts:fetch-collection-banner-batch` command to fetch banner of multiple collections');
+            return Command::INVALID;
+        }
 
-        $networks->map(function ($network) {
-            Collection::query()
-                ->select(['id', 'address'])
-                ->where('network_id', '=', $network->id)
-                ->when($this->option('missing-only'), function (Builder $query) {
-                    return $query->whereNull('extra_attributes->banner');
-                })
-                ->chunkById(4, function (IlluminateCollection $collections) use ($network) {
-                    $addresses = $collections->pluck('address')->toArray();
-
-                    Log::info("Dispatching FetchCollectionBannerJob", [
-                        'network_id' => $network->id,
-                        'collection_addresses' => $addresses
-                    ]);
-
-                    if ($collections->isNotEmpty()) {
-                        FetchCollectionBannerJob::dispatch($addresses, $network);
-                    }
-                } );
+        $this->forEachCollection(function ($collection) {
+            Job::dispatch($collection);
         });
 
         return Command::SUCCESS;
