@@ -7,10 +7,12 @@ interface SkeletonProperties {
     height?: string | number;
     isCircle?: boolean;
     className?: string;
+    disabled?: boolean;
 }
 
-export const Skeleton = ({ isCircle, width, height, className }: SkeletonProperties): JSX.Element => (
+export const Skeleton = ({ isCircle, width, height, className, disabled = false }: SkeletonProperties): JSX.Element => (
     <SkeletonReact
+        enableAnimation={!disabled}
         containerTestId="Skeleton"
         circle={isCircle}
         style={{ width, height }}
