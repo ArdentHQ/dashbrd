@@ -20,7 +20,10 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 class Token extends Model
 {
-    use BelongsToNetwork, BelongsToTokenGuid, HasFactory, WithData;
+    use BelongsToNetwork;
+    use BelongsToTokenGuid;
+    use HasFactory;
+    use WithData;
 
     /**
      * @var array<string>
@@ -115,6 +118,23 @@ class Token extends Model
         return $this->scopeWithoutSpam($query->whereHas('network', function (Builder $query) {
             $query->where('is_mainnet', true);
         }));
+    }
+
+    /**
+     * @return HasMany<Balance>
+     */
+    public function balances()
+    {
+        return $this->hasMany(Balance::class, 'token_id', 'id');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWithBalancesOnMainnet(Builder $query): Builder
+    {
+        return $query->mainnet()->has('balances');
     }
 
     /**
