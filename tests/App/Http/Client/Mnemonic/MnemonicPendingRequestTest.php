@@ -369,45 +369,30 @@ it('should convert total to native currency by using historical price for the pe
         ]);
 });
 
-// it('should ignore activity with unexpected label', function () {
-//     $response = fixtureData('mnemonic.nft_transfers');
+it('should ignore activity with unexpected label', function () {
+    $response = fixtureData('mnemonic.nft_transfers');
 
-//     $response['nftTransfers'][1]['labels'] = ['LABEL_BURN'];
+    $response['nftTransfers'][1]['labels'] = ['LABEL_BURN'];
 
-//     Mnemonic::fake([
-//         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response($response, 200),
-//     ]);
+    Mnemonic::fake([
+        'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response($response, 200),
+    ]);
 
-//    $network = Network::polygon();
+    $network = Network::polygon();
 
-//     $collection = Collection::factory()->create([
-//         'network_id' => $network->id,
-//         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
-//     ]);
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
+    ]);
 
-//     $nft = Nft::factory()->create([
-//         'token_number' => '8304',
-//         'collection_id' => $collection->id,
-//     ]);
+    // Note: limit is ignored because the fixture is fixed size
+    $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100);
 
-//     // Note: limit is ignored because the fixture is fixed size
-//     $data = Mnemonic::getNftActivity(Chains::Polygon, $collection->address, $nft->token_number, 100);
+    expect($data)->toHaveCount(18);
 
-//     expect($data)->toHaveCount(17);
-
-//     expect($data->first()->toArray())->toEqualCanonicalizing([
-//         'contractAddress' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
-//         'tokenId' => '8304',
-//         'sender' => '0x0000000000000000000000000000000000000000',
-//         'recipient' => '0xe66e1e9e37e4e148b21eb22001431818e980d060',
-//         'txHash' => '0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de',
-//         'type' => 'LABEL_MINT',
-//         'timestamp' => '2022-04-16T16:39:27+00:00',
-//         'total_native' => null,
-//         'total_usd' => '7547.995011517354',
-//         'extra_attributes' => $data->first()->extraAttributes,
-//     ]);
-// });
+    expect($data->contains(fn ($activity) => $activity->type?->value === 'LABEL_BURN'))->toBeFalse();
+    expect($data->contains(fn ($activity) => $activity->type === null))->toBeTrue();
+});
 
 it('should fetch activity from date', function () {
     $from = Carbon::now();
