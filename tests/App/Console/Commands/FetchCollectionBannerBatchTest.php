@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Models\Collection;
 use Illuminate\Support\Facades\Bus;
