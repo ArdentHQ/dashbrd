@@ -352,3 +352,17 @@ it('has a retry until', function () {
 
     expect((new FetchCollectionActivity($collection))->retryUntil())->toBeInstanceOf(DateTime::class);
 });
+
+it('resets the collection state if the job fails', function () {
+    $collection = Collection::factory()->create([
+        'is_fetching_activity' => true,
+        'activity_updated_at' => null,
+    ]);
+
+    (new FetchCollectionActivity($collection))->onFailure(new RuntimeException);
+
+    $collection->refresh();
+
+    expect($collection->is_fetching_activity)->toBeFalse();
+    expect($collection->activity_updated_at)->not->toBeNull();
+});

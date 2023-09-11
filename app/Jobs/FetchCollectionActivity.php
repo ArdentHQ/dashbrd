@@ -18,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class FetchCollectionActivity implements ShouldQueue
 {
@@ -107,6 +108,14 @@ class FetchCollectionActivity implements ShouldQueue
                     ->activities()
                     ->latest('timestamp')
                     ->value('timestamp');
+    }
+
+    public function onFailure(Throwable $exception): void
+    {
+        $this->collection->update([
+            'is_fetching_activity' => false,
+            'activity_updated_at' => now(),
+        ]);
     }
 
     public function retryUntil(): DateTime
