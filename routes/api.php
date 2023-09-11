@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use App\Http\Controllers;
-use App\Http\Controllers\LandingPageDataController;
-use App\Http\Controllers\NetworkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('landing-data', LandingPageDataController::class)->name('landing-data');
+Route::get('/landing-data', Controllers\LandingPageDataController::class)->name('landing-data');
 
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
@@ -25,22 +23,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tokens/breakdown', [Controllers\TokenController::class, 'breakdown'])->name('tokens.breakdown');
     Route::get('/tokens/search', [Controllers\TokenController::class, 'searchTokens'])->name('tokens.search');
 
-    Route::post('/transaction-success', Controllers\TransactionSuccessController::class)->name('transaction-success');
+    Route::post('/transaction-success', Controllers\TransactionSuccessController::class)
+            ->name('transaction-success');
 
-    Route::get('/networks/{network:id}/tokens/{token:address}/transactions/network-native-token', [
-        Controllers\NativeTokenController::class, 'show',
-    ])->name('tokens.network-native-token')->scopeBindings();
+    Route::get('/networks/{network:id}/tokens/{token:address}/transactions/network-native-token', [Controllers\NativeTokenController::class, 'show'])
+            ->name('tokens.network-native-token')
+            ->scopeBindings();
 
-    Route::post('/price_history', Controllers\PriceHistoryController::class)->name('price_history');
+    Route::post('/price_history', Controllers\PriceHistoryController::class)
+            ->name('price_history');
 
-    Route::post('/line_chart_data', Controllers\WalletsLineChartController::class)->name('line_chart_data');
+    Route::post('/line_chart_data', Controllers\WalletsLineChartController::class)
+            ->name('line_chart_data');
 
     Route::post('/galleries/{gallery:slug}/like', [Controllers\GalleryController::class, 'like'])
         ->name('galleries.like')
         ->middleware(['signed_wallet']);
 
-    Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', [Controllers\CollectionNftController::class, 'refresh'])->name('nft.refresh')
-        ->middleware('throttle:nft:refresh');
+    Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
+            ->name('nft.refresh')
+            ->middleware('throttle:nft:refresh');
 
-    Route::get('/networks/{chainId}', NetworkController::class)->name('network-by-chain');
+    Route::get('/networks/{chainId}', Controllers\NetworkController::class)
+            ->name('network-by-chain');
 });
