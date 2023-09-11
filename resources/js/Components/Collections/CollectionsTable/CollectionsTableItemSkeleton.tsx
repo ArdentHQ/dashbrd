@@ -5,10 +5,10 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 export const CollectionsTableItemSkeleton = ({
     index,
-    disabled = false,
+    disabled,
 }: {
     index: number;
-    disabled?: boolean;
+    disabled: boolean;
 }): JSX.Element => {
     const { isMdAndAbove, isLgAndAbove, isXlAndAbove } = useBreakpoint();
 
