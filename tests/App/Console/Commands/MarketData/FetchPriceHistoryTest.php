@@ -27,7 +27,6 @@ it('dispatches a job for every token and user currency in the database', functio
     User::factory()->create(['extra_attributes' => ['currency' => 'EUR']]);
     User::factory()->create(['extra_attributes' => ['currency' => 'MXN']]);
 
-
     $wallet = Wallet::factory()->create();
 
     $tokens->each(function ($token) use ($wallet) {
@@ -36,8 +35,6 @@ it('dispatches a job for every token and user currency in the database', functio
             'token_id' => $token->id,
         ]);
     });
-
-
 
     $this->artisan('marketdata:fetch-price-history --period='.Period::DAY->value);
 
