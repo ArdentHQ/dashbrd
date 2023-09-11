@@ -17,6 +17,7 @@ use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Nft;
@@ -144,6 +145,10 @@ class CollectionController extends Controller
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
         if (! $collection->recentlyViewed()) {
+            if($collection->banner() === null) {
+                FetchCollectionBanner::dispatch($collection);
+            }
+
             SyncCollection::dispatch($collection);
         }
 
