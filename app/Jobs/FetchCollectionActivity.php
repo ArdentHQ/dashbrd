@@ -27,7 +27,7 @@ class FetchCollectionActivity implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private Collection $collection,
+        public Collection $collection,
         public bool $forced = false,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);

@@ -20,7 +20,7 @@ use App\Support\Facades\Mnemonic;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-final class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
+class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
 {
     use LoadsFromCache;
 
