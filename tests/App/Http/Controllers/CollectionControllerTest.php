@@ -102,7 +102,7 @@ it('should run FetchCollectionBanner if collection has no banner', function () {
     Bus::assertDispatched(FetchCollectionBanner::class);
 });
 
-it('should run FetchCollectionBanner if collection was updated more than a week ago', function() {
+it('should run FetchCollectionBanner if collection was updated more than a week ago', function () {
     $user = createUser();
 
     Bus::fake();
