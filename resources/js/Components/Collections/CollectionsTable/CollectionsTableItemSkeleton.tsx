@@ -1,11 +1,15 @@
 import React, { useMemo } from "react";
 import { Skeleton } from "@/Components/Skeleton";
 import { TableCell, TableRow } from "@/Components/Table";
-import { useAuth } from "@/Hooks/useAuth";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.Element => {
-    const { authenticated } = useAuth();
+export const CollectionsTableItemSkeleton = ({
+    index,
+    disabled = false,
+}: {
+    index: number;
+    disabled?: boolean;
+}): JSX.Element => {
     const { isMdAndAbove, isLgAndAbove, isXlAndAbove } = useBreakpoint();
 
     const nftsToShow = useMemo((): number => {
@@ -36,12 +40,12 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                 <Skeleton
                     isCircle
                     className="relative h-8 w-8 shrink-0 md:h-20 md:w-20"
-                    disabled={!authenticated}
+                    disabled={disabled}
                 />
 
                 <Skeleton
                     className="h-4 w-28"
-                    disabled={!authenticated}
+                    disabled={disabled}
                 />
             </TableCell>
 
@@ -54,11 +58,11 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                     <div className="mt-1 flex flex-col items-end space-y-2">
                         <Skeleton
                             className="h-4 w-16"
-                            disabled={!authenticated}
+                            disabled={disabled}
                         />
                         <Skeleton
                             className="h-4 w-24"
-                            disabled={!authenticated}
+                            disabled={disabled}
                         />
                     </div>
                 </TableCell>
@@ -72,11 +76,11 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                 <div className="mt-1 flex flex-col items-end space-y-2">
                     <Skeleton
                         className="h-4 w-12"
-                        disabled={!authenticated}
+                        disabled={disabled}
                     />
                     <Skeleton
                         className="h-4 w-20"
-                        disabled={!authenticated}
+                        disabled={disabled}
                     />
                 </div>
             </TableCell>
@@ -91,7 +95,7 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                     <Skeleton
                         className="mr-2 h-5 w-5"
                         isCircle
-                        disabled={!authenticated}
+                        disabled={disabled}
                     />
                 </TableCell>
             )}
@@ -109,7 +113,7 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                                 <Skeleton
                                     key={key}
                                     className="h-20 w-20"
-                                    disabled={!authenticated}
+                                    disabled={disabled}
                                 />
                             ))}
                     </div>
@@ -125,7 +129,7 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                 <Skeleton
                     className="h-6 w-6 md:mt-0 md:h-10 md:w-10"
                     isCircle
-                    disabled={!authenticated}
+                    disabled={disabled}
                 />
             </TableCell>
         </TableRow>

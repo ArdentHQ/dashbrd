@@ -108,7 +108,12 @@ export const CollectionsTable = ({
                         nftsCount: 1,
                     }) as App.Data.Collections.CollectionData[]
                 }
-                row={(_, index: number) => <CollectionsTableItemSkeleton index={index} />}
+                row={(_, index: number) => (
+                    <CollectionsTableItemSkeleton
+                        index={index}
+                        disabled={user === null}
+                    />
+                )}
             />
         );
     }
