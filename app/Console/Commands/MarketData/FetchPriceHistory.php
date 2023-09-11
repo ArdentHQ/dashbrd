@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class FetchPriceHistory extends Command
 {

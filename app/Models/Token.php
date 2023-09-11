@@ -134,7 +134,7 @@ class Token extends Model
      */
     public function scopeWithBalancesOnMainnet(Builder $query): Builder
     {
-        return $query->mainnet()->has("balances");
+        return $query->mainnet()->has('balances');
     }
 
     /**
