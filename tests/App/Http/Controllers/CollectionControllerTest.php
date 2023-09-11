@@ -102,6 +102,35 @@ it('should run FetchCollectionBanner if collection has no banner', function () {
     Bus::assertDispatched(FetchCollectionBanner::class);
 });
 
+it('should run FetchCollectionBanner if collection was updated more than a week ago', function() {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'extra_attributes' => [
+            'banner' => 'https://example.com/image.png',
+        ],
+        'updated_at' => now()->subWeek(),
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionBanner::class);
+});
+
 it('should not run FetchCollectionBanner if collection has banner', function () {
     $user = createUser();
 
