@@ -12,7 +12,6 @@ use App\Models\Nft;
 use App\Models\Token;
 use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia as Assert;
-use Carbon\Carbon;
 
 it('can render the collections overview page', function () {
     $user = createUser();
@@ -117,7 +116,6 @@ it('should run FetchCollectionBanner if colleciton banner was updated more than 
             'banner_updated_at' => now()->subWeek()->subDay()->toDateTimeString(),
         ],
     ]);
-
 
     Token::factory()->create([
         'network_id' => $network->id,
