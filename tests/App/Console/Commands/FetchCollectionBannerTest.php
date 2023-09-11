@@ -27,5 +27,6 @@ it('should return error if `collection-id` flag is missing', function () {
     $response = $this->artisan('nfts:fetch-collection-banner');
 
     $response->assertExitCode(Command::INVALID);
+
     Bus::assertDispatchedTimes(FetchCollectionBanner::class, 0);
 });

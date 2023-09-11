@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionBannerBatch as FetchCollectionBannerJob;
+use App\Jobs\FetchCollectionBannerBatch as FetchCollectionBannerBatchJob;
 use App\Models\Collection;
 use App\Models\Network;
 use Illuminate\Console\Command;
@@ -55,7 +55,7 @@ class FetchCollectionBannerBatch extends Command
                     ]);
 
                     if ($collections->isNotEmpty()) {
-                        FetchCollectionBannerJob::dispatch($addresses, $network);
+                        FetchCollectionBannerBatchJob::dispatch($addresses, $network);
                     }
                 });
         });
