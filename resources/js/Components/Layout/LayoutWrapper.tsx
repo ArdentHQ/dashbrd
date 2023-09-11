@@ -56,7 +56,7 @@ export const LayoutWrapper = ({
             </header>
 
             <AuthOverlay
-                showAuthOverlay={showAuthOverlay}
+                show={showAuthOverlay}
                 showCloseButton={showCloseButton}
                 closeOverlay={closeOverlay}
             />
