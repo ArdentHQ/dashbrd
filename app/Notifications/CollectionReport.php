@@ -40,7 +40,7 @@ final class CollectionReport extends Notification implements ShouldQueue
                 $collection = $this->report->subject;
 
                 $attachment
-                    ->title(title: $collection->name)
+                    ->title(title: $collection->name, url: route('collections.view', $collection))
                     ->author('Reporter: '.$this->reporter())
                     ->fields($this->fields());
             });
