@@ -39,6 +39,6 @@ return [
 
     'default_filesystem_disk' => env('FILAMENT_FILESYSTEM_DISK', 'public'),
 
-    'enabled' => env('2FA_ENABLED', true),
+    '2fa_enabled' => env('2FA_ENABLED', true),
 
 ];
