@@ -28,7 +28,7 @@ const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): J
             <div className="flex h-fit justify-center">
                 <Button
                     icon="Plus"
-                    className="w-full py-2 sm:w-fit sm:px-6"
+                    className="justify-center·py-2·sm:w-fit·sm:px-6"
                     disabled={connecting || !initialized}
                     onClick={onClick}
                     variant={isMdAndAbove ? "secondary" : "primary"}
