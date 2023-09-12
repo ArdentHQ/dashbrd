@@ -128,7 +128,7 @@ export const AuthOverlay = ({
                         <div className="flex w-full flex-col items-center">
                             {switching && <SwitchingNetwork />}
                             {(connecting || signing) && <ConnectingWallet signing={signing} />}
-                            {!connecting && !switching && (
+                            {!connecting && !switching && !signing && (
                                 <ConnectWallet
                                     closeOverlay={closeOverlay}
                                     showCloseButton={showCloseButton}
