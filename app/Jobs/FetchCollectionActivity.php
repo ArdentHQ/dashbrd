@@ -24,6 +24,8 @@ class FetchCollectionActivity implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
+    public const LIMIT = 500;
+
     /**
      * Create a new job instance.
      */
@@ -51,12 +53,10 @@ class FetchCollectionActivity implements ShouldQueue
             'is_fetching_activity' => true,
         ]);
 
-        $limit = 500;
-
         $activities = $provider->getCollectionActivity(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address,
-            limit: $limit,
+            limit: static::LIMIT,
             from: $this->latestActivityTimestamp(),
         );
 
@@ -87,11 +87,11 @@ class FetchCollectionActivity implements ShouldQueue
                 'extra_attributes' => json_encode($activity->extraAttributes),
             ])->toArray();
 
-        DB::transaction(function () use ($formattedActivities, $activities, $limit) {
+        DB::transaction(function () use ($formattedActivities, $activities) {
             NftActivity::upsert($formattedActivities, uniqueBy: ['tx_hash', 'collection_id', 'token_number', 'type']);
 
             // If we get the limit it may be that there are more activities to fetch...
-            if ($limit === count($activities)) {
+            if (static::LIMIT === count($activities)) {
                 self::dispatch($this->collection, forced: true)->afterCommit();
             } else {
                 $this->collection->update([
