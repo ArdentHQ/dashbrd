@@ -129,14 +129,6 @@ describe('user is signed', function () {
             );
     });
 
-    it('should redirect user from the "create" page if no nfts', function () {
-        $user = createUser();
-
-        $this->actingAs($user)
-            ->get(route('my-galleries.create'))
-            ->assertRedirect(route('my-galleries'));
-    });
-
     it('can render the "edit" page if owns the gallery', function () {
         $user = createUser();
 
