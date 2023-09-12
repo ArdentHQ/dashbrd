@@ -270,7 +270,9 @@ it('can order nfts by mint date', function () {
         NftTransferType::Mint->value => 3, // timestamp = 3
         NftTransferType::Sale->value => 5, // timestamp = 5
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft1)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft1->collection_id,
+            'token_number' => $nft1->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -282,7 +284,9 @@ it('can order nfts by mint date', function () {
         NftTransferType::Mint->value => 4, // timestamp = 4
         NftTransferType::Sale->value => 6, // timestamp = 6
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft2)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft2->collection_id,
+            'token_number' => $nft2->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -294,7 +298,9 @@ it('can order nfts by mint date', function () {
         NftTransferType::Mint->value => 2, // timestamp = 3
         NftTransferType::Sale->value => 1, // timestamp = 1
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft3)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft3->collection_id,
+            'token_number' => $nft3->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -321,7 +327,9 @@ it('can order nfts by received date', function () {
         NftTransferType::Mint->value => 3, // timestamp = 3
         NftTransferType::Sale->value => 5, // timestamp = 5
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft1)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft1->collection_id,
+            'token_number' => $nft1->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -333,7 +341,9 @@ it('can order nfts by received date', function () {
         NftTransferType::Mint->value => 4, // timestamp = 4
         NftTransferType::Sale->value => 6, // timestamp = 6
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft2)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft2->collection_id,
+            'token_number' => $nft2->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -345,7 +355,9 @@ it('can order nfts by received date', function () {
         NftTransferType::Mint->value => 2, // timestamp = 3
         NftTransferType::Sale->value => 1, // timestamp = 1
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft3)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft3->collection_id,
+            'token_number' => $nft3->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);

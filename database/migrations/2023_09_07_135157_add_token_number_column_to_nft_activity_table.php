@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::table('nft_activity', function (Blueprint $table) {
             $table->foreignIdFor(Collection::class)->nullable()->constrained()->cascadeOnDelete()->after('id');
             $table->addColumn('numeric', 'token_number', ['numeric_type' => 'numeric'])->after('collection_id')->nullable();
-            $table->string('log_index')->nullable()->after('tx_hash');
+            $table->addColumn('numeric', 'log_index', ['numeric_type' => 'numeric'])->after('tx_hash')->nullable();
 
             $table->dropColumn('nft_id');
 

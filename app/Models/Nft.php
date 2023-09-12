@@ -201,7 +201,7 @@ class Nft extends Model
         $select = "
                 SELECT timestamp
                 FROM nft_activity
-                WHERE nft_activity.nft_id = nfts.id AND type = '".NftTransferType::Mint->value."'
+                WHERE nft_activity.collection_id = nfts.collection_id AND nft_activity.token_number = nfts.token_number AND type = '".NftTransferType::Mint->value."'
                 ORDER BY timestamp DESC
         ";
 
@@ -223,7 +223,7 @@ class Nft extends Model
         $select = "
                 SELECT timestamp
                 FROM nft_activity
-                WHERE nft_activity.nft_id = nfts.id AND type = '".NftTransferType::Transfer->value."'
+                WHERE nft_activity.collection_id = nfts.collection_id AND nft_activity.token_number = nfts.token_number AND type = '".NftTransferType::Transfer->value."'
                 ORDER BY timestamp DESC
                 LIMIT 1
         ";

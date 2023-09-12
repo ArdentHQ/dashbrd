@@ -256,7 +256,7 @@ class Collection extends Model
         // Get the latest timestamp for each NFT
         $subselect = sprintf("SELECT timestamp
             FROM nft_activity
-            WHERE nft_activity.nft_id = nfts.id AND lower(recipient) = '%s'
+            WHERE nft_activity.collection_id = nfts.collection_id AND nft_activity.token_number = nfts.token_number AND lower(recipient) = '%s'
             -- Latest timestamp
             ORDER BY timestamp desc
             LIMIT 1", strtolower($wallet->address));
