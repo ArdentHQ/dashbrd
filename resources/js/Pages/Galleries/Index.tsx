@@ -4,12 +4,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GalleriesHeading } from "./Components/GalleriesHeading";
+import GalleryGuestBanner from "./Components/GalleryGuestBanner";
 import { GallerySkeleton } from "./Components/GallerySkeleton/GallerySkeleton";
 import { useGalleryCarousel } from "./hooks/use-gallery-carousel";
 import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
     title: string;
@@ -25,6 +29,11 @@ interface Galleries {
 
 const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
+
+    const { connectWallet, initialized, connecting } = useMetaMaskContext();
+
+    const { wallet } = useAuth();
+    const isAuthenticated = isTruthy(wallet);
 
     const { props } = usePage();
     const { slidesPerView, horizontalOffset } = useGalleryCarousel();
@@ -59,8 +68,15 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
                     />
                 </div>
 
+                <GalleryGuestBanner
+                    connectWallet={connectWallet}
+                    initialized={initialized}
+                    connecting={connecting}
+                    isAuthenticated={isAuthenticated}
+                />
+
                 {galleries === undefined ? (
-                    <div className="mt-7 space-y-9">
+                    <div className="mt-5 space-y-9">
                         <GallerySkeleton
                             title={t("pages.galleries.most_popular_galleries")}
                             viewAllPath={route("galleries.most-popular")}
@@ -77,13 +93,13 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
                 ) : (
                     <>
                         {isEmpty && (
-                            <div className="mx-6 mt-6 sm:mx-8 2xl:mx-0">
+                            <div className="mx-6 mt-5 sm:mx-8 2xl:mx-0">
                                 <EmptyBlock>{t("pages.galleries.empty_title")}</EmptyBlock>
                             </div>
                         )}
 
                         {!isEmpty && (
-                            <div className="mt-7 space-y-9">
+                            <div className="mt-5 space-y-9">
                                 <Carousel
                                     horizontalOffset={horizontalOffset}
                                     headerClassName="mx-6 sm:mx-8 2xl:mx-0"
