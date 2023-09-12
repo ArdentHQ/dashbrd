@@ -189,7 +189,7 @@ class Collection extends Model
                 GROUP BY collection_id
             ) nfts"), 'collections.id', '=', 'nfts.collection_id')
             ->groupBy('collections.id')
-            ->orderByRaw("total_value $direction $nullsPosition")
+            ->orderByRaw("total_value {$direction} {$nullsPosition}")
             ->orderBy('collections.id', $direction);
     }
 
@@ -204,7 +204,7 @@ class Collection extends Model
 
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
-        )->orderByRaw("total_floor_price $direction $nullsPosition");
+        )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
     }
 
     /**
