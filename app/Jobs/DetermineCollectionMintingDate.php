@@ -30,6 +30,7 @@ class DetermineCollectionMintingDate implements ShouldQueue
         $existing = Collection::query()
                             ->where('network_id', $this->nft->networkId)
                             ->where('minted_block', $this->nft->mintedBlock)
+                            ->whereNotNull('minted_at')
                             ->value('minted_at');
 
         // Check whether we already have a minted timestamp for the collection with the same minting block...

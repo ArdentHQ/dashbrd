@@ -20,6 +20,10 @@ import { ReactComponent as Polygonscan } from "@icons/brands/polygonscan.svg";
 import { ReactComponent as TwitterLg } from "@icons/brands/twitter-lg.svg";
 import { ReactComponent as Twitter } from "@icons/brands/twitter.svg";
 import { ReactComponent as Uniswap } from "@icons/brands/uniswap.svg";
+import { ReactComponent as BlurColor } from "@icons/brands_color/blur.svg";
+import { ReactComponent as LooksRareColor } from "@icons/brands_color/looksrare.svg";
+import { ReactComponent as OpenseaColor } from "@icons/brands_color/opensea.svg";
+import { ReactComponent as RaribleColor } from "@icons/brands_color/rarible.svg";
 import { ReactComponent as Calendar } from "@icons/calendar.svg";
 import { ReactComponent as Cards } from "@icons/cards.svg";
 import { ReactComponent as Cart } from "@icons/cart.svg";
@@ -98,6 +102,9 @@ import { ReactComponent as XInCircle } from "@icons/x-in-circle.svg";
 import { ReactComponent as X } from "@icons/x.svg";
 
 export const SvgCollection = {
+    RaribleColor,
+    BlurColor,
+    LooksRareColor,
     ArrowRight,
     ArrowUp,
     ArrowUpArrowDown,
@@ -113,6 +120,7 @@ export const SvgCollection = {
     TwitterLg,
     Uniswap,
     Opensea,
+    OpenseaColor,
     Blur,
     Calendar,
     Cards,

@@ -13,6 +13,7 @@ import { EditableGalleryHook } from "@/Components/Galleries/Hooks/useEditableGal
 import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
+import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
@@ -93,6 +94,7 @@ const Create = ({
         <LayoutWrapper
             withSlider
             toastMessage={props.toast}
+            belowHeader={<NoNftsOverlay show={paginatedNfts.length === 0} />}
         >
             <Head title={title} />
 
