@@ -43,7 +43,7 @@ class NftController extends Controller
             'reportAvailableIn' => RateLimiterHelpers::nftReportAvailableInHumanReadable($request, $nft),
             'traits' => CollectionTraitData::collection($nft->traits),
             'nativeToken' => TokenData::fromModel($nativeToken),
-            'allowsGuests' => true
+            'allowsGuests' => true,
         ]);
     }
 
