@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
 import { Icon } from "@/Components/Icon";
+import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
 
 interface Properties extends Pick<MetaMaskState, "connecting" | "initialized" | "connectWallet"> {
@@ -11,6 +12,8 @@ interface Properties extends Pick<MetaMaskState, "connecting" | "initialized" | 
 
 const GalleryGuestBanner = ({ connectWallet, initialized, connecting, isAuthenticated }: Properties): JSX.Element => {
     const { t } = useTranslation();
+
+    const { isMdAndAbove } = useBreakpoint();
 
     const handleClick = (): void => {
         if (isAuthenticated) {
@@ -37,7 +40,7 @@ const GalleryGuestBanner = ({ connectWallet, initialized, connecting, isAuthenti
                     className="w-full py-2 sm:w-fit sm:px-6"
                     disabled={connecting || !initialized}
                     onClick={handleClick}
-                    variant="secondary"
+                    variant={isMdAndAbove ? "secondary" : "primary"}
                 >
                     <span className="flex w-full items-center justify-center">
                         <Icon

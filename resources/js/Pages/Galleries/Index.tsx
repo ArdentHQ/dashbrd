@@ -93,13 +93,13 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
                 ) : (
                     <>
                         {isEmpty && (
-                            <div className="mx-6 mt-6 sm:mx-8 2xl:mx-0">
+                            <div className="mx-6 mt-5 sm:mx-8 2xl:mx-0">
                                 <EmptyBlock>{t("pages.galleries.empty_title")}</EmptyBlock>
                             </div>
                         )}
 
                         {!isEmpty && (
-                            <div className="mt-7 space-y-9">
+                            <div className="mt-5 space-y-9">
                                 <Carousel
                                     horizontalOffset={horizontalOffset}
                                     headerClassName="mx-6 sm:mx-8 2xl:mx-0"
