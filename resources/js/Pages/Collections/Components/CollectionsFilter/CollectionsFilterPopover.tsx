@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Toggle } from "@/Components/Form/Toggle";
 import { Popover } from "@/Components/Popover";
+import { Tooltip } from "@/Components/Tooltip";
 import { useDebounce } from "@/Hooks/useDebounce";
 
 interface Properties {
@@ -42,11 +43,13 @@ export const CollectionsFilterPopover = ({
             {({ open }) => (
                 <>
                     <div className="sm:relative">
-                        <Popover.Button
-                            as={IconButton}
-                            icon="Funnel"
-                            disabled={disabled}
-                        />
+                        <Tooltip content={t("common.filter")}>
+                            <Popover.Button
+                                as={IconButton}
+                                icon="Funnel"
+                                disabled={disabled}
+                            />
+                        </Tooltip>
 
                         {hidden && <PulsatingDot />}
                     </div>

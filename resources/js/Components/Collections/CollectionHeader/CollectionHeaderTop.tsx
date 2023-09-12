@@ -10,6 +10,7 @@ import { Img } from "@/Components/Image";
 import { Link } from "@/Components/Link";
 import { Point } from "@/Components/Point";
 import { Report } from "@/Components/Report";
+import { Tooltip } from "@/Components/Tooltip";
 import { useNetwork } from "@/Hooks/useNetwork";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -27,28 +28,36 @@ interface CollectionHeaderTopProperties {
 interface SocialLinkProperties {
     href: string | null;
     icon: IconName;
+    tooltip?: string;
 }
 
-export const SocialLink = ({ href, icon, ...properties }: SocialLinkProperties): JSX.Element => (
+export const SocialLink = ({ href, icon, tooltip, ...properties }: SocialLinkProperties): JSX.Element => (
     <>
-        {isTruthy(href) && (
-            <ButtonLink
-                icon={icon}
-                href={href}
-                variant="icon"
-                target="_blank"
-                {...properties}
-            />
-        )}
+        <Tooltip
+            content={tooltip}
+            offset={[0, 20]}
+        >
+            <span>
+                {isTruthy(href) && (
+                    <ButtonLink
+                        icon={icon}
+                        href={href}
+                        variant="icon"
+                        target="_blank"
+                        {...properties}
+                    />
+                )}
 
-        {!isTruthy(href) && (
-            <Button
-                icon={icon}
-                variant="icon"
-                disabled
-                {...properties}
-            />
-        )}
+                {!isTruthy(href) && (
+                    <Button
+                        icon={icon}
+                        variant="icon"
+                        disabled
+                        {...properties}
+                    />
+                )}
+            </span>
+        </Tooltip>
     </>
 );
 
@@ -124,18 +133,21 @@ export const CollectionHeaderTop = ({
                         data-testid="CollectionHeaderTop__website"
                         href={collection.website}
                         icon="GlobeWithCursor"
+                        tooltip={t("common.website")}
                     />
 
                     <SocialLink
                         data-testid="CollectionHeaderTop__twitter"
                         href={collection.twitter}
                         icon="Twitter"
+                        tooltip={t("common.twitter")}
                     />
 
                     <SocialLink
                         data-testid="CollectionHeaderTop__discord"
                         href={collection.discord}
                         icon="Discord"
+                        tooltip={t("common.discord")}
                     />
 
                     <Report
@@ -146,6 +158,7 @@ export const CollectionHeaderTop = ({
                         reportAvailableIn={reportAvailableIn}
                         allowReport={allowReport}
                         tooltipOffset={[0, 20]}
+                        displayDefaultTooltip
                     />
                 </div>
             </div>
