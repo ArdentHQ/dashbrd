@@ -1,6 +1,7 @@
-export interface AuthOverlayProperties extends React.HTMLAttributes<HTMLDivElement> {
-    showAuthOverlay: boolean;
-    showCloseButton: boolean;
+import { type OverlayProperties } from "@/Components/Layout/Overlay/Overlay.contracts";
+
+export interface AuthOverlayProperties extends Omit<OverlayProperties, "showOverlay"> {
+    show: boolean;
     closeOverlay: () => void;
 }
 
