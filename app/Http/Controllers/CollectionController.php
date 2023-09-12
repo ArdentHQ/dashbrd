@@ -15,11 +15,13 @@ use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
+use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Nft;
+use App\Models\User;
 use App\Support\Cache\UserCache;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
@@ -122,22 +124,8 @@ class CollectionController extends Controller
 
     public function view(Request $request, Collection $collection): Response
     {
+        /** @var User|null $user */
         $user = $request->user();
-
-        if ($user === null) {
-            return Inertia::render('Collections/Index', [
-                'title' => trans('metatags.collections.title'),
-                'stats' => new CollectionStatsData(
-                    nfts: 0,
-                    collections: 0,
-                    value: 0,
-                ),
-                'sortBy' => null,
-                'sortDirection' => 'desc',
-                'showHidden' => false,
-                'view' => 'list',
-            ]);
-        }
 
         $sortByMintDate = $request->query('sort') === 'minted';
 
@@ -164,7 +152,7 @@ class CollectionController extends Controller
             ->select('nfts.*')
             ->filter($filters, $user)
             ->search($request->get('query'))
-            ->orderByOwnership($user)
+            ->when($user, fn($q) => $q->orderByOwnership($user))
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
             ->when(! $sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
             ->paginate(12)
@@ -188,20 +176,23 @@ class CollectionController extends Controller
 
         $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
 
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
+
         return Inertia::render('Collections/View', [
             'activities' => new NftActivitiesData($paginated),
-            'collection' => CollectionDetailData::fromModel($collection, $user->currency(), $user),
-            'isHidden' => $user->hiddenCollections()->where('id', $collection->id)->exists(),
+            'collection' => CollectionDetailData::fromModel($collection, $currency, $user),
+            'isHidden' => $user && $user->hiddenCollections()->where('id', $collection->id)->exists(),
             'previousUrl' => url()->previous() === url()->current()
                 ? null
                 : url()->previous(),
             'nfts' => new GalleryNftsData($paginatedNfts),
             'collectionTraits' => CollectionTraitFilterData::fromCollection($collection),
-            'alreadyReported' => $collection->wasReportedByUserRecently($user),
+            'alreadyReported' => $user && $collection->wasReportedByUserRecently($user),
             'reportAvailableIn' => $reportAvailableIn,
             'appliedFilters' => $this->appliedParameters($request, $pageLimit, $tab, $filters),
             'sortByMintDate' => $sortByMintDate,
             'nativeToken' => TokenData::fromModel($nativeToken),
+            'allowsGuests' => true,
         ]);
     }
 
