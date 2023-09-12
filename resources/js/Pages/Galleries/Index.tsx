@@ -35,10 +35,18 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
 
     const guestBannerClickHandler = (): void => {
         if (authenticated) {
-            router.visit(route("my-galleries.create"));
+            router.visit(
+                route("my-galleries.create", {
+                    redirectTo: "my-galleries.create",
+                }),
+            );
         } else {
             showConnectOverlay(() => {
-                router.visit(route("my-galleries.create"));
+                router.visit(
+                    route("my-galleries.create", {
+                        redirectTo: "my-galleries.create",
+                    }),
+                );
             });
         }
     };
