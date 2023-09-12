@@ -25,7 +25,7 @@ class EnsureOnboarded
 
             $redirectRoute = $request->query('redirectTo', 'galleries');
 
-            return redirect()->route('onboarding', ['redirectTo' => $redirectRoute ])->with('onboarding:redirect', $request->url());
+            return redirect()->route('onboarding', ['redirectTo' => $redirectRoute])->with('onboarding:redirect', $request->url());
         }
 
         // This only triggers for non-GET methods (POST, DELETE, PUT, ...) for non-onboarded users...
