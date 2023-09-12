@@ -33,7 +33,7 @@ const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): J
                     onClick={onClick}
                     variant={isMdAndAbove ? "secondary" : "primary"}
                 >
-                    {t("pages.galleries.guest_banner.create_gallery")}
+                    {t("common.create_gallery")}
                 </Button>
             </div>
         </div>

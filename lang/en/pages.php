@@ -136,7 +136,7 @@ return [
         'my_galleries' => [
             'title' => 'My Galleries',
             'new_gallery' => 'New Gallery',
-            'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "New Gallery" button.',
+            'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'succesfully_deleted' => 'Gallery successfully deleted',
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',
@@ -198,7 +198,6 @@ return [
         'guest_banner' => [
             'title' => 'Craft the ultimate',
             'subtitle' => 'Pick your favorites, curate your gallery, & share it with the world.',
-            'create_gallery' => 'Create Gallery',
         ],
     ],
 
