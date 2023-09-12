@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import React from "react";
+import { expect } from "vitest";
 import { Report } from "./Report";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
@@ -9,8 +10,14 @@ import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 describe("Report", () => {
+    const showConnectOverlayMock = vi.fn();
+
     beforeAll(() => {
-        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...getSampleMetaMaskState(),
+            showConnectOverlay: showConnectOverlayMock,
+        });
+
         vi.spyOn(useAuth, "useAuth").mockReturnValue({
             user: null,
             wallet: null,
@@ -85,6 +92,29 @@ describe("Report", () => {
 
         await userEvent.click(screen.getByTestId("ConfirmationDialog__close"));
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
+    });
+
+    it("should show auth overlay if guest clicks on it", async () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("Report_flag"));
+        expect(showConnectOverlayMock).toHaveBeenCalledOnce();
     });
 
     it("should render with default tooltip if display default tooltip is true", async () => {

@@ -18,6 +18,7 @@ import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
+import CollectionNftsData = App.Data.Collections.CollectionNftsData;
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
@@ -268,7 +269,7 @@ const CollectionsView = ({
                                     ) : (
                                         <CollectionNftsGrid
                                             nfts={nfts}
-                                            userNfts={collection.nfts}
+                                            userNfts={auth.user != null ? collection.nfts : { paginated: [] }}
                                         />
                                     )}
                                 </div>
