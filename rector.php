@@ -45,18 +45,14 @@ use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRecto
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
-use Utils\Rector\CustomReturnAnnotationIncorrectNullableRectorA;
-
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__.'/app',
     ]);
 
-    $rectorConfig->skip([
-        UnSpreadOperatorRector::class => [
-            __DIR__.'/app/Jobs/Traits/PriorityDispatchable.php',
-        ],
+    $rectorConfig->bootstrapFiles([
+        __DIR__.'/vendor/nunomaduro/larastan/bootstrap.php',
     ]);
 
     $rectorConfig->phpVersion(PhpVersion::PHP_82);
@@ -108,6 +104,5 @@ return static function (RectorConfig $rectorConfig): void {
         ReturnTypeFromStrictTernaryRector::class,
         PropertyTypeFromStrictSetterGetterRector::class,
         ReturnNeverTypeRector::class,
-        CustomReturnAnnotationIncorrectNullableRector::class,
     ]);
 };

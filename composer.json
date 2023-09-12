@@ -61,8 +61,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "Utils\\Rector\\": "utils/rector"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
