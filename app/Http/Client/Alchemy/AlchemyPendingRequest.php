@@ -324,6 +324,8 @@ class AlchemyPendingRequest extends PendingRequest
         $bannerImageUrl = Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl');
         if (!empty($bannerImageUrl)) {
             $bannerImageUrl = preg_replace('/(?<=\?|&)w=(\d+)/', 'w=1378', $bannerImageUrl);
+        } else {
+            $bannerImageUrl = null;
         }
 
         return new Web3NftData(
