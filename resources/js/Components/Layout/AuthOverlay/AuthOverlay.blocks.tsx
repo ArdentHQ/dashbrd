@@ -52,7 +52,7 @@ export const ConnectionError = ({
     const { t } = useTranslation();
 
     return (
-        <OverlayButtonsWrapper>
+        <OverlayButtonsWrapper data-testid="ConnectionError">
             {showCloseButton && (
                 <Button
                     data-testid="AuthOverlay__close-button"
