@@ -12,6 +12,7 @@ use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Collections\Concerns\QueriesCollectionNfts;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
+use App\Data\Network\NetworkWithCollectionsData;
 use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
@@ -19,6 +20,7 @@ use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
+use App\Models\Network;
 use App\Models\Nft;
 use App\Support\Cache\UserCache;
 use App\Support\RateLimiterHelpers;
@@ -55,6 +57,8 @@ class CollectionController extends Controller
         $hiddenCollections = $user->hiddenCollections->pluck('address');
         $showHidden = $request->get('showHidden') === 'true';
 
+        $selectedChainIds = array_filter(explode(",", $request->get('chain', "")));
+
         if ($showHidden && $hiddenCollections->isEmpty()) {
             return redirect()->route('collections', $request->except('showHidden'));
         }
@@ -74,6 +78,7 @@ class CollectionController extends Controller
                 ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
+                ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
                 ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
                 ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
@@ -106,6 +111,8 @@ class CollectionController extends Controller
             ]);
         }
 
+        $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
+
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
             'stats' => new CollectionStatsData(
@@ -116,7 +123,9 @@ class CollectionController extends Controller
             'sortBy' => $sortBy,
             'sortDirection' => $sortDirection,
             'showHidden' => $showHidden,
+            'selectedChainIds' => $selectedChainIds,
             'view' => $request->get('view') === 'grid' ? 'grid' : 'list',
+            'availableNetworks' => $networks,
         ]);
     }
 
@@ -135,6 +144,7 @@ class CollectionController extends Controller
                 'sortBy' => null,
                 'sortDirection' => 'desc',
                 'showHidden' => false,
+                'selectedChainIds' => [],
                 'view' => 'list',
             ]);
         }

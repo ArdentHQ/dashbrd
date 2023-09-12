@@ -11,6 +11,7 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionDisplayType, CollectionsFilter } from "@/Pages/Collections/Components/CollectionsFilter";
 import { CollectionsHeading } from "@/Pages/Collections/Components/CollectionsHeading";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
+import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 const sort = (sortBy: string, direction?: string): void => {
@@ -33,12 +34,14 @@ const CollectionsIndex = ({
     title,
     sortBy,
     sortDirection,
+    availableNetworks,
 }: {
     title: string;
     auth: PageProps["auth"];
     stats: App.Data.Collections.CollectionStatsData;
     sortBy: string | null;
     sortDirection: "asc" | "desc";
+    availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
 }): JSX.Element => {
     const { props } = usePage();
 
@@ -47,6 +50,10 @@ const CollectionsIndex = ({
 
     const [displayType, setDisplayType] = useState(
         queryParameters.view === "grid" ? CollectionDisplayType.Grid : CollectionDisplayType.List,
+    );
+
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(
+        isTruthy(queryParameters.chain) ? queryParameters.chain.split(",").map(Number) : [],
     );
 
     const { showToast } = useToasts();
@@ -76,6 +83,7 @@ const CollectionsIndex = ({
                 type: "error",
             });
         },
+        selectedChainIds,
     });
 
     useEffect(() => {
@@ -94,13 +102,22 @@ const CollectionsIndex = ({
         });
     };
 
+    const handleSelectedChainIds = (chainId: number): void => {
+        const chainIds = selectedChainIds.includes(chainId)
+            ? selectedChainIds.filter((id) => id !== chainId)
+            : [...selectedChainIds, chainId];
+
+        setSelectedChainIds(chainIds);
+
+        reload({ selectedChainIds: chainIds });
+    };
+
     return (
         <DefaultLayout
             auth={auth}
             toastMessage={props.toast}
         >
             <Head title={title} />
-
             <div>
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     <CollectionsHeading
@@ -124,6 +141,9 @@ const CollectionsIndex = ({
                         onChangeVisibilityStatus={(isHidden) => {
                             reload({ showHidden: isHidden });
                         }}
+                        availableNetworks={availableNetworks}
+                        handleSelectedChainIds={handleSelectedChainIds}
+                        selectedChainIds={selectedChainIds}
                     />
                 </div>
 

@@ -16,6 +16,7 @@ interface QueryParameters {
     showHidden?: boolean;
     query?: string;
     sort?: string | null;
+    selectedChainIds?: number[];
 }
 
 interface CollectionsResponse {
@@ -28,7 +29,15 @@ interface CollectionsResponse {
 
 interface CollectionsState {
     loadMore: () => void;
-    reload: ({ showHidden, page }?: { showHidden?: boolean; page?: number }) => void;
+    reload: ({
+        showHidden,
+        page,
+        selectedChainIds,
+    }?: {
+        showHidden?: boolean;
+        page?: number;
+        selectedChainIds?: number[];
+    }) => void;
     collections: App.Data.Collections.CollectionData[];
     nfts: App.Data.Collections.CollectionNftData[];
     isLoading: boolean;
@@ -46,11 +55,13 @@ export const useCollections = ({
     showHidden,
     sortBy,
     view,
+    selectedChainIds,
 }: {
     view: CollectionDisplayType;
     showHidden: boolean;
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
+    selectedChainIds: number[];
 }): CollectionsState => {
     const [isLoading, setIsLoading] = useState(true);
     const isLoadingMore = useRef(false);
@@ -70,6 +81,7 @@ export const useCollections = ({
         query = "",
         page = 1,
         showHidden = false,
+        selectedChainIds = [],
         sort = null,
     }: QueryParameters = {}): Promise<CollectionsResponse> => {
         setIsLoading(true);
@@ -80,6 +92,7 @@ export const useCollections = ({
             page: isNumber(page) && Number(page) !== 1 ? page.toString() : "",
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
+            chain: selectedChainIds.length > 0 ? selectedChainIds.join(",") : "",
             view,
         });
 
@@ -121,7 +134,7 @@ export const useCollections = ({
         setQuery,
         loading: isSearching,
     } = useLiveSearch({
-        request: async (query: string) => await fetchCollections({ query, showHidden, sort: sortBy }),
+        request: async (query: string) => await fetchCollections({ query, showHidden, sort: sortBy, selectedChainIds }),
         onError: onSearchError,
     });
 
@@ -138,17 +151,19 @@ export const useCollections = ({
             page: pageMeta.currentPage + 1,
             query,
             showHidden,
+            selectedChainIds,
             sort: sortBy,
         });
     };
 
-    const reload = (options: { showHidden?: boolean; page?: number } = {}): void => {
+    const reload = (options: { showHidden?: boolean; page?: number; selectedChainIds?: number[] } = {}): void => {
         setCollections([]);
 
         void fetchCollections({
             page: pageMeta.currentPage,
             query,
             showHidden,
+            selectedChainIds,
             sort: sortBy,
             ...options,
         });
@@ -159,7 +174,7 @@ export const useCollections = ({
             setQuery(searchQuery);
 
             if (!isTruthy(searchQuery)) {
-                void fetchCollections({ sort: sortBy, showHidden });
+                void fetchCollections({ sort: sortBy, showHidden, selectedChainIds });
             }
         },
         [setQuery, setCollections, sortBy, showHidden],
