@@ -152,7 +152,7 @@ class CollectionController extends Controller
             ->select('nfts.*')
             ->filter($filters, $user)
             ->search($request->get('query'))
-            ->when($user, fn($q) => $q->orderByOwnership($user))
+            ->when($user, fn ($q) => $q->orderByOwnership($user))
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
             ->when(! $sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
             ->paginate(12)
