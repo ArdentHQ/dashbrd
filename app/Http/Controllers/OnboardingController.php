@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,8 +25,11 @@ class OnboardingController extends Controller
             return redirect()->route('galleries');
         }
 
+        $redirectRoute = $request->query('redirectTo', 'galleries');
+        $redirectUrl = Route::has($redirectRoute) && is_string($redirectRoute) ? $redirectRoute : "galleries";
+
         return Inertia::render('Onboarding', [
-            'redirectTo' => $request->session()->get('onboarding:redirect', default: route('galleries')),
+            'redirectTo' => $request->session()->get('onboarding:redirect', default: route($redirectUrl)),
         ]);
     }
 }
