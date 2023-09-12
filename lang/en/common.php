@@ -87,6 +87,7 @@ return [
     'of' => 'of',
     'pagination_input_placeholder' => 'Enter the page number',
     'nft_count' => '{0} :count NFTs|{1} :count NFT|[2,*] :count NFTs',
+    'nft_gallery' => 'NFT Gallery',
     'unable_to_retrieve_image' => 'Unable to retrieve your NFT image at this time',
     'optional' => 'Optional',
     'selected' => 'Selected',
