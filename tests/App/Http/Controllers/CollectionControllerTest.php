@@ -202,7 +202,8 @@ it('can render the collections view page with owned filter', function ($owned) {
                     fn (Assert $page) => $page->where('owned', $owned !== null)
                         ->where('traits', null)
                         ->where('tab', 'collection')
-                        ->where('pageLimit', 10)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 24)
 
                 )
         );
@@ -246,7 +247,8 @@ it('can render the collections view page with falsy owned filter', function ($ow
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('traits', null)
                         ->where('tab', 'collection')
-                        ->where('pageLimit', 10)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 24)
                 )
         );
 })->with([
@@ -295,7 +297,8 @@ it('can render the collections view page with traits', function () {
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('traits', $traits)
                         ->where('tab', 'collection')
-                        ->where('pageLimit', 10)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 24)
                 )
         );
 });
@@ -330,12 +333,13 @@ it('can render the collections view page with activity tab', function () {
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('tab', 'activity')
                         ->where('traits', null)
-                        ->where('pageLimit', 10)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 24)
                 )
         );
 });
 
-it('can render the collections view page with custom pageLimit', function () {
+it('can render the collections view page with custom activityPageLimit', function () {
     $user = createUser();
 
     $network = Network::polygon()->firstOrFail();
@@ -355,7 +359,7 @@ it('can render the collections view page with custom pageLimit', function () {
         ->get(route('collections.view', [
             'collection' => $collection->slug,
             'tab' => 'activity',
-            'pageLimit' => 25,
+            'activityPageLimit' => 25,
         ]))
         ->assertStatus(200)
         ->assertInertia(
@@ -366,12 +370,13 @@ it('can render the collections view page with custom pageLimit', function () {
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('tab', 'activity')
                         ->where('traits', null)
-                        ->where('pageLimit', 25)
+                        ->where('activityPageLimit', 25)
+                        ->where('nftPageLimit', 24)
                 )
         );
 });
 
-it('can render the collections view page with max pageLimit of 100', function () {
+it('can render the collections view page with max activityPageLimit of 100', function () {
     $user = createUser();
 
     $network = Network::polygon()->firstOrFail();
@@ -391,7 +396,7 @@ it('can render the collections view page with max pageLimit of 100', function ()
         ->get(route('collections.view', [
             'collection' => $collection->slug,
             'tab' => 'activity',
-            'pageLimit' => 300,
+            'activityPageLimit' => 300,
         ]))
         ->assertStatus(200)
         ->assertInertia(
@@ -402,7 +407,8 @@ it('can render the collections view page with max pageLimit of 100', function ()
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('tab', 'activity')
                         ->where('traits', null)
-                        ->where('pageLimit', 100)
+                        ->where('activityPageLimit', 100)
+                        ->where('nftPageLimit', 24)
                 )
         );
 });
@@ -437,7 +443,8 @@ it('uses collection tab if another parameter is passed', function () {
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('traits', null)
                         ->where('tab', 'collection')
-                        ->where('pageLimit', 10)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 24)
                 )
         );
 });
@@ -472,7 +479,8 @@ it('can render the collections view page with invalid traits', function ($invali
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('traits', null)
                         ->where('tab', 'collection')
-                        ->where('pageLimit', 10)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 24)
                 )
         );
 })->with([
@@ -521,7 +529,8 @@ it('can render the collections view page with empty traits', function () {
                     fn (Assert $page) => $page->where('owned', false)
                         ->where('traits', null)
                         ->where('tab', 'collection')
-                        ->where('pageLimit', 10)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 24)
                 )
         );
 });
