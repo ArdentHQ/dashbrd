@@ -136,7 +136,7 @@ return [
         'my_galleries' => [
             'title' => 'My Galleries',
             'new_gallery' => 'New Gallery',
-            'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "New Gallery" button.',
+            'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'succesfully_deleted' => 'Gallery successfully deleted',
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',
@@ -186,6 +186,9 @@ return [
             'load_more_collections_one' => 'Load {{count}} More Collection',
             'load_more_collections_other' => 'Load {{count}} More Collections',
             'load_more_nfts' => 'Load More NFTs',
+            'can_purchase' => 'You can purchase NFTs with these top NFT Marketplaces:',
+            'must_own_one_nft' => 'You must own at least one (1) NFT in order to create a gallery.',
+            'back_to_galleries' => 'Back to Galleries',
         ],
         'delete_modal' => [
             'title' => 'Delete Gallery',
@@ -195,7 +198,6 @@ return [
         'guest_banner' => [
             'title' => 'Craft the ultimate',
             'subtitle' => 'Pick your favorites, curate your gallery, & share it with the world.',
-            'create_gallery' => 'Create Gallery',
         ],
     ],
 

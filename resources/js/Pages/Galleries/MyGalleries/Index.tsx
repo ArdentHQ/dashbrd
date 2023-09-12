@@ -61,7 +61,7 @@ const Index = ({
                                                 name="Plus"
                                                 size="md"
                                             />
-                                            <span>{t("pages.galleries.my_galleries.new_gallery")}</span>
+                                            <span>{t("common.create_gallery")}</span>
                                         </span>
                                     </ButtonLink>
                                 </div>
@@ -87,7 +87,7 @@ const Index = ({
                                         name="Plus"
                                         size="md"
                                     />
-                                    <span>{t("pages.galleries.my_galleries.new_gallery")}</span>
+                                    <span>{t("common.create_gallery")}</span>
                                 </span>
                             </ButtonLink>
                         </>
