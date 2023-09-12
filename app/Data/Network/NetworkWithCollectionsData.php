@@ -26,8 +26,6 @@ class NetworkWithCollectionsData extends Data
     }
 
     /**
-     * @param User $user
-     * @param bool $showHidden
      * @return \Illuminate\Support\Collection<int, NetworkWithCollectionsData>
      */
     public static function fromModel(User $user, bool $showHidden)
