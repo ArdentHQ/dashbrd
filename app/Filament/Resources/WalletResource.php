@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use Filament\Infolists\Components\TextEntry;
 use App\Filament\Resources\WalletResource\Pages\CreateWallet;
 use App\Filament\Resources\WalletResource\Pages\EditWallet;
 use App\Filament\Resources\WalletResource\Pages\ListWallets;
@@ -35,7 +36,7 @@ class WalletResource extends Resource
     {
         return $infolist
             ->schema([
-                \Filament\Infolists\Components\TextEntry::make('address'),
+                TextEntry::make('address'),
             ]);
     }
 
