@@ -12,6 +12,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface Properties {
@@ -33,22 +34,16 @@ const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
 
     const { authenticated } = useAuth();
 
+    const { signedAction } = useAuthorizedAction();
+
     const guestBannerClickHandler = (): void => {
-        if (authenticated) {
+        signedAction(() => {
             router.visit(
                 route("my-galleries.create", {
                     redirectTo: "my-galleries.create",
                 }),
             );
-        } else {
-            showConnectOverlay(() => {
-                router.visit(
-                    route("my-galleries.create", {
-                        redirectTo: "my-galleries.create",
-                    }),
-                );
-            });
-        }
+        });
     };
 
     const { props } = usePage();
