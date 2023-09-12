@@ -21,11 +21,10 @@ class OnboardingController extends Controller
             ]);
         }
 
-
         $redirectRoute = $request->query('redirectTo', 'galleries');
         $redirectUrl = Route::has($redirectRoute) && is_string($redirectRoute) ? $redirectRoute : 'galleries';
 
-        if ($request->wallet()->onboarded() && !Route::has($request->query('redirectTo'))) {
+        if ($request->wallet()->onboarded() && ! Route::has($request->query('redirectTo'))) {
             return redirect()->route('galleries');
         }
 
