@@ -1,27 +1,17 @@
-import { router } from "@inertiajs/react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
-import { Icon } from "@/Components/Icon";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
 
-interface Properties extends Pick<MetaMaskState, "connecting" | "initialized" | "connectWallet"> {
-    isAuthenticated: boolean;
+interface Properties extends Pick<MetaMaskState, "connecting" | "initialized"> {
+    onClick?: () => void;
 }
 
-const GalleryGuestBanner = ({ connectWallet, initialized, connecting, isAuthenticated }: Properties): JSX.Element => {
+const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): JSX.Element => {
     const { t } = useTranslation();
-
     const { isMdAndAbove } = useBreakpoint();
-
-    const handleClick = (): void => {
-        if (isAuthenticated) {
-            router.visit(route("my-galleries.create"));
-        } else {
-            void connectWallet();
-        }
-    };
 
     return (
         <div className="gallery-guest-banner mx-6 mt-4 flex flex-col gap-3 rounded-xl border border-theme-secondary-300 bg-cover bg-center p-6 backdrop-blur sm:mx-8 md:flex-row md:items-center md:justify-between md:gap-4 md:bg-left 2xl:mx-0">
@@ -37,18 +27,13 @@ const GalleryGuestBanner = ({ connectWallet, initialized, connecting, isAuthenti
 
             <div className="flex h-fit justify-center">
                 <Button
-                    className="w-full py-2 sm:w-fit sm:px-6"
+                    icon="Plus"
+                    className="justify-center·py-2·sm:w-fit·sm:px-6"
                     disabled={connecting || !initialized}
-                    onClick={handleClick}
+                    onClick={onClick}
                     variant={isMdAndAbove ? "secondary" : "primary"}
                 >
-                    <span className="flex w-full items-center justify-center">
-                        <Icon
-                            name="Plus"
-                            size="md"
-                        />
-                        <span className="ml-0.5 sm:w-full">{t("pages.galleries.guest_banner.create_gallery")}</span>
-                    </span>
+                    {t("common.create_gallery")}
                 </Button>
             </div>
         </div>
