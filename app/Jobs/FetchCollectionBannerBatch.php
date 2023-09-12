@@ -58,16 +58,16 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
             Collection::query()
                 ->where('address', $data->contractAddress)
                 ->update([
-                        'extra_attributes' => DB::raw("
+                    'extra_attributes' => DB::raw("
                             jsonb_set(
                                 jsonb_set(
                                     extra_attributes::jsonb,
                                     '{banner}', '\"$data->bannerImageUrl\"'::jsonb, true
                                 ),
-                                '{banner_updated_at}', '" . now()->timestamp . "'::jsonb, true
+                                '{banner_updated_at}', '".now()->timestamp."'::jsonb, true
                             )::jsonb
-                        ")
-            ]);
+                        "),
+                ]);
         });
     }
 
