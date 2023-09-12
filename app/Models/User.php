@@ -23,6 +23,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Spatie\LaravelData\WithData;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Traits\HasRoles;
@@ -30,7 +31,7 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
-    use BelongsToWallet, HasFactory, HasWallets, Notifiable, SoftDeletes, WithData;
+    use BelongsToWallet, HasFactory, HasWallets, Notifiable, SoftDeletes, TwoFactorAuthenticatable, WithData;
     use HasRoles {
         assignRole as baseAssignRole;
     }

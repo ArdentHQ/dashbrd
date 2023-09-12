@@ -258,7 +258,9 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
         event.stopPropagation();
 
         if (!authenticated) {
-            showConnectOverlay();
+            showConnectOverlay(() => {
+                void like(gallery.slug, true);
+            });
             return;
         }
 

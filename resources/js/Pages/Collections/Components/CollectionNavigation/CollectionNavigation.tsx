@@ -86,7 +86,7 @@ export const CollectionNavigation = ({
             selectedIndex={selectedIndex}
             onChange={tabChangeHandler}
         >
-            <div className="backdrop-blur-7 -mx-6 mt-6 bg-gradient-to-r from-theme-secondary-100 via-theme-secondary-200 to-theme-danger-100 px-6 py-3 sm:-mx-8 sm:px-8 lg:mx-0 lg:rounded-xl lg:px-5">
+            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 px-6 py-3 sm:-mx-8 sm:px-8 lg:mx-0 lg:rounded-xl lg:px-5">
                 <Tab.List className="flex justify-between">
                     <div className="w-full sm:w-auto">
                         <Tabs className="space-x-1 bg-transparent">
