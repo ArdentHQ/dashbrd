@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Data\Network;
 
-use App\Enums\Chains;
 use App\Models\Network;
 use App\Models\User;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
-
 
 #[TypeScript]
 class NetworkWithCollectionsData extends Data
@@ -28,9 +26,6 @@ class NetworkWithCollectionsData extends Data
     }
 
     /**
-     * @param  User  $user
-     * @param  bool  $showHidden
-     *
      * @return NetworkWithCollectionsData[]
      */
     public static function fromModel(User $user, bool $showHidden)

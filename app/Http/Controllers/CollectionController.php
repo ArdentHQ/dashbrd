@@ -57,7 +57,7 @@ class CollectionController extends Controller
         $hiddenCollections = $user->hiddenCollections->pluck('address');
         $showHidden = $request->get('showHidden') === 'true';
 
-        $selectedChainIds = array_filter(explode(",", $request->get('chain', "")));
+        $selectedChainIds = array_filter(explode(',', $request->get('chain', '')));
 
         if ($showHidden && $hiddenCollections->isEmpty()) {
             return redirect()->route('collections', $request->except('showHidden'));
