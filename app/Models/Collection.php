@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Query\Expression;
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
@@ -256,7 +257,7 @@ class Collection extends Model
      */
     public function scopeOrderByChainId(Builder $query, string $direction): Builder
     {
-        /** @var \Illuminate\Database\Query\Expression */
+        /** @var Expression */
         $select = Network::select('chain_id')
             ->whereColumn('networks.id', 'collections.network_id')
             ->latest('chain_id')

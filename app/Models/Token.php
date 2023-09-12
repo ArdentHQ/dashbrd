@@ -155,7 +155,7 @@ class Token extends Model
         return $query
             ->bySymbol('MATIC')
             ->whereHas('network', function (Builder $query) {
-                /** @var Builder<\App\Models\Network> $query */
+                /** @var Builder<Network> $query */
                 $query->polygon();
             });
     }

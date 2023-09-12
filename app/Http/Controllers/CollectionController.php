@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Spatie\LaravelData\PaginatedDataCollection;
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionNftData;
@@ -180,10 +181,10 @@ class CollectionController extends Controller
             'pageLimit' => $pageLimit,
         ]);
 
-        /** @var \Spatie\LaravelData\PaginatedDataCollection<int, \App\Data\Nfts\NftActivityData> */
+        /** @var PaginatedDataCollection<int, NftActivityData> */
         $paginated = NftActivityData::collection($activities);
 
-        /** @var \Spatie\LaravelData\PaginatedDataCollection<int, \App\Data\Gallery\GalleryNftData> */
+        /** @var PaginatedDataCollection<int, GalleryNftData> */
         $paginatedNfts = GalleryNftData::collection($nfts);
 
         $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();

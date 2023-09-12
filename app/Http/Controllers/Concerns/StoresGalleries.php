@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Concerns;
 
+use Illuminate\Filesystem\FilesystemAdapter;
 use App\Enums\ToastType;
 use App\Models\Gallery;
 use App\Models\User;
@@ -95,7 +96,7 @@ trait StoresGalleries
         if (is_string($coverImage)) {
             return $coverImage;
         } elseif ($coverImage !== null && is_a($coverImage, UploadedFile::class)) {
-            /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+            /** @var FilesystemAdapter $disk */
             $disk = Storage::disk('public');
             $filePath = $disk->put('galleryCoverImages', $coverImage);
 
