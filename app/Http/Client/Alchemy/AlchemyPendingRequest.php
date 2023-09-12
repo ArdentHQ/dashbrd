@@ -311,8 +311,8 @@ class AlchemyPendingRequest extends PendingRequest
             return new Web3ContractMetadata(
                 contractAddress: $collectionMeta['address'],
                 collectionName: Arr::get($collectionMeta, 'contractMetadata.name'),
-                collectionSlug: Arr::get($collectionMeta, 'contractMetadata.openSea.collectionSlug'),
                 totalSupply: Arr::get($collectionMeta, 'contractMetadata.totalSupply'),
+                collectionSlug: Arr::get($collectionMeta, 'contractMetadata.openSea.collectionSlug'),
                 imageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.imageUrl'),
                 floorPrice: Arr::get($collectionMeta, 'contractMetadata.openSea.floorPrice'),
                 bannerImageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.bannerImageUrl'),

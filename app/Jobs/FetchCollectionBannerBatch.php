@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
@@ -44,13 +45,29 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
         $metadata = Alchemy::getContractMetadataBatch($this->collectionAddresses, $this->network);
 
         $metadata->each(function (Web3ContractMetadata $data) {
+            // Skip this iteration because bannerImageUrl is null
+            if (is_null($data->bannerImageUrl)) {
+                return false;
+            }
+
             Log::info('Updating collection banner', [
                 'collection_address' => $data->contractAddress,
                 'banner' => $data->bannerImageUrl,
             ]);
 
-            Collection::query()->where('address', $data->contractAddress)
-                ->update(['extra_attributes->banner' => $data->bannerImageUrl]);
+            Collection::query()
+                ->where('address', $data->contractAddress)
+                ->update([
+                        'extra_attributes' => DB::raw("
+                            jsonb_set(
+                                jsonb_set(
+                                    extra_attributes::jsonb,
+                                    '{banner}', '\"$data->bannerImageUrl\"'::jsonb, true
+                                ),
+                                '{banner_updated_at}', '" . now()->timestamp . "'::jsonb, true
+                            )::jsonb
+                        ")
+            ]);
         });
     }
 
