@@ -26,7 +26,7 @@ class OnboardingController extends Controller
         }
 
         $redirectRoute = $request->query('redirectTo', 'galleries');
-        $redirectUrl = Route::has($redirectRoute) && is_string($redirectRoute) ? $redirectRoute : "galleries";
+        $redirectUrl = Route::has($redirectRoute) && is_string($redirectRoute) ? $redirectRoute : 'galleries';
 
         return Inertia::render('Onboarding', [
             'redirectTo' => $request->session()->get('onboarding:redirect', default: route($redirectUrl)),
