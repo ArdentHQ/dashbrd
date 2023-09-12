@@ -322,7 +322,7 @@ class AlchemyPendingRequest extends PendingRequest
         $mintTimestamp = $this->getNftMintingDateProperty($nft);
 
         $bannerImageUrl = Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl');
-        if (!empty($bannerImageUrl)) {
+        if (! empty($bannerImageUrl)) {
             $bannerImageUrl = preg_replace('/(?<=\?|&)w=(\d+)/', 'w=1378', $bannerImageUrl);
         }
 
