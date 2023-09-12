@@ -51,8 +51,7 @@ export const NoNftsOverlay = ({ show }: { show: boolean }): JSX.Element => {
                         />
                         <Marketplace
                             icon="LooksRareColor"
-                            href="
-LooksRare: https://looksrare.org/"
+                            href="https://looksrare.org/"
                         />
                     </div>
                 </div>
