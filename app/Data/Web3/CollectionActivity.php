@@ -19,6 +19,7 @@ class CollectionActivity extends Data
         public string $sender,
         public string $recipient,
         public string $txHash,
+        public string $logIndex,
         public ?NftTransferType $type,
         public Carbon $timestamp,
         public ?float $totalNative,
@@ -31,6 +32,7 @@ class CollectionActivity extends Data
     {
         return implode(':', [
             $this->txHash,
+            $this->logIndex,
             $this->tokenId,
             $this->type->value,
         ]);

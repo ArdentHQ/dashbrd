@@ -15,13 +15,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('nft_activity', function (Blueprint $table) {
-            $table->addColumn('numeric', 'token_number', ['numeric_type' => 'numeric'])->nullable();
-            $table->foreignIdFor(Collection::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('nft_id')->nullable()->change();
+            $table->foreignIdFor(Collection::class)->nullable()->constrained()->cascadeOnDelete()->after('id');
+            $table->addColumn('numeric', 'token_number', ['numeric_type' => 'numeric'])->after('collection_id')->nullable();
+            $table->string('log_index')->nullable()->after('tx_hash');
 
-            // TODO: remove `nft_id`
+            $table->dropColumn('nft_id');
 
-            $table->unique(['tx_hash', 'collection_id', 'token_number', 'type']);
+            $table->unique(['tx_hash', 'log_index', 'collection_id', 'token_number', 'type']);
         });
     }
 };

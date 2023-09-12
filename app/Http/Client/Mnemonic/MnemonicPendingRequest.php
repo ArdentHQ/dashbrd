@@ -393,6 +393,7 @@ class MnemonicPendingRequest extends PendingRequest
                 sender: $transfer['sender']['address'],
                 recipient: $transfer['recipient']['address'],
                 txHash: $transfer['blockchainEvent']['txHash'],
+                logIndex: $transfer['blockchainEvent']['logIndex'],
                 type: $this->extractNftTransferType($transfer['labels']),
                 timestamp: $blockchainTimestamp,
                 totalNative: $prices['native'],

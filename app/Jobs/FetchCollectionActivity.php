@@ -81,6 +81,7 @@ class FetchCollectionActivity implements ShouldQueue
                 'sender' => $activity->sender,
                 'recipient' => $activity->recipient,
                 'tx_hash' => $activity->txHash,
+                'log_index' => $activity->logIndex,
                 'timestamp' => $activity->timestamp,
                 'total_native' => $activity->totalNative,
                 'total_usd' => $activity->totalUsd,
@@ -88,7 +89,7 @@ class FetchCollectionActivity implements ShouldQueue
             ])->toArray();
 
         DB::transaction(function () use ($formattedActivities, $activities) {
-            NftActivity::upsert($formattedActivities, uniqueBy: ['tx_hash', 'collection_id', 'token_number', 'type']);
+            NftActivity::upsert($formattedActivities, uniqueBy: ['tx_hash', 'log_index', 'collection_id', 'token_number', 'type']);
 
             // If we get the limit it may be that there are more activities to fetch...
             if (static::LIMIT === count($activities)) {
