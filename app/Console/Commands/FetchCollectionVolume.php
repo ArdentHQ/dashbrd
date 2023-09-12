@@ -30,7 +30,7 @@ class FetchCollectionVolume extends Command
      */
     public function handle(): int
     {
-        $this->forEachCollection(static function ($collection) {
+        $this->forEachCollection(function ($collection) {
             Job::dispatch($collection);
         });
 
