@@ -2,7 +2,7 @@
     background-image: url("../images/gallery/guest-banner-small.svg");
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
     .gallery-guest-banner {
         background-image: url("../images/gallery/guest-banner.svg");
     }

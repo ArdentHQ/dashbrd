@@ -2,6 +2,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
 import { Icon } from "@/Components/Icon";
+import { useBreakpoint } from "@/Hooks/useBreakpoint";
+
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
 
 interface Properties extends Pick<MetaMaskState, "connecting" | "initialized"> {
@@ -10,6 +12,7 @@ interface Properties extends Pick<MetaMaskState, "connecting" | "initialized"> {
 
 const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): JSX.Element => {
     const { t } = useTranslation();
+    const { isMdAndAbove } = useBreakpoint();
 
     return (
         <div className="gallery-guest-banner mx-6 mt-4 flex flex-col gap-3 rounded-xl border border-theme-secondary-300 bg-cover bg-center p-6 backdrop-blur sm:mx-8 md:flex-row md:items-center md:justify-between md:gap-4 md:bg-left 2xl:mx-0">
@@ -28,7 +31,7 @@ const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): J
                     className="w-full py-2 sm:w-fit sm:px-6"
                     disabled={connecting || !initialized}
                     onClick={onClick}
-                    variant="secondary"
+                    variant={isMdAndAbove ? "secondary" : "primary"}
                 >
                     <span className="flex w-full items-center justify-center">
                         <Icon
