@@ -77,6 +77,7 @@ return [
     'gallery' => 'Gallery',
     'basic_gallery' => 'Basic Gallery',
     'gallery_name' => 'Gallery Name',
+    'create_gallery' => 'Create Gallery',
     'external_link' => 'External Link',
     'follow_link' => 'Follow Link',
     'cover' => 'Cover',
