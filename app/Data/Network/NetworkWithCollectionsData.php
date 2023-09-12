@@ -26,7 +26,9 @@ class NetworkWithCollectionsData extends Data
     }
 
     /**
-     * @return NetworkWithCollectionsData[]
+     * @param User $user
+     * @param bool $showHidden
+     * @return \Illuminate\Support\Collection<int, NetworkWithCollectionsData>
      */
     public static function fromModel(User $user, bool $showHidden)
     {
@@ -36,15 +38,15 @@ class NetworkWithCollectionsData extends Data
         });
 
         $networksWithCollectionsCount = $networks->map(function ($network) use ($collectionsPerNetwork) {
-            return [
-                'id' => $network->id,
-                'name' => $network->name,
-                'isMainnet' => $network->is_mainnet,
-                'chainId' => $network->chain_id,
-                'publicRpcProvider' => $network->public_rpc_provider,
-                'explorerUrl' => $network->explorer_url,
-                'collectionsCount' => $collectionsPerNetwork[$network->id] ?? 0,
-            ];
+            return new NetworkWithCollectionsData(
+                $network->id,
+                $network->name,
+                $network->is_mainnet,
+                $network->chain_id,
+                $network->public_rpc_provider,
+                $network->explorer_url,
+                $collectionsPerNetwork[$network->id] ?? 0
+            );
         });
 
         return $networksWithCollectionsCount;
