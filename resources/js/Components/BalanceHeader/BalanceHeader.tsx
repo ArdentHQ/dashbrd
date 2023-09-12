@@ -18,6 +18,7 @@ export const BalanceHeader = ({
     assets,
     currency,
     isLoading = false,
+    skeletonDisabled = false,
     onSend,
     onReceive,
 }: BalanceHeaderProperties): JSX.Element => {
@@ -29,6 +30,7 @@ export const BalanceHeader = ({
         return (
             <BalanceHeaderMobile
                 isLoading={isLoading}
+                skeletonDisabled={skeletonDisabled}
                 balance={balance}
                 address={address}
                 assets={assets}
@@ -40,7 +42,7 @@ export const BalanceHeader = ({
     }
 
     if (isLoading) {
-        return <BalanceHeaderSkeleton />;
+        return <BalanceHeaderSkeleton disabled={skeletonDisabled} />;
     }
 
     return (

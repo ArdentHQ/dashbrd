@@ -17,6 +17,7 @@ export const BalanceHeaderMobile = ({
     assets,
     currency,
     isLoading = false,
+    skeletonDisabled = false,
     onSend,
     onReceive,
 }: BalanceHeaderProperties): JSX.Element => {
@@ -24,7 +25,7 @@ export const BalanceHeaderMobile = ({
     const { setOpen: setBreakdownOpen } = useSliderContext();
 
     if (isLoading) {
-        return <BalanceHeaderMobileSkeleton />;
+        return <BalanceHeaderMobileSkeleton disabled={skeletonDisabled} />;
     }
 
     return (

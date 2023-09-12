@@ -4,7 +4,7 @@ import { LinkButton } from "@/Components/Link";
 import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
 import { Skeleton } from "@/Components/Skeleton";
 
-export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
+export const BalanceHeaderMobileSkeleton = ({ disabled }: { disabled: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -16,12 +16,14 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         <Skeleton
                             height={15}
                             width={100}
+                            disabled={disabled}
                         />
                     </div>
 
                     <Skeleton
                         height={20}
                         width={20}
+                        disabled={disabled}
                     />
                 </div>
             </div>
@@ -33,6 +35,7 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         <Skeleton
                             height={32}
                             width={120}
+                            disabled={disabled}
                         />
                     </div>
                 </div>
@@ -42,18 +45,21 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         width={40}
                         height={40}
                         isCircle
+                        disabled={disabled}
                     />
 
                     <Skeleton
                         width={40}
                         height={40}
                         isCircle
+                        disabled={disabled}
                     />
 
                     <Skeleton
                         width={40}
                         height={40}
                         isCircle
+                        disabled={disabled}
                     />
                 </div>
             </div>
@@ -70,6 +76,7 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         <Skeleton
                             height={12}
                             width={20}
+                            disabled={disabled}
                         />
                     </div>
 

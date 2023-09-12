@@ -8,9 +8,11 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 export const WalletTokensTableItemSkeleton = ({
     index,
     isCompact,
+    disabled,
 }: {
     index: number;
     isCompact: boolean;
+    disabled: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -30,26 +32,45 @@ export const WalletTokensTableItemSkeleton = ({
                         <Skeleton
                             isCircle
                             className="h-10 w-10"
+                            disabled={disabled}
                         />
 
                         <div className="flex flex-col items-start space-y-0.5">
-                            <Skeleton className="my-1 h-4 w-10" />
-                            <Skeleton className="my-1 h-3.5 w-24" />
+                            <Skeleton
+                                className="my-1 h-4 w-10"
+                                disabled={disabled}
+                            />
+                            <Skeleton
+                                className="my-1 h-3.5 w-24"
+                                disabled={disabled}
+                            />
                         </div>
                     </div>
                 </TableCell>
 
                 <TableCell innerClassName="justify-end">
                     <div className="flex flex-col items-end space-y-0.5">
-                        <Skeleton className="my-1 h-4 w-24" />
-                        <Skeleton className="my-1 h-3.5 w-12" />
+                        <Skeleton
+                            className="my-1 h-4 w-24"
+                            disabled={disabled}
+                        />
+                        <Skeleton
+                            className="my-1 h-3.5 w-12"
+                            disabled={disabled}
+                        />
                     </div>
                 </TableCell>
 
                 <TableCell innerClassName="justify-end">
                     <div className="flex flex-col items-end space-y-0.5">
-                        <Skeleton className="my-1 h-4 w-16" />
-                        <Skeleton className="my-1 h-3.5 w-10" />
+                        <Skeleton
+                            className="my-1 h-4 w-16"
+                            disabled={disabled}
+                        />
+                        <Skeleton
+                            className="my-1 h-3.5 w-10"
+                            disabled={disabled}
+                        />
                     </div>
                 </TableCell>
 
@@ -58,7 +79,10 @@ export const WalletTokensTableItemSkeleton = ({
                         className="hidden lg:table-cell"
                         innerClassName="justify-end"
                     >
-                        <Skeleton className="h-5 w-12" />
+                        <Skeleton
+                            className="h-5 w-12"
+                            disabled={disabled}
+                        />
                     </TableCell>
                 )}
 
@@ -67,7 +91,10 @@ export const WalletTokensTableItemSkeleton = ({
                         className="hidden xl:table-cell"
                         innerClassName="justify-end"
                     >
-                        <Skeleton className="h-5 w-16" />
+                        <Skeleton
+                            className="h-5 w-16"
+                            disabled={disabled}
+                        />
                     </TableCell>
                 )}
 
@@ -76,7 +103,10 @@ export const WalletTokensTableItemSkeleton = ({
                         className="hidden lg:table-cell"
                         innerClassName="justify-end"
                     >
-                        <Skeleton className="h-10 w-25" />
+                        <Skeleton
+                            className="h-10 w-25"
+                            disabled={disabled}
+                        />
                     </TableCell>
                 )}
 
@@ -87,7 +117,10 @@ export const WalletTokensTableItemSkeleton = ({
                     {isMdAndAbove ? (
                         <div className="relative inline-flex items-center overflow-hidden rounded-3xl px-5 py-2 font-medium">
                             <div className="absolute inset-0">
-                                <Skeleton className="h-10 w-full" />
+                                <Skeleton
+                                    className="h-10 w-full"
+                                    disabled={disabled}
+                                />
                             </div>
 
                             <span>{t("common.details")}</span>
@@ -96,6 +129,7 @@ export const WalletTokensTableItemSkeleton = ({
                         <Skeleton
                             isCircle
                             className="block h-10 w-10 md:hidden"
+                            disabled={disabled}
                         />
                     )}
                 </TableCell>
@@ -114,17 +148,30 @@ export const WalletTokensTableItemSkeleton = ({
                 <Skeleton
                     isCircle
                     className="h-10 w-10"
+                    disabled={disabled}
                 />
 
                 <div className="flex flex-col items-start space-y-0.5 font-medium">
-                    <Skeleton className="my-1 h-3.5 w-10" />
-                    <Skeleton className="my-[3px] h-3 w-16" />
+                    <Skeleton
+                        className="my-1 h-3.5 w-10"
+                        disabled={disabled}
+                    />
+                    <Skeleton
+                        className="my-[3px] h-3 w-16"
+                        disabled={disabled}
+                    />
                 </div>
             </div>
 
             <div className="flex flex-col items-end space-y-0.5 font-medium">
-                <Skeleton className="my-1 h-3.5 w-10" />
-                <Skeleton className="my-[3px] h-3 w-24" />
+                <Skeleton
+                    className="my-1 h-3.5 w-10"
+                    disabled={disabled}
+                />
+                <Skeleton
+                    className="my-[3px] h-3 w-24"
+                    disabled={disabled}
+                />
             </div>
         </button>
     );

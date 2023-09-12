@@ -262,6 +262,7 @@ export const WalletTokensTable = ({
                     <WalletTokensTableItemSkeleton
                         index={index}
                         isCompact={!isSmAndAbove}
+                        disabled={!isTruthy(user)}
                     />
                 );
             }
