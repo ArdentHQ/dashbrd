@@ -13,7 +13,6 @@ use Rector\CodingStyle\Rector\ClassConst\SplitGroupedClassConstantsRector;
 use Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
-use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector;
@@ -53,7 +52,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->phpstanConfig('./phpstan.neon');
 
     $rectorConfig->rules([
-        UnSpreadOperatorRector::class,
         NewlineAfterStatementRector::class,
         RemoveFinalFromConstRector::class,
         BinarySwitchToIfElseRector::class,
