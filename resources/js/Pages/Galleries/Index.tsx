@@ -11,7 +11,6 @@ import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
@@ -30,9 +29,7 @@ interface Galleries {
 const GalleriesIndex = ({ stats, auth, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    const { showConnectOverlay, initialized, connecting } = useMetaMaskContext();
-
-    const { authenticated } = useAuth();
+    const { initialized, connecting } = useMetaMaskContext();
 
     const { signedAction } = useAuthorizedAction();
 
