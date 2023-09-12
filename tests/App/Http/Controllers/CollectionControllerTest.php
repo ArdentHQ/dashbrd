@@ -292,7 +292,6 @@ it('can render the collections view page with custom nftPageLimit', function () 
         );
 });
 
-
 it('can render the collections view page with traits', function () {
     $user = createUser();
 
