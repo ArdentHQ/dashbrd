@@ -947,16 +947,16 @@ it('should fetch nfts for wallet and keep previous collections last indexed toke
 
     Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
 
+    $network = Network::polygon()->firstOrFail();
+    $wallet = Wallet::factory()->create();
+
     $collection = Collection::factory()->create([
+        'network_id' => $network->id,
         'name' => 'PsychonautzNFT',
         'slug' => 'psychonautznft',
         'address' => '0x0b7600ca77fc257fe7eb432f87825cccc4590037',
-        'network_id' => 1,
         'last_indexed_token_number' => '12345',
     ]);
-
-    $network = Network::polygon()->firstOrFail();
-    $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('collections', 1);
     $this->assertDatabaseCount('nfts', 0);
