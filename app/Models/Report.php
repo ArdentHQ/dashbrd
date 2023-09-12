@@ -18,7 +18,7 @@ class Report extends Model
 
     protected $guarded = [];
 
-    public static function booted(): void
+    protected static function booted(): void
     {
         static::created(function (self $report) {
             Notification::route('slack', config('dashbrd.reports.slack_webhook_url'))->notify(
