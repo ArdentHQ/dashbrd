@@ -70,7 +70,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('telescope:prune')->dailyAt('1:00');
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
         $schedule->command('queue:prune-batches --hours=48')->dailyAt('1:10');
-        $schedule->command('queue:prune-failed --hours=168')->daily();
+        $schedule->command('queue:prune-failed --hours=720')->daily(); // 30 days
 
         if (Feature::active(Features::Portfolio->value)) {
             $this->scheduleJobsForPortfolio($schedule);
