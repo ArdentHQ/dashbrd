@@ -28,18 +28,13 @@ const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): J
 
             <div className="flex h-fit justify-center">
                 <Button
+                    icon="Plus"
                     className="w-full py-2 sm:w-fit sm:px-6"
                     disabled={connecting || !initialized}
                     onClick={onClick}
                     variant={isMdAndAbove ? "secondary" : "primary"}
                 >
-                    <span className="flex w-full items-center justify-center">
-                        <Icon
-                            name="Plus"
-                            size="md"
-                        />
-                        <span className="ml-0.5 sm:w-full">{t("pages.galleries.guest_banner.create_gallery")}</span>
-                    </span>
+                    {t("pages.galleries.guest_banner.create_gallery")}
                 </Button>
             </div>
         </div>
