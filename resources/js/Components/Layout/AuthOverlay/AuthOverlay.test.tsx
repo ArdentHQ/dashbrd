@@ -45,7 +45,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
-                showAuthOverlay={true}
+                show={true}
                 showCloseButton={false}
                 closeOverlay={vi.fn()}
             />,
@@ -133,7 +133,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
-                showAuthOverlay={true}
+                show={true}
                 showCloseButton={true}
                 closeOverlay={vi.fn()}
             />,
@@ -232,7 +232,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
-                showAuthOverlay={true}
+                show={true}
                 showCloseButton={false}
                 closeOverlay={vi.fn()}
             />,
