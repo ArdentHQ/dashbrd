@@ -38,6 +38,7 @@ interface Properties {
         tab: "activity" | "collection";
         pageLimit: number;
         query: string;
+        nftPageLimit: number;
     };
     activities: App.Data.Nfts.NftActivitiesData;
     sortByMintDate?: boolean;
@@ -65,7 +66,8 @@ const CollectionsView = ({
     const { props } = usePage();
 
     const [selectedTab, setSelectedTab] = useState<"collection" | "activity">(appliedFilters.tab);
-    const [pageLimit, setPageLimit] = useState<number>(appliedFilters.pageLimit);
+    const [activityPageLimit, setActivityPageLimit] = useState<number>(appliedFilters.pageLimit);
+    const [nftPageLimit, setNftPageLimit] = useState<number>(appliedFilters.nftPageLimit);
     const [selectedTraits, setSelectedTraits] = useState<TraitsFilters>(appliedFilters.traits);
     const [showOnlyOwned, setShowOnlyOwned] = useState<boolean>(appliedFilters.owned);
     const [filterIsDirty, setFilterIsDirty] = useState(false);
@@ -84,7 +86,7 @@ const CollectionsView = ({
         if (selectedTab === "activity") {
             return {
                 tab: selectedTab,
-                pageLimit: pageLimit === 10 ? undefined : pageLimit,
+                activityPageLimit: activityPageLimit === 10 ? undefined : activityPageLimit,
             };
         }
 
@@ -94,8 +96,9 @@ const CollectionsView = ({
             tab: undefined,
             sort: sortByMintDate ? "minted" : undefined,
             query: isTruthy(query) ? query : undefined,
+            nftPageLimit: nftPageLimit === 10 ? undefined : nftPageLimit,
         };
-    }, [selectedTraits, showOnlyOwned, selectedTab, pageLimit, query, hasSelectedTraits]);
+    }, [selectedTraits, showOnlyOwned, selectedTab, activityPageLimit, nftPageLimit, query, hasSelectedTraits]);
 
     useEffect(() => {
         if (!filterIsDirty) {
@@ -163,8 +166,14 @@ const CollectionsView = ({
         setFilterIsDirty(true);
     };
 
-    const pageLimitChangeHandler = (pageLimit: number): void => {
-        setPageLimit(pageLimit);
+    const activityPageLimitChangeHandler = (pageLimit: number): void => {
+        setActivityPageLimit(pageLimit);
+
+        setFilterIsDirty(true);
+    };
+
+    const nftsPageLimitChangeHandler = (pageLimit: number): void => {
+        setNftPageLimit(pageLimit);
 
         setFilterIsDirty(true);
     };
@@ -269,6 +278,8 @@ const CollectionsView = ({
                                     ) : (
                                         <CollectionNftsGrid
                                             nfts={nfts}
+                                            pageLimit={nftPageLimit}
+                                            onPageLimitChange={nftsPageLimitChangeHandler}
                                             userNfts={collection.nfts}
                                         />
                                     )}
@@ -285,8 +296,8 @@ const CollectionsView = ({
                                         collection={collection}
                                         activities={activities}
                                         showNameColumn
-                                        pageLimit={pageLimit}
-                                        onPageLimitChange={pageLimitChangeHandler}
+                                        pageLimit={activityPageLimit}
+                                        onPageLimitChange={activityPageLimitChangeHandler}
                                         nativeToken={nativeToken}
                                     />
                                 )}

@@ -159,6 +159,9 @@ class CollectionController extends Controller
 
         $filters = $this->parseFilters($request, $ownedNfts->count());
 
+        // Allow any number but not more than 96
+        $nftPageLimit = min($request->has('nftPageLimit') ? (int) $request->get('nftPageLimit') : 24, 96);
+
         $nfts = $collection
             ->nfts()
             ->select('nfts.*')
@@ -167,17 +170,17 @@ class CollectionController extends Controller
             ->orderByOwnership($user)
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
             ->when(! $sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
-            ->paginate(12)
+            ->paginate($nftPageLimit)
             ->appends($request->all());
 
         // Allow any number but not more than 100
-        $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 10, 100);
+        $activityPageLimit = min($request->has('activityPageLimit') ? (int) $request->get('activityPageLimit') : 10, 100);
 
         $tab = $request->get('tab') === 'activity' ? 'activity' : 'collection';
 
-        $activities = $collection->activities()->latest('timestamp')->where('type', '!=', NftTransferType::Transfer)->paginate($pageLimit)->appends([
+        $activities = $collection->activities()->latest('timestamp')->where('type', '!=', NftTransferType::Transfer)->paginate($activityPageLimit)->appends([
             'tab' => 'activity',
-            'pageLimit' => $pageLimit,
+            'activityPageLimit' => $activityPageLimit,
         ]);
 
         /** @var \Spatie\LaravelData\PaginatedDataCollection<int, \App\Data\Nfts\NftActivityData> */
@@ -199,7 +202,7 @@ class CollectionController extends Controller
             'collectionTraits' => CollectionTraitFilterData::fromCollection($collection),
             'alreadyReported' => $collection->wasReportedByUserRecently($user),
             'reportAvailableIn' => $reportAvailableIn,
-            'appliedFilters' => $this->appliedParameters($request, $pageLimit, $tab, $filters),
+            'appliedFilters' => $this->appliedParameters($request, $activityPageLimit, $nftPageLimit, $tab, $filters),
             'sortByMintDate' => $sortByMintDate,
             'nativeToken' => TokenData::fromModel($nativeToken),
         ]);
@@ -264,7 +267,7 @@ class CollectionController extends Controller
      * } $filters
      * @return array{owned: bool, traits: array<string, array<string, string[]>> | null}
      */
-    private function appliedParameters(Request $request, int $pageLimit, string $tab, mixed $filters): array
+    private function appliedParameters(Request $request, int $activityPageLimit, int $nftPageLimit, string $tab, mixed $filters): array
     {
         // transform sanitized traits back into the same format as frontend gave us
         $traits = collect($filters['traits'] ?? [])
@@ -289,7 +292,8 @@ class CollectionController extends Controller
             'owned' => $filters['owned'],
             'traits' => $traits->isEmpty() ? null : $traits->toArray(),
             'tab' => $tab,
-            'pageLimit' => $pageLimit,
+            'activityPageLimit' => $activityPageLimit,
+            'nftPageLimit' => $nftPageLimit,
         ];
     }
 }
