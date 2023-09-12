@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Spatie\LaravelData\PaginatedDataCollection;
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionNftData;
@@ -29,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {

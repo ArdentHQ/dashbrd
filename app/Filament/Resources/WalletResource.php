@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use Filament\Infolists\Components\TextEntry;
 use App\Filament\Resources\WalletResource\Pages\CreateWallet;
 use App\Filament\Resources\WalletResource\Pages\EditWallet;
 use App\Filament\Resources\WalletResource\Pages\ListWallets;
 use App\Filament\Resources\WalletResource\Pages\ViewWallet;
 use App\Models\Wallet;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\CreateAction;
