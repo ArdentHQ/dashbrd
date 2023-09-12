@@ -305,6 +305,7 @@ const CollectionsView = ({
                     }}
                     selectedTraitsSetHandler={selectedTraitsSetHandler}
                     setFilters={setFilters}
+                    user={auth.user}
                 />
             </DefaultLayout>
         </ExternalLinkContextProvider>
