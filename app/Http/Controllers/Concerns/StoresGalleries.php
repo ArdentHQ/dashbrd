@@ -95,15 +95,15 @@ trait StoresGalleries
     {
         if (is_string($coverImage)) {
             return $coverImage;
-        } elseif ($coverImage !== null && is_a($coverImage, UploadedFile::class)) {
+        }
+
+        if ($coverImage !== null && is_a($coverImage, UploadedFile::class)) {
             /** @var FilesystemAdapter $disk */
             $disk = Storage::disk('public');
             $filePath = $disk->put('galleryCoverImages', $coverImage);
-
             if ($filePath === false) {
                 return null;
             }
-
             /** @var string $filePath */
             return Storage::url($filePath);
         }
