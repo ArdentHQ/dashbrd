@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
-import { Icon } from "@/Components/Icon";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
