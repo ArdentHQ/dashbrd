@@ -321,6 +321,11 @@ class AlchemyPendingRequest extends PendingRequest
 
         $mintTimestamp = $this->getNftMintingDateProperty($nft);
 
+        $bannerImageUrl = Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl');
+        if (!empty($bannerImageUrl)) {
+            $bannerImageUrl = preg_replace('/(?<=\?|&)w=(\d+)/', 'w=1378', $bannerImageUrl);
+        }
+
         return new Web3NftData(
             tokenAddress: $nft['contract']['address'],
             tokenNumber: CryptoUtils::hexToBigIntStr($nft['id']['tokenId']),
@@ -332,7 +337,7 @@ class AlchemyPendingRequest extends PendingRequest
             collectionDescription: Arr::get($nft, 'contractMetadata.openSea.description'),
             collectionSocials: $socials,
             collectionSupply: $supply,
-            collectionBannerImageUrl: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl'),
+            collectionBannerImageUrl: $bannerImageUrl,
             name: $this->getNftName($nft),
             description: $description,
             extraAttributes: $this->getNftExtraAttributes($nft),
