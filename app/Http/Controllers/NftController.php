@@ -13,6 +13,7 @@ use App\Data\Token\TokenData;
 use App\Jobs\FetchNftActivity;
 use App\Models\Collection;
 use App\Models\Nft;
+use App\Models\User;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -22,6 +23,9 @@ class NftController extends Controller
 {
     public function show(Request $request, Collection $collection, Nft $nft): Response
     {
+        /** @var User|null $user */
+        $user = $request->user();
+
         $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
 
         // Dispatch every 3 days...
@@ -35,10 +39,11 @@ class NftController extends Controller
             'nft' => NftData::fromModel($nft),
             'activities' => $this->getActivities($request, $nft),
             'collectionDetails' => CollectionBasicDetailsData::fromModel($collection),
-            'alreadyReported' => $nft->wasReportedByUserRecently($request->user()),
+            'alreadyReported' => $user && $nft->wasReportedByUserRecently($request->user()),
             'reportAvailableIn' => RateLimiterHelpers::nftReportAvailableInHumanReadable($request, $nft),
             'traits' => CollectionTraitData::collection($nft->traits),
             'nativeToken' => TokenData::fromModel($nativeToken),
+            'allowsGuests' => true
         ]);
     }
 
