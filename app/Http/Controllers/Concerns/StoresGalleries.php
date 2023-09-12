@@ -104,6 +104,7 @@ trait StoresGalleries
             if ($filePath === false) {
                 return null;
             }
+
             /** @var string $filePath */
             return Storage::url($filePath);
         }
