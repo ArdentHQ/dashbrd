@@ -256,6 +256,43 @@ it('can render the collections view page with falsy owned filter', function ($ow
     0,
 ]);
 
+it('can render the collections view page with custom nftPageLimit', function () {
+    $user = createUser();
+
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', [
+            'collection' => $collection->slug,
+            'nftPageLimit' => 48,
+        ]))
+        ->assertStatus(200)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/View')
+                ->has(
+                    'appliedFilters',
+                    fn (Assert $page) => $page->where('owned', false)
+                        ->where('tab', 'collection')
+                        ->where('traits', null)
+                        ->where('activityPageLimit', 10)
+                        ->where('nftPageLimit', 48)
+                )
+        );
+});
+
+
 it('can render the collections view page with traits', function () {
     $user = createUser();
 
