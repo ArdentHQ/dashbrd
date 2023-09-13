@@ -48,10 +48,6 @@ class MyGalleryController extends Controller
 
         $collections->withPath(route('my-galleries.collections'));
 
-        if ($collections->isEmpty()) {
-            return redirect(route('my-galleries'));
-        }
-
         $nftsPerPage = (int) config('dashbrd.gallery.pagination.nfts_per_page');
 
         $nfts = Nft::paginatedCollectionNfts($collections, $user, $nftsPerPage);
