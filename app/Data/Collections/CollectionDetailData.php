@@ -72,7 +72,7 @@ class CollectionDetailData extends Data
             nftsCount: $nftsQuery->count(),
             mintedAt: $collection->minted_at?->getTimestampMs(),
             nfts: new CollectionNftsData(
-                CollectionNftData::collection($nftsQuery->get())
+                CollectionNftData::collection($user ? $nftsQuery->get() : [])
             ),
         );
     }

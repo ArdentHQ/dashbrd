@@ -268,7 +268,7 @@ const CollectionsView = ({
                                     ) : (
                                         <CollectionNftsGrid
                                             nfts={nfts}
-                                            userNfts={auth.user != null ? collection.nfts : { paginated: [] }}
+                                            userNfts={collection.nfts}
                                         />
                                     )}
                                 </div>

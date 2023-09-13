@@ -137,15 +137,18 @@ class CollectionController extends Controller
 
         $collection->touchQuietly('last_viewed_at');
 
-        $ownedNfts = $collection
-            ->nfts()
-            ->select('nfts.*')
-            ->filter([
-                'owned' => true,
-                'traits' => $this->normalizeTraits($request->get('traits', [])),
-            ], $user);
+        $ownedNftsCount = $user
+            ? $collection
+                ->nfts()
+                ->select('nfts.*')
+                ->filter([
+                    'owned' => true,
+                    'traits' => $this->normalizeTraits($request->get('traits', [])),
+                ], $user)
+                ->count()
+            : 0;
 
-        $filters = $this->parseFilters($request, $ownedNfts->count());
+        $filters = $this->parseFilters($request, $ownedNftsCount);
 
         $nfts = $collection
             ->nfts()
