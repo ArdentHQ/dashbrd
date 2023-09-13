@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Network;
 
+use Illuminate\Support\Collection;
 use App\Models\Network;
 use App\Models\User;
 use Spatie\LaravelData\Data;
@@ -26,7 +27,7 @@ class NetworkWithCollectionsData extends Data
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, NetworkWithCollectionsData>
+     * @return Collection<int, NetworkWithCollectionsData>
      */
     public static function fromModel(User $user, bool $showHidden)
     {
