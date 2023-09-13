@@ -26,7 +26,9 @@ class DashboardController extends Controller
     {
         if (Feature::active(Features::Galleries->value)) {
             return redirect()->route('galleries');
-        } elseif (Feature::active(Features::Collections->value)) {
+        }
+
+        if (Feature::active(Features::Collections->value)) {
             return redirect()->route('collections');
         }
 

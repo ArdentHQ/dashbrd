@@ -29,6 +29,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {
@@ -187,10 +188,10 @@ class CollectionController extends Controller
             'pageLimit' => $pageLimit,
         ]);
 
-        /** @var \Spatie\LaravelData\PaginatedDataCollection<int, \App\Data\Nfts\NftActivityData> */
+        /** @var PaginatedDataCollection<int, NftActivityData> */
         $paginated = NftActivityData::collection($activities);
 
-        /** @var \Spatie\LaravelData\PaginatedDataCollection<int, \App\Data\Gallery\GalleryNftData> */
+        /** @var PaginatedDataCollection<int, GalleryNftData> */
         $paginatedNfts = GalleryNftData::collection($nfts);
 
         $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
