@@ -138,6 +138,39 @@ it('filters recently active wallets', function () {
         ->toEqualCanonicalizing(Wallet::recentlyActive()->pluck('id')->toArray());
 });
 
+it('filters not recently active wallets', function () {
+    $this->freezeTime();
+
+    $active[] = Wallet::factory()->create([
+        'last_activity_at' => now()->subSeconds(config('dashbrd.wallets.active_threshold') - 1),
+    ]);
+
+    $active[] = Wallet::factory()->create([
+        'last_activity_at' => now()->subSeconds(config('dashbrd.wallets.active_threshold')),
+    ]);
+
+    $inactive[] = Wallet::factory()->create([
+        'last_activity_at' => now()->subSeconds(config('dashbrd.wallets.active_threshold') + 1),
+    ]);
+
+    $inactive[] = Wallet::factory()->create([
+        'last_activity_at' => now()->subSeconds(config('dashbrd.wallets.active_threshold') + 2),
+    ]);
+
+    $active[] = Wallet::factory()->create([
+        'last_activity_at' => now(),
+    ]);
+
+    $inactive[] = Wallet::factory()->create([
+        'last_activity_at' => null,
+    ]);
+
+    expect(Wallet::notRecentlyActive()->count())->toBe(3);
+
+    expect(array_map(fn ($wallet) => $wallet->id, $inactive))
+        ->toEqualCanonicalizing(Wallet::notRecentlyActive()->pluck('id')->toArray());
+});
+
 it('filters online wallets', function () {
     $this->freezeTime();
 
