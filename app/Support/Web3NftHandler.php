@@ -67,6 +67,8 @@ class Web3NftHandler
                     'website' => $nftData->collectionWebsite,
                     'socials' => $nftData->collectionSocials,
                     'banner' => $nftData->collectionBannerImageUrl,
+                    'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
+
                 ]),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),

@@ -162,6 +162,7 @@ class MoralisPendingRequest extends PendingRequest
                 collectionSocials: null,
                 collectionSupply: null,
                 collectionBannerImageUrl: null,
+                collectionBannerUpdatedAt: null,
                 name: $this->getNftName($nft),
                 description: $nft['normalized_metadata']['description'] ?? null,
                 extraAttributes: $extraAttributes,
