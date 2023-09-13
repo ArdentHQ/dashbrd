@@ -117,6 +117,10 @@ class Collection extends Model
     {
         $bannerUpdatedAt = $this->extra_attributes->get('banner_updated_at');
 
+        if ($bannerUpdatedAt === null) {
+            return null;
+        }
+
         return Carbon::parse($bannerUpdatedAt);
     }
 
