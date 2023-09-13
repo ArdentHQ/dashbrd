@@ -164,7 +164,7 @@ class LiveDumpNfts extends Command
     private function getTopCollections(Chains $chain, int $limit = 25): IlluminateCollection
     {
         $chainName = strtolower($chain->name);
-        $fileName = self::nftsSubDir."/top-$chainName-collections.json";
+        $fileName = self::nftsSubDir."/top-{$chainName}-collections.json";
 
         $fs = Storage::disk(self::diskName);
 
@@ -258,7 +258,7 @@ class LiveDumpNfts extends Command
 
         $nfts = [];
 
-        $chunks = $fs->allFiles("$path/nft-chunks");
+        $chunks = $fs->allFiles("{$path}/nft-chunks");
 
         foreach ($chunks as $chunk) {
             $nftsChunk = json_decode($fs->get($chunk));
@@ -283,7 +283,7 @@ class LiveDumpNfts extends Command
 
         $fs = Storage::disk(self::diskName);
 
-        $file = $fs->get("$path/nft-chunks/$chunk.json");
+        $file = $fs->get("{$path}/nft-chunks/{$chunk}.json");
 
         if (! $file) {
             return null;
