@@ -15,7 +15,7 @@ final class NftImageUrl
     public static function getAllSizes(?string $url): array
     {
         /** @var array{thumb: string | null, small: string | null, large: string | null} $result */
-        $result = collect(ImageSize::cases())
+        $result = collect(ImageSize::defaultList())
             ->mapWithKeys(fn ($size) => [$size->value => ($url ? self::get($url, $size) : null)])
             ->all();
 

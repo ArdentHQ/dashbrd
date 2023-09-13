@@ -11,6 +11,15 @@ enum ImageSize: string
     case Large = 'large';
     case Banner = 'banner';
 
+    public static function defaultList(): array
+    {
+        return [
+            ImageSize::Thumb,
+            ImageSize::Small,
+            ImageSize::Large,
+        ];
+    }
+
     public function width(): int
     {
         return match ($this) {
