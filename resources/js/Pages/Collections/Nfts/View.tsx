@@ -1,4 +1,3 @@
-import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import { NftBackButton } from "@/Components/Collections/Nfts/NftBackButton";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
