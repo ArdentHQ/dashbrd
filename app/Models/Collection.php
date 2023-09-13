@@ -9,6 +9,7 @@ use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -115,7 +116,7 @@ class Collection extends Model
     {
         $updatedAt = $this->extra_attributes->get('banner_updated_at');
 
-        return $updatedAt ? Carbon::parse($updatedAt) : null;
+        return Carbon::parse($updatedAt);
     }
 
     public function website(bool $defaultToExplorer = true): ?string
