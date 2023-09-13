@@ -102,7 +102,7 @@ class Web3NftHandler
             extra_attributes = excluded.extra_attributes,
             minted_block = excluded.minted_block,
             minted_at = excluded.minted_at,
-            last_indexed_token_number = excluded.last_indexed_token_number
+            last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
     returning id, address, floor_price, supply
      ",
                 $collectionsData->toArray(),
