@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Data\Network;
 
-use Illuminate\Support\Collection;
 use App\Models\Network;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
