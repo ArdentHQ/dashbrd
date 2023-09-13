@@ -113,15 +113,9 @@ class Collection extends Model
         return $this->extra_attributes->get('banner');
     }
 
-    public function bannerUpdatedAt(): ?Carbon
+    public function bannerUpdatedAt(): ?string
     {
-        $bannerUpdatedAt = $this->extra_attributes->get('banner_updated_at');
-
-        if ($bannerUpdatedAt === null) {
-            return null;
-        }
-
-        return Carbon::parse($bannerUpdatedAt);
+        return $this->extra_attributes->get('banner_updated_at');
     }
 
     public function website(bool $defaultToExplorer = true): ?string
