@@ -4,7 +4,7 @@ import { LinkButton } from "@/Components/Link";
 import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
 import { Skeleton } from "@/Components/Skeleton";
 
-export const BalanceHeaderSkeleton = (): JSX.Element => {
+export const BalanceHeaderSkeleton = ({ animated }: { animated: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -20,6 +20,7 @@ export const BalanceHeaderSkeleton = (): JSX.Element => {
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={91}
+                                animated={animated}
                             />
                         </div>
 
@@ -28,6 +29,7 @@ export const BalanceHeaderSkeleton = (): JSX.Element => {
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={30}
+                                animated={animated}
                             />
                         </div>
                     </div>
@@ -41,11 +43,13 @@ export const BalanceHeaderSkeleton = (): JSX.Element => {
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={178}
+                                animated={animated}
                             />
 
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={24}
+                                animated={animated}
                             />
                         </div>
                     </div>
@@ -58,26 +62,31 @@ export const BalanceHeaderSkeleton = (): JSX.Element => {
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
                             </div>
                         </div>
@@ -87,26 +96,31 @@ export const BalanceHeaderSkeleton = (): JSX.Element => {
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
+                                    animated={animated}
                                 />
                             </div>
                         </div>
@@ -116,26 +130,31 @@ export const BalanceHeaderSkeleton = (): JSX.Element => {
                                 <Skeleton
                                     width={60}
                                     height={20}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
+                                    animated={animated}
                                 />
                             </div>
                         </div>

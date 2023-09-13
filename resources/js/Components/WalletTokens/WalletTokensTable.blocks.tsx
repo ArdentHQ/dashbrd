@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Button, IconButton } from "@/Components/Buttons";
 import { PriceChart } from "@/Components/PortfolioBreakdown";
 import { PriceChange } from "@/Components/PriceChange/PriceChange";
-import { Skeleton } from "@/Components/Skeleton";
 import { TokenLogo } from "@/Components/Tokens/TokenLogo";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
@@ -280,15 +279,6 @@ export const Chart = ({ asset }: Omit<Properties, "onClick">): JSX.Element => {
     const labels = useMemo<string[]>(() => Object.keys(values), [values]);
 
     const isErrored = useMemo(() => symbolLoaded && !hasData, [hasData, symbolLoaded]);
-
-    if (!symbolLoaded) {
-        return (
-            <Skeleton
-                data-testloading
-                className="h-10 w-25"
-            />
-        );
-    }
 
     return (
         <Tooltip

@@ -8,9 +8,11 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 export const WalletTokensTableItemSkeleton = ({
     index,
     isCompact,
+    animated,
 }: {
     index: number;
     isCompact: boolean;
+    animated: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -30,26 +32,45 @@ export const WalletTokensTableItemSkeleton = ({
                         <Skeleton
                             isCircle
                             className="h-10 w-10"
+                            animated={animated}
                         />
 
                         <div className="flex flex-col items-start space-y-0.5">
-                            <Skeleton className="my-1 h-4 w-10" />
-                            <Skeleton className="my-1 h-3.5 w-24" />
+                            <Skeleton
+                                className="my-1 h-4 w-10"
+                                animated={animated}
+                            />
+                            <Skeleton
+                                className="my-1 h-3.5 w-24"
+                                animated={animated}
+                            />
                         </div>
                     </div>
                 </TableCell>
 
                 <TableCell innerClassName="justify-end">
                     <div className="flex flex-col items-end space-y-0.5">
-                        <Skeleton className="my-1 h-4 w-24" />
-                        <Skeleton className="my-1 h-3.5 w-12" />
+                        <Skeleton
+                            className="my-1 h-4 w-24"
+                            animated={animated}
+                        />
+                        <Skeleton
+                            className="my-1 h-3.5 w-12"
+                            animated={animated}
+                        />
                     </div>
                 </TableCell>
 
                 <TableCell innerClassName="justify-end">
                     <div className="flex flex-col items-end space-y-0.5">
-                        <Skeleton className="my-1 h-4 w-16" />
-                        <Skeleton className="my-1 h-3.5 w-10" />
+                        <Skeleton
+                            className="my-1 h-4 w-16"
+                            animated={animated}
+                        />
+                        <Skeleton
+                            className="my-1 h-3.5 w-10"
+                            animated={animated}
+                        />
                     </div>
                 </TableCell>
 
@@ -58,7 +79,10 @@ export const WalletTokensTableItemSkeleton = ({
                         className="hidden lg:table-cell"
                         innerClassName="justify-end"
                     >
-                        <Skeleton className="h-5 w-12" />
+                        <Skeleton
+                            className="h-5 w-12"
+                            animated={animated}
+                        />
                     </TableCell>
                 )}
 
@@ -67,7 +91,10 @@ export const WalletTokensTableItemSkeleton = ({
                         className="hidden xl:table-cell"
                         innerClassName="justify-end"
                     >
-                        <Skeleton className="h-5 w-16" />
+                        <Skeleton
+                            className="h-5 w-16"
+                            animated={animated}
+                        />
                     </TableCell>
                 )}
 
@@ -76,7 +103,10 @@ export const WalletTokensTableItemSkeleton = ({
                         className="hidden lg:table-cell"
                         innerClassName="justify-end"
                     >
-                        <Skeleton className="h-10 w-25" />
+                        <Skeleton
+                            className="h-10 w-25"
+                            animated={animated}
+                        />
                     </TableCell>
                 )}
 
@@ -87,7 +117,10 @@ export const WalletTokensTableItemSkeleton = ({
                     {isMdAndAbove ? (
                         <div className="relative inline-flex items-center overflow-hidden rounded-3xl px-5 py-2 font-medium">
                             <div className="absolute inset-0">
-                                <Skeleton className="h-10 w-full" />
+                                <Skeleton
+                                    className="h-10 w-full"
+                                    animated={animated}
+                                />
                             </div>
 
                             <span>{t("common.details")}</span>
@@ -96,6 +129,7 @@ export const WalletTokensTableItemSkeleton = ({
                         <Skeleton
                             isCircle
                             className="block h-10 w-10 md:hidden"
+                            animated={animated}
                         />
                     )}
                 </TableCell>
@@ -114,17 +148,30 @@ export const WalletTokensTableItemSkeleton = ({
                 <Skeleton
                     isCircle
                     className="h-10 w-10"
+                    animated={animated}
                 />
 
                 <div className="flex flex-col items-start space-y-0.5 font-medium">
-                    <Skeleton className="my-1 h-3.5 w-10" />
-                    <Skeleton className="my-[3px] h-3 w-16" />
+                    <Skeleton
+                        className="my-1 h-3.5 w-10"
+                        animated={animated}
+                    />
+                    <Skeleton
+                        className="my-[3px] h-3 w-16"
+                        animated={animated}
+                    />
                 </div>
             </div>
 
             <div className="flex flex-col items-end space-y-0.5 font-medium">
-                <Skeleton className="my-1 h-3.5 w-10" />
-                <Skeleton className="my-[3px] h-3 w-24" />
+                <Skeleton
+                    className="my-1 h-3.5 w-10"
+                    animated={animated}
+                />
+                <Skeleton
+                    className="my-[3px] h-3 w-24"
+                    animated={animated}
+                />
             </div>
         </button>
     );
