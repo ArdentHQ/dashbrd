@@ -218,7 +218,7 @@ class MoralisPendingRequest extends PendingRequest
 
         $query = http_build_query([
             'wallet_addresses' => $walletAddresses,
-            'chain' => $chain->value
+            'chain' => $chain->value,
         ]);
 
         $balances = self::get(sprintf('wallets/balances?%s', $query))->json('0.wallet_balances');

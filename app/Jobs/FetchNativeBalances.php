@@ -41,7 +41,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
         $walletsToUpdate = collect();
 
         $balancesToInsert = $balances->map(function ($walletBalance) use ($nativeToken, $walletsToUpdate) {
-            $wallet = $this->wallets->first(fn($wallet) => $wallet->address === $walletBalance->address);
+            $wallet = $this->wallets->first(fn ($wallet) => $wallet->address === $walletBalance->address);
 
             $walletsToUpdate->push($wallet);
 
