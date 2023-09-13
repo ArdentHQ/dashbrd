@@ -1,7 +1,10 @@
 import React from "react";
 import { CollectionHeaderTop } from "./CollectionHeaderTop";
 import { MarkdownImage } from "@/Components/Collections/CollentionDescription";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
+import * as useAuth from "@/Hooks/useAuth";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 const collection = new CollectionDetailDataFactory().create({
@@ -12,6 +15,22 @@ const collection = new CollectionDetailDataFactory().create({
 });
 
 describe("CollectionHeaderTop", () => {
+    beforeAll(() => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: true,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+    });
+
     it("should render", () => {
         render(<CollectionHeaderTop collection={collection} />);
 
