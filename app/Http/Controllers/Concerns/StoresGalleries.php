@@ -9,6 +9,7 @@ use App\Models\Gallery;
 use App\Models\User;
 use App\Support\Cache\GalleryCache;
 use App\Support\Cache\UserCache;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -94,11 +95,12 @@ trait StoresGalleries
     {
         if (is_string($coverImage)) {
             return $coverImage;
-        } elseif ($coverImage !== null && is_a($coverImage, UploadedFile::class)) {
-            /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+        }
+
+        if ($coverImage !== null && is_a($coverImage, UploadedFile::class)) {
+            /** @var FilesystemAdapter $disk */
             $disk = Storage::disk('public');
             $filePath = $disk->put('galleryCoverImages', $coverImage);
-
             if ($filePath === false) {
                 return null;
             }

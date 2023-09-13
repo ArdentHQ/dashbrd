@@ -941,3 +941,32 @@ function getTestNfts($length = 3, $offset = 0, $withCursor = false): array
         'pageKey' => $withCursor ? 'cursor' : null,
     ];
 }
+
+it('should fetch nfts for wallet and keep previous collections last indexed token number', function () {
+    Bus::fake();
+
+    Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
+
+    $network = Network::polygon()->firstOrFail();
+    $wallet = Wallet::factory()->create();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'name' => 'PsychonautzNFT',
+        'slug' => 'psychonautznft',
+        'address' => '0x0b7600ca77fc257fe7eb432f87825cccc4590037',
+        'last_indexed_token_number' => '12345',
+    ]);
+
+    $this->assertDatabaseCount('collections', 1);
+    $this->assertDatabaseCount('nfts', 0);
+
+    (new FetchWalletNfts(WalletData::fromModel($wallet), NetworkData::from($network)))->handle();
+
+    $this->assertDatabaseCount('collections', 39);
+    $this->assertDatabaseCount('nfts', 90);
+
+    expect(Collection::whereNotNull('last_indexed_token_number')->count())->toBe(1);
+
+    expect($collection->fresh()->last_indexed_token_number)->toBe('12345');
+});

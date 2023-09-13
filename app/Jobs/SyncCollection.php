@@ -34,7 +34,6 @@ class SyncCollection implements ShouldBeUnique, ShouldQueue
             new FetchCollectionTraits($this->collection),
             new FetchCollectionOwners($this->collection),
             new FetchCollectionVolume($this->collection),
-            new FetchCollectionBanner($this->collection),
         ])->name('Syncing Collection #'.$this->collection->id)->dispatch();
     }
 
