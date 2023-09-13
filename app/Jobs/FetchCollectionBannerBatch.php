@@ -55,14 +55,14 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
                 return false;
             }
 
-            Log::info('Updating collection banner', [
-                'collection_address' => $data->contractAddress,
-                'banner' => $data->bannerImageUrl,
-            ]);
-
             $collection = $collections->first(fn($collection) => $collection->address === $data->contractAddress);
 
             if ($collection) {
+                Log::info('Updating collection banner', [
+                    'collection_address' => $data->contractAddress,
+                    'banner' => $data->bannerImageUrl,
+                ]);
+
                 $collection->extra_attributes->set('banner', $data->bannerImageUrl);
                 $collection->extra_attributes->set('banner_updated_at', now()->timestamp);
 
