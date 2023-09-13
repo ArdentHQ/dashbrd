@@ -51,7 +51,7 @@ class Web3NftHandler
         $collectionsData = $nftsGroupedByCollectionAddress->flatMap(function (Web3NftData $nftData) use ($now, $nftsInCollection) {
             $token = $nftData->token();
 
-            $data = [
+            return [
                 $nftData->tokenAddress,
                 $nftData->networkId,
                 trim($nftData->collectionName),
@@ -70,22 +70,13 @@ class Web3NftHandler
                 ]),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
-            ];
-
-            if ($this->collection) {
-                $data[] = $this->lastRetrievedTokenNumber($nftsInCollection->get($nftData->tokenAddress));
-            }
-
-            return [
-                ...$data,
+                $this->lastRetrievedTokenNumber($nftsInCollection->get($nftData->tokenAddress)),
                 $now,
                 $now,
             ];
         });
 
-        $valuesPlaceholders = $nftsGroupedByCollectionAddress
-            // If no collection the `last_indexed_token_number` is not updated
-            ->map(fn () => $this->collection ? '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' : '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
+        $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
 
         $ids = DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $dispatchJobs, $now) {
             // upsert nfts/collections (if any)
@@ -93,14 +84,11 @@ class Web3NftHandler
                 return collect();
             }
 
-            $lastIndexedTokenNumberColumn = $this->collection ? 'last_indexed_token_number, ' : '';
-            $lastIndexedTokenConflict = $this->collection ? 'last_indexed_token_number = excluded.last_indexed_token_number, ' : '';
-
             $dbCollections = collect(DB::select(
                 // language=postgresql
                 "
     insert into collections
-        (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, $lastIndexedTokenNumberColumn created_at, updated_at)
+        (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, last_indexed_token_number, created_at, updated_at)
     values $valuesPlaceholders
     on conflict (address, network_id) do update
         set name = trim(coalesce(excluded.name, collections.name)),
@@ -111,8 +99,8 @@ class Web3NftHandler
             floor_price_retrieved_at = excluded.floor_price_retrieved_at,
             extra_attributes = excluded.extra_attributes,
             minted_block = excluded.minted_block,
-            {$lastIndexedTokenConflict}
-            minted_at = excluded.minted_at
+            minted_at = excluded.minted_at,
+            last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
     returning id, address, floor_price, supply
      ",
                 $collectionsData->toArray(),
