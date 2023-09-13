@@ -17,7 +17,6 @@ import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
-import { assertUser } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
@@ -60,8 +59,6 @@ const CollectionsView = ({
     sortByMintDate = false,
     nativeToken,
 }: Properties): JSX.Element => {
-    assertUser(auth.user);
-
     const { t } = useTranslation();
     const { props } = usePage();
 
@@ -230,11 +227,13 @@ const CollectionsView = ({
                         <Tab.Panel>
                             <div className="mt-6 flex lg:space-x-6">
                                 <div className="hidden w-full max-w-[304px] space-y-3 lg:block">
-                                    <CollectionOwnedToggle
-                                        checked={showOnlyOwned}
-                                        onChange={ownedChangedHandler}
-                                        ownedNftsCount={collection.nftsCount}
-                                    />
+                                    {auth.user !== null && (
+                                        <CollectionOwnedToggle
+                                            checked={showOnlyOwned}
+                                            onChange={ownedChangedHandler}
+                                            ownedNftsCount={collection.nftsCount}
+                                        />
+                                    )}
 
                                     <CollectionPropertiesFilter
                                         traits={collectionTraits}
@@ -317,6 +316,7 @@ const CollectionsView = ({
                     }}
                     selectedTraitsSetHandler={selectedTraitsSetHandler}
                     setFilters={setFilters}
+                    user={auth.user}
                 />
             </DefaultLayout>
         </ExternalLinkContextProvider>

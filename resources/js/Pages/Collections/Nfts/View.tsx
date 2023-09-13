@@ -4,7 +4,6 @@ import { NftBackButton } from "@/Components/Collections/Nfts/NftBackButton";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { NftHeading } from "@/Pages/Collections/Nfts/Components/NftHeading";
-import { assertUser } from "@/Utils/assertions";
 
 interface Properties {
     title: string;
@@ -29,7 +28,6 @@ const CollectionsNftsView = ({
     traits,
     nativeToken,
 }: Properties): JSX.Element => {
-    assertUser(auth.user);
     const { props } = usePage();
 
     return (
