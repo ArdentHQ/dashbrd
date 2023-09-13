@@ -5,6 +5,8 @@ import { IconButton } from "@/Components/Buttons";
 import { CollectionReportModal } from "@/Components/Collections/CollectionReportModal";
 import { NftReportModal } from "@/Components/Collections/Nfts/NftReportModal";
 import { Tooltip } from "@/Components/Tooltip";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
 
 interface Properties {
     model: App.Data.Nfts.NftData | App.Data.Collections.CollectionDetailData;
@@ -29,6 +31,10 @@ export const Report = ({
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [showReportModal, setShowReportModal] = useState(false);
+
+    const { authenticated } = useAuth();
+
+    const { showConnectOverlay } = useMetaMaskContext();
 
     const disableReport = useMemo<boolean>((): boolean => {
         if (!allowReport) {
@@ -69,7 +75,7 @@ export const Report = ({
                         data-testid="Report_flag"
                         icon="Flag"
                         onClick={() => {
-                            setShowReportModal(true);
+                            authenticated ? setShowReportModal(true) : showConnectOverlay();
                         }}
                         disabled={disableReport}
                     />

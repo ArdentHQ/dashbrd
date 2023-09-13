@@ -20,7 +20,10 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 class Token extends Model
 {
-    use BelongsToNetwork, BelongsToTokenGuid, HasFactory, WithData;
+    use BelongsToNetwork;
+    use BelongsToTokenGuid;
+    use HasFactory;
+    use WithData;
 
     /**
      * @var array<string>
@@ -118,6 +121,23 @@ class Token extends Model
     }
 
     /**
+     * @return HasMany<Balance>
+     */
+    public function balances()
+    {
+        return $this->hasMany(Balance::class, 'token_id', 'id');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWithBalancesOnMainnet(Builder $query): Builder
+    {
+        return $query->mainnet()->has('balances');
+    }
+
+    /**
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -135,7 +155,7 @@ class Token extends Model
         return $query
             ->bySymbol('MATIC')
             ->whereHas('network', function (Builder $query) {
-                /** @var Builder<\App\Models\Network> $query */
+                /** @var Builder<Network> $query */
                 $query->polygon();
             });
     }

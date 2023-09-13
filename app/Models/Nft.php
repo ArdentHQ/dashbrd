@@ -166,9 +166,9 @@ class Nft extends Model
      * } $filters
      * @return Builder<self>
      */
-    public function scopeFilter(Builder $query, array $filters, User $user): Builder
+    public function scopeFilter(Builder $query, array $filters, ?User $user): Builder
     {
-        if ($filters['owned']) {
+        if ($filters['owned'] && $user) {
             $query->ownedBy($user);
         }
 

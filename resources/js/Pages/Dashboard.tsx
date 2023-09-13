@@ -18,6 +18,7 @@ const LoadingDashboard = (): JSX.Element => (
     <div>
         <BalanceHeader
             isLoading
+            skeletonAnimated={false}
             balance="0"
             address=""
             assets={[]}

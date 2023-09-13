@@ -4,11 +4,9 @@ import { NftBackButton } from "@/Components/Collections/Nfts/NftBackButton";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { NftHeading } from "@/Pages/Collections/Nfts/Components/NftHeading";
-import { assertUser } from "@/Utils/assertions";
 
 interface Properties {
     title: string;
-    auth: PageProps["auth"];
     nft: App.Data.Nfts.NftData;
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
@@ -19,7 +17,6 @@ interface Properties {
 }
 
 const CollectionsNftsView = ({
-    auth,
     title,
     nft,
     reportAvailableIn,
@@ -29,7 +26,6 @@ const CollectionsNftsView = ({
     traits,
     nativeToken,
 }: Properties): JSX.Element => {
-    assertUser(auth.user);
     const { props } = usePage();
 
     return (

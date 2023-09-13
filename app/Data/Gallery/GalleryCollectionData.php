@@ -30,6 +30,7 @@ class GalleryCollectionData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?string $banner,
+        public ?string $bannerUpdatedAt,
         public ?string $website,
         public ?int $nftsCount,
     ) {
@@ -50,6 +51,7 @@ class GalleryCollectionData extends Data
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
             image: $collection->extra_attributes->get('image'),
             banner: $collection->extra_attributes->get('banner'),
+            bannerUpdatedAt: $collection->extra_attributes->get('banner_updated_at'),
             website: $collection->website(),
             nftsCount: $collection->nfts_count ?? null,
         );
