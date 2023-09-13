@@ -44,7 +44,12 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
     {
         $metadata = Alchemy::getContractMetadataBatch($this->collectionAddresses, $this->network);
 
-        $metadata->each(function (Web3ContractMetadata $data) {
+        $collections = Collection::query()
+            ->whereIn('address', $metadata->pluck('contractAddress'))
+            ->select(['id', 'address'])
+            ->get();
+
+        $metadata->each(function (Web3ContractMetadata $data) use ($collections) {
             // Skip this iteration because bannerImageUrl is null
             if (is_null($data->bannerImageUrl)) {
                 return false;
@@ -55,19 +60,14 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
                 'banner' => $data->bannerImageUrl,
             ]);
 
-            Collection::query()
-                ->where('address', $data->contractAddress)
-                ->update([
-                    'extra_attributes' => DB::raw("
-                            jsonb_set(
-                                jsonb_set(
-                                    extra_attributes::jsonb,
-                                    '{banner}', '\"$data->bannerImageUrl\"'::jsonb, true
-                                ),
-                                '{banner_updated_at}', '".now()->timestamp."'::jsonb, true
-                            )::jsonb
-                        "),
-                ]);
+            $collection = $collections->first(fn($collection) => $collection->address === $data->contractAddress);
+
+            if ($collection) {
+                $collection->extra_attributes->set('banner', $data->bannerImageUrl);
+                $collection->extra_attributes->set('banner_updated_at', now()->timestamp);
+
+                $collection->save();
+            }
         });
     }
 
