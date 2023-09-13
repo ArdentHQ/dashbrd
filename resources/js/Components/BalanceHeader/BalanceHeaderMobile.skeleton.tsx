@@ -4,7 +4,7 @@ import { LinkButton } from "@/Components/Link";
 import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
 import { Skeleton } from "@/Components/Skeleton";
 
-export const BalanceHeaderMobileSkeleton = ({ disabled }: { disabled: boolean }): JSX.Element => {
+export const BalanceHeaderMobileSkeleton = ({ animated }: { animated: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -16,14 +16,14 @@ export const BalanceHeaderMobileSkeleton = ({ disabled }: { disabled: boolean })
                         <Skeleton
                             height={15}
                             width={100}
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </div>
 
                     <Skeleton
                         height={20}
                         width={20}
-                        disabled={disabled}
+                        animated={animated}
                     />
                 </div>
             </div>
@@ -35,7 +35,7 @@ export const BalanceHeaderMobileSkeleton = ({ disabled }: { disabled: boolean })
                         <Skeleton
                             height={32}
                             width={120}
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </div>
                 </div>
@@ -45,21 +45,21 @@ export const BalanceHeaderMobileSkeleton = ({ disabled }: { disabled: boolean })
                         width={40}
                         height={40}
                         isCircle
-                        disabled={disabled}
+                        animated={animated}
                     />
 
                     <Skeleton
                         width={40}
                         height={40}
                         isCircle
-                        disabled={disabled}
+                        animated={animated}
                     />
 
                     <Skeleton
                         width={40}
                         height={40}
                         isCircle
-                        disabled={disabled}
+                        animated={animated}
                     />
                 </div>
             </div>
@@ -76,7 +76,7 @@ export const BalanceHeaderMobileSkeleton = ({ disabled }: { disabled: boolean })
                         <Skeleton
                             height={12}
                             width={20}
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </div>
 

@@ -8,11 +8,11 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 export const WalletTokensTableItemSkeleton = ({
     index,
     isCompact,
-    disabled,
+    animated,
 }: {
     index: number;
     isCompact: boolean;
-    disabled: boolean;
+    animated: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -32,17 +32,17 @@ export const WalletTokensTableItemSkeleton = ({
                         <Skeleton
                             isCircle
                             className="h-10 w-10"
-                            disabled={disabled}
+                            animated={animated}
                         />
 
                         <div className="flex flex-col items-start space-y-0.5">
                             <Skeleton
                                 className="my-1 h-4 w-10"
-                                disabled={disabled}
+                                animated={animated}
                             />
                             <Skeleton
                                 className="my-1 h-3.5 w-24"
-                                disabled={disabled}
+                                animated={animated}
                             />
                         </div>
                     </div>
@@ -52,11 +52,11 @@ export const WalletTokensTableItemSkeleton = ({
                     <div className="flex flex-col items-end space-y-0.5">
                         <Skeleton
                             className="my-1 h-4 w-24"
-                            disabled={disabled}
+                            animated={animated}
                         />
                         <Skeleton
                             className="my-1 h-3.5 w-12"
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </div>
                 </TableCell>
@@ -65,11 +65,11 @@ export const WalletTokensTableItemSkeleton = ({
                     <div className="flex flex-col items-end space-y-0.5">
                         <Skeleton
                             className="my-1 h-4 w-16"
-                            disabled={disabled}
+                            animated={animated}
                         />
                         <Skeleton
                             className="my-1 h-3.5 w-10"
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </div>
                 </TableCell>
@@ -81,7 +81,7 @@ export const WalletTokensTableItemSkeleton = ({
                     >
                         <Skeleton
                             className="h-5 w-12"
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </TableCell>
                 )}
@@ -93,7 +93,7 @@ export const WalletTokensTableItemSkeleton = ({
                     >
                         <Skeleton
                             className="h-5 w-16"
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </TableCell>
                 )}
@@ -105,7 +105,7 @@ export const WalletTokensTableItemSkeleton = ({
                     >
                         <Skeleton
                             className="h-10 w-25"
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </TableCell>
                 )}
@@ -119,7 +119,7 @@ export const WalletTokensTableItemSkeleton = ({
                             <div className="absolute inset-0">
                                 <Skeleton
                                     className="h-10 w-full"
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
                             </div>
 
@@ -129,7 +129,7 @@ export const WalletTokensTableItemSkeleton = ({
                         <Skeleton
                             isCircle
                             className="block h-10 w-10 md:hidden"
-                            disabled={disabled}
+                            animated={animated}
                         />
                     )}
                 </TableCell>
@@ -148,17 +148,17 @@ export const WalletTokensTableItemSkeleton = ({
                 <Skeleton
                     isCircle
                     className="h-10 w-10"
-                    disabled={disabled}
+                    animated={animated}
                 />
 
                 <div className="flex flex-col items-start space-y-0.5 font-medium">
                     <Skeleton
                         className="my-1 h-3.5 w-10"
-                        disabled={disabled}
+                        animated={animated}
                     />
                     <Skeleton
                         className="my-[3px] h-3 w-16"
-                        disabled={disabled}
+                        animated={animated}
                     />
                 </div>
             </div>
@@ -166,11 +166,11 @@ export const WalletTokensTableItemSkeleton = ({
             <div className="flex flex-col items-end space-y-0.5 font-medium">
                 <Skeleton
                     className="my-1 h-3.5 w-10"
-                    disabled={disabled}
+                    animated={animated}
                 />
                 <Skeleton
                     className="my-[3px] h-3 w-24"
-                    disabled={disabled}
+                    animated={animated}
                 />
             </div>
         </button>

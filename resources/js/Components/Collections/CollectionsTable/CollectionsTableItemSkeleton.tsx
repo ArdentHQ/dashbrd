@@ -5,10 +5,10 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 export const CollectionsTableItemSkeleton = ({
     index,
-    disabled,
+    animated,
 }: {
     index: number;
-    disabled: boolean;
+    animated: boolean;
 }): JSX.Element => {
     const { isMdAndAbove, isLgAndAbove, isXlAndAbove } = useBreakpoint();
 
@@ -40,12 +40,12 @@ export const CollectionsTableItemSkeleton = ({
                 <Skeleton
                     isCircle
                     className="relative h-8 w-8 shrink-0 md:h-20 md:w-20"
-                    disabled={disabled}
+                    animated={animated}
                 />
 
                 <Skeleton
                     className="h-4 w-28"
-                    disabled={disabled}
+                    animated={animated}
                 />
             </TableCell>
 
@@ -58,11 +58,11 @@ export const CollectionsTableItemSkeleton = ({
                     <div className="mt-1 flex flex-col items-end space-y-2">
                         <Skeleton
                             className="h-4 w-16"
-                            disabled={disabled}
+                            animated={animated}
                         />
                         <Skeleton
                             className="h-4 w-24"
-                            disabled={disabled}
+                            animated={animated}
                         />
                     </div>
                 </TableCell>
@@ -76,11 +76,11 @@ export const CollectionsTableItemSkeleton = ({
                 <div className="mt-1 flex flex-col items-end space-y-2">
                     <Skeleton
                         className="h-4 w-12"
-                        disabled={disabled}
+                        animated={animated}
                     />
                     <Skeleton
                         className="h-4 w-20"
-                        disabled={disabled}
+                        animated={animated}
                     />
                 </div>
             </TableCell>
@@ -95,7 +95,7 @@ export const CollectionsTableItemSkeleton = ({
                     <Skeleton
                         className="mr-2 h-5 w-5"
                         isCircle
-                        disabled={disabled}
+                        animated={animated}
                     />
                 </TableCell>
             )}
@@ -113,7 +113,7 @@ export const CollectionsTableItemSkeleton = ({
                                 <Skeleton
                                     key={key}
                                     className="h-20 w-20"
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
                             ))}
                     </div>
@@ -129,7 +129,7 @@ export const CollectionsTableItemSkeleton = ({
                 <Skeleton
                     className="h-6 w-6 md:mt-0 md:h-10 md:w-10"
                     isCircle
-                    disabled={disabled}
+                    animated={animated}
                 />
             </TableCell>
         </TableRow>

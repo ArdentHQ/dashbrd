@@ -111,7 +111,7 @@ export const CollectionsTable = ({
                 row={(_, index: number) => (
                     <CollectionsTableItemSkeleton
                         index={index}
-                        disabled={user === null}
+                        animated={user !== null}
                     />
                 )}
             />

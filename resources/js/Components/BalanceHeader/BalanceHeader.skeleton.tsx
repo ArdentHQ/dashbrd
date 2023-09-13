@@ -4,7 +4,7 @@ import { LinkButton } from "@/Components/Link";
 import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
 import { Skeleton } from "@/Components/Skeleton";
 
-export const BalanceHeaderSkeleton = ({ disabled }: { disabled: boolean }): JSX.Element => {
+export const BalanceHeaderSkeleton = ({ animated }: { animated: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -20,7 +20,7 @@ export const BalanceHeaderSkeleton = ({ disabled }: { disabled: boolean }): JSX.
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={91}
-                                disabled={disabled}
+                                animated={animated}
                             />
                         </div>
 
@@ -29,7 +29,7 @@ export const BalanceHeaderSkeleton = ({ disabled }: { disabled: boolean }): JSX.
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={30}
-                                disabled={disabled}
+                                animated={animated}
                             />
                         </div>
                     </div>
@@ -43,13 +43,13 @@ export const BalanceHeaderSkeleton = ({ disabled }: { disabled: boolean }): JSX.
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={178}
-                                disabled={disabled}
+                                animated={animated}
                             />
 
                             <Skeleton
                                 className="mt-1 h-6"
                                 width={24}
-                                disabled={disabled}
+                                animated={animated}
                             />
                         </div>
                     </div>
@@ -62,31 +62,31 @@ export const BalanceHeaderSkeleton = ({ disabled }: { disabled: boolean }): JSX.
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
                             </div>
                         </div>
@@ -96,31 +96,31 @@ export const BalanceHeaderSkeleton = ({ disabled }: { disabled: boolean }): JSX.
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={18}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
                             </div>
                         </div>
@@ -130,31 +130,31 @@ export const BalanceHeaderSkeleton = ({ disabled }: { disabled: boolean }): JSX.
                                 <Skeleton
                                     width={60}
                                     height={20}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
 
                                 <Skeleton
                                     width={60}
                                     height={20}
-                                    disabled={disabled}
+                                    animated={animated}
                                 />
                             </div>
                         </div>
