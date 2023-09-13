@@ -157,6 +157,7 @@ class LiveUserSeeder extends UserSeeder
             collectionSocials: $nft['collectionSocials'],
             collectionSupply: $nft['collectionSupply'],
             collectionBannerImageUrl: $nft['collectionBannerImageUrl'] ?? null,
+            collectionBannerUpdatedAt: null,
             name: $nft['name'],
             description: $nft['description'],
             extraAttributes: $nft['extraAttributes'],
