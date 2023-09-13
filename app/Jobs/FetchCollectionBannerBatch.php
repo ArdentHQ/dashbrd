@@ -18,7 +18,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
@@ -55,7 +54,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
                 return false;
             }
 
-            $collection = $collections->first(fn($collection) => $collection->address === $data->contractAddress);
+            $collection = $collections->first(fn ($collection) => $collection->address === $data->contractAddress);
 
             if ($collection) {
                 Log::info('Updating collection banner', [
