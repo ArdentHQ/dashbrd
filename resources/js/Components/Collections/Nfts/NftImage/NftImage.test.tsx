@@ -4,9 +4,11 @@ import { t } from "i18next";
 import React from "react";
 import { NftImage } from "./NftImage";
 import { NftHeader } from "@/Components/Collections/Nfts/NftHeader";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { act, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
 import { Breakpoint } from "@/Tests/utils";
 
@@ -19,6 +21,7 @@ describe("NftImage", () => {
     beforeAll(() => {
         process.env.REACT_APP_IS_UNIT = "false";
         vi.spyOn(window, "Image").mockImplementation(() => image);
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
     });
 
     afterAll(() => {

@@ -52,8 +52,6 @@ Route::middleware('auth')->group(function () {
         Route::post('{collection:address}/reports', [
             CollectionReportController::class, 'store',
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
-
-        Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
     });
 
     Route::group(['prefix' => 'nfts'], function () {
@@ -70,7 +68,7 @@ Route::middleware('auth')->group(function () {
 Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
     Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
     Route::get('{collection:slug}', [CollectionController::class, 'view'])->name('collections.view');
-
+    Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
 });
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
