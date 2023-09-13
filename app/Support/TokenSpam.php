@@ -33,7 +33,9 @@ final class TokenSpam
                 }
 
                 return self::noSpam();
-            } elseif (config('dashbrd.token_spam.filter_type') === 'strict') {
+            }
+
+            if (config('dashbrd.token_spam.filter_type') === 'strict') {
                 // However, if we have strict token spam filter on, we ignore anything not on coingecko
                 return self::spam('coingecko mismatch');
             }

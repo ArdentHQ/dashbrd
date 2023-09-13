@@ -34,6 +34,7 @@ class CollectionDetailData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?string $banner,
+        public ?string $bannerUpdatedAt,
         public ?string $website,
         public ?string $twitter,
         public ?string $discord,
@@ -63,6 +64,7 @@ class CollectionDetailData extends Data
             floorPriceFiat: $currencyCode !== null ? $collection->fiatValue($currencyCode) : null,
             image: $collection->extra_attributes->get('image'),
             banner: $collection->extra_attributes->get('banner'),
+            bannerUpdatedAt: $collection->extra_attributes->get('banner_updated_at'),
             website: $collection->website(defaultToExplorer: false),
             twitter: $collection->twitter(),
             discord: $collection->discord(),
@@ -72,7 +74,7 @@ class CollectionDetailData extends Data
             nftsCount: $nftsQuery->count(),
             mintedAt: $collection->minted_at?->getTimestampMs(),
             nfts: new CollectionNftsData(
-                CollectionNftData::collection($nftsQuery->get())
+                CollectionNftData::collection($user ? $nftsQuery->get() : [])
             ),
         );
     }
