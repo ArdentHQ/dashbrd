@@ -41,7 +41,7 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
         );
 
         $this->collection->extra_attributes->set('banner', $banner);
-        $this->collection->extra_attributes->set('banner_updated_at', now()->timestamp);
+        $this->collection->extra_attributes->set('banner_updated_at', now()->toIso8601String());
 
         $this->collection->save();
     }
