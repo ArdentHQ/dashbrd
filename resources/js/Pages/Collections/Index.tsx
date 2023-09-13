@@ -53,7 +53,9 @@ const CollectionsIndex = ({
     );
 
     const [selectedChainIds, setSelectedChainIds] = useState<number[]>(
-        isTruthy(queryParameters.chain) ? queryParameters.chain.split(",").map(Number) : [],
+        isTruthy(queryParameters.chain)
+            ? queryParameters.chain.split(",").map(Number)
+            : availableNetworks.map((network) => network.chainId),
     );
 
     const { showToast } = useToasts();
