@@ -67,6 +67,8 @@ class Web3NftHandler
                     'website' => $nftData->collectionWebsite,
                     'socials' => $nftData->collectionSocials,
                     'banner' => $nftData->collectionBannerImageUrl,
+                    'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
+
                 ]),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
@@ -89,7 +91,7 @@ class Web3NftHandler
                 "
     insert into collections
         (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, last_indexed_token_number, created_at, updated_at)
-    values $valuesPlaceholders
+    values {$valuesPlaceholders}
     on conflict (address, network_id) do update
         set name = trim(coalesce(excluded.name, collections.name)),
             symbol = coalesce(excluded.symbol, collections.symbol),
@@ -100,7 +102,7 @@ class Web3NftHandler
             extra_attributes = excluded.extra_attributes,
             minted_block = excluded.minted_block,
             minted_at = excluded.minted_at,
-            last_indexed_token_number = excluded.last_indexed_token_number
+            last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
     returning id, address, floor_price, supply
      ",
                 $collectionsData->toArray(),

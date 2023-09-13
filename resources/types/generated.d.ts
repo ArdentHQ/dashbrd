@@ -113,6 +113,7 @@ declare namespace App.Data.Collections {
         floorPriceFiat: number | null;
         image: string | null;
         banner: string | null;
+        bannerUpdatedAt: string | null;
         website: string | null;
         twitter: string | null;
         discord: string | null;
@@ -192,6 +193,7 @@ declare namespace App.Data.Gallery {
         floorPriceDecimals: number | null;
         image: string | null;
         banner: string | null;
+        bannerUpdatedAt: string | null;
         website: string | null;
         nftsCount: number | null;
     };
@@ -460,6 +462,7 @@ declare namespace App.Data.Web3 {
         collectionWebsite: string | null;
         collectionDescription: string | null;
         collectionBannerImageUrl: string | null;
+        collectionBannerUpdatedAt: string | null;
         collectionSocials: Array<any> | null;
         collectionSupply: number | null;
         name: string | null;

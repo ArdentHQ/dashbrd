@@ -9,7 +9,6 @@ use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -196,7 +195,7 @@ class Collection extends Model
                 GROUP BY collection_id
             ) nfts"), 'collections.id', '=', 'nfts.collection_id')
             ->groupBy('collections.id')
-            ->orderByRaw("total_value $direction $nullsPosition")
+            ->orderByRaw("total_value {$direction} {$nullsPosition}")
             ->orderBy('collections.id', $direction);
     }
 
@@ -211,7 +210,7 @@ class Collection extends Model
 
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
-        )->orderByRaw("total_floor_price $direction $nullsPosition");
+        )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
     }
 
     /**
@@ -264,7 +263,7 @@ class Collection extends Model
      */
     public function scopeOrderByChainId(Builder $query, string $direction): Builder
     {
-        /** @var \Illuminate\Database\Query\Expression */
+        /** @var Expression */
         $select = Network::select('chain_id')
             ->whereColumn('networks.id', 'collections.network_id')
             ->latest('chain_id')

@@ -361,6 +361,7 @@ class AlchemyPendingRequest extends PendingRequest
             collectionBannerImageUrl: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl'),
             collectionSocials: $socials,
             collectionSupply: $supply,
+            collectionBannerUpdatedAt: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl') ? Carbon::now()->toIso8601String() : null,
             name: $this->getNftName($nft),
             description: $description,
             extraAttributes: $this->getNftExtraAttributes($nft),

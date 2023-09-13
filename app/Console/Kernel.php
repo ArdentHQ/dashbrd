@@ -133,7 +133,6 @@ class Kernel extends ConsoleKernel
             ->everyThirtyMinutes();
 
         // Fetch banners for collections that don't have one yet
-        // (More often according to config)
         $schedule
             ->command(FetchCollectionBannerBatch::class, [
                 '--missing-only',
