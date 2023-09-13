@@ -28,6 +28,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             floorPriceDecimals: 18,
             image: faker.image.avatar(),
             banner: faker.image.avatar(),
+            bannerUpdatedAt: faker.date.recent().toISOString(),
             website: faker.internet.url(),
         }));
     }

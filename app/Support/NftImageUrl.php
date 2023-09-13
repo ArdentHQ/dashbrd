@@ -54,7 +54,7 @@ final class NftImageUrl
             $path = $parts['path'];
 
             $size = 'w_'.$imageSize->width().',h_'.$imageSize->height();
-            $newPath = preg_replace('/(?<=\/)upload(?=\/)/', "upload/$size", $path);
+            $newPath = preg_replace('/(?<=\/)upload(?=\/)/', "upload/{$size}", $path);
 
             $url = str_replace($path, $newPath, $url);
         }
@@ -102,8 +102,8 @@ final class NftImageUrl
         // }
         //
         $extension = pathinfo($url, PATHINFO_EXTENSION);
-        $filename = basename($url, ".$extension");
-        $baseUrl = str_replace("/$filename.$extension", '', $url);
+        $filename = basename($url, ".{$extension}");
+        $baseUrl = str_replace("/{$filename}.{$extension}", '', $url);
 
         if ($imageSize || empty($extension)) {
             $moralisSize = match ($imageSize ?? ImageSize::Large) {
