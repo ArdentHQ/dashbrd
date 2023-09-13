@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchNativeBalances as Job;
+use App\Jobs\FetchNativeBalances as FetchNativeBalancesJob;
 use App\Models\Network;
 use App\Models\Wallet;
 use App\Support\Queues;
@@ -68,6 +68,6 @@ class FetchNativeBalances extends Command
      */
     private function handleWallet(Wallet $wallet, Collection $networks): void
     {
-        $networks->each(fn ($network) => Job::dispatch($wallet, $network)->onQueue(Queues::WALLETS));
+        $networks->each(fn ($network) => FetchNativeBalancesJob::dispatch($wallet, $network)->onQueue(Queues::WALLETS));
     }
 }
