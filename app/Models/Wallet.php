@@ -92,6 +92,21 @@ class Wallet extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeNotRecentlyActive(Builder $query): Builder
+    {
+        /**
+         * @var int $activeThreshold
+         */
+        $activeThreshold = config('dashbrd.wallets.active_threshold');
+
+        return $query->whereNull('last_activity_at')
+            ->orWhere('last_activity_at', '<=', now()->subSeconds($activeThreshold + 1));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeOnline(Builder $query): Builder
     {
         /**

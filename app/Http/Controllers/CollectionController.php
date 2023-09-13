@@ -17,6 +17,7 @@ use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Nft;
@@ -28,6 +29,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {
@@ -144,6 +146,12 @@ class CollectionController extends Controller
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
         if (! $collection->recentlyViewed()) {
+            $bannerUpdatedAt = $collection->bannerUpdatedAt();
+
+            if ($collection->banner() === null || $bannerUpdatedAt->diffInDays(now()) > 7) {
+                FetchCollectionBanner::dispatch($collection);
+            }
+
             SyncCollection::dispatch($collection);
         }
 
@@ -183,10 +191,10 @@ class CollectionController extends Controller
             'activityPageLimit' => $activityPageLimit,
         ]);
 
-        /** @var \Spatie\LaravelData\PaginatedDataCollection<int, \App\Data\Nfts\NftActivityData> */
+        /** @var PaginatedDataCollection<int, NftActivityData> */
         $paginated = NftActivityData::collection($activities);
 
-        /** @var \Spatie\LaravelData\PaginatedDataCollection<int, \App\Data\Gallery\GalleryNftData> */
+        /** @var PaginatedDataCollection<int, GalleryNftData> */
         $paginatedNfts = GalleryNftData::collection($nfts);
 
         $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
