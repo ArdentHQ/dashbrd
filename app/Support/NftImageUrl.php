@@ -65,7 +65,7 @@ final class NftImageUrl
     private static function getOpenSeaCdn(string $url, ?ImageSize $imageSize): ?string
     {
         // https://i.seadn.io/gcs/files/5ff2b7fa5c94616f34a27e37eadfbfd1.png?h=256&w=96&auto=format
-        if (! preg_match('/^https:\/\/(i\.seadn\.io\/(gcs|gae)(\/files\/)?).*/', $url)) {
+        if (! preg_match('/^https:\/\/i\.seadn\.io\//', $url)) {
             return null;
         }
 
