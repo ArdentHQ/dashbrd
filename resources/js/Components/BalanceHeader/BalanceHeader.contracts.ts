@@ -4,6 +4,7 @@ export interface BalanceHeaderProperties {
     address: string;
     currency: string;
     isLoading?: boolean;
+    skeletonAnimated?: boolean;
     assets: App.Data.TokenPortfolioData[];
     onSend?: () => void;
     onReceive?: () => void;

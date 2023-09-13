@@ -3,7 +3,13 @@ import { Skeleton } from "@/Components/Skeleton";
 import { TableCell, TableRow } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.Element => {
+export const CollectionsTableItemSkeleton = ({
+    index,
+    animated,
+}: {
+    index: number;
+    animated: boolean;
+}): JSX.Element => {
     const { isMdAndAbove, isLgAndAbove, isXlAndAbove } = useBreakpoint();
 
     const nftsToShow = useMemo((): number => {
@@ -34,9 +40,13 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                 <Skeleton
                     isCircle
                     className="relative h-8 w-8 shrink-0 md:h-20 md:w-20"
+                    animated={animated}
                 />
 
-                <Skeleton className="h-4 w-28" />
+                <Skeleton
+                    className="h-4 w-28"
+                    animated={animated}
+                />
             </TableCell>
 
             {isLgAndAbove && (
@@ -46,8 +56,14 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                     hoverClassName=""
                 >
                     <div className="mt-1 flex flex-col items-end space-y-2">
-                        <Skeleton className="h-4 w-16" />
-                        <Skeleton className="h-4 w-24" />
+                        <Skeleton
+                            className="h-4 w-16"
+                            animated={animated}
+                        />
+                        <Skeleton
+                            className="h-4 w-24"
+                            animated={animated}
+                        />
                     </div>
                 </TableCell>
             )}
@@ -58,8 +74,14 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                 hoverClassName=""
             >
                 <div className="mt-1 flex flex-col items-end space-y-2">
-                    <Skeleton className="h-4 w-12" />
-                    <Skeleton className="h-4 w-20" />
+                    <Skeleton
+                        className="h-4 w-12"
+                        animated={animated}
+                    />
+                    <Skeleton
+                        className="h-4 w-20"
+                        animated={animated}
+                    />
                 </div>
             </TableCell>
 
@@ -73,6 +95,7 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                     <Skeleton
                         className="mr-2 h-5 w-5"
                         isCircle
+                        animated={animated}
                     />
                 </TableCell>
             )}
@@ -90,6 +113,7 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                                 <Skeleton
                                     key={key}
                                     className="h-20 w-20"
+                                    animated={animated}
                                 />
                             ))}
                     </div>
@@ -105,6 +129,7 @@ export const CollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.
                 <Skeleton
                     className="h-6 w-6 md:mt-0 md:h-10 md:w-10"
                     isCircle
+                    animated={animated}
                 />
             </TableCell>
         </TableRow>
