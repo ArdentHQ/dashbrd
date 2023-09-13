@@ -134,11 +134,11 @@ class CollectionController extends Controller
 
         $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
 
-        if (! $collection->recentlyViewed()) {
+        if (!$collection->recentlyViewed()) {
             $bannerUpdatedAt = $collection->bannerUpdatedAt();
             $formattedBannerUpdatedAt = $bannerUpdatedAt ? Carbon::parse($bannerUpdatedAt) : null;
 
-            if ($collection->banner() === null || ($formattedBannerUpdatedAt !== null && $formattedBannerUpdatedAt->diffInDays(now()) > 7)) {
+            if ($collection->banner() === null || $formattedBannerUpdatedAt === null || ($formattedBannerUpdatedAt !== null && $formattedBannerUpdatedAt->diffInDays(now()) > 7)) {
                 FetchCollectionBanner::dispatch($collection);
             }
 
