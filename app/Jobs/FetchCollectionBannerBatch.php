@@ -63,7 +63,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
                 ]);
 
                 $collection->extra_attributes->set('banner', $data->bannerImageUrl);
-                $collection->extra_attributes->set('banner_updated_at', now()->timestamp);
+                $collection->extra_attributes->set('banner_updated_at', now());
 
                 $collection->save();
             }
