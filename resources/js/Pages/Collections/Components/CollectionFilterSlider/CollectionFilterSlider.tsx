@@ -20,6 +20,7 @@ interface Properties {
         displayType: string,
     ) => TraitsFilters;
     setFilters: (showOnlyOwned: boolean, selectedTraits: TraitsFilters) => void;
+    user: App.Data.UserData | null;
 }
 
 export const CollectionFilterSlider = ({
@@ -31,6 +32,7 @@ export const CollectionFilterSlider = ({
     onClose,
     selectedTraitsSetHandler,
     setFilters,
+    user,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [showOnlyOwned, setShowOnlyOwned] = useState(defaultShowOnlyOwned);
@@ -70,11 +72,13 @@ export const CollectionFilterSlider = ({
                         className="pb-28 xs:px-6 xs:pt-6 sm:px-8"
                     >
                         <div className="xs:space-y-3">
-                            <CollectionOwnedToggle
-                                checked={showOnlyOwned}
-                                onChange={setShowOnlyOwned}
-                                ownedNftsCount={ownedNftsCount}
-                            />
+                            {user != null && (
+                                <CollectionOwnedToggle
+                                    checked={showOnlyOwned}
+                                    onChange={setShowOnlyOwned}
+                                    ownedNftsCount={ownedNftsCount}
+                                />
+                            )}
 
                             <CollectionPropertiesFilter
                                 traits={traits}
