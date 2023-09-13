@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -196,7 +197,7 @@ class Collection extends Model
                 GROUP BY collection_id
             ) nfts"), 'collections.id', '=', 'nfts.collection_id')
             ->groupBy('collections.id')
-            ->orderByRaw("total_value $direction $nullsPosition")
+            ->orderByRaw("total_value {$direction} {$nullsPosition}")
             ->orderBy('collections.id', $direction);
     }
 
@@ -211,7 +212,7 @@ class Collection extends Model
 
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
-        )->orderByRaw("total_floor_price $direction $nullsPosition");
+        )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
     }
 
     /**
@@ -264,7 +265,7 @@ class Collection extends Model
      */
     public function scopeOrderByChainId(Builder $query, string $direction): Builder
     {
-        /** @var \Illuminate\Database\Query\Expression */
+        /** @var Expression */
         $select = Network::select('chain_id')
             ->whereColumn('networks.id', 'collections.network_id')
             ->latest('chain_id')
