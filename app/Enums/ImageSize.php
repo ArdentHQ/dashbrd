@@ -11,6 +11,9 @@ enum ImageSize: string
     case Large = 'large';
     case Banner = 'banner';
 
+    /**
+     * @return array<ImageSize>
+     */
     public static function defaultList(): array
     {
         return [
