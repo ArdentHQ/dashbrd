@@ -9,6 +9,7 @@ enum ImageSize: string
     case Thumb = 'thumb';
     case Small = 'small';
     case Large = 'large';
+    case Banner = 'banner';
 
     public function width(): int
     {
@@ -16,6 +17,7 @@ enum ImageSize: string
             ImageSize::Thumb => 96,
             ImageSize::Small => 256,
             ImageSize::Large => 512,
+            ImageSize::Banner => 1378,
         };
     }
 
@@ -25,6 +27,7 @@ enum ImageSize: string
             ImageSize::Thumb => 96,
             ImageSize::Small => 256,
             ImageSize::Large => 512,
+            ImageSize::Banner => 400,
         };
     }
 }

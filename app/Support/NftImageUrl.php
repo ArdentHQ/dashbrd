@@ -110,6 +110,7 @@ final class NftImageUrl
                 ImageSize::Thumb => 'low',
                 ImageSize::Small => 'medium',
                 ImageSize::Large => 'high',
+                ImageSize::Banner => 'high',
             };
 
             $url = "{$baseUrl}/{$moralisSize}.jpeg";

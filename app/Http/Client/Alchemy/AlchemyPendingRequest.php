@@ -13,6 +13,7 @@ use App\Data\Web3\Web3NftsChunk;
 use App\Enums\AlchemyChain;
 use App\Enums\Chains;
 use App\Enums\CryptoCurrencyDecimals;
+use App\Enums\ImageSize;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\ConnectionException;
@@ -323,7 +324,7 @@ class AlchemyPendingRequest extends PendingRequest
 
         $bannerImageUrl = Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl');
         if (! empty($bannerImageUrl)) {
-            $bannerImageUrl = preg_replace('/(?<=\?|&)w=(\d+)/', 'w=1378', $bannerImageUrl);
+            $bannerImageUrl = NftImageUrl::get($bannerImageUrl, ImageSize::Banner);
         } else {
             $bannerImageUrl = null;
         }
