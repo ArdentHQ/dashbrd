@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { CollectionDescription } from "@/Components/Collections/CollentionDescription";
 import { NftActions } from "@/Components/Collections/Nfts/NftHeader/NftActions";
-import { NftHead } from "@/Components/Collections/Nfts/NftHeader/NftHead";
+import { NftBasicInfo } from "@/Components/Collections/Nfts/NftHeader/NftBasicInfo";
 import { NftOwner } from "@/Components/Collections/Nfts/NftHeader/NftOwner";
 import { Point } from "@/Components/Point";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
@@ -21,7 +21,7 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
         return (
             <div className="flex w-full justify-between">
                 <div className="flex w-full flex-col gap-2">
-                    <NftHead nft={nft} />
+                    <NftBasicInfo nft={nft} />
                     <div className="flex flex-col gap-2 xl:flex-row xl:items-center">
                         <NftOwner nft={nft} />
                         <div className="hidden xl:block">
@@ -67,7 +67,7 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
             </div>
 
             <div className="mb-6 flex w-full flex-col gap-4 border-b border-solid border-theme-secondary-300 bg-white pb-6 pt-4">
-                <NftHead nft={nft} />
+                <NftBasicInfo nft={nft} />
                 <NftActions
                     addTestIds={true}
                     alreadyReported={alreadyReported}

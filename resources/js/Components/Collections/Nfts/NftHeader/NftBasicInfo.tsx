@@ -8,11 +8,14 @@ interface Properties {
     nft: App.Data.Nfts.NftData;
 }
 
-export const NftHead = ({ nft }: Properties): JSX.Element => {
+export const NftBasicInfo = ({ nft }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <div className="flex flex-col items-center gap-0 lg:items-start">
+        <div
+            className="flex flex-col items-center gap-0 lg:items-start"
+            data-testid="NftBasicInfo__container"
+        >
             <div className="flex items-center gap-2">
                 {nft.collection.image != null && (
                     <Img
