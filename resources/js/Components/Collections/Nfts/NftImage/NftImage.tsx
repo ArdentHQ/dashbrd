@@ -11,6 +11,9 @@ export const NftImage = ({ nft }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [selectedNft, setSelectedNft] = useState(false);
 
+    const { authenticated } = useAuth();
+    const { showConnectOverlay } = useMetaMaskContext();
+
     const { large: largeImage, original, originalRaw } = nft.images;
     const originalNftImage = original ?? originalRaw ?? largeImage;
 
