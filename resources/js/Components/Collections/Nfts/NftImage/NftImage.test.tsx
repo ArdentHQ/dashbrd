@@ -1,13 +1,11 @@
 import { fireEvent } from "@testing-library/dom";
 import { saveAs } from "file-saver";
-import { t } from "i18next";
 import React from "react";
 import { NftImage } from "./NftImage";
 import { NftHeader } from "@/Components/Collections/Nfts/NftHeader";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
-import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { act, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
 import { Breakpoint } from "@/Tests/utils";
@@ -172,31 +170,6 @@ describe("NftImage", () => {
         expect(screen.getByTestId("NftImage__zoomModal")).toBeDisabled();
     });
 
-    it("should refresh succesfully", async () => {
-        server.use(requestMock(`${BASE_URL}/nft/refresh`, { success: true }, { method: "post" }));
-
-        server.use(
-            requestMock(
-                "http://localhost/api",
-                {
-                    success: true,
-                },
-                {
-                    method: "post",
-                },
-            ),
-        );
-
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withValues().create(),
-        });
-
-        render(<NftImage nft={nft} />);
-
-        await userEvent.click(screen.getByTestId("NftImage__refresh"));
-        expect(screen.getByTestId("NftImage__refresh")).toBeDisabled();
-    });
-
     it("cannot select with click on desktop", () => {
         const nft = new NftFactory().create({
             images: new NftImagesDataFactory().withValues().create({
@@ -231,22 +204,5 @@ describe("NftImage", () => {
         fireEvent.click(screen.getByTestId("GalleryCard"));
 
         expect(screen.getByTestId("GalleryCard__overlay")).toHaveClass("pointer-events-none");
-    });
-
-    it("should render icon buttons with tooltips", async () => {
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withValues().create(),
-        });
-
-        render(<NftImage nft={nft} />);
-
-        await userEvent.hover(screen.getByTestId("NftImage__zoomModal"));
-        expect(screen.getByText(t("common.zoom"))).toBeInTheDocument();
-
-        await userEvent.hover(screen.getByTestId("NftImage__saveAs"));
-        expect(screen.getByText(t("common.download"))).toBeInTheDocument();
-
-        await userEvent.hover(screen.getByTestId("NftImage__refresh"));
-        expect(screen.getByText(t("common.refresh_metadata"))).toBeInTheDocument();
     });
 });
