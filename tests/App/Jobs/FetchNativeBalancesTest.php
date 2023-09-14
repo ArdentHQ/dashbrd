@@ -48,7 +48,7 @@ it('should fetch native balance for a wallet', function () {
 
 it('does not fire a job to index transactions if balance is already synced', function () {
     Moralis::fake([
-        'https://deep-index.moralis.io/api/v2/*' => Http::response(<<<'JSON'
+        'https://deep-index.moralis.io/api/v2/*' => Http::response(<<<JSON
 [
     {
         "wallet_balances": [
