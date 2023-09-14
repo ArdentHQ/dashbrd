@@ -32,7 +32,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
     public Collection $wallets;
 
     /**
-     * @param  Collection<int, Wallet> $wallets
+     * @param  Collection<int, Wallet>  $wallets
      */
     public function __construct(
         Collection|Wallet $wallets,
