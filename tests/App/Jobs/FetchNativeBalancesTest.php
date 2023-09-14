@@ -53,7 +53,7 @@ it('does not fire a job to index transactions if balance is already synced', fun
 
     $network = Network::polygon()->firstOrFail();
     $wallet = Wallet::factory()->create([
-        'address' => '0x123'
+        'address' => '0x123',
     ]);
 
     $nativeToken = Token::factory()->create([
