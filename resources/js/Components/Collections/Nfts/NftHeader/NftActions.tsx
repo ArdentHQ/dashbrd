@@ -86,13 +86,17 @@ export const NftActions = ({
         window.open(getChainLink(nft.collection.chainId, nft.collection.address, nft.tokenNumber), "_blank");
 
     return (
-        <div className={cn("inline-flex gap-2 rounded-full", className)}>
+        <div
+            className={cn("inline-flex gap-2 rounded-full", className)}
+            data-testid="NftActions__container"
+        >
             <Tooltip
                 content={getTooltipText(nft.collection.chainId)}
                 hideOnClick={true}
                 zIndex={10}
             >
                 <IconButton
+                    data-testid={addTestIds ? "NftActions__viewOnChain" : undefined}
                     icon={
                         <NetworkIcon
                             networkId={nft.collection.chainId}
@@ -130,7 +134,7 @@ export const NftActions = ({
                 zIndex={10}
             >
                 <IconButton
-                    data-testid={addTestIds ? "NftImage__refresh" : undefined}
+                    data-testid={addTestIds ? "NftActions__refresh" : undefined}
                     icon="Refresh"
                     disabled={originalNftImage === null || isRefreshing}
                     onClick={() => {
