@@ -221,6 +221,7 @@ class MoralisPendingRequest extends PendingRequest
             'chain' => $chain->value,
         ]);
 
+        /** @var array<int, mixed> $balances */
         $balances = self::get(sprintf('wallets/balances?%s', $query))->json('0.wallet_balances');
 
         return collect($balances)->map(function ($balance) {
