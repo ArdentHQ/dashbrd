@@ -11,7 +11,6 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { useNetwork } from "@/Hooks/useNetwork";
-import { assertUser } from "@/Utils/assertions";
 import { FormatFiat, FormatFiatShort, FormatNumber } from "@/Utils/Currency";
 import { toHuman } from "@/Utils/dates";
 import { formatAddress } from "@/Utils/format-address";
@@ -297,10 +296,18 @@ export const Type = ({
 
 export const Timestamp = ({ value }: { value: number }): JSX.Element => {
     const { user } = useActiveUser();
-    assertUser(user);
+
+    const attributes =
+        user != null
+            ? user.attributes
+            : {
+                  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                  time_format: "24" as const,
+                  date_format: "short",
+              };
 
     return (
-        <Tooltip content={toHuman(value * 1000, user.attributes)}>
+        <Tooltip content={toHuman(value * 1000, attributes)}>
             <span
                 data-testid="ActivityTable__timestamp"
                 className="whitespace-nowrap text-sm font-medium leading-5.5 text-theme-secondary-700 sm:text-base"
