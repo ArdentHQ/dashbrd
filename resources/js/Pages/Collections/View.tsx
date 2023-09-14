@@ -272,8 +272,14 @@ const CollectionsView = ({
                                         </div>
                                     </div>
 
-                                    {nfts.paginated.data.length === 0 && query !== "" ? (
-                                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                                    {nfts.paginated.data.length === 0 ? (
+                                        query !== "" ? (
+                                            <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                                        ) : (
+                                            <EmptyBlock>
+                                                {t("pages.collections.search.no_results_with_filters")}
+                                            </EmptyBlock>
+                                        )
                                     ) : (
                                         <CollectionNftsGrid
                                             nfts={nfts}

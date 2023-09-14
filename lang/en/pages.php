@@ -62,6 +62,7 @@ return [
         'search' => [
             'loading_results' => 'Loading results...',
             'no_results' => 'We could not find anything matching your search criteria, please try again!',
+            'no_results_with_filters' => 'We could not find anything matching your filters, please try again!',
             'error' => 'Could not load search results. Please try again later.',
         ],
         'sorting' => [
