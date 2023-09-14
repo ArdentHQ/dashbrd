@@ -54,7 +54,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
             ->each(function (Web3ContractMetadata $data) use ($collections) {
                 $address = Str::lower($data->contractAddress);
 
-                $collection = $collections->first(fn ($collection) => Str::lower($collection->address) === $address);
+                $collection = $collections->first(fn ($collection) => $address === Str::lower($collection->address));
 
                 if ($collection) {
                     Log::info('Updating collection banner', [
@@ -67,7 +67,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
 
                     $collection->save();
                 }
-        });
+            });
     }
 
     public function uniqueId(): string
