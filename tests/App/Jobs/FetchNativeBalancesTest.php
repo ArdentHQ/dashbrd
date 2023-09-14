@@ -48,7 +48,20 @@ it('should fetch native balance for a wallet', function () {
 
 it('does not fire a job to index transactions if balance is already synced', function () {
     Moralis::fake([
-        'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native-multiple'), 200),
+        'https://deep-index.moralis.io/api/v2/*' => Http::response(<<<JSON
+[
+    {
+        "wallet_balances": [
+            {
+                "address": "0x123",
+                "balance": "28499206466583095",
+                "balance_formatted": "0.0285"
+            },
+        ]
+    }
+]
+JSON
+, 200),
     ]);
 
     $network = Network::polygon()->firstOrFail();
@@ -69,7 +82,7 @@ it('does not fire a job to index transactions if balance is already synced', fun
     $this->assertDatabaseCount('tokens', 1);
     $this->assertDatabaseCount('balances', 1);
 
-    (new FetchNativeBalances($wallet, $network))->handle();
+    (new FetchNativeBalances(collect([$wallet]), $network))->handle();
 
     $this->assertDatabaseCount('tokens', 1);
     $this->assertDatabaseCount('balances', 1);
@@ -79,7 +92,7 @@ it('should fail the job if network has no native token', function () {
     $network = Network::factory()->create();
     $wallet = Wallet::factory()->create();
 
-    expect(fn () => (new FetchNativeBalances($wallet, $network))->handle())
+    expect(fn () => (new FetchNativeBalances(collect([$wallet]), $network))->handle())
         ->toThrow(ModelNotFoundException::class);
 });
 
@@ -105,7 +118,7 @@ it('has a retry until', function () {
     $network = Network::factory()->create();
     $wallet = Wallet::factory()->create();
 
-    $job = new FetchNativeBalances($wallet, $network);
+    $job = new FetchNativeBalances(collect([$wallet]), $network);
 
     expect($job->retryUntil())->toBeInstanceOf(DateTime::class);
 });
