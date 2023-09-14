@@ -32,12 +32,12 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
         Collection|Wallet $wallets,
         public Network $network,
     ) {
-        $this->wallets =  $wallets instanceof Wallet ? collect([$wallets]) : $wallets;
+        $this->wallets = $wallets instanceof Wallet ? collect([$wallets]) : $wallets;
     }
 
     public function handle(): void
     {
-        Log::info("Processing FetchNativeBalances job", [
+        Log::info('Processing FetchNativeBalances job', [
             'network_id' => $this->network->id,
             'wallet_ids' => $this->wallets,
         ]);
@@ -53,7 +53,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
         $balancesToInsert = $balances->map(function ($walletBalance) use ($nativeToken, $walletsToUpdate) {
             $address = Str::lower($walletBalance->address);
 
-            $wallet = $this->wallets->first(fn ($wallet) => Str::lower($wallet->address) === $address);
+            $wallet = $this->wallets->first(fn ($wallet) => $address === Str::lower($wallet->address));
 
             $walletsToUpdate->push($wallet);
 
@@ -66,7 +66,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
             ];
         });
 
-        DB::transaction(function () use ($balancesToInsert, $walletsToUpdate) {
+        DB::transaction(function () use ($balancesToInsert) {
             Balance::query()->upsert(
                 $balancesToInsert->toArray(),
                 ['wallet_id', 'token_id'],
@@ -74,7 +74,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
             );
         });
 
-        $walletsToUpdate->map(function($wallet) {
+        $walletsToUpdate->map(function ($wallet) {
             $wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
             $wallet->save();
         });
