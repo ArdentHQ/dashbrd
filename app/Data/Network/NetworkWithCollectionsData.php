@@ -31,7 +31,7 @@ class NetworkWithCollectionsData extends Data
      */
     public static function fromModel(User $user, bool $showHidden)
     {
-        $networks = Network::scopeOnlyActive()->get();
+        $networks = Network::onlyActive()->get();
         $collectionsPerNetwork = $networks->mapWithKeys(function ($network) use ($user, $showHidden) {
             return [$network->id => $user->collections()->where('network_id', $network->id)->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))->count()];
         });
