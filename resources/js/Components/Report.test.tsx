@@ -24,6 +24,7 @@ describe("Report", () => {
             authenticated: true,
             showAuthOverlay: false,
             showCloseButton: false,
+            signed: true,
             closeOverlay: vi.fn(),
         });
     });
@@ -103,6 +104,7 @@ describe("Report", () => {
             authenticated: false,
             showAuthOverlay: false,
             showCloseButton: false,
+            signed: false,
             closeOverlay: vi.fn(),
         });
 
