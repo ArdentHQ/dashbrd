@@ -45,9 +45,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 
         $result = $provider->getCollectionsNfts($this->collection, $this->nft->token_number, 1);
 
-        (new Web3NftHandler(collection: $this->collection))->store(
-            $result->nfts, dispatchJobs: true
-        );
+        (new Web3NftHandler(collection: $this->collection))->store($result->nfts);
     }
 
     public function uniqueId(): string

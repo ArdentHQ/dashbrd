@@ -89,7 +89,7 @@ it('should throw an exception if no wallet or collection passed', function () {
             mintedAt: null,
         );
 
-        $handler->store(nfts: collect([$data]), dispatchJobs: true);
+        $handler->store(nfts: collect([$data]));
     })->toThrow(RuntimeException::class);
 });
 

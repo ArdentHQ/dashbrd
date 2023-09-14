@@ -46,9 +46,7 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 
         (new Web3NftHandler(collection: $this->collection))
                     ->withPersistingLastIndexedTokenNumber()
-                    ->store(
-                        $result->nfts, dispatchJobs: true
-                    );
+                    ->store($result->nfts);
 
         if ($result->nextToken !== null) {
             Artisan::call('collections:fetch-nfts', [

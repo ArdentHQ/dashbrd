@@ -17,6 +17,7 @@ use App\Models\Nft;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -40,93 +41,69 @@ class Web3NftHandler
     /**
      * @param  Collection<int, Web3NftData>  $nfts
      */
-    public function store(Collection $nfts, bool $dispatchJobs = false): void
+    public function store(Collection $nfts): void
     {
+        if ($nfts->isEmpty()) {
+            return;
+        }
+
         $now = Carbon::now();
 
-        $nftsInCollection = collect($nfts)->groupBy('tokenAddress');
+        $nftsInCollection = collect($nfts)->groupBy(fn ($nft) => Str::lower($nft->tokenAddress));
 
-        $nftsGroupedByCollectionAddress = $nftsInCollection->map->first();
-
-        $collectionsData = $nftsGroupedByCollectionAddress->flatMap(function (Web3NftData $nftData) use ($now, $nftsInCollection) {
-            $token = $nftData->token();
+        $collectionsData = $nftsInCollection->map->first()->map(function (Web3NftData $nft) use ($now, $nftsInCollection) {
+            $token = $nft->token();
 
             return [
-                $nftData->tokenAddress,
-                $nftData->networkId,
-                trim($nftData->collectionName),
-                $this->getSlug($nftData->collectionName),
-                $nftData->collectionSymbol,
-                $nftData->collectionDescription !== null ? strip_tags($nftData->collectionDescription) : null,
-                $nftData->collectionSupply,
-                $token ? $nftData->floorPrice?->price : null,
-                $token?->id,
-                $token ? $nftData->floorPrice?->retrievedAt : null,
-                json_encode([
-                    'image' => $nftData->collectionImage,
-                    'website' => $nftData->collectionWebsite,
-                    'socials' => $nftData->collectionSocials,
-                    'banner' => $nftData->collectionBannerImageUrl,
-                    'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
-
+                'address' => $nft->tokenAddress,
+                'network_id' => $nft->networkId,
+                'name' => trim($nft->collectionName),
+                'slug' => $this->getSlug($nft->collectionName),
+                'symbol' => $nft->collectionSymbol,
+                'description' => $nft->collectionDescription !== null ? strip_tags($nft->collectionDescription) : null,
+                'supply' => $nft->collectionSupply,
+                'floor_price' => $token ? $nft->floorPrice?->price : null,
+                'floor_price_token_id' => $token?->id,
+                'floor_price_retrieved_at' => $token ? $nft->floorPrice?->retrievedAt : null,
+                'extra_attributes' => json_encode([
+                    'image' => $nft->collectionImage,
+                    'website' => $nft->collectionWebsite,
+                    'socials' => $nft->collectionSocials,
+                    'banner' => $nft->collectionBannerImageUrl,
+                    'banner_updated_at' => $nft->collectionBannerImageUrl ? $now : null,
                 ]),
-                $nftData->mintedBlock,
-                $nftData->mintedAt?->toDateTimeString(),
-                $this->lastRetrievedTokenNumber($nftsInCollection->get($nftData->tokenAddress)),
-                $now,
-                $now,
+                'minted_block' => $nft->mintedBlock,
+                'minted_at' => $nft->mintedAt?->toDateTimeString(),
+                'last_indexed_token_number' => $this->lastRetrievedTokenNumber($nftsInCollection->get(Str::lower($nft->tokenAddress))),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         });
 
-        $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
+        /** @var string[] $columns */
+        $columns = array_keys($collectionsData->first());
 
-        $ids = DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $dispatchJobs, $now) {
-            // upsert nfts/collections (if any)
-            if ($nfts->isEmpty()) {
-                return collect();
-            }
+        unset($columns['network_id']);
+        unset($columns['address']);
 
-            $dbCollections = collect(DB::select(
-                // language=postgresql
-                "
-    insert into collections
-        (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, last_indexed_token_number, created_at, updated_at)
-    values {$valuesPlaceholders}
-    on conflict (address, network_id) do update
-        set name = trim(coalesce(excluded.name, collections.name)),
-            symbol = coalesce(excluded.symbol, collections.symbol),
-            description = coalesce(excluded.description, collections.description),
-            supply = coalesce(excluded.supply, collections.supply),
-            floor_price_token_id = excluded.floor_price_token_id,
-            floor_price_retrieved_at = excluded.floor_price_retrieved_at,
-            extra_attributes = excluded.extra_attributes,
-            minted_block = excluded.minted_block,
-            minted_at = excluded.minted_at,
-            last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
-    returning id, address, floor_price, supply
-     ",
-                $collectionsData->toArray(),
-            ));
+        // We take all the columns (except the ones we unique on which are network_id and address)
+        // and generate `column = coalesce(excluded.column, collections.column)` for UPSERT...
+        $update = collect($columns)->mapWithKeys(fn ($column) => [
+            $column => DB::raw(sprintf('coalesce(excluded.%s, collections.%s)', $column, $column)),
+        ])->all();
 
-            // Group all NFTs by their address, so the key will be the address of the collection
-            $groupedByAddress = collect($dbCollections)->keyBy(fn ($nft) => Str::lower($nft->address));
+        $collections = DB::transaction(function () use ($nfts, $collectionsData, $update, $now) {
+            /** @var EloquentCollection<int, CollectionModel> $collections */
+            $collections = CollectionModel::upsertReturning(
+                $collectionsData->toArray(), uniqueBy: ['address', 'network_id'], update: $update
+            );
 
-            $nfts = $nfts->filter(function ($nft) use ($groupedByAddress) {
-                $collection = $groupedByAddress->get(Str::lower($nft->tokenAddress));
+            /** @var EloquentCollection<string, CollectionModel> $collections */
+            $collections = $collections->keyBy(fn (CollectionModel $collection) => Str::lower($collection->address));
 
-                return $this->shouldKeepNft($collection);
-            });
-
-            $valuesToUpsert = $nfts->map(fn ($nft) => [
-                'wallet_id' => $this->wallet?->id,
-                'collection_id' => $groupedByAddress->get(Str::lower($nft->tokenAddress))->id,
-                'token_number' => $nft->tokenNumber,
-                'name' => $nft->name,
-                'extra_attributes' => json_encode($nft->extraAttributes),
-                'deleted_at' => null,
-            ])->toArray();
-
-            $uniqueBy = ['collection_id', 'token_number'];
+            $nfts = $nfts->filter(
+                fn ($nft) => $this->shouldKeepNft($collections[Str::lower($nft->tokenAddress)])
+            );
 
             $valuesToUpdateIfExists = ['name', 'extra_attributes', 'deleted_at'];
 
@@ -134,55 +111,44 @@ class Web3NftHandler
                 $valuesToUpdateIfExists[] = 'wallet_id';
             }
 
-            Nft::upsert($valuesToUpsert, $uniqueBy, $valuesToUpdateIfExists);
+            Nft::upsert($nfts->map(fn ($nft) => [
+                'wallet_id' => $this->wallet?->id,
+                'collection_id' => $collections->get(Str::lower($nft->tokenAddress))->id,
+                'token_number' => $nft->tokenNumber,
+                'name' => $nft->name,
+                'extra_attributes' => json_encode($nft->extraAttributes),
+                'deleted_at' => null,
+            ])->toArray(), uniqueBy: ['collection_id', 'token_number'], update: $valuesToUpdateIfExists);
 
             // Traits only need if collections are enabled
             if (Feature::active(Features::Collections->value)) {
-                $this->upsertTraits($nfts, $groupedByAddress, $now);
+                $this->upsertTraits($nfts, $collections, $now);
             }
 
-            $ids = $dbCollections->pluck('id');
+            $collections->filter(fn ($collection) => $collection->floor_price === null)->each(function ($collection) {
+                FetchCollectionFloorPrice::dispatch($this->getChainId(), $collection->address)->onQueue(Queues::NFTS)->afterCommit();
+            });
 
-            if ($dispatchJobs) {
-                $groupedByAddress
-                    ->each(function ($dbCollection, string $address) {
-                        if (! empty($dbCollection->floor_price)) {
-                            return;
-                        }
-
-                        FetchCollectionFloorPrice::dispatch($this->getChainId(), $address)
-                                ->onQueue(Queues::NFTS)
-                                ->afterCommit();
-                    });
-            }
-
-            return $ids;
+            return $collections;
         });
 
         if (Feature::active(Features::Collections->value)) {
-            $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
-                DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
+            $collections->filter(fn ($collection) => $collection->minted_at === null)->each(function ($collection) {
+                DetermineCollectionMintingDate::dispatch($collection)->onQueue(Queues::NFTS);
             });
 
-            CollectionModel::updateFiatValue($ids->toArray());
+            CollectionModel::updateFiatValue($collections->modelKeys());
 
             // Users that own NFTs from the collections that were updated
-            $affectedUsersIds = User::whereHas('wallets', function (Builder $walletQuery) use ($ids) {
-                $walletQuery->whereHas('nfts', function (Builder $nftQuery) use ($ids) {
-                    $nftQuery->whereIn('collection_id', $ids);
-                });
+            $affectedUsersIds = User::whereHas('wallets', function (Builder $query) use ($collections) {
+                $query->whereHas('nfts', fn ($q) => $q->whereIn('collection_id', $collections->modelKeys()));
             })->pluck('users.id')->toArray();
 
             User::updateCollectionsValue($affectedUsersIds);
         }
     }
 
-    /**
-     * @param object{
-     *   supply: int|null
-     * } $collection
-     */
-    private function shouldKeepNft(object $collection): bool
+    private function shouldKeepNft(CollectionModel $collection): bool
     {
         // Dont ignore wallet NFTs
         if ($this->wallet !== null) {

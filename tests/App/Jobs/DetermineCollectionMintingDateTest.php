@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\Web3\Web3NftData;
 use App\Jobs\DetermineCollectionMintingDate;
 use App\Models\Collection;
 use App\Models\Network;
@@ -32,29 +31,7 @@ it('updates the collection date based on previously indexed dates', function () 
         'minted_at' => null,
     ]);
 
-    $nft = new Web3NftData(
-        tokenAddress: 'dummy-address',
-        tokenNumber: '1',
-        networkId: $network->id,
-        collectionName: 'Test',
-        collectionSymbol: 'Test',
-        collectionImage: null,
-        collectionWebsite: null,
-        collectionDescription: null,
-        collectionSocials: [],
-        collectionSupply: null,
-        collectionBannerImageUrl: null,
-        collectionBannerUpdatedAt: null,
-        name: null,
-        description: null,
-        extraAttributes: [],
-        floorPrice: null,
-        traits: [],
-        mintedBlock: 1000,
-        mintedAt: null,
-    );
-
-    $job = new DetermineCollectionMintingDate($nft);
+    $job = new DetermineCollectionMintingDate($collection);
 
     $job->handle();
 
@@ -81,29 +58,7 @@ it('retrieves the minted date from the web3 provider if not previously retrieved
         'minted_at' => null,
     ]);
 
-    $nft = new Web3NftData(
-        tokenAddress: 'dummy-address',
-        tokenNumber: '1',
-        networkId: $network->id,
-        collectionName: 'Test',
-        collectionSymbol: 'Test',
-        collectionImage: null,
-        collectionWebsite: null,
-        collectionDescription: null,
-        collectionSocials: [],
-        collectionSupply: null,
-        collectionBannerImageUrl: null,
-        collectionBannerUpdatedAt: null,
-        name: null,
-        description: null,
-        extraAttributes: [],
-        floorPrice: null,
-        traits: [],
-        mintedBlock: 1000,
-        mintedAt: null,
-    );
-
-    $job = new DetermineCollectionMintingDate($nft);
+    $job = new DetermineCollectionMintingDate($collection);
 
     $job->handle();
 
@@ -111,61 +66,13 @@ it('retrieves the minted date from the web3 provider if not previously retrieved
 });
 
 it('has a middleware', function () {
-    $network = Network::polygon()->first();
-
-    $nft = new Web3NftData(
-        tokenAddress: 'dummy-address',
-        tokenNumber: '1',
-        networkId: $network->id,
-        collectionName: 'Test',
-        collectionSymbol: 'Test',
-        collectionImage: null,
-        collectionWebsite: null,
-        collectionDescription: null,
-        collectionSocials: [],
-        collectionSupply: null,
-        collectionBannerImageUrl: null,
-        collectionBannerUpdatedAt: null,
-        name: null,
-        description: null,
-        extraAttributes: [],
-        floorPrice: null,
-        traits: [],
-        mintedBlock: 1000,
-        mintedAt: null,
-    );
-
-    $job = new DetermineCollectionMintingDate($nft);
+    $job = new DetermineCollectionMintingDate(new Collection);
 
     expect($job->middleware())->toBeArray();
 });
 
 it('has a retry until', function () {
-    $network = Network::polygon()->first();
-
-    $nft = new Web3NftData(
-        tokenAddress: 'dummy-address',
-        tokenNumber: '1',
-        networkId: $network->id,
-        collectionName: 'Test',
-        collectionSymbol: 'Test',
-        collectionImage: null,
-        collectionWebsite: null,
-        collectionDescription: null,
-        collectionSocials: [],
-        collectionSupply: null,
-        collectionBannerImageUrl: null,
-        collectionBannerUpdatedAt: null,
-        name: null,
-        description: null,
-        extraAttributes: [],
-        floorPrice: null,
-        traits: [],
-        mintedBlock: 1000,
-        mintedAt: null,
-    );
-
-    $job = new DetermineCollectionMintingDate($nft);
+    $job = new DetermineCollectionMintingDate(new Collection);
 
     expect($job->retryUntil())->toBeInstanceOf(DateTime::class);
 });
