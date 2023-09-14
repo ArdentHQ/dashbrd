@@ -10,6 +10,7 @@ use App\Models\Wallet;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class FetchNativeBalances extends Command
 {
@@ -56,10 +57,15 @@ class FetchNativeBalances extends Command
         $onlyOnline = $this->option('only-online');
 
         Wallet::query()
-            ->when($onlyOnline, fn ($query) => $query->online())
-            ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
+            ->select(['id', 'address'])
+            ->whereIn('id', [3, 4])
+//            ->when($onlyOnline, fn ($query) => $query->online())
+//            ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
             ->chunkById(100, function ($wallets) use ($networks) {
-                $wallets->each(fn ($wallet) => $this->handleWallet($wallet, $networks));
+                dump($wallets->toArray());
+                $networks
+                    ->each(fn ($network) => FetchNativeBalancesJob::dispatch($wallets, $network)
+                    ->onQueue(Queues::WALLETS));
             });
     }
 
@@ -68,6 +74,8 @@ class FetchNativeBalances extends Command
      */
     private function handleWallet(Wallet $wallet, Collection $networks): void
     {
-        $networks->each(fn ($network) => FetchNativeBalancesJob::dispatch($wallet, $network)->onQueue(Queues::WALLETS));
+        $networks
+            ->each(fn ($network) => FetchNativeBalancesJob::dispatch([$wallet], $network)
+            ->onQueue(Queues::WALLETS));
     }
 }

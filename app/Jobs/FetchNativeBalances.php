@@ -8,6 +8,7 @@ use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Balance;
 use App\Models\Network;
+use App\Models\Wallet;
 use App\Support\Facades\Moralis;
 use Carbon\Carbon;
 use DateTime;
@@ -16,13 +17,14 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, WithWeb3DataProvider;
 
     public function __construct(
         public Collection $wallets,
@@ -32,6 +34,11 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 
     public function handle(): void
     {
+        Log::info("Processing FetchNativeBalances job", [
+            'network_id' => $this->network->id,
+            'wallet_ids' => $this->wallets,
+        ]);
+
         $nativeToken = $this->network->nativeToken()->firstOrFail();
 
         $addresses = $this->wallets->pluck('address')->toArray();
@@ -41,7 +48,9 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
         $walletsToUpdate = collect();
 
         $balancesToInsert = $balances->map(function ($walletBalance) use ($nativeToken, $walletsToUpdate) {
-            $wallet = $this->wallets->first(fn ($wallet) => $wallet->address === $walletBalance->address);
+            $address = Str::lower($walletBalance->address);
+
+            $wallet = $this->wallets->first(fn ($wallet) => Str::lower($wallet->address) === $address);
 
             $walletsToUpdate->push($wallet);
 
@@ -54,19 +63,24 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
             ];
         });
 
-        DB::transaction(function () use ($balancesToInsert) {
-            Balance::query()->upsert([$balancesToInsert], ['wallet_id', 'token_id'], ['balance', 'updated_at']);
+        DB::transaction(function () use ($balancesToInsert, $walletsToUpdate) {
+            Balance::query()->upsert(
+                $balancesToInsert->toArray(),
+                ['wallet_id', 'token_id'],
+                ['balance', 'updated_at']
+            );
         });
 
-        $walletsToUpdate->each(function ($wallet) {
-            $wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
-            $wallet->save();
-        });
+        Wallet::query()->whereIn('id', $walletsToUpdate->pluck('id'))
+            ->update(['extra_attributes->native_balances_fetched_at' => Carbon::now()]);
     }
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->wallet->id.':'.$this->network->chain_id;
+        $sortedWalletIds = [...$this->wallets->pluck('id')];
+        sort($sortedWalletIds, SORT_NUMERIC);
+
+        return self::class.':'.$this->network->chain_id.':'.implode('-', $sortedWalletIds);
     }
 
     public function retryUntil(): DateTime
