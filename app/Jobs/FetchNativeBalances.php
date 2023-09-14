@@ -26,10 +26,12 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, WithWeb3DataProvider;
 
+    /** @var Collection<int, Wallet> */
     public Collection $wallets;
 
     /**
      * @param  Collection<int, Wallet>|Wallet  $wallets
+     * @param  Network  $network
      */
     public function __construct(
         Collection|Wallet $wallets,
