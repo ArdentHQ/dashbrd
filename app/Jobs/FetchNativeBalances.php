@@ -26,7 +26,6 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, WithWeb3DataProvider;
 
-
     /**
      * @var Collection<int, Wallet>
      */
