@@ -30,7 +30,7 @@ export const NftOwner = ({ nft }: Properties): JSX.Element => {
 
             {nft.wallet !== null && ownerUrl !== null && address !== null ? (
                 <Link
-                    data-testid="NftHeader__walletAddress"
+                    data-testid="NftOwner__walletAddress"
                     href={ownerUrl}
                     external
                     showExternalIcon={true}

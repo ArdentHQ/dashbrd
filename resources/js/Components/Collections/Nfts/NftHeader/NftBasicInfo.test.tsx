@@ -1,5 +1,5 @@
 import { NftBasicInfo } from "./NftBasicInfo";
-import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import { render, screen } from "@/Tests/testing-library";
 
@@ -13,7 +13,7 @@ describe("NftBasicInfo", () => {
     });
 
     it("should render collection image and name", () => {
-        const collection = new CollectionFactory().create();
+        const collection = new NFTCollectionFactory().create();
 
         const nft = new NftFactory().create({
             collection,
