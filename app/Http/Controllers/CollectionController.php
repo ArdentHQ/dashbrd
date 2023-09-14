@@ -120,7 +120,6 @@ class CollectionController extends Controller
         $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
         $selectedChainIds = array_filter($selectedChainIds, fn ($id) => $networks->firstWhere('id', $id) !== null);
 
-
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
             'stats' => new CollectionStatsData(
