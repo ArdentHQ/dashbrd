@@ -40,8 +40,8 @@ it('should fetch native balance for a wallet', function () {
 
     (new FetchNativeBalances(collect([$wallet1, $wallet2, $wallet3]), $network))->handle();
 
-    expect($wallet1->findBalance($token)->balance)->toBeString("28499206466583095")
-        ->and($wallet2->findBalance($token)->balance)->toBeString("0");
+    expect($wallet1->findBalance($token)->balance)->toBeString('28499206466583095')
+        ->and($wallet2->findBalance($token)->balance)->toBeString('0');
 
     $this->assertDatabaseCount('balances', 2);
 });
@@ -98,11 +98,11 @@ it('should fail the job if network has no native token', function () {
 
 it('should use the wallet id as a unique job identifier', function () {
     $network = Network::factory()->create([
-        'chain_id' => 45
+        'chain_id' => 45,
     ]);
 
     $wallet1 = Wallet::factory()->create([
-        'id' => 35
+        'id' => 35,
     ]);
 
     $wallet2 = Wallet::factory()->create([
