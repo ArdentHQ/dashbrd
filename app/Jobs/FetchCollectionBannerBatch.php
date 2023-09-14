@@ -19,6 +19,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
 {
@@ -48,25 +49,24 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
             ->select(['id', 'address'])
             ->get();
 
-        $metadata->each(function (Web3ContractMetadata $data) use ($collections) {
-            // Skip this iteration because bannerImageUrl is null
-            if (is_null($data->bannerImageUrl)) {
-                return false;
-            }
+        $metadata
+            ->filter(fn ($data) => $data->bannerImageUrl !== null)
+            ->each(function (Web3ContractMetadata $data) use ($collections) {
+                $address = Str::lower($data->contractAddress);
 
-            $collection = $collections->first(fn ($collection) => $collection->address === $data->contractAddress);
+                $collection = $collections->first(fn ($collection) => Str::lower($collection->address) === $address);
 
-            if ($collection) {
-                Log::info('Updating collection banner', [
-                    'collection_address' => $data->contractAddress,
-                    'banner' => $data->bannerImageUrl,
-                ]);
+                if ($collection) {
+                    Log::info('Updating collection banner', [
+                        'collection_address' => $address,
+                        'banner' => $data->bannerImageUrl,
+                    ]);
 
-                $collection->extra_attributes->set('banner', $data->bannerImageUrl);
-                $collection->extra_attributes->set('banner_updated_at', now());
+                    $collection->extra_attributes->set('banner', $data->bannerImageUrl);
+                    $collection->extra_attributes->set('banner_updated_at', now());
 
-                $collection->save();
-            }
+                    $collection->save();
+                }
         });
     }
 
