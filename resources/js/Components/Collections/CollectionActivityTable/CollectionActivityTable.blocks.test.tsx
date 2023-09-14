@@ -12,6 +12,7 @@ import {
     Type,
 } from "@/Components/Collections/CollectionActivityTable/CollectionActivityTable.blocks";
 import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
+import * as activeUserContextMock from "@/Contexts/ActiveUserContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
@@ -289,16 +290,30 @@ describe("Image", () => {
 });
 
 describe("TimeStamp", () => {
+    const activity = new NFTActivityFactory().create({
+        type: "LABEL_TRANSFER",
+        nft: new CollectionNftDataFactory().withoutImages().create(),
+        timestamp: 1699660800,
+    });
+
     it("Timestamp rendered", () => {
-        const activity = new NFTActivityFactory().create({
-            type: "LABEL_TRANSFER",
-            nft: new CollectionNftDataFactory().withoutImages().create(),
-            timestamp: 1699660800,
+        render(<Timestamp value={activity.timestamp} />);
+
+        expect(screen.getByTestId("ActivityTable__timestamp")).toBeInTheDocument();
+    });
+
+    it("should render timestamp for guests", () => {
+        const activeUserSpy = vi.spyOn(activeUserContextMock, "useActiveUser").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
         });
 
         render(<Timestamp value={activity.timestamp} />);
 
         expect(screen.getByTestId("ActivityTable__timestamp")).toBeInTheDocument();
+
+        activeUserSpy.mockRestore();
     });
 });
 
