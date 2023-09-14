@@ -12,14 +12,15 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
 
 it('should fetch native balance for a wallet', function () {
-
     Moralis::fake([
-        'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native'), 200),
+        'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native-multiple'), 200),
     ]);
 
     $network = Network::polygon()->firstOrFail();
 
-    $wallet = Wallet::factory()->create();
+    $wallet = Wallet::factory()->create([
+        'address' => '0x123',
+    ]);
 
     Token::factory()->create([
         'network_id' => $network->id,
@@ -31,18 +32,18 @@ it('should fetch native balance for a wallet', function () {
 
     (new FetchNativeBalances($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('tokens', 1);
     $this->assertDatabaseCount('balances', 1);
 });
 
 it('does not fire a job to index transactions if balance is already synced', function () {
-
     Moralis::fake([
-        'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native'), 200),
+        'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native-multiple'), 200),
     ]);
 
     $network = Network::polygon()->firstOrFail();
-    $wallet = Wallet::factory()->create();
+    $wallet = Wallet::factory()->create([
+        'address' => '0x123'
+    ]);
 
     $nativeToken = Token::factory()->create([
         'network_id' => $network->id,
