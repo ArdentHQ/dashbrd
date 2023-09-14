@@ -5,6 +5,7 @@ import React from "react";
 import { NftImage } from "./NftImage";
 import { NftHeader } from "@/Components/Collections/Nfts/NftHeader";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
+import * as useAuth from "@/Hooks/useAuth";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
@@ -17,11 +18,23 @@ vi.mock("file-saver", () => ({
 }));
 describe("NftImage", () => {
     const image = new Image();
+    const showConnectOverlayMock = vi.fn();
 
     beforeAll(() => {
         process.env.REACT_APP_IS_UNIT = "false";
         vi.spyOn(window, "Image").mockImplementation(() => image);
-        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...getSampleMetaMaskState(),
+            showConnectOverlay: showConnectOverlayMock,
+        });
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: true,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
     });
 
     afterAll(() => {
@@ -248,5 +261,25 @@ describe("NftImage", () => {
 
         await userEvent.hover(screen.getByTestId("NftImage__refresh"));
         expect(screen.getByText(t("common.refresh_metadata"))).toBeInTheDocument();
+    });
+
+    it("should show auth overlay if guest clicks on metadata refresh", async () => {
+        const nft = new NftFactory().create({
+            images: new NftImagesDataFactory().withValues().create(),
+        });
+
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        render(<NftImage nft={nft} />);
+
+        await userEvent.click(screen.getByTestId("NftImage__refresh"));
+        expect(showConnectOverlayMock).toHaveBeenCalledOnce();
     });
 });
