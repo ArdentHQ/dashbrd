@@ -29,10 +29,16 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
     /**
      * @param  Collection<int, Wallet> $wallets
      */
+    public Collection $wallets;
+
+    /**
+     * @param  Collection<int, Wallet> $wallets
+     */
     public function __construct(
-        public Collection $wallets,
+        Collection|Wallet $wallets,
         public Network $network,
     ) {
+        $this->wallets = $wallets instanceof Wallet ? collect([$wallets]) : $wallets;
     }
 
     public function handle(): void

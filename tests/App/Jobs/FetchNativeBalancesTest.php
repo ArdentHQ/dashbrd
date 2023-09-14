@@ -92,7 +92,7 @@ it('should fail the job if network has no native token', function () {
     $network = Network::factory()->create();
     $wallet = Wallet::factory()->create();
 
-    expect(fn () => (new FetchNativeBalances(collect([$wallet]), $network))->handle())
+    expect(fn () => (new FetchNativeBalances($wallet, $network))->handle())
         ->toThrow(ModelNotFoundException::class);
 });
 
@@ -118,7 +118,7 @@ it('has a retry until', function () {
     $network = Network::factory()->create();
     $wallet = Wallet::factory()->create();
 
-    $job = new FetchNativeBalances(collect([$wallet]), $network);
+    $job = new FetchNativeBalances($wallet, $network);
 
     expect($job->retryUntil())->toBeInstanceOf(DateTime::class);
 });
