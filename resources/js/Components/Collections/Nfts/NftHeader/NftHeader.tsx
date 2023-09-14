@@ -36,8 +36,6 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
                                 description={nft.collection.description}
                                 linkClassName="font-medium text-sm"
                             />
-
-                            <Point />
                         </div>
                     </div>
                 </div>
