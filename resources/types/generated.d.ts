@@ -397,6 +397,11 @@ declare namespace App.Data.Wallet {
         small: string | null;
         small2x: string | null;
     };
+    export type WalletBalance = {
+        address: string;
+        balance: string;
+        formattedBalance: string;
+    };
     export type WalletData = {
         address: string;
         domain: string | null;

@@ -26,10 +26,13 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, WithWeb3DataProvider;
 
+    public Collection $wallets;
+
     public function __construct(
-        public Collection $wallets,
+        Collection|Wallet $wallets,
         public Network $network,
     ) {
+        $this->wallets =  $wallets instanceof Wallet ? collect([$wallets]) : $wallets;
     }
 
     public function handle(): void
@@ -71,8 +74,11 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
             );
         });
 
-        Wallet::query()->whereIn('id', $walletsToUpdate->pluck('id'))
-            ->update(['extra_attributes->native_balances_fetched_at' => Carbon::now()]);
+        $walletsToUpdate->map(function($wallet) {
+            $wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
+            $wallet->save();
+        });
+
     }
 
     public function uniqueId(): string
