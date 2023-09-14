@@ -57,3 +57,17 @@ it('should handle arrays in NFT descriptions', function () {
 
     expect(Alchemy::walletNfts($walletData, $networkData)->nfts[0]->description)->toBeString();
 });
+
+it('should increment default size for banner image if it is not null in parseNft', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
+            ->push(fixtureData('alchemy.nfts_array_description_with_banner'), 200),
+    ]);
+
+    $walletData = WalletData::fromModel(Wallet::factory()->create());
+    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+
+    $collection = Alchemy::walletNfts($walletData, $networkData);
+
+    expect($collection->nfts[0]->collectionBannerImageUrl)->toContain('w=1378');
+});
