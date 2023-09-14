@@ -34,7 +34,9 @@ it('should fetch nft collection banner', function () {
 
     $collection->refresh();
 
-    expect($collection->bannerUpdatedAt()->timestamp)->toBe($now->timestamp)
+    $updatedAt = Carbon::parse($collection->bannerUpdatedAt());
+
+    expect($updatedAt->timestamp)->toBe($now->timestamp)
         ->and($collection->banner())->toBe('https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format');
 });
 
