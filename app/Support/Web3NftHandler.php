@@ -137,6 +137,7 @@ class Web3NftHandler
             fn ($nft) => Str::lower($nft->tokenAddress)
         );
 
+        // @phpstan-ignore-next-line
         return $nftsInCollection->map->first()->map(function (Web3NftData $nft) use ($nftsInCollection) {
             $token = $nft->token();
 
