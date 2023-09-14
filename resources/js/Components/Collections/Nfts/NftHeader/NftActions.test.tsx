@@ -207,7 +207,7 @@ describe("Nftactions", () => {
         );
     });
 
-    it("should not render test ids", () => {
+    it("should not render test ids if addTestIds is false", () => {
         const nft = new NftFactory().create({
             images: new NftImagesDataFactory().withValues().create(),
         });

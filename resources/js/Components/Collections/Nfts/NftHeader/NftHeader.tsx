@@ -19,7 +19,10 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
 
     if (isLgAndAbove) {
         return (
-            <div className="flex w-full justify-between">
+            <div
+                className="flex w-full justify-between"
+                data-testId="NftHeader__desktop"
+            >
                 <div className="flex w-full flex-col gap-2">
                     <NftBasicInfo nft={nft} />
                     <div className="flex flex-col gap-2 xl:flex-row xl:items-center">
@@ -54,7 +57,10 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
 
     return (
         <>
-            <div className="flex w-full flex-row items-center justify-center gap-2 border-solid border-theme-secondary-300 bg-theme-secondary-50 px-8 pb-6 pt-4 backdrop-blur sm:border-b sm:border-none sm:pb-4">
+            <div
+                className="flex w-full flex-row items-center justify-center gap-2 border-solid border-theme-secondary-300 bg-theme-secondary-50 px-8 pb-6 pt-4 backdrop-blur sm:border-b sm:border-none sm:pb-4"
+                data-testId="NftHeader__mobile"
+            >
                 <NftOwner nft={nft} />
 
                 <Point />

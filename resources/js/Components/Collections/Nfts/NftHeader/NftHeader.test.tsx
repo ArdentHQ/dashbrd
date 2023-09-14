@@ -1,13 +1,26 @@
 import { router } from "@inertiajs/react";
 import React from "react";
 import { NftHeader } from "./NftHeader";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
-import NftWalletFactory from "@/Tests/Factories/Nfts/NftWalletFactory";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
+import { Breakpoint } from "@/Tests/utils";
 
 describe("NftHeader", () => {
+    const image = new Image();
+
+    beforeAll(() => {
+        process.env.REACT_APP_IS_UNIT = "false";
+        vi.spyOn(window, "Image").mockImplementation(() => image);
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+    });
     it("should render", () => {
         const nft = new NftFactory().withWallet().create({
             images: new NftImagesDataFactory().withValues().create(),
@@ -15,18 +28,8 @@ describe("NftHeader", () => {
 
         render(<NftHeader nft={nft} />);
 
-        expect(screen.getByTestId("NftHeader__collectionImage")).toBeInTheDocument();
         expect(screen.getByTestId("NftHeader__collectionName")).toBeInTheDocument();
         expect(screen.getByTestId("NftHeader__heading")).toBeInTheDocument();
-        expect(screen.getByTestId("NftHeader__walletAddress")).toBeInTheDocument();
-    });
-
-    it("shows NA label if no wallet", () => {
-        const nft = new NftFactory().withoutWallet().create();
-
-        render(<NftHeader nft={nft} />);
-
-        expect(screen.getByText("N/A")).toBeInTheDocument();
     });
 
     it("hide collection image if is null", () => {
@@ -51,37 +54,19 @@ describe("NftHeader", () => {
         expect(routerSpy).toBeCalledTimes(1);
     });
 
-    it("should use polygon url for address", () => {
-        const wallet = new NftWalletFactory().create();
+    it("should render desktop version for large screens", () => {
+        const nft = new NftFactory().withWallet().create();
 
-        const nft = new NftFactory().withWallet().create({
-            wallet,
-        });
+        render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.xl });
 
-        nft.collection.chainId = 137;
-
-        render(<NftHeader nft={nft} />);
-
-        expect(screen.getByTestId("NftHeader__walletAddress")).toHaveAttribute(
-            "href",
-            `https://polygonscan.com/address/${wallet.address}`,
-        );
+        expect(screen.getByTestId("NftHeader__desktop")).toBeInTheDocument();
     });
 
-    it("should use ethereum url for address", () => {
-        const wallet = new NftWalletFactory().create();
+    it("should render mobile version for small screens", () => {
+        const nft = new NftFactory().withWallet().create();
 
-        const nft = new NftFactory().withWallet().create({
-            wallet,
-        });
+        render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.sm });
 
-        nft.collection.chainId = 1;
-
-        render(<NftHeader nft={nft} />);
-
-        expect(screen.getByTestId("NftHeader__walletAddress")).toHaveAttribute(
-            "href",
-            `https://etherscan.io/address/${wallet.address}`,
-        );
+        expect(screen.getByTestId("NftHeader__mobile")).toBeInTheDocument();
     });
 });
