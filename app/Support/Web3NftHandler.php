@@ -123,20 +123,26 @@ class Web3NftHandler
             // Traits only need if collections are enabled
             if (Feature::active(Features::Collections->value)) {
                 $this->upsertTraits($nfts, $collections, $now);
-            }
 
-            $collections->filter(fn ($collection) => $collection->floor_price === null)->each(function ($collection) {
-                FetchCollectionFloorPrice::dispatch($this->getChainId(), $collection->address)->onQueue(Queues::NFTS)->afterCommit();
-            });
+                $collections->each(function ($collection) {
+                    if ($collection->floor_price === null) {
+                        FetchCollectionFloorPrice::dispatch($this->getChainId(), $collection->address)
+                                ->afterCommit()
+                                ->onQueue(Queues::NFTS);
+                    }
+
+                    if ($collection->minted_at === null) {
+                        DetermineCollectionMintingDate::dispatch($collection)
+                                ->afterCommit()
+                                ->onQueue(Queues::NFTS);
+                    }
+                });
+            }
 
             return $collections;
         });
 
         if (Feature::active(Features::Collections->value)) {
-            $collections->filter(fn ($collection) => $collection->minted_at === null)->each(function ($collection) {
-                DetermineCollectionMintingDate::dispatch($collection)->onQueue(Queues::NFTS);
-            });
-
             CollectionModel::updateFiatValue($collections->modelKeys());
 
             // Users that own NFTs from the collections that were updated
