@@ -72,7 +72,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 
         Log::info('Updating native balances', [
             'network_id' => $this->network->id,
-            'data' => $balancesToInsert->map(fn($balance) => collect($balance)->only(['wallet_id', 'balance']))
+            'data' => $balancesToInsert->map(fn ($balance) => collect($balance)->only(['wallet_id', 'balance'])),
         ]);
 
         DB::transaction(function () use ($balancesToInsert) {
