@@ -18,11 +18,19 @@ it('should fetch native balance for a wallet', function () {
 
     $network = Network::polygon()->firstOrFail();
 
-    $wallet = Wallet::factory()->create([
+    $wallet1 = Wallet::factory()->create([
         'address' => '0x123',
     ]);
 
-    Token::factory()->create([
+    $wallet2 = Wallet::factory()->create([
+        'address' => '0x123A',
+    ]);
+
+    $wallet3 = Wallet::factory()->create([
+        'address' => '0xABC',
+    ]);
+
+    $token = Token::factory()->create([
         'network_id' => $network->id,
         'is_native_token' => true,
     ]);
@@ -30,9 +38,12 @@ it('should fetch native balance for a wallet', function () {
     $this->assertDatabaseCount('tokens', 1);
     $this->assertDatabaseCount('balances', 0);
 
-    (new FetchNativeBalances($wallet, $network))->handle();
+    (new FetchNativeBalances(collect([$wallet1, $wallet2, $wallet3]), $network))->handle();
 
-    $this->assertDatabaseCount('balances', 1);
+    expect($wallet1->findBalance($token)->balance)->toBeString("28499206466583095")
+        ->and($wallet2->findBalance($token)->balance)->toBeString("0");
+
+    $this->assertDatabaseCount('balances', 2);
 });
 
 it('does not fire a job to index transactions if balance is already synced', function () {
@@ -73,10 +84,21 @@ it('should fail the job if network has no native token', function () {
 });
 
 it('should use the wallet id as a unique job identifier', function () {
-    $network = Network::factory()->create();
-    $wallet = Wallet::factory()->create();
+    $network = Network::factory()->create([
+        'chain_id' => 45
+    ]);
 
-    expect((new FetchNativeBalances($wallet, $network)))->uniqueId()->toBeString();
+    $wallet1 = Wallet::factory()->create([
+        'id' => 35
+    ]);
+
+    $wallet2 = Wallet::factory()->create([
+        'id' => 2,
+    ]);
+
+    $uniqueId = (new FetchNativeBalances(collect([$wallet1, $wallet2]), $network))->uniqueId();
+
+    expect($uniqueId)->toBe("App\Jobs\FetchNativeBalances:45:2-35");
 });
 
 it('has a retry until', function () {

@@ -11,6 +11,11 @@
                 "address": "0x123",
                 "balance": "28499206466583095",
                 "balance_formatted": "0.0285"
+            },
+            {
+                "address": "0x123a",
+                "balance": "0",
+                "balance_formatted": "0"
             }
         ]
     }
