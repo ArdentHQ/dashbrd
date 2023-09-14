@@ -30,7 +30,6 @@ describe("Nftactions", () => {
         render(
             <NftActions
                 nft={nft}
-                addTestIds={true}
                 alreadyReported={false}
                 reportAvailableIn={null}
             />,
@@ -65,7 +64,6 @@ describe("Nftactions", () => {
         render(
             <NftActions
                 nft={nft}
-                addTestIds={true}
                 alreadyReported={false}
                 reportAvailableIn={null}
             />,
@@ -88,7 +86,6 @@ describe("Nftactions", () => {
         render(
             <NftActions
                 nft={nft}
-                addTestIds={true}
                 alreadyReported={false}
                 reportAvailableIn={null}
             />,
@@ -113,7 +110,6 @@ describe("Nftactions", () => {
         render(
             <NftActions
                 nft={nft}
-                addTestIds={true}
                 alreadyReported={false}
                 reportAvailableIn={null}
             />,
@@ -138,7 +134,6 @@ describe("Nftactions", () => {
         render(
             <NftActions
                 nft={nft}
-                addTestIds={true}
                 alreadyReported={false}
                 reportAvailableIn={null}
             />,
@@ -165,7 +160,6 @@ describe("Nftactions", () => {
         render(
             <NftActions
                 nft={nft}
-                addTestIds={true}
                 alreadyReported={false}
                 reportAvailableIn={null}
             />,
@@ -192,7 +186,6 @@ describe("Nftactions", () => {
         render(
             <NftActions
                 nft={nft}
-                addTestIds={true}
                 alreadyReported={false}
                 reportAvailableIn={null}
             />,
@@ -205,22 +198,5 @@ describe("Nftactions", () => {
             `https://mumbai.polygonscan.com/token/${collection.address}?a=${nft.tokenNumber}`,
             "_blank",
         );
-    });
-
-    it("should not render test ids if addTestIds is false", () => {
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withValues().create(),
-        });
-
-        render(
-            <NftActions
-                nft={nft}
-                addTestIds={false}
-                alreadyReported={false}
-                reportAvailableIn={null}
-            />,
-        );
-
-        expect(screen.queryByTestId("NftActions__container")).not.toBeInTheDocument();
     });
 });

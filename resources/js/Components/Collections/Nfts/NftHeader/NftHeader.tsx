@@ -43,7 +43,6 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
                 </div>
                 <div className="flex items-end">
                     <NftActions
-                        addTestIds={true}
                         alreadyReported={alreadyReported}
                         className="justify-center"
                         nft={nft}
@@ -75,7 +74,6 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
             <div className="mb-6 flex w-full flex-col gap-4 border-b border-solid border-theme-secondary-300 bg-white pb-6 pt-4">
                 <NftBasicInfo nft={nft} />
                 <NftActions
-                    addTestIds={true}
                     alreadyReported={alreadyReported}
                     className="justify-center"
                     nft={nft}

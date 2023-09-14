@@ -11,7 +11,6 @@ import { useToasts } from "@/Hooks/useToasts";
 import { ExplorerChains } from "@/Utils/Explorer";
 
 interface Properties {
-    addTestIds: boolean;
     alreadyReported?: boolean;
     className?: string;
     nft: App.Data.Nfts.NftData;
@@ -20,7 +19,6 @@ interface Properties {
 }
 
 export const NftActions = ({
-    addTestIds = false,
     alreadyReported = false,
     className,
     nft,
@@ -88,7 +86,7 @@ export const NftActions = ({
     return (
         <div
             className={cn("inline-flex gap-2 rounded-full", className)}
-            data-testid={addTestIds ? "NftActions__container" : undefined}
+            data-testid={"NftActions__container"}
         >
             <Tooltip
                 content={getTooltipText(nft.collection.chainId)}
@@ -96,7 +94,7 @@ export const NftActions = ({
                 zIndex={10}
             >
                 <IconButton
-                    data-testid={addTestIds ? "NftActions__viewOnChain" : undefined}
+                    data-testid={"NftActions__viewOnChain"}
                     icon={
                         <NetworkIcon
                             networkId={nft.collection.chainId}
@@ -134,7 +132,7 @@ export const NftActions = ({
                 zIndex={10}
             >
                 <IconButton
-                    data-testid={addTestIds ? "NftActions__refresh" : undefined}
+                    data-testid={"NftActions__refresh"}
                     icon="Refresh"
                     disabled={originalNftImage === null || isRefreshing}
                     onClick={() => {
