@@ -10,6 +10,7 @@ use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Nft;
 use App\Models\Token;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -131,7 +132,7 @@ it('should run FetchCollectionBanner if colleciton banner was updated more than 
     Bus::assertDispatched(FetchCollectionBanner::class);
 });
 
-it('should not run FetchCollectionBanner if collection has banner', function () {
+it('should run FetchCollectionBanner if collection has banner but no banner_updated_at set', function () {
     $user = createUser();
 
     Bus::fake();
@@ -142,6 +143,35 @@ it('should not run FetchCollectionBanner if collection has banner', function () 
         'network_id' => $network->id,
         'extra_attributes' => [
             'banner' => 'https://example.com/image.png',
+        ],
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionBanner::class);
+});
+
+it('should not run FetchCollectionBanner if collection has banner and banner_updated_at set', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'extra_attributes' => [
+            'banner' => 'https://example.com/image.png',
+            'banner_updated_at' => Carbon::now(),
         ],
     ]);
 
