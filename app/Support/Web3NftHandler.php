@@ -49,36 +49,7 @@ class Web3NftHandler
 
         $now = Carbon::now();
 
-        $nftsInCollection = collect($nfts)->groupBy(fn ($nft) => Str::lower($nft->tokenAddress));
-
-        $collectionsData = $nftsInCollection->map->first()->map(function (Web3NftData $nft) use ($now, $nftsInCollection) {
-            $token = $nft->token();
-
-            return [
-                'address' => $nft->tokenAddress,
-                'network_id' => $nft->networkId,
-                'name' => trim($nft->collectionName),
-                'slug' => $this->getSlug($nft->collectionName),
-                'symbol' => $nft->collectionSymbol,
-                'description' => $nft->collectionDescription !== null ? strip_tags($nft->collectionDescription) : null,
-                'supply' => $nft->collectionSupply,
-                'floor_price' => $token ? $nft->floorPrice?->price : null,
-                'floor_price_token_id' => $token?->id,
-                'floor_price_retrieved_at' => $token ? $nft->floorPrice?->retrievedAt : null,
-                'extra_attributes' => json_encode([
-                    'image' => $nft->collectionImage,
-                    'website' => $nft->collectionWebsite,
-                    'socials' => $nft->collectionSocials,
-                    'banner' => $nft->collectionBannerImageUrl,
-                    'banner_updated_at' => $nft->collectionBannerImageUrl ? $now : null,
-                ]),
-                'minted_block' => $nft->mintedBlock,
-                'minted_at' => $nft->mintedAt?->toDateTimeString(),
-                'last_indexed_token_number' => $this->lastRetrievedTokenNumber($nftsInCollection->get(Str::lower($nft->tokenAddress))),
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
-        });
+        $collectionsData = $this->getCollections($nfts);
 
         /** @var string[] $columns */
         $columns = array_keys($collectionsData->first());
@@ -152,6 +123,48 @@ class Web3NftHandler
 
             User::updateCollectionsValue($affectedUsersIds);
         }
+    }
+
+    /**
+     * Take the collection of NFTs and pluck out the collection data for every collection.
+     *
+     * @param Collection<int, Web3NftData> $nfts
+     * @return Collection<int, mixed[]>
+     */
+    private function getCollections(Collection $nfts): Collection
+    {
+        $nftsInCollection = collect($nfts)->groupBy(
+            fn ($nft) => Str::lower($nft->tokenAddress)
+        );
+
+        return $nftsInCollection->map->first()->map(function (Web3NftData $nft) use ($nftsInCollection) {
+            $token = $nft->token();
+
+            return [
+                'address' => $nft->tokenAddress,
+                'network_id' => $nft->networkId,
+                'name' => trim($nft->collectionName),
+                'slug' => $this->getSlug($nft->collectionName),
+                'symbol' => $nft->collectionSymbol,
+                'description' => $nft->collectionDescription !== null ? strip_tags($nft->collectionDescription) : null,
+                'supply' => $nft->collectionSupply,
+                'floor_price' => $token ? $nft->floorPrice?->price : null,
+                'floor_price_token_id' => $token?->id,
+                'floor_price_retrieved_at' => $token ? $nft->floorPrice?->retrievedAt : null,
+                'extra_attributes' => json_encode([
+                    'image' => $nft->collectionImage,
+                    'website' => $nft->collectionWebsite,
+                    'socials' => $nft->collectionSocials,
+                    'banner' => $nft->collectionBannerImageUrl,
+                    'banner_updated_at' => $nft->collectionBannerImageUrl ? now() : null,
+                ]),
+                'minted_block' => $nft->mintedBlock,
+                'minted_at' => $nft->mintedAt?->toDateTimeString(),
+                'last_indexed_token_number' => $this->lastRetrievedTokenNumber($nftsInCollection->get(Str::lower($nft->tokenAddress))),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        });
     }
 
     private function shouldKeepNft(CollectionModel $collection): bool
