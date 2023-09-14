@@ -141,7 +141,10 @@ export const formatTimestampForPeriod = ({
     return `${buildDayMonth(parts, dateFormat)}${getYearDelimiter(dateFormat)}${parts.year}`;
 };
 
-export const toHuman = (date: number, options: Omit<App.Data.Attributes, "currency">): string => {
+export const toHuman = (
+    date: number,
+    options: Pick<App.Data.Attributes, "date_format" | "timezone" | "time_format">,
+): string => {
     const dateFormat = options.date_format as DateFormat;
 
     const parts = getTimestampParts({
