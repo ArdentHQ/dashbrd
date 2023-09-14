@@ -63,6 +63,8 @@ return [
     'view_all' => 'View All',
     'view_more_on_polygonscan' => 'View More on PolygonScan',
     'view_more_on_etherscan' => 'View More on Etherscan',
+    'view_nft_on_etherscan' => 'View NFT on Etherscan',
+    'view_nft_on_polygonscan' => 'View NFT on PolygonScan',
     'polygonscan' => 'PolygonScan',
     'etherscan' => 'Etherscan',
     'featured' => 'Featured',
