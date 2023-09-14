@@ -53,9 +53,7 @@ const CollectionsIndex = ({
     );
 
     const [selectedChainIds, setSelectedChainIds] = useState<number[]>(
-        isTruthy(queryParameters.chain)
-            ? queryParameters.chain.split(",").map(Number)
-            : availableNetworks.map((network) => network.chainId),
+        isTruthy(queryParameters.chain) ? availableNetworks.map((network) => network.chainId) : [],
     );
 
     const { showToast } = useToasts();
@@ -141,7 +139,7 @@ const CollectionsIndex = ({
                         activeSort={sortBy}
                         onSort={sort}
                         onChangeVisibilityStatus={(isHidden) => {
-                            reload({ showHidden: isHidden });
+                            reload({ showHidden: isHidden, selectedChainIds });
                         }}
                         availableNetworks={availableNetworks}
                         handleSelectedChainIds={handleSelectedChainIds}

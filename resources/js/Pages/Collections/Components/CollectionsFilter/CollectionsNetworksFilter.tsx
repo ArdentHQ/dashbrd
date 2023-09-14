@@ -1,3 +1,4 @@
+import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Checkbox } from "@/Components/Form/Checkbox";
@@ -27,16 +28,27 @@ const NetworkFilterCheckbox = ({
                 onChange={() => {
                     handleClick(value);
                 }}
-                checked={isSelected}
+                checked={isSelected && count > 0}
+                disabled={count === 0}
             />
 
             <NetworkIcon
                 networkId={value}
                 withoutTooltip
+                textClassName={cn({
+                    "text-theme-secondary-500": count === 0,
+                })}
             />
         </div>
 
-        <div className="text-sm font-medium text-theme-secondary-700">{count}</div>
+        <div
+            className={cn("text-sm font-medium", {
+                "text-theme-secondary-500": count === 0,
+                "text-theme-secondary-700": count > 0,
+            })}
+        >
+            {count}
+        </div>
     </label>
 );
 
