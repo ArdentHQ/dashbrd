@@ -41,7 +41,7 @@ class FetchNativeBalances extends Command
         if ($walletId !== null) {
             $wallet = Wallet::findOrFail($walletId);
 
-            $this->process($networks, collect([$wallet]));
+            $this->process(collect([$wallet]), $networks);
         } else {
             $this->handleAllWallets($networks);
         }
@@ -61,7 +61,7 @@ class FetchNativeBalances extends Command
             ->when($onlyOnline, fn ($query) => $query->online())
             ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
             ->chunkById(100, function ($wallets) use ($networks) {
-                $this->process($networks, $wallets);
+                $this->process($wallets, $networks);
             });
     }
 
@@ -69,7 +69,7 @@ class FetchNativeBalances extends Command
      * @param  Collection<int, Network>  $networks
      * @param  SupportCollection<int, Wallet>  $wallets
      */
-    private function process(Collection $networks, SupportCollection $wallets): void
+    private function process(SupportCollection $wallets, Collection $networks): void
     {
         $networks
             ->each(fn ($network) => FetchNativeBalancesJob::dispatch($wallets, $network)
