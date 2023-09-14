@@ -50,7 +50,7 @@ class SwitchAccountRequest extends FormRequest
         ];
     }
 
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         auth()->logout();
 

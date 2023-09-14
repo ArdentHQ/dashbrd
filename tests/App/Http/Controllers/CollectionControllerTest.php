@@ -3,12 +3,14 @@
 declare(strict_types=1);
 
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Nft;
 use App\Models\Token;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -71,6 +73,120 @@ it('can render the collections view page', function () {
     expect($collection->fresh()->last_viewed_at)->not->toBeNull();
 
     Bus::assertDispatched(SyncCollection::class);
+});
+
+it('should run FetchCollectionBanner if collection has no banner', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'extra_attributes' => [
+            'banner' => null,
+        ],
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionBanner::class);
+});
+
+it('should run FetchCollectionBanner if colleciton banner was updated more than a week ago', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'extra_attributes' => [
+            'banner' => 'https://example.com/image.png',
+            'banner_updated_at' => now()->subWeek()->subDay()->toDateTimeString(),
+        ],
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionBanner::class);
+});
+
+it('should run FetchCollectionBanner if collection has banner but no banner_updated_at set', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'extra_attributes' => [
+            'banner' => 'https://example.com/image.png',
+        ],
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionBanner::class);
+});
+
+it('should not run FetchCollectionBanner if collection has banner and banner_updated_at set', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon()->firstOrFail();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'extra_attributes' => [
+            'banner' => 'https://example.com/image.png',
+            'banner_updated_at' => Carbon::now(),
+        ],
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections.view', $collection->slug))
+        ->assertStatus(200);
+
+    Bus::assertNotDispatched(FetchCollectionBanner::class);
 });
 
 it('can render the collection details page for guests', function () {

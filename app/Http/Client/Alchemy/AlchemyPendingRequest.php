@@ -13,6 +13,7 @@ use App\Data\Web3\Web3NftsChunk;
 use App\Enums\AlchemyChain;
 use App\Enums\Chains;
 use App\Enums\CryptoCurrencyDecimals;
+use App\Enums\ImageSize;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\ConnectionException;
@@ -321,6 +322,13 @@ class AlchemyPendingRequest extends PendingRequest
 
         $mintTimestamp = $this->getNftMintingDateProperty($nft);
 
+        $bannerImageUrl = Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl');
+        if (! empty($bannerImageUrl)) {
+            $bannerImageUrl = NftImageUrl::get($bannerImageUrl, ImageSize::Banner);
+        } else {
+            $bannerImageUrl = null;
+        }
+
         return new Web3NftData(
             tokenAddress: $nft['contract']['address'],
             tokenNumber: CryptoUtils::hexToBigIntStr($nft['id']['tokenId']),
@@ -332,7 +340,8 @@ class AlchemyPendingRequest extends PendingRequest
             collectionDescription: Arr::get($nft, 'contractMetadata.openSea.description'),
             collectionSocials: $socials,
             collectionSupply: $supply,
-            collectionBannerImageUrl: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl'),
+            collectionBannerImageUrl: $bannerImageUrl,
+            collectionBannerUpdatedAt: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl') ? Carbon::now() : null,
             name: $this->getNftName($nft),
             description: $description,
             extraAttributes: $this->getNftExtraAttributes($nft),
