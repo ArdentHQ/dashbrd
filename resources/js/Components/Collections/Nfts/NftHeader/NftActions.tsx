@@ -19,7 +19,7 @@ interface Properties {
     reportReasons?: Record<string, string>;
 }
 
-const NftActions = ({
+export const NftActions = ({
     addTestIds = false,
     alreadyReported = false,
     className,
@@ -141,5 +141,3 @@ const NftActions = ({
         </div>
     );
 };
-
-export default NftActions;
