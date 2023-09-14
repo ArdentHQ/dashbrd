@@ -31,7 +31,7 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
                 <ButtonLink
                     href={url}
                     icon="ChevronLeftSmall"
-                    iconSize="sm"
+                    iconSize="xs"
                     variant="icon"
                     className="hidden lg:flex"
                     data-testid="NftBackButton__urlMobile"
