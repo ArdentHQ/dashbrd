@@ -11,6 +11,8 @@ import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Report } from "@/Components/Report";
 import { Tooltip } from "@/Components/Tooltip";
 import { ZoomDialog } from "@/Components/ZoomDialog";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
 import { useToasts } from "@/Hooks/useToasts";
 
 interface Properties {
@@ -33,10 +35,18 @@ export const NftImage = ({
     const { showToast } = useToasts();
     const [isRefreshing, setIsRefreshing] = useState(false);
 
+    const { authenticated } = useAuth();
+    const { showConnectOverlay } = useMetaMaskContext();
+
     const { large: largeImage, original, originalRaw } = nft.images;
     const originalNftImage = original ?? originalRaw ?? largeImage;
 
     const handleRefresh = async (): Promise<void> => {
+        if (!authenticated) {
+            showConnectOverlay();
+            return;
+        }
+
         setIsRefreshing(true);
 
         await axios.post<{ success: boolean }>(

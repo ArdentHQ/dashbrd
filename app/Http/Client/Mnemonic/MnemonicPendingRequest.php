@@ -10,6 +10,7 @@ use App\Data\Web3\Web3NftTransfer;
 use App\Enums\Chains;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\CurrencyCode;
+use App\Enums\ImageSize;
 use App\Enums\MnemonicChain;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
@@ -18,6 +19,7 @@ use App\Exceptions\RateLimitException;
 use App\Models\Token;
 use App\Models\TokenPriceHistory;
 use App\Support\CryptoUtils;
+use App\Support\NftImageUrl;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
@@ -209,7 +211,7 @@ class MnemonicPendingRequest extends PendingRequest
 
         // The image from `TYPE_ORIGINAL_BANNER_IMAGE_URL` includes a w= parameter
         // that we can use to store a bigger image in our db.
-        return preg_replace('/(?<=\?|&)w=(\d+)/', 'w=1378', $image);
+        return NftImageUrl::get($image, ImageSize::Banner);
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getownerscount
