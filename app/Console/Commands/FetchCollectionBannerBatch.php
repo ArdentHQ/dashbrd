@@ -54,9 +54,7 @@ class FetchCollectionBannerBatch extends Command
                         'collection_addresses' => $addresses,
                     ]);
 
-                    if ($collections->isNotEmpty()) {
-                        FetchCollectionBannerBatchJob::dispatch($addresses, $network);
-                    }
+                    FetchCollectionBannerBatchJob::dispatch($addresses, $network);
                 });
         });
 
