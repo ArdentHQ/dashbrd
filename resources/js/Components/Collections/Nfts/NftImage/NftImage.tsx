@@ -11,9 +11,9 @@ import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Report } from "@/Components/Report";
 import { Tooltip } from "@/Components/Tooltip";
 import { ZoomDialog } from "@/Components/ZoomDialog";
-import { useToasts } from "@/Hooks/useToasts";
-import { useAuth } from "@/Hooks/useAuth";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
+import { useToasts } from "@/Hooks/useToasts";
 
 interface Properties {
     nft: App.Data.Nfts.NftData;
