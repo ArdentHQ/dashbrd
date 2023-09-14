@@ -128,7 +128,7 @@ class Web3NftHandler
     /**
      * Take the collection of NFTs and pluck out the collection data for every collection.
      *
-     * @param Collection<int, Web3NftData> $nfts
+     * @param  Collection<int, Web3NftData>  $nfts
      * @return Collection<int, mixed[]>
      */
     private function getCollections(Collection $nfts): Collection
