@@ -22,10 +22,9 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
                 <ButtonLink
                     href={url}
                     icon="ChevronLeftSmall"
-                    iconSize="xs"
+                    iconSize="2xs"
                     variant="icon"
                     className="h-6 w-6 lg:hidden"
-                    iconClass="w-2 h-2"
                     data-testid="NftBackButton__urlDesktop"
                 />
 

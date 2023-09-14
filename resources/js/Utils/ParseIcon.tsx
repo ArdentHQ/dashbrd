@@ -14,6 +14,9 @@ interface IconDimensions {
 
 const getDimensions = (size: Properties["size"] = "sm"): IconDimensions => {
     const sizeMap: Record<string, IconDimensions> = {
+        "2xs": {
+            className: "h-2 w-2",
+        },
         xs: {
             className: "h-3 w-3",
         },
