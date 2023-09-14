@@ -57,9 +57,8 @@ class FetchNativeBalances extends Command
 
         Wallet::query()
             ->select(['id', 'address'])
-            ->whereIn('id', [3, 1])
-//            ->when($onlyOnline, fn ($query) => $query->online())
-//            ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
+            ->when($onlyOnline, fn ($query) => $query->online())
+            ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
             ->chunkById(100, function ($wallets) use ($networks) {
                 $networks
                     ->each(fn ($network) => FetchNativeBalancesJob::dispatch($wallets, $network)

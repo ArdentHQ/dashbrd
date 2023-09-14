@@ -28,6 +28,10 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 
     public Collection $wallets;
 
+    /**
+     * @param  Collection<int, Wallet>|Wallet  $wallets
+     * @param  Network  $network
+     */
     public function __construct(
         Collection|Wallet $wallets,
         public Network $network,
@@ -39,7 +43,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
     {
         Log::info("Processing FetchNativeBalances job", [
             'network_id' => $this->network->id,
-            'wallet_ids' => $this->wallets,
+            'wallet_ids' => $this->wallets->pluck('id')->toArray(),
         ]);
 
         $nativeToken = $this->network->nativeToken()->firstOrFail();
