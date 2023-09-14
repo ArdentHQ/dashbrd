@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import { NftBasicInfo } from "./NftBasicInfo";
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
@@ -23,6 +24,23 @@ describe("NftBasicInfo", () => {
 
         expect(screen.getByTestId("NftHeader__collectionImage")).toBeInTheDocument();
         expect(screen.getByTestId("NftHeader__collectionName")).toBeInTheDocument();
+    });
+
+    it("should render url to collection page", () => {
+        const collection = new NFTCollectionFactory().create();
+
+        const nft = new NftFactory().create({
+            collection,
+        });
+
+        render(<NftBasicInfo nft={nft} />);
+
+        const function_ = vi.fn();
+        const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
+
+        screen.getByTestId("NftHeader__collectionName").click();
+
+        expect(routerSpy).toBeCalledTimes(1);
     });
 
     it("should render nft name if available", () => {

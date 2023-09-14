@@ -208,4 +208,21 @@ describe("Nftactions", () => {
             "_blank",
         );
     });
+
+    it("should not render test ids", () => {
+        const nft = new NftFactory().create({
+            images: new NftImagesDataFactory().withValues().create(),
+        });
+
+        render(
+            <NftActions
+                nft={nft}
+                addTestIds={false}
+                alreadyReported={false}
+                reportAvailableIn={null}
+            />,
+        );
+
+        expect(screen.queryByTestId("NftActions__container")).not.toBeInTheDocument();
+    });
 });
