@@ -1,5 +1,3 @@
-import { fireEvent } from "@testing-library/dom";
-import { saveAs } from "file-saver";
 import React from "react";
 import { NftImage } from "./NftImage";
 import { NftHeader } from "@/Components/Collections/Nfts/NftHeader";
@@ -9,7 +7,6 @@ import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { act, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
-import { Breakpoint } from "@/Tests/utils";
 
 vi.mock("file-saver", () => ({
     saveAs: vi.fn(),
@@ -46,9 +43,6 @@ describe("NftImage", () => {
 
         render(<NftImage nft={nft} />);
 
-        expect(screen.getByTestId("NftImage__zoomModal")).toBeInTheDocument();
-        expect(screen.getByTestId("NftImage__saveAs")).toBeInTheDocument();
-
         act(() => {
             image.onload?.(new Event(""));
         });
@@ -58,35 +52,11 @@ describe("NftImage", () => {
         });
     });
 
-    it("should use originalRaw image if original image is missing", async () => {
-        const images = new NftImagesDataFactory().withValues().create({
-            original: null,
-        });
-
-        const nft = new NftFactory().create({
-            name: "Anakin Skywalker",
-            images,
-        });
-
-        render(<NftImage nft={nft} />);
-
-        await userEvent.click(screen.getByTestId("NftImage__zoomModal"));
-
-        act(() => {
-            image.onload?.(new Event(""));
-        });
-
-        expect(screen.getByTestId("NftImage__zoomImage")).toBeInTheDocument();
-        expect(screen.getByTestId("NftImage__zoomImage").getAttribute("src")).toBe(images.originalRaw);
-
-        fireEvent.click(screen.getByTestId("NftImage__saveAs"));
-        expect(saveAs).toHaveBeenCalledWith(images.originalRaw, nft.name);
-    });
-
     it("should use large image if both original and originalRaw are missing", async () => {
         const images = new NftImagesDataFactory().withValues().create({
             original: null,
             originalRaw: null,
+            large: "https://example.com/largeImage",
         });
 
         const nft = new NftFactory().create({
@@ -96,28 +66,14 @@ describe("NftImage", () => {
 
         render(<NftImage nft={nft} />);
 
-        await userEvent.click(screen.getByTestId("NftImage__zoomModal"));
-
         act(() => {
             image.onload?.(new Event(""));
         });
 
-        expect(screen.getByTestId("NftImage__zoomImage")).toBeInTheDocument();
-        expect(screen.getByTestId("NftImage__zoomImage").getAttribute("src")).toBe(images.large);
-
-        fireEvent.click(screen.getByTestId("NftImage__saveAs"));
-        expect(saveAs).toHaveBeenCalledWith(images.large, nft.name);
-    });
-
-    it("disables the buttons if no images", () => {
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withoutValues().create(),
+        await waitFor(() => {
+            expect(screen.getByTestId("NftImage__image")).toBeInTheDocument();
+            expect(screen.getByTestId("NftImage__image")).toHaveAttribute("src", images.large);
         });
-
-        render(<NftImage nft={nft} />);
-
-        expect(screen.getByTestId("NftImage__zoomModal")).toBeDisabled();
-        expect(screen.getByTestId("NftImage__saveAs")).toBeDisabled();
     });
 
     it("hide image if no images", () => {
@@ -130,92 +86,23 @@ describe("NftImage", () => {
         expect(screen.queryByTestId("NftImage__image")).not.toBeInTheDocument();
     });
 
-    it("show/hide zoom modal", async () => {
+    it("should open image in new tab on click", async () => {
         const nft = new NftFactory().create({
             images: new NftImagesDataFactory().withValues().create(),
-        });
-
-        render(<NftImage nft={nft} />);
-
-        await userEvent.click(screen.getByTestId("NftImage__zoomModal"));
-        expect(screen.getByTestId("ZoomDialog")).toBeInTheDocument();
-
-        await userEvent.click(screen.getByTestId("ZoomDialog__close"));
-        expect(screen.queryByTestId("ZoomDialog")).not.toBeInTheDocument();
-    });
-
-    it("download image", () => {
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withValues().create(),
-        });
-
-        render(<NftImage nft={nft} />);
-
-        fireEvent.click(screen.getByTestId("NftImage__saveAs"));
-        expect(saveAs).toHaveBeenCalled();
-    });
-
-    it("download image without NFT name", () => {
-        const nft = new NftFactory().create({
-            name: null,
-            images: new NftImagesDataFactory().withValues().create(),
-        });
-
-        render(<NftImage nft={nft} />);
-
-        fireEvent.click(screen.getByTestId("NftImage__saveAs"));
-        expect(saveAs).toHaveBeenCalled();
-    });
-
-    it("should disabled zoom if image fails to load", () => {
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withValues().create({
-                large: "@!##$%%%%$@#",
-            }),
         });
 
         render(<NftImage nft={nft} />);
 
         act(() => {
-            image.onerror?.(new Event(""));
+            image.onload?.(new Event(""));
         });
 
-        expect(screen.getByTestId("NftImage__zoomModal")).toBeDisabled();
-    });
-
-    it("cannot select with click on desktop", () => {
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withValues().create({
-                large: "@!##$%%%%$@#",
-            }),
+        await waitFor(() => {
+            expect(screen.getByTestId("NftImage__image")).toBeInTheDocument();
         });
 
-        render(<NftImage nft={nft} />, {
-            breakpoint: Breakpoint.xl,
-        });
+        await userEvent.click(screen.getByTestId("NftImage__image"));
 
-        expect(screen.getByTestId("GalleryCard__overlay")).toHaveClass("pointer-events-none");
-
-        fireEvent.click(screen.getByTestId("GalleryCard"));
-
-        expect(screen.getByTestId("GalleryCard__overlay")).toHaveClass("pointer-events-none");
-    });
-
-    it("cannot select on mobile", () => {
-        const nft = new NftFactory().create({
-            images: new NftImagesDataFactory().withValues().create({
-                large: "@!##$%%%%$@#",
-            }),
-        });
-
-        render(<NftImage nft={nft} />, {
-            breakpoint: Breakpoint.sm,
-        });
-
-        expect(screen.getByTestId("GalleryCard__overlay")).toHaveClass("pointer-events-none");
-
-        fireEvent.click(screen.getByTestId("GalleryCard"));
-
-        expect(screen.getByTestId("GalleryCard__overlay")).toHaveClass("pointer-events-none");
+        expect(window.open).toHaveBeenCalledWith(nft.images.original, "_blank");
     });
 });

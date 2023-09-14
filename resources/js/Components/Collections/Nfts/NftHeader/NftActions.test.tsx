@@ -146,7 +146,6 @@ describe("Nftactions", () => {
 
         await userEvent.click(screen.getByTestId("NftActions__viewOnChain"));
 
-        // Window should open new tab with polygonscan
         expect(window.open).toHaveBeenCalledWith(
             `https://polygonscan.com/token/${collection.address}?a=${nft.tokenNumber}`,
             "_blank",
@@ -174,7 +173,6 @@ describe("Nftactions", () => {
 
         await userEvent.click(screen.getByTestId("NftActions__viewOnChain"));
 
-        // Window should open new tab with etherscan
         expect(window.open).toHaveBeenCalledWith(
             `https://etherscan.io/token/${collection.address}?a=${nft.tokenNumber}`,
             "_blank",
