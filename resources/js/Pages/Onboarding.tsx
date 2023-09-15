@@ -42,10 +42,7 @@ const Onboarding = ({ auth, redirectTo }: Properties): JSX.Element => {
     }, [POLLING_INTERVAL]);
 
     return (
-        <DefaultLayout
-            auth={auth}
-            toastMessage={props.toast}
-        >
+        <DefaultLayout toastMessage={props.toast}>
             <Head title={t("pages.onboarding.title")} />
 
             <div className="mx-6 sm:mx-8 2xl:mx-0">
