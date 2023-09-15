@@ -1,4 +1,3 @@
-import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import { NftBackButton } from "@/Components/Collections/Nfts/NftBackButton";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
@@ -7,7 +6,6 @@ import { NftHeading } from "@/Pages/Collections/Nfts/Components/NftHeading";
 
 interface Properties {
     title: string;
-    auth: PageProps["auth"];
     nft: App.Data.Nfts.NftData;
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
@@ -18,7 +16,6 @@ interface Properties {
 }
 
 const CollectionsNftsView = ({
-    auth,
     title,
     nft,
     reportAvailableIn,
@@ -32,10 +29,7 @@ const CollectionsNftsView = ({
 
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
-            <DefaultLayout
-                auth={auth}
-                toastMessage={props.toast}
-            >
+            <DefaultLayout toastMessage={props.toast}>
                 <Head title={title} />
 
                 <NftBackButton
