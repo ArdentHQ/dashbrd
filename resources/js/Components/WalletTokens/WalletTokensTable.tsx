@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useInViewport } from "react-in-viewport";
 import { type Column, type HeaderGroup, type TableState } from "react-table";
 import { WalletTokensTableItemSkeleton } from "./WalletTokensTableItemSkeleton";
-import { type TokensListSortBy } from "@/Components/PortfolioBreakdown/Hooks/useTokensList";
 import { Table, TableCell, TableRow } from "@/Components/Table";
 import { TokenDetailsSlider } from "@/Components/Tokens/TokenDetailsSlider";
 import {
@@ -18,9 +17,11 @@ import {
     Volume,
 } from "@/Components/WalletTokens/WalletTokensTable.blocks";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { type WalletTokensSortBy } from "@/Hooks/useWalletTokens";
 import { assertUser } from "@/Utils/assertions";
 import { WithLineChartData } from "@/Utils/Hooks/useLineChartData";
 import { isTruthy } from "@/Utils/is-truthy";
+
 const WalletTokensTableItem = ({
     asset,
     currency,
@@ -153,7 +154,7 @@ export const WalletTokensTable = ({
     onReceive?: (asset: App.Data.TokenListItemData) => void;
     onLoadMore?: () => void;
     onSort?: (column: HeaderGroup<App.Data.TokenListItemData>) => void;
-    sortBy?: TokensListSortBy;
+    sortBy?: WalletTokensSortBy;
     sortDirection?: "asc" | "desc";
 }): JSX.Element => {
     const { t } = useTranslation();

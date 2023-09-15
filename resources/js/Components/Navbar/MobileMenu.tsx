@@ -6,12 +6,11 @@ import { Avatar } from "@/Components/Avatar";
 import { Button, IconButton } from "@/Components/Buttons";
 import { ClipboardButton } from "@/Components/Clipboard";
 import { Icon, type IconName } from "@/Components/Icon";
-import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
+import { PortfolioBreakdownLine, usePortfolioBreakdown } from "@/Components/PortfolioBreakdown";
 import { Slider } from "@/Components/Slider";
 import { TokenActions } from "@/Components/Tokens/TokenActions";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
-import { usePortfolioBreakdownContext } from "@/Contexts/PortfolioBreakdownContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
 import { FormatFiat } from "@/Utils/Currency";
 import { formatAddress } from "@/Utils/format-address";
@@ -80,7 +79,7 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                                             setMenuOpen(false);
                                         }}
                                     />
-                                    <PortfolioBreakdown tokenCount={Math.max(wallet.totalTokens, 1)} />
+                                    <PortfolioBreakdown wallet={wallet} />
                                     <Footer address={wallet.address} />
                                 </div>
                             )}
@@ -258,15 +257,16 @@ const TransactionActions = ({
     );
 };
 
-const PortfolioBreakdown = ({ tokenCount }: { tokenCount: number }): JSX.Element => {
+const PortfolioBreakdown = ({ wallet }: { wallet: App.Data.Wallet.WalletData }): JSX.Element => {
     const { t } = useTranslation();
+    const { assets } = usePortfolioBreakdown(wallet);
 
-    const { breakdownAssets } = usePortfolioBreakdownContext();
+    const tokenCount = Math.max(wallet.totalTokens, 1);
 
     return (
         <>
             <div className="mb-4">
-                <PortfolioBreakdownLine assets={breakdownAssets} />
+                <PortfolioBreakdownLine assets={assets} />
 
                 <div className="mt-2 flex items-center justify-between">
                     <p className="text-sm font-medium leading-5.5 text-theme-secondary-700">
