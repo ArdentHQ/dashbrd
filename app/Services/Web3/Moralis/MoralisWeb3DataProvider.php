@@ -29,9 +29,9 @@ final class MoralisWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
-        return Moralis::erc20($wallet, $network);
+        return Moralis::getWalletTokens($wallet, $network);
     }
 
     public function getWalletNfts(

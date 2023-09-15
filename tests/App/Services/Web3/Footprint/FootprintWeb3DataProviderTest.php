@@ -37,9 +37,16 @@ it('should throw NotImplementedException for methods that require wallet and net
 })
 ->throws(NotImplementedException::class)
 ->with([
-    'getWalletTokens',
     'getWalletNfts',
 ]);
+
+it('should getWalletTokens and throw NotImplementedException', function () {
+    $network = Network::polygon()->firstOrFail();
+
+    $provider = new FootprintWeb3DataProvider();
+
+    $provider->getWalletTokens(Wallet::factory()->create(), $network);
+})->throws(NotImplementedException::class);
 
 it('should getBlockTimestamp and throw NotImplementedException', function () {
     $network = Network::polygon()->firstOrFail();

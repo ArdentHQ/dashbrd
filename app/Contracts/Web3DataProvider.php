@@ -21,7 +21,7 @@ interface Web3DataProvider
     /**
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection;
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection;
 
     public function getWalletNfts(
         WalletData $wallet,

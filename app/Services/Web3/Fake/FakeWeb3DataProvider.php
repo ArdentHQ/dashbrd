@@ -37,7 +37,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
         $tokens = Token::where('network_id', $network->id)->get();
 

@@ -16,10 +16,10 @@ it('should throw a connection exception on server errors', function () {
         'https://polygon-mainnet.g.alchemy.com/v2/*' => Http::response(null, 500),
     ]);
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    Alchemy::erc20($walletData, $networkData);
+    Alchemy::getWalletTokens($wallet, $network);
 })->throws(ConnectionException::class);
 
 it('should throw a custom exception on 429 status code', function () {
@@ -27,10 +27,10 @@ it('should throw a custom exception on 429 status code', function () {
         'https://polygon-mainnet.g.alchemy.com/v2/*' => Http::response(null, 429),
     ]);
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    Alchemy::erc20($walletData, $networkData);
+    Alchemy::getWalletTokens($wallet, $network);
 })->throws(RateLimitException::class);
 
 it('should not retry request on 400', function () {
@@ -40,10 +40,10 @@ it('should not retry request on 400', function () {
             ->push(fixtureData('alchemy.erc20'), 200),
     ]);
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    expect(fn () => Alchemy::erc20($walletData, $networkData))->toThrow('400 Bad Request');
+    expect(fn () => Alchemy::getWalletTokens($wallet, $network))->toThrow('400 Bad Request');
 });
 
 it('should handle arrays in NFT descriptions', function () {

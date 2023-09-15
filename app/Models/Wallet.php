@@ -171,7 +171,6 @@ class Wallet extends Model
     public function dispatchIndexingJobs(Network $network, ?bool $onPriorityQueue = false): void
     {
         $networkData = NetworkData::fromModel($network);
-        $walletData = WalletData::from($this);
 
         FetchEnsDetails::dispatch($this)
             ->afterCommit()
@@ -181,7 +180,7 @@ class Wallet extends Model
             ->afterCommit()
             ->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::DEFAULT);
 
-        FetchTokens::dispatch($walletData, $networkData)
+        FetchTokens::dispatch($this, $network)
             ->afterCommit()
             ->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::DEFAULT);
 

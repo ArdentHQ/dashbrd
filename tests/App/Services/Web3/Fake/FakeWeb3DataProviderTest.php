@@ -18,15 +18,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 it('should getWalletTokens', function () {
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $dbTokens = Token::factory(5)->create(['network_id' => $networkData->id]);
+    $dbTokens = Token::factory(5)->create(['network_id' => $network->id]);
 
-    $wallet = WalletData::from(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new FakeWeb3DataProvider();
 
-    $tokens = $provider->getWalletTokens($wallet, $networkData);
+    $tokens = $provider->getWalletTokens($wallet, $network);
     expect($tokens->count())->toEqual(count($dbTokens));
     $tokens->each(function ($token) {
         expect($token)->toBeInstanceOf(Web3Erc20TokenData::class);

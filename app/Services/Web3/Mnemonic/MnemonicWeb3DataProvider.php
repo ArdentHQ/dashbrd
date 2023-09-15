@@ -25,7 +25,7 @@ final class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
 {
     use LoadsFromCache;
 
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
         throw new NotImplementedException();
     }

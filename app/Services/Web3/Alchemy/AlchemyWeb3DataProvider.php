@@ -27,9 +27,9 @@ final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
-        return Alchemy::erc20($wallet, $network);
+        return Alchemy::getWalletTokens($wallet, $network);
     }
 
     public function getWalletNfts(

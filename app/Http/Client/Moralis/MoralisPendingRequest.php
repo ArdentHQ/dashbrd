@@ -89,9 +89,9 @@ class MoralisPendingRequest extends PendingRequest
      * } $query
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function erc20(WalletData $wallet, NetworkData $network, array $query = []): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network, array $query = []): Collection
     {
-        $chain = MoralisChain::fromChainId($network->chainId);
+        $chain = MoralisChain::fromChainId($network->chain_id);
 
         /** @var array<int, array{
          *  token_address: string,

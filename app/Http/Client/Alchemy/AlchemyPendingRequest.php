@@ -112,9 +112,9 @@ class AlchemyPendingRequest extends PendingRequest
      *
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function erc20(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
-        $this->chain = AlchemyChain::fromChainId($network->chainId);
+        $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
         $allTokens = collect();
         $allTokenBalances = collect();

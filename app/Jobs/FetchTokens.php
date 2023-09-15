@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Balance;
+use App\Models\Network;
 use App\Models\Token;
 use App\Models\Wallet;
 use Carbon\Carbon;
@@ -31,8 +30,8 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public WalletData $wallet,
-        public NetworkData $network,
+        public Wallet $wallet,
+        public Network $network,
     ) {
     }
 
@@ -54,8 +53,6 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
                 'decimals' => $token->decimals ?? 0,
             ];
         });
-
-        $wallet = Wallet::find($this->wallet->id);
 
         $tokens = DB::transaction(function () use ($tokens, $params) {
             $dbTokens = Collection::make($params->map(fn ($record) => Token::updateOrCreate([
@@ -84,7 +81,7 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
 
         // Delete balances that are not in the list of tokens and are not native
         // tokens (which are handled on the `FetchNativeTokens` job)
-        $wallet->balances()
+        $this->wallet->balances()
             ->whereHas('token', fn ($query) => $query
                     ->where('network_id', $this->network->id)
                     ->whereNotIn('id', $tokens->pluck('id'))
@@ -94,7 +91,7 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
             ->whereDoesntHave('token', fn ($query) => $query->nativeToken())
             ->delete();
 
-        $this->storeLastFetchedDate($wallet);
+        $this->storeLastFetchedDate($this->wallet);
     }
 
     private function storeLastFetchedDate(Wallet $wallet): void
@@ -105,7 +102,7 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->wallet->id.':'.$this->network->chainId;
+        return self::class.':'.$this->wallet->id.':'.$this->network->chain_id;
     }
 
     public function retryUntil(): DateTime
