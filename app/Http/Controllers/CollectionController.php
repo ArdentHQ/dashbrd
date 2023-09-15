@@ -213,7 +213,7 @@ class CollectionController extends Controller
         ])->withViewData([
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
             'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),
-            'image' => trans('metatags.collections.view.image')
+            'image' => trans('metatags.collections.view.image'),
         ]);
     }
 

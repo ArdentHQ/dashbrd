@@ -47,7 +47,7 @@ class NftController extends Controller
         ])->withViewData([
             'title' => trans('metatags.nfts.view.title', ['nft' => $nft->name ?? $nft->token_number]),
             'description' => trans('metatags.nfts.view.description', ['nft' => $nft->name ?? $nft->token_number, 'collection' => $collection->name]),
-            'image' => trans('metatags.nfts.view.image')
+            'image' => trans('metatags.nfts.view.image'),
         ]);
     }
 
