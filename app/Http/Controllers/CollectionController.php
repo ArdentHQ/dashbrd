@@ -209,6 +209,11 @@ class CollectionController extends Controller
             'sortByMintDate' => $sortByMintDate,
             'nativeToken' => TokenData::fromModel($nativeToken),
             'allowsGuests' => true,
+            'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
+        ])->withViewData([
+            'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
+            'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),
+            'image' => trans('metatags.collections.view.image')
         ]);
     }
 
