@@ -4,12 +4,11 @@ import { useTranslation } from "react-i18next";
 import { ErrorBlock, type ErrorBlockProperties } from "@/Components/ErrorBlock";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
-const Error = ({ auth, contactEmail, statusCode }: ErrorBlockProperties & PageProps): JSX.Element => {
+const Error = ({ contactEmail, statusCode }: ErrorBlockProperties & PageProps): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <DefaultLayout
-            auth={auth}
             wrapperClassName="flex-1 flex items-center justify-center mx-6 sm:mx-8 2xl:mx-0"
             isMaintenanceModeActive={statusCode === 503}
         >

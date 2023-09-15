@@ -95,10 +95,7 @@ const CollectionsIndex = ({
     };
 
     return (
-        <DefaultLayout
-            auth={auth}
-            toastMessage={props.toast}
-        >
+        <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
 
             <div>

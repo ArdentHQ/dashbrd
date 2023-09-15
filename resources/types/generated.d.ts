@@ -418,6 +418,16 @@ declare namespace App.Data.Wallet {
     };
 }
 declare namespace App.Data.Web3 {
+    export type Web3ContractMetadata = {
+        contractAddress: string;
+        collectionName: string;
+        collectionSlug: string;
+        totalSupply: string;
+        imageUrl: string;
+        floorPrice: number;
+        bannerImageUrl: string | null;
+        description: string | null;
+    };
     export type Web3Erc20TokenData = {
         tokenAddress: string;
         networkId: number;

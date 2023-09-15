@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Console\Commands\FetchCoingeckoTokens;
-use App\Console\Commands\FetchCollectionBanner;
+use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionNfts;
 use App\Console\Commands\FetchEnsDetails;
@@ -134,7 +134,7 @@ class Kernel extends ConsoleKernel
 
         // Fetch banners for collections that don't have one yet
         $schedule
-            ->command(FetchCollectionBanner::class, [
+            ->command(FetchCollectionBannerBatch::class, [
                 '--missing-only',
             ])
             ->withoutOverlapping()

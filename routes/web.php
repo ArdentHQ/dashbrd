@@ -16,6 +16,7 @@ use App\Http\Controllers\NftController;
 use App\Http\Controllers\NftReportController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\RefreshCsrfTokenController;
+use App\Http\Controllers\WalletController;
 use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Middleware\RecordGalleryView;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-
 
 Route::middleware('auth')->group(function () {
     Route::get('/get-started', [OnboardingController::class, 'show'])->name('onboarding');
+    Route::get('/wallet-data', WalletController::class)->name('wallet');
 
     // Settings
     Route::get('/settings', [GeneralSettingsController::class, 'edit'])->name('settings.general');

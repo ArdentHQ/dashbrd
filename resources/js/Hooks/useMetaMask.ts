@@ -272,6 +272,19 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
         void initProvider();
 
+        return () => {
+            clearInterval(verifyNetworkInterval);
+        };
+    }, []);
+
+    // Initialize the Web3Provider when the page loads
+    useEffect(() => {
+        if (!initialized || !supportsMetaMask || needsMetaMask) {
+            return;
+        }
+
+        const ethereum = getEthereum();
+
         const accountChangedListener = (accounts: string[]): void => {
             setAccount(accounts.length > 0 ? utils.getAddress(accounts[0]) : undefined);
 
@@ -311,10 +324,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             ethereum.removeListener("chainChanged", chainChangedListener);
             ethereum.removeListener("connect", connectListener);
             ethereum.removeListener("disconnect", disconnectListener);
-
-            clearInterval(verifyNetworkInterval);
         };
-    }, []);
+    }, [initialized]);
 
     const requestChainAndAccount = useCallback(async () => {
         try {
