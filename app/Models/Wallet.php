@@ -185,7 +185,7 @@ class Wallet extends Model
             ->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::DEFAULT);
 
         $batch = Bus::batch([
-            (new FetchUserNfts($this->user_id, $networkData))->afterCommit(),
+            (new FetchUserNfts($this->user_id, $network))->afterCommit(),
         ]);
 
         $batch->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::NFTS);

@@ -34,16 +34,16 @@ it('should getWalletTokens', function () {
 });
 
 it('should getWalletNfts', function () {
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $collection = Collection::factory()->create(['network_id' => $networkData->id]);
+    $collection = Collection::factory()->create(['network_id' => $network->id]);
     $dbNfts = Nft::factory(5)->create(['collection_id' => $collection->id]);
 
-    $wallet = WalletData::from(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new FakeWeb3DataProvider();
 
-    $nfts = $provider->getWalletNfts($wallet, $networkData)->nfts;
+    $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
     expect($nfts->count())->toEqual(count($dbNfts));
     $nfts->each(function ($nft) {
         expect($nft)

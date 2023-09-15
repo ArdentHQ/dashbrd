@@ -52,10 +52,10 @@ it('should handle arrays in NFT descriptions', function () {
             ->push(fixtureData('alchemy.nfts_array_description'), 200),
     ]);
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    expect(Alchemy::walletNfts($walletData, $networkData)->nfts[0]->description)->toBeString();
+    expect(Alchemy::getWalletNfts($wallet, $network)->nfts[0]->description)->toBeString();
 });
 
 it('should increment default size for banner image if it is not null in parseNft', function () {
@@ -64,10 +64,10 @@ it('should increment default size for banner image if it is not null in parseNft
             ->push(fixtureData('alchemy.nfts_array_description_with_banner'), 200),
     ]);
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    $collection = Alchemy::walletNfts($walletData, $networkData);
+    $collection = Alchemy::getWalletNfts($wallet, $network);
 
     expect($collection->nfts[0]->collectionBannerImageUrl)->toContain('w=1378');
 });

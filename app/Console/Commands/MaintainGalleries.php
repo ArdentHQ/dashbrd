@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Data\NetworkData;
 use App\Jobs\FetchUserNfts;
 use App\Models\Gallery;
 use App\Models\Network;
@@ -61,9 +60,7 @@ class MaintainGalleries extends Command
     private function handleUser(int $userId, Collection $networks): void
     {
         $networks->each(function ($network) use ($userId) {
-            $networkData = NetworkData::from($network);
-
-            FetchUserNfts::dispatch($userId, $networkData)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
+            FetchUserNfts::dispatch($userId, $network)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
         });
     }
 }

@@ -23,11 +23,7 @@ interface Web3DataProvider
      */
     public function getWalletTokens(Wallet $wallet, Network $network): Collection;
 
-    public function getWalletNfts(
-        WalletData $wallet,
-        NetworkData $network,
-        ?string $cursor
-    ): Web3NftsChunk;
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor): Web3NftsChunk;
 
     public function getCollectionsNfts(CollectionModel $collection, ?string $startToken): Web3NftsChunk;
 

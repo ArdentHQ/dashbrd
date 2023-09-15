@@ -21,8 +21,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 /**
- * @method static Collection<int, Web3Erc20TokenData> getWalletTokens(Wallet $wallet, Network $network) $query = [])
- * @method static Web3NftsChunk walletNfts(WalletData $wallet, NetworkData $network, ?string $cursor = null, ?int $limit = null) $query = [])
+ * @method static Collection<int, Web3Erc20TokenData> erc20(WalletData $wallet, NetworkData $network) $query = [])
+ * @method static Web3NftsChunk getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null, ?int $limit = null) $query = [])
  * @method static Web3NftsChunk collectionNfts(CollectionModel $collection, ?string $startToken = null, ?int $limit = null)
  * @method static array collectionNftsRaw(CollectionModel $collection, ?string $startToken = null)
  * @method static array<string> getSpamContracts(Network $network)
