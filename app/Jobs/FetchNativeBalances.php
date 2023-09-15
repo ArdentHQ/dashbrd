@@ -81,19 +81,18 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
             'data' => $balancesToInsert->map(fn ($balance) => collect($balance)->only(['wallet_id', 'balance'])),
         ]);
 
-        DB::transaction(function () use ($balancesToInsert) {
+        DB::transaction(function () use ($balancesToInsert, $walletsToUpdate) {
             Balance::query()->upsert(
                 $balancesToInsert->toArray(),
                 ['wallet_id', 'token_id'],
                 ['balance', 'updated_at']
             );
-        });
 
-        $walletsToUpdate->map(function ($wallet) {
-            $wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
-            $wallet->save();
+            $walletsToUpdate->map(function ($wallet) {
+                $wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
+                $wallet->save();
+            });
         });
-
     }
 
     public function uniqueId(): string
