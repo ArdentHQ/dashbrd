@@ -20,7 +20,7 @@ import NetworkFeesFixture from "@/Tests/Fixtures/network_fees.json";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { render, screen, TestProviders, userEvent } from "@/Tests/testing-library";
 
 const asset = new TokenListItemDataFactory().create({
     symbol: "BRDY",
@@ -158,10 +158,12 @@ describe("TransactionFormSlider", () => {
         expect(screen.getByTestId("SliderFormActionsToolbar__cancel")).toHaveTextContent("Back");
 
         rerender(
-            <TransactionFormSlider
-                {...properties}
-                asset={undefined}
-            />,
+            <TestProviders>
+                <TransactionFormSlider
+                    {...properties}
+                    asset={undefined}
+                />
+            </TestProviders>,
         );
 
         await userEvent.click(screen.getByTestId("TransactionFormSliderHeader__tab2"));
@@ -240,21 +242,25 @@ describe("TransactionSendForm", () => {
         expect(screen.getByTestId("Transaction__InitiationStep")).toBeInTheDocument();
 
         rerender(
-            <TransactionSendForm
-                {...properties}
-                step={SendTransactionStep.Execution}
-                setStep={setStepMock}
-            />,
+            <TestProviders>
+                <TransactionSendForm
+                    {...properties}
+                    step={SendTransactionStep.Execution}
+                    setStep={setStepMock}
+                />
+            </TestProviders>,
         );
 
         expect(screen.getByTestId("Transaction__ExecutionStep")).toBeInTheDocument();
 
         rerender(
-            <TransactionSendForm
-                {...properties}
-                step={SendTransactionStep.Result}
-                setStep={setStepMock}
-            />,
+            <TestProviders>
+                <TransactionSendForm
+                    {...properties}
+                    step={SendTransactionStep.Result}
+                    setStep={setStepMock}
+                />
+            </TestProviders>,
         );
 
         expect(await screen.findByTestId("Transaction__ResultStep")).toBeInTheDocument();

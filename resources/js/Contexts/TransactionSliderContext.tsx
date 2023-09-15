@@ -1,6 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import TokenListItemData = App.Data.TokenListItemData;
-import { useTokensList } from "@/Components/PortfolioBreakdown/Hooks/useTokensList";
 import { type TransactionDirection, TransactionFormSlider } from "@/Components/TransactionFormSlider";
 import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import {
@@ -8,6 +7,7 @@ import {
     type TransactionRecord,
     useTransactionStatusMonitor,
 } from "@/Hooks/useTransactionStatusMonitor";
+import { useWalletTokens } from "@/Hooks/useWalletTokens";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export interface TransactionSliderState {
@@ -36,17 +36,9 @@ export const TransactionSliderProvider = ({ children }: { children: React.ReactN
 
     const [transactionAsset, setTransactionAsset] = useState<App.Data.TokenListItemData | undefined>();
 
-    const { tokens, loadTokens } = useTokensList();
-
-    const { authenticated, wallet, user } = useActiveUser();
-
+    const { wallet, user } = useActiveUser();
     const { registerTransaction, lastTransaction } = useTransactionStatusMonitor();
-
-    useEffect(() => {
-        if (authenticated === true) {
-            void loadTokens();
-        }
-    }, [authenticated]);
+    const { tokens } = useWalletTokens(wallet);
 
     return (
         <TransactionSliderContext.Provider
