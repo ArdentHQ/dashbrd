@@ -192,6 +192,8 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 onFinish: () => {
                     setSwitching(false);
 
+                    setSigned(false);
+
                     resolve();
                 },
             });
