@@ -55,6 +55,19 @@ return [
 
     'collections' => [
         'title' => 'Collections | Dashbrd',
+        'view' => [
+            'title' => ':name Collection | Dashbrd',
+            'description' => 'Immerse yourself in the intricate details of :name collection, featuring remarkable digital assets. Start your NFT journey today!',
+            'image' => '/images/meta/nft-collection.png',
+        ],
+    ],
+
+    'nfts' => [
+        'view' => [
+            'title' => ':nft NFT | Dashbrd',
+            'description' => 'Uncover the complete story of :nft NFT from the :collection collection, delving into its unique attributes and distinctive features.',
+            'image' => '/images/meta/nft-details.png',
+        ],
     ],
 
     'settings' => [
