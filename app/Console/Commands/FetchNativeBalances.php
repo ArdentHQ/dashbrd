@@ -60,7 +60,7 @@ class FetchNativeBalances extends Command
             ->select(['id', 'address'])
             ->when($onlyOnline, fn ($query) => $query->online())
             ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
-            ->chunkById(100, function ($wallets) use ($networks) {
+            ->chunkById(25, function ($wallets) use ($networks) {
                 $this->process($wallets, $networks);
             });
     }
