@@ -13,10 +13,10 @@ export const PageInput = ({
     const { t } = useTranslation();
 
     return (
-        <div className="flex items-center space-x-1">
+        <div className="mt-3 flex items-center space-x-1 px-3">
             <form
                 onSubmit={onSubmit}
-                className="relative flex w-60"
+                className="relative flex w-full"
                 data-testid="Pagination__PageInput__form"
             >
                 <input

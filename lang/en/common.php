@@ -14,6 +14,7 @@ return [
     'continue' => 'Continue',
     'done' => 'Done',
     'filter' => 'Filter',
+    'items' => 'Items',
     'receive' => 'Receive',
     'received' => 'Received',
     'retry' => 'Retry',

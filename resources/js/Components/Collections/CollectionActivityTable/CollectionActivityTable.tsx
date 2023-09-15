@@ -157,6 +157,7 @@ export const CollectionActivityTable = ({
                                 onChange={({ value }) => {
                                     onPageLimitChange(Number(value));
                                 }}
+                                suffix={t("common.records")}
                             />
                             {activities.paginated.meta.last_page > 1 && <Pagination data={activities.paginated} />}
                         </div>
@@ -179,6 +180,7 @@ export const CollectionActivityTable = ({
                                               onChange={({ value }) => {
                                                   onPageLimitChange(Number(value));
                                               }}
+                                              suffix={t("common.records")}
                                           />
 
                                           {activities.paginated.meta.last_page > 1 && (

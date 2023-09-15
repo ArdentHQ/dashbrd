@@ -8,17 +8,19 @@ export const SelectPageLimit = ({
     value = 10,
     onChange,
     options = defaultOptions,
+    suffix,
 }: {
     value?: string | number;
     options?: Array<string | number>;
     onChange?: ({ value, url }: { value: string | number; url: string }) => void;
+    suffix: string;
 }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <Listbox
-            className="w-full sm:w-40 md:w-[13.5rem]"
-            optionsClassName="right-0 w-full sm :w-40 bottom-14"
+            className="w-full xs:w-[12rem] sm:flex sm:justify-between"
+            optionsClassName="right-0 w-full xs:w-16 bottom-16 rounded-xl"
             onChange={(value) => {
                 const urlParameters = new URLSearchParams(window.location.href);
                 urlParameters.set(urlParameterKey, String(value));
@@ -33,7 +35,7 @@ export const SelectPageLimit = ({
 
                         <div className="px-4 text-theme-secondary-700">
                             {value}
-                            <span className="sm:hidden md:inline-block">&nbsp;{t("common.records")}</span>
+                            <span className="sm:hidden md:inline-block">&nbsp; {suffix}</span>
                         </div>
                     </div>
                 </Listbox.Button>
@@ -43,6 +45,8 @@ export const SelectPageLimit = ({
                 <Listbox.Option
                     key={key}
                     value={value}
+                    classNames={{ option: "!px-3 justify-center" }}
+                    hasGradient
                 >
                     {value}
                 </Listbox.Option>

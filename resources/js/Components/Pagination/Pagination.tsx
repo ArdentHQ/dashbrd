@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { type FormEvent, useMemo, useState } from "react";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { IconButton } from "@/Components/Buttons/IconButton";
 import { Ellipsis } from "@/Components/Pagination/Ellipsis";
 import { MobileButton } from "@/Components/Pagination/MobileButton";
 import { NextPageLink } from "@/Components/Pagination/NextPageLink";
@@ -67,10 +68,16 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
         return <></>;
     }
 
+    const handleClick = (): void => {
+        setShowInput(true);
+        setPage(data.meta.current_page.toString());
+    };
+
     return (
         <nav
             aria-label="Pagination"
             data-testid="Pagination"
+            className="!m-0 w-full sm:w-fit"
             {...properties}
         >
             {showInput ? (
@@ -86,7 +93,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                 />
             ) : (
                 <>
-                    <div className="hidden items-center space-x-3 sm:flex">
+                    <div className="mt-3 hidden items-center space-x-3 xs:flex sm:mt-0 sm:w-fit">
                         {data.meta.current_page > 1 && (
                             <ButtonLink
                                 href={data.meta.first_page_url}
@@ -147,19 +154,41 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                         )}
                     </div>
 
-                    <div className="sm:hidden">
-                        <div className="flex items-center space-x-3">
+                    <div className="mt-3 px-3 xs:hidden">
+                        <div className="flex w-full flex-col items-center gap-3">
                             <MobileButton
                                 page={pageAsNumber}
                                 totalPages={totalPages}
-                                onClick={() => {
-                                    setShowInput(true);
-                                    setPage(data.meta.current_page.toString());
-                                }}
+                                onClick={handleClick}
                             />
 
-                            {data.meta.prev_page_url !== null && <PreviousPageLink href={data.meta.prev_page_url} />}
-                            {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
+                            <div className="flex w-full flex-row items-center justify-between">
+                                <ButtonLink
+                                    href={data.meta.first_page_url}
+                                    variant="icon"
+                                    icon="DoubleChevronLeftSmall"
+                                    data-testid="Pagination__firstPageLink"
+                                    disabled={data.meta.current_page === 1}
+                                />
+
+                                <PreviousPageLink href={data.meta.prev_page_url} />
+
+                                <IconButton
+                                    icon="MagnifyingGlass"
+                                    data-testid="Pagination__search"
+                                    onClick={handleClick}
+                                />
+
+                                <NextPageLink href={data.meta.next_page_url} />
+
+                                <ButtonLink
+                                    href={data.meta.last_page_url}
+                                    variant="icon"
+                                    icon="DoubleChevronRightSmall"
+                                    data-testid="Pagination__lastPageLink"
+                                    disabled={data.meta.current_page === data.meta.last_page}
+                                />
+                            </div>
                         </div>
                     </div>
                 </>

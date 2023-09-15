@@ -1,10 +1,11 @@
+import { t } from "i18next";
 import React from "react";
 import { SelectPageLimit } from "./SelectPageLimit";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 describe("Pagination__SelectPageLimit", () => {
     it("should render default value", () => {
-        render(<SelectPageLimit />);
+        render(<SelectPageLimit suffix={t("common.records")} />);
 
         expect(screen.getByText("Show")).toBeInTheDocument();
         expect(screen.getByText("10")).toBeInTheDocument();
@@ -16,6 +17,7 @@ describe("Pagination__SelectPageLimit", () => {
             <SelectPageLimit
                 value={20}
                 options={[10, 20]}
+                suffix={t("common.records")}
             />,
         );
 
@@ -27,7 +29,12 @@ describe("Pagination__SelectPageLimit", () => {
     it("should select option", async () => {
         const onChangeMock = vi.fn();
 
-        render(<SelectPageLimit onChange={onChangeMock} />);
+        render(
+            <SelectPageLimit
+                onChange={onChangeMock}
+                suffix={t("common.records")}
+            />,
+        );
 
         expect(screen.getByText("10")).toBeInTheDocument();
 
@@ -41,5 +48,19 @@ describe("Pagination__SelectPageLimit", () => {
 
         expect(screen.queryByTestId("ListboxOption")).not.toBeInTheDocument();
         expect(onChangeMock).toHaveBeenCalledWith(expect.objectContaining({ value: 25 }));
+    });
+
+    it("should render with custom suffix", () => {
+        render(
+            <SelectPageLimit
+                value={20}
+                options={[10, 20]}
+                suffix={t("common.items")}
+            />,
+        );
+
+        expect(screen.getByText("Show")).toBeInTheDocument();
+        expect(screen.getByText("20")).toBeInTheDocument();
+        expect(screen.getByText("items")).toBeInTheDocument();
     });
 });
