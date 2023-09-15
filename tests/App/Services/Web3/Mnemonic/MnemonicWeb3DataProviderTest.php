@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Enums\Chains;
 use App\Exceptions\NotImplementedException;
 use App\Jobs\Middleware\RateLimited;
