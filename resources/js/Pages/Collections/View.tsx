@@ -197,6 +197,24 @@ const CollectionsView = ({
         );
     };
 
+    const renderNoResults = ({
+        hasTraitsFiltered,
+        hasQuery,
+    }: {
+        hasTraitsFiltered: boolean;
+        hasQuery: boolean;
+    }): JSX.Element => {
+        if (hasTraitsFiltered) {
+            return <EmptyBlock>{t("pages.collections.search.no_results_with_filters")}</EmptyBlock>;
+        }
+
+        if (hasQuery) {
+            return <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>;
+        }
+
+        return <EmptyBlock>{t("pages.collections.search.no_results_ownership")}</EmptyBlock>;
+    };
+
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
             <DefaultLayout
@@ -272,8 +290,11 @@ const CollectionsView = ({
                                         </div>
                                     </div>
 
-                                    {nfts.paginated.data.length === 0 && query !== "" ? (
-                                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                                    {nfts.paginated.data.length === 0 ? (
+                                        renderNoResults({
+                                            hasTraitsFiltered: hasSelectedTraits,
+                                            hasQuery: query !== "",
+                                        })
                                     ) : (
                                         <CollectionNftsGrid
                                             nfts={nfts}
