@@ -54,14 +54,10 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 
         $balances = Moralis::getNativeBalances($addresses, $this->network);
 
-        $walletsToUpdate = collect();
-
-        $balancesToInsert = $balances->map(function ($walletBalance) use ($nativeToken, $walletsToUpdate) {
+        $balancesToInsert = $balances->map(function ($walletBalance) use ($nativeToken) {
             $address = Str::lower($walletBalance->address);
 
             $wallet = $this->wallets->first(fn ($wallet) => $address === Str::lower($wallet->address));
-
-            $walletsToUpdate->push($wallet);
 
             return [
                 'wallet_id' => $wallet->id,
@@ -81,14 +77,14 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
             'data' => $balancesToInsert->map(fn ($balance) => collect($balance)->only(['wallet_id', 'balance'])),
         ]);
 
-        DB::transaction(function () use ($balancesToInsert, $walletsToUpdate) {
+        DB::transaction(function () use ($balancesToInsert) {
             Balance::query()->upsert(
                 $balancesToInsert->toArray(),
                 ['wallet_id', 'token_id'],
                 ['balance', 'updated_at']
             );
 
-            $walletsToUpdate->map(function ($wallet) {
+            $this->wallets->map(function ($wallet) {
                 $wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
                 $wallet->save();
             });
