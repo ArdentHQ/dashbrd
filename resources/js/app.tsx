@@ -4,6 +4,7 @@ import "./bootstrap";
 import "../css/app.css";
 
 import { createInertiaApp } from "@inertiajs/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios, { type AxiosError } from "axios";
 import axiosCancel from "axios-cancel";
 import {
@@ -26,7 +27,6 @@ import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
 import { CookieConsent } from "./cookieConsent";
 import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
 import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
-import { PortfolioBreakdownProvider } from "@/Contexts/PortfolioBreakdownContext";
 import { TransactionSliderProvider } from "@/Contexts/TransactionSliderContext";
 import { i18n } from "@/I18n";
 
@@ -57,6 +57,8 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointE
 
 const appName = window.document.querySelector("title")?.innerText ?? "Dashbrd";
 
+const queryClient = new QueryClient();
+
 void createInertiaApp({
     title: (title) => (title !== "" ? title : appName),
 
@@ -66,22 +68,22 @@ void createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <EnvironmentContextProvider
-                environment={props.initialPage.props.environment}
-                features={props.initialPage.props.features}
-            >
-                <I18nextProvider i18n={i18n}>
-                    <ActiveUserContextProvider initialAuth={props.initialPage.props.auth}>
-                        <MetaMaskContextProvider initialAuth={props.initialPage.props.auth}>
-                            <PortfolioBreakdownProvider>
+            <QueryClientProvider client={queryClient}>
+                <EnvironmentContextProvider
+                    environment={props.initialPage.props.environment}
+                    features={props.initialPage.props.features}
+                >
+                    <I18nextProvider i18n={i18n}>
+                        <ActiveUserContextProvider initialAuth={props.initialPage.props.auth}>
+                            <MetaMaskContextProvider initialAuth={props.initialPage.props.auth}>
                                 <TransactionSliderProvider>
                                     <App {...props} />
                                 </TransactionSliderProvider>
-                            </PortfolioBreakdownProvider>
-                        </MetaMaskContextProvider>
-                    </ActiveUserContextProvider>
-                </I18nextProvider>
-            </EnvironmentContextProvider>,
+                            </MetaMaskContextProvider>
+                        </ActiveUserContextProvider>
+                    </I18nextProvider>
+                </EnvironmentContextProvider>
+            </QueryClientProvider>,
         );
     },
     progress: {

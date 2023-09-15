@@ -121,6 +121,7 @@
         "@metamask/providers": "^10.2.1",
         "@popperjs/core": "^2.11.8",
         "@storybook/addon-docs": "^7.1.1",
+        "@tanstack/react-query": "^4.33.0",
         "@testing-library/jest-dom": "^5.17.0",
         "@types/string-hash": "^1.1.1",
         "assert": "^2.0.0",
