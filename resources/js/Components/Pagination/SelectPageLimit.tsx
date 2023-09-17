@@ -45,7 +45,6 @@ export const SelectPageLimit = ({
                 <Listbox.Option
                     key={key}
                     value={value}
-                    classNames={{ option: "!px-3 justify-center" }}
                     hasGradient
                 >
                     {value}

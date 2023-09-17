@@ -57,7 +57,7 @@ export const ListboxOption = ({
         data-testid="ListboxOption"
         className={({ active, selected }: { active: boolean; selected: boolean }) =>
             cn(
-                "transition-default group relative flex h-11 cursor-default select-none items-center px-6 py-3",
+                "transition-default group relative flex h-11 cursor-default select-none items-center justify-center p-3",
                 {
                     "cursor-pointer text-theme-secondary-700 hover:bg-theme-hint-50 hover:text-theme-secondary-900":
                         !selected && isDisabled !== true,
