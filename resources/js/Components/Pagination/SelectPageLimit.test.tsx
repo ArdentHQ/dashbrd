@@ -61,6 +61,6 @@ describe("Pagination__SelectPageLimit", () => {
 
         expect(screen.getByText("Show")).toBeInTheDocument();
         expect(screen.getByText("20")).toBeInTheDocument();
-        expect(screen.getByText("items")).toBeInTheDocument();
+        expect(screen.getByText("Items")).toBeInTheDocument();
     });
 });
