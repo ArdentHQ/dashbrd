@@ -29,6 +29,7 @@ class CollectionFactory extends Factory
             'name' => fn () => fake()->name(),
             'symbol' => fn () => fake()->name(),
             'address' => '0x'.fake()->sha1(), // To imitate an address
+            'supply' => fn () => random_int(5000, 10000),
             'floor_price' => (string) (random_int(50, 1000) * 1e18),
             'floor_price_token_id' => fn () => Token::factory(),
             'floor_price_retrieved_at' => Carbon::now(),
