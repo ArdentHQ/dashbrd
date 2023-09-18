@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('admin')
             ->login()
             ->font('Ubuntu', provider: GoogleFontProvider::class)
+            ->viteTheme("resources/css/filament/admin/theme.css")
             ->favicon(asset('favicon-32x32.png'))
             ->colors([
                 'primary' => [
