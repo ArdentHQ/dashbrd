@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -37,10 +35,10 @@ it('should getWalletTokens', function () {
 
     $network = Network::polygon()->firstOrFail();
 
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
-    $tokens = $provider->getWalletTokens($wallet, NetworkData::from($network));
+    $tokens = $provider->getWalletTokens($wallet, $network);
 
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(5)
@@ -130,7 +128,7 @@ it('should paginate getWalletTokens', function () {
     $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
-    $tokens = $provider->getWalletTokens(WalletData::from($wallet), NetworkData::from($network));
+    $tokens = $provider->getWalletTokens($wallet, $network);
 
     expect($tokens)->toHaveCount(4)
         ->and($tokens->first()->tokenAddress)->toEqual('0x1111111111111111111111111111111111111111')
