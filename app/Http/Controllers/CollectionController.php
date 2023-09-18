@@ -75,6 +75,7 @@ class CollectionController extends Controller
         $defaultSortDirection = $sortBy === null ? 'desc' : 'asc';
 
         $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
+        $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
 
         if ($request->wantsJson()) {
             $searchQuery = $request->get('query');
@@ -114,10 +115,11 @@ class CollectionController extends Controller
                 'reportByCollectionAvailableIn' => $reportByCollectionAvailableIn,
                 'alreadyReportedByCollection' => $alreadyReportedByCollection,
                 'hiddenCollectionAddresses' => $hiddenCollections,
+                'availableNetworks' => $networks,
             ]);
         }
 
-        $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
+
         $selectedChainIds = array_filter($selectedChainIds, fn ($id) => $networks->firstWhere('id', $id) !== null);
 
         return Inertia::render('Collections/Index', [

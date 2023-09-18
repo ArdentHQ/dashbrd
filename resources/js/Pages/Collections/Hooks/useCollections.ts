@@ -25,6 +25,7 @@ interface CollectionsResponse {
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
     hiddenCollectionAddresses: string[];
+    availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
 }
 
 interface CollectionsState {
@@ -44,6 +45,7 @@ interface CollectionsState {
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
     hiddenCollectionAddresses: string[];
+    availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
     search: (searchQuery: string) => void;
     query: string;
     isSearching: boolean;
@@ -74,6 +76,7 @@ export const useCollections = ({
     const [reportByCollectionAvailableIn, setSeportByCollectionAvailableIn] = useState<ReportByCollectionAvailableIn>(
         {},
     );
+    const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
 
     const { headers } = useInertiaHeader();
 
@@ -113,6 +116,7 @@ export const useCollections = ({
         setHiddenCollectionAddresses(data.hiddenCollectionAddresses);
         setAlreadyReportedByCollection(data.alreadyReportedByCollection);
         setSeportByCollectionAvailableIn(data.reportByCollectionAvailableIn);
+        setAvailableNetworks(data.availableNetworks);
 
         if (showHidden && data.hiddenCollectionAddresses.length === 0) {
             replaceUrlQuery({ showHidden: "" });
@@ -189,6 +193,7 @@ export const useCollections = ({
         hiddenCollectionAddresses,
         alreadyReportedByCollection,
         reportByCollectionAvailableIn,
+        availableNetworks,
         search,
         query,
         isSearching,

@@ -34,14 +34,12 @@ const CollectionsIndex = ({
     title,
     sortBy,
     sortDirection,
-    availableNetworks,
 }: {
     title: string;
     auth: PageProps["auth"];
     stats: App.Data.Collections.CollectionStatsData;
     sortBy: string | null;
     sortDirection: "asc" | "desc";
-    availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
 }): JSX.Element => {
     const { props } = usePage();
 
@@ -53,7 +51,7 @@ const CollectionsIndex = ({
     );
 
     const [selectedChainIds, setSelectedChainIds] = useState<number[]>(
-        isTruthy(queryParameters.chain) ? availableNetworks.map((network) => network.chainId) : [],
+        isTruthy(queryParameters.chain) ? queryParameters.chain.split(",").map((chain) => Number(chain)) : [],
     );
 
     const { showToast } = useToasts();
@@ -69,6 +67,7 @@ const CollectionsIndex = ({
         hiddenCollectionAddresses,
         alreadyReportedByCollection,
         reportByCollectionAvailableIn,
+        availableNetworks,
         query,
         search,
         isSearching,
