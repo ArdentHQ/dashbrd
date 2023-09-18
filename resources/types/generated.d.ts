@@ -22,8 +22,8 @@ declare namespace App.Data {
     };
     export type NetworkData = {
         name: string;
-        chainId: number;
         isMainnet: boolean;
+        chainId: number;
         publicRpcProvider: string;
         explorerUrl: string;
     };
@@ -397,6 +397,11 @@ declare namespace App.Data.Wallet {
         default: string | null;
         small: string | null;
         small2x: string | null;
+    };
+    export type WalletBalance = {
+        address: string;
+        balance: string;
+        formattedBalance: string;
     };
     export type WalletData = {
         address: string;

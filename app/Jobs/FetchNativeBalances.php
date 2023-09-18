@@ -6,8 +6,10 @@ namespace App\Jobs;
 
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
+use App\Models\Balance;
 use App\Models\Network;
 use App\Models\Wallet;
+use App\Support\Facades\Moralis;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Bus\Queueable;
@@ -15,43 +17,86 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, WithWeb3DataProvider;
 
+    /**
+     * @var Collection<int, Wallet>
+     */
+    public Collection $wallets;
+
+    /**
+     * @param  Collection<int, Wallet>  $wallets
+     */
     public function __construct(
-        public Wallet $wallet,
+        Collection|Wallet $wallets,
         public Network $network,
     ) {
+        $this->wallets = $wallets instanceof Wallet ? collect([$wallets]) : $wallets;
     }
 
     public function handle(): void
     {
+        Log::info('Processing FetchNativeBalances job', [
+            'network_id' => $this->network->id,
+            'wallet_ids' => $this->wallets->pluck('id')->toArray(),
+        ]);
+
         $nativeToken = $this->network->nativeToken()->firstOrFail();
 
-        $provider = $this->getWeb3DataProvider();
-        $balance = $provider->getNativeBalance($this->wallet, $this->network);
+        $addresses = $this->wallets->pluck('address')->toArray();
 
-        DB::transaction(function () use ($balance, $nativeToken) {
-            DB::table('balances')->upsert([
-                'wallet_id' => $this->wallet->id,
+        $balances = Moralis::getNativeBalances($addresses, $this->network);
+
+        $balancesToInsert = $balances->map(function ($walletBalance) use ($nativeToken) {
+            $address = Str::lower($walletBalance->address);
+
+            $wallet = $this->wallets->first(fn ($wallet) => $address === Str::lower($wallet->address));
+
+            return [
+                'wallet_id' => $wallet->id,
                 'token_id' => $nativeToken->id,
-                'balance' => $balance,
+                'balance' => $walletBalance->balance,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ], ['wallet_id', 'token_id'], ['balance', 'updated_at']);
+            ];
         });
 
-        $this->wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
-        $this->wallet->save();
+        if ($balancesToInsert->isEmpty()) {
+            return;
+        }
+
+        Log::info('Updating native balances', [
+            'network_id' => $this->network->id,
+            'data' => $balancesToInsert->map(fn ($balance) => collect($balance)->only(['wallet_id', 'balance'])),
+        ]);
+
+        DB::transaction(function () use ($balancesToInsert) {
+            Balance::query()->upsert(
+                $balancesToInsert->toArray(),
+                ['wallet_id', 'token_id'],
+                ['balance', 'updated_at']
+            );
+
+            $this->wallets->map(function ($wallet) {
+                $wallet->extra_attributes->set('native_balances_fetched_at', Carbon::now());
+                $wallet->save();
+            });
+        });
     }
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->wallet->id.':'.$this->network->chain_id;
+        $sortedWalletIds = [...$this->wallets->pluck('id')];
+        sort($sortedWalletIds, SORT_NUMERIC);
+
+        return self::class.':'.$this->network->chain_id.':'.implode('-', $sortedWalletIds);
     }
 
     public function retryUntil(): DateTime
