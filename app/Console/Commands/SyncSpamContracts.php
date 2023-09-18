@@ -68,7 +68,7 @@ class SyncSpamContracts extends Command
             $inserted = SpamContract::query()->insertOrIgnore($dataToInsert->toArray());
 
             if ($inserted > 0) {
-                Log::info("Added $inserted Spam Contracts (If not exist already)", [
+                Log::info("Added {$inserted} Spam Contracts (If not exist already)", [
                     'address' => $dataToInsert->pluck('address')->toArray(),
                     'networkId' => $networkId,
                 ]);
