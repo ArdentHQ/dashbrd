@@ -1,21 +1,28 @@
 import { t } from "i18next";
 import { NftActions } from "./NftActions";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
+import * as useAuth from "@/Hooks/useAuth";
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { act, render, screen, userEvent } from "@/Tests/testing-library";
+import { act, fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
 import { ExplorerChains } from "@/Utils/Explorer";
 
 describe("Nftactions", () => {
+    const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
+        callback();
+    });
     const image = new Image();
 
     beforeAll(() => {
         process.env.REACT_APP_IS_UNIT = "false";
         vi.spyOn(window, "Image").mockImplementation(() => image);
-        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...getSampleMetaMaskState(),
+            showConnectOverlay: showConnectOverlayMock,
+        });
     });
 
     afterAll(() => {
@@ -71,6 +78,47 @@ describe("Nftactions", () => {
 
         await userEvent.click(screen.getByTestId("NftActions__refresh"));
         expect(screen.getByTestId("NftActions__refresh")).toBeDisabled();
+    });
+
+    it("should display connect overlay if there is no user", () => {
+        server.use(requestMock(`${BASE_URL}/nft/refresh`, { success: true }, { method: "post" }));
+
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
+        server.use(
+            requestMock(
+                "http://localhost/api",
+                {
+                    success: true,
+                },
+                {
+                    method: "post",
+                },
+            ),
+        );
+
+        const nft = new NftFactory().create({
+            images: new NftImagesDataFactory().withValues().create(),
+        });
+
+        render(
+            <NftActions
+                nft={nft}
+                alreadyReported={false}
+                reportAvailableIn={null}
+            />,
+        );
+
+        fireEvent.click(screen.getByTestId("NftActions__refresh"));
+
+        expect(showConnectOverlayMock).toHaveBeenCalled();
     });
 
     it("should render polygon network icon and tooltip if chain is polygon", async () => {

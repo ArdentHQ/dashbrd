@@ -94,10 +94,10 @@ export const NftActions = ({
 
     const handleClick = (): void => {
         if (authenticated) {
-            handleRefresh();
+            void handleRefresh();
         } else {
             showConnectOverlay(() => {
-                handleRefresh();
+                void handleRefresh();
             });
         }
     };
