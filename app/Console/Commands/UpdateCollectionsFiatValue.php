@@ -34,13 +34,17 @@ class UpdateCollectionsFiatValue extends Command
         User::query()->select('id')->chunkById(50, function (EloquentCollection $users) {
             dispatch(function () use ($users) {
                 User::updateCollectionsValue($users->pluck('id')->toArray());
-            })->onQueue(Queues::SCHEDULED_DEFAULT);
+            })
+                ->delay(now()->addMinutes(20))
+                ->onQueue(Queues::SCHEDULED_DEFAULT);
         });
 
         Collection::query()->select('id')->chunkById(50, function (EloquentCollection $collections) {
             dispatch(function () use ($collections) {
                 Collection::updateFiatValue($collections->pluck('id')->toArray());
-            })->onQueue(Queues::SCHEDULED_DEFAULT);
+            })
+                ->delay(now()->addMinutes(20))
+                ->onQueue(Queues::SCHEDULED_DEFAULT);
         });
 
         return Command::SUCCESS;
