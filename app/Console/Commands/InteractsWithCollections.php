@@ -8,14 +8,17 @@ use App\Models\Collection;
 use App\Models\SpamContract;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Log;
 
 trait InteractsWithCollections
 {
     /**
      * @param  Closure(Collection):void  $callback
      * @param  Closure(Builder<Collection>):Builder<Collection>|null  $queryCallback
+     * @param  Closure(SupportCollection):array|null  $getLogData
      */
-    public function forEachCollection(Closure $callback, Closure $queryCallback = null): void
+    public function forEachCollection(Closure $callback, Closure $queryCallback = null, Closure $getLogData = null): void
     {
         // Apply `$queryCallback` to modify the query before fetching collections...
 
@@ -24,6 +27,10 @@ trait InteractsWithCollections
 
             if (SpamContract::isSpam($collection->address, $collection->network)) {
                 return;
+            }
+
+            if ($getLogData !== null) {
+                Log::info(...$getLogData(collect([$collection])));
             }
 
             $callback($collection);
@@ -37,7 +44,15 @@ trait InteractsWithCollections
             ->withoutSpamContracts()
             ->chunkById(
                 100,
-                static fn ($collections) => $collections->each($callback),
-                'collections.id', 'id');
+                function ($collections) use ($callback, $getLogData) {
+                    if ($getLogData !== null) {
+                        Log::info(...$getLogData($collections));
+                    }
+
+                    $collections->each($callback);
+                },
+                'collections.id',
+                'id'
+            );
     }
 }
