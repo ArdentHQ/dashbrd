@@ -31,7 +31,11 @@ class FetchCollectionNfts extends Command
     public function handle(): int
     {
         $this->forEachCollection(function ($collection) {
-            Job::dispatch($collection, $this->option('start-token') ?? $collection->last_indexed_token_number);
+            Job::dispatch(
+                $collection,
+                startToken: $this->option('start-token') ?? $collection->last_indexed_token_number,
+                skipIfPotentiallyFull: true,
+            );
         });
 
         return Command::SUCCESS;

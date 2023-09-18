@@ -224,3 +224,16 @@ it('updates a max token number when indexing', function () {
     (new FetchCollectionNfts($collection))->handle();
     expect($collection->fresh()->last_indexed_token_number)->toBe('99');
 });
+
+it('skips potentially full collections', function () {
+    Alchemy::fake();
+
+    $collection = Collection::factory()->create([
+        'supply' => 10,
+        'last_indexed_token_number' => 10,
+    ]);
+
+    (new FetchCollectionNfts($collection, startToken: null, skipIfPotentiallyFull: true))->handle();
+
+    Alchemy::assertNothingSent();
+});

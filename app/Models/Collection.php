@@ -417,4 +417,22 @@ class Collection extends Model
 
         return $this->last_viewed_at->gte(now()->subDays(1));
     }
+
+    /**
+     * A collection is only *potentially* full if the total supply matches the last token number that was indexed for the collection.
+     *
+     * Or if the number of NFTs in a collection matches the total supply.
+     */
+    public function isPotentiallyFull(): bool
+    {
+        if ($this->last_indexed_token_number === null || $this->supply === null) {
+            return false;
+        }
+
+        if ((string) $this->supply === (string) $this->last_indexed_token_number) {
+            return true;
+        }
+
+        return $this->supply === $this->nfts()->count();
+    }
 }

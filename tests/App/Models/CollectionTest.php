@@ -902,3 +902,36 @@ it('can determine whether collection was recently viewed', function () {
 
     expect($collection->recentlyViewed())->toBeFalse();
 });
+
+it('can determie whether the collection is potentially full', function () {
+    expect((new Collection([
+        'supply' => null,
+    ]))->isPotentiallyFull())->toBeFalse();
+
+    expect((new Collection([
+        'last_indexed_token_number' => null,
+    ]))->isPotentiallyFull())->toBeFalse();
+
+    expect((new Collection([
+        'supply' => 10,
+        'last_indexed_token_number' => 10,
+    ]))->isPotentiallyFull())->toBeTrue();
+
+    $collection = Collection::factory()->create([
+        'supply' => 10,
+        'last_indexed_token_number' => 5,
+    ]);
+
+    Nft::factory(5)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeFalse();
+
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 5,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+});

@@ -28,7 +28,8 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
      */
     public function __construct(
         public Collection $collection,
-        public ?string $startToken = null
+        public ?string $startToken = null,
+        public bool $skipIfPotentiallyFull = false,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -45,6 +46,10 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 
         // Ignore collections above the supply cap
         if ($this->collection->supply === null || $this->collection->supply > config('dashbrd.collections_max_cap')) {
+            return;
+        }
+
+        if ($this->skipIfPotentiallyFull && $this->collection->isPotentiallyFull()) {
             return;
         }
 
