@@ -38,7 +38,13 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        // Ignore explicitly blacklisted collections
         if (BlacklistedCollections::includes($this->collection->address)) {
+            return;
+        }
+
+        // Ignore collections above the supply cap
+        if ($this->collection->supply === null || $this->collection->supply > config('dashbrd.collections_max_cap')) {
             return;
         }
 
