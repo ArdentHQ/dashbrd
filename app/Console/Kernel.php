@@ -7,6 +7,7 @@ namespace App\Console;
 use App\Console\Commands\FetchCoingeckoTokens;
 use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
+use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
@@ -144,6 +145,11 @@ class Kernel extends ConsoleKernel
             ->command(FetchCollectionNfts::class)
             ->withoutOverlapping()
             ->dailyAt('11:00');
+
+        $schedule
+            ->command(FetchCollectionMetadata::class)
+            ->withoutOverlapping()
+            ->weeklyOn(4); // runs on Thursday
 
         $schedule
             ->command(SyncSpamContracts::class)
