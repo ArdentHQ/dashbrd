@@ -10,7 +10,6 @@ use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
 use App\Models\Nft;
 use App\Models\NftActivity;
-use App\Models\SpamContract;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
