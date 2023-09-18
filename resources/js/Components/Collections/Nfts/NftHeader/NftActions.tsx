@@ -108,7 +108,7 @@ export const NftActions = ({
                             withoutTooltip
                         />
                     }
-                    className="bg-theme-hint-50"
+                    className="bg-transparent"
                     href={getChainLink(nft.collection.chainId, nft.collection.address, nft.tokenNumber)}
                     target="_blank"
                 />
@@ -124,7 +124,7 @@ export const NftActions = ({
             >
                 <IconButton
                     icon="Copy"
-                    className="bg-theme-hint-50"
+                    className="bg-transparent"
                 />
             </Clipboard>
 
@@ -135,7 +135,7 @@ export const NftActions = ({
                 alreadyReported={alreadyReported}
                 reportAvailableIn={reportAvailableIn}
                 displayDefaultTooltip={true}
-                className="bg-theme-hint-50"
+                className="bg-transparent"
             />
 
             <Tooltip
@@ -147,7 +147,7 @@ export const NftActions = ({
                     data-testid={"NftActions__refresh"}
                     icon="Refresh"
                     disabled={originalNftImage === null || isRefreshing}
-                    className="bg-theme-hint-50"
+                    className="bg-transparent"
                     onClick={() => {
                         void handleRefresh();
                     }}
