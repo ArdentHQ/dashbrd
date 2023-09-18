@@ -184,15 +184,11 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @see https://docs.alchemy.com/reference/getnfts
      */
-    public function walletNfts(
-        WalletData $wallet,
-        NetworkData $network,
-        string $cursor = null,
-        int $limit = null
-    ): Web3NftsChunk {
+    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null, int $limit = null): Web3NftsChunk
+    {
         $this->apiUrl = $this->getNftV2ApiUrl();
 
-        $this->chain = AlchemyChain::fromChainId($network->chainId);
+        $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
         $query = http_build_query([
             'owner' => $wallet->address,

@@ -32,13 +32,9 @@ final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
         return Alchemy::erc20($wallet, $network);
     }
 
-    public function getWalletNfts(
-        WalletData $wallet,
-        NetworkData $network,
-        string $cursor = null,
-        int $limit = null,
-    ): Web3NftsChunk {
-        return Alchemy::walletNfts($wallet, $network, $cursor, $limit);
+    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null, int $limit = null): Web3NftsChunk
+    {
+        return Alchemy::getWalletNfts($wallet, $network, $cursor, $limit);
     }
 
     public function getCollectionsNfts(

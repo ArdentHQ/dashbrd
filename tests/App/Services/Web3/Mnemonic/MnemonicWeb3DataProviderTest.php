@@ -80,12 +80,17 @@ it('should throw NotImplementedException', function ($name) {
     expect(fn () => call_user_func([$provider, $name], $wallet, $networkData))->toThrow(NotImplementedException::class);
 })->with([
     'getWalletTokens',
-    'getWalletNfts',
 ]);
 
 it('throws a not implemented exception when trying to fetch ENS domain', function () {
     (new MnemonicWeb3DataProvider)->getEnsDomain(
         Wallet::factory()->create()
+    );
+})->throws(NotImplementedException::class);
+
+it('throws a not implemented exception when trying to fetch NFTs for a wallet', function () {
+    (new MnemonicWeb3DataProvider)->getWalletNfts(
+        Wallet::factory()->create(), Network::factory()->create()
     );
 })->throws(NotImplementedException::class);
 
