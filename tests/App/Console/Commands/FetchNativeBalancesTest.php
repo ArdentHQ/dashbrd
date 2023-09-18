@@ -19,7 +19,7 @@ it('dispatches a job for active wallets', function () {
         '--chain-id' => 1,
     ]);
 
-    Bus::assertDispatchedTimes(FetchNativeBalances::class, 3);
+    Bus::assertDispatchedTimes(FetchNativeBalances::class, 1);
 });
 
 it('dispatches a job for online wallets', function () {
@@ -38,7 +38,7 @@ it('dispatches a job for online wallets', function () {
         '--only-online' => true,
     ]);
 
-    Bus::assertDispatchedTimes(FetchNativeBalances::class, 3);
+    Bus::assertDispatchedTimes(FetchNativeBalances::class, 1);
 });
 
 it('dispatches native balances job for mainnet networks if chain id is not provided', function () {
@@ -56,7 +56,7 @@ it('dispatches native balances job for mainnet networks if chain id is not provi
 
     $this->artisan('wallets:fetch-native-balances');
 
-    Bus::assertDispatchedTimes(FetchNativeBalances::class, 6);
+    Bus::assertDispatchedTimes(FetchNativeBalances::class, 2);
 });
 
 it('dispatches a job for a specific wallet', function () {
