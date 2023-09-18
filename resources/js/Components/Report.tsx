@@ -77,7 +77,11 @@ export const Report = ({
                         data-testid="Report_flag"
                         icon="Flag"
                         onClick={() => {
-                            authenticated ? setShowReportModal(true) : showConnectOverlay();
+                            authenticated
+                                ? setShowReportModal(true)
+                                : showConnectOverlay(() => {
+                                      setShowReportModal(true);
+                                  });
                         }}
                         disabled={disableReport}
                         className={className}

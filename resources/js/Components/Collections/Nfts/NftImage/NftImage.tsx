@@ -16,6 +16,7 @@ export const NftImage = ({ nft }: Properties): JSX.Element => {
         window.open(originalNftImage as string, "_blank");
     };
 
+
     return (
         <>
             <GalleryCard
