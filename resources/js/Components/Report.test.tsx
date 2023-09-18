@@ -10,7 +10,9 @@ import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 describe("Report", () => {
-    const showConnectOverlayMock = vi.fn();
+    const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
+        callback();
+    });
 
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
@@ -117,6 +119,8 @@ describe("Report", () => {
 
         await userEvent.click(screen.getByTestId("Report_flag"));
         expect(showConnectOverlayMock).toHaveBeenCalledOnce();
+
+        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
     });
 
     it("should render with default tooltip if display default tooltip is true", async () => {

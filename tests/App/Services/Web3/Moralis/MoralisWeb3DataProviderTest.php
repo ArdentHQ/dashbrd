@@ -43,12 +43,12 @@ it('should getWalletNfts', function () {
         'https://deep-index.moralis.io/api/v2/*/nft?*' => Http::response(fixtureData('moralis.nfts'), 200),
     ]);
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new MoralisWeb3DataProvider();
-    $tokens = $provider->getWalletNfts($wallet, $networkData)->nfts;
+    $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(47)
@@ -164,11 +164,11 @@ it('should filter out nfts', function () {
             ->push(fixtureData('moralis.nfts_lowestprice'), 200),
     ]);
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
     $wallet = Wallet::factory()->create();
 
     $provider = new MoralisWeb3DataProvider();
-    $nfts = $provider->getWalletNfts(WalletData::from($wallet), $networkData)->nfts;
+    $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($nfts)->toHaveCount(4)
         ->and($nfts->first()->name)->toBeNull()
