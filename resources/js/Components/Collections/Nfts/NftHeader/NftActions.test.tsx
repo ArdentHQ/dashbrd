@@ -121,7 +121,7 @@ describe("Nftactions", () => {
         expect(screen.getByText(t("common.view_nft_on_etherscan").toString())).toBeInTheDocument();
     });
 
-    it("should redirect to polygonscan if chain is polygon", async () => {
+    it("should redirect to polygonscan if chain is polygon", () => {
         const collection = new NFTCollectionFactory().create({
             chainId: ExplorerChains.PolygonMainnet,
         });
@@ -146,7 +146,7 @@ describe("Nftactions", () => {
         );
     });
 
-    it("should redirect to etherscan if chain is ethereum", async () => {
+    it("should redirect to etherscan if chain is ethereum", () => {
         const collection = new NFTCollectionFactory().create({
             chainId: ExplorerChains.EthereumMainnet,
         });
@@ -171,7 +171,7 @@ describe("Nftactions", () => {
         );
     });
 
-    it("should redirect to goerli explorer if chain is ethereum testnet", async () => {
+    it("should redirect to goerli explorer if chain is ethereum testnet", () => {
         const collection = new NFTCollectionFactory().create({
             chainId: ExplorerChains.EthereumTestnet,
         });
@@ -196,7 +196,7 @@ describe("Nftactions", () => {
         );
     });
 
-    it("should redirect to mumbai explorer if chain is polygon testnet", async () => {
+    it("should redirect to mumbai explorer if chain is polygon testnet", () => {
         const collection = new NFTCollectionFactory().create({
             chainId: ExplorerChains.PolygonTestnet,
         });
