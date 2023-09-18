@@ -333,7 +333,7 @@ class Collection extends Model
     public function scopeWithAcceptableSupply(Builder $query): Builder
     {
         return $query->where(function (Builder $query) {
-            return $query
+            $query
                 ->where('collections.supply', '<=', config('dashbrd.collections_max_cap'))
                 ->orWhereNotNull('collections.supply');
         });
@@ -441,7 +441,7 @@ class Collection extends Model
         return $this->last_viewed_at->gte(now()->subDays(1));
     }
 
-    public static function isInvalid(Collection $collection): bool
+    public static function isInvalid(Collection $collection, bool $withSpamCheck = true): bool
     {
         // Ignore collections above the supply cap
         if ($collection->supply === null || $collection->supply > config('dashbrd.collections_max_cap')) {
@@ -453,7 +453,7 @@ class Collection extends Model
             return true;
         }
 
-        if (SpamContract::isSpam($collection->address, $collection->network)) {
+        if ($withSpamCheck && SpamContract::isSpam($collection->address, $collection->network)) {
             return true;
         }
 

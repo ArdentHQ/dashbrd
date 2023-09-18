@@ -26,8 +26,7 @@ trait InteractsWithCollections
                 ->filterInvalid()
                 ->first();
 
-            // Ignore explicitly blacklisted collections
-            if (!BlacklistedCollections::includes($collection->address)) {
+            if (Collection::isInvalid($collection, false)) {
                 $callback($collection);
             }
 
@@ -40,8 +39,7 @@ trait InteractsWithCollections
             ->filterInvalid()
             ->chunkById(100, function ($collections) use ($callback) {
                 $collections->each(function ($collection) use ($callback) {
-                    // Ignore explicitly blacklisted collections
-                    if (!BlacklistedCollections::includes($collection->address)) {
+                    if (Collection::isInvalid($collection, false)) {
                         $callback($collection);
                     }
                 });
