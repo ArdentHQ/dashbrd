@@ -8,6 +8,8 @@ import { Clipboard } from "@/Components/Clipboard";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Report } from "@/Components/Report";
 import { Tooltip } from "@/Components/Tooltip";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
 import { useToasts } from "@/Hooks/useToasts";
 import { ExplorerChains } from "@/Utils/Explorer";
 
@@ -28,6 +30,8 @@ export const NftActions = ({
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { showToast } = useToasts();
+    const { showConnectOverlay } = useMetaMaskContext();
+    const { authenticated } = useAuth();
 
     const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -85,6 +89,16 @@ export const NftActions = ({
                     address: tokenNumber,
                     token: collectionAddress,
                 });
+        }
+    };
+
+    const handleClick = (): void => {
+        if (authenticated) {
+            handleRefresh();
+        } else {
+            showConnectOverlay(() => {
+                handleRefresh();
+            });
         }
     };
 
@@ -148,9 +162,7 @@ export const NftActions = ({
                     icon="Refresh"
                     disabled={originalNftImage === null || isRefreshing}
                     className="bg-transparent"
-                    onClick={() => {
-                        void handleRefresh();
-                    }}
+                    onClick={handleClick}
                 />
             </Tooltip>
         </div>
