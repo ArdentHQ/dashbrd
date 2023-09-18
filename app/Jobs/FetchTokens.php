@@ -91,13 +91,8 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
             ->whereDoesntHave('token', fn ($query) => $query->nativeToken())
             ->delete();
 
-        $this->storeLastFetchedDate($this->wallet);
-    }
-
-    private function storeLastFetchedDate(Wallet $wallet): void
-    {
-        $wallet->extra_attributes->set('tokens_fetched_at', Carbon::now());
-        $wallet->save();
+        $this->wallet->extra_attributes->set('tokens_fetched_at', Carbon::now());
+        $this->wallet->save();
     }
 
     public function uniqueId(): string
