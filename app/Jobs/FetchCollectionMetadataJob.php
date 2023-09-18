@@ -66,13 +66,14 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
 
                     $collection->name = $data->collectionName;
                     $collection->supply = $data->totalSupply;
+                    $collection->minted_block = $data->mintedBlock;
 
                     if ($data->description) {
                         $collection->description = $data->description;
                     }
 
                     if ($data->floorPrice) {
-                        $collection->floor_price = $data->floorPrice;
+                        $collection->floor_price = $data->floorPrice * 1e18;
                     }
 
                     if ($data->bannerImageUrl) {

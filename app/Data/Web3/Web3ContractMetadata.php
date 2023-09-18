@@ -12,6 +12,7 @@ class Web3ContractMetadata extends Data
         public string $contractAddress,
         public string $collectionName,
         public int $totalSupply,
+        public int $mintedBlock,
         public ?string $collectionSlug,
         public ?string $imageUrl,
         public ?float $floorPrice,
