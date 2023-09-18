@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Enums\Chains;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
@@ -17,10 +15,10 @@ it('should throw a custom connection exception on internal server error', functi
         'https://deep-index.moralis.io/api/v2/*' => Http::response(null, 500),
     ]);
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    Moralis::erc20($walletData, $networkData);
+    Moralis::getWalletTokens($wallet, $network);
 })->throws(ConnectionException::class);
 
 it('should throw a custom exception when rate limited', function () {
@@ -28,10 +26,10 @@ it('should throw a custom exception when rate limited', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(null, 429),
     ]);
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    Moralis::erc20($walletData, $networkData);
+    Moralis::getWalletTokens($wallet, $network);
 })->throws(RateLimitException::class);
 
 it('should not retry request on 400', function () {
@@ -43,10 +41,10 @@ it('should not retry request on 400', function () {
 
     $network = Network::polygon()->firstOrFail();
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::fromModel(Network::polygon()->firstOrFail());
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon()->firstOrFail();
 
-    expect(fn () => Moralis::erc20($walletData, $networkData))->toThrow('400 Bad Request');
+    expect(fn () => Moralis::getWalletTokens($wallet, $network))->toThrow('400 Bad Request');
 });
 
 it('should return null on 404 when getting nft floor price', function () {

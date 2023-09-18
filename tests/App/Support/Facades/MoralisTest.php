@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Models\Network;
 use App\Models\Wallet;
@@ -17,10 +15,10 @@ it('can use the facade', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
+    $network = Network::polygon()->firstOrFail();
+    $wallet = Wallet::factory()->create();
 
-    $data = Moralis::erc20($walletData, $networkData);
+    $data = Moralis::getWalletTokens($wallet, $network);
 
     expect($data)->toBeInstanceOf(Collection::class);
 

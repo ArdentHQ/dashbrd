@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Web3\Fake;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -37,7 +35,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
         $tokens = Token::where('network_id', $network->id)->get();
 
