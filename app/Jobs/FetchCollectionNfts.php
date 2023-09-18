@@ -37,7 +37,7 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->collection->isInvalid(false)) {
+        if ($this->collection->isBlacklisted()) {
             return;
         }
 

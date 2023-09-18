@@ -449,7 +449,7 @@ class Collection extends Model
         }
 
         // Ignore explicitly blacklisted collections
-        if (BlacklistedCollections::includes($this->address)) {
+        if ($this->isBlacklisted()) {
             return true;
         }
 
@@ -458,5 +458,10 @@ class Collection extends Model
         }
 
         return false;
+    }
+
+    public function isBlacklisted(): bool
+    {
+        return BlacklistedCollections::includes($this->address);
     }
 }

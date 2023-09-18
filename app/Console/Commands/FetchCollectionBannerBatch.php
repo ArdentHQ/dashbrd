@@ -48,6 +48,8 @@ class FetchCollectionBannerBatch extends Command
                     $query->whereNull('extra_attributes->banner');
                 })
                 ->chunkById(100, function (IlluminateCollection $collections) use ($network) {
+                    $collections = $collections(fn($collection) => $collection->isBlacklisted());
+
                     $addresses = $collections->pluck('address')->toArray();
 
                     Log::info('Dispatching FetchCollectionBannerBatchJob', [
