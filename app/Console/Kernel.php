@@ -149,7 +149,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command(FetchCollectionMetadata::class)
             ->withoutOverlapping()
-            ->weeklyOn(4); // runs on Thursday
+            ->weeklyOn(Schedule::THURSDAY);
 
         $schedule
             ->command(SyncSpamContracts::class)
