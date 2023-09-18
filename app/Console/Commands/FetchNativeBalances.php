@@ -11,6 +11,7 @@ use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Log;
 
 class FetchNativeBalances extends Command
 {
@@ -48,6 +49,10 @@ class FetchNativeBalances extends Command
         if ($walletId !== null) {
             $wallet = Wallet::findOrFail($walletId);
 
+            Log::info('Dispatching FetchNativeBalances Job', [
+                'wallet' => $wallet->address,
+            ]);
+
             $this->process(collect([$wallet]), $networks);
         } else {
             $this->handleAllWallets($networks);
@@ -68,6 +73,10 @@ class FetchNativeBalances extends Command
             ->when($onlyOnline, fn ($query) => $query->online())
             ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
             ->chunkById(self::CHUNK_SIZE, function ($wallets) use ($networks) {
+                Log::info('Dispatching FetchNativeBalances Job', [
+                    'wallets' => $wallets->pluck('address')->toArray(),
+                ]);
+
                 $this->process($wallets, $networks);
             });
     }

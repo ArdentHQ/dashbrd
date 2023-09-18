@@ -8,6 +8,7 @@ use App\Jobs\FetchEnsDetails as Job;
 use App\Models\Wallet;
 use App\Support\Queues;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class FetchEnsDetails extends Command
 {
@@ -35,6 +36,10 @@ class FetchEnsDetails extends Command
         if ($walletId !== null) {
             $wallet = Wallet::findOrFail($walletId);
 
+            Log::info('Dispatching FetchEnsDetails Job', [
+                'wallet' => $wallet->address,
+            ]);
+
             $this->handleWallet($wallet);
         } else {
             $this->handleAllWallets();
@@ -46,6 +51,10 @@ class FetchEnsDetails extends Command
     private function handleAllWallets(): void
     {
         Wallet::recentlyActive()->chunkById(100, function ($wallets) {
+            Log::info('Dispatching FetchEnsDetails Job', [
+                'wallets' => $wallets->pluck('address')->toArray(),
+            ]);
+
             $wallets->each(fn ($wallet) => $this->handleWallet($wallet));
         });
     }

@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Jobs\FetchNftActivity as Job;
 use App\Models\Nft;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class FetchNftActivity extends Command
 {
@@ -34,6 +35,10 @@ class FetchNftActivity extends Command
         if ($nftId !== null) {
             $nft = Nft::findOrFail($nftId);
 
+            Log::info('Dispatching FetchNftActivity Job', [
+                'nft' => $nft->id,
+            ]);
+
             $this->handleNft($nft);
         } else {
             $this->handleOwnedNfts();
@@ -56,6 +61,10 @@ class FetchNftActivity extends Command
         Nft::query()
             ->whereNotNull('wallet_id')
             ->chunkById(100, function ($nfts) {
+                Log::info('Dispatching FetchNftActivity Job', [
+                    'nfts' => $nfts->pluck('id')->toArray(),
+                ]);
+
                 $nfts->each(fn ($nft) => $this->handleNft($nft));
             });
     }

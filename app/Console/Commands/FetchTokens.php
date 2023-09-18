@@ -10,6 +10,7 @@ use App\Models\Wallet;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class FetchTokens extends Command
 {
@@ -41,6 +42,11 @@ class FetchTokens extends Command
         if ($walletId !== null) {
             $wallet = Wallet::findOrFail($walletId);
 
+            Log::info('Dispatching FetchTokens Job', [
+                'wallet' => $wallet->address,
+                'networks' => $networks->pluck('id')->toArray(),
+            ]);
+
             $this->handleWallet($wallet, $networks);
         } else {
             $this->handleAllWallets($networks);
@@ -61,6 +67,11 @@ class FetchTokens extends Command
             ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
             ->chunkById(100, function ($wallets) use ($networks) {
                 $wallets->each(fn ($wallet) => $this->handleWallet($wallet, $networks));
+
+                Log::info('Dispatching FetchTokens Job', [
+                    'wallets' => $wallets->pluck('address')->toArray(),
+                    'networks' => $networks->pluck('id')->toArray(),
+                ]);
             });
     }
 
