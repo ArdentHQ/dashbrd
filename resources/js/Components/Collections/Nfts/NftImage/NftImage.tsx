@@ -41,12 +41,7 @@ export const NftImage = ({
     const { large: largeImage, original, originalRaw } = nft.images;
     const originalNftImage = original ?? originalRaw ?? largeImage;
 
-    const handleRefresh = async (): Promise<void> => {
-        if (!authenticated) {
-            showConnectOverlay();
-            return;
-        }
-
+    const refreshNft = async (): Promise<void> => {
         setIsRefreshing(true);
 
         await axios.post<{ success: boolean }>(
@@ -60,6 +55,17 @@ export const NftImage = ({
             message: t("common.refreshing_metadata"),
             isExpanded: true,
         });
+    };
+
+    const handleRefresh = (): void => {
+        if (!authenticated) {
+            showConnectOverlay(() => {
+                void refreshNft();
+            });
+            return;
+        }
+
+        void refreshNft();
     };
 
     const renderActions = (className: string, addTestIds = false): JSX.Element => (
@@ -125,7 +131,7 @@ export const NftImage = ({
                     icon="Refresh"
                     disabled={originalNftImage === null || isRefreshing}
                     onClick={() => {
-                        void handleRefresh();
+                        handleRefresh();
                     }}
                 />
             </Tooltip>

@@ -15,6 +15,7 @@ class FetchCollectionMetadata extends Command
 {
     /**
      * Alchemy API supports up to 100 contract addresses per request
+     *
      * @see https://docs.alchemy.com/reference/getcontractmetadatabatch
      */
     const CHUNK_SIZE = 100;
