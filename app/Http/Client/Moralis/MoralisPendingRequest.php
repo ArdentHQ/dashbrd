@@ -127,9 +127,9 @@ class MoralisPendingRequest extends PendingRequest
     /**
      * @see https://docs.moralis.io/web3-data-api/evm/reference/get-wallet-nfts
      */
-    public function walletNfts(WalletData $wallet, NetworkData $network, ?string $cursor): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor): Web3NftsChunk
     {
-        $chain = MoralisChain::fromChainId($network->chainId);
+        $chain = MoralisChain::fromChainId($network->chain_id);
 
         $data = self::get($wallet->address.'/nft', [
             'chain' => $chain->value,

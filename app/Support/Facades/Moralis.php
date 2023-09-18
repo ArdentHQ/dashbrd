@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Http;
 
 /**
  * @method static Collection<int, Web3Erc20TokenData> erc20(WalletData $wallet, NetworkData $network, array{to_block?: number, token_addresses?: array<string>} $query = [])
- * @method static Web3NftsChunk walletNfts(WalletData $wallet, NetworkData $network, ?string $cursor)
+ * @method static Web3NftsChunk getWalletNfts(Wallet $wallet, Network $network, ?string $cursor)
  * @method static string | null ensDomain(Wallet $wallet)
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Collection<int, WalletBalance> getNativeBalances(array $walletAddresses, Network $network)

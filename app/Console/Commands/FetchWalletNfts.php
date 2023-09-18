@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Jobs\FetchWalletNfts as FetchWalletNftsJob;
 use App\Models\Network;
 use App\Models\Wallet;
@@ -68,8 +66,8 @@ class FetchWalletNfts extends Command
         $startTimestamp = $this->option('start-timestamp');
 
         $networks->each(fn ($network) => FetchWalletNftsJob::dispatch(
-            WalletData::from($wallet),
-            NetworkData::from($network),
+            $wallet,
+            $network,
             $this->option('cursor'),
             empty($startTimestamp) ? Carbon::now() : Carbon::createFromTimestampMs($startTimestamp),
         ));
