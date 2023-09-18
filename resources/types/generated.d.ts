@@ -21,8 +21,8 @@ declare namespace App.Data {
     };
     export type NetworkData = {
         name: string;
-        chainId: number;
         isMainnet: boolean;
+        chainId: number;
         publicRpcProvider: string;
         explorerUrl: string;
     };

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Data\NetworkData;
 use App\Data\Wallet\WalletData;
 use App\Jobs\FetchEnsDetails;
 use App\Jobs\FetchNativeBalances;
@@ -170,8 +169,6 @@ class Wallet extends Model
 
     public function dispatchIndexingJobs(Network $network, ?bool $onPriorityQueue = false): void
     {
-        $networkData = NetworkData::fromModel($network);
-
         FetchEnsDetails::dispatch($this)
             ->afterCommit()
             ->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::DEFAULT);

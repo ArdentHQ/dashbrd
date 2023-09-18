@@ -82,11 +82,11 @@ it('should getEnsDomain from cache', function () {
 
 it('should get native balance', function () {
     $wallet = Wallet::factory()->create();
-    $networkData = Network::polygon()->firstOrFail();
+    $network = Network::polygon()->firstOrFail();
 
     $provider = new FakeWeb3DataProvider();
 
-    expect($provider->getNativeBalance($wallet, $networkData))->toBeString();
+    expect($provider->getNativeBalance($wallet, $network))->toBeString();
 });
 
 it('should return no middleware', function () {
