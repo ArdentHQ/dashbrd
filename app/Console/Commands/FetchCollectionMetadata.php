@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Log;
 class FetchCollectionMetadata extends Command
 {
     /**
+     * Alchemy API supports up to 100 contract addresses per request
+     * @see https://docs.alchemy.com/reference/getcontractmetadatabatch
+     */
+    const CHUNK_SIZE = 100;
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -42,7 +48,7 @@ class FetchCollectionMetadata extends Command
             Collection::query()
                 ->select(['id', 'address'])
                 ->where('network_id', '=', $network->id)
-                ->chunkById(100, function (IlluminateCollection $collections) use ($network) {
+                ->chunkById(self::CHUNK_SIZE, function (IlluminateCollection $collections) use ($network) {
                     $addresses = $collections->pluck('address')->toArray();
 
                     Log::info('Dispatching FetchCollectionMetadataJob', [
