@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Jobs\FetchTokens as Job;
 use App\Models\Network;
 use App\Models\Wallet;
@@ -71,6 +69,6 @@ class FetchTokens extends Command
      */
     private function handleWallet(Wallet $wallet, Collection $networks): void
     {
-        $networks->each(fn ($network) => Job::dispatch(WalletData::from($wallet), NetworkData::from($network))->onQueue(Queues::TOKENS));
+        $networks->each(fn ($network) => Job::dispatch($wallet, $network)->onQueue(Queues::TOKENS));
     }
 }

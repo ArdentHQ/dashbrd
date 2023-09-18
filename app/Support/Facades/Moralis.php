@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Facades;
 
-use App\Data\NetworkData;
 use App\Data\Wallet\WalletBalance;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
@@ -19,7 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 /**
- * @method static Collection<int, Web3Erc20TokenData> erc20(WalletData $wallet, NetworkData $network, array{to_block?: number, token_addresses?: array<string>} $query = [])
+ * @method static Collection<int, Web3Erc20TokenData> getWalletTokens(Wallet $wallet, Network $network, array{to_block?: number, token_addresses?: array<string>} $query = [])
  * @method static Web3NftsChunk getWalletNfts(Wallet $wallet, Network $network, ?string $cursor)
  * @method static string | null ensDomain(Wallet $wallet)
  * @method static string getNativeBalance(Wallet $wallet, Network $network)

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Support\Facades;
 
-use App\Data\Wallet\WalletData;
-use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftCollectionTrait;
 use App\Data\Web3\Web3NftTransfer;
@@ -18,7 +16,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 /**
- * @method static Collection<int, Web3Erc20TokenData> erc20(WalletData $wallet) $query = [])
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Web3NftCollectionFloorPrice | null getNftCollectionFloorPrice(Chains $chain, string $contractAddress)
  * @method static string | null getNftCollectionBanner(Chains $chain, string $contractAddress)
