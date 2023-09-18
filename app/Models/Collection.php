@@ -441,19 +441,19 @@ class Collection extends Model
         return $this->last_viewed_at->gte(now()->subDays(1));
     }
 
-    public static function isInvalid(Collection $collection, bool $withSpamCheck = true): bool
+    public function isInvalid(bool $withSpamCheck = true): bool
     {
         // Ignore collections above the supply cap
-        if ($collection->supply === null || $collection->supply > config('dashbrd.collections_max_cap')) {
+        if ($this->supply === null || $this->supply > config('dashbrd.collections_max_cap')) {
             return true;
         }
 
         // Ignore explicitly blacklisted collections
-        if (BlacklistedCollections::includes($collection->address)) {
+        if (BlacklistedCollections::includes($this->address)) {
             return true;
         }
 
-        if ($withSpamCheck && SpamContract::isSpam($collection->address, $collection->network)) {
+        if ($withSpamCheck && SpamContract::isSpam($this->address, $this->network)) {
             return true;
         }
 

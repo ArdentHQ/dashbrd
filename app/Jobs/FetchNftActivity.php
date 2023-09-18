@@ -44,7 +44,7 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
     {
         $collection = $this->nft->collection;
 
-        if (Collection::isInvalid($collection)) {
+        if ($collection->isInvalid()) {
             return;
         }
 

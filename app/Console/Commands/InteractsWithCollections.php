@@ -24,7 +24,7 @@ trait InteractsWithCollections
                 ->filterInvalid()
                 ->first();
 
-            if (Collection::isInvalid($collection, false)) {
+            if ($collection->isInvalid(false)) {
                 $callback($collection);
             }
 
@@ -37,7 +37,7 @@ trait InteractsWithCollections
             ->filterInvalid()
             ->chunkById(100, function ($collections) use ($callback) {
                 $collections->each(function ($collection) use ($callback) {
-                    if (Collection::isInvalid($collection, false)) {
+                    if ($collection->isInvalid(false)) {
                         $callback($collection);
                     }
                 });
