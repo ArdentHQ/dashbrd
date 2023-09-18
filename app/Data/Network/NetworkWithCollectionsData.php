@@ -39,7 +39,7 @@ class NetworkWithCollectionsData extends Data
                     fn ($q) => $showHidden
                         ? $q->whereIn('collections.id', $user->hiddenCollections->modelKeys())
                         : $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys())
-                )->count()
+                )->count(),
             ];
         });
 

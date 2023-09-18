@@ -119,7 +119,6 @@ class CollectionController extends Controller
             ]);
         }
 
-
         $selectedChainIds = array_filter($selectedChainIds, fn ($id) => $networks->firstWhere('id', $id) !== null);
 
         return Inertia::render('Collections/Index', [
