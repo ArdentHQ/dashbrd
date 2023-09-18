@@ -139,11 +139,10 @@ describe("Nftactions", () => {
             />,
         );
 
-        await userEvent.click(screen.getByTestId("NftActions__viewOnChain"));
-
-        expect(window.open).toHaveBeenCalledWith(
+        expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
+        expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
+            "href",
             `https://polygonscan.com/token/${collection.address}?a=${nft.tokenNumber}`,
-            "_blank",
         );
     });
 
@@ -165,15 +164,39 @@ describe("Nftactions", () => {
             />,
         );
 
-        await userEvent.click(screen.getByTestId("NftActions__viewOnChain"));
-
-        expect(window.open).toHaveBeenCalledWith(
+        expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
+        expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
+            "href",
             `https://etherscan.io/token/${collection.address}?a=${nft.tokenNumber}`,
-            "_blank",
         );
     });
 
-    it("should redirect to mumbai if chain is polygon testnet", async () => {
+    it("should redirect to goerli explorer if chain is ethereum testnet", async () => {
+        const collection = new NFTCollectionFactory().create({
+            chainId: ExplorerChains.EthereumTestnet,
+        });
+
+        const nft = new NftFactory().create({
+            images: new NftImagesDataFactory().withValues().create(),
+            collection,
+        });
+
+        render(
+            <NftActions
+                nft={nft}
+                alreadyReported={false}
+                reportAvailableIn={null}
+            />,
+        );
+
+        expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
+        expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
+            "href",
+            `https://goerli.etherscan.io/token/${collection.address}?a=${nft.tokenNumber}`,
+        );
+    });
+
+    it("should redirect to mumbai explorer if chain is polygon testnet", async () => {
         const collection = new NFTCollectionFactory().create({
             chainId: ExplorerChains.PolygonTestnet,
         });
@@ -191,12 +214,10 @@ describe("Nftactions", () => {
             />,
         );
 
-        await userEvent.click(screen.getByTestId("NftActions__viewOnChain"));
-
-        // Window should open new tab with mumbai
-        expect(window.open).toHaveBeenCalledWith(
+        expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
+        expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
+            "href",
             `https://mumbai.polygonscan.com/token/${collection.address}?a=${nft.tokenNumber}`,
-            "_blank",
         );
     });
 });
