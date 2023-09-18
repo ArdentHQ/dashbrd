@@ -18,6 +18,7 @@ class FetchNativeBalances extends Command
 
     /**
      * Moralis API supports up to 25 addresses
+     *
      * @see https://docs.moralis.io/web3-data-api/evm/reference/get-native-balances-for-addresses?chain=eth&wallet_addresses=[]
      */
     const CHUNK_SIZE = 25;
