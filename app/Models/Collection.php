@@ -9,6 +9,7 @@ use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
+use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -329,6 +330,28 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeWithAcceptableSupply(Builder $query): Builder
+    {
+        return $query->where(function (Builder $query) {
+            return $query
+                ->where('collections.supply', '<=', config('dashbrd.collections_max_cap'))
+                ->orWhereNotNull('collections.supply');
+        });
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFilterInvalid(Builder $query): Builder
+    {
+        return $query->withAcceptableSupply()->withoutSpamContracts();
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeForCollectionData(Builder $query, User $user = null): Builder
     {
         $extraAttributeSelect = "CASE
@@ -416,5 +439,24 @@ class Collection extends Model
         }
 
         return $this->last_viewed_at->gte(now()->subDays(1));
+    }
+
+    public static function isInvalid(Collection $collection): bool
+    {
+        // Ignore collections above the supply cap
+        if ($collection->supply === null || $collection->supply > config('dashbrd.collections_max_cap')) {
+            return true;
+        }
+
+        // Ignore explicitly blacklisted collections
+        if (BlacklistedCollections::includes($collection->address)) {
+            return true;
+        }
+
+        if (SpamContract::isSpam($collection->address, $collection->network)) {
+            return true;
+        }
+
+        return false;
     }
 }

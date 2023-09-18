@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Models\Collection;
 use App\Models\SpamContract;
+use App\Support\BlacklistedCollections;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -20,13 +21,15 @@ trait InteractsWithCollections
         // Apply `$queryCallback` to modify the query before fetching collections...
 
         if ($this->option('collection-id')) {
-            $collection = Collection::find($this->option('collection-id'));
+            $collection = Collection::query()
+                ->where('id', '=', $this->option('collection-id'))
+                ->filterInvalid()
+                ->first();
 
-            if (SpamContract::isSpam($collection->address, $collection->network)) {
-                return;
+            // Ignore explicitly blacklisted collections
+            if (!BlacklistedCollections::includes($collection->address)) {
+                $callback($collection);
             }
-
-            $callback($collection);
 
             return;
         }
@@ -34,10 +37,14 @@ trait InteractsWithCollections
         Collection::query()
             ->when($queryCallback !== null, $queryCallback)
             ->select('collections.*')
-            ->withoutSpamContracts()
-            ->chunkById(
-                100,
-                static fn ($collections) => $collections->each($callback),
-                'collections.id', 'id');
+            ->filterInvalid()
+            ->chunkById(100, function ($collections) use ($callback) {
+                $collections->each(function ($collection) use ($callback) {
+                    // Ignore explicitly blacklisted collections
+                    if (!BlacklistedCollections::includes($collection->address)) {
+                        $callback($collection);
+                    }
+                });
+            }, 'collections.id', 'id');
     }
 }

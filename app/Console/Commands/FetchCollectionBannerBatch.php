@@ -43,6 +43,7 @@ class FetchCollectionBannerBatch extends Command
             Collection::query()
                 ->select(['id', 'address'])
                 ->where('network_id', '=', $network->id)
+                ->filterInvalid()
                 ->when($this->option('missing-only'), function (Builder $query) {
                     $query->whereNull('extra_attributes->banner');
                 })
