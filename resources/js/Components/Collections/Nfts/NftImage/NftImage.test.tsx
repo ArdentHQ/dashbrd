@@ -13,7 +13,10 @@ vi.mock("file-saver", () => ({
 }));
 describe("NftImage", () => {
     const image = new Image();
-    const showConnectOverlayMock = vi.fn();
+
+    const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
+        callback();
+    });
 
     beforeAll(() => {
         process.env.REACT_APP_IS_UNIT = "false";
