@@ -34,12 +34,9 @@ final class MoralisWeb3DataProvider extends AbstractWeb3DataProvider
         return Moralis::erc20($wallet, $network);
     }
 
-    public function getWalletNfts(
-        WalletData $wallet,
-        NetworkData $network,
-        string $cursor = null
-    ): Web3NftsChunk {
-        return Moralis::walletNfts($wallet, $network, $cursor);
+    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null): Web3NftsChunk
+    {
+        return Moralis::getWalletNfts($wallet, $network, $cursor);
     }
 
     public function getEnsDomain(Wallet $wallet): ?string
