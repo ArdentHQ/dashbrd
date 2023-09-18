@@ -73,8 +73,7 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
                     }
 
                     if ($data->floorPrice) {
-                        $floorPrice = (int)$data->floorPrice * 1e18;
-                        $collection->floor_price = (string)$floorPrice;
+                        $collection->floor_price = (string)($data->floorPrice * 1e18);
                     }
 
                     if ($data->bannerImageUrl) {
