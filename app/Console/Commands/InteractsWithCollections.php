@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Collection;
-use App\Models\SpamContract;
 use App\Support\BlacklistedCollections;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,7 +26,7 @@ trait InteractsWithCollections
                 ->first();
 
             // Ignore explicitly blacklisted collections
-            if (!BlacklistedCollections::includes($collection->address)) {
+            if (! BlacklistedCollections::includes($collection->address)) {
                 $callback($collection);
             }
 
@@ -41,7 +40,7 @@ trait InteractsWithCollections
             ->chunkById(100, function ($collections) use ($callback) {
                 $collections->each(function ($collection) use ($callback) {
                     // Ignore explicitly blacklisted collections
-                    if (!BlacklistedCollections::includes($collection->address)) {
+                    if (! BlacklistedCollections::includes($collection->address)) {
                         $callback($collection);
                     }
                 });

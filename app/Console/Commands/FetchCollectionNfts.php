@@ -33,7 +33,7 @@ class FetchCollectionNfts extends Command
         $this->forEachCollection(function ($collection) {
             FetchCollectionNftsJob::dispatch(
                 $collection,
-                    $this->option('start-token') ?? $collection->last_indexed_token_number
+                $this->option('start-token') ?? $collection->last_indexed_token_number
             );
         });
 
