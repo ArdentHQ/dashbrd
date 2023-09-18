@@ -5,6 +5,8 @@ import * as useAuth from "@/Hooks/useAuth";
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { act, fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
@@ -64,6 +66,18 @@ describe("Nftactions", () => {
             ),
         );
 
+        const user = new UserDataFactory().create();
+        const wallet = new WalletFactory().create();
+
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user,
+            wallet,
+            authenticated: true,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            closeOverlay: vi.fn(),
+        });
+
         const nft = new NftFactory().create({
             images: new NftImagesDataFactory().withValues().create(),
         });
@@ -77,6 +91,7 @@ describe("Nftactions", () => {
         );
 
         await userEvent.click(screen.getByTestId("NftActions__refresh"));
+        expect(showConnectOverlayMock).not.toHaveBeenCalled();
         expect(screen.getByTestId("NftActions__refresh")).toBeDisabled();
     });
 
