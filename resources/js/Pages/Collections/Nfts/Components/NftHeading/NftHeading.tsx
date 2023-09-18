@@ -133,7 +133,7 @@ export const NftHeading = ({
                 </div>
             </div>
 
-            {/* New header - Mobile */}
+            {/* Mobile */}
             <div className="lg:hidden">
                 <NftHeader
                     nft={nft}
