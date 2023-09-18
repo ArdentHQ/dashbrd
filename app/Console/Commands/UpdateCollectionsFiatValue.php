@@ -31,20 +31,28 @@ class UpdateCollectionsFiatValue extends Command
      */
     public function handle(): int
     {
-        User::query()->select('id')->chunkById(50, function (EloquentCollection $users) {
+        $usersIndex = 0;
+
+        User::query()->select('id')->chunkById(50, function (EloquentCollection $users) use (&$usersIndex) {
             dispatch(function () use ($users) {
                 User::updateCollectionsValue($users->pluck('id')->toArray());
             })
-                ->delay(now()->addMinutes(20))
+                ->delay(now()->addMinutes($usersIndex * 15))
                 ->onQueue(Queues::SCHEDULED_DEFAULT);
+
+            $usersIndex++;
         });
 
-        Collection::query()->select('id')->chunkById(50, function (EloquentCollection $collections) {
+        $collectionsIndex = 0;
+
+        Collection::query()->select('id')->chunkById(50, function (EloquentCollection $collections) use (&$collectionsIndex) {
             dispatch(function () use ($collections) {
                 Collection::updateFiatValue($collections->pluck('id')->toArray());
             })
-                ->delay(now()->addMinutes(20))
+                ->delay(now()->addMinutes($collectionsIndex * 15))
                 ->onQueue(Queues::SCHEDULED_DEFAULT);
+
+            $collectionsIndex++;
         });
 
         return Command::SUCCESS;
