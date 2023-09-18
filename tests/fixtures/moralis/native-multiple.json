@@ -1,0 +1,22 @@
+[
+    {
+        "chain": "eth_mainnet",
+        "chain_id": "2",
+        "total_balance": "57499206466583095",
+        "block_number": "123456789",
+        "block_timestamp": "0.057",
+        "total_balance_formatted": "123456789",
+        "wallet_balances": [
+            {
+                "address": "0x123",
+                "balance": "28499206466583095",
+                "balance_formatted": "0.0285"
+            },
+            {
+                "address": "0x123a",
+                "balance": "0",
+                "balance_formatted": "0"
+            }
+        ]
+    }
+]
