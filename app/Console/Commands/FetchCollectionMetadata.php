@@ -45,7 +45,7 @@ class FetchCollectionMetadata extends Command
                 ->chunkById(100, function (IlluminateCollection $collections) use ($network) {
                     $addresses = $collections->pluck('address')->toArray();
 
-                    Log::info('Dispatching FetchCollectionBannerBatchJob', [
+                    Log::info('Dispatching FetchCollectionMetadataJob', [
                         'network_id' => $network->id,
                         'collection_addresses' => $addresses,
                     ]);

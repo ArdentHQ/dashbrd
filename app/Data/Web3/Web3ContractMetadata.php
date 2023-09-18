@@ -11,7 +11,7 @@ class Web3ContractMetadata extends Data
     public function __construct(
         public string $contractAddress,
         public string $collectionName,
-        public string $totalSupply,
+        public int $totalSupply,
         public ?string $collectionSlug,
         public ?string $imageUrl,
         public ?float $floorPrice,
