@@ -13,7 +13,7 @@ it('can refresh metadata of nft', function () {
 
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,

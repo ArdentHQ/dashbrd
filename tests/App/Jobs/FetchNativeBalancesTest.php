@@ -17,7 +17,7 @@ it('should fetch native balance for a wallet', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -41,7 +41,7 @@ it('does not fire a job to index transactions if balance is already synced', fun
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $nativeToken = Token::factory()->create([
