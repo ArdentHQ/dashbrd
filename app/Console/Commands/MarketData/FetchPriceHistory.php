@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class FetchPriceHistory extends Command
 {
@@ -37,8 +38,16 @@ class FetchPriceHistory extends Command
 
         $progressBar = $this->output->createProgressBar($tokens->count() * $currencies->count());
 
+        Log::info('Dispatching FetchPriceHistory Job', [
+            'currencies' => $currencies->toArray(),
+            'period' => $period,
+            'tokens' => $tokens->pluck('address')->toArray(),
+        ]);
+
         $currencies->each(function (string $currency) use ($tokens, $progressBar, $period) {
+
             $tokens->each(function (Token $token) use ($progressBar, $period, $currency) {
+
                 Job::dispatch(
                     token: $token,
                     period: Period::from($period),

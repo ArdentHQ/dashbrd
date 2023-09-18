@@ -10,6 +10,7 @@ use App\Models\Wallet;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class UpdateTokenDetails extends Command
 {
@@ -61,6 +62,10 @@ class UpdateTokenDetails extends Command
             ->when($skip !== null, fn ($query) => $query->skip((int) $skip))
             ->get();
 
+        Log::info('Dispatching UpdateTokenDetails Job', [
+            'tokens' => $tokens->pluck('address')->toArray(),
+        ]);
+
         $this->dispatchJobForTokens($tokens);
     }
 
@@ -73,6 +78,11 @@ class UpdateTokenDetails extends Command
             ->when($limit !== null, fn ($query) => $query->limit((int) $limit))
             ->where('wallet_id', $wallet->id)
             ->get();
+
+        Log::info('Dispatching UpdateTokenDetails Job for Wallet', [
+            'wallet' => $wallet->address,
+            'tokens' => $tokens->pluck('address')->toArray(),
+        ]);
 
         $this->dispatchJobForTokens($tokens);
     }

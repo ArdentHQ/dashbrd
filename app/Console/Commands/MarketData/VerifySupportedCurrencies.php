@@ -6,6 +6,7 @@ namespace App\Console\Commands\MarketData;
 
 use App\Jobs\VerifySupportedCurrencies as Job;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class VerifySupportedCurrencies extends Command
 {
@@ -15,6 +16,8 @@ class VerifySupportedCurrencies extends Command
 
     public function handle(): void
     {
+        Log::info('Dispatching VerifySupportedCurrencies Job');
+
         Job::dispatch();
     }
 }
