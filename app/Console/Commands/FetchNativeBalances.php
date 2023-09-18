@@ -17,6 +17,12 @@ class FetchNativeBalances extends Command
     use InteractsWithNetworks;
 
     /**
+     * Moralis API supports up to 25 addresses
+     * @see https://docs.moralis.io/web3-data-api/evm/reference/get-native-balances-for-addresses?chain=eth&wallet_addresses=[]
+     */
+    const CHUNK_SIZE = 25;
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -60,7 +66,7 @@ class FetchNativeBalances extends Command
             ->select(['id', 'address'])
             ->when($onlyOnline, fn ($query) => $query->online())
             ->when(! $onlyOnline, fn ($query) => $query->recentlyActive())
-            ->chunkById(25, function ($wallets) use ($networks) {
+            ->chunkById(self::CHUNK_SIZE, function ($wallets) use ($networks) {
                 $this->process($wallets, $networks);
             });
     }
