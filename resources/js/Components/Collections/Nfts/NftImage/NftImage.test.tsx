@@ -18,7 +18,10 @@ vi.mock("file-saver", () => ({
 }));
 describe("NftImage", () => {
     const image = new Image();
-    const showConnectOverlayMock = vi.fn();
+
+    const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
+        callback();
+    });
 
     beforeAll(() => {
         process.env.REACT_APP_IS_UNIT = "false";
@@ -185,7 +188,7 @@ describe("NftImage", () => {
         expect(screen.getByTestId("NftImage__zoomModal")).toBeDisabled();
     });
 
-    it("should refresh succesfully", async () => {
+    it("should refresh successfully", async () => {
         server.use(requestMock(`${BASE_URL}/nft/refresh`, { success: true }, { method: "post" }));
 
         server.use(
@@ -264,6 +267,8 @@ describe("NftImage", () => {
     });
 
     it("should show auth overlay if guest clicks on metadata refresh", async () => {
+        server.use(requestMock(`${BASE_URL}/nft/refresh`, { success: true }, { method: "post" }));
+
         const nft = new NftFactory().create({
             images: new NftImagesDataFactory().withValues().create(),
         });
@@ -281,5 +286,8 @@ describe("NftImage", () => {
 
         await userEvent.click(screen.getByTestId("NftImage__refresh"));
         expect(showConnectOverlayMock).toHaveBeenCalledOnce();
+
+        await userEvent.click(screen.getByTestId("NftImage__refresh"));
+        expect(screen.getByTestId("NftImage__refresh")).toBeDisabled();
     });
 });

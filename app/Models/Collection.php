@@ -26,6 +26,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
+ * @property ?int $supply
  * @property ?string $floor_price
  * @property ?string $last_indexed_token_number.
  */
