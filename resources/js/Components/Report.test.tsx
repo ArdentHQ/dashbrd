@@ -146,4 +146,18 @@ describe("Report", () => {
         await userEvent.hover(screen.getByTestId("Report_flag"));
         expect(screen.queryByText(t("common.report"))).not.toBeInTheDocument();
     });
+
+    it("should render with custom class names for icon button", () => {
+        const nft = new NftFactory().create();
+
+        render(
+            <Report
+                model={nft}
+                modelType={"nft"}
+                className="custom-class"
+            />,
+        );
+
+        expect(screen.getByTestId("Report_flag")).toHaveClass("custom-class");
+    });
 });

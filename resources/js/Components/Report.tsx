@@ -17,6 +17,7 @@ interface Properties {
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
     tooltipOffset?: [number, number];
+    className?: string;
 }
 
 export const Report = ({
@@ -28,6 +29,7 @@ export const Report = ({
     reportAvailableIn = null,
     reportReasons = {},
     tooltipOffset,
+    className,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [showReportModal, setShowReportModal] = useState(false);
@@ -78,6 +80,7 @@ export const Report = ({
                             authenticated ? setShowReportModal(true) : showConnectOverlay();
                         }}
                         disabled={disableReport}
+                        className={className}
                     />
                 </div>
             </Tooltip>

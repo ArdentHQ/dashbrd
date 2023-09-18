@@ -102,6 +102,7 @@ export const NftActions = ({
                             withoutTooltip
                         />
                     }
+                    className="bg-theme-hint-50"
                     onClick={handleClick}
                 />
             </Tooltip>
@@ -114,7 +115,10 @@ export const NftActions = ({
                 copiedIconClass="button-icon w-10 h-10"
                 tooltipTitle={t("common.copy_clipboard")}
             >
-                <IconButton icon="Copy" />
+                <IconButton
+                    icon="Copy"
+                    className="bg-theme-hint-50"
+                />
             </Clipboard>
 
             <Report
@@ -124,6 +128,7 @@ export const NftActions = ({
                 alreadyReported={alreadyReported}
                 reportAvailableIn={reportAvailableIn}
                 displayDefaultTooltip={true}
+                className="bg-theme-hint-50"
             />
 
             <Tooltip
@@ -135,6 +140,7 @@ export const NftActions = ({
                     data-testid={"NftActions__refresh"}
                     icon="Refresh"
                     disabled={originalNftImage === null || isRefreshing}
+                    className="bg-theme-hint-50"
                     onClick={() => {
                         void handleRefresh();
                     }}
