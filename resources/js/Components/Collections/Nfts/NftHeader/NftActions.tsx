@@ -53,10 +53,13 @@ export const NftActions = ({
     const getTooltipText = (chainId: App.Enums.Chains): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
-            case ExplorerChains.EthereumTestnet:
                 return t("common.view_nft_on_etherscan").toString();
-            default:
+            case ExplorerChains.EthereumTestnet:
+                return t("common.view_nft_on_goerli_tesnet").toString();
+            case ExplorerChains.PolygonMainnet:
                 return t("common.view_nft_on_polygonscan").toString();
+            default:
+                return t("common.view_nft_on_mumbai_tesnet").toString();
         }
     };
 
@@ -72,13 +75,13 @@ export const NftActions = ({
                     address: tokenNumber,
                     token: collectionAddress,
                 });
-            case ExplorerChains.PolygonTestnet:
-                return t("urls.explorers.mumbai.token_transactions", {
+            case ExplorerChains.PolygonMainnet:
+                return t("urls.explorers.polygonscan.token_transactions", {
                     address: tokenNumber,
                     token: collectionAddress,
                 });
             default:
-                return t("urls.explorers.polygonscan.token_transactions", {
+                return t("urls.explorers.mumbai.token_transactions", {
                     address: tokenNumber,
                     token: collectionAddress,
                 });

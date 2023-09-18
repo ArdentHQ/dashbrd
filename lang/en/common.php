@@ -65,6 +65,8 @@ return [
     'view_more_on_etherscan' => 'View More on Etherscan',
     'view_nft_on_etherscan' => 'View NFT on Etherscan',
     'view_nft_on_polygonscan' => 'View NFT on PolygonScan',
+    'view_nft_on_goerli_tesnet' => 'View NFT on Goerli Testnet Explorer',
+    'view_nft_on_mumbai_tesnet' => 'View NFT on Mumbai Testnet Explorer',
     'polygonscan' => 'PolygonScan',
     'etherscan' => 'Etherscan',
     'featured' => 'Featured',
