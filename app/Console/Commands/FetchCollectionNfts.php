@@ -33,7 +33,9 @@ class FetchCollectionNfts extends Command
         $startToken = $this->option('start-token');
 
         $this->forEachCollection(
-            callback: fn ($collection) => Job::dispatch($collection, $startToken ?? $collection->last_indexed_token_number),
+            callback: function ($collection) use ($startToken) {
+                Job::dispatch($collection, $startToken ?? $collection->last_indexed_token_number);
+            },
             getLogData: fn ($collections) => [
                 'Dispatching FetchCollectionNfts Job', [
                     'collection_addresses' => $collections->pluck('address')->toArray(),

@@ -16,14 +16,14 @@ trait InteractsWithCollections
     /**
      * @param  Closure(Collection):void  $callback
      * @param  Closure(Builder<Collection>):Builder<Collection>|null  $queryCallback
-     * @param  Closure(SupportCollection):array|null  $getLogData
+     * @param  (Closure(SupportCollection<int, Collection>):array<mixed>)|null  $getLogData
      */
     public function forEachCollection(Closure $callback, Closure $queryCallback = null, Closure $getLogData = null): void
     {
         // Apply `$queryCallback` to modify the query before fetching collections...
 
         if ($this->option('collection-id')) {
-            $collection = Collection::find($this->option('collection-id'));
+            $collection = Collection::findOrFail($this->option('collection-id'));
 
             if (SpamContract::isSpam($collection->address, $collection->network)) {
                 return;

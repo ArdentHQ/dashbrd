@@ -49,7 +49,7 @@ class FetchWalletNfts extends Command
                 'wallets' => $wallet->address,
                 'networks' => $networks->pluck('id')->toArray(),
                 'cursor' => $cursor,
-                'start-timestamp' => $startTimestamp?->toDateTimeString(),
+                'start-timestamp' => $startTimestamp->toDateTimeString(),
             ]);
 
             $this->handleWallet($wallet, $networks, $cursor, $startTimestamp);

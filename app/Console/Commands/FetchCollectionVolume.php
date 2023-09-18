@@ -31,7 +31,9 @@ class FetchCollectionVolume extends Command
     public function handle(): int
     {
         $this->forEachCollection(
-            callback: fn ($collection) => Job::dispatch($collection),
+            callback: function ($collection) {
+                Job::dispatch($collection);
+            },
             getLogData: fn ($collections) => [
                 'Dispatching FetchCollectionVolume Job', [
                     'collection_addresses' => $collections->pluck('address')->toArray(),

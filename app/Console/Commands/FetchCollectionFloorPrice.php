@@ -31,7 +31,9 @@ class FetchCollectionFloorPrice extends Command
     public function handle(): int
     {
         $this->forEachCollection(
-            callback: fn ($collection) => Job::dispatch($collection->network->chain_id, $collection->address),
+            callback: function ($collection) {
+                Job::dispatch($collection->network->chain_id, $collection->address);
+            },
             getLogData: fn ($collections) => [
                 'Dispatching FetchCollectionFloorPrice Job', [
                     'collection_addresses' => $collections->pluck('address')->toArray(),
