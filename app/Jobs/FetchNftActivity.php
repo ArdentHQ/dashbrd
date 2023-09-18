@@ -7,7 +7,6 @@ namespace App\Jobs;
 use App\Data\Web3\Web3NftTransfer;
 use App\Enums\Chains;
 use App\Jobs\Traits\RecoversFromProviderErrors;
-use App\Models\Collection;
 use App\Models\Nft;
 use App\Models\NftActivity;
 use App\Support\Facades\Mnemonic;
