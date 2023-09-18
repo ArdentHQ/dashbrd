@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
-use App\Models\User;
+use App\Models\Network;
+use App\Models\Wallet;
 use App\Support\Cache\GalleryCache;
 use App\Support\Cache\UserCache;
 use App\Support\Queues;
@@ -30,8 +29,8 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public WalletData $wallet,
-        public NetworkData $network,
+        public Wallet $wallet,
+        public Network $network,
         public ?string $cursor = null,
         public ?Carbon $startTimestamp = null,
     ) {
@@ -65,12 +64,12 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
         // clear individual dirty gallery caches so they update ASAP
         GalleryCache::clearAllDirty();
 
-        UserCache::clearAll(User::findOrFail($this->wallet->userId));
+        UserCache::clearAll($this->wallet->user);
     }
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->wallet->id.':'.$this->network->chainId.':'.$this->cursor;
+        return self::class.':'.$this->wallet->id.':'.$this->network->chain_id.':'.$this->cursor;
     }
 
     public function retryUntil(): DateTime
