@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class UpdateDiscordMembers extends Command
 {
@@ -40,6 +41,8 @@ class UpdateDiscordMembers extends Command
         $this->info('Discord members: '.$membersCount);
 
         Cache::set('discord_members', $membersCount);
+
+        Log::info('Updated Discord Members: '.$membersCount);
 
         return Command::SUCCESS;
     }

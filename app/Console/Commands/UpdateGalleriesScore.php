@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Models\Gallery;
 use App\Support\Queues;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateGalleriesScore extends Command
 {
@@ -30,7 +31,10 @@ class UpdateGalleriesScore extends Command
     public function handle(): int
     {
         dispatch(static function () {
+
             Gallery::updateScores();
+
+            Log::info('Updated Gallery Scores');
         })->onQueue(Queues::SCHEDULED_DEFAULT);
 
         return Command::SUCCESS;

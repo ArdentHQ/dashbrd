@@ -8,6 +8,7 @@ use Atymic\Twitter\Facade\Twitter;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class UpdateTwitterFollowers extends Command
 {
@@ -42,6 +43,8 @@ class UpdateTwitterFollowers extends Command
         $this->info('Twitter followers: '.$count);
 
         Cache::set('twitter_followers', $count);
+
+        Log::info('Updated Twitter Followers: '.$count);
 
         return Command::SUCCESS;
     }

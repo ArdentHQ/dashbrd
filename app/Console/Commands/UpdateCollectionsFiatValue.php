@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection as EloquentCollection;
+use Illuminate\Support\Facades\Log;
 
 class UpdateCollectionsFiatValue extends Command
 {
@@ -33,13 +34,25 @@ class UpdateCollectionsFiatValue extends Command
     {
         User::query()->select('id')->chunkById(50, function (EloquentCollection $users) {
             dispatch(function () use ($users) {
-                User::updateCollectionsValue($users->pluck('id')->toArray());
+                $ids = $users->pluck('id')->toArray();
+
+                User::updateCollectionsValue($ids);
+
+                Log::info('Updated Users Collections Fiat Value', [
+                    'users' => $ids,
+                ]);
             })->onQueue(Queues::SCHEDULED_DEFAULT);
         });
 
         Collection::query()->select('id')->chunkById(50, function (EloquentCollection $collections) {
             dispatch(function () use ($collections) {
-                Collection::updateFiatValue($collections->pluck('id')->toArray());
+                $ids = $collections->pluck('id')->toArray();
+
+                Collection::updateFiatValue($ids);
+
+                Log::info('Updated Collection Fiat Value', [
+                    'collections' => $ids,
+                ]);
             })->onQueue(Queues::SCHEDULED_DEFAULT);
         });
 

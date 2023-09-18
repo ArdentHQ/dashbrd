@@ -11,6 +11,7 @@ use App\Support\Facades\Alchemy;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class SyncSpamContracts extends Command
 {
@@ -64,12 +65,24 @@ class SyncSpamContracts extends Command
                 'updated_at' => $now,
             ]);
 
-            SpamContract::query()->insertOrIgnore($dataToInsert->toArray());
+            $inserted = SpamContract::query()->insertOrIgnore($dataToInsert->toArray());
+
+            if ($inserted > 0) {
+                Log::info("Added $inserted Spam Contracts (If not exist already)", [
+                    'address' => $dataToInsert->pluck('address')->toArray(),
+                    'networkId' => $networkId,
+                ]);
+            }
         });
 
         $contractsToClean = $contractsToClean->flatten();
 
         if ($contractsToClean->isNotEmpty()) {
+            Log::info('Deleting Spam Contracts', [
+                'address' => $contractsToClean->toArray(),
+                'networkId' => $networkId,
+            ]);
+
             SpamContract::query()->whereIn('address', $contractsToClean)->delete();
         }
 

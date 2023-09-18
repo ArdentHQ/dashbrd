@@ -11,6 +11,7 @@ use App\Models\Wallet;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class MaintainGalleries extends Command
 {
@@ -40,11 +41,22 @@ class MaintainGalleries extends Command
 
         if ($userId !== null) {
             $gallery = Gallery::where('user_id', $userId)->firstOrFail();
+
+            Log::info('Dispatching MaintainGalleries Job', [
+                'user_id' => $userId,
+                'networks' => $networks->pluck('id')->toArray(),
+            ]);
+
             $this->handleUser($gallery['user_id'], $networks);
         } else {
             $wallets = Wallet::notRecentlyActive()->whereHas('user', function ($query) {
                 return $query->whereHas('galleries');
             });
+
+            Log::info('Dispatching MaintainGalleries Job', [
+                'user_ids' => $wallets->pluck('user_id')->toArray(),
+                'networks' => $networks->pluck('id')->toArray(),
+            ]);
 
             $wallets->chunk(
                 100,

@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Models\Gallery;
 use App\Support\Queues;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateGalleriesValue extends Command
 {
@@ -31,6 +32,8 @@ class UpdateGalleriesValue extends Command
     {
         dispatch(static function () {
             Gallery::updateValues();
+
+            Log::info('Updated Gallery Value');
         })->onQueue(Queues::SCHEDULED_DEFAULT);
 
         return Command::SUCCESS;
