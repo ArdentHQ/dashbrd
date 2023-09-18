@@ -1,32 +1,37 @@
+import { type QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
 import { GRAPH_BACKGROUND_COLORS } from "@/Components/PortfolioBreakdown/PortfolioBreakdown.contracts";
+import { useWalletPollingInterval } from "@/Hooks/useWalletPollingIntervals";
+import { isTruthy } from "@/Utils/is-truthy";
 
-export const usePortfolioBreakdown = (): {
+export const usePortfolioBreakdown = (
+    wallet?: App.Data.Wallet.WalletData | null,
+): {
     assets: App.Data.TokenPortfolioData[];
-    loading: boolean;
-    loadBreakdown: () => Promise<void>;
+    isLoading: boolean;
 } => {
-    const [loading, setLoading] = useState<boolean>(true);
-    const [assets, setAssets] = useState<App.Data.TokenPortfolioData[]>([]);
+    const { calculateInterval } = useWalletPollingInterval(wallet);
 
-    const loadBreakdown = async (): Promise<void> => {
-        setLoading(true);
+    const queryClient = useQueryClient();
+    const queryKey: QueryKey = ["breakdown"];
 
-        const { data } = await axios.get<App.Data.TokenPortfolioData[]>(
-            route("tokens.breakdown", {
-                top_count: GRAPH_BACKGROUND_COLORS.length - 1,
-            }),
-        );
-
-        setAssets(data);
-
-        setLoading(false);
-    };
+    const { data, isLoading } = useQuery({
+        enabled: isTruthy(wallet),
+        queryKey,
+        refetchInterval: () => calculateInterval(queryClient.getQueryState(queryKey)?.dataUpdateCount),
+        staleTime: Number.POSITIVE_INFINITY,
+        refetchOnWindowFocus: false,
+        select: ({ data }) => data,
+        queryFn: async () =>
+            await axios.get<App.Data.TokenPortfolioData[]>(
+                route("tokens.breakdown", {
+                    top_count: GRAPH_BACKGROUND_COLORS.length - 1,
+                }),
+            ),
+    });
 
     return {
-        assets,
-        loading,
-        loadBreakdown,
+        assets: data ?? [],
+        isLoading,
     };
 };

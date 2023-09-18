@@ -408,6 +408,11 @@ declare namespace App.Data.Wallet {
         small: string | null;
         small2x: string | null;
     };
+    export type WalletBalance = {
+        address: string;
+        balance: string;
+        formattedBalance: string;
+    };
     export type WalletData = {
         address: string;
         domain: string | null;
@@ -431,10 +436,10 @@ declare namespace App.Data.Web3 {
     export type Web3ContractMetadata = {
         contractAddress: string;
         collectionName: string;
-        collectionSlug: string;
         totalSupply: string;
-        imageUrl: string;
-        floorPrice: number;
+        collectionSlug: string | null;
+        imageUrl: string | null;
+        floorPrice: number | null;
         bannerImageUrl: string | null;
         description: string | null;
     };
