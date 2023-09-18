@@ -3,6 +3,7 @@ import cn from "classnames";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
+import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Clipboard } from "@/Components/Clipboard";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Report } from "@/Components/Report";
@@ -62,8 +63,12 @@ export const NftActions = ({
     const getChainLink = (chainId: App.Enums.Chains, collectionAddress: string, tokenNumber: string): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
-            case ExplorerChains.EthereumTestnet:
                 return t("urls.explorers.etherscan.token_transactions", {
+                    address: tokenNumber,
+                    token: collectionAddress,
+                });
+            case ExplorerChains.EthereumTestnet:
+                return t("urls.explorers.goerli.token_transactions", {
                     address: tokenNumber,
                     token: collectionAddress,
                 });
@@ -80,9 +85,6 @@ export const NftActions = ({
         }
     };
 
-    const handleClick = (): Window | null =>
-        window.open(getChainLink(nft.collection.chainId, nft.collection.address, nft.tokenNumber), "_blank");
-
     return (
         <div
             className={cn("inline-flex gap-2 rounded-full", className)}
@@ -93,8 +95,9 @@ export const NftActions = ({
                 hideOnClick={true}
                 zIndex={10}
             >
-                <IconButton
+                <ButtonLink
                     data-testid={"NftActions__viewOnChain"}
+                    variant="icon"
                     icon={
                         <NetworkIcon
                             networkId={nft.collection.chainId}
@@ -103,7 +106,8 @@ export const NftActions = ({
                         />
                     }
                     className="bg-theme-hint-50"
-                    onClick={handleClick}
+                    href={getChainLink(nft.collection.chainId, nft.collection.address, nft.tokenNumber)}
+                    target="_blank"
                 />
             </Tooltip>
 
