@@ -37,7 +37,7 @@ trait InteractsWithCollections
             ->filterInvalid()
             ->chunkById(100, function ($collections) use ($callback) {
                 $collections
-                    ->filter(fn($collection) => $collection->isBlacklisted())
+                    ->filter(fn ($collection) => $collection->isBlacklisted())
                     ->each($callback);
             }, 'collections.id', 'id');
     }
