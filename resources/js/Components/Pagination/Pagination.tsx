@@ -167,7 +167,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                     href={data.meta.first_page_url}
                                     variant="icon"
                                     icon="DoubleChevronLeftSmall"
-                                    data-testid="Pagination__firstPageLink"
+                                    data-testid="Pagination__firstPageLink_mobile"
                                     disabled={data.meta.current_page === 1}
                                 />
 
@@ -185,7 +185,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                     href={data.meta.last_page_url}
                                     variant="icon"
                                     icon="DoubleChevronRightSmall"
-                                    data-testid="Pagination__lastPageLink"
+                                    data-testid="Pagination__lastPageLink_mobile"
                                     disabled={data.meta.current_page === data.meta.last_page}
                                 />
                             </div>

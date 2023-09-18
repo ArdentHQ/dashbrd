@@ -212,7 +212,7 @@ describe("Pagination", () => {
         });
     });
 
-    it("shows disabled first page button if on first page", () => {
+    it("doesn't show first page button if on first page", () => {
         const data = {
             ...paginationData,
             meta: {
@@ -223,8 +223,7 @@ describe("Pagination", () => {
 
         render(<Pagination data={data} />);
 
-        expect(screen.queryByTestId("Pagination__firstPageLink")).toBeInTheDocument();
-        expect(screen.getByTestId("Pagination__firstPageLink")).toHaveAttribute("disabled");
+        expect(screen.queryByTestId("Pagination__firstPageLink")).not.toBeInTheDocument();
     });
 
     it("shows first page link if not on first page", () => {
@@ -238,10 +237,11 @@ describe("Pagination", () => {
 
         render(<Pagination data={data} />);
 
-        expect(screen.getAllByTestId("Pagination__firstPageLink")).toHaveLength(2);
+        expect(screen.getByTestId("Pagination__firstPageLink")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__firstPageLink_mobile")).toBeInTheDocument();
     });
 
-    it("show disabled last page button if on last page", () => {
+    it("doesn't show last page button if on last page", () => {
         const data = {
             ...paginationData,
             meta: {
@@ -252,7 +252,7 @@ describe("Pagination", () => {
 
         render(<Pagination data={data} />);
 
-        expect(screen.queryByTestId("Pagination__lastPageLink")).toBeInTheDocument();
+        expect(screen.queryByTestId("Pagination__lastPageLink")).not.toBeInTheDocument();
     });
 
     it("shows first page link if not on first page", () => {
@@ -266,7 +266,8 @@ describe("Pagination", () => {
 
         render(<Pagination data={data} />);
 
-        expect(screen.getAllByTestId("Pagination__lastPageLink")).toHaveLength(2);
+        expect(screen.getByTestId("Pagination__lastPageLink")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__lastPageLink_mobile")).toBeInTheDocument();
     });
 
     it("shows previous page url if there is a previous page", () => {
