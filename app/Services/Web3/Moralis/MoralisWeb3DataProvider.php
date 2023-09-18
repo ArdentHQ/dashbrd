@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Web3\Moralis;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
@@ -29,9 +27,9 @@ final class MoralisWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
-        return Moralis::erc20($wallet, $network);
+        return Moralis::getWalletTokens($wallet, $network);
     }
 
     public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null): Web3NftsChunk
