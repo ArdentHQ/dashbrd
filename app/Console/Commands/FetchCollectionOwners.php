@@ -30,9 +30,14 @@ class FetchCollectionOwners extends Command
      */
     public function handle(): int
     {
-        $this->forEachCollection(function ($collection) {
-            Job::dispatch($collection);
-        });
+        $this->forEachCollection(
+            callback: fn ($collection) => Job::dispatch($collection),
+            getLogData: fn ($collections) => [
+                'Dispatching FetchCollectionOwners Job', [
+                    'collection_addresses' => $collections->pluck('address')->toArray(),
+                ],
+            ]
+        );
 
         return Command::SUCCESS;
     }
