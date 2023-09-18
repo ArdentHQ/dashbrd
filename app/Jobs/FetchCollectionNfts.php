@@ -7,7 +7,6 @@ namespace App\Jobs;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
-use App\Support\BlacklistedCollections;
 use App\Support\Queues;
 use App\Support\Web3NftHandler;
 use DateTime;

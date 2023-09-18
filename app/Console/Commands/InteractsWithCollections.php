@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Collection;
-use App\Models\SpamContract;
-use App\Support\BlacklistedCollections;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
