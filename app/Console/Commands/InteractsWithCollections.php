@@ -25,7 +25,7 @@ trait InteractsWithCollections
                 ->filterInvalid()
                 ->first();
 
-            if ($collection && !$collection->isBlacklisted()) {
+            if ($collection && ! $collection->isBlacklisted()) {
                 $callback($collection);
             }
 
@@ -38,7 +38,7 @@ trait InteractsWithCollections
             ->filterInvalid()
             ->chunkById(100, function ($collections) use ($callback) {
                 $collections
-                    ->filter(fn($collection) => !$collection->isBlacklisted())
+                    ->filter(fn ($collection) => ! $collection->isBlacklisted())
                     ->each($callback);
             }, 'collections.id', 'id');
     }
