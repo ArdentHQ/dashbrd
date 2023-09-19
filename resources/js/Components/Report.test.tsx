@@ -1,6 +1,7 @@
+import { router } from "@inertiajs/react";
 import { t } from "i18next";
 import React from "react";
-import { expect } from "vitest";
+import { expect, type SpyInstance } from "vitest";
 import { Report } from "./Report";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
@@ -9,9 +10,16 @@ import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
+let routerSpy: SpyInstance;
+
 describe("Report", () => {
     const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
         callback();
+    });
+
+    beforeEach(() => {
+        const function_ = vi.fn();
+        routerSpy = vi.spyOn(router, "reload").mockImplementation(function_);
     });
 
     beforeAll(() => {
@@ -32,6 +40,10 @@ describe("Report", () => {
 
     afterAll(() => {
         vi.restoreAllMocks();
+    });
+
+    afterEach(() => {
+        routerSpy.mockRestore();
     });
 
     it("should render with nft", () => {
@@ -100,6 +112,35 @@ describe("Report", () => {
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
     });
 
+    it("show report modal on load", () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+                show={true}
+            />,
+        );
+
+        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+    });
+
+    it("doesnt show report modal on load if cant report", () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+                show={true}
+                allowReport={false}
+            />,
+        );
+
+        expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
+    });
+
     it("should show auth overlay if guest clicks on it", async () => {
         const collection = new CollectionDetailDataFactory().create();
 
@@ -121,9 +162,14 @@ describe("Report", () => {
         );
 
         await userEvent.click(screen.getByTestId("Report_flag"));
+
         expect(showConnectOverlayMock).toHaveBeenCalledOnce();
 
-        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+        expect(routerSpy).toHaveBeenCalledWith({
+            data: {
+                report: true,
+            },
+        });
     });
 
     it("should render with default tooltip if display default tooltip is true", async () => {

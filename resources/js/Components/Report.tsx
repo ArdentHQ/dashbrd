@@ -119,7 +119,6 @@ export const Report = ({
 
     useEffect(() => {
         if (show && !disableReport && authenticated) {
-            console.log("show reprot modal");
             setShowReportModal(true);
         }
     }, [show, disableReport, authenticated]);
