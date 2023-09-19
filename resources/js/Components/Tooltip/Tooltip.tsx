@@ -43,6 +43,7 @@ export const Tooltip = ({
             )}
             onShown={handleShow}
             disabled={isTruthy(disabled) || isDisabled}
+            touch={false}
             {...properties}
         />
     );
