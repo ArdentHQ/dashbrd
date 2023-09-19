@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::table('collections', function (Blueprint $table) {
             $table->boolean('is_fetching_activity')->default(false)->after('minted_at');
             $table->timestamp('activity_updated_at')->nullable()->after('is_fetching_activity');
+
+            $table->index('is_fetching_activity');
         });
     }
 };
