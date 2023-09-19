@@ -41,6 +41,7 @@ describe("Report", () => {
             <Report
                 model={nft}
                 modelType={"nft"}
+                show={false}
             />,
         );
 
@@ -55,6 +56,7 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
@@ -69,6 +71,7 @@ describe("Report", () => {
             <Report
                 model={nft}
                 modelType={"nft"}
+                show={false}
             />,
         );
 
@@ -86,6 +89,7 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
@@ -112,6 +116,7 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
@@ -129,6 +134,7 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 displayDefaultTooltip={true}
+                show={false}
             />,
         );
 
@@ -144,6 +150,7 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 displayDefaultTooltip={false}
+                show={false}
             />,
         );
 
@@ -159,6 +166,7 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 className="custom-class"
+                show={false}
             />,
         );
 
