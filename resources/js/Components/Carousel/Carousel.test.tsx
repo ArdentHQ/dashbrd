@@ -16,8 +16,8 @@ describe("Carousel", () => {
         );
 
         expect(screen.getAllByTestId("CarouselControls__view-all")).toHaveLength(1);
-        expect(screen.getByTestId("CarouseNavigationButtons__previous")).toBeInTheDocument();
-        expect(screen.getByTestId("CarouseNavigationButtons__next")).toBeInTheDocument();
+        expect(screen.getByTestId("CarouselNavigationButtons__previous")).toBeInTheDocument();
+        expect(screen.getByTestId("CarouselNavigationButtons__next")).toBeInTheDocument();
 
         expect(screen.getAllByTestId("carousel-item")).toHaveLength(2);
     });
@@ -35,29 +35,31 @@ describe("Carousel", () => {
             </Carousel>,
         );
 
-        expect(screen.getByTestId("CarouseNavigationButtons__previous")).toHaveClass(
+        expect(screen.getByTestId("CarouselNavigationButtons__previous")).toHaveClass(
             `carousel-button-previous-${carouselKey}`,
         );
 
-        expect(screen.getByTestId("CarouseNavigationButtons__next")).toHaveClass(`carousel-button-next-${carouselKey}`);
+        expect(screen.getByTestId("CarouselNavigationButtons__next")).toHaveClass(
+            `carousel-button-next-${carouselKey}`,
+        );
     });
 
     it("should render carousel controls", () => {
         render(<CarouselControls />);
 
-        expect(screen.getByTestId("CarouseNavigationButtons__previous")).toHaveClass(`carousel-button-previous-1`);
-        expect(screen.getByTestId("CarouseNavigationButtons__next")).toHaveClass(`carousel-button-next-1`);
+        expect(screen.getByTestId("CarouselNavigationButtons__previous")).toHaveClass(`carousel-button-previous-1`);
+        expect(screen.getByTestId("CarouselNavigationButtons__next")).toHaveClass(`carousel-button-next-1`);
     });
 
     it("should render carousel next button", () => {
         render(<CarouselNextButton />);
 
-        expect(screen.getByTestId("CarouseNavigationButtons__next")).toBeInTheDocument();
+        expect(screen.getByTestId("CarouselNavigationButtons__next")).toBeInTheDocument();
     });
 
     it("should render carousel previous button", () => {
         render(<CarouselPreviousButton />);
 
-        expect(screen.getByTestId("CarouseNavigationButtons__previous")).toBeInTheDocument();
+        expect(screen.getByTestId("CarouselNavigationButtons__previous")).toBeInTheDocument();
     });
 });

@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
-import { CollectionDescription } from "@/Components/Collections/CollentionDescription";
+import { CollectionDescription } from "@/Components/Collections/CollectionDescription";
 import { Heading } from "@/Components/Heading";
 import { type IconName } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
