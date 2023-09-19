@@ -59,7 +59,6 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
                         'collection_address' => $address,
                         'name' => $data->collectionName,
                         'total_supply' => $data->totalSupply,
-                        'floor_price' => $data->floorPrice,
                         'description' => $data->description,
                         'banner' => $data->bannerImageUrl,
                     ]);
@@ -70,10 +69,6 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
 
                     if ($data->description) {
                         $collection->description = $data->description;
-                    }
-
-                    if ($data->floorPrice) {
-                        $collection->floor_price = (string) ($data->floorPrice * 1e18);
                     }
 
                     if ($data->bannerImageUrl) {

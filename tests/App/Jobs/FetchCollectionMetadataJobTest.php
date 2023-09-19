@@ -24,7 +24,6 @@ it('should update nft collection metadata', function () {
         'address' => '0xe785e82358879f061bc3dcac6f0444462d4b5330',
         'network_id' => $network->id,
         'supply' => 8000,
-        'floor_price' => 80000000,
         'minted_block' => 12907765,
         'extra_attributes' => [
             'banner' => null,
@@ -40,7 +39,6 @@ it('should update nft collection metadata', function () {
     expect($collection->name)->toBe('World Of Women')
         ->and($collection->supply)->toBe(10000)
         ->and($collection->minted_block)->toBe(12907782)
-        ->and($collection->floor_price)->toBe('569100000000000000')
         ->and($collection->description)->toBe('World of Women is a collection of 10,000 NFTs.')
         ->and($updatedAt->timestamp)->toBe($now->timestamp)
         ->and($collection->banner())->toBe('https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format');
@@ -71,7 +69,6 @@ it('should skip updating column if metadata is null', function () {
 
     expect($collection->banner())->toBeNull()
         ->and($collection->supply)->toBe(10000)
-        ->and($collection->floor_price)->toBe('80000000')
         ->and($collection->description)->toBe('hello');
 });
 
