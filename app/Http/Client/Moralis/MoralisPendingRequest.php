@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Client\Moralis;
 
-use App\Data\NetworkData;
 use App\Data\Wallet\WalletBalance;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -90,9 +88,9 @@ class MoralisPendingRequest extends PendingRequest
      * } $query
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function erc20(WalletData $wallet, NetworkData $network, array $query = []): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network, array $query = []): Collection
     {
-        $chain = MoralisChain::fromChainId($network->chainId);
+        $chain = MoralisChain::fromChainId($network->chain_id);
 
         /** @var array<int, array{
          *  token_address: string,
