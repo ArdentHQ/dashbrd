@@ -43,10 +43,15 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchNftActivity Job: Processing', [
+            'token_number' => $this->nft->token_number,
+        ]);
+
         $collection = $this->nft->collection;
 
         if (SpamContract::isSpam($collection->address, $collection->network)) {
-            Log::info('FetchNftActivity Job Ingored for Spam Collection', [
+            Log::info('FetchNftActivity Job:: Ingored for Spam Collection', [
+                'token_number' => $this->nft->token_number,
                 'address' => $collection->address,
                 'network' => $collection->network->id,
             ]);
@@ -95,7 +100,7 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
             FetchNftActivity::dispatch($this->nft)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
         }
 
-        Log::info('FetchNftActivity Job Handled', [
+        Log::info('FetchNftActivity Job: Handled', [
             'address' => $collection->address,
             'network' => $collection->network->id,
             'token_number' => $this->nft->token_number,

@@ -39,8 +39,14 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
      */
     public function handle(MarketDataProvider $provider): void
     {
+        Log::info('FetchPriceHistory Job: Processing', [
+            'token_id' => $this->token->id,
+            'period' => $this->period->value,
+            'currency' => $this->currency,
+        ]);
+
         if (is_null($this->token->tokenGuid)) {
-            Log::info('FetchPriceHistory ignored for token without guid', [
+            Log::info('FetchPriceHistory Job: Ignored for token without guid', [
                 'token_id' => $this->token->id,
                 'token_address' => $this->token->address,
                 'token_network' => $this->token->network_id,
@@ -66,7 +72,8 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
 
         $affected = TokenPriceHistory::query()->insertOrIgnore($priceHistoryList);
 
-        Log::info('FetchPriceHistory Job Handled', [
+        Log::info('FetchPriceHistory Job: Handled', [
+            'token_id' => $this->token->id,
             'affected' => $affected,
             'period' => $this->period->value,
             'currency' => $this->currency,

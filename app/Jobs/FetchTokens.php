@@ -41,6 +41,11 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchTokens Job: Processing', [
+            'wallet' => $this->wallet->address,
+            'network' => $this->network->id,
+        ]);
+
         $web3DataProvider = $this->getWeb3DataProvider();
 
         $tokens = $web3DataProvider->getWalletTokens($this->wallet, $this->network);
@@ -92,15 +97,15 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
             ->whereDoesntHave('token', fn ($query) => $query->nativeToken())
             ->delete();
 
-        Log::info('FetchTokens Job Handled', [
+        $this->wallet->extra_attributes->set('tokens_fetched_at', Carbon::now());
+        $this->wallet->save();
+
+        Log::info('FetchTokens Job: Handled', [
             'tokens' => $tokens->pluck('id')->toArray(),
             'wallet' => $this->wallet->address,
             'network' => $this->network->id,
             'deleted_balances_count' => $deleted,
         ]);
-
-        $this->wallet->extra_attributes->set('tokens_fetched_at', Carbon::now());
-        $this->wallet->save();
     }
 
     public function uniqueId(): string

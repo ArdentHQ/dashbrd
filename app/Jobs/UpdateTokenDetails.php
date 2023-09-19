@@ -39,6 +39,10 @@ class UpdateTokenDetails implements ShouldBeUnique, ShouldQueue
      */
     public function handle(MarketDataProvider $provider): void
     {
+        Log::info('UpdateTokenDetails Job: Processing', [
+            'token_id' => $this->token->id,
+        ]);
+
         $tokenDetails = $provider->getTokenDetails($this->token);
 
         if ($tokenDetails === null) {
@@ -84,7 +88,7 @@ class UpdateTokenDetails implements ShouldBeUnique, ShouldQueue
                 ];
             })->all(), ['token_guid', 'currency'], ['price', 'price_change_24h', 'updated_at']);
 
-            Log::info('Token Prices Upserted', [
+            Log::info('UpdateTokenDetails Job: Token Prices Upserted', [
                 'total' => $affected,
                 'token_id' => $this->token->id,
                 'token_guid' => $guid->guid,
