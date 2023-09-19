@@ -33,9 +33,9 @@ return [
             'transactions' => 'https://mumbai.polygonscan.com/tx/:id',
         ],
         'goerli' => [
-            'token_transactions' => 'https://goerli.polygonscan.com/token/:token?a=:address',
-            'addresses' => 'https://goerli.polygonscan.com/address/:address',
-            'transactions' => 'https://goerli.polygonscan.com/tx/:id',
+            'token_transactions' => 'https://goerli.etherscan.io/token/:token?a=:address',
+            'addresses' => 'https://goerli.etherscan.io/address/:address',
+            'transactions' => 'https://goerli.etherscan.io/tx/:id',
         ],
     ],
 ];

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Http\Client\Alchemy\AlchemyUnknownChainException;
 use App\Models\Network;
@@ -28,11 +26,11 @@ it('can use the facade', function () {
         };
     });
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
-    $data = Alchemy::erc20($walletData, $networkData);
+    $data = Alchemy::getWalletTokens($wallet, $network);
 
     expect($data)->toBeInstanceOf(Collection::class);
 
@@ -58,7 +56,7 @@ it('reuses existing token metadata', function () {
 
     $network = Network::polygon()->firstOrFail();
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     Token::factory()->createMany([
         ['network_id' => $network->id, 'address' => '0x01e849040c418c3b7f130351a6e4630c08a7d98e'],
@@ -68,7 +66,7 @@ it('reuses existing token metadata', function () {
         // ['network_id' => $network->id,'address' => '0x08130635368aa28b217a4dfb68e1bf8dc525621c'],
     ]);
 
-    $data = Alchemy::erc20($walletData, NetworkData::from($network));
+    $data = Alchemy::getWalletTokens($wallet, $network);
     Alchemy::assertSentCount(4); // 1 erc20 call plus 3 metadata look ups
 
     expect($data)->toBeInstanceOf(Collection::class);
@@ -81,7 +79,7 @@ it('reuses existing token metadata', function () {
         ['network_id' => $network->id, 'address' => '0x08130635368aa28b217a4dfb68e1bf8dc525621c'],
     ]);
 
-    $data = Alchemy::erc20($walletData, NetworkData::from($network));
+    $data = Alchemy::getWalletTokens($wallet, $network);
     Alchemy::assertSentCount(5); // just 1 additional erc20 call plus 0 metadata lookups
 
     expect($data)->toBeInstanceOf(Collection::class);
@@ -100,11 +98,11 @@ it('handles missing token metadata', function () {
         };
     });
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
-    $data = Alchemy::erc20($walletData, $networkData);
+    $data = Alchemy::getWalletTokens($wallet, $network);
 
     expect($data)->toBeInstanceOf(Collection::class);
 
@@ -123,11 +121,11 @@ it('rethrows on unexpected error', function () {
         };
     });
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $walletData = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
-    Alchemy::erc20($walletData, $networkData);
+    Alchemy::getWalletTokens($wallet, $network);
 })->throws(ClientException::class);
 
 it('throws if unknown chain', function () {

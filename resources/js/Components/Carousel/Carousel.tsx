@@ -133,8 +133,9 @@ export const CarouselPreviousButton = ({
 }): JSX.Element => (
     <IconButton
         className={`carousel-button-previous-${carouselKey}`}
-        data-testid="CarouseNavigationButtons__previous"
+        data-testid="CarouselNavigationButtons__previous"
         icon="ChevronLeftSmall"
+        iconSize="xs"
         disabled={disabled}
     />
 );
@@ -149,9 +150,10 @@ export const CarouselNextButton = ({
     disabled?: boolean;
 }): JSX.Element => (
     <IconButton
-        data-testid="CarouseNavigationButtons__next"
+        data-testid="CarouselNavigationButtons__next"
         className={cn(`carousel-button-next-${carouselKey}`, className)}
         icon="ChevronRightSmall"
+        iconSize="xs"
         disabled={disabled}
     />
 );

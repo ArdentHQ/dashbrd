@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Client\Alchemy;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3ContractMetadata;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
@@ -112,9 +110,9 @@ class AlchemyPendingRequest extends PendingRequest
      *
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function erc20(WalletData $wallet, NetworkData $network): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection
     {
-        $this->chain = AlchemyChain::fromChainId($network->chainId);
+        $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
         $allTokens = collect();
         $allTokenBalances = collect();

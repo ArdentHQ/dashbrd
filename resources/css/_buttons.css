@@ -61,6 +61,15 @@
         @apply border-0 bg-theme-secondary-100 text-theme-secondary-500;
     }
 
+    /* Override for Traits Carousel */
+    .traits-carousel-controls .button-icon[disabled] {
+        @apply bg-theme-secondary-200;
+    }
+
+    .traits-carousel-controls .button-icon {
+        @apply border-transparent;
+    }
+
     /* Icon Buttons */
     /* Like */
     .button-like svg path,
