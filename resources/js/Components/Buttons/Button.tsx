@@ -24,7 +24,7 @@ export interface ButtonContentProperties {
     iconClass?: string;
     variant?: ButtonVariant;
     processing?: boolean;
-    iconSize?: "xs" | "sm" | "md";
+    iconSize?: "2xs" | "xs" | "sm" | "md";
 }
 
 export interface ButtonProperties extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonContentProperties {}
