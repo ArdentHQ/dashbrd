@@ -16,6 +16,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class FetchEnsDetails implements ShouldBeUnique, ShouldQueue
@@ -35,6 +36,10 @@ class FetchEnsDetails implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchEnsDetails Job: Processing', [
+            'wallet' => $this->wallet->address,
+        ]);
+
         $provider = $this->getWeb3DataProvider();
 
         $ensDomain = $provider->getEnsDomain($this->wallet);
@@ -49,6 +54,10 @@ class FetchEnsDetails implements ShouldBeUnique, ShouldQueue
             $checksum = md5($imageBody);
 
             if (! $this->imageChanged($checksum)) {
+                Log::info('FetchEnsDetails Job: Ignoring Avatar because not changed', [
+                    'wallet' => $this->wallet->address,
+                ]);
+
                 return;
             }
 
@@ -59,8 +68,20 @@ class FetchEnsDetails implements ShouldBeUnique, ShouldQueue
                     'checksum' => $checksum,
                 ])
                 ->toMediaCollection('avatar');
+
+            Log::info('FetchEnsDetails Job: Added Avatar from response', [
+                'wallet' => $this->wallet->address,
+            ]);
         } else {
-            $walletDetails->getFirstMedia('avatar')?->delete();
+            $avatar = $walletDetails->getFirstMedia('avatar');
+
+            if ($avatar) {
+                Log::info('FetchEnsDetails Job: Deleting Avatar', [
+                    'wallet' => $this->wallet->address,
+                ]);
+
+                $avatar->delete();
+            }
         }
     }
 
