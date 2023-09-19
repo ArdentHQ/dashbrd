@@ -27,7 +27,7 @@ export const CollectionDescription = ({
                         <LinkButton
                             data-testid="CollectionHeaderTop__about"
                             className={cn(
-                                "border-b border-dashed border-theme-secondary-900 text-theme-secondary-900",
+                                "border-b border-dashed border-theme-secondary-500 text-theme-secondary-500",
                                 linkClassName,
                             )}
                             disabled
