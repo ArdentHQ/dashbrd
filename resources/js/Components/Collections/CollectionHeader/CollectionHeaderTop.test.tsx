@@ -1,6 +1,6 @@
 import React from "react";
 import { CollectionHeaderTop } from "./CollectionHeaderTop";
-import { MarkdownImage } from "@/Components/Collections/CollentionDescription";
+import { MarkdownImage } from "@/Components/Collections/CollectionDescription";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
