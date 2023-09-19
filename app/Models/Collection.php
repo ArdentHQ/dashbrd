@@ -398,7 +398,7 @@ class Collection extends Model
 
         $query = $collectionIds === null ? self::query() : self::whereIn('collections.id', $collectionIds);
 
-        $query->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
+        $query->lock('for update skip locked')->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
     }
 
     /**
