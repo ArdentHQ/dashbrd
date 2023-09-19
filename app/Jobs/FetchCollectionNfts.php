@@ -18,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 {
@@ -38,13 +39,31 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchCollectionNfts Job: Processing', [
+            'collection' => $this->collection->address,
+            'startToken' => $this->startToken,
+        ]);
+
         // Ignore explicitly blacklisted collections
         if (BlacklistedCollections::includes($this->collection->address)) {
+
+            Log::info('FetchCollectionNfts Job: Ignored because blacklisted', [
+                'collection' => $this->collection->address,
+                'startToken' => $this->startToken,
+            ]);
+
             return;
         }
 
         // Ignore collections above the supply cap
         if ($this->collection->supply === null || $this->collection->supply > config('dashbrd.collections_max_cap')) {
+            Log::info('FetchCollectionNfts Job: Ignored becasue supply is null or > max', [
+                'collection' => $this->collection->address,
+                'supply' => $this->collection->supply,
+                'max' => config('dashbrd.collections_max_cap'),
+                'startToken' => $this->startToken,
+            ]);
+
             return;
         }
 
@@ -62,6 +81,13 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
                 '--start-token' => $result->nextToken,
             ]);
         }
+
+        Log::info('FetchCollectionNfts Job: Handled', [
+            'collection' => $this->collection->address,
+            'startToken' => $this->startToken,
+            'nfts_count' => $result->nfts->count(),
+            'nextToken' => $result->nextToken,
+        ]);
     }
 
     public function uniqueId(): string
