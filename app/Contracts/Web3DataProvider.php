@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
@@ -21,7 +19,7 @@ interface Web3DataProvider
     /**
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function getWalletTokens(WalletData $wallet, NetworkData $network): Collection;
+    public function getWalletTokens(Wallet $wallet, Network $network): Collection;
 
     public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor): Web3NftsChunk;
 

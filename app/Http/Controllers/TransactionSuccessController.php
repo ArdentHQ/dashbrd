@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Jobs\FetchNativeBalances;
 use App\Jobs\FetchTokens;
 use App\Models\Network;
@@ -21,7 +19,7 @@ class TransactionSuccessController extends Controller
 
         $network = Network::where('chain_id', $request->chainId)->firstOrFail();
 
-        FetchTokens::dispatch(WalletData::from($wallet), NetworkData::from($network))->onQueue(Queues::PRIORITY);
+        FetchTokens::dispatch($wallet, $network)->onQueue(Queues::PRIORITY);
 
         FetchNativeBalances::dispatch($wallet, $network)->onQueue(Queues::PRIORITY);
 
