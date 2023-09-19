@@ -200,7 +200,7 @@ export const TraitsCarousel = ({
                 <div
                     data-testid="TraitsCarousel__controls"
                     className={cn(
-                        "items-center space-x-3",
+                        "traits-carousel-controls items-center space-x-3",
                         traits.length > carouselOptions.slidesPerView * carouselOptions.grid.rows ? "flex" : "hidden",
                     )}
                 >

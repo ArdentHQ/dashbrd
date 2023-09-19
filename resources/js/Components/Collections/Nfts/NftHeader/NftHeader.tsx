@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { CollectionDescription } from "@/Components/Collections/CollentionDescription";
+import { CollectionDescription } from "@/Components/Collections/CollectionDescription";
 import { NftActions } from "@/Components/Collections/Nfts/NftHeader/NftActions";
 import { NftBasicInfo } from "@/Components/Collections/Nfts/NftHeader/NftBasicInfo";
 import { NftOwner } from "@/Components/Collections/Nfts/NftHeader/NftOwner";
@@ -21,7 +21,7 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
         return (
             <div
                 className="flex w-full justify-between"
-                data-testId="NftHeader__desktop"
+                data-testid="NftHeader__desktop"
             >
                 <div className="flex w-full flex-col gap-2">
                     <NftBasicInfo nft={nft} />
@@ -56,7 +56,7 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
         <>
             <div
                 className="flex w-max flex-row items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-8 pb-4 pt-4 backdrop-blur xs:w-full sm:border-none sm:pb-4"
-                data-testId="NftHeader__mobile"
+                data-testid="NftHeader__mobile"
             >
                 <NftOwner nft={nft} />
 
