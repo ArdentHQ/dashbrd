@@ -392,13 +392,17 @@ class Collection extends Model
     /**
      * @param  null|array<int>  $collectionIds
      */
-    public static function updateFiatValue(array $collectionIds = null): void
+    public static function updateFiatValue(array $collectionIds = []): void
     {
         $calculateFiatValueQuery = get_query('collections.calculate_fiat_value');
 
-        $query = $collectionIds === null ? self::query() : self::whereIn('collections.id', $collectionIds);
+        $collectionIds = implode(',', $collectionIds);
 
-        $query->lock('for update skip locked')->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
+        Collection::query()
+            ->when(! empty($collectionIds), function ($query) use ($collectionIds) {
+                $query->whereRaw("collections.id IN (SELECT collections.id FROM collections WHERE collections.id IN ({$collectionIds}) FOR UPDATE SKIP LOCKED)");
+            })
+            ->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
     }
 
     /**

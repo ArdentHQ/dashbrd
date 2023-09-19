@@ -125,7 +125,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     /**
      * @param  null|array<int>  $usersIds
      */
-    public static function updateCollectionsValue(array $usersIds = null): void
+    public static function updateCollectionsValue(array $usersIds = []): void
     {
         $calculateValueQuery = get_query('users.calculate_collections_value');
 
