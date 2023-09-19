@@ -129,9 +129,13 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         $calculateValueQuery = get_query('users.calculate_collections_value');
 
-        $query = $usersIds === null ? User::query() : User::whereIn('users.id', $usersIds);
+        $usersIds = implode(',', $usersIds);
 
-        $query->lock('for update skip locked')->update(['collections_value' => DB::raw($calculateValueQuery)]);
+        User::query()
+            ->when(!empty($usersIds), function ($query) use ($usersIds) {
+                $query->whereRaw("users.id IN (SELECT users.id FROM users WHERE users.id IN ($usersIds) FOR UPDATE SKIP LOCKED)");
+            })
+            ->update(['collections_value' => DB::raw($calculateValueQuery)]);
     }
 
     /**
