@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { CollectionDescription } from "@/Components/Collections/CollentionDescription";
+import { CollectionDescription } from "@/Components/Collections/CollectionDescription";
 import { NftActions } from "@/Components/Collections/Nfts/NftHeader/NftActions";
 import { NftBasicInfo } from "@/Components/Collections/Nfts/NftHeader/NftBasicInfo";
 import { NftOwner } from "@/Components/Collections/Nfts/NftHeader/NftOwner";
