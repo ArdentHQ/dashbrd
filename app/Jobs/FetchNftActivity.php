@@ -19,6 +19,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchNftActivity implements ShouldBeUnique, ShouldQueue
 {
@@ -45,6 +46,11 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
         $collection = $this->nft->collection;
 
         if (SpamContract::isSpam($collection->address, $collection->network)) {
+            Log::info('FetchNftActivity Job Ingored for Spam Collection', [
+                'address' => $collection->address,
+                'network' => $collection->network->id,
+            ]);
+
             return;
         }
 
@@ -66,7 +72,7 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
             from: $latestActivityDate
         );
 
-        NftActivity::upsert(
+        $upserted = NftActivity::upsert(
             $nftActivity->map(function (Web3NftTransfer $activity) {
                 return [
                     'nft_id' => $this->nft->id,
@@ -88,6 +94,14 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
         if ($limit === $nftActivity->count()) {
             FetchNftActivity::dispatch($this->nft)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
         }
+
+        Log::info('FetchNftActivity Job Handled', [
+            'address' => $collection->address,
+            'network' => $collection->network->id,
+            'token_number' => $this->nft->token_number,
+            'upserted_activities' => $upserted,
+            'dispatched_for_more' => $limit === $nftActivity->count(),
+        ]);
 
         $this->nft->touch('last_activity_fetched_at');
     }
