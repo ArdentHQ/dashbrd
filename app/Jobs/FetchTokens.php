@@ -21,6 +21,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FetchTokens implements ShouldBeUnique, ShouldQueue
 {
@@ -81,7 +82,7 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
 
         // Delete balances that are not in the list of tokens and are not native
         // tokens (which are handled on the `FetchNativeTokens` job)
-        $this->wallet->balances()
+        $deleted = $this->wallet->balances()
             ->whereHas('token', fn ($query) => $query
                     ->where('network_id', $this->network->id)
                     ->whereNotIn('id', $tokens->pluck('id'))
@@ -90,6 +91,13 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
             ->when(! App::environment('production'), fn ($query) => $query->whereDoesntHave('token', fn ($query) => $query->whereIn('symbol', config('dashbrd.test_tokens'))))
             ->whereDoesntHave('token', fn ($query) => $query->nativeToken())
             ->delete();
+
+        Log::info('FetchTokens Job Handled', [
+            'tokens' => $tokens->pluck('id')->toArray(),
+            'wallet' => $this->wallet->address,
+            'network' => $this->network->id,
+            'deleted_balances_count' => $deleted,
+        ]);
 
         $this->wallet->extra_attributes->set('tokens_fetched_at', Carbon::now());
         $this->wallet->save();

@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
 {
@@ -39,6 +40,12 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
     public function handle(MarketDataProvider $provider): void
     {
         if (is_null($this->token->tokenGuid)) {
+            Log::info('FetchPriceHistory ignored for token without guid', [
+                'token_id' => $this->token->id,
+                'token_address' => $this->token->address,
+                'token_network' => $this->token->network_id,
+            ]);
+
             return;
         }
 
@@ -57,7 +64,13 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
             ];
         }, $priceHistory->toArray());
 
-        TokenPriceHistory::query()->insertOrIgnore($priceHistoryList);
+        $affected = TokenPriceHistory::query()->insertOrIgnore($priceHistoryList);
+
+        Log::info('FetchPriceHistory Job Handled', [
+            'affected' => $affected,
+            'period' => $this->period->value,
+            'currency' => $this->currency,
+        ]);
     }
 
     public function retryUntil(): DateTime

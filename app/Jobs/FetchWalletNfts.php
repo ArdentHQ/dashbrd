@@ -20,6 +20,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
 {
@@ -48,6 +49,15 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
         $nftHandler = new Web3NftHandler(wallet: $this->wallet, network: $this->network);
 
         $nftHandler->store($result->nfts, true);
+
+        Log::info('FetchWalletNfts job handled with Web3NftHandler', [
+            'nfts_count' => $result->nfts->count(),
+            'wallet' => $this->wallet->address,
+            'network' => $this->network->id,
+            'next_token' => $result->nextToken,
+            'cursor' => $this->cursor,
+            'start_timestamp' => $this->startTimestamp?->toDateTimeString(),
+        ]);
 
         self::dispatchIf(
             $result->nextToken !== null,
