@@ -38,4 +38,22 @@ return [
             'transactions' => 'https://goerli.etherscan.io/tx/:id',
         ],
     ],
+    'marketplaces' => [
+        'opensea' => [
+            'collection' => 'https://opensea.io/assets/:network/:address',
+            'nft' => 'https://opensea.io/assets/:network/:address/:nftId',
+        ],
+        'rarible' => [
+            'collection' => 'https://rarible.com/collection/:address/items',
+            'nft' => 'https://rarible.com/token/:address::nftId',
+        ],
+        'blur' => [
+            'collection' => 'https://blur.io/collection/:address',
+            'nft' => 'https://blur.io/asset/:address/:nftId',
+        ],
+        'looksrare' => [
+            'collection' => 'https://looksrare.org/collections/:address',
+            'nft' => 'https://looksrare.org/collections/:address/:nftId',
+        ],
+    ],
 ];

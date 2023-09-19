@@ -1,8 +1,10 @@
 import { useTranslation } from "react-i18next";
+
 import { CollectionDescription } from "@/Components/Collections/CollectionDescription";
 import { NftActions } from "@/Components/Collections/Nfts/NftHeader/NftActions";
 import { NftBasicInfo } from "@/Components/Collections/Nfts/NftHeader/NftBasicInfo";
 import { NftOwner } from "@/Components/Collections/Nfts/NftHeader/NftOwner";
+import { Marketplaces } from "@/Components/Marketplaces";
 import { Point } from "@/Components/Point";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
@@ -37,6 +39,14 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
                                 linkClassName="font-medium text-sm"
                             />
                         </div>
+                        <Point />
+
+                        <Marketplaces
+                            type="nft"
+                            nftId={nft.tokenNumber}
+                            address={nft.collection.address}
+                            chainId={nft.collection.chainId}
+                        />
                     </div>
                 </div>
                 <div className="flex items-end">
