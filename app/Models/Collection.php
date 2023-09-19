@@ -390,7 +390,7 @@ class Collection extends Model
     }
 
     /**
-     * @param  null|array<int>  $collectionIds
+     * @param  array<int>  $collectionIds
      */
     public static function updateFiatValue(array $collectionIds = []): void
     {

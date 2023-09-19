@@ -123,7 +123,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
-     * @param  null|array<int>  $usersIds
+     * @param  array<int>  $usersIds
      */
     public static function updateCollectionsValue(array $usersIds = []): void
     {
