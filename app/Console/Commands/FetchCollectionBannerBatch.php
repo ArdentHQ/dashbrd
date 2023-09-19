@@ -41,14 +41,14 @@ class FetchCollectionBannerBatch extends Command
 
         $networks->map(function ($network) {
             Collection::query()
-                ->select(['id', 'address'])
-                ->where('network_id', '=', $network->id)
+                ->select(['collections.id', 'collections.address'])
+                ->where('collections.network_id', '=', $network->id)
                 ->filterInvalid()
                 ->when($this->option('missing-only'), function (Builder $query) {
                     $query->whereNull('extra_attributes->banner');
                 })
                 ->chunkById(100, function (IlluminateCollection $collections) use ($network) {
-                    $collections = $collections(fn($collection) => $collection->isBlacklisted());
+                    $collections = $collections->filter(fn($collection) => !$collection->isBlacklisted());
 
                     $addresses = $collections->pluck('address')->toArray();
 
