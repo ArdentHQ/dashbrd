@@ -40,7 +40,6 @@ const NetworkFilterCheckbox = ({
             <NetworkIcon
                 networkId={value}
                 withoutTooltip
-                displayTestnetNames
                 textClassName={cn({
                     "text-theme-secondary-500": count === 0,
                 })}

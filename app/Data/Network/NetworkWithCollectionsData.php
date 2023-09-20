@@ -32,18 +32,16 @@ class NetworkWithCollectionsData extends Data
     public static function fromModel(User $user, bool $showHidden)
     {
         $networks = Network::onlyActive()->get();
-        $collectionsPerNetwork = $networks->mapWithKeys(function ($network) use ($user, $showHidden) {
-            return [$network->id => $user->collections()
+
+        return $networks->map(function ($network) use ($user, $showHidden) {
+            $collectionCount = $user->collections()
                 ->where('network_id', $network->id)
                 ->where(
                     fn ($q) => $showHidden
                         ? $q->whereIn('collections.id', $user->hiddenCollections->modelKeys())
                         : $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys())
-                )->count(),
-            ];
-        });
+                )->count();
 
-        $networksWithCollectionsCount = $networks->map(function ($network) use ($collectionsPerNetwork) {
             return new NetworkWithCollectionsData(
                 $network->id,
                 $network->name,
@@ -51,10 +49,8 @@ class NetworkWithCollectionsData extends Data
                 $network->chain_id,
                 $network->public_rpc_provider,
                 $network->explorer_url,
-                $collectionsPerNetwork[$network->id] ?? 0
+                $collectionCount
             );
         });
-
-        return $networksWithCollectionsCount;
     }
 }
