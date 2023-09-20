@@ -38,15 +38,15 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
                                 description={nft.collection.description}
                                 linkClassName="font-medium text-sm"
                             />
-                        </div>
-                        <Point />
+                            <Point />
 
-                        <Marketplaces
-                            type="nft"
-                            nftId={nft.tokenNumber}
-                            address={nft.collection.address}
-                            chainId={nft.collection.chainId}
-                        />
+                            <Marketplaces
+                                type="nft"
+                                nftId={nft.tokenNumber}
+                                address={nft.collection.address}
+                                chainId={nft.collection.chainId}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-end">
@@ -65,18 +65,32 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
     return (
         <>
             <div
-                className="flex w-full flex-row items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur xs:px-8 sm:border-none sm:pb-4"
+                className="flex w-full flex-col items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur xs:px-8 sm:flex-row sm:border-none sm:pb-4"
                 data-testid="NftHeader__mobile"
             >
-                <NftOwner nft={nft} />
+                <div className="flex flex-row items-center justify-center gap-2">
+                    <NftOwner nft={nft} />
 
-                <Point />
+                    <Point />
 
-                <CollectionDescription
-                    name={t("pages.nfts.about_nft")}
-                    description={nft.collection.description}
-                    linkClassName="font-medium text-sm"
-                />
+                    <CollectionDescription
+                        name={t("pages.nfts.about_nft")}
+                        description={nft.collection.description}
+                        linkClassName="font-medium text-sm"
+                    />
+
+                    <div className="hidden sm:block">
+                        <Point />
+                    </div>
+                </div>
+                <div>
+                    <Marketplaces
+                        type="nft"
+                        nftId={nft.tokenNumber}
+                        address={nft.collection.address}
+                        chainId={nft.collection.chainId}
+                    />
+                </div>
             </div>
 
             <div className="mb-6 flex w-full flex-col gap-4 border-b border-solid border-theme-secondary-300 bg-white pb-6 pt-4">
