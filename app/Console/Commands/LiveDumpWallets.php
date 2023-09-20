@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Contracts\Web3DataProvider;
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Chains;
 use App\Models\Network;
@@ -139,7 +137,7 @@ class LiveDumpWallets extends Command
         $nfts = collect();
 
         do {
-            $result = $provider->getWalletNfts(WalletData::fromModel($wallet), NetworkData::from($network), $cursor);
+            $result = $provider->getWalletNfts($wallet, $network, $cursor);
 
             $cursor = $result->nextToken;
 

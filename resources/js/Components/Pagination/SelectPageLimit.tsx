@@ -11,7 +11,7 @@ export const SelectPageLimit = ({
 }: {
     value?: string | number;
     options?: Array<string | number>;
-    onChange?: ({ value, url }: { value?: string | number; url: string }) => void;
+    onChange?: ({ value, url }: { value: string | number; url: string }) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
 

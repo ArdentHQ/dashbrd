@@ -12,10 +12,12 @@ import { FailedMessage, WaitingMessage } from "@/Components/TransactionFormSlide
 import { type ExecutionStepProperties } from "@/Components/TransactionFormSlider/Steps/ExecutionStep.contracts";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
+import { LocalStorageKey, useLocalStorage } from "@/Hooks/useLocalStorage";
 
 export const ExecutionStep = ({ setStep, dispatch, ...properties }: ExecutionStepProperties): JSX.Element => {
     const { t } = useTranslation();
     const { sendTransaction, account, chainId, switchToNetwork } = useMetaMaskContext();
+    const [, setLastTransactionSentAt] = useLocalStorage<number | null>(LocalStorageKey.LastTransactionSentAt, null);
 
     const { registerTransaction } = useTransactionSliderContext();
 
@@ -60,6 +62,7 @@ export const ExecutionStep = ({ setStep, dispatch, ...properties }: ExecutionSte
                 });
 
                 setTransactionState(TransactionState.Executed);
+                setLastTransactionSentAt(new Date().getTime());
 
                 setStep(SendTransactionStep.Result);
             } catch (error) {

@@ -10,7 +10,9 @@ import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 describe("Report", () => {
-    const showConnectOverlayMock = vi.fn();
+    const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
+        callback();
+    });
 
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
@@ -115,6 +117,8 @@ describe("Report", () => {
 
         await userEvent.click(screen.getByTestId("Report_flag"));
         expect(showConnectOverlayMock).toHaveBeenCalledOnce();
+
+        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
     });
 
     it("should render with default tooltip if display default tooltip is true", async () => {
@@ -145,5 +149,19 @@ describe("Report", () => {
 
         await userEvent.hover(screen.getByTestId("Report_flag"));
         expect(screen.queryByText(t("common.report"))).not.toBeInTheDocument();
+    });
+
+    it("should render with custom class names for icon button", () => {
+        const nft = new NftFactory().create();
+
+        render(
+            <Report
+                model={nft}
+                modelType={"nft"}
+                className="custom-class"
+            />,
+        );
+
+        expect(screen.getByTestId("Report_flag")).toHaveClass("custom-class");
     });
 });

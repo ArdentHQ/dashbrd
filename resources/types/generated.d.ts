@@ -21,8 +21,8 @@ declare namespace App.Data {
     };
     export type NetworkData = {
         name: string;
-        chainId: number;
         isMainnet: boolean;
+        chainId: number;
         publicRpcProvider: string;
         explorerUrl: string;
     };
@@ -397,6 +397,11 @@ declare namespace App.Data.Wallet {
         small: string | null;
         small2x: string | null;
     };
+    export type WalletBalance = {
+        address: string;
+        balance: string;
+        formattedBalance: string;
+    };
     export type WalletData = {
         address: string;
         domain: string | null;
@@ -417,6 +422,16 @@ declare namespace App.Data.Wallet {
     };
 }
 declare namespace App.Data.Web3 {
+    export type Web3ContractMetadata = {
+        contractAddress: string;
+        collectionName: string;
+        totalSupply: string;
+        collectionSlug: string | null;
+        imageUrl: string | null;
+        floorPrice: number | null;
+        bannerImageUrl: string | null;
+        description: string | null;
+    };
     export type Web3Erc20TokenData = {
         tokenAddress: string;
         networkId: number;

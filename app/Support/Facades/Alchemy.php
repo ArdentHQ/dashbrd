@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Facades;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
+use App\Data\Web3\Web3ContractMetadata;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -20,11 +19,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 /**
- * @method static Collection<int, Web3Erc20TokenData> erc20(WalletData $wallet, NetworkData $network) $query = [])
- * @method static Web3NftsChunk walletNfts(WalletData $wallet, NetworkData $network, ?string $cursor = null, ?int $limit = null) $query = [])
+ * @method static Collection<int, Web3Erc20TokenData> getWalletTokens(Wallet $wallet, Network $network) $query = [])
+ * @method static Web3NftsChunk getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null, ?int $limit = null) $query = [])
  * @method static Web3NftsChunk collectionNfts(CollectionModel $collection, ?string $startToken = null, ?int $limit = null)
  * @method static array collectionNftsRaw(CollectionModel $collection, ?string $startToken = null)
  * @method static array<string> getSpamContracts(Network $network)
+ * @method static Collection<int, Web3ContractMetadata> getContractMetadataBatch(array $contractAddresses, Network $network)
  * @method static Web3NftData parseNft(array $nft, int $networkId)
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Carbon getBlockTimestamp(Network $network, int $blockNumber)

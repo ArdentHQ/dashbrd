@@ -7,7 +7,7 @@ interface GalleryCardProperties {
     className?: string;
     isSelected: boolean;
     fixedOnMobile?: boolean;
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 const Context = createContext<{
@@ -48,7 +48,7 @@ const GalleryCardRoot = ({
             return;
         }
 
-        onClick();
+        if (onClick !== undefined) onClick();
     };
 
     return (

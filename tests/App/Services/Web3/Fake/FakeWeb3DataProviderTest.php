@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -18,15 +16,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 it('should getWalletTokens', function () {
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $dbTokens = Token::factory(5)->create(['network_id' => $networkData->id]);
+    $dbTokens = Token::factory(5)->create(['network_id' => $network->id]);
 
-    $wallet = WalletData::from(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new FakeWeb3DataProvider();
 
-    $tokens = $provider->getWalletTokens($wallet, $networkData);
+    $tokens = $provider->getWalletTokens($wallet, $network);
     expect($tokens->count())->toEqual(count($dbTokens));
     $tokens->each(function ($token) {
         expect($token)->toBeInstanceOf(Web3Erc20TokenData::class);
@@ -34,16 +32,16 @@ it('should getWalletTokens', function () {
 });
 
 it('should getWalletNfts', function () {
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon()->firstOrFail();
 
-    $collection = Collection::factory()->create(['network_id' => $networkData->id]);
+    $collection = Collection::factory()->create(['network_id' => $network->id]);
     $dbNfts = Nft::factory(5)->create(['collection_id' => $collection->id]);
 
-    $wallet = WalletData::from(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new FakeWeb3DataProvider();
 
-    $nfts = $provider->getWalletNfts($wallet, $networkData)->nfts;
+    $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
     expect($nfts->count())->toEqual(count($dbNfts));
     $nfts->each(function ($nft) {
         expect($nft)
@@ -84,11 +82,11 @@ it('should getEnsDomain from cache', function () {
 
 it('should get native balance', function () {
     $wallet = Wallet::factory()->create();
-    $networkData = Network::polygon()->firstOrFail();
+    $network = Network::polygon()->firstOrFail();
 
     $provider = new FakeWeb3DataProvider();
 
-    expect($provider->getNativeBalance($wallet, $networkData))->toBeString();
+    expect($provider->getNativeBalance($wallet, $network))->toBeString();
 });
 
 it('should return no middleware', function () {

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Client\Moralis;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
+use App\Data\Wallet\WalletBalance;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -89,9 +88,9 @@ class MoralisPendingRequest extends PendingRequest
      * } $query
      * @return Collection<int, Web3Erc20TokenData>
      */
-    public function erc20(WalletData $wallet, NetworkData $network, array $query = []): Collection
+    public function getWalletTokens(Wallet $wallet, Network $network, array $query = []): Collection
     {
-        $chain = MoralisChain::fromChainId($network->chainId);
+        $chain = MoralisChain::fromChainId($network->chain_id);
 
         /** @var array<int, array{
          *  token_address: string,
@@ -126,9 +125,9 @@ class MoralisPendingRequest extends PendingRequest
     /**
      * @see https://docs.moralis.io/web3-data-api/evm/reference/get-wallet-nfts
      */
-    public function walletNfts(WalletData $wallet, NetworkData $network, ?string $cursor): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor): Web3NftsChunk
     {
-        $chain = MoralisChain::fromChainId($network->chainId);
+        $chain = MoralisChain::fromChainId($network->chain_id);
 
         $data = self::get($wallet->address.'/nft', [
             'chain' => $chain->value,
@@ -159,10 +158,10 @@ class MoralisPendingRequest extends PendingRequest
                 collectionImage: Arr::get($extraAttributes, 'images.large'),
                 collectionWebsite: $nft['normalized_metadata']['external_link'] ?? null,
                 collectionDescription: null,
-                collectionSocials: null,
-                collectionSupply: null,
                 collectionBannerImageUrl: null,
                 collectionBannerUpdatedAt: null,
+                collectionSocials: null,
+                collectionSupply: null,
                 name: $this->getNftName($nft),
                 description: $nft['normalized_metadata']['description'] ?? null,
                 extraAttributes: $extraAttributes,
@@ -203,6 +202,33 @@ class MoralisPendingRequest extends PendingRequest
         $chain = MoralisChain::fromChainId($network->chain_id);
 
         return self::get(sprintf('%s/balance?chain=%s', $wallet->address, $chain->value))->json('balance');
+    }
+
+    /**
+     * @see https://docs.moralis.io/web3-data-api/evm/reference/get-native-balances-for-addresses
+     *
+     * @param  array<string>  $walletAddresses
+     * @return Collection<int, WalletBalance>
+     */
+    public function getNativeBalances(array $walletAddresses, Network $network): Collection
+    {
+        $chain = MoralisChain::fromChainId($network->chain_id);
+
+        $query = http_build_query([
+            'wallet_addresses' => $walletAddresses,
+            'chain' => $chain->value,
+        ]);
+
+        /** @var array<int, mixed> $balances */
+        $balances = self::get(sprintf('wallets/balances?%s', $query))->json('0.wallet_balances');
+
+        return collect($balances)->map(function ($balance) {
+            return new WalletBalance(
+                address: $balance['address'],
+                balance: $balance['balance'],
+                formattedBalance: $balance['balance_formatted']
+            );
+        });
     }
 
     /**

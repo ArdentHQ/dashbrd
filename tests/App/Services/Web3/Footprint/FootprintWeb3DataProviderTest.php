@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Enums\Chains;
 use App\Exceptions\NotImplementedException;
 use App\Jobs\Middleware\RateLimited;
@@ -27,19 +25,13 @@ it('should getNftCollectionFloorPrice', function () {
     expect($data)->toBeNull();
 });
 
-it('should throw NotImplementedException for methods that require wallet and network', function ($method) {
-    $wallet = WalletData::from(Wallet::factory()->create());
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+it('should getWalletTokens and throw NotImplementedException', function () {
+    $network = Network::polygon()->firstOrFail();
 
     $provider = new FootprintWeb3DataProvider();
 
-    $provider->{$method}($wallet, $networkData);
-})
-->throws(NotImplementedException::class)
-->with([
-    'getWalletTokens',
-    'getWalletNfts',
-]);
+    $provider->getWalletTokens(Wallet::factory()->create(), $network);
+})->throws(NotImplementedException::class);
 
 it('should getBlockTimestamp and throw NotImplementedException', function () {
     $network = Network::polygon()->firstOrFail();
@@ -47,6 +39,14 @@ it('should getBlockTimestamp and throw NotImplementedException', function () {
     $provider = new FootprintWeb3DataProvider();
 
     $provider->getBlockTimestamp($network, 1);
+})->throws(NotImplementedException::class);
+
+it('should getWalletNfts and throw NotImplementedException', function () {
+    $network = Network::polygon()->firstOrFail();
+
+    $provider = new FootprintWeb3DataProvider();
+
+    $provider->getWalletNfts(Wallet::factory()->create(), $network);
 })->throws(NotImplementedException::class);
 
 it('should getCollectionsNfts and throw NotImplementedException', function () {

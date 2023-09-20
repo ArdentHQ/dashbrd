@@ -17,6 +17,7 @@ interface Properties {
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
     tooltipOffset?: [number, number];
+    className?: string;
 }
 
 export const Report = ({
@@ -28,6 +29,7 @@ export const Report = ({
     reportAvailableIn = null,
     reportReasons = {},
     tooltipOffset,
+    className,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [showReportModal, setShowReportModal] = useState(false);
@@ -75,9 +77,14 @@ export const Report = ({
                         data-testid="Report_flag"
                         icon="Flag"
                         onClick={() => {
-                            authenticated ? setShowReportModal(true) : showConnectOverlay();
+                            authenticated
+                                ? setShowReportModal(true)
+                                : showConnectOverlay(() => {
+                                      setShowReportModal(true);
+                                  });
                         }}
                         disabled={disableReport}
+                        className={className}
                     />
                 </div>
             </Tooltip>
