@@ -44,7 +44,7 @@ export const NftOwner = ({ nft }: Properties): JSX.Element => {
                     </span>
                 </Link>
             ) : (
-                <span>{t("common.na")}</span>
+                <span className="ml-1">{t("common.na")}</span>
             )}
         </div>
     );
