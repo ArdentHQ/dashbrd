@@ -21,21 +21,25 @@ return [
             'token_transactions' => 'https://etherscan.io/token/:token?a=:address',
             'addresses' => 'https://etherscan.io/address/:address',
             'transactions' => 'https://etherscan.io/tx/:id',
+            'nft' => 'https://etherscan.io/nft/:address/:nftId',
         ],
         'polygonscan' => [
             'token_transactions' => 'https://polygonscan.com/token/:token?a=:address',
             'addresses' => 'https://polygonscan.com/address/:address',
             'transactions' => 'https://polygonscan.com/tx/:id',
+            'nft' => 'https://polygonscan.com/nft/:address/:nftId',
         ],
         'mumbai' => [
             'token_transactions' => 'https://mumbai.polygonscan.com/token/:token?a=:address',
             'addresses' => 'https://mumbai.polygonscan.com/address/:address',
             'transactions' => 'https://mumbai.polygonscan.com/tx/:id',
+            'nft' => 'https://mumbai.polygonscan.com/nft/:address/:nftId',
         ],
         'goerli' => [
             'token_transactions' => 'https://goerli.etherscan.io/token/:token?a=:address',
             'addresses' => 'https://goerli.etherscan.io/address/:address',
             'transactions' => 'https://goerli.etherscan.io/tx/:id',
+            'nft' => 'https://goerli.etherscan.io/nft/:address/:nftId',
         ],
     ],
 ];

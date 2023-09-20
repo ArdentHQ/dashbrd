@@ -43,7 +43,7 @@ it('retrieves the minted date from the web3 provider if not previously retrieved
         '*' => Http::response(fixtureData('alchemy.block_data'), 200),
     ]);
 
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Collection::factory()->create([
         'network_id' => $network->id,
