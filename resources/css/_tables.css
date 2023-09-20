@@ -72,7 +72,7 @@
 
 .table-list tbody tr:hover::after {
     content: "";
-    @apply outline-theme-hint-100;
+    @apply outline-theme-primary-100;
 }
 
 .table-list tbody tr td:first-child::before {

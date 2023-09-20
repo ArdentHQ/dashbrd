@@ -45,7 +45,7 @@ export const BalanceHeaderMobile = ({
                     <Clipboard text={address}>
                         <button type="button">
                             <Icon
-                                className="text-theme-hint-600"
+                                className="text-theme-primary-600"
                                 name="Copy"
                                 size="md"
                             />
@@ -86,9 +86,9 @@ export const BalanceHeaderMobile = ({
                             setBreakdownOpen(true);
                         }}
                         className={cn(
-                            "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-hint-600 outline-none ",
-                            "hover:border-theme-hint-700 hover:text-theme-hint-700",
-                            "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300 focus-visible:ring-offset-2",
+                            "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none ",
+                            "hover:border-theme-primary-700 hover:text-theme-primary-700",
+                            "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 focus-visible:ring-offset-2",
                         )}
                     >
                         {t("common.more_details")}

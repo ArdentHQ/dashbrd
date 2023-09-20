@@ -105,9 +105,9 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                 <Link
                                                     href={route("dashboard")}
                                                     className={cn(
-                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-hint-600 outline-none ",
-                                                        "hover:text-theme-hint-700",
-                                                        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300 focus-visible:ring-offset-2",
+                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none ",
+                                                        "hover:text-theme-primary-700",
+                                                        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 focus-visible:ring-offset-2",
                                                     )}
                                                 >
                                                     {t("common.my_wallet")}
@@ -241,7 +241,7 @@ const DropdownNavigationLink = ({
         as={as}
         className={cn(
             "transition-default flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 md-lg:px-6",
-            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-hint-300",
+            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300",
         )}
     >
         <div className="flex items-center space-x-3 rounded-full">
