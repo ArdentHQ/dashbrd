@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Queue;
 it('dispatches onto the queue', function () {
     [$matic] = seedTokens();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     Collection::factory()->create([
         'network_id' => $network->id,
@@ -37,7 +37,7 @@ it('dispatches onto the queue', function () {
 it('updates the collection fiat values', function () {
     [$matic, $sand, $weth] = seedTokens();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     // 1 MATIC = 1.052 USD
     $collectionInMatic = Collection::factory()->create([

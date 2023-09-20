@@ -11,8 +11,7 @@ final class ValidChain implements Rule
 {
     public function passes($attribute, $value): bool
     {
-        return Network::where('chain_id', $value)
-            ->whereIn('chain_id', Network::activeChainIds())->exists();
+        return Network::activeChainIds()->contains($value);
     }
 
     public function message(): string

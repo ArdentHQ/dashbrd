@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
 it('trims collection names', function () {
     Bus::fake();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $handler = new Web3NftHandler(
