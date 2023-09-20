@@ -15,6 +15,7 @@ class AuthData extends Data
         public ?UserData $user,
         public ?WalletData $wallet,
         public bool $authenticated,
+        public bool $signed,
     ) {
     }
 }

@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Auth;
 
-use App\Http\Requests\Traits\UpdatesPrimaryWallet;
 use App\Rules\ValidChain;
 use App\Rules\WalletAddress;
+use App\Rules\WalletSignature;
+use App\Support\Facades\Signature;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class LoginRequest extends FormRequest
+class SignRequest extends FormRequest
 {
-    use UpdatesPrimaryWallet;
-
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user() !== null;
     }
 
     /**
@@ -33,6 +31,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'address' => ['required', new WalletAddress()],
+            'signature' => ['required', new WalletSignature()],
             'chainId' => ['required', new ValidChain()],
         ];
     }
@@ -42,33 +41,50 @@ class LoginRequest extends FormRequest
      *
      * @throws ValidationException
      */
-    public function authenticate(): void
+    public function sign(): void
     {
         $credentials = $this->getAuthParams();
+        $nonce = $credentials['nonce'] ?? null;
 
-        if (! Auth::attempt($credentials, remember: true)) {
+        $wallet = $this->wallet();
+
+        if ($nonce === null || $wallet === null) {
+            throw ValidationException::withMessages([
+                'address' => trans('auth.session_timeout'),
+            ]);
+        }
+
+        $verified = Signature::verify(
+            signature: $credentials['signature'],
+            address: $credentials['address'],
+            message: Signature::buildSignMessage($credentials['nonce'])
+        );
+
+        if (! $verified) {
+            Signature::setWalletIsNotSigned($wallet->id);
+
             throw ValidationException::withMessages([
                 'address' => trans('auth.failed'),
             ]);
         }
 
-        $this->updatePrimaryWallet();
+        Signature::setWalletIsSigned($wallet->id);
+
+        Signature::forgetSessionNonce((int) $credentials['chainId']);
     }
 
     /**
-     * @return array<string, (Rule | mixed[] | string)>
+     * @return array<string, string>
      */
     private function getAuthParams(): array
     {
+        $nonce = Signature::getSessionNonce($this->chainId);
+
         return [
             'address' => $this->address,
+            'signature' => $this->signature,
             'chainId' => $this->chainId,
-            // Passing the `userId` in case is logged so we can associate the wallet
-            // to a existing user on the web3 auth provider
-            'userId' => $this->user()?->id,
-            // Passing the user locale information from frontend...
-            'timezone' => $this->input('tz', 'UTC'),
-            'locale' => $this->input('locale', 'en-US'),
+            'nonce' => $nonce,
         ];
     }
 }

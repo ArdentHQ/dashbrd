@@ -36,7 +36,9 @@ export default {
 export const Default = {
     render: (args) => {
         return (
-            <ActiveUserContextProvider initialAuth={{ user: { attributes: {} }, wallet: null, authenticated: false }}>
+            <ActiveUserContextProvider
+                initialAuth={{ user: { attributes: {} }, wallet: null, authenticated: false, signed: false }}
+            >
                 <CollectionActivityTable {...args} />
             </ActiveUserContextProvider>
         );

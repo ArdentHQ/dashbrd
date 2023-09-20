@@ -8,8 +8,8 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
 import { formatAddress } from "@/Utils/format-address";
@@ -249,22 +249,19 @@ export const GalleryHeading = ({
 const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { likes, hasLiked, like } = useLikes({ count: gallery.likes, hasLiked: gallery.hasLiked });
 
-    const { authenticated } = useAuth();
-
-    const { showConnectOverlay } = useMetaMaskContext();
+    const { signedAction } = useAuthorizedAction();
 
     const likeButtonHandler: MouseEventHandler<HTMLElement> = (event): void => {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!authenticated) {
-            showConnectOverlay(() => {
-                void like(gallery.slug, true);
-            });
-            return;
-        }
+        signedAction(({ authenticated }) => {
+            // If user wasnt authenticated, foce a positive
+            // like since we dont know if he liked it before
+            const likeValue = !authenticated ? true : undefined;
 
-        void like(gallery.slug);
+            void like(gallery.slug, likeValue);
+        });
     };
 
     return (

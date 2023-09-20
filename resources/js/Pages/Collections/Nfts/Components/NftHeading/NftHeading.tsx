@@ -19,6 +19,7 @@ interface Properties {
     collectionDetails: App.Data.Collections.CollectionBasicDetailsData;
     traits?: App.Data.Collections.CollectionTraitData[];
     nativeToken: App.Data.Token.TokenData;
+    showReportModal: boolean;
 }
 
 export type NftTabTypes = "trait" | "activity";
@@ -34,6 +35,7 @@ export const NftHeading = ({
     collectionDetails,
     traits = [],
     nativeToken,
+    showReportModal,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { isLgAndAbove } = useBreakpoint();
@@ -125,6 +127,7 @@ export const NftHeading = ({
                             alreadyReported={alreadyReported}
                             reportAvailableIn={reportAvailableIn}
                             reportReasons={reportReasons}
+                            showReportModal={showReportModal}
                         />
                     </div>
                     <div className="relative mb-3 mt-6">
@@ -140,6 +143,9 @@ export const NftHeading = ({
                     alreadyReported={alreadyReported}
                     reportAvailableIn={reportAvailableIn}
                     reportReasons={reportReasons}
+                    // Set to false to prevent the modal from showing up twice
+                    // when modal is opened automatically on page load
+                    showReportModal={false}
                 />
             </div>
 
