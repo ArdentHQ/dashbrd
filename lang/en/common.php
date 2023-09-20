@@ -89,6 +89,8 @@ return [
     'page' => 'Page',
     'polygon' => 'Polygon',
     'ethereum' => 'Ethereum',
+    'mumbai' => 'Mumbai',
+    'goerli' => 'Goerli',
     'of' => 'of',
     'pagination_input_placeholder' => 'Enter the page number',
     'nft_count' => '{0} :count NFTs|{1} :count NFT|[2,*] :count NFTs',
