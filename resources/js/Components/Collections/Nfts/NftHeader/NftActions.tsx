@@ -70,24 +70,24 @@ export const NftActions = ({
     const getChainLink = (chainId: App.Enums.Chains, collectionAddress: string, tokenNumber: string): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
-                return t("urls.explorers.etherscan.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.etherscan.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
             case ExplorerChains.EthereumTestnet:
-                return t("urls.explorers.goerli.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.goerli.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
             case ExplorerChains.PolygonMainnet:
-                return t("urls.explorers.polygonscan.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.polygonscan.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
             default:
-                return t("urls.explorers.mumbai.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.mumbai.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
         }
     };
