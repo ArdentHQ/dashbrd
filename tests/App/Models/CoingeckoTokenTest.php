@@ -7,7 +7,7 @@ use App\Models\Network;
 use App\Models\Token;
 
 it('should lookupByToken with platform', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'MATIC',
@@ -26,7 +26,7 @@ it('should lookupByToken with platform', function () {
 });
 
 it('should lookupByToken with name and symbol combination', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'MATIC',
@@ -45,7 +45,7 @@ it('should lookupByToken with name and symbol combination', function () {
 });
 
 it('should not lookupByToken with name when already used by another token', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $tokenLegit = Token::factory()->create([
         'symbol' => 'BAL',
@@ -75,7 +75,7 @@ it('should not lookupByToken with name when already used by another token', func
 });
 
 it('should lookupByToken by guid', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->withGuid('testy')->create([
         'symbol' => 'MATIC',
@@ -92,7 +92,7 @@ it('should lookupByToken by guid', function () {
 });
 
 it('should lookupByToken and handle duplicate platforms', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'MATIC',
@@ -117,7 +117,7 @@ it('should lookupByToken and handle duplicate platforms', function () {
 });
 
 it('should lookupByToken and handle duplicate symbols', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'MATIC',
@@ -142,7 +142,7 @@ it('should lookupByToken and handle duplicate symbols', function () {
 });
 
 it('should lookupByToken and handle duplicate names', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'MATIC',
@@ -167,7 +167,7 @@ it('should lookupByToken and handle duplicate names', function () {
 });
 
 it('should lookupByToken and sort duplicates', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'MATIC',
@@ -194,7 +194,7 @@ it('should lookupByToken and sort duplicates', function () {
 });
 
 it('should return null when lookupByToken when table empty', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'MATIC',

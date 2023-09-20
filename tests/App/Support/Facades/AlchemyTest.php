@@ -26,7 +26,7 @@ it('can use the facade', function () {
         };
     });
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -54,7 +54,7 @@ it('reuses existing token metadata', function () {
         };
     });
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -98,7 +98,7 @@ it('handles missing token metadata', function () {
         };
     });
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -121,7 +121,7 @@ it('rethrows on unexpected error', function () {
         };
     });
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 

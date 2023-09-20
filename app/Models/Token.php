@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Data\Token\TokenData;
+use App\Enums\Chains;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\BelongsToTokenGuid;
@@ -115,9 +116,9 @@ class Token extends Model
      */
     public function scopeMainnet(Builder $query): Builder
     {
-        return $this->scopeWithoutSpam($query->whereHas('network', function (Builder $query) {
-            $query->where('is_mainnet', true);
-        }));
+        return $query->withoutSpam()->whereHas(
+            'network', fn ($q) => $q->onlyMainnet()
+        );
     }
 
     /**
@@ -152,12 +153,9 @@ class Token extends Model
      */
     public function scopeMatic(Builder $query): Builder
     {
-        return $query
-            ->bySymbol('MATIC')
-            ->whereHas('network', function (Builder $query) {
-                /** @var Builder<Network> $query */
-                $query->polygon();
-            });
+        return $query->bySymbol('MATIC')->whereHas(
+            'network', fn ($q) => $q->where('chain_id', Chains::Polygon)
+        );
     }
 
     /**
