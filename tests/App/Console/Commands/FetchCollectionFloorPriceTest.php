@@ -68,4 +68,3 @@ it('should not dispatch a job for a given spam collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
 });
-
