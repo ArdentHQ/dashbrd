@@ -419,8 +419,9 @@ declare namespace App.Data.Wallet {
 declare namespace App.Data.Web3 {
     export type Web3ContractMetadata = {
         contractAddress: string;
-        collectionName: string;
-        totalSupply: string;
+        collectionName: string | null;
+        totalSupply: number | null;
+        mintedBlock: number | null;
         collectionSlug: string | null;
         imageUrl: string | null;
         floorPrice: number | null;

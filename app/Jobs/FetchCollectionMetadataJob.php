@@ -63,9 +63,17 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
                         'banner' => $data->bannerImageUrl,
                     ]);
 
-                    $collection->name = $data->collectionName;
-                    $collection->supply = $data->totalSupply;
-                    $collection->minted_block = $data->mintedBlock;
+                    if ($data->collectionName) {
+                        $collection->name = $data->collectionName;
+                    }
+
+                    if ($data->totalSupply) {
+                        $collection->supply = $data->totalSupply;
+                    }
+
+                    if ($data->mintedBlock) {
+                        $collection->minted_block = $data->mintedBlock;
+                    }
 
                     if ($data->description) {
                         $collection->description = $data->description;

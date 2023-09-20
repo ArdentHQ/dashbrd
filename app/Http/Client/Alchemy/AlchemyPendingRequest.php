@@ -305,11 +305,14 @@ class AlchemyPendingRequest extends PendingRequest
         $collections = self::post('getContractMetadataBatch', ['contractAddresses' => $contactAddresses])->json();
 
         return collect($collections)->map(function ($collectionMeta) {
+            $supply = Arr::get($collectionMeta, 'contractMetadata.totalSupply');
+            $mintedBlock = Arr::get($collectionMeta, 'contractMetadata.deployedBlockNumber');
+
             return new Web3ContractMetadata(
                 contractAddress: $collectionMeta['address'],
                 collectionName: Arr::get($collectionMeta, 'contractMetadata.name'),
-                totalSupply: (int) Arr::get($collectionMeta, 'contractMetadata.totalSupply'),
-                mintedBlock: (int) Arr::get($collectionMeta, 'contractMetadata.deployedBlockNumber'),
+                totalSupply: $supply ? (int) $supply : null,
+                mintedBlock: $mintedBlock ? (int) $mintedBlock : null,
                 collectionSlug: Arr::get($collectionMeta, 'contractMetadata.openSea.collectionSlug'),
                 imageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.imageUrl'),
                 floorPrice: Arr::get($collectionMeta, 'contractMetadata.openSea.floorPrice'),
