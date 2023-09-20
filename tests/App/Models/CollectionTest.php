@@ -906,7 +906,6 @@ it('can determine whether collection was recently viewed', function () {
     expect($collection->recentlyViewed())->toBeFalse();
 });
 
-
 it('should mark collection as invalid - unacceptable supply', function () {
     $collection = new Collection([
         'supply' => null,
@@ -959,7 +958,6 @@ it('should mark collection as invalid - blacklisted', function () {
         'supply' => 3000,
         'address' => '0x123',
     ]);
-
 
     expect($collection1->isInvalid())->toBeTrue();
 });
