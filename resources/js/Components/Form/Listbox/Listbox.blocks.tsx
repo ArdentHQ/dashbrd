@@ -30,7 +30,8 @@ export const ListboxAvatar = ({
             className={cn(
                 "relative -top-px -mt-4 flex h-8 w-8 flex-shrink-0 flex-grow-0 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100 transition group-disabled:bg-theme-secondary-200",
                 {
-                    "group-enabled:bg-theme-primary-700 group-[:enabled:hover]:bg-theme-primary-800": variant === "primary",
+                    "group-enabled:bg-theme-primary-700 group-[:enabled:hover]:bg-theme-primary-800":
+                        variant === "primary",
                     "group-enabled:bg-theme-danger-600": variant === "danger",
                     "group-enabled:bg-theme-secondary-100": variant === undefined,
                 },
