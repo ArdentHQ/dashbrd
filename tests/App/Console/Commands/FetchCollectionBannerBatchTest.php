@@ -37,9 +37,9 @@ it('dispatches a job for collections without banners', function () {
 it('should exclude spam contracts', function () {
     Bus::fake();
 
-    $networks = Network::factory()->create();
+    $network = Network::factory()->create();
 
-    $collections = Collection::factory(2)->create(['network_id' => $networks[0]->id]);
+    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
 
     SpamContract::query()->insert([
         'address' => $collections->first()->address,

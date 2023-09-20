@@ -963,3 +963,45 @@ it('should mark collection as invalid - blacklisted', function () {
 
     expect($collection1->isInvalid())->toBeTrue();
 });
+
+it('should exclude spam contracts', function () {
+    $network = Network::factory()->create();
+
+    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
+
+    SpamContract::query()->insert([
+        'address' => $collections->first()->address,
+        'network_id' => $collections->first()->network_id,
+    ]);
+
+    $validCollections = Collection::query()->filterInvalid()->get();
+
+    expect($validCollections->count())->toBe(1)
+        ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
+});
+
+it('should exclude collections with an invalid supply', function () {
+    Config::set('dashbrd.collections_max_cap', 5000);
+
+    $network = Network::factory()->create();
+
+    $collection1 = Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 3000,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => null,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 5001,
+    ]);
+
+    $validCollections = Collection::query()->filterInvalid()->get();
+
+    expect($validCollections->count())->toBe(1)
+        ->and($validCollections->first()->slug)->toBe($collection1->slug);
+});
