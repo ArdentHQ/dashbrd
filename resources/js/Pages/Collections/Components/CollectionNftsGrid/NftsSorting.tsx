@@ -78,7 +78,7 @@ const DropdownButton = ({
         className={cn(
             "transition-default cursor-pointer whitespace-nowrap px-6 py-2.5 text-left text-base font-medium",
             isActive
-                ? "bg-theme-hint-100 text-theme-hint-600"
+                ? "bg-theme-primary-100 text-theme-primary-600"
                 : "text-theme-secondary-700 hover:bg-theme-secondary-100 hover:text-theme-secondary-900",
         )}
         onClick={onClick}

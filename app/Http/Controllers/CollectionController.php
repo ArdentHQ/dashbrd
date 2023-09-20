@@ -222,6 +222,7 @@ class CollectionController extends Controller
             'nativeToken' => TokenData::fromModel($nativeToken),
             'allowsGuests' => true,
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
+            'showReportModal' => $request->boolean('report'),
         ])->withViewData([
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
             'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),

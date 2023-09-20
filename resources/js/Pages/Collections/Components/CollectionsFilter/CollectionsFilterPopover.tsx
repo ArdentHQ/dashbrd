@@ -109,7 +109,7 @@ export const CollectionsFilterPopover = ({
 
 const PulsatingDot = (): JSX.Element => (
     <>
-        <span className="absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-hint-600 ring-4 ring-white" />
-        <span className="animate-ping-slow absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-hint-600" />
+        <span className="absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-primary-600 ring-4 ring-white" />
+        <span className="animate-ping-slow absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-primary-600" />
     </>
 );

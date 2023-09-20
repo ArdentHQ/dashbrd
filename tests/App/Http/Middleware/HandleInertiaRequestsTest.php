@@ -15,7 +15,7 @@ use App\Support\Cache\UserCache;
 
 it('should get cached data for user', function () {
     $user = User::factory()->create();
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create([
         'user_id' => $user->id,
     ]);

@@ -43,14 +43,16 @@ export const InstallMetamask = ({
 };
 
 export const ConnectionError = ({
+    requiresSignature,
     onConnect,
+    onSign,
     showCloseButton,
     closeOverlay,
 }: ConnectionErrorProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <OverlayButtonsWrapper>
+        <OverlayButtonsWrapper data-testid="ConnectionError">
             {showCloseButton && (
                 <Button
                     data-testid="AuthOverlay__close-button"
@@ -63,7 +65,7 @@ export const ConnectionError = ({
             )}
             <Button
                 className="min-w-[81px] justify-center"
-                onClick={onConnect}
+                onClick={requiresSignature ? onSign : onConnect}
             >
                 {t("common.retry")}
             </Button>
@@ -79,14 +81,14 @@ export const SwitchingNetwork = (): JSX.Element => {
             <Icon
                 name="Spinner"
                 size="lg"
-                className="animate-spin text-theme-hint-600"
+                className="animate-spin text-theme-primary-600"
             />
             <span className="font-medium text-theme-secondary-900">{t("auth.wallet.switching_wallet")}</span>
         </OverlayButtonsWrapper>
     );
 };
 
-export const ConnectingWallet = (): JSX.Element => {
+export const ConnectingWallet = ({ signing }: { signing: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -94,17 +96,20 @@ export const ConnectingWallet = (): JSX.Element => {
             <Icon
                 name="Spinner"
                 size="xl"
-                className="animate-spin text-theme-hint-600"
+                className="animate-spin text-theme-primary-600"
             />
-            <span className="font-medium text-theme-secondary-900">{t("auth.wallet.connecting")}</span>
+            <span className="font-medium text-theme-secondary-900">
+                {signing ? t("auth.wallet.waiting_for_signature") : t("auth.wallet.connecting")}
+            </span>
         </OverlayButtonsWrapper>
     );
 };
 
 export const ConnectWallet = ({
     isWalletInitialized,
-    shouldRequireSignature,
+    requiresSignature,
     onConnect,
+    onSign,
     showCloseButton,
     closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
@@ -125,12 +130,12 @@ export const ConnectWallet = ({
 
             <Button
                 disabled={!isWalletInitialized}
-                onClick={onConnect}
+                onClick={requiresSignature ? onSign : onConnect}
                 className={classNames("justify-center", {
                     "w-full whitespace-nowrap": showCloseButton,
                 })}
             >
-                {shouldRequireSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
+                {requiresSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
             </Button>
         </OverlayButtonsWrapper>
     );

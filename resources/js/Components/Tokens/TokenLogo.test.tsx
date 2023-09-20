@@ -82,7 +82,7 @@ describe("TokenLogo", () => {
             />,
         );
 
-        expect(screen.getByTestId("TokenLogo__chain")).toHaveClass("border-theme-hint-100");
+        expect(screen.getByTestId("TokenLogo__chain")).toHaveClass("border-theme-primary-100");
     });
 
     it("should have size md by default", () => {

@@ -68,7 +68,7 @@ export const GalleryActionToolbar = ({
                                         iconPosition="right"
                                         variant="secondary"
                                         type="button"
-                                        iconClass="text-theme-hint-900"
+                                        iconClass="text-theme-primary-900"
                                         className="hidden h-full rounded-none rounded-r-xl border-none bg-transparent px-5 font-normal lg:block"
                                         onClick={onTemplateClick}
                                         data-testid="GalleryActionToolbar__template-button"
@@ -116,7 +116,7 @@ export const GalleryActionToolbar = ({
                                             iconPosition="right"
                                             variant="secondary"
                                             type="button"
-                                            iconClass="text-theme-hint-900"
+                                            iconClass="text-theme-primary-900"
                                             className="hidden h-full rounded-none rounded-r-xl border-none bg-transparent px-5 font-normal lg:block"
                                             onClick={onTemplateClick}
                                             data-testid="GalleryActionToolbar__template-button"
@@ -136,7 +136,7 @@ export const GalleryActionToolbar = ({
                                             <IconButton
                                                 onClick={onCoverClick}
                                                 icon="RoundedSquareWithPencil"
-                                                className="h-full rounded-none rounded-r-xl border-none bg-transparent font-normal text-theme-hint-900"
+                                                className="h-full rounded-none rounded-r-xl border-none bg-transparent font-normal text-theme-primary-900"
                                             />
                                         )}
 
@@ -144,7 +144,7 @@ export const GalleryActionToolbar = ({
                                             <Button
                                                 onClick={onCoverClick}
                                                 variant="bordered"
-                                                className="flex h-full rounded-none rounded-r-xl border-none bg-transparent font-normal text-theme-hint-900"
+                                                className="flex h-full rounded-none rounded-r-xl border-none bg-transparent font-normal text-theme-primary-900"
                                                 icon="RoundedSquareWithPencil"
                                                 iconPosition="right"
                                             >

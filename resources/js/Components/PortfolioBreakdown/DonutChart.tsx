@@ -103,7 +103,7 @@ export const DonutChart = ({ assets, currency, size = 276 }: DonutChartPropertie
             >
                 <Icon
                     name="Wallet"
-                    className="bg-theme-hint-50 text-theme-hint-600"
+                    className="bg-theme-primary-50 text-theme-primary-600"
                     size="lg"
                 />
 

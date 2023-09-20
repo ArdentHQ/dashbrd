@@ -12,17 +12,6 @@ it('can create a basic network', function () {
     expect($network->name)->not()->toBeNull();
 });
 
-it('can get Polygon network', function () {
-    // Random network
-    Network::factory()->create();
-
-    $polygonNetwork = Network::polygon()->firstOrFail();
-
-    expect(Network::polygon()->count())->toBe(1);
-
-    expect(Network::polygon()->first()->id)->toEqual($polygonNetwork->id);
-});
-
 it('can retrieve the tokens assigned to the network', function () {
     $network = Network::factory()->create();
 

@@ -71,7 +71,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
                             "bg-theme-success-50 text-theme-secondary-700": type === "success",
                             "bg-theme-warning-50 text-theme-secondary-700": type === "warning",
                             "bg-theme-danger-50 text-theme-secondary-700": type === "error",
-                            "bg-theme-hint-50 text-theme-secondary-700": type === "info",
+                            "bg-theme-primary-50 text-theme-secondary-700": type === "info",
                         })}
                     >
                         {message}

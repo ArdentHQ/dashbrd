@@ -10,7 +10,7 @@ import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface Properties {
@@ -27,26 +27,18 @@ interface Galleries {
 const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    const { showConnectOverlay, initialized, connecting } = useMetaMaskContext();
+    const { initialized, connecting } = useMetaMaskContext();
 
-    const { authenticated } = useAuth();
+    const { signedAction } = useAuthorizedAction();
 
     const guestBannerClickHandler = (): void => {
-        if (authenticated) {
+        signedAction(() => {
             router.visit(
                 route("my-galleries.create", {
                     redirectTo: "my-galleries.create",
                 }),
             );
-        } else {
-            showConnectOverlay(() => {
-                router.visit(
-                    route("my-galleries.create", {
-                        redirectTo: "my-galleries.create",
-                    }),
-                );
-            });
-        }
+        });
     };
 
     const { props } = usePage();
