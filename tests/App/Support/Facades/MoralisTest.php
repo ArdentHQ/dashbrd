@@ -15,7 +15,7 @@ it('can use the facade', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $data = Moralis::getWalletTokens($wallet, $network);
@@ -46,7 +46,7 @@ it('can use the facade to fetch the balance for a native coin', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 

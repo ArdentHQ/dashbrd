@@ -32,7 +32,7 @@ export const MobileButton = ({ page, totalPages, ...properties }: MobileButtonPr
                 {t("common.of")} {formattedTotalPages}
             </span>
 
-            <span className="text-theme-hint-900">
+            <span className="text-theme-primary-900">
                 <Icon name="Ellipsis" />
             </span>
         </button>

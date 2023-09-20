@@ -42,7 +42,7 @@ export const CarouselControls = ({
         >
             <div className="flex items-center">
                 <Link
-                    className="ml-2 text-theme-hint-600 sm:hidden"
+                    className="ml-2 text-theme-primary-600 sm:hidden"
                     href={viewAllPath}
                 >
                     <Icon name="ArrowRight" />

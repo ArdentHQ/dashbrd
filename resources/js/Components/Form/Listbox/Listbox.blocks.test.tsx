@@ -89,7 +89,7 @@ describe("Listbox", () => {
 
         await userEvent.click(screen.getByTestId("Listbox__trigger"));
 
-        expect(screen.getByTestId("ListboxOption")).toHaveClass("bg-theme-hint-100");
+        expect(screen.getByTestId("ListboxOption")).toHaveClass("bg-theme-primary-100");
     });
 });
 

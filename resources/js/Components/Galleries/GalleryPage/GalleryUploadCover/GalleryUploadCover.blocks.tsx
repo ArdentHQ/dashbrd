@@ -22,7 +22,7 @@ export const ImageEditActions = ({ src, onRemove, onUpload }: ImageEditActionsPr
     >
         <div className="transition-default absolute inset-0 z-10 flex items-center justify-center rounded-xl opacity-100 group-hover:opacity-100 md:bg-white/30 md:opacity-0 md:backdrop-blur-md">
             <div className="flex h-full items-end justify-center pb-4 md:items-center md:pb-0">
-                <div className="flex items-center space-x-3 rounded-full bg-theme-hint-50/50 p-1 backdrop-blur-lg backdrop-filter md:bg-white/30">
+                <div className="flex items-center space-x-3 rounded-full bg-theme-primary-50/50 p-1 backdrop-blur-lg backdrop-filter md:bg-white/30">
                     <IconButton
                         data-testid="ImageEditActions__upload"
                         icon="Upload"

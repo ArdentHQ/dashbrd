@@ -58,7 +58,7 @@ export const CollectionCard = ({
         <div
             ref={reference}
             data-testid="CollectionCard"
-            className="transition-default group relative flex cursor-pointer flex-col rounded-xl border border-theme-secondary-300 p-8 outline outline-3 outline-transparent hover:outline-theme-hint-100 focus-visible:outline-theme-hint-300"
+            className="transition-default group relative flex cursor-pointer flex-col rounded-xl border border-theme-secondary-300 p-8 outline outline-3 outline-transparent hover:outline-theme-primary-100 focus-visible:outline-theme-primary-300"
             onClick={() => {
                 router.visit(
                     route("collections.view", {
@@ -105,7 +105,7 @@ export const CollectionCard = ({
             >
                 <span
                     ref={collectionNameReference}
-                    className="break-word-legacy group-hover mx-auto mt-1 max-w-full truncate text-lg font-medium leading-7 group-hover:text-theme-hint-700"
+                    className="break-word-legacy group-hover mx-auto mt-1 max-w-full truncate text-lg font-medium leading-7 group-hover:text-theme-primary-700"
                 >
                     {collection.name}
                 </span>

@@ -36,7 +36,7 @@ export const NftOwner = ({ nft }: Properties): JSX.Element => {
                     showExternalIcon={true}
                     className="ml-1 flex flex-row items-center"
                 >
-                    <span className="text-theme-hint-600">
+                    <span className="text-theme-primary-600">
                         <TruncateMiddle
                             length={8}
                             text={address}
@@ -44,7 +44,7 @@ export const NftOwner = ({ nft }: Properties): JSX.Element => {
                     </span>
                 </Link>
             ) : (
-                <span>{t("common.na")}</span>
+                <span className="ml-1">{t("common.na")}</span>
             )}
         </div>
     );

@@ -44,11 +44,11 @@ body {
     }
 
     .custom-scroll::-webkit-scrollbar-thumb {
-        @apply rounded-lg bg-theme-hint-200;
+        @apply rounded-lg bg-theme-primary-200;
     }
 
     .custom-scroll {
-        scrollbar-color: rgb(var(--theme-color-hint-200)) transparent;
+        scrollbar-color: rgb(var(--theme-color-primary-200)) transparent;
     }
 }
 

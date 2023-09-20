@@ -16,7 +16,7 @@ it('should fetch tokens for wallet', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('tokens', 0);
@@ -33,7 +33,7 @@ it('should delete tokens balances that are no longer present', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     // Present in the response
@@ -84,7 +84,7 @@ it('should update tokens on change', function () {
             ->push(fixtureData('moralis.erc20_update'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     expect(Token::bySymbol('BalancerV2.io')->first())->toBeNull()
@@ -111,7 +111,7 @@ it('does not fire a job to index transactions for tokens whose balance is alread
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $first = Token::factory()->for($network)->create([
         'address' => '0xcab66b484123ecc93673b30d9e543b2204bf0369',
@@ -157,7 +157,7 @@ it('does not store balances if all tokens have zero balance', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20-spam'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('tokens', 0);
@@ -170,7 +170,7 @@ it('does not store balances if all tokens have zero balance', function () {
 });
 
 it('handles an empty token list for a wallet', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     Moralis::shouldReceive('getWalletTokens')
@@ -187,14 +187,14 @@ it('handles an empty token list for a wallet', function () {
 });
 
 it('should use the wallet id as a unique job identifier', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     expect((new FetchTokens($wallet, $network)))->uniqueId()->toBeString();
 });
 
 it('has a retry until', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $job = new FetchTokens($wallet, $network);

@@ -8,7 +8,7 @@ export const LikeButton = ({ children, className, ...properties }: LikeButtonPro
         variant="bordered"
         className={cn(className, "button-like")}
         {...properties}
-        iconClass="text-theme-hint-900"
+        iconClass="text-theme-primary-900"
     >
         <span className="text-sm font-medium text-theme-secondary-700">{children}</span>
     </Button>

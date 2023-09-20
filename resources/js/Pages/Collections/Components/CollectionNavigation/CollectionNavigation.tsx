@@ -31,13 +31,13 @@ const CollectionNavigationTab = forwardRef<
                             icon={icon}
                             variant="primary"
                             iconClass={classNames("w-[18px] h-auto", {
-                                "text-theme-hint-600": !selected && !disabled,
+                                "text-theme-primary-600": !selected && !disabled,
                                 "text-theme-secondary-500": disabled,
                             })}
                             className={classNames(
                                 "w-full justify-center disabled:bg-transparent disabled:text-theme-secondary-500 sm:w-auto",
                                 {
-                                    "bg-transparent text-theme-hint-900": !selected,
+                                    "bg-transparent text-theme-primary-900": !selected,
                                     [hoverClass]: !selected && !disabled,
                                 },
                             )}
