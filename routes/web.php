@@ -38,10 +38,14 @@ Route::middleware('auth')->group(function () {
     // Gallery
     Route::group(['prefix' => 'my-galleries', 'middleware' => 'features:galleries'], function () {
         Route::get('', [MyGalleryController::class, 'index'])->name('my-galleries')->middleware(EnsureOnboarded::class);
-        Route::get('create', [MyGalleryController::class, 'create'])->name('my-galleries.create')->middleware(EnsureOnboarded::class);
-        Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
-        Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
-        Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');
+
+        Route::group(['middleware' => 'signed_wallet'], function () {
+            Route::get('create', [MyGalleryController::class, 'create'])->name('my-galleries.create')->middleware(EnsureOnboarded::class);
+            Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
+            Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
+            Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');
+        });
+
         Route::get('collections', [MyGalleryCollectionController::class, 'index'])->name('my-galleries.collections');
         Route::get('{collection:slug}/nfts', [MyGalleryCollectionController::class, 'nfts'])->name('my-galleries.nfts');
     });
@@ -63,7 +67,9 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
 
         Route::post('{gallery:slug}/reports',
-            [GalleryReportController::class, 'store'])->name('reports.create')->middleware('throttle:gallery:reports');
+            [GalleryReportController::class, 'store'])
+                ->name('reports.create')
+                ->middleware(['throttle:gallery:reports', 'signed_wallet']);
     });
 });
 

@@ -15,12 +15,12 @@ export const textInputDynamicClassnames = ({
         classes.push("border-theme-danger-400 ring-1 ring-theme-danger-400");
     } else {
         if (isFocused) {
-            classes.push("border-theme-hint-600 ring-1 ring-theme-hint-600");
+            classes.push("border-theme-primary-600 ring-1 ring-theme-primary-600");
         } else {
             classes.push("border-theme-secondary-400");
 
             if (isMouseOver && !isDisabled) {
-                classes.push("ring-2 ring-theme-hint-100");
+                classes.push("ring-2 ring-theme-primary-100");
             }
         }
     }

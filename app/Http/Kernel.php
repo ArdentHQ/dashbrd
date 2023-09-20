@@ -13,6 +13,7 @@ use App\Http\Middleware\StoreLastActivity;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ValidateSignature;
+use App\Http\Middleware\ValidateSignedWallet;
 use App\Http\Middleware\ValidateWallet;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
@@ -102,6 +103,7 @@ class Kernel extends HttpKernel
         'guest' => RedirectIfAuthenticated::class,
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,
+        'signed_wallet' => ValidateSignedWallet::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
         'features' => EnsureFeaturesAreActive::class,

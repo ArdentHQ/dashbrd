@@ -44,6 +44,7 @@ class NftController extends Controller
             'traits' => CollectionTraitData::collection($nft->traits),
             'nativeToken' => TokenData::fromModel($nativeToken),
             'allowsGuests' => true,
+            'showReportModal' => $request->boolean('report'),
         ])->withViewData([
             'title' => trans('metatags.nfts.view.title', ['nft' => $nft->name ?? $nft->token_number]),
             'description' => trans('metatags.nfts.view.description', ['nft' => $nft->name ?? $nft->token_number, 'collection' => $collection->name]),

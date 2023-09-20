@@ -19,6 +19,7 @@ interface Properties {
     nft: App.Data.Nfts.NftData;
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
+    showReportModal?: boolean;
 }
 
 export const NftActions = ({
@@ -27,6 +28,7 @@ export const NftActions = ({
     nft,
     reportAvailableIn = null,
     reportReasons,
+    showReportModal = false,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { showToast } = useToasts();
@@ -150,6 +152,7 @@ export const NftActions = ({
                 reportAvailableIn={reportAvailableIn}
                 displayDefaultTooltip={true}
                 className="bg-transparent"
+                show={showReportModal}
             />
 
             <Tooltip

@@ -165,9 +165,9 @@ export const TraitsCarousel = ({
                                     {t("pages.collections.rarity")}
                                 </span>
 
-                                <div className="relative h-2 w-25 bg-theme-hint-200 md:w-full">
+                                <div className="relative h-2 w-25 bg-theme-primary-200 md:w-full">
                                     <div
-                                        className="left-0 h-full bg-theme-hint-600 md:absolute"
+                                        className="left-0 h-full bg-theme-primary-600 md:absolute"
                                         style={{ width: `${trait.nftsPercentage}%` }}
                                     />
                                 </div>

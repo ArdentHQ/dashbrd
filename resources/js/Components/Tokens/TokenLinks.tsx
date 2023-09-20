@@ -70,7 +70,7 @@ const SocialMediaLink = ({
             <Icon
                 name={icon}
                 size="md"
-                className="text-theme-hint-900"
+                className="text-theme-primary-900"
             />
         </a>
     </Tooltip>

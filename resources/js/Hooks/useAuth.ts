@@ -5,6 +5,7 @@ import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 export const useAuth = (): App.Data.AuthData & {
     showAuthOverlay: boolean;
     showCloseButton: boolean;
+    signed: boolean;
     closeOverlay: () => void;
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
@@ -22,13 +23,21 @@ export const useAuth = (): App.Data.AuthData & {
     const { wallet, authenticated, user } = auth;
 
     const {
+        signed,
         connecting,
         switching,
         errorMessage: metamaskErrorMessage,
         requiresSignature,
         isShowConnectOverlay,
         hideConnectOverlay,
+        onDisconnected,
     } = useMetaMaskContext();
+
+    useEffect(() => {
+        if (!authenticated) {
+            onDisconnected();
+        }
+    }, [authenticated]);
 
     const closeOverlay = (): void => {
         hideConnectOverlay();
@@ -41,6 +50,9 @@ export const useAuth = (): App.Data.AuthData & {
     }, [connecting]);
 
     const showAuthOverlay = useMemo<boolean>(() => {
+        if (requiresSignature) {
+            return true;
+        }
         if (isShowConnectOverlay) {
             return true;
         }
@@ -69,11 +81,7 @@ export const useAuth = (): App.Data.AuthData & {
             return true;
         }
 
-        if (metamaskErrorMessage !== undefined) {
-            return true;
-        }
-
-        return requiresSignature;
+        return metamaskErrorMessage !== undefined;
     }, [
         authenticated,
         connecting,
@@ -86,10 +94,11 @@ export const useAuth = (): App.Data.AuthData & {
         isShowConnectOverlay,
     ]);
 
-    const showCloseButton = allowsGuests;
+    const showCloseButton = allowsGuests || requiresSignature;
 
     return {
         authenticated,
+        signed,
         user,
         wallet,
         showAuthOverlay,

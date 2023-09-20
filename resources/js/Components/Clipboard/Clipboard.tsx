@@ -92,10 +92,10 @@ export const ClipboardButton = ({ text, className, zIndex }: ClipboardProperties
     >
         <button
             type="button"
-            className="transition-default rounded-full outline-none outline-3 outline-offset-8 focus-visible:outline-theme-hint-300"
+            className="transition-default rounded-full outline-none outline-3 outline-offset-8 focus-visible:outline-theme-primary-300"
         >
             <Icon
-                className="text-theme-hint-600 transition-colors hover:text-theme-hint-700"
+                className="text-theme-primary-600 transition-colors hover:text-theme-primary-700"
                 name="Copy"
                 size="md"
             />

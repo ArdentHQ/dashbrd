@@ -2,6 +2,8 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: "class",
+
     future: {
         hoverOnlyWhenSupported: true,
     },
@@ -144,6 +146,18 @@ module.exports = {
             "theme-secondary-700": "rgb(var(--theme-color-secondary-700) / <alpha-value>)",
             "theme-secondary-800": "rgb(var(--theme-color-secondary-800) / <alpha-value>)",
             "theme-secondary-900": "rgb(var(--theme-color-secondary-900) / <alpha-value>)",
+
+            "theme-dark-50": "rgb(var(--theme-color-dark-50) / <alpha-value>)",
+            "theme-dark-100": "rgb(var(--theme-color-dark-100) / <alpha-value>)",
+            "theme-dark-200": "rgb(var(--theme-color-dark-200) / <alpha-value>)",
+            "theme-dark-300": "rgb(var(--theme-color-dark-300) / <alpha-value>)",
+            "theme-dark-400": "rgb(var(--theme-color-dark-400) / <alpha-value>)",
+            "theme-dark-500": "rgb(var(--theme-color-dark-500) / <alpha-value>)",
+            "theme-dark-600": "rgb(var(--theme-color-dark-600) / <alpha-value>)",
+            "theme-dark-700": "rgb(var(--theme-color-dark-700) / <alpha-value>)",
+            "theme-dark-800": "rgb(var(--theme-color-dark-800) / <alpha-value>)",
+            "theme-dark-900": "rgb(var(--theme-color-dark-900) / <alpha-value>)",
+            "theme-dark-950": "rgb(var(--theme-color-dark-950) / <alpha-value>)",
 
             "theme-danger-50": "rgb(var(--theme-color-danger-50) / <alpha-value>)",
             "theme-danger-100": "rgb(var(--theme-color-danger-100) / <alpha-value>)",
