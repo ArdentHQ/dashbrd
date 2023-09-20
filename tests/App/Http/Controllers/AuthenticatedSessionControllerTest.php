@@ -15,7 +15,7 @@ use App\Support\Facades\Signature;
 it('should handle an incoming authentication request for a new user', function () {
     Token::factory()->matic()->create();
 
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('')
@@ -37,7 +37,7 @@ it('should handle an incoming authentication request for a new user', function (
 });
 
 it('should handle an incoming authentication request for a user with a new wallet', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create([
         'address' => '0x1231231231231231231231231231231231231231',
@@ -67,7 +67,7 @@ it('should handle an incoming authentication request for a user with a new walle
 });
 
 it('should handle an incoming authentication request for an existing user', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create([
         'address' => '0x2231231231231231231231231231231231231231',
@@ -109,7 +109,7 @@ it('should handle an invalid incoming authentication request', function () {
         ->andReturn($nonce)
         ->once();
 
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [
         'address' => '0x2231231231231231231231231231231231231231',
@@ -123,7 +123,7 @@ it('should handle an invalid incoming authentication request', function () {
 it('should throw a validation exception when nonce is not available in session', function () {
     Signature::shouldReceive('getSessionNonce')->andReturn(null)->once();
 
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [
         'address' => '0x2231231231231231231231231231231231231231',
@@ -135,7 +135,7 @@ it('should throw a validation exception when nonce is not available in session',
 });
 
 it('should validate data on incoming authentication request', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [])
         ->assertSessionHasErrors([
@@ -156,7 +156,7 @@ it('should validate data on incoming authentication request', function () {
 });
 
 it('should sign a message', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('test message')
@@ -173,7 +173,7 @@ it('should sign a message', function () {
 });
 
 it('should validate data when signing a message', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('sign-message'), [])
         ->assertSessionHasErrors([
@@ -187,7 +187,7 @@ it('should validate data when signing a message', function () {
 });
 
 it('should switch account', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create();
 
@@ -211,7 +211,7 @@ it('should switch account', function () {
 });
 
 it('should throw error when switching account with unknown address', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $user = User::factory()->create();
     $oldWallet = Wallet::factory()->create();
 
@@ -262,7 +262,7 @@ it('should destroy the session', function () {
 });
 
 it("stores user's timezone if specified", function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('')
@@ -293,7 +293,7 @@ it("stores user's timezone if specified", function () {
 });
 
 it("defaults user's timezone to UTC if not specified", function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('')
@@ -322,7 +322,7 @@ it("defaults user's timezone to UTC if not specified", function () {
 });
 
 it("defaults user's timezone to UTC if timezone is not valid", function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('')
@@ -352,7 +352,7 @@ it("defaults user's timezone to UTC if timezone is not valid", function () {
 });
 
 it('defaults currency to USD if locale is not valid', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('')

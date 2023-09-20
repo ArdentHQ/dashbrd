@@ -27,7 +27,7 @@ it('should fetch nfts for wallet', function () {
 
     Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('collections', 0);
@@ -46,7 +46,7 @@ it('should fetch nfts for wallet and handle empty response', function () {
         '*' => Http::response(['result' => ['ownedNfts' => []]], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('collections', 0);
@@ -63,7 +63,7 @@ it('should fetch nfts for wallet and dispatch floor price job', function () {
 
     Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('collections', 0);
@@ -86,7 +86,7 @@ it('should fetch nfts for wallet and skip floor price job if already present', f
         '*' => Http::response(getTestNfts(1)),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
     Token::factory()->create(['network_id' => $network->id, 'symbol' => 'eth']);
 
@@ -98,7 +98,7 @@ it('should fetch nfts for wallet and skip floor price job if already present', f
 });
 
 it('should use the wallet id as a unique job identifier', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $uniqueId = (new FetchWalletNfts($wallet, $network,
@@ -118,7 +118,7 @@ it('should detach no longer owned nfts', function () {
             ->push(getTestNfts(2)),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('collections', 0);
@@ -166,7 +166,7 @@ it('should delete gallery when all nfts have been removed', function () {
             ->push(['ownedNfts' => []]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('collections', 0);
@@ -241,7 +241,7 @@ it('should handle NFT owner changes', function () {
             ->push(['ownedNfts' => []]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet1 = Wallet::factory()->create();
     $wallet2 = Wallet::factory()->create();
 
@@ -301,7 +301,7 @@ it('should delete gallery of previous owner if it becomes empty', function () {
             ->push(getTestNfts(1, 2)),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet1 = Wallet::factory()->create();
     $wallet2 = Wallet::factory()->create();
 
@@ -352,7 +352,7 @@ it('should not delete gallery/nfts of local testing wallet', function () {
             ->push(['ownedNfts' => []]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet1 = Wallet::factory()->create();
 
     config(['dashbrd.testing_wallet' => $wallet1->address]);
@@ -429,7 +429,7 @@ it('should clear gallery & user cache', function () {
     expect($galleryCache->nftsCount())->toBe(0)
         ->and($userCache->nftsCount())->toBe(0);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     [$wallet1, $wallet2] = Wallet::factory()->createMany([
         ['user_id' => $user1],
         ['user_id' => $user2],
@@ -477,7 +477,7 @@ it('should fetch nfts for wallet with default provider', function () {
         '*' => Http::response(['result' => ['ownedNfts' => []]], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -519,7 +519,7 @@ it('should not store base64 encoded asset images', function () {
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -568,7 +568,7 @@ it('should use media thumbnail for collection image if no opensea image url', fu
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -615,7 +615,7 @@ it('should use media gateway for collection image if no opensea image url', func
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -666,7 +666,7 @@ it('should not store original asset image if it is in base64 encoded format', fu
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -716,7 +716,7 @@ it('should extract social details from opensea', function () {
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -769,7 +769,7 @@ it('should use opensea description for collection', function () {
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -825,7 +825,7 @@ it('should handle nft traits', function () {
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     (new FetchWalletNfts($wallet, $network))->handle();
@@ -856,7 +856,7 @@ it('should handle nft traits', function () {
 });
 
 it('has a retry until', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $job = new FetchWalletNfts($wallet, $network);
@@ -873,7 +873,7 @@ it('should paginate wallet NFTs', function () {
             ->push(getTestNfts(1, 2)),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $this->assertDatabaseCount('nfts', 0);
@@ -942,7 +942,7 @@ it('should fetch nfts for wallet and keep previous collections last indexed toke
 
     Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $collection = Collection::factory()->create([

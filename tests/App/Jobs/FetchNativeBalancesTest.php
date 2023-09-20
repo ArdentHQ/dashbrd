@@ -16,7 +16,7 @@ it('should fetch native balance for a wallet', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native-multiple'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet1 = Wallet::factory()->create([
         'address' => '0x123',
@@ -64,7 +64,7 @@ JSON
             , 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create([
         'address' => '0x123',
     ]);

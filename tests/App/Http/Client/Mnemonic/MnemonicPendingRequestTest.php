@@ -30,7 +30,7 @@ it('should throw a custom exception on connection failures', function () {
         'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 500),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -44,7 +44,7 @@ it('should throw on 401', function () {
         'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 401),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -60,7 +60,7 @@ it('should throw a custom exception on rate limits', function () {
         ]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -76,7 +76,7 @@ it('should not retry request on 400', function () {
             ->push(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $from = Carbon::now();
 
@@ -99,7 +99,7 @@ it('should get owners', function () {
             ->push(['ownersCount' => '789'], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -120,7 +120,7 @@ it('should get volume', function () {
             ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -137,7 +137,7 @@ it('should handle no volume', function ($request) {
             ->push($request, 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -170,7 +170,7 @@ it('should fetch nft collection traits', function () {
         'https://*-rest.api.mnemonichq.com/collections/v1beta2/*/traits/numeric?*' => Http::response(fixtureData('mnemonic.collection_traits_numeric'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -197,7 +197,7 @@ it('should fetch nft collection traits with pagination', function () {
             ->push(['traits' => []]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -218,7 +218,7 @@ it('should fetch nft collection traits and deduplicate', function () {
             ->push(['traits' => []]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -239,7 +239,7 @@ it('should circuit break when fetching nft collection traits', function () {
         ]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -255,7 +255,7 @@ it('should fetch nft activity', function () {
         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -291,7 +291,7 @@ it('should convert total to native currency by using historical price for the gi
         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -339,7 +339,7 @@ it('should convert total to native currency by using historical price for the pe
             200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -398,7 +398,7 @@ it('should ignore nft activity with unexpected label', function () {
         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response($response, 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -436,7 +436,7 @@ it('should fetch nft from date', function () {
         'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*blockTimestampGt=*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -472,7 +472,7 @@ it('should return null floor price on 400', function () {
             ->push(null, 400),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,

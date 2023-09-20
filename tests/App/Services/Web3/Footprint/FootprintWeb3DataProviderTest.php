@@ -26,7 +26,7 @@ it('should getNftCollectionFloorPrice', function () {
 });
 
 it('should getWalletTokens and throw NotImplementedException', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new FootprintWeb3DataProvider();
 
@@ -34,7 +34,7 @@ it('should getWalletTokens and throw NotImplementedException', function () {
 })->throws(NotImplementedException::class);
 
 it('should getBlockTimestamp and throw NotImplementedException', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new FootprintWeb3DataProvider();
 
@@ -42,7 +42,7 @@ it('should getBlockTimestamp and throw NotImplementedException', function () {
 })->throws(NotImplementedException::class);
 
 it('should getWalletNfts and throw NotImplementedException', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new FootprintWeb3DataProvider();
 
