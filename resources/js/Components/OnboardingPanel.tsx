@@ -18,7 +18,7 @@ export const OnboardingPanel = ({ className, heading, subheading, ...properties 
         <div className="relative">
             <Icon
                 name="SpinnerNarrow"
-                className="h-40 w-40 animate-spin text-theme-hint-600"
+                className="h-40 w-40 animate-spin text-theme-primary-600"
             />
 
             <span className="absolute left-8 top-8 flex items-center justify-center">

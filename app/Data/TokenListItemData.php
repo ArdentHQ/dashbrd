@@ -7,6 +7,7 @@ namespace App\Data;
 use App\Models\Token;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -57,10 +58,10 @@ class TokenListItemData extends Data
 
     /**
      * @param  int  $currentPage
-     * @param  array<int>  $chainIds
+     * @param  Collection<int, int>  $chainIds
      * @return PaginatedDataCollection<int, TokenListItemData>
      */
-    public static function paginated(User $user, int $perPage, int $currentPage = null, string $sortBy, string $sortDirection, array $chainIds): PaginatedDataCollection
+    public static function paginated(User $user, int $perPage, int $currentPage = null, string $sortBy, string $sortDirection, Collection $chainIds): PaginatedDataCollection
     {
         $sortBy = in_array($sortBy, self::$sortByOptions) ? $sortBy : 'fiat_balance';
 
@@ -75,7 +76,7 @@ class TokenListItemData extends Data
             'currency' => $userCurrency->canonical(),
             'limit' => $perPage,
             'offset' => $currentPage ? ($currentPage - 1) * $perPage : 0,
-            'chainIds' => implode(',', $chainIds),
+            'chainIds' => $chainIds->join(','),
             'sortBy' => $sortBy,
             'sortDirection' => $sortDirection,
             'nullDirection' => $nullDirection,
@@ -83,7 +84,7 @@ class TokenListItemData extends Data
 
         $total = DB::select(get_query('tokens.get_list_count', [
             'walletId' => $user->wallet_id,
-            'chainIds' => implode(',', $chainIds),
+            'chainIds' => $chainIds->join(','),
         ]))[0]->item_count;
 
         if (empty($items)) {

@@ -17,6 +17,7 @@ describe("Navbar", () => {
         vi.spyOn(useAuth, "useAuth").mockReturnValue({
             user,
             wallet,
+            signed: false,
             authenticated: true,
             showAuthOverlay: false,
             showCloseButton: false,

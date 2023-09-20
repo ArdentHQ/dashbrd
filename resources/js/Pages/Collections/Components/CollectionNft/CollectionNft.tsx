@@ -28,7 +28,7 @@ export const CollectionNft = ({
                 collection: nft.collectionSlug,
                 nft: nft.tokenNumber,
             })}
-            className="transition-default cursor-pointer rounded-xl border border-theme-secondary-300 p-2 ring-theme-hint-100 hover:ring-2"
+            className="transition-default cursor-pointer rounded-xl border border-theme-secondary-300 p-2 ring-theme-primary-100 hover:ring-2"
         >
             <span className="relative block">
                 <Img
@@ -37,7 +37,7 @@ export const CollectionNft = ({
                 />
 
                 <span className="absolute inset-x-0 top-0 m-4 flex">
-                    <span className="block flex h-7.5 min-w-0 items-center rounded-3xl bg-theme-hint-50/50 p-1 backdrop-blur-lg backdrop-filter">
+                    <span className="block flex h-7.5 min-w-0 items-center rounded-3xl bg-theme-primary-50/50 p-1 backdrop-blur-lg backdrop-filter">
                         <Tooltip
                             content={<span>#&nbsp;{nft.tokenNumber}</span>}
                             disabled={!isTokenNumberTruncated}

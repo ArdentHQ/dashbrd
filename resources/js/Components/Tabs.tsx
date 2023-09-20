@@ -23,7 +23,7 @@ const getTabClasses = ({
     className?: string;
 }): string => {
     const baseClassName = cn(
-        "transition-default flex items-center font-medium whitespace-nowrap outline-none outline-3 focus-visible:outline-theme-hint-300",
+        "transition-default flex items-center font-medium whitespace-nowrap outline-none outline-3 focus-visible:outline-theme-primary-300",
         {
             "cursor-pointer": !disabled,
             "cursor-not-allowed text-theme-secondary-500": disabled,
@@ -60,7 +60,7 @@ const getTabClasses = ({
         baseClassName,
         "rounded-xl sm:py-2.5 sm:px-3 outline-offset-0",
         {
-            "bg-theme-hint-100": selected,
+            "bg-theme-primary-100": selected,
             "hover:bg-theme-secondary-100 hover:text-theme-secondary-900": !selected && !disabled,
         },
         className,

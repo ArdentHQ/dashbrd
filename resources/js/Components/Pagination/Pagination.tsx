@@ -109,7 +109,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                             {showBeforeEllipsis && (
                                 <button
                                     type="button"
-                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-hint-300"
+                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-primary-300"
                                     data-testid="Pagination__EllipsisButton"
                                     onClick={() => {
                                         setShowInput(true);
@@ -131,7 +131,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                             {showAfterEllipsis && (
                                 <button
                                     type="button"
-                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-hint-300"
+                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-primary-300"
                                     data-testid="Pagination__EllipsisButton__after"
                                     onClick={() => {
                                         setShowInput(true);

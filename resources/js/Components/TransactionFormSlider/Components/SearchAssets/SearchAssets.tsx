@@ -99,7 +99,7 @@ export const SearchAssets = ({
                     <Icon
                         size="xl"
                         name="SpinnerNarrow"
-                        className="m-auto animate-spin text-theme-hint-600"
+                        className="m-auto animate-spin text-theme-primary-600"
                     />
                 </div>
             )}

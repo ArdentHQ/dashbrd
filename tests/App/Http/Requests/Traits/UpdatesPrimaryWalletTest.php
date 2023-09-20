@@ -15,7 +15,7 @@ it('should update primary wallet of user', function () {
     $user->wallet_id = $wallet->id;
     $user->save();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $newWallet = Wallet::factory()->create([
         'address' => '0x0000000000000000000000000000000000001010',
     ]);
@@ -43,7 +43,7 @@ it('should throw exception if invalid credentials', function () {
     $user->wallet_id = $wallet->id;
     $user->save();
 
-    $network2 = Network::polygon()->firstOrFail();
+    $network2 = Network::polygon();
     $newWallet = Wallet::factory()->create([
         'address' => '0x0000000000000000000000000000000000001010',
     ]);

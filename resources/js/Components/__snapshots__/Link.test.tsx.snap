@@ -47,7 +47,7 @@ exports[`Link > should render as external 1`] = `
 exports[`Link > should render with link variant classname 1`] = `
 <DocumentFragment>
   <a
-    class="transition-default rounded-full font-medium leading-5.5 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300 text-sm text-theme-secondary-700"
+    class="transition-default rounded-full font-medium leading-5.5 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 text-sm text-theme-secondary-700"
     data-testid="Link__anchor"
     href="/test-link"
     rel="noreferrer"
@@ -93,7 +93,7 @@ exports[`LinkButton > should render 1`] = `
 exports[`LinkButton > should render with link variant classname 1`] = `
 <DocumentFragment>
   <button
-    class="transition-default rounded-full font-medium leading-5.5 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300 text-sm text-theme-secondary-700"
+    class="transition-default rounded-full font-medium leading-5.5 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 text-sm text-theme-secondary-700"
     data-testid="Link__button"
     type="button"
   >
