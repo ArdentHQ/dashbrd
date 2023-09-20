@@ -109,7 +109,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command(FetchCollectionActivity::class)
             ->withoutOverlapping()
-            ->dailyAt('10:00');
+            ->weeklyOn(Schedule::MONDAY);
 
         $schedule
             ->command(FetchCollectionFloorPrice::class)

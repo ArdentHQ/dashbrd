@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\RefreshNftMetadata;
 use App\Models\Collection;
 use App\Models\Nft;
@@ -19,6 +20,8 @@ class RefreshedNftController extends Controller
         // hence if the user didn't run into a per-user rate limit we consider it still a success.
         // It's supposed to be completely opaque to the user what the "refresh" is doing.
         RefreshNftMetadata::dispatch($collection, $nft)->onQueue(Queues::NFTS);
+
+        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
 
         return response()->json([
             'success' => true,
