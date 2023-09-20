@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Models\Traits\BelongsToUser;
@@ -14,7 +16,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Article extends Model implements HasMedia, Viewable
 {
-    use BelongsToUser, CanBeLiked, HasFactory, InteractsWithViews, SoftDeletes, InteractsWithMedia;
+    use BelongsToUser, CanBeLiked, HasFactory, InteractsWithMedia, InteractsWithViews, SoftDeletes;
 
     public $guarded = ['id'];
 
