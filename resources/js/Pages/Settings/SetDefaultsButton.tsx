@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { router } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons/Button";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
+import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { WarningExclamation } from "@/images";
-
 interface Properties {
     onConfirm: (closeModal: () => void) => void;
     isDisabled: boolean;
+    reset: boolean;
 }
 
-export const SetDefaultsButton = ({ onConfirm, isDisabled }: Properties): JSX.Element => {
+export const SetDefaultsButton = ({ onConfirm, isDisabled, reset }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [modalShown, setModalShown] = useState(false);
+    const { signedAction } = useAuthorizedAction();
+    const { signed } = useAuth();
+
+    useEffect(() => {
+        if (reset && signed) {
+            setModalShown(true);
+        }
+    }, [reset, signed]);
+
+    const closeModal = (): void => {
+        setModalShown(false);
+
+        if (reset) {
+            router.reload({
+                data: {
+                    reset: undefined,
+                },
+            });
+        }
+    };
 
     return (
         <>
@@ -20,7 +43,17 @@ export const SetDefaultsButton = ({ onConfirm, isDisabled }: Properties): JSX.El
                 variant="secondary"
                 className="w-1/2 items-center justify-center space-x-2 px-0 sm:w-auto sm:px-5"
                 onClick={() => {
-                    setModalShown(true);
+                    signedAction(({ signed }) => {
+                        setModalShown(true);
+
+                        if (!signed) {
+                            router.reload({
+                                data: {
+                                    reset: true,
+                                },
+                            });
+                        }
+                    });
                 }}
             >
                 <span className="whitespace-nowrap">{t("pages.settings.general.set_defaults")}</span>
@@ -33,11 +66,11 @@ export const SetDefaultsButton = ({ onConfirm, isDisabled }: Properties): JSX.El
                 cancelLabel={t("common.cancel")}
                 isDisabled={isDisabled}
                 onClose={() => {
-                    setModalShown(false);
+                    closeModal();
                 }}
                 onConfirm={() => {
                     onConfirm(() => {
-                        setModalShown(false);
+                        closeModal();
                     });
                 }}
             >
