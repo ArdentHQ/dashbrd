@@ -21,7 +21,12 @@ const NetworkFilterCheckbox = ({
     value: App.Data.Network.NetworkWithCollectionsData["chainId"];
     isSelected: boolean;
 }): JSX.Element => (
-    <label className="group flex cursor-pointer items-center justify-between text-sm">
+    <label
+        className={cn("group flex  items-center justify-between text-sm", {
+            "cursor-not-allowed": count === 0,
+            "cursor-pointer": count > 0,
+        })}
+    >
         <div className="flex items-center justify-center gap-3 text-base font-medium text-theme-secondary-700">
             <Checkbox
                 value={value}
