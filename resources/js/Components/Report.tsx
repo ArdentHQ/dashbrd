@@ -6,8 +6,8 @@ import { IconButton } from "@/Components/Buttons";
 import { CollectionReportModal } from "@/Components/Collections/CollectionReportModal";
 import { NftReportModal } from "@/Components/Collections/Nfts/NftReportModal";
 import { Tooltip } from "@/Components/Tooltip";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 interface Properties {
     model: App.Data.Nfts.NftData | App.Data.Collections.CollectionDetailData;
@@ -79,8 +79,6 @@ export const Report = ({
 
     const { authenticated } = useAuth();
 
-    const { showConnectOverlay } = useMetaMaskContext();
-
     const disableReport = useMemo<boolean>((): boolean => {
         if (!allowReport) {
             return true;
@@ -117,6 +115,8 @@ export const Report = ({
         });
     };
 
+    const { signedAction } = useAuthorizedAction();
+
     useEffect(() => {
         if (show && !disableReport && authenticated) {
             setShowReportModal(true);
@@ -136,19 +136,17 @@ export const Report = ({
                         data-testid="Report_flag"
                         icon="Flag"
                         onClick={() => {
-                            if (!authenticated) {
-                                showConnectOverlay(() => {
+                            signedAction(({ signed }) => {
+                                setShowReportModal(true);
+
+                                if (!signed) {
                                     router.reload({
                                         data: {
                                             report: true,
                                         },
                                     });
-                                });
-
-                                return;
-                            }
-
-                            setShowReportModal(true);
+                                }
+                            });
                         }}
                         disabled={disableReport}
                         className={className}
