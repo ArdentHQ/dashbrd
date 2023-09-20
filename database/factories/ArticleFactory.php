@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Article;
+use App\Models\User;
 use Database\Factories\Traits\RandomTimestamps;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,6 +29,7 @@ class ArticleFactory extends Factory
             'date' => fake()->date(),
             'meta_description' => fake()->text(),
             'content' => fake()->text(),
+            'user_id' => User::factory()->withWallet()
         ];
     }
 }

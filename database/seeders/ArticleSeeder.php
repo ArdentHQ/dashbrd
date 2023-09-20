@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Collection;
 use Illuminate\Database\Seeder;
 
 class ArticleSeeder extends Seeder
@@ -13,6 +13,16 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        Article::factory()->createMany(20);
+        $articles = Article::factory()->createMany(10);
+
+        $articles->map(function ($article) {
+            $imageUrl = fake()->imageUrl(640,480, null, false);
+            $article->addMediaFromUrl($imageUrl)->toMediaCollection();
+
+            $collections = Collection::factory()->createMany(2);
+
+            $article->collections()->attach($collections, ['order_index' => 1]);
+        });
+
     }
 }

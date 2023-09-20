@@ -12,7 +12,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('collection_article', function (Blueprint $table) {
+        Schema::create('article_collection', function (Blueprint $table) {
             $table->foreignIdFor(Article::class)->index()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Collection::class)->index()->constrained()->cascadeOnDelete();
             $table->integer('order_index');
