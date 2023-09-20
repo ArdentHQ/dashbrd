@@ -16,7 +16,7 @@ it('should throw a custom connection exception on internal server error', functi
     ]);
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     Moralis::getWalletTokens($wallet, $network);
 })->throws(ConnectionException::class);
@@ -27,7 +27,7 @@ it('should throw a custom exception when rate limited', function () {
     ]);
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     Moralis::getWalletTokens($wallet, $network);
 })->throws(RateLimitException::class);
@@ -39,10 +39,10 @@ it('should not retry request on 400', function () {
             ->push(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     expect(fn () => Moralis::getWalletTokens($wallet, $network))->toThrow('400 Bad Request');
 });

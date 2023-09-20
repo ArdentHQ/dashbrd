@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 it('should getWalletTokens', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $dbTokens = Token::factory(5)->create(['network_id' => $network->id]);
 
@@ -32,7 +32,7 @@ it('should getWalletTokens', function () {
 });
 
 it('should getWalletNfts', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create(['network_id' => $network->id]);
     $dbNfts = Nft::factory(5)->create(['collection_id' => $collection->id]);
@@ -82,7 +82,7 @@ it('should getEnsDomain from cache', function () {
 
 it('should get native balance', function () {
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new FakeWeb3DataProvider();
 

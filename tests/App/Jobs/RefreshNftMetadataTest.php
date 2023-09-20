@@ -19,7 +19,7 @@ it('should refresh NFT metadata', function () {
     Bus::fake();
 
     $user = createUser();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
@@ -49,7 +49,7 @@ it('should refresh NFT metadata', function () {
 });
 
 it('should skip refreshing NFT metadata for a spam collection', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collectionAddress = '0x000000000a42c2791eec307fff43fa5c640e3ef7';
 
@@ -83,7 +83,7 @@ it('should skip refreshing NFT metadata for a spam collection', function () {
 
 it('should use the nft id as a unique job identifier', function () {
     $user = createUser();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',

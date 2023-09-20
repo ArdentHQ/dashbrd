@@ -32,7 +32,7 @@ it('should fetch and store nft activity', function () {
         'is_default_token' => 1,
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -49,7 +49,7 @@ it('should fetch and store nft activity', function () {
 });
 
 it('should skip fetching NFT activity for a spam collection', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collectionAddress = '0x000000000a42c2791eec307fff43fa5c640e3ef7';
 
@@ -108,7 +108,7 @@ it('should call the job again if response equals the limit', function () {
             ->push($fixture, 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,

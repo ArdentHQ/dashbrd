@@ -13,7 +13,7 @@ it('should fetch nft collection banner', function () {
         'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/metadata' => Http::response(fixtureData('mnemonic.nft_metadata'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -39,7 +39,7 @@ it('should fetch nft collection banner in case no image', function () {
         'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/metadata' => Http::response($response, 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -58,7 +58,7 @@ it('should fetch nft collection banner in case no image', function () {
 });
 
 it('should use the collection address and network id as a unique job identifier', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'address' => '0x12345',

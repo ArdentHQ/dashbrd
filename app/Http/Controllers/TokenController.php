@@ -63,7 +63,7 @@ class TokenController extends Controller
             'currency' => $user->currency()->canonical(),
             'query' => ':query',
             'limit' => 5,
-            'chainIds' => implode(',', Network::activeChainIds()),
+            'chainIds' => Network::activeChainIds()->join(','),
         ]), ['query' => sprintf('%s%%', $query)]);
 
         return TokenListItemData::collection($items);
