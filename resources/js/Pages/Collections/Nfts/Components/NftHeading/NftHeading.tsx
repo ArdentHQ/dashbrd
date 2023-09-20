@@ -115,7 +115,7 @@ export const NftHeading = ({
 
     return (
         <div className="mx-auto -mt-6 flex w-full max-w-content flex-1 flex-col sm:-mt-8 lg:-mt-0 lg:px-8 2xl:px-0">
-            <div className="flex min-w-0 items-start justify-center gap-6 border border-theme-secondary-300 bg-theme-hint-50 md:p-6 lg:mb-6 lg:rounded-xl">
+            <div className="flex min-w-0 items-start justify-center gap-6 border border-theme-secondary-300 bg-theme-primary-50 md:p-6 lg:mb-6 lg:rounded-xl">
                 <NftImage nft={nft} />
 
                 <div className="hidden min-w-0 flex-1 lg:block">

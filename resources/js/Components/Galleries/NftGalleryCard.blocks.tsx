@@ -63,8 +63,8 @@ const NftImage = ({
             <div
                 data-testid={`NftImageGrid__selected--${nft.tokenNumber}`}
                 className={cn("transition-default pointer-events-none absolute inset-0 rounded-xl", {
-                    "border-2 border-theme-hint-600": isSelected,
-                    "border-theme-hint-100 group-hover:border-3": !isSelected,
+                    "border-2 border-theme-primary-600": isSelected,
+                    "border-theme-primary-100 group-hover:border-3": !isSelected,
                 })}
             >
                 <div
@@ -75,7 +75,7 @@ const NftImage = ({
                         },
                     )}
                 >
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-hint-600 text-white">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-primary-600 text-white">
                         <Icon name="CheckSmall" />
                     </div>
                 </div>
@@ -235,7 +235,7 @@ export const GalleryHeading = ({
                 delay={[500, 0]}
             >
                 <Heading
-                    className="transition-default truncate pt-0.5 group-hover:text-theme-hint-700"
+                    className="transition-default truncate pt-0.5 group-hover:text-theme-primary-700"
                     level={4}
                     ref={truncateReference}
                 >

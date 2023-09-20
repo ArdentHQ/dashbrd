@@ -39,7 +39,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
                         "bg-theme-success-100 text-theme-success-700": type === "success",
                         "bg-theme-warning-100 text-theme-warning-800": type === "warning",
                         "bg-theme-danger-100 text-theme-danger-700": type === "error",
-                        "bg-theme-hint-100 text-theme-hint-700": type === "info",
+                        "bg-theme-primary-100 text-theme-primary-700": type === "info",
                     })}
                 >
                     <div className="flex items-center space-x-2 px-6 py-3">
@@ -71,7 +71,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
                             "bg-theme-success-50 text-theme-secondary-700": type === "success",
                             "bg-theme-warning-50 text-theme-secondary-700": type === "warning",
                             "bg-theme-danger-50 text-theme-secondary-700": type === "error",
-                            "bg-theme-hint-50 text-theme-secondary-700": type === "info",
+                            "bg-theme-primary-50 text-theme-secondary-700": type === "info",
                         })}
                     >
                         {message}

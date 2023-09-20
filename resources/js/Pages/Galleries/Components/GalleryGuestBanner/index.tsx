@@ -18,7 +18,7 @@ const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): J
             <div className="flex w-full flex-col gap-0.5 md:h-14 md:w-fit md:justify-center">
                 <h3 className="text-center text-xl font-medium capitalize leading-7 text-theme-secondary-900 md:text-left md:text-2xl">
                     {t("pages.galleries.guest_banner.title")}{" "}
-                    <span className="block text-theme-hint-600 sm:inline-block">{t("common.nft_gallery")}</span>
+                    <span className="block text-theme-primary-600 sm:inline-block">{t("common.nft_gallery")}</span>
                 </h3>
                 <p className="text-center text-xs font-medium text-theme-secondary-700 md:text-left md:text-sm">
                     {t("pages.galleries.guest_banner.subtitle")}

@@ -12,14 +12,14 @@ describe("Toast", () => {
         );
 
         expect(screen.getByTestId("Toast")).toBeInTheDocument();
-        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-hint-100 text-theme-hint-700");
+        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-primary-100 text-theme-primary-700");
     });
 
     it("should render info by default", () => {
         render(<Toast message="test" />);
 
         expect(screen.getByTestId("Toast")).toBeInTheDocument();
-        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-hint-100 text-theme-hint-700");
+        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-primary-100 text-theme-primary-700");
     });
 
     it("should render pending", () => {
@@ -79,7 +79,7 @@ describe("Toast", () => {
         );
 
         expect(screen.getByTestId("Toast")).toBeInTheDocument();
-        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-hint-100 text-theme-hint-700");
+        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-primary-100 text-theme-primary-700");
         expect(screen.getByText("Information")).toBeInTheDocument();
     });
 
@@ -123,6 +123,6 @@ describe("ToastTemplate", () => {
             expect(screen.getByTestId("Toast")).toBeInTheDocument();
         });
 
-        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-hint-100 text-theme-hint-700");
+        expect(screen.getByTestId("Toast__wrapper")).toHaveClass("bg-theme-primary-100 text-theme-primary-700");
     });
 });

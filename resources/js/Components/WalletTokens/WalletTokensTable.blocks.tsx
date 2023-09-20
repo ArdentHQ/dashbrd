@@ -69,7 +69,7 @@ export const Token = memo(
                 <button
                     data-testid="WalletTokensTable__token"
                     type="button"
-                    className="transition-default group/token flex items-center space-x-3 rounded-2xl outline-none outline-3 outline-offset-4 focus-visible:outline-theme-hint-300"
+                    className="transition-default group/token flex items-center space-x-3 rounded-2xl outline-none outline-3 outline-offset-4 focus-visible:outline-theme-primary-300"
                     onClick={() => {
                         onClick(asset);
                     }}
@@ -93,7 +93,7 @@ export const Token = memo(
                 <div className="flex flex-col items-start space-y-0.5 whitespace-nowrap font-medium">
                     <span
                         data-testid="WalletTokensTable__token_symbol"
-                        className="text-sm leading-5.5 text-theme-secondary-900 group-hover/token:text-theme-hint-700 sm:text-base sm:leading-6"
+                        className="text-sm leading-5.5 text-theme-secondary-900 group-hover/token:text-theme-primary-700 sm:text-base sm:leading-6"
                     >
                         {asset.symbol}
                     </span>

@@ -29,7 +29,7 @@ export const Wallet = ({ address }: { address: string }): JSX.Element => {
                 <Icon
                     name="Copy"
                     size="md"
-                    className="cursor-pointer text-theme-hint-600"
+                    className="cursor-pointer text-theme-primary-600"
                 />
             </Clipboard>
         </div>
@@ -53,7 +53,7 @@ export const WaitingMessage = (): JSX.Element => {
                 <Icon
                     name="Spinner"
                     size="xl"
-                    className="mr-3 animate-spin text-theme-hint-600"
+                    className="mr-3 animate-spin text-theme-primary-600"
                 />
                 <span className="font-medium text-theme-secondary-900">
                     {t("pages.send_receive_panel.send.waiting_spinner_text")}

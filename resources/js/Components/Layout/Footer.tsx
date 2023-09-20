@@ -34,7 +34,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
                     <Link
                         variant="link"
                         href={t("urls.landing")}
-                        textColor="text-theme-hint-600"
+                        textColor="text-theme-primary-600"
                     >
                         {appName()}
                     </Link>
@@ -83,7 +83,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
                         <div className="mt-2 flex space-x-4 xs:mt-0 md:space-x-0">
                             <a
                                 href={t("urls.twitter").toString()}
-                                className="transition-default text-theme-secondary-700 hover:text-theme-hint-700 md:hidden"
+                                className="transition-default text-theme-secondary-700 hover:text-theme-primary-700 md:hidden"
                                 target="_blank"
                                 rel="noopener nofollow noreferrer"
                             >
@@ -96,7 +96,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
 
                             <a
                                 href={t("urls.twitter").toString()}
-                                className="button-icon group hidden border-transparent bg-transparent text-theme-secondary-700 hover:text-theme-hint-900 md:flex"
+                                className="button-icon group hidden border-transparent bg-transparent text-theme-secondary-700 hover:text-theme-primary-900 md:flex"
                                 target="_blank"
                                 rel="noopener nofollow noreferrer"
                             >
@@ -109,7 +109,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
 
                             <a
                                 href={t("urls.github").toString()}
-                                className="transition-default text-theme-secondary-700 hover:text-theme-hint-700 md:hidden"
+                                className="transition-default text-theme-secondary-700 hover:text-theme-primary-700 md:hidden"
                                 target="_blank"
                                 rel="noopener nofollow noreferrer"
                             >
@@ -122,7 +122,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
 
                             <a
                                 href={t("urls.github").toString()}
-                                className="button-icon group !ml-0 hidden border-transparent bg-transparent text-theme-secondary-700 hover:text-theme-hint-900 md:flex"
+                                className="button-icon group !ml-0 hidden border-transparent bg-transparent text-theme-secondary-700 hover:text-theme-primary-900 md:flex"
                                 target="_blank"
                                 rel="noopener nofollow noreferrer"
                             >
@@ -135,7 +135,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
 
                             <a
                                 href={t("urls.discord").toString()}
-                                className="transition-default text-theme-secondary-700 hover:text-theme-hint-700 md:hidden"
+                                className="transition-default text-theme-secondary-700 hover:text-theme-primary-700 md:hidden"
                                 target="_blank"
                                 rel="noopener nofollow noreferrer"
                             >
@@ -148,7 +148,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
 
                             <a
                                 href={t("urls.discord").toString()}
-                                className="button-icon group !ml-0 hidden border-transparent bg-transparent text-theme-secondary-700 hover:text-theme-hint-900 md:flex"
+                                className="button-icon group !ml-0 hidden border-transparent bg-transparent text-theme-secondary-700 hover:text-theme-primary-900 md:flex"
                                 target="_blank"
                                 rel="noopener nofollow noreferrer"
                             >

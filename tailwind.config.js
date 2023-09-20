@@ -190,17 +190,6 @@ module.exports = {
             "theme-info-700": "rgb(var(--theme-color-info-700) / <alpha-value>)",
             "theme-info-800": "rgb(var(--theme-color-info-800) / <alpha-value>)",
             "theme-info-900": "rgb(var(--theme-color-info-900) / <alpha-value>)",
-
-            "theme-hint-50": "rgb(var(--theme-color-hint-50) / <alpha-value>)",
-            "theme-hint-100": "rgb(var(--theme-color-hint-100) / <alpha-value>)",
-            "theme-hint-200": "rgb(var(--theme-color-hint-200) / <alpha-value>)",
-            "theme-hint-300": "rgb(var(--theme-color-hint-300) / <alpha-value>)",
-            "theme-hint-400": "rgb(var(--theme-color-hint-400) / <alpha-value>)",
-            "theme-hint-500": "rgb(var(--theme-color-hint-500) / <alpha-value>)",
-            "theme-hint-600": "rgb(var(--theme-color-hint-600) / <alpha-value>)",
-            "theme-hint-700": "rgb(var(--theme-color-hint-700) / <alpha-value>)",
-            "theme-hint-800": "rgb(var(--theme-color-hint-800) / <alpha-value>)",
-            "theme-hint-900": "rgb(var(--theme-color-hint-900) / <alpha-value>)",
         },
     },
 
