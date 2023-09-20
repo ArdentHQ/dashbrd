@@ -79,7 +79,7 @@ export const SwitchingNetwork = (): JSX.Element => {
             <Icon
                 name="Spinner"
                 size="lg"
-                className="animate-spin text-theme-hint-600"
+                className="animate-spin text-theme-primary-600"
             />
             <span className="font-medium text-theme-secondary-900">{t("auth.wallet.switching_wallet")}</span>
         </OverlayButtonsWrapper>
@@ -94,7 +94,7 @@ export const ConnectingWallet = (): JSX.Element => {
             <Icon
                 name="Spinner"
                 size="xl"
-                className="animate-spin text-theme-hint-600"
+                className="animate-spin text-theme-primary-600"
             />
             <span className="font-medium text-theme-secondary-900">{t("auth.wallet.connecting")}</span>
         </OverlayButtonsWrapper>

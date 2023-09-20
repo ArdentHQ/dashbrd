@@ -24,7 +24,7 @@ export const ToastCloseButton = ({
                 "hover:bg-theme-success-200 hover:text-theme-success-800": type === "success",
                 "hover:bg-theme-warning-200 hover:text-theme-warning-900": type === "warning",
                 "hover:bg-theme-danger-200 hover:text-theme-danger-800": type === "error",
-                "hover:bg-theme-hint-200 hover:text-theme-hint-800": type === "info",
+                "hover:bg-theme-primary-200 hover:text-theme-primary-800": type === "info",
             })}
         >
             <span className="sr-only">{t("common.close_toast")}</span>

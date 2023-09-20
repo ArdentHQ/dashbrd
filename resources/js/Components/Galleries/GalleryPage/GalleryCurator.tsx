@@ -55,7 +55,7 @@ export const GalleryCurator = ({
                     <span>{t("pages.galleries.curated_by")}</span>
 
                     <div className="flex items-center space-x-2">
-                        <span className="transition-default flex text-theme-hint-600 group-hover:text-theme-hint-700 group-hover:decoration-theme-hint-700">
+                        <span className="transition-default flex text-theme-primary-600 group-hover:text-theme-primary-700 group-hover:decoration-theme-primary-700">
                             {truncate !== false ? renderTruncatedAddress(truncate) : renderAddress()}
                         </span>
 

@@ -4,7 +4,7 @@ import { Icon } from "@/Components/Icon";
 const PoweredByLink = ({ url, icon, title }: { url: string; icon: React.ReactNode; title: string }): JSX.Element => (
     <a
         href={url}
-        className="transition-default text-theme-secondary-700 hover:text-theme-hint-700"
+        className="transition-default text-theme-secondary-700 hover:text-theme-primary-700"
         target="_blank"
         rel="noopener nofollow noreferrer"
     >
