@@ -25,17 +25,17 @@
     --theme-color-secondary-900: 49 51 63; /* #31333f */
 
     /* Dark Mode Gray */
-    --theme-color-dark-secondary-50: 227 232 234; /* #E3E8EA */
-    --theme-color-dark-secondary-100: 202 210 215; /* #CAD2D7 */
-    --theme-color-dark-secondary-200: 164 177 188; /* #A4B1BC */
-    --theme-color-dark-secondary-300: 120 138 152; /* #788A98 */
-    --theme-color-dark-secondary-400: 93 111 125; /* #5D6F7D */
-    --theme-color-dark-secondary-500: 80 93 106; /* #505D6A */
-    --theme-color-dark-secondary-600: 69 79 89; /* #454F59 */
-    --theme-color-dark-secondary-700: 61 68 77; /* #3D444D */
-    --theme-color-dark-secondary-800: 44 49 57; /* #2C3139 */
-    --theme-color-dark-secondary-900: 35 39 45; /* #23272D */
-    --theme-color-dark-secondary-950: 25 29 34; /* #191D22 */
+    --theme-color-dark-50: 227 232 234; /* #E3E8EA */
+    --theme-color-dark-100: 202 210 215; /* #CAD2D7 */
+    --theme-color-dark-200: 164 177 188; /* #A4B1BC */
+    --theme-color-dark-300: 120 138 152; /* #788A98 */
+    --theme-color-dark-400: 93 111 125; /* #5D6F7D */
+    --theme-color-dark-500: 80 93 106; /* #505D6A */
+    --theme-color-dark-600: 69 79 89; /* #454F59 */
+    --theme-color-dark-700: 61 68 77; /* #3D444D */
+    --theme-color-dark-800: 44 49 57; /* #2C3139 */
+    --theme-color-dark-900: 35 39 45; /* #23272D */
+    --theme-color-dark-950: 25 29 34; /* #191D22 */
 
     /* Red */
     --theme-color-danger-50: 255 245 242; /* #fff5f2 */
