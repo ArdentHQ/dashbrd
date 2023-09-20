@@ -13,6 +13,7 @@ interface Properties {
     collectionDetails: App.Data.Collections.CollectionBasicDetailsData;
     traits: App.Data.Collections.CollectionTraitData[];
     nativeToken: App.Data.Token.TokenData;
+    showReportModal: boolean;
 }
 
 const CollectionsNftsView = ({
@@ -24,6 +25,7 @@ const CollectionsNftsView = ({
     collectionDetails,
     traits,
     nativeToken,
+    showReportModal,
 }: Properties): JSX.Element => {
     const { props } = usePage();
 
@@ -49,6 +51,7 @@ const CollectionsNftsView = ({
                     reportAvailableIn={reportAvailableIn}
                     reportReasons={props.reportReasons}
                     traits={traits}
+                    showReportModal={showReportModal}
                 />
             </DefaultLayout>
         </ExternalLinkContextProvider>
