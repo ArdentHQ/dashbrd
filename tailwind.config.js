@@ -147,6 +147,18 @@ module.exports = {
             "theme-secondary-800": "rgb(var(--theme-color-secondary-800) / <alpha-value>)",
             "theme-secondary-900": "rgb(var(--theme-color-secondary-900) / <alpha-value>)",
 
+            "theme-dark-50": "rgb(var(--theme-color-dark-secondary-50) / <alpha-value>)",
+            "theme-dark-100": "rgb(var(--theme-color-dark-secondary-100) / <alpha-value>)",
+            "theme-dark-200": "rgb(var(--theme-color-dark-secondary-200) / <alpha-value>)",
+            "theme-dark-300": "rgb(var(--theme-color-dark-secondary-300) / <alpha-value>)",
+            "theme-dark-400": "rgb(var(--theme-color-dark-secondary-400) / <alpha-value>)",
+            "theme-dark-500": "rgb(var(--theme-color-dark-secondary-500) / <alpha-value>)",
+            "theme-dark-600": "rgb(var(--theme-color-dark-secondary-600) / <alpha-value>)",
+            "theme-dark-700": "rgb(var(--theme-color-dark-secondary-700) / <alpha-value>)",
+            "theme-dark-800": "rgb(var(--theme-color-dark-secondary-800) / <alpha-value>)",
+            "theme-dark-900": "rgb(var(--theme-color-dark-secondary-900) / <alpha-value>)",
+            "theme-dark-950": "rgb(var(--theme-color-dark-secondary-950) / <alpha-value>)",
+
             "theme-danger-50": "rgb(var(--theme-color-danger-50) / <alpha-value>)",
             "theme-danger-100": "rgb(var(--theme-color-danger-100) / <alpha-value>)",
             "theme-danger-200": "rgb(var(--theme-color-danger-200) / <alpha-value>)",
