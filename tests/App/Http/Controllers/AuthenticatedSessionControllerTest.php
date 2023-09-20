@@ -22,7 +22,7 @@ it('should sign a user', function () {
     $user->wallet()->associate($wallet);
     $user->save();
 
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('')
@@ -127,7 +127,7 @@ it('should handle invalid credentails', function () {
 });
 
 it('should handle an incoming authentication request for a user with a new wallet', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create([
         'address' => '0x1231231231231231231231231231231231231231',
@@ -144,7 +144,7 @@ it('should handle an incoming authentication request for a user with a new walle
 });
 
 it('should handle an incoming authentication request for an existing user', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create([
         'address' => '0x2231231231231231231231231231231231231231',
@@ -161,7 +161,7 @@ it('should handle an incoming authentication request for an existing user', func
 });
 
 it('should handle an invalid incoming authentication request', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [
         'address' => 'invalid',
@@ -172,7 +172,7 @@ it('should handle an invalid incoming authentication request', function () {
 });
 
 it('should validate data on incoming authentication request', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [])
         ->assertSessionHasErrors([
@@ -190,7 +190,7 @@ it('should validate data on incoming authentication request', function () {
 });
 
 it('should sign a message', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Signature::shouldReceive('buildSignMessage')
         ->andReturn('test message')
@@ -207,7 +207,7 @@ it('should sign a message', function () {
 });
 
 it('should validate data when signing a message', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('sign-message'), [])
         ->assertSessionHasErrors([
@@ -221,7 +221,7 @@ it('should validate data when signing a message', function () {
 });
 
 it('should switch account', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create();
 
@@ -257,7 +257,7 @@ it('should destroy the session', function () {
 });
 
 it("stores user's timezone if specified", function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
@@ -275,7 +275,7 @@ it("stores user's timezone if specified", function () {
 });
 
 it("defaults user's timezone to UTC if not specified", function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
@@ -291,7 +291,7 @@ it("defaults user's timezone to UTC if not specified", function () {
 });
 
 it("defaults user's timezone to UTC if timezone is not valid", function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
@@ -308,7 +308,7 @@ it("defaults user's timezone to UTC if timezone is not valid", function () {
 });
 
 it('defaults currency to USD if locale is not valid', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',

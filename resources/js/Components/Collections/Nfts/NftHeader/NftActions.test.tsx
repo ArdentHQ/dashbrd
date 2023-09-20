@@ -207,7 +207,7 @@ describe("Nftactions", () => {
         expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
         expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
             "href",
-            `https://polygonscan.com/token/${collection.address}?a=${nft.tokenNumber}`,
+            `https://polygonscan.com/nft/${collection.address}/${nft.tokenNumber}`,
         );
     });
 
@@ -232,7 +232,7 @@ describe("Nftactions", () => {
         expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
         expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
             "href",
-            `https://etherscan.io/token/${collection.address}?a=${nft.tokenNumber}`,
+            `https://etherscan.io/nft/${collection.address}/${nft.tokenNumber}`,
         );
     });
 
@@ -257,7 +257,7 @@ describe("Nftactions", () => {
         expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
         expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
             "href",
-            `https://goerli.etherscan.io/token/${collection.address}?a=${nft.tokenNumber}`,
+            `https://goerli.etherscan.io/nft/${collection.address}/${nft.tokenNumber}`,
         );
     });
 
@@ -282,7 +282,7 @@ describe("Nftactions", () => {
         expect(screen.getByTestId("NftActions__viewOnChain")).toBeInTheDocument();
         expect(screen.getByTestId("NftActions__viewOnChain")).toHaveAttribute(
             "href",
-            `https://mumbai.polygonscan.com/token/${collection.address}?a=${nft.tokenNumber}`,
+            `https://mumbai.polygonscan.com/nft/${collection.address}/${nft.tokenNumber}`,
         );
     });
 });

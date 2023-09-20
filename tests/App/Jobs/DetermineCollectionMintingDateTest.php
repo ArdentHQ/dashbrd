@@ -66,7 +66,7 @@ it('retrieves the minted date from the web3 provider if not previously retrieved
         '*' => Http::response(fixtureData('alchemy.block_data'), 200),
     ]);
 
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     Collection::factory()->create([
         'network_id' => $network->id,
@@ -111,7 +111,7 @@ it('retrieves the minted date from the web3 provider if not previously retrieved
 });
 
 it('has a middleware', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $nft = new Web3NftData(
         tokenAddress: 'dummy-address',
@@ -141,7 +141,7 @@ it('has a middleware', function () {
 });
 
 it('has a retry until', function () {
-    $network = Network::polygon()->first();
+    $network = Network::polygon();
 
     $nft = new Web3NftData(
         tokenAddress: 'dummy-address',

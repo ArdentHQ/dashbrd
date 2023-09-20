@@ -15,7 +15,7 @@ it('should throw a connection exception on server errors', function () {
     ]);
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     Alchemy::getWalletTokens($wallet, $network);
 })->throws(ConnectionException::class);
@@ -26,7 +26,7 @@ it('should throw a custom exception on 429 status code', function () {
     ]);
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     Alchemy::getWalletTokens($wallet, $network);
 })->throws(RateLimitException::class);
@@ -39,7 +39,7 @@ it('should not retry request on 400', function () {
     ]);
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     expect(fn () => Alchemy::getWalletTokens($wallet, $network))->toThrow('400 Bad Request');
 });
@@ -51,7 +51,7 @@ it('should handle arrays in NFT descriptions', function () {
     ]);
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     expect(Alchemy::getWalletNfts($wallet, $network)->nfts[0]->description)->toBeString();
 });
@@ -63,7 +63,7 @@ it('should increment default size for banner image if it is not null in parseNft
     ]);
 
     $wallet = Wallet::factory()->create();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Alchemy::getWalletNfts($wallet, $network);
 
