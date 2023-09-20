@@ -1,16 +1,15 @@
 :root {
-    /* Blue */
-    --theme-color-primary-rgb: 9 100 228; /* #0964E4 */
-    --theme-color-primary-50: 245 250 255; /* #f5faff */
-    --theme-color-primary-100: 229 240 248; /* #e5f0f8 */
-    --theme-color-primary-200: 186 214 240; /* #bad6f0 */
-    --theme-color-primary-300: 153 199 238; /* #99c7ee */
-    --theme-color-primary-400: 119 185 254; /* #77b9fe */
-    --theme-color-primary-500: 62 157 255; /* #3e9dff */
-    --theme-color-primary-600: 0 125 255; /* #007dff */
-    --theme-color-primary-700: 7 90 242; /* #075af2 */
-    --theme-color-primary-800: 11 77 199; /* #0b4dc7 */
-    --theme-color-primary-900: 23 62 133; /* #173e85 */
+    /* Purple */
+    --theme-color-primary-50: 248 248 255; /* #f8f8ff */
+    --theme-color-primary-100: 229 232 255; /* #e5e8ff */
+    --theme-color-primary-200: 207 212 255; /* #cfd4ff */
+    --theme-color-primary-300: 168 177 255; /* #a8b1ff */
+    --theme-color-primary-400: 134 146 255; /* #8692ff */
+    --theme-color-primary-500: 107 122 255; /* #6b7aff */
+    --theme-color-primary-600: 80 96 238; /* #5060ee */
+    --theme-color-primary-700: 61 76 211; /* #3d4cd3 */
+    --theme-color-primary-800: 44 57 174; /* #2c39ae */
+    --theme-color-primary-900: 33 43 131; /* #212b83 */
 
     /* Gray */
     --theme-color-secondary-50: 250 250 255; /* #fafaff */

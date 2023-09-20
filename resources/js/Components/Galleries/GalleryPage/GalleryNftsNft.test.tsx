@@ -45,7 +45,7 @@ describe("GalleryNftsNft", () => {
         expect(nft.name).toBeDefined();
         assert(nft.name);
 
-        expect(screen.getByTestId("GalleryCard")).not.toHaveClass("outline-theme-hint-300");
+        expect(screen.getByTestId("GalleryCard")).not.toHaveClass("outline-theme-primary-300");
         expect(screen.getByTestId("GalleryNftsNft__price")).toHaveTextContent("11 ETH");
         expect(screen.getByTestId("GalleryNftsNft__name")).toHaveTextContent(nft.name);
     });
@@ -73,7 +73,7 @@ describe("GalleryNftsNft", () => {
             );
         });
 
-        expect(screen.getByTestId("GalleryCard")).toHaveClass("outline-theme-hint-300");
+        expect(screen.getByTestId("GalleryCard")).toHaveClass("outline-theme-primary-300");
     });
 
     it("should render without image", async () => {
@@ -229,7 +229,7 @@ describe("GalleryNftsNft", () => {
         expect(nft.name).toBeDefined();
         assert(nft.name);
 
-        expect(screen.getByTestId("GalleryCard")).not.toHaveClass("lg:outline-theme-hint-300");
+        expect(screen.getByTestId("GalleryCard")).not.toHaveClass("lg:outline-theme-primary-300");
         expect(screen.getByTestId("GalleryNftsNft__price")).toHaveTextContent("11 ETH");
         expect(screen.getByTestId("GalleryNftsNft__name")).toHaveTextContent(nft.name);
     });

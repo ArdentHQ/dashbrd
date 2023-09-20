@@ -148,7 +148,7 @@ export const TokenTransactionDetailsSlider = ({
                                     <span className="flex items-center whitespace-nowrap">
                                         <Link
                                             href={transactionHashUrl}
-                                            className="outline-offset-3 transition-default flex items-center space-x-2 whitespace-nowrap rounded-full text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300"
+                                            className="outline-offset-3 transition-default flex items-center space-x-2 whitespace-nowrap rounded-full text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300"
                                             external
                                         >
                                             <TruncateMiddle
@@ -164,7 +164,7 @@ export const TokenTransactionDetailsSlider = ({
                                         <Icon
                                             name="Copy"
                                             size="md"
-                                            className="cursor-pointer text-theme-hint-600"
+                                            className="cursor-pointer text-theme-primary-600"
                                         />
                                     </Clipboard>
                                 </div>
