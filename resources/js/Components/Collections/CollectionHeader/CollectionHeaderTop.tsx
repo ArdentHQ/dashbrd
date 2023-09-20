@@ -23,6 +23,7 @@ interface CollectionHeaderTopProperties {
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
+    showReportModal?: boolean;
 }
 
 interface SocialLinkProperties {
@@ -68,6 +69,7 @@ export const CollectionHeaderTop = ({
     alreadyReported = false,
     reportAvailableIn = null,
     reportReasons,
+    showReportModal = false,
 }: CollectionHeaderTopProperties): JSX.Element => {
     const { t } = useTranslation();
     const address = formatAddress(collection.address);
@@ -159,6 +161,7 @@ export const CollectionHeaderTop = ({
                         allowReport={allowReport}
                         tooltipOffset={[0, 20]}
                         displayDefaultTooltip
+                        show={showReportModal}
                     />
                 </div>
             </div>
