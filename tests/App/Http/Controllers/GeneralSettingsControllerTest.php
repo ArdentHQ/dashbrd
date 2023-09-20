@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\DateFormat;
+use App\Support\Facades\Signature;
 
 it('can render the General Settings page', function () {
     $user = createUser();
@@ -12,7 +13,7 @@ it('can render the General Settings page', function () {
         ->assertStatus(200);
 });
 
-it('can update user general preferences', function () {
+it('cant update user general preferences if not signed', function () {
     $user = createUser([
         'extra_attributes' => [
             'currency' => 'USD',
@@ -28,116 +29,143 @@ it('can update user general preferences', function () {
             'date_format' => DateFormat::C->value,
             'time_format' => '12',
             'timezone' => 'Europe/Amsterdam',
+        ])
+        ->assertRedirect();
+});
+
+describe('user is signed', function () {
+    beforeEach(function () {
+        Signature::shouldReceive('walletIsSigned')
+            ->andReturn(true);
+    });
+
+    it('can update user general preferences', function () {
+        $user = createUser([
+            'extra_attributes' => [
+                'currency' => 'USD',
+                'date_format' => DateFormat::D,
+                'time_format' => '24',
+                'timezone' => 'UTC',
+            ],
         ]);
 
-    $user->refresh();
+        $this->actingAs($user)
+            ->put(route('settings.general'), [
+                'currency' => 'EUR',
+                'date_format' => DateFormat::C->value,
+                'time_format' => '12',
+                'timezone' => 'Europe/Amsterdam',
+            ]);
 
-    expect($user->extra_attributes['currency'])->toBe('EUR');
-    expect($user->extra_attributes['date_format'])->toBe(DateFormat::C->value);
-    expect($user->extra_attributes['time_format'])->toBe('12');
-    expect($user->extra_attributes['timezone'])->toBe('Europe/Amsterdam');
-});
+        $user->refresh();
 
-it('requires currency to be a valid currency', function () {
-    $user = createUser([
-        'extra_attributes' => [
-            'currency' => 'USD',
-            'date_format' => DateFormat::D,
-            'time_format' => '24',
-            'timezone' => 'UTC',
-        ],
-    ]);
+        expect($user->extra_attributes['currency'])->toBe('EUR');
+        expect($user->extra_attributes['date_format'])->toBe(DateFormat::C->value);
+        expect($user->extra_attributes['time_format'])->toBe('12');
+        expect($user->extra_attributes['timezone'])->toBe('Europe/Amsterdam');
+    });
 
-    $this->actingAs($user)
-        ->put(route('settings.general'), [
-            'currency' => 'invalid',
-            'date_format' => DateFormat::C->value,
-            'time_format' => '12',
-            'timezone' => 'Europe/Amsterdam',
-        ])->assertSessionHasErrors('currency');
+    it('requires currency to be a valid currency', function () {
+        $user = createUser([
+            'extra_attributes' => [
+                'currency' => 'USD',
+                'date_format' => DateFormat::D,
+                'time_format' => '24',
+                'timezone' => 'UTC',
+            ],
+        ]);
 
-    $user->refresh();
+        $this->actingAs($user)
+            ->put(route('settings.general'), [
+                'currency' => 'invalid',
+                'date_format' => DateFormat::C->value,
+                'time_format' => '12',
+                'timezone' => 'Europe/Amsterdam',
+            ])->assertSessionHasErrors('currency');
 
-    expect($user->extra_attributes['currency'])->toBe('USD');
-    expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
-    expect($user->extra_attributes['time_format'])->toBe('24');
-    expect($user->extra_attributes['timezone'])->toBe('UTC');
-});
+        $user->refresh();
 
-it('requires date format to be a valid format', function () {
-    $user = createUser([
-        'extra_attributes' => [
-            'currency' => 'USD',
-            'date_format' => DateFormat::D,
-            'time_format' => '24',
-            'timezone' => 'UTC',
-        ],
-    ]);
+        expect($user->extra_attributes['currency'])->toBe('USD');
+        expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
+        expect($user->extra_attributes['time_format'])->toBe('24');
+        expect($user->extra_attributes['timezone'])->toBe('UTC');
+    });
 
-    $this->actingAs($user)
-        ->put(route('settings.general'), [
-            'currency' => 'EUR',
-            'date_format' => 'invalid',
-            'time_format' => '12',
-            'timezone' => 'Europe/Amsterdam',
-        ])->assertSessionHasErrors('date_format');
+    it('requires date format to be a valid format', function () {
+        $user = createUser([
+            'extra_attributes' => [
+                'currency' => 'USD',
+                'date_format' => DateFormat::D,
+                'time_format' => '24',
+                'timezone' => 'UTC',
+            ],
+        ]);
 
-    $user->refresh();
+        $this->actingAs($user)
+            ->put(route('settings.general'), [
+                'currency' => 'EUR',
+                'date_format' => 'invalid',
+                'time_format' => '12',
+                'timezone' => 'Europe/Amsterdam',
+            ])->assertSessionHasErrors('date_format');
 
-    expect($user->extra_attributes['currency'])->toBe('USD');
-    expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
-    expect($user->extra_attributes['time_format'])->toBe('24');
-    expect($user->extra_attributes['timezone'])->toBe('UTC');
-});
+        $user->refresh();
 
-it('requires time format to be a either 12 or 24', function () {
-    $user = createUser([
-        'extra_attributes' => [
-            'currency' => 'USD',
-            'date_format' => DateFormat::D,
-            'time_format' => '24',
-            'timezone' => 'UTC',
-        ],
-    ]);
+        expect($user->extra_attributes['currency'])->toBe('USD');
+        expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
+        expect($user->extra_attributes['time_format'])->toBe('24');
+        expect($user->extra_attributes['timezone'])->toBe('UTC');
+    });
 
-    $this->actingAs($user)
-        ->put(route('settings.general'), [
-            'currency' => 'EUR',
-            'date_format' => DateFormat::C->value,
-            'time_format' => '36',
-            'timezone' => 'Europe/Amsterdam',
-        ])->assertSessionHasErrors('time_format');
+    it('requires time format to be a either 12 or 24', function () {
+        $user = createUser([
+            'extra_attributes' => [
+                'currency' => 'USD',
+                'date_format' => DateFormat::D,
+                'time_format' => '24',
+                'timezone' => 'UTC',
+            ],
+        ]);
 
-    $user->refresh();
+        $this->actingAs($user)
+            ->put(route('settings.general'), [
+                'currency' => 'EUR',
+                'date_format' => DateFormat::C->value,
+                'time_format' => '36',
+                'timezone' => 'Europe/Amsterdam',
+            ])->assertSessionHasErrors('time_format');
 
-    expect($user->extra_attributes['currency'])->toBe('USD');
-    expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
-    expect($user->extra_attributes['time_format'])->toBe('24');
-    expect($user->extra_attributes['timezone'])->toBe('UTC');
-});
+        $user->refresh();
 
-it('requires timezone to be valid', function () {
-    $user = createUser([
-        'extra_attributes' => [
-            'currency' => 'USD',
-            'date_format' => DateFormat::D,
-            'time_format' => '24',
-            'timezone' => 'UTC',
-        ],
-    ]);
+        expect($user->extra_attributes['currency'])->toBe('USD');
+        expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
+        expect($user->extra_attributes['time_format'])->toBe('24');
+        expect($user->extra_attributes['timezone'])->toBe('UTC');
+    });
 
-    $this->actingAs($user)
-        ->put(route('settings.general'), [
-            'currency' => 'EUR',
-            'date_format' => DateFormat::C->value,
-            'time_format' => '12',
-            'timezone' => 'something/inavlid',
-        ])->assertSessionHasErrors('timezone');
+    it('requires timezone to be valid', function () {
+        $user = createUser([
+            'extra_attributes' => [
+                'currency' => 'USD',
+                'date_format' => DateFormat::D,
+                'time_format' => '24',
+                'timezone' => 'UTC',
+            ],
+        ]);
 
-    $user->refresh();
+        $this->actingAs($user)
+            ->put(route('settings.general'), [
+                'currency' => 'EUR',
+                'date_format' => DateFormat::C->value,
+                'time_format' => '12',
+                'timezone' => 'something/inavlid',
+            ])->assertSessionHasErrors('timezone');
 
-    expect($user->extra_attributes['currency'])->toBe('USD');
-    expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
-    expect($user->extra_attributes['time_format'])->toBe('24');
-    expect($user->extra_attributes['timezone'])->toBe('UTC');
+        $user->refresh();
+
+        expect($user->extra_attributes['currency'])->toBe('USD');
+        expect($user->extra_attributes['date_format'])->toBe(DateFormat::D->value);
+        expect($user->extra_attributes['time_format'])->toBe('24');
+        expect($user->extra_attributes['timezone'])->toBe('UTC');
+    });
 });

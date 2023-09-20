@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
     // Settings
     Route::get('/settings', [GeneralSettingsController::class, 'edit'])->name('settings.general');
-    Route::put('/settings', [GeneralSettingsController::class, 'update']);
+    Route::put('/settings', [GeneralSettingsController::class, 'update'])->middleware('signed_wallet');
 
     // Gallery
     Route::group(['prefix' => 'my-galleries', 'middleware' => 'features:galleries'], function () {
