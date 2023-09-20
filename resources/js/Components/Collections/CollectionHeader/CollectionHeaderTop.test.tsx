@@ -4,6 +4,7 @@ import { CollectionHeaderTop } from "./CollectionHeaderTop";
 import { MarkdownImage } from "@/Components/Collections/CollectionDescription";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
@@ -157,6 +158,14 @@ describe("CollectionHeaderTop", () => {
         const function_ = vi.fn();
         const routerSpy = vi.spyOn(router, "reload").mockImplementation(function_);
 
+        const signedActionMock = vi.fn().mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        const useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+        });
+
         render(<CollectionHeaderTop collection={collection} />);
 
         expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
@@ -172,6 +181,7 @@ describe("CollectionHeaderTop", () => {
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
 
         routerSpy.mockRestore();
+        useAuthorizedActionSpy.mockRestore();
     });
 
     it("should disable reporting", () => {

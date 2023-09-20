@@ -5,12 +5,15 @@ import { expect, type SpyInstance } from "vitest";
 import { Report } from "./Report";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 let routerSpy: SpyInstance;
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
 
 describe("Report", () => {
     const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
@@ -20,6 +23,14 @@ describe("Report", () => {
     beforeEach(() => {
         const function_ = vi.fn();
         routerSpy = vi.spyOn(router, "reload").mockImplementation(function_);
+
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+        });
     });
 
     beforeAll(() => {
@@ -45,6 +56,7 @@ describe("Report", () => {
 
     afterEach(() => {
         routerSpy.mockRestore();
+        useAuthorizedActionSpy.mockRestore();
     });
 
     it("should render with nft", () => {
@@ -164,8 +176,6 @@ describe("Report", () => {
         );
 
         await userEvent.click(screen.getByTestId("Report_flag"));
-
-        expect(showConnectOverlayMock).toHaveBeenCalledOnce();
 
         expect(routerSpy).toHaveBeenCalledWith({
             data: {
