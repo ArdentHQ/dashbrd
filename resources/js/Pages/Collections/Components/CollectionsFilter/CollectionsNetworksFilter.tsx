@@ -70,7 +70,7 @@ const CollectionsNetworksFilter = ({
             <div className="bg-theme-secondary-50 px-6 py-3 text-sm font-medium text-theme-secondary-700">
                 {t("pages.collections.collections_network")}
             </div>
-            {console.log(availableNetworks)}
+
             <div className="flex flex-col gap-3 px-6 pb-6 pt-3">
                 {availableNetworks.map((network) => (
                     <NetworkFilterCheckbox
