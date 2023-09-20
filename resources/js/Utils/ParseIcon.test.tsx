@@ -38,7 +38,7 @@ describe("ParseIcon", () => {
         expect(screen.getByTestId("icon-ArrowUp")).toHaveClass("h-4 w-4");
     });
 
-    it.each(["xs", "sm", "md"] as Array<ButtonContentProperties["iconSize"]>)(
+    it.each(["2xs", "xs", "sm", "md"] as Array<ButtonContentProperties["iconSize"]>)(
         "should render in custom sizes",
         (size) => {
             render(
@@ -47,6 +47,10 @@ describe("ParseIcon", () => {
                     size={size}
                 />,
             );
+
+            if (size === "2xs") {
+                expect(screen.getByTestId("icon-ArrowUp")).toHaveClass("h-2 w-2");
+            }
 
             if (size === "xs") {
                 expect(screen.getByTestId("icon-ArrowUp")).toHaveClass("h-3 w-3");
