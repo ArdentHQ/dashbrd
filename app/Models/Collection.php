@@ -332,11 +332,9 @@ class Collection extends Model
      */
     public function scopeWithAcceptableSupply(Builder $query): Builder
     {
-        return $query->where(function (Builder $query) {
-            $query
-                ->where('collections.supply', '<=', config('dashbrd.collections_max_cap'))
-                ->orWhereNotNull('collections.supply');
-        });
+        return $query
+            ->where('collections.supply', '<=', config('dashbrd.collections_max_cap'))
+            ->whereNotNull('collections.supply');
     }
 
     /**
