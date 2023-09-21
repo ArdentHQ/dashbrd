@@ -66,6 +66,14 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
         );
 
         if ($result->nextToken === null) {
+            Log::info('FetchWalletNfts Job: run cleanupNftsAndGalleries', [
+                'wallet' => $this->wallet->address,
+                'network' => $this->network->id,
+                'next_token' => $result->nextToken,
+                'cursor' => $this->cursor,
+                'start_timestamp' => $this->startTimestamp?->toDateTimeString(),
+            ]);
+
             $nftHandler->cleanupNftsAndGalleries($this->startTimestamp);
         }
 
