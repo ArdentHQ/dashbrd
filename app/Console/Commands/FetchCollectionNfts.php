@@ -32,13 +32,13 @@ class FetchCollectionNfts extends Command
     public function handle(): int
     {
         $this->forEachCollection(function ($collection) {
-            if (!$collection->isBlacklisted()) {
+            if (! $collection->isBlacklisted()) {
                 FetchCollectionNftsJob::dispatch(
                     $collection,
                     $this->option('start-token') ?? $collection->last_indexed_token_number
                 );
             }
-        }, queryCallback: fn(Builder $query) => $query->withAcceptableSupply());
+        }, queryCallback: fn (Builder $query) => $query->withAcceptableSupply());
 
         return Command::SUCCESS;
     }
