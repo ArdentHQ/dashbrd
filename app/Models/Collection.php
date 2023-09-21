@@ -475,4 +475,13 @@ class Collection extends Model
     {
         return $query->whereHas('nfts', fn ($nftQuery) => $nftQuery->whereHas('wallet', fn ($walletQuery) => $walletQuery->hasBeenSigned()));
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
+    }
 }
