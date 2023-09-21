@@ -29,7 +29,9 @@ it('dispatches a job for collections that belongs to signed wallets', function (
     $signedCollection = Collection::factory()->create();
 
     $signedWallet = Wallet::factory()->create([
-        'last_signed_at' => now(),
+        'extra_attributes' => [
+            'last_signed_at' => now(),
+        ],
     ]);
 
     Nft::factory()->create([

@@ -45,7 +45,10 @@ class Signature
 
     public static function setWalletIsSigned(int $walletId): void
     {
-        Wallet::where('id', $walletId)->update(['last_signed_at' => Carbon::now()]);
+        $wallet = Wallet::findOrFail($walletId);
+
+        $wallet->extra_attributes->set('last_signed_at', Carbon::now());
+        $wallet->save();
 
         Session::put('wallet-is-signed.'.$walletId, true);
     }
