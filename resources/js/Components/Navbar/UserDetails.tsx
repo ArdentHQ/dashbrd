@@ -1,4 +1,4 @@
-import { Link as InertiaLink } from "@inertiajs/react";
+import { Link as InertiaLink, type InertiaLinkProps, router } from "@inertiajs/react";
 import cn from "classnames";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,6 +12,7 @@ import { TokenActions } from "@/Components/Tokens/TokenActions";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { FormatFiat } from "@/Utils/Currency";
 import { formatAddress } from "@/Utils/format-address";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
@@ -33,9 +34,11 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
     const { assets } = usePortfolioBreakdown(wallet);
 
+    const { signedAction } = useAuthorizedAction();
+
     return (
         <Popover className="sm:relative">
-            {({ open }) => (
+            {({ open, close }) => (
                 <>
                     <Trigger wallet={wallet} />
 
@@ -155,9 +158,19 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
                                             <li>
                                                 <DropdownNavigationLink
-                                                    href={route("settings.general")}
+                                                    href="#"
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+
+                                                        signedAction(() => {
+                                                            router.get(route("settings.general"));
+                                                        });
+
+                                                        close();
+                                                    }}
                                                     icon="Cog"
                                                     label={t("pages.settings.title")}
+                                                    as="button"
                                                 />
                                             </li>
 
@@ -220,19 +233,19 @@ const Trigger = ({ wallet }: { wallet: App.Data.Wallet.WalletData }): JSX.Elemen
     </Popover.Button>
 );
 
+interface DropdownNavigationLinkProperties extends Omit<InertiaLinkProps, "label"> {
+    icon: IconName;
+    label: ReactNode;
+}
+
 const DropdownNavigationLink = ({
     as = "a",
     href,
     method = "get",
     icon,
     label,
-}: {
-    as?: "a" | "button";
-    href: string;
-    method?: "get" | "post" | "put" | "patch" | "delete";
-    icon: IconName;
-    label: ReactNode;
-}): JSX.Element => (
+    ...properties
+}: DropdownNavigationLinkProperties): JSX.Element => (
     <InertiaLink
         data-testid="UserDetails__navigationLink"
         type="button"
@@ -243,6 +256,7 @@ const DropdownNavigationLink = ({
             "transition-default flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 md-lg:px-6",
             "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300",
         )}
+        {...properties}
     >
         <div className="flex items-center space-x-3 rounded-full">
             <Icon

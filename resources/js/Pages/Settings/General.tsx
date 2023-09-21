@@ -7,7 +7,6 @@ import { SetDefaultsButton } from "./SetDefaultsButton";
 import { Button } from "@/Components/Buttons/Button";
 import { InputGroup } from "@/Components/Form/InputGroup";
 import { Listbox } from "@/Components/Form/Listbox";
-import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { Form } from "@/Pages/Settings/Form";
 
 interface Currency {
@@ -33,14 +32,13 @@ interface Properties {
     dateFormats: DateFormat[];
     auth: PageProps["auth"];
     title: string;
-    reset: boolean;
 }
 
-const General = ({ auth, currencies, timezones, dateFormats, title, reset }: Properties): JSX.Element => {
+const General = ({ auth, currencies, timezones, dateFormats, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
-    const { signedAction } = useAuthorizedAction();
     const user = auth.user as App.Data.UserData;
     const { props } = usePage();
+
     const [loading, setLoading] = useState(false);
 
     const { data, setData, put, processing, errors } = useForm({
@@ -83,7 +81,6 @@ const General = ({ auth, currencies, timezones, dateFormats, title, reset }: Pro
             <SetDefaultsButton
                 onConfirm={resetToDefaults}
                 isDisabled={processing}
-                reset={reset}
             />
 
             <Button
@@ -100,15 +97,12 @@ const General = ({ auth, currencies, timezones, dateFormats, title, reset }: Pro
     const submit = (event: FormEvent): void => {
         event.preventDefault();
 
-        signedAction(() => {
-            setLoading(true);
+        setLoading(true);
 
-            put(route("settings.general"), {
-                preserveState: false,
-                onFinish: () => {
-                    setLoading(false);
-                },
-            });
+        put(route("settings.general"), {
+            onFinish: () => {
+                setLoading(false);
+            },
         });
     };
 
