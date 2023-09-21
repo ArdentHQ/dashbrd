@@ -119,7 +119,7 @@ const CollectionsIndex = ({
                         activeSort={sortBy}
                         onSort={sort}
                         onChangeVisibilityStatus={(isHidden) => {
-                            reload({ showHidden: isHidden });
+                            reload({ showHidden: isHidden, page: 1 });
                         }}
                     />
                 </div>
