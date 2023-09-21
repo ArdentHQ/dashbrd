@@ -337,6 +337,10 @@ class AlchemyPendingRequest extends PendingRequest
             $description = Arr::get($nft, 'description.0');
         }
 
+        if ($description === null) {
+            $description = $nft['metadata']['description'] ?? null;
+        }
+
         $socials = [
             'twitter' => Arr::get($nft, 'contractMetadata.openSea.twitterUsername'),
             'discord' => Arr::get($nft, 'contractMetadata.openSea.discordUrl'),

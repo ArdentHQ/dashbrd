@@ -121,13 +121,14 @@ class Web3NftHandler
                 'collection_id' => $groupedByAddress->get(Str::lower($nft->tokenAddress))->id,
                 'token_number' => $nft->tokenNumber,
                 'name' => $nft->name,
+                'description' => $nft->description,
                 'extra_attributes' => json_encode($nft->extraAttributes),
                 'deleted_at' => null,
             ])->toArray();
 
             $uniqueBy = ['collection_id', 'token_number'];
 
-            $valuesToUpdateIfExists = ['name', 'extra_attributes', 'deleted_at'];
+            $valuesToUpdateIfExists = ['name', 'description', 'extra_attributes', 'deleted_at'];
 
             if ($this->wallet !== null) {
                 $valuesToUpdateIfExists[] = 'wallet_id';
