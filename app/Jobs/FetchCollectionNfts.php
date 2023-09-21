@@ -7,7 +7,6 @@ namespace App\Jobs;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
-use App\Support\BlacklistedCollections;
 use App\Support\Queues;
 use App\Support\Web3NftHandler;
 use DateTime;
@@ -35,19 +34,10 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 
     /**
      * Execute the job.
+     * Attention! This job assumes that you already filtered invalid collections.
      */
     public function handle(): void
     {
-        // Ignore explicitly blacklisted collections
-        if (BlacklistedCollections::includes($this->collection->address)) {
-            return;
-        }
-
-        // Ignore collections above the supply cap
-        if ($this->collection->supply === null || $this->collection->supply > config('dashbrd.collections_max_cap')) {
-            return;
-        }
-
         $result = $this->getWeb3DataProvider()->getCollectionsNfts($this->collection, $this->startToken);
 
         (new Web3NftHandler(collection: $this->collection))
