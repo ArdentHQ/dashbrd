@@ -45,6 +45,9 @@ export const CollectionsFilterPopover = ({
         }
     }, [debouncedQuery]);
 
+    const allNetworksSelected =
+        availableNetworks.filter((network) => network.collectionsCount > 0).length === selectedChainIds.length;
+
     return (
         <Popover className="sm:relative">
             {({ open }) => (
@@ -57,8 +60,7 @@ export const CollectionsFilterPopover = ({
                                 disabled={disabled}
                             />
                         </Tooltip>
-
-                        {(hidden || selectedChainIds.length > 0) && <PulsatingDot />}
+                        {(hidden || !allNetworksSelected) && <PulsatingDot />}
                     </div>
 
                     <Popover.Transition show={open}>
