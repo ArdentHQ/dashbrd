@@ -475,13 +475,4 @@ class Collection extends Model
     {
         return $query->whereHas('nfts', fn ($nftQuery) => $nftQuery->whereHas('wallet', fn ($walletQuery) => $walletQuery->hasBeenSigned()));
     }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeWithoutSignedWallet(Builder $query): Builder
-    {
-        return $query->whereDoesntHave('nfts', fn ($nftQuery) => $nftQuery->whereHas('wallet', fn ($walletQuery) => $walletQuery->hasBeenSigned()));
-    }
 }
