@@ -16,7 +16,7 @@ class FetchCollectionNfts extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-nfts {--collection-id=} {--start-token=}';
+    protected $signature = 'collections:fetch-nfts {--collection-id=} {--start-token=} {--only-signed}';
 
     /**
      * The console command description.
@@ -30,12 +30,21 @@ class FetchCollectionNfts extends Command
      */
     public function handle(): int
     {
-        $this->forEachCollection(function ($collection) {
-            FetchCollectionNftsJob::dispatch(
-                $collection,
-                $this->option('start-token') ?? $collection->last_indexed_token_number
-            );
-        });
+
+        $onlySigned = (bool) $this->option('only-signed');
+
+        $this->forEachCollection(
+            callback: function ($collection) {
+                FetchCollectionNftsJob::dispatch(
+                    $collection,
+                    $this->option('start-token') ?? $collection->last_indexed_token_number
+                );
+            },
+            queryCallback: fn ($query) => $query->when(
+                $onlySigned,
+                fn ($query) => $query->withSignedWallet()
+            )
+        );
 
         return Command::SUCCESS;
     }
