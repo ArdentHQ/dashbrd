@@ -43,6 +43,7 @@ export const TransactionFormSliderHeader = ({
                             <Tooltip
                                 content={t("pages.token_panel.insufficient_funds")}
                                 disabled={balance !== 0}
+                                touch={balance === 0}
                             >
                                 <div className="flex w-full items-center justify-center space-x-3">
                                     <span data-testid="TransactionFormSlider__tab-send">{t("common.send")}</span>

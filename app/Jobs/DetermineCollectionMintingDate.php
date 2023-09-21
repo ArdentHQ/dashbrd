@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class DetermineCollectionMintingDate implements ShouldQueue
 {
@@ -27,6 +28,13 @@ class DetermineCollectionMintingDate implements ShouldQueue
 
     public function handle(): void
     {
+        Log::info('DetermineCollectionMintingDate Job: Processing', [
+            'network' => $this->nft->networkId,
+            'minted_block' => $this->nft->mintedBlock,
+            'token_number' => $this->nft->tokenNumber,
+            'token_address' => $this->nft->tokenAddress,
+        ]);
+
         $existing = Collection::query()
                             ->where('network_id', $this->nft->networkId)
                             ->where('minted_block', $this->nft->mintedBlock)
@@ -37,6 +45,13 @@ class DetermineCollectionMintingDate implements ShouldQueue
         if ($existing !== null) {
             $this->touchCollectionDate($existing->toDateTimeString());
 
+            Log::info('DetermineCollectionMintingDate Job: Setting date from existing', [
+                'network' => $this->nft->networkId,
+                'minted_block' => $this->nft->mintedBlock,
+                'token_number' => $this->nft->tokenNumber,
+                'token_address' => $this->nft->tokenAddress,
+            ]);
+
             return;
         }
 
@@ -45,6 +60,13 @@ class DetermineCollectionMintingDate implements ShouldQueue
         $timestamp = $this->getWeb3DataProvider()->getBlockTimestamp($network, $this->nft->mintedBlock);
 
         $this->touchCollectionDate($timestamp->toDateTimeString());
+
+        Log::info('DetermineCollectionMintingDate Job: Setting date from provider', [
+            'network' => $this->nft->networkId,
+            'minted_block' => $this->nft->mintedBlock,
+            'token_number' => $this->nft->tokenNumber,
+            'token_address' => $this->nft->tokenAddress,
+        ]);
     }
 
     private function touchCollectionDate(string $date): void

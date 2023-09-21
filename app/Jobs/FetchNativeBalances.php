@@ -43,7 +43,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
 
     public function handle(): void
     {
-        Log::info('Processing FetchNativeBalances job', [
+        Log::info('FetchNativeBalances Job: Processing', [
             'network_id' => $this->network->id,
             'wallet_ids' => $this->wallets->pluck('id')->toArray(),
         ]);
@@ -72,7 +72,7 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        Log::info('Updating native balances', [
+        Log::info('FetchNativeBalances Job: Updating native balances', [
             'network_id' => $this->network->id,
             'data' => $balancesToInsert->map(fn ($balance) => collect($balance)->only(['wallet_id', 'balance'])),
         ]);

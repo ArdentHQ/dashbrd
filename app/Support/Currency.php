@@ -7,7 +7,6 @@ namespace App\Support;
 use App\Enums\CurrencyCode;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use NumberFormatter;
 
 /**
  * @implements Arrayable<'name'|'code'|'symbol', string>
@@ -26,23 +25,6 @@ class Currency implements Arrayable
         return static::codes()->contains($currency)
                     ? $currency
                     : $default;
-    }
-
-    public static function guessCodeFromLocale(string $locale): string
-    {
-        /** @var string|false $currency */
-        $currency = NumberFormatter::create(
-            $locale, style: NumberFormatter::CURRENCY
-        )->getTextAttribute(NumberFormatter::CURRENCY_CODE);
-
-        $fallback = CurrencyCode::USD->value;
-
-        // "Currency code" will be XXX is locale does not exist...
-        if ($currency === false || $currency === 'XXX') {
-            return $fallback;
-        }
-
-        return static::find($currency, $fallback);
     }
 
     /**
