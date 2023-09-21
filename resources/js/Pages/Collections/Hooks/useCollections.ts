@@ -90,14 +90,18 @@ export const useCollections = ({
         setIsLoading(true);
         isLoadingMore.current = true;
 
-        const pageUrlWithSearch = replaceUrlQuery({
+        let pageUrlWithSearch = replaceUrlQuery({
             query,
             page: isNumber(page) && Number(page) !== 1 ? page.toString() : "",
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
-            chain: selectedChainIds.length > 0 ? selectedChainIds.join(",") : "",
+
             view,
         });
+
+        if (selectedChainIds.length > 0) {
+            pageUrlWithSearch += `&chain=${selectedChainIds.join(",")}`;
+        }
 
         const { data } = await axios.get<CollectionsResponse>(pageUrlWithSearch, {
             requestId: "collections-page",
