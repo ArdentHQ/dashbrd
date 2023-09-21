@@ -5,7 +5,7 @@ import { type PaginationData } from "@/Components/Pagination/Pagination.contract
 import { useInertiaHeader } from "@/Hooks/useInertiaHeader";
 import { useLiveSearch } from "@/Hooks/useLiveSearch";
 import { type CollectionDisplayType } from "@/Pages/Collections/Components/CollectionsFilter";
-import { getAllChains } from "@/Utils/Explorer";
+import { ExplorerChains } from "@/Utils/Explorer";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
@@ -78,7 +78,10 @@ export const useCollections = ({
         {},
     );
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(getAllChains());
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([
+        ExplorerChains.EthereumMainnet,
+        ExplorerChains.PolygonMainnet,
+    ]);
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
