@@ -58,13 +58,13 @@ export const ConnectionError = ({
                     data-testid="AuthOverlay__close-button"
                     variant="secondary"
                     onClick={closeOverlay}
-                    className="min-w-[81px] justify-center"
+                    className="w-full min-w-[81px] justify-center xs:w-auto"
                 >
                     {t("common.close")}
                 </Button>
             )}
             <Button
-                className="min-w-[81px] justify-center"
+                className="w-full min-w-[81px] justify-center xs:w-auto"
                 onClick={requiresSignature ? onSign : onConnect}
             >
                 {t("common.retry")}
@@ -133,6 +133,7 @@ export const ConnectWallet = ({
                 onClick={requiresSignature ? onSign : onConnect}
                 className={classNames("justify-center", {
                     "w-full whitespace-nowrap": showCloseButton,
+                    "w-full xs:w-auto": !showCloseButton,
                 })}
             >
                 {requiresSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}
