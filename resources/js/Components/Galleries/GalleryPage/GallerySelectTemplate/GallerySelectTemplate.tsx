@@ -17,21 +17,21 @@ export const GallerySelectTemplate = ({
             <div className={className}>
                 <button
                     type="button"
-                    className="w-full overflow-hidden rounded-xl text-left outline outline-1 outline-theme-hint-600"
+                    className="w-full overflow-hidden rounded-xl text-left outline outline-1 outline-theme-primary-600"
                 >
-                    <div className="flex items-center justify-between bg-theme-hint-100 p-4">
+                    <div className="flex items-center justify-between bg-theme-primary-100 p-4">
                         <p className="text-sm font-medium text-theme-secondary-700">
                             {t("pages.galleries.create.templates.basic")}
                         </p>
 
                         <div>
-                            <span className="flex rounded-full bg-theme-hint-200 px-2 py-0.5 text-xs font-medium text-theme-hint-500">
+                            <span className="flex rounded-full bg-theme-primary-200 px-2 py-0.5 text-xs font-medium text-theme-primary-500">
                                 {t("common.selected")}
                             </span>
                         </div>
                     </div>
 
-                    <div className="bg-theme-hint-50 p-4">
+                    <div className="bg-theme-primary-50 p-4">
                         <img
                             src={basic}
                             alt={t("common.preview")}

@@ -81,7 +81,7 @@ describe("TextInput", () => {
 
         await userEvent.hover(screen.getByTestId("TextInput"));
 
-        expect(screen.getByTestId("TextInput")).toHaveClass("ring-2 ring-theme-hint-100");
+        expect(screen.getByTestId("TextInput")).toHaveClass("ring-2 ring-theme-primary-100");
     });
 
     it("should render text input avatar", () => {
@@ -116,6 +116,6 @@ describe("TextInput", () => {
 
         await userEvent.hover(screen.getByTestId("TextInput__button"));
 
-        expect(screen.getByTestId("TextInput")).not.toHaveClass("ring-2 ring-theme-hint-100");
+        expect(screen.getByTestId("TextInput")).not.toHaveClass("ring-2 ring-theme-primary-100");
     });
 });

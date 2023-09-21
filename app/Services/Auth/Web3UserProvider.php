@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Auth;
 
+use App\Enums\CurrencyCode;
 use App\Enums\DateFormat;
 use App\Models\User;
 use App\Models\Wallet;
-use App\Support\Currency;
-use App\Support\Facades\Signature;
-use App\Support\Timezone;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -49,10 +47,10 @@ class Web3UserProvider extends EloquentUserProvider
                 /** @var User $user */
                 $user = $this->newModelQuery()->create([
                     'extra_attributes' => [
-                        'currency' => Currency::guessCodeFromLocale($credentials['locale'] ?? 'en-US'),
+                        'currency' => CurrencyCode::USD->value,
                         'date_format' => DateFormat::D->value,
                         'time_format' => '24',
-                        'timezone' => Timezone::find($credentials['timezone']),
+                        'timezone' => 'UTC',
                     ],
                 ]);
             }
@@ -70,15 +68,8 @@ class Web3UserProvider extends EloquentUserProvider
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
         /** @var User $user */
-        if ($user->wallets()->where('address', $credentials['address'])->doesntExist()) {
-            return false;
-        }
+        return $user->wallets()->where('address', $credentials['address'])->exists();
 
-        return Signature::verify(
-            signature: $credentials['signature'],
-            address: $credentials['address'],
-            message: Signature::buildSignMessage($credentials['nonce'])
-        );
     }
 
     /**

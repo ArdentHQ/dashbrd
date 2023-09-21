@@ -91,7 +91,7 @@ const Dialog = ({
                                     <div data-testid="Dialog__close">
                                         <button
                                             type="button"
-                                            className="transition-default flex h-8 w-8 items-center justify-center rounded-full text-theme-hint-900 hover:bg-theme-secondary-300"
+                                            className="transition-default flex h-8 w-8 items-center justify-center rounded-full text-theme-primary-900 hover:bg-theme-secondary-300"
                                             onClick={onClose}
                                         >
                                             <Icon

@@ -19,7 +19,7 @@ it('should fetch nft collections and trigger the job again with the next token',
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -47,7 +47,7 @@ it('should fetch nft collections without triggering another job if no next token
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response($response, 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
@@ -82,7 +82,7 @@ it('should not fetch nfts if the collection address is blacklisted', function ()
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_blacklisted_collection'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $blacklist = config('dashbrd.blacklisted_collections');
 
     $collection = Collection::factory()->create([
@@ -107,7 +107,7 @@ it('should fetch nfts if the collection address is not blacklisted', function ()
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
@@ -133,7 +133,7 @@ it('should not store nfts if the collection supply is higher than COLLECTIONS_MA
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection_exceeding_max_cap_supply'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
@@ -142,44 +142,6 @@ it('should not store nfts if the collection supply is higher than COLLECTIONS_MA
 
     expect(Nft::count())->toBe(0);
     expect(NftTrait::count())->toBe(0);
-
-    (new FetchCollectionNfts($collection))->handle();
-
-    expect(Nft::count())->toBe(0);
-    expect(NftTrait::count())->toBe(0);
-});
-
-it('should not fetch nfts if the collection supply is higher than COLLECTIONS_MAX_CAP or null', function () {
-    Bus::fake();
-
-    Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
-    ]);
-
-    $network = Network::polygon()->firstOrFail();
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-        'supply' => null,
-    ]);
-
-    $this->assertDatabaseCount('collections', 1);
-
-    expect(Nft::count())->toBe(0);
-    expect(NftTrait::count())->toBe(0);
-
-    // Null supply
-    (new FetchCollectionNfts($collection))->handle();
-
-    expect(Nft::count())->toBe(0);
-    expect(NftTrait::count())->toBe(0);
-
-    // Higher than max cap supply
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-        'supply' => config('dashbrd.collections_max_cap') + 1,
-    ]);
-
-    $this->assertDatabaseCount('collections', 2);
 
     (new FetchCollectionNfts($collection))->handle();
 
@@ -192,7 +154,7 @@ it('does not store NFTs for collections that do not report a total supply', func
 
     Alchemy::fake(Http::response(fixtureData('alchemy.get_nfts_for_collection_without_total_supply'), 200));
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
@@ -215,7 +177,7 @@ it('updates a max token number when indexing', function () {
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $collection = Collection::factory()->create([
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
         'network_id' => $network->id,

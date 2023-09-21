@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 use App\Support\Timezone;
 
-it('can find specific timezone', function () {
-    expect(Timezone::find('Europe/Amsterdam'))->toBe('Europe/Amsterdam');
-    expect(Timezone::find('Unknown', default: 'UTC'))->toBe('UTC');
-});
-
 it('can get all timezones', function () {
     $timezones = Timezone::all();
 

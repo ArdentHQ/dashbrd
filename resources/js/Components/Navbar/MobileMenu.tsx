@@ -204,7 +204,7 @@ export const NavLink = ({
                 "text-theme-secondary-700": !active,
             })}
         >
-            <div className="rounded-full bg-theme-hint-50 p-2.5">
+            <div className="rounded-full bg-theme-primary-50 p-2.5">
                 <Icon
                     name={icon}
                     size="lg"
@@ -275,7 +275,7 @@ const PortfolioBreakdown = ({ wallet }: { wallet: App.Data.Wallet.WalletData }):
 
                     <Link
                         href={route("dashboard")}
-                        className="transition-default text-sm font-medium text-theme-hint-600 hover:text-theme-hint-700"
+                        className="transition-default text-sm font-medium text-theme-primary-600 hover:text-theme-primary-700"
                     >
                         {t("common.my_wallet")}
                     </Link>
@@ -310,7 +310,7 @@ const Footer = ({ address }: { address: string }): JSX.Element => {
             >
                 <Icon
                     name="DoorExit"
-                    className="h-5 w-5 text-theme-hint-600"
+                    className="h-5 w-5 text-theme-primary-600"
                 />
             </Link>
         </div>

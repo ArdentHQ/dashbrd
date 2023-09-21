@@ -11,6 +11,7 @@ use App\Data\Wallet\WalletData;
 use App\Models\Report;
 use App\Models\Token;
 use App\Models\User;
+use App\Support\Facades\Signature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Inertia\Middleware;
@@ -58,6 +59,7 @@ class HandleInertiaRequests extends Middleware
                 $userData,
                 $walletData,
                 $user !== null,
+                $wallet !== null ? Signature::walletIsSigned($wallet->id) : false
             ),
             'allowsGuests' => false,
             'features' => Feature::all(),

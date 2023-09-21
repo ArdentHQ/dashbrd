@@ -12,7 +12,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 it('can render the collection nfts view page', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -43,7 +43,7 @@ it('can render the collection nfts view page', function () {
 it('should render the collections NTFs view page with custom pageLimit', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,

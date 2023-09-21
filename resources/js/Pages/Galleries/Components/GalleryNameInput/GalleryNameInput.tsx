@@ -29,7 +29,7 @@ export const GalleryNameInput = ({
                     "transition-default relative flex items-center justify-center rounded-xl border px-4 py-3",
                     {
                         "border-theme-danger-400 ring-1 ring-theme-danger-400": hasError || hasLimitError,
-                        "border-theme-secondary-400 focus-within:border-theme-hint-600 focus-within:ring-1 focus-within:ring-theme-hint-600":
+                        "border-theme-secondary-400 focus-within:border-theme-primary-600 focus-within:ring-1 focus-within:ring-theme-primary-600":
                             !hasError && !hasLimitError,
                     },
                 )}

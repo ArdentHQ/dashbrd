@@ -92,7 +92,7 @@ describe("Tabs", () => {
             </Tabs.Link>,
         );
 
-        expect(screen.getByTestId("test").parentElement?.className).toContain("bg-theme-hint-100");
+        expect(screen.getByTestId("test").parentElement?.className).toContain("bg-theme-primary-100");
     });
     it("marks link as disabled", () => {
         render(

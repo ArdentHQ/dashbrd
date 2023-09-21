@@ -19,6 +19,7 @@ interface Properties {
     nft: App.Data.Nfts.NftData;
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
+    showReportModal?: boolean;
 }
 
 export const NftActions = ({
@@ -27,6 +28,7 @@ export const NftActions = ({
     nft,
     reportAvailableIn = null,
     reportReasons,
+    showReportModal = false,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { showToast } = useToasts();
@@ -70,24 +72,24 @@ export const NftActions = ({
     const getChainLink = (chainId: App.Enums.Chains, collectionAddress: string, tokenNumber: string): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
-                return t("urls.explorers.etherscan.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.etherscan.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
             case ExplorerChains.EthereumTestnet:
-                return t("urls.explorers.goerli.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.goerli.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
             case ExplorerChains.PolygonMainnet:
-                return t("urls.explorers.polygonscan.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.polygonscan.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
             default:
-                return t("urls.explorers.mumbai.token_transactions", {
-                    address: tokenNumber,
-                    token: collectionAddress,
+                return t("urls.explorers.mumbai.nft", {
+                    nftId: tokenNumber,
+                    address: collectionAddress,
                 });
         }
     };
@@ -150,6 +152,7 @@ export const NftActions = ({
                 reportAvailableIn={reportAvailableIn}
                 displayDefaultTooltip={true}
                 className="bg-transparent"
+                show={showReportModal}
             />
 
             <Tooltip

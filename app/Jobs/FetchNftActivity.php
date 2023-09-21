@@ -9,7 +9,6 @@ use App\Enums\Chains;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Nft;
 use App\Models\NftActivity;
-use App\Models\SpamContract;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
@@ -49,11 +48,10 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
 
         $collection = $this->nft->collection;
 
-        if (SpamContract::isSpam($collection->address, $collection->network)) {
-            Log::info('FetchNftActivity Job:: Ingored for Spam Collection', [
+        if ($collection->isInvalid()) {
+            Log::info('FetchNftActivity Job: Ignored, Collection Invalid', [
                 'token_number' => $this->nft->token_number,
-                'address' => $collection->address,
-                'network' => $collection->network->id,
+                'collection_address' => $collection->address,
             ]);
 
             return;

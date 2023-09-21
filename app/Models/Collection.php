@@ -9,6 +9,7 @@ use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
+use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -329,6 +330,26 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeWithAcceptableSupply(Builder $query): Builder
+    {
+        return $query
+            ->where('collections.supply', '<=', config('dashbrd.collections_max_cap'))
+            ->whereNotNull('collections.supply');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFilterInvalid(Builder $query): Builder
+    {
+        return $query->withAcceptableSupply()->withoutSpamContracts();
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeForCollectionData(Builder $query, User $user = null): Builder
     {
         $extraAttributeSelect = "CASE
@@ -390,15 +411,19 @@ class Collection extends Model
     }
 
     /**
-     * @param  null|array<int>  $collectionIds
+     * @param  array<int>  $collectionIds
      */
-    public static function updateFiatValue(array $collectionIds = null): void
+    public static function updateFiatValue(array $collectionIds = []): void
     {
         $calculateFiatValueQuery = get_query('collections.calculate_fiat_value');
 
-        $query = $collectionIds === null ? self::query() : self::whereIn('collections.id', $collectionIds);
+        $collectionIds = implode(',', $collectionIds);
 
-        $query->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
+        Collection::query()
+            ->when(! empty($collectionIds), function ($query) use ($collectionIds) {
+                $query->whereRaw("collections.id IN (SELECT collections.id FROM collections WHERE collections.id IN ({$collectionIds}) FOR UPDATE SKIP LOCKED)");
+            })
+            ->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
     }
 
     /**
@@ -416,5 +441,29 @@ class Collection extends Model
         }
 
         return $this->last_viewed_at->gte(now()->subDays(1));
+    }
+
+    public function isInvalid(bool $withSpamCheck = true): bool
+    {
+        // Ignore collections above the supply cap
+        if ($this->supply === null || $this->supply > config('dashbrd.collections_max_cap')) {
+            return true;
+        }
+
+        // Ignore explicitly blacklisted collections
+        if ($this->isBlacklisted()) {
+            return true;
+        }
+
+        if ($withSpamCheck && SpamContract::isSpam($this->address, $this->network)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isBlacklisted(): bool
+    {
+        return BlacklistedCollections::includes($this->address);
     }
 }

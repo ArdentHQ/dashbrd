@@ -29,6 +29,7 @@ describe("TokenDetails", () => {
             user,
             wallet,
             authenticated: true,
+            signed: false,
             showAuthOverlay: false,
             showCloseButton: false,
             closeOverlay: vi.fn(),

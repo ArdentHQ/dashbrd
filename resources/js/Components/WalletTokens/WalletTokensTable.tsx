@@ -118,7 +118,7 @@ const WalletTokensTableItem = ({
     return (
         <button
             type="button"
-            className="flex items-center justify-between rounded-xl border border-theme-secondary-300 px-4 py-5 outline-none outline-3 outline-offset-0 transition-all hover:outline-theme-hint-300 focus-visible:outline-theme-hint-300"
+            className="flex items-center justify-between rounded-xl border border-theme-secondary-300 px-4 py-5 outline-none outline-3 outline-offset-0 transition-all hover:outline-theme-primary-300 focus-visible:outline-theme-primary-300"
             onClick={() => {
                 onDetailsClick(asset);
             }}

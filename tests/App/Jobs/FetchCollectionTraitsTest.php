@@ -14,7 +14,7 @@ it('should fetch nft collection traits', function () {
         'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/traits/numeric?*' => Http::response(fixtureData('mnemonic.collection_traits_numeric'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -30,7 +30,7 @@ it('should fetch nft collection traits', function () {
 });
 
 it('should use the collection address and network id as a unique job identifier', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'address' => '0x12345',
