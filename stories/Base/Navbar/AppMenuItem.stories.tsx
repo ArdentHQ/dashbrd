@@ -11,7 +11,7 @@ export default {
             options: ["Wallet", "Communities", "Collections"],
             defaultValue: "Wallet",
             mapping: {
-                Wallet: "bg-theme-hint-50 text-theme-hint-600",
+                Wallet: "bg-theme-primary-50 text-theme-primary-600",
                 Communities: "bg-theme-success-50 text-theme-success-600",
                 Collections: "bg-theme-warning-50 text-theme-warning-600",
             },

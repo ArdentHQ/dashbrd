@@ -30,7 +30,8 @@ export const ListboxAvatar = ({
             className={cn(
                 "relative -top-px -mt-4 flex h-8 w-8 flex-shrink-0 flex-grow-0 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100 transition group-disabled:bg-theme-secondary-200",
                 {
-                    "group-enabled:bg-theme-hint-700 group-[:enabled:hover]:bg-theme-hint-800": variant === "primary",
+                    "group-enabled:bg-theme-primary-700 group-[:enabled:hover]:bg-theme-primary-800":
+                        variant === "primary",
                     "group-enabled:bg-theme-danger-600": variant === "danger",
                     "group-enabled:bg-theme-secondary-100": variant === undefined,
                 },
@@ -59,11 +60,11 @@ export const ListboxOption = ({
             cn(
                 "transition-default group relative flex h-11 cursor-default select-none items-center px-6 py-3",
                 {
-                    "cursor-pointer text-theme-secondary-700 hover:bg-theme-hint-50 hover:text-theme-secondary-900":
+                    "cursor-pointer text-theme-secondary-700 hover:bg-theme-primary-50 hover:text-theme-secondary-900":
                         !selected && isDisabled !== true,
-                    "bg-theme-hint-100 text-theme-secondary-900": (selected || isSelected) && !isTruthy(hasGradient),
-                    "bg-theme-hint-100 text-theme-hint-600": (selected || isSelected) && isTruthy(hasGradient),
-                    "bg-theme-hint-50 text-theme-secondary-900": active && !selected,
+                    "bg-theme-primary-100 text-theme-secondary-900": (selected || isSelected) && !isTruthy(hasGradient),
+                    "bg-theme-primary-100 text-theme-primary-600": (selected || isSelected) && isTruthy(hasGradient),
+                    "bg-theme-primary-50 text-theme-secondary-900": active && !selected,
                     "text-theme-secondary-500 hover:bg-transparent hover:text-theme-secondary-500":
                         isDisabled === true && !selected,
                 },
@@ -171,17 +172,17 @@ export const ListboxGradientButton = ({ children }: HTMLAttributes<HTMLDivElemen
     <HeadlessListbox.Button
         data-testid="ListboxGradientButton"
         className={cn(
-            "group relative block w-full rounded-xl border border-theme-secondary-400 px-5 py-2 text-left transition focus:outline-none enabled:focus:ring-2 enabled:focus:ring-theme-hint-300",
+            "group relative block w-full rounded-xl border border-theme-secondary-400 px-5 py-2 text-left transition focus:outline-none enabled:focus:ring-2 enabled:focus:ring-theme-primary-300",
             "disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700",
         )}
     >
         {({ open }) => (
             <div className="flex items-center justify-between space-x-3">
-                <span className="flex-1 truncate text-xl font-bold leading-[1.875rem] text-theme-hint-600 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]">
+                <span className="flex-1 truncate text-xl font-bold leading-[1.875rem] text-theme-primary-600 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]">
                     {children}
                 </span>
 
-                <div className="pointer-events-none flex h-6 w-6 items-center justify-center rounded-full bg-theme-hint-600 text-white">
+                <div className="pointer-events-none flex h-6 w-6 items-center justify-center rounded-full bg-theme-primary-600 text-white">
                     <Icon
                         data-testid="ListboxButtonIcon"
                         name="ChevronDownSmall"

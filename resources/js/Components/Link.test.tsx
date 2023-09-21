@@ -69,7 +69,7 @@ describe("Link", () => {
             <Link
                 href="/test-link"
                 external
-                textColor="text-theme-hint-600"
+                textColor="text-theme-primary-600"
                 variant="link"
             >
                 <span data-testid="test"></span>
@@ -77,7 +77,7 @@ describe("Link", () => {
         );
 
         expect(screen.getByTestId("Link__anchor")).toBeInTheDocument();
-        expect(screen.getByTestId("Link__anchor")).toHaveClass("text-theme-hint-600");
+        expect(screen.getByTestId("Link__anchor")).toHaveClass("text-theme-primary-600");
     });
 });
 

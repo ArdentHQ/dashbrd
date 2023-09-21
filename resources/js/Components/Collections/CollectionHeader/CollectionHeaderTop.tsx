@@ -23,6 +23,7 @@ interface CollectionHeaderTopProperties {
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
+    showReportModal?: boolean;
 }
 
 interface SocialLinkProperties {
@@ -68,6 +69,7 @@ export const CollectionHeaderTop = ({
     alreadyReported = false,
     reportAvailableIn = null,
     reportReasons,
+    showReportModal = false,
 }: CollectionHeaderTopProperties): JSX.Element => {
     const { t } = useTranslation();
     const address = formatAddress(collection.address);
@@ -107,7 +109,7 @@ export const CollectionHeaderTop = ({
                             <Link
                                 data-testid="CollectionHeaderTop__address"
                                 href={contractUrl}
-                                className="outline-offset-3 transition-default flex items-center space-x-2 whitespace-nowrap rounded-full text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300"
+                                className="outline-offset-3 transition-default flex items-center space-x-2 whitespace-nowrap rounded-full text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300"
                                 external
                             >
                                 <span>
@@ -159,6 +161,7 @@ export const CollectionHeaderTop = ({
                         allowReport={allowReport}
                         tooltipOffset={[0, 20]}
                         displayDefaultTooltip
+                        show={showReportModal}
                     />
                 </div>
             </div>

@@ -46,7 +46,7 @@ export const AddressLink = ({
             <Link
                 variant="link"
                 fontSize="text-sm sm:text-base"
-                textColor="text-theme-hint-600"
+                textColor="text-theme-primary-600"
                 className="flex items-center"
                 href={addressUrl(address)}
                 external
@@ -90,7 +90,7 @@ export const Name = ({
             />
         </div>
 
-        <span className="transition-default truncate text-base font-medium leading-5.5 text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300 md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
+        <span className="transition-default truncate text-base font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
             {activity.nft.name}
         </span>
     </div>
@@ -113,7 +113,7 @@ export const NameMobile = ({
                 }),
             );
         }}
-        className="transition-default cursor-pointer truncate font-medium leading-5.5 text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300"
+        className="transition-default cursor-pointer truncate font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300"
     >
         {activity.nft.name}
     </span>
@@ -217,7 +217,7 @@ export const Type = ({
                                 variant="link"
                                 className="flex items-center leading-6"
                                 fontSize="text-base"
-                                textColor="text-theme-hint-600"
+                                textColor="text-theme-primary-600"
                                 href={transactionUrl(activity.id)}
                                 external
                                 iconClassName="ml-2 text-theme-secondary-500"
@@ -276,7 +276,7 @@ export const Type = ({
         <div className="flex items-center space-x-2">
             <Link
                 variant="link"
-                textColor="text-theme-hint-600"
+                textColor="text-theme-primary-600"
                 href={transactionUrl(activity.id)}
                 className="flex items-center"
                 external
@@ -287,7 +287,7 @@ export const Type = ({
 
             <Icon
                 name={activityIcon}
-                className="text-theme-hint-600"
+                className="text-theme-primary-600"
                 size="lg"
             />
         </div>

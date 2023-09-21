@@ -96,7 +96,7 @@ const Logo = (): JSX.Element => (
             href={route("galleries")}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center rounded-full outline-none outline-3 outline-offset-4 focus-visible:outline-theme-hint-300"
+            className="flex items-center rounded-full outline-none outline-3 outline-offset-4 focus-visible:outline-theme-primary-300"
         >
             <Icon
                 name="Logo"

@@ -42,6 +42,7 @@ interface Properties {
     activities: App.Data.Nfts.NftActivitiesData;
     sortByMintDate?: boolean;
     nativeToken: App.Data.Token.TokenData;
+    showReportModal: boolean;
 }
 
 const CollectionsView = ({
@@ -58,6 +59,7 @@ const CollectionsView = ({
     appliedFilters,
     sortByMintDate = false,
     nativeToken,
+    showReportModal,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { props } = usePage();
@@ -233,6 +235,7 @@ const CollectionsView = ({
                         collection={collection}
                         alreadyReported={alreadyReported}
                         reportAvailableIn={reportAvailableIn}
+                        showReportModal={showReportModal}
                     />
 
                     <CollectionNavigation

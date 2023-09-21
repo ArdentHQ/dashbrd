@@ -30,7 +30,7 @@ export const PageInput = ({
                     onChange={(event) => {
                         onChange(event.target.value);
                     }}
-                    className="transition-default hidden-arrows w-full appearance-none rounded-full border border-theme-secondary-300 py-2 pl-4 pr-10 outline-4 outline-offset-0 placeholder:text-theme-secondary-500 focus:border-theme-hint-600 focus:outline-offset-0 focus:outline-theme-hint-300 focus:ring-0"
+                    className="transition-default hidden-arrows w-full appearance-none rounded-full border border-theme-secondary-300 py-2 pl-4 pr-10 outline-4 outline-offset-0 placeholder:text-theme-secondary-500 focus:border-theme-primary-600 focus:outline-offset-0 focus:outline-theme-primary-300 focus:ring-0"
                     placeholder={t("common.pagination_input_placeholder")}
                     data-testid="Pagination__PageInput__input"
                 />

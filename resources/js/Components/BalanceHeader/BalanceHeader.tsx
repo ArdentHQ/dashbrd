@@ -113,11 +113,11 @@ export const BalanceHeader = ({
                                     setBreakdownOpen(true);
                                 }}
                                 className={cn(
-                                    "transition-default rounded-full text-sm font-medium leading-5.5 text-theme-hint-600",
+                                    "transition-default rounded-full text-sm font-medium leading-5.5 text-theme-primary-600",
                                     "underline decoration-transparent underline-offset-2",
                                     "outline-none outline-3 outline-offset-4",
-                                    "hover:text-theme-hint-700 hover:decoration-theme-hint-700",
-                                    "focus-visible:outline-theme-hint-300",
+                                    "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
+                                    "focus-visible:outline-theme-primary-300",
                                 )}
                             >
                                 {t("common.more_details")}
