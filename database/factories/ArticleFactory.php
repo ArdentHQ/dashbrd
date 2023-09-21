@@ -29,7 +29,7 @@ class ArticleFactory extends Factory
             'date' => fake()->date(),
             'meta_description' => fake()->text(),
             'content' => fake()->text(),
-            'user_id' => User::factory()->withWallet()
+            'user_id' => User::factory()->withWallet(),
         ];
     }
 }

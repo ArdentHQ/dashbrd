@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Article;
@@ -16,7 +18,7 @@ class ArticleSeeder extends Seeder
         $articles = Article::factory()->createMany(10);
 
         $articles->map(function ($article) {
-            $imageUrl = fake()->imageUrl(640,480, null, false);
+            $imageUrl = fake()->imageUrl(640, 480, null, false);
             $article->addMediaFromUrl($imageUrl)->toMediaCollection();
 
             $collections = Collection::factory()->createMany(2);
