@@ -73,6 +73,7 @@ describe("NftImageGrid", () => {
             name: "nft_1",
             images: { thumb: "nft_image_1", small: "", large: "" },
             tokenNumber: "1",
+            ownedByCurrentUser: false,
             ...collectionInfo,
         },
         {
@@ -80,6 +81,7 @@ describe("NftImageGrid", () => {
             name: "nft_2",
             images: { thumb: "nft_image_2", small: "nft_image_2", large: "nft_image_2" },
             tokenNumber: "2",
+            ownedByCurrentUser: false,
             ...collectionInfo,
         },
         {
@@ -87,6 +89,7 @@ describe("NftImageGrid", () => {
             name: "nft_3",
             images: { thumb: "nft_image_3", small: "nft_image_3", large: "nft_image_3" },
             tokenNumber: "3",
+            ownedByCurrentUser: false,
             ...collectionInfo,
         },
         {
@@ -94,6 +97,7 @@ describe("NftImageGrid", () => {
             name: "nft_4",
             images: { thumb: null, small: null, large: null },
             tokenNumber: "4",
+            ownedByCurrentUser: false,
             ...collectionInfo,
         },
     ];
@@ -177,6 +181,7 @@ describe("NftImageGrid", () => {
                                 name: "nft_5",
                                 images: { thumb: "nft_image_5", small: "nft_image_5", large: "nft_image_5" },
                                 tokenNumber: "5",
+                                ownedByCurrentUser: false,
                                 ...collectionInfo,
                             },
                             {
@@ -184,6 +189,7 @@ describe("NftImageGrid", () => {
                                 name: "nft_6",
                                 images: { thumb: "nft_image_6", small: "nft_image_6", large: "nft_image_6" },
                                 tokenNumber: "6",
+                                ownedByCurrentUser: false,
                                 ...collectionInfo,
                             },
                         ],
@@ -215,6 +221,7 @@ describe("NftImageGrid", () => {
                                 name: "nft_5",
                                 images: { thumb: "nft_image_5", small: "nft_image_5", large: "nft_image_5" },
                                 tokenNumber: "5",
+                                ownedByCurrentUser: false,
                                 ...collectionInfo,
                             },
                             {
@@ -222,6 +229,7 @@ describe("NftImageGrid", () => {
                                 name: "nft_6",
                                 images: { thumb: "nft_image_6", small: "nft_image_6", large: "nft_image_6" },
                                 tokenNumber: "6",
+                                ownedByCurrentUser: false,
                                 ...collectionInfo,
                             },
                         ],

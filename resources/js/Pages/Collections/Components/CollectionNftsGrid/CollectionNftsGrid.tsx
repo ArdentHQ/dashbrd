@@ -4,12 +4,10 @@ import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
 
 export const CollectionNftsGrid = ({
     nfts,
-    userNfts,
     onPageLimitChange,
     pageLimit,
 }: {
     nfts: App.Data.Gallery.GalleryNftsData;
-    userNfts: App.Data.Collections.CollectionNftsData;
     onPageLimitChange: (pageLimit: number) => void;
     pageLimit: number;
 }): JSX.Element => (
@@ -19,7 +17,6 @@ export const CollectionNftsGrid = ({
                 <CollectionNft
                     key={nft.id}
                     nft={nft}
-                    owned={userNfts.paginated.some((userNft) => userNft.id === nft.id)}
                 />
             ))}
         </div>

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
-use App\Data\Collections\Concerns\QueriesCollectionNfts;
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Models\User;
@@ -18,8 +17,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 class CollectionDetailData extends Data
 {
-    use QueriesCollectionNfts;
-
     public function __construct(
         public string $name,
         public string $slug,
@@ -43,13 +40,11 @@ class CollectionDetailData extends Data
         public ?int $owners,
         public int $nftsCount,
         public ?int $mintedAt,
-        public CollectionNftsData $nfts,
     ) {
     }
 
     public static function fromModel(Collection $collection, CurrencyCode $currencyCode = null, User $user = null): self
     {
-        $nftsQuery = self::getCollectionNftsQuery($collection, $user);
         $symbol = $collection->floorPriceToken?->symbol;
 
         return new self(
@@ -71,11 +66,8 @@ class CollectionDetailData extends Data
             supply: $collection->supply,
             volume: $collection->volume,
             owners: $collection->owners,
-            nftsCount: $nftsQuery->count(),
+            nftsCount: $collection->nfts()->when($user !== null, fn ($q) => $q->ownedBy($user))->count(),
             mintedAt: $collection->minted_at?->getTimestampMs(),
-            nfts: new CollectionNftsData(
-                CollectionNftData::collection($user ? $nftsQuery->get() : [])
-            ),
         );
     }
 }
