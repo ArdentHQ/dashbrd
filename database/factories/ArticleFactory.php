@@ -26,7 +26,7 @@ class ArticleFactory extends Factory
         return [
             'title' => fake()->name(),
             'category' => fake()->name(),
-            'date' => fake()->date(),
+            'published_at' => fake()->date(),
             'meta_description' => fake()->text(),
             'content' => fake()->text(),
             'user_id' => User::factory()->withWallet(),
