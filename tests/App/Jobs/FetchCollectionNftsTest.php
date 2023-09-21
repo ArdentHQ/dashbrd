@@ -149,43 +149,7 @@ it('should not store nfts if the collection supply is higher than COLLECTIONS_MA
     expect(NftTrait::count())->toBe(0);
 });
 
-it('should not fetch nfts if the collection supply is higher than COLLECTIONS_MAX_CAP or null', function () {
-    Bus::fake();
 
-    Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
-    ]);
-
-    $network = Network::polygon();
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-        'supply' => null,
-    ]);
-
-    $this->assertDatabaseCount('collections', 1);
-
-    expect(Nft::count())->toBe(0);
-    expect(NftTrait::count())->toBe(0);
-
-    // Null supply
-    (new FetchCollectionNfts($collection))->handle();
-
-    expect(Nft::count())->toBe(0);
-    expect(NftTrait::count())->toBe(0);
-
-    // Higher than max cap supply
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-        'supply' => config('dashbrd.collections_max_cap') + 1,
-    ]);
-
-    $this->assertDatabaseCount('collections', 2);
-
-    (new FetchCollectionNfts($collection))->handle();
-
-    expect(Nft::count())->toBe(0);
-    expect(NftTrait::count())->toBe(0);
-});
 
 it('does not store NFTs for collections that do not report a total supply', function () {
     Bus::fake();
