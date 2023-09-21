@@ -81,7 +81,6 @@ class CollectionController extends Controller
             return $networks->firstWhere('chainId', $id)?->collectionsCount > 0;
         });
 
-
         if ($request->wantsJson()) {
             $searchQuery = $request->get('query');
 

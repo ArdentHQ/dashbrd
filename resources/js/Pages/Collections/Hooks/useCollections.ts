@@ -50,6 +50,8 @@ interface CollectionsState {
     query: string;
     isSearching: boolean;
     reportCollection: (address: string) => void;
+    selectedChainIds: number[];
+    setSelectedChainIds: (chainIds: number[]) => void;
 }
 
 export const useCollections = ({
@@ -57,13 +59,11 @@ export const useCollections = ({
     showHidden,
     sortBy,
     view,
-    selectedChainIds,
 }: {
     view: CollectionDisplayType;
     showHidden: boolean;
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
-    selectedChainIds: number[];
 }): CollectionsState => {
     const [isLoading, setIsLoading] = useState(true);
     const isLoadingMore = useRef(false);
@@ -77,14 +77,13 @@ export const useCollections = ({
         {},
     );
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([]);
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
         query = "",
         page = 1,
         showHidden = false,
-        selectedChainIds = [],
         sort = null,
     }: QueryParameters = {}): Promise<CollectionsResponse> => {
         setIsLoading(true);
@@ -95,7 +94,6 @@ export const useCollections = ({
             page: isNumber(page) && Number(page) !== 1 ? page.toString() : "",
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
-
             view,
         });
 
@@ -121,6 +119,10 @@ export const useCollections = ({
         setAlreadyReportedByCollection(data.alreadyReportedByCollection);
         setSeportByCollectionAvailableIn(data.reportByCollectionAvailableIn);
         setAvailableNetworks(data.availableNetworks);
+
+        if (selectedChainIds.length === 0) {
+            setSelectedChainIds(data.availableNetworks.map((network) => network.chainId));
+        }
 
         if (showHidden && data.hiddenCollectionAddresses.length === 0) {
             replaceUrlQuery({ showHidden: "" });
@@ -205,5 +207,7 @@ export const useCollections = ({
             alreadyReportedByCollection[address] = true;
             setAlreadyReportedByCollection(alreadyReportedByCollection);
         },
+        selectedChainIds,
+        setSelectedChainIds,
     };
 };

@@ -11,7 +11,6 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionDisplayType, CollectionsFilter } from "@/Pages/Collections/Components/CollectionsFilter";
 import { CollectionsHeading } from "@/Pages/Collections/Components/CollectionsHeading";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
-import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 const sort = (sortBy: string, direction?: string): void => {
@@ -50,10 +49,6 @@ const CollectionsIndex = ({
         queryParameters.view === "grid" ? CollectionDisplayType.Grid : CollectionDisplayType.List,
     );
 
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(
-        isTruthy(queryParameters.chain) ? queryParameters.chain.split(",").map((chain) => Number(chain)) : [],
-    );
-
     const { showToast } = useToasts();
 
     const showHidden = queryParameters.showHidden === "true";
@@ -72,6 +67,8 @@ const CollectionsIndex = ({
         search,
         isSearching,
         reportCollection,
+        selectedChainIds,
+        setSelectedChainIds,
     } = useCollections({
         showHidden,
         sortBy,
@@ -82,7 +79,6 @@ const CollectionsIndex = ({
                 type: "error",
             });
         },
-        selectedChainIds,
     });
 
     useEffect(() => {
@@ -107,9 +103,11 @@ const CollectionsIndex = ({
             : [...selectedChainIds, chainId];
 
         setSelectedChainIds(chainIds);
-
-        reload({ selectedChainIds: chainIds });
     };
+
+    useEffect(() => {
+        reload({ selectedChainIds });
+    }, [selectedChainIds]);
 
     return (
         <DefaultLayout toastMessage={props.toast}>
