@@ -123,7 +123,7 @@ class CollectionController extends Controller
         ]);
     }
 
-    public function view(Request $request, Collection $collection): Response
+    public function show(Request $request, Collection $collection): Response
     {
         /** @var User|null $user */
         $user = $request->user();
