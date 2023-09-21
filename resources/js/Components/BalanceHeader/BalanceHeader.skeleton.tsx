@@ -163,9 +163,9 @@ export const BalanceHeaderSkeleton = ({ animated }: { animated: boolean }): JSX.
                             <LinkButton
                                 data-testid="BalanceHeader__more-details"
                                 className={cn(
-                                    "transition-default rounded-full text-sm font-medium leading-5.5 text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none",
-                                    "hover:text-theme-hint-700 hover:decoration-theme-hint-700",
-                                    "outline-offset-4 focus-visible:outline-3 focus-visible:outline-theme-hint-300",
+                                    "transition-default rounded-full text-sm font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none",
+                                    "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
+                                    "outline-offset-4 focus-visible:outline-3 focus-visible:outline-theme-primary-300",
                                 )}
                             >
                                 {t("common.more_details")}

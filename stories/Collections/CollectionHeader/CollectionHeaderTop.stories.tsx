@@ -20,7 +20,7 @@ export const Top = {
                 environment="storybook"
                 features={{ collections: true, galleries: true, portfolio: true }}
             >
-                <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: false }}>
+                <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: false, signed: false }}>
                     <CollectionHeaderTop
                         collection={args.collection}
                         allowReport={false}

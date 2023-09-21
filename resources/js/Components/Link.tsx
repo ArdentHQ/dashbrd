@@ -42,7 +42,7 @@ const variantClassName = ({
                 "outline-none outline-3 outline-offset-4",
                 {
                     "cursor-not-allowed text-theme-secondary-500": disabled === true,
-                    "hover:text-theme-hint-700 hover:decoration-theme-hint-700 focus-visible:outline-theme-hint-300":
+                    "hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300":
                         disabled !== true,
                 },
                 className,

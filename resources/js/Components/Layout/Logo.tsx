@@ -28,7 +28,7 @@ export const Logo = ({
             <Link
                 href={t("urls.landing")}
                 rel="noreferrer"
-                className="flex items-center rounded-full outline-none outline-3 outline-offset-4 focus-visible:outline-theme-hint-300"
+                className="flex items-center rounded-full outline-none outline-3 outline-offset-4 focus-visible:outline-theme-primary-300"
                 data-testid="Logo__link"
             >
                 <Icon

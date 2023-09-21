@@ -7,9 +7,8 @@ import { GalleryHeading } from "@/Components/Galleries/GalleryPage/GalleryHeadin
 import { GalleryNfts } from "@/Components/Galleries/GalleryPage/GalleryNfts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
-interface Properties {
+interface Properties extends PageProps {
     title: string;
-    auth: PageProps["auth"];
     gallery: App.Data.Gallery.GalleryData;
     stats: App.Data.Gallery.GalleryStatsData;
     collections: App.Data.Nfts.NftCollectionData[];
