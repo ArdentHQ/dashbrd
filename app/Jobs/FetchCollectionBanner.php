@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
 {
@@ -35,6 +36,10 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchCollectionBanner Job: Processing', [
+            'collection' => $this->collection->address,
+        ]);
+
         $banner = Mnemonic::getNftCollectionBanner(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
@@ -44,6 +49,11 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
         $this->collection->extra_attributes->set('banner_updated_at', now());
 
         $this->collection->save();
+
+        Log::info('FetchCollectionBanner Job: Handled', [
+            'collection' => $this->collection->address,
+            'banner' => $banner,
+        ]);
     }
 
     public function uniqueId(): string

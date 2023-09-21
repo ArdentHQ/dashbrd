@@ -42,7 +42,10 @@ const Index = ({
 
                     {nftCount === 0 && (
                         <>
-                            <Tooltip content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}>
+                            <Tooltip
+                                content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}
+                                touch
+                            >
                                 <div className="sm:hidden">
                                     <Button
                                         icon="Plus"
@@ -52,7 +55,10 @@ const Index = ({
                                 </div>
                             </Tooltip>
 
-                            <Tooltip content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}>
+                            <Tooltip
+                                content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}
+                                touch
+                            >
                                 <div className="hidden sm:block">
                                     <Button disabled={true}>
                                         <span className="flex items-center space-x-2">
