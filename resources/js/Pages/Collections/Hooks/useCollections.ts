@@ -121,7 +121,11 @@ export const useCollections = ({
         setAvailableNetworks(data.availableNetworks);
 
         if (selectedChainIds.length === 0) {
-            setSelectedChainIds(data.availableNetworks.map((network) => network.chainId));
+            setSelectedChainIds(
+                data.availableNetworks
+                    .filter((network) => network.collectionsCount > 0)
+                    .map((network) => network.chainId),
+            );
         }
 
         if (showHidden && data.hiddenCollectionAddresses.length === 0) {
