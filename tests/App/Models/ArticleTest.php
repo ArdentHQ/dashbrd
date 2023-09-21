@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Models\Article;
 use App\Models\Collection;
-use App\Models\User;
 
 it('should create an article', function () {
     $article = Article::factory()->create();

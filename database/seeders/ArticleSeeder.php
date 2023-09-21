@@ -20,7 +20,7 @@ class ArticleSeeder extends Seeder
 
         $network = Network::query()->first();
 
-        if (!$network) {
+        if (! $network) {
             $network = Network::factory()->create();
         }
 
@@ -29,7 +29,7 @@ class ArticleSeeder extends Seeder
             $article->addMediaFromUrl($imageUrl)->toMediaCollection();
 
             $collections = Collection::factory(2)->createMany([
-                'network' => $network->id
+                'network' => $network->id,
             ]);
 
             $article->collections()->attach($collections, ['order_index' => 1]);
