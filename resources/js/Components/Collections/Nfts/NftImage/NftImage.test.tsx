@@ -31,6 +31,7 @@ describe("NftImage", () => {
             authenticated: true,
             showAuthOverlay: false,
             showCloseButton: false,
+            signed: true,
             closeOverlay: vi.fn(),
         });
     });

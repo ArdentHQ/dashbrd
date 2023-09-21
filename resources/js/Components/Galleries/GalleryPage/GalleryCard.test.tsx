@@ -30,7 +30,7 @@ describe("GalleryCard", () => {
             </GalleryCard>,
         );
 
-        expect(screen.getByTestId("GalleryCard")).toHaveClass("outline-theme-hint-300");
+        expect(screen.getByTestId("GalleryCard")).toHaveClass("outline-theme-primary-300");
     });
 
     it("should render fixedOnMobile class", () => {

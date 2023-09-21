@@ -32,12 +32,12 @@ export const Toggle = ({
             id={id}
             className={cn(
                 className,
-                "relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300",
+                "relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300",
                 disabled
                     ? "bg-theme-secondary-200"
                     : [
                           checked
-                              ? "bg-theme-hint-600 hover:bg-theme-hint-700 active:bg-theme-hint-800"
+                              ? "bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800"
                               : "bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400",
                       ],
             )}

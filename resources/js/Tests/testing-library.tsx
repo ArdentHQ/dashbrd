@@ -39,7 +39,7 @@ export const TestProviders = ({
             }}
         >
             <I18nextProvider i18n={i18n}>
-                <ActiveUserContextProvider initialAuth={{ wallet, user, authenticated: false }}>
+                <ActiveUserContextProvider initialAuth={{ wallet, user, authenticated: false, signed: false }}>
                     <ResponsiveContext.Provider value={{ width: breakpointWidth(options?.breakpoint) }}>
                         {children}
                     </ResponsiveContext.Provider>

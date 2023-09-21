@@ -27,8 +27,10 @@ export const AuthOverlay = ({
     const {
         needsMetaMask,
         connectWallet,
+        signWallet,
         initialized,
         connecting,
+        signing,
         switching,
         errorMessage,
         waitingSignature,
@@ -58,7 +60,11 @@ export const AuthOverlay = ({
                 </div>
 
                 <p className="font-medium text-theme-secondary-700">
-                    {needsMetaMask ? t("auth.wallet.install_long") : t("auth.wallet.connect_long")}
+                    {requiresSignature
+                        ? t("auth.wallet.sign_subtitle")
+                        : needsMetaMask
+                        ? t("auth.wallet.install_long")
+                        : t("auth.wallet.connect_long")}
                 </p>
             </div>
 
@@ -121,15 +127,18 @@ export const AuthOverlay = ({
                     {errorMessage === undefined && (
                         <div className="flex w-full flex-col items-center">
                             {switching && <SwitchingNetwork />}
-                            {connecting && <ConnectingWallet />}
-                            {!connecting && !switching && (
+                            {(connecting || signing) && <ConnectingWallet signing={signing} />}
+                            {!connecting && !switching && !signing && (
                                 <ConnectWallet
                                     closeOverlay={closeOverlay}
                                     showCloseButton={showCloseButton}
                                     isWalletInitialized={initialized}
-                                    shouldRequireSignature={requiresSignature}
+                                    requiresSignature={requiresSignature}
                                     onConnect={() => {
                                         void connectWallet();
+                                    }}
+                                    onSign={() => {
+                                        void signWallet();
                                     }}
                                 />
                             )}
@@ -140,8 +149,12 @@ export const AuthOverlay = ({
                         <ConnectionError
                             closeOverlay={closeOverlay}
                             showCloseButton={showCloseButton}
+                            requiresSignature={requiresSignature}
                             onConnect={() => {
                                 void connectWallet();
+                            }}
+                            onSign={() => {
+                                void signWallet();
                             }}
                         />
                     )}
