@@ -42,7 +42,7 @@ export const CollectionName = ({
                         <p
                             ref={collectionNameReference}
                             data-testid="CollectionName__name"
-                            className="group-hover md:leading-auto truncate text-sm font-medium leading-6 text-theme-secondary-900 group-hover:text-theme-hint-700 md:text-lg"
+                            className="group-hover md:leading-auto truncate text-sm font-medium leading-6 text-theme-secondary-900 group-hover:text-theme-primary-700 md:text-lg"
                         >
                             {collection.name}
                         </p>

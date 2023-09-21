@@ -9,7 +9,7 @@ export const LoadingBlock = ({ text }: { text?: string }): JSX.Element => (
             <Icon
                 size="xl"
                 name="Spinner"
-                className="animate-spin text-theme-hint-600"
+                className="animate-spin text-theme-primary-600"
             />
             <div>{text}</div>
         </div>

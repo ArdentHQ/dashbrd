@@ -1,12 +1,13 @@
-import { useMemo, useState } from "react";
+import { router } from "@inertiajs/react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { CollectionReportModal } from "@/Components/Collections/CollectionReportModal";
 import { NftReportModal } from "@/Components/Collections/Nfts/NftReportModal";
 import { Tooltip } from "@/Components/Tooltip";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 interface Properties {
     model: App.Data.Nfts.NftData | App.Data.Collections.CollectionDetailData;
@@ -17,7 +18,49 @@ interface Properties {
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
     tooltipOffset?: [number, number];
+    className?: string;
+    show: boolean;
 }
+
+const ReportModal = ({
+    modelType,
+    reportReasons,
+    model,
+    isOpen,
+    onClose,
+}: {
+    modelType: "nft" | "collection";
+    reportReasons: Record<string, string>;
+    model: App.Data.Nfts.NftData | App.Data.Collections.CollectionDetailData;
+    isOpen: boolean;
+    onClose: () => void;
+}): JSX.Element => {
+    if (modelType === "nft") {
+        return createPortal(
+            <div data-testid="Report_nft">
+                <NftReportModal
+                    reportReasons={reportReasons}
+                    nft={model as App.Data.Nfts.NftData}
+                    isOpen={isOpen}
+                    onClose={onClose}
+                />
+            </div>,
+            document.body,
+            "nft-report-modal",
+        );
+    }
+
+    return (
+        <div data-testid="Report_collection">
+            <CollectionReportModal
+                reportReasons={reportReasons}
+                collection={model as App.Data.Collections.CollectionDetailData}
+                isOpen={isOpen}
+                onClose={onClose}
+            />
+        </div>
+    );
+};
 
 export const Report = ({
     model,
@@ -28,13 +71,13 @@ export const Report = ({
     reportAvailableIn = null,
     reportReasons = {},
     tooltipOffset,
+    className,
+    show,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [showReportModal, setShowReportModal] = useState(false);
 
     const { authenticated } = useAuth();
-
-    const { showConnectOverlay } = useMetaMaskContext();
 
     const disableReport = useMemo<boolean>((): boolean => {
         if (!allowReport) {
@@ -62,6 +105,24 @@ export const Report = ({
         }
     }, [reportAvailableIn, alreadyReported]);
 
+    const closeReportModalHandler = (): void => {
+        setShowReportModal(false);
+
+        router.reload({
+            data: {
+                report: undefined,
+            },
+        });
+    };
+
+    const { signedAction } = useAuthorizedAction();
+
+    useEffect(() => {
+        if (show && !disableReport && authenticated) {
+            setShowReportModal(true);
+        }
+    }, [show, disableReport, authenticated]);
+
     return (
         <>
             <Tooltip
@@ -75,47 +136,32 @@ export const Report = ({
                         data-testid="Report_flag"
                         icon="Flag"
                         onClick={() => {
-                            authenticated
-                                ? setShowReportModal(true)
-                                : showConnectOverlay(() => {
-                                      setShowReportModal(true);
-                                  });
+                            signedAction(({ signed }) => {
+                                setShowReportModal(true);
+
+                                if (!signed) {
+                                    router.reload({
+                                        data: {
+                                            report: true,
+                                        },
+                                    });
+                                }
+                            });
                         }}
                         disabled={disableReport}
+                        className={className}
                     />
                 </div>
             </Tooltip>
 
             {!disableReport && (
-                <>
-                    {modelType === "nft" &&
-                        createPortal(
-                            <div data-testid="Report_nft">
-                                <NftReportModal
-                                    reportReasons={reportReasons}
-                                    nft={model as App.Data.Nfts.NftData}
-                                    isOpen={showReportModal}
-                                    onClose={() => {
-                                        setShowReportModal(false);
-                                    }}
-                                />
-                            </div>,
-                            document.body,
-                        )}
-
-                    {modelType === "collection" && (
-                        <div data-testid="Report_collection">
-                            <CollectionReportModal
-                                reportReasons={reportReasons}
-                                collection={model as App.Data.Collections.CollectionDetailData}
-                                isOpen={showReportModal}
-                                onClose={() => {
-                                    setShowReportModal(false);
-                                }}
-                            />
-                        </div>
-                    )}
-                </>
+                <ReportModal
+                    onClose={closeReportModalHandler}
+                    reportReasons={reportReasons}
+                    model={model}
+                    isOpen={showReportModal}
+                    modelType={modelType}
+                />
             )}
         </>
     );

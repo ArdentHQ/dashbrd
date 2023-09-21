@@ -95,9 +95,9 @@ export const TokenBalance = ({ asset, currency, onSend, onReceive }: Properties)
                     </Tooltip>
                 </div>
 
-                <div className="h-2 bg-theme-hint-200">
+                <div className="h-2 bg-theme-primary-200">
                     <div
-                        className="h-2 bg-theme-hint-600"
+                        className="h-2 bg-theme-primary-600"
                         style={{
                             width: `${Math.round((Number(asset.percentage) + Number.EPSILON) * 100)}%`,
                         }}

@@ -1,12 +1,13 @@
+import { router } from "@inertiajs/react";
 import React from "react";
 import { CollectionHeaderTop } from "./CollectionHeaderTop";
-import { MarkdownImage } from "@/Components/Collections/CollentionDescription";
+import { MarkdownImage } from "@/Components/Collections/CollectionDescription";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
-
 const collection = new CollectionDetailDataFactory().create({
     description: "This is a test collection",
     website: "https://website.com",
@@ -23,6 +24,7 @@ describe("CollectionHeaderTop", () => {
             authenticated: true,
             showAuthOverlay: false,
             showCloseButton: false,
+            signed: true,
             closeOverlay: vi.fn(),
         });
     });
@@ -153,6 +155,17 @@ describe("CollectionHeaderTop", () => {
     });
 
     it("should open and close the report modal", async () => {
+        const function_ = vi.fn();
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(function_);
+
+        const signedActionMock = vi.fn().mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        const useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+        });
+
         render(<CollectionHeaderTop collection={collection} />);
 
         expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
@@ -166,6 +179,9 @@ describe("CollectionHeaderTop", () => {
         await userEvent.click(screen.getByTestId("Dialog__close").getElementsByTagName("button")[0]);
 
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
+
+        routerSpy.mockRestore();
+        useAuthorizedActionSpy.mockRestore();
     });
 
     it("should disable reporting", () => {

@@ -79,7 +79,7 @@ it('can set additional token details', function () {
         ->with('testy')
         ->andReturn(new CoingeckoTokenData(fixtureData('coingecko.coins_bitcoin')));
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory()->create([
         'symbol' => 'TEST',
@@ -109,7 +109,7 @@ it('can set additional token details', function () {
 });
 
 it('ignores spam tokens', function () {
-    $polygonNetwork = Network::polygon()->firstOrFail();
+    $polygonNetwork = Network::polygon();
 
     $tokens = Token::factory(2)->create([
         'network_id' => $polygonNetwork->id,
@@ -126,7 +126,7 @@ it('ignores spam tokens', function () {
 });
 
 it('ignores spam tokens on mainnet by default', function () {
-    $polygonNetwork = Network::polygon()->firstOrFail();
+    $polygonNetwork = Network::polygon();
 
     $tokens = Token::factory(2)->create([
         'network_id' => $polygonNetwork->id,

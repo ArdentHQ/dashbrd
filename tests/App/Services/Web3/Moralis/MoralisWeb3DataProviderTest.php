@@ -23,7 +23,7 @@ it('should getWalletTokens', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -41,7 +41,7 @@ it('should getWalletNfts', function () {
         'https://deep-index.moralis.io/api/v2/*/nft?*' => Http::response(fixtureData('moralis.nfts'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -82,7 +82,7 @@ it('can get native balance for a wallet', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -162,7 +162,7 @@ it('should filter out nfts', function () {
             ->push(fixtureData('moralis.nfts_lowestprice'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $provider = new MoralisWeb3DataProvider();
@@ -185,7 +185,7 @@ it('can get block data for a network', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.block'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new MoralisWeb3DataProvider();
 
@@ -199,7 +199,7 @@ it('should cache the block data', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::sequence()->push(fixtureData('moralis.block'), 200)->push(fixtureData('moralis.block_alternate', 200)),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $cache = Cache::tags([MoralisWeb3DataProvider::class, MoralisWeb3DataProvider::class.'-getBlockTimestamp']);
     $cacheKey = $network->id.'-100000000';

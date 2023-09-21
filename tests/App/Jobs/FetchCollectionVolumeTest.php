@@ -17,7 +17,7 @@ it('should fetch nft collection volume', function () {
         ], 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,

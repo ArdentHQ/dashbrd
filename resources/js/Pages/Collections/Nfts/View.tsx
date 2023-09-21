@@ -13,6 +13,7 @@ interface Properties {
     collectionDetails: App.Data.Collections.CollectionBasicDetailsData;
     traits: App.Data.Collections.CollectionTraitData[];
     nativeToken: App.Data.Token.TokenData;
+    showReportModal: boolean;
 }
 
 const CollectionsNftsView = ({
@@ -24,6 +25,7 @@ const CollectionsNftsView = ({
     collectionDetails,
     traits,
     nativeToken,
+    showReportModal,
 }: Properties): JSX.Element => {
     const { props } = usePage();
 
@@ -37,7 +39,7 @@ const CollectionsNftsView = ({
                     url={route("collections.view", {
                         slug: nft.collection.slug,
                     })}
-                    className="-mt-2 mb-10 px-6 sm:mb-14 sm:px-8 lg:mb-4 2xl:px-0"
+                    className="-mt-6 mb-6 bg-theme-secondary-50 px-6 py-4 sm:-mt-8 sm:mb-8 lg:-mt-4 lg:mb-0 lg:bg-white lg:px-8 2xl:px-0"
                 />
 
                 <NftHeading
@@ -49,6 +51,7 @@ const CollectionsNftsView = ({
                     reportAvailableIn={reportAvailableIn}
                     reportReasons={props.reportReasons}
                     traits={traits}
+                    showReportModal={showReportModal}
                 />
             </DefaultLayout>
         </ExternalLinkContextProvider>

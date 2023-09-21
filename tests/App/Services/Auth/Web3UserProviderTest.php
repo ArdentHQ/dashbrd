@@ -6,7 +6,6 @@ use App\Enums\Chains;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Auth\Web3UserProvider;
-use App\Support\Facades\Signature;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 
 it('should validate credentials', function () {
@@ -19,17 +18,9 @@ it('should validate credentials', function () {
     $user->wallet_id = $wallet->id;
     $user->save();
 
-    Signature::shouldReceive('buildSignMessage')
-        ->andReturn('')
-        ->once()
-        ->shouldReceive('verify')
-        ->andReturn(true)
-        ->once();
-
     $provider = new Web3UserProvider(HasherContract::class, User::class);
     $result = $provider->validateCredentials($user, [
         'address' => $wallet->address,
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'nonce' => '1234',
     ]);
 
@@ -49,7 +40,6 @@ it('should have invalid credentials if wallet does not exist for user', function
     $provider = new Web3UserProvider(HasherContract::class, User::class);
     $result = $provider->validateCredentials($user, [
         'address' => '0x0000000000000000000000000000000000001010',
-        'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'nonce' => '1234',
     ]);
 
