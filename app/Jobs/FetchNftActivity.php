@@ -9,7 +9,6 @@ use App\Enums\Chains;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Nft;
 use App\Models\NftActivity;
-use App\Models\SpamContract;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
@@ -44,7 +43,7 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
     {
         $collection = $this->nft->collection;
 
-        if (SpamContract::isSpam($collection->address, $collection->network)) {
+        if ($collection->isInvalid()) {
             return;
         }
 

@@ -7,10 +7,13 @@ use App\Enums\NftTransferType;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\Gallery;
+use App\Models\Network;
 use App\Models\Nft;
 use App\Models\NftActivity;
+use App\Models\SpamContract;
 use App\Models\User;
 use App\Models\Wallet;
+use Illuminate\Support\Facades\Config;
 
 it('can create a basic collection', function () {
     $collection = Collection::factory()->create();
@@ -901,4 +904,102 @@ it('can determine whether collection was recently viewed', function () {
     ]);
 
     expect($collection->recentlyViewed())->toBeFalse();
+});
+
+it('should mark collection as invalid - unacceptable supply', function () {
+    $collection = new Collection([
+        'supply' => null,
+    ]);
+
+    expect($collection->isInvalid())->toBeTrue();
+
+    Config::set('dashbrd.collections_max_cap', 5000);
+
+    $collection = new Collection([
+        'supply' => 5001,
+    ]);
+
+    expect($collection->isInvalid())->toBeTrue();
+});
+
+it('should mark collection as invalid - spam check', function () {
+    $network = new Network(['id' => 1]);
+
+    $collection1 = new Collection([
+        'supply' => 3000,
+        'address' => '0x123',
+    ]);
+
+    $collection1->setAttribute('network', $network);
+
+    $collection2 = new Collection([
+        'supply' => 3000,
+        'address' => '0x1234',
+    ]);
+
+    $collection2->setAttribute('network', $network);
+
+    SpamContract::query()->insert([
+        'address' => $collection1->address,
+        'network_id' => $network->id,
+    ]);
+
+    expect($collection1->isInvalid(withSpamCheck: false))->toBeFalse()
+        ->and($collection1->isInvalid())->toBeTrue()
+        ->and($collection2->isInvalid())->toBeFalse();
+});
+
+it('should mark collection as invalid - blacklisted', function () {
+    config(['dashbrd.blacklisted_collections' => [
+        '0x123',
+    ]]);
+
+    $collection1 = new Collection([
+        'supply' => 3000,
+        'address' => '0x123',
+    ]);
+
+    expect($collection1->isInvalid())->toBeTrue();
+});
+
+it('should exclude spam contracts', function () {
+    $network = Network::factory()->create();
+
+    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
+
+    SpamContract::query()->insert([
+        'address' => $collections->first()->address,
+        'network_id' => $collections->first()->network_id,
+    ]);
+
+    $validCollections = Collection::query()->filterInvalid()->get();
+
+    expect($validCollections->count())->toBe(1)
+        ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
+});
+
+it('should exclude collections with an invalid supply', function () {
+    Config::set('dashbrd.collections_max_cap', 5000);
+
+    $network = Network::factory()->create();
+
+    $collection1 = Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 3000,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => null,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 5001,
+    ]);
+
+    $validCollections = Collection::query()->filterInvalid()->get();
+
+    expect($validCollections->count())->toBe(1)
+        ->and($validCollections->first()->slug)->toBe($collection1->slug);
 });
