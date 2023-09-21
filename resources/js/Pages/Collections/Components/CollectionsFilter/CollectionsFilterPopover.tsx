@@ -58,7 +58,7 @@ export const CollectionsFilterPopover = ({
                             />
                         </Tooltip>
 
-                        {hidden && <PulsatingDot />}
+                        {(hidden || selectedChainIds.length > 0) && <PulsatingDot />}
                     </div>
 
                     <Popover.Transition show={open}>
