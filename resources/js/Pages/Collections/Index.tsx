@@ -133,7 +133,7 @@ const CollectionsIndex = ({
                         activeSort={sortBy}
                         onSort={sort}
                         onChangeVisibilityStatus={(isHidden) => {
-                            reload({ showHidden: isHidden, selectedChainIds });
+                            reload({ showHidden: isHidden, selectedChainIds, page: 1 });
                         }}
                         availableNetworks={availableNetworks}
                         handleSelectedChainIds={handleSelectedChainIds}
