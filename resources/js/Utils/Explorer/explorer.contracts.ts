@@ -19,3 +19,15 @@ export enum ExplorerChains {
     PolygonTestnet = 80001,
     EthereumTestnet = 5,
 }
+
+const TESTNET_ENABLED = process.env.MIX_TESTNET_ENABLED === "true";
+
+export const getAllChains = (): number[] => {
+    let chains = [ExplorerChains.EthereumMainnet, ExplorerChains.PolygonMainnet];
+
+    if (TESTNET_ENABLED) {
+        chains = [...chains, ExplorerChains.EthereumTestnet, ExplorerChains.PolygonTestnet];
+    }
+
+    return chains;
+};

@@ -5,6 +5,7 @@ import { type PaginationData } from "@/Components/Pagination/Pagination.contract
 import { useInertiaHeader } from "@/Hooks/useInertiaHeader";
 import { useLiveSearch } from "@/Hooks/useLiveSearch";
 import { type CollectionDisplayType } from "@/Pages/Collections/Components/CollectionsFilter";
+import { getAllChains } from "@/Utils/Explorer";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
@@ -77,7 +78,7 @@ export const useCollections = ({
         {},
     );
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([]);
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(getAllChains());
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
@@ -119,14 +120,6 @@ export const useCollections = ({
         setAlreadyReportedByCollection(data.alreadyReportedByCollection);
         setSeportByCollectionAvailableIn(data.reportByCollectionAvailableIn);
         setAvailableNetworks(data.availableNetworks);
-
-        if (selectedChainIds.length === 0) {
-            setSelectedChainIds(
-                data.availableNetworks
-                    .filter((network) => network.collectionsCount > 0)
-                    .map((network) => network.chainId),
-            );
-        }
 
         if (showHidden && data.hiddenCollectionAddresses.length === 0) {
             replaceUrlQuery({ showHidden: "" });
