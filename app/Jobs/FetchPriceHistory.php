@@ -41,6 +41,7 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
     {
         Log::info('FetchPriceHistory Job: Processing', [
             'token_id' => $this->token->id,
+            'token_name' => $this->token->name,
             'period' => $this->period->value,
             'currency' => $this->currency,
         ]);
@@ -48,6 +49,7 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
         if (is_null($this->token->tokenGuid)) {
             Log::info('FetchPriceHistory Job: Ignored for token without guid', [
                 'token_id' => $this->token->id,
+                'token_name' => $this->token->name,
                 'token_address' => $this->token->address,
                 'token_network' => $this->token->network_id,
             ]);
@@ -74,6 +76,7 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
 
         Log::info('FetchPriceHistory Job: Handled', [
             'token_id' => $this->token->id,
+            'token_name' => $this->token->name,
             'affected' => $affected,
             'period' => $this->period->value,
             'currency' => $this->currency,
