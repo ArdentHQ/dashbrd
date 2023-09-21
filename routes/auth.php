@@ -13,6 +13,6 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
-    Route::post('switch-account', [AuthenticatedSessionController::class, 'switchAccount'])
-        ->name('switch-account');
+    Route::post('sign', [AuthenticatedSessionController::class, 'sign'])
+        ->name('sign');
 });

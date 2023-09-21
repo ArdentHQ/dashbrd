@@ -16,6 +16,7 @@ describe("NftGalleryCard", () => {
         authenticated: true,
         showAuthOverlay: false,
         showCloseButton: false,
+        signed: false,
         closeOverlay: vi.fn(),
     });
 

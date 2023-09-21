@@ -62,7 +62,7 @@ const GalleryCardRoot = ({
                 data-testid="GalleryCard"
                 className={cn(
                     "transition-default group relative aspect-square overflow-hidden rounded-xl bg-theme-secondary-100 outline-none outline-3 outline-offset-0",
-                    { "outline-theme-hint-300": isSelected },
+                    { "outline-theme-primary-300": isSelected },
                     fixedOnMobile
                         ? {
                               "lg:cursor-pointer": className === undefined || !className.includes("cursor-"),
@@ -87,7 +87,7 @@ const GalleryCardOverlay = ({ children }: { children: React.ReactNode }): JSX.El
         <div
             data-testid="GalleryCard__overlay"
             className={cn(
-                "transition-default absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-hint-50/75 px-8 text-center ",
+                "transition-default absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-primary-50/75 px-8 text-center ",
                 {
                     "group-hover:pointer-events-auto group-hover:opacity-100 group-hover:backdrop-blur-md":
                         !fixedOnMobile,

@@ -13,9 +13,16 @@ interface Properties {
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
     reportReasons?: Record<string, string>;
+    showReportModal?: boolean;
 }
 
-export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReasons }: Properties): JSX.Element => {
+export const NftHeader = ({
+    nft,
+    alreadyReported,
+    reportAvailableIn,
+    reportReasons,
+    showReportModal = false,
+}: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { isLgAndAbove } = useBreakpoint();
 
@@ -56,6 +63,7 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
                         nft={nft}
                         reportAvailableIn={reportAvailableIn}
                         reportReasons={reportReasons}
+                        showReportModal={showReportModal}
                     />
                 </div>
             </div>
@@ -101,6 +109,7 @@ export const NftHeader = ({ nft, alreadyReported, reportAvailableIn, reportReaso
                     nft={nft}
                     reportAvailableIn={reportAvailableIn}
                     reportReasons={reportReasons}
+                    showReportModal={showReportModal}
                 />
             </div>
         </>

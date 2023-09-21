@@ -70,6 +70,7 @@ describe("Nftactions", () => {
         const wallet = new WalletFactory().create();
 
         vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            signed: true,
             user,
             wallet,
             authenticated: true,
@@ -100,6 +101,7 @@ describe("Nftactions", () => {
 
         vi.spyOn(useAuth, "useAuth").mockReturnValue({
             user: null,
+            signed: true,
             wallet: null,
             authenticated: false,
             showAuthOverlay: false,

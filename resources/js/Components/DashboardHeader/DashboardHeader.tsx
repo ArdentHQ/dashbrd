@@ -33,7 +33,7 @@ export const DashboardHeader = ({
                 <div>
                     <Tooltip
                         content={sendingDisabled ? t("pages.token_panel.insufficient_funds") : t("common.send")}
-                        touch={false}
+                        touch={sendingDisabled}
                         disabled={!sendingDisabled}
                         zIndex={50}
                     >

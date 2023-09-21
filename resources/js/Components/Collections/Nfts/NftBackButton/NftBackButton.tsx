@@ -51,9 +51,9 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
                 <Link
                     href={url}
                     className={cn(
-                        "transition-default text-theme-hint-600 underline decoration-transparent underline-offset-2 outline-none",
-                        "hover:text-theme-hint-700 hover:decoration-theme-hint-700",
-                        "focus-visible:decoration-theme-hint-700",
+                        "transition-default text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none",
+                        "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
+                        "focus-visible:decoration-theme-primary-700",
                     )}
                 >
                     {nft.collection.name}
