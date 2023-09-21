@@ -944,7 +944,7 @@ it('should mark collection as invalid - spam check', function () {
         'network_id' => $network->id,
     ]);
 
-    expect($collection1->isInvalid(false))->toBeFalse()
+    expect($collection1->isInvalid(withSpamCheck: false))->toBeFalse()
         ->and($collection1->isInvalid())->toBeTrue()
         ->and($collection2->isInvalid())->toBeFalse();
 });
