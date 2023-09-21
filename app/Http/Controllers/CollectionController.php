@@ -78,7 +78,7 @@ class CollectionController extends Controller
         $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
 
         $selectedChainIds = array_filter($selectedChainIds, function ($id) use ($networks) {
-            return $networks->firstWhere('id', $id)?->collectionsCount > 0;
+            return $networks->firstWhere('chainId', $id)?->collectionsCount > 0;
         });
 
 
