@@ -38,11 +38,17 @@ class FetchEnsDetails implements ShouldBeUnique, ShouldQueue
     {
         Log::info('FetchEnsDetails Job: Processing', [
             'wallet' => $this->wallet->address,
+            'wallet_domain' => $this->wallet->details?->domain,
         ]);
 
         $provider = $this->getWeb3DataProvider();
 
         $ensDomain = $provider->getEnsDomain($this->wallet);
+
+        Log::info('FetchEnsDetails Job: ens domain retrieved', [
+            'wallet' => $this->wallet->address,
+            'ensDomain' => $ensDomain,
+        ]);
 
         $walletDetails = $this->wallet->details()->updateOrCreate([], [
             'domain' => $ensDomain,

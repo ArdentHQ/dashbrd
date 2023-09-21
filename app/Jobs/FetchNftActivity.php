@@ -42,11 +42,11 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        $collection = $this->nft->collection;
+
         Log::info('FetchNftActivity Job: Processing', [
             'token_number' => $this->nft->token_number,
         ]);
-
-        $collection = $this->nft->collection;
 
         if ($collection->isInvalid()) {
             Log::info('FetchNftActivity Job: Ignored, Collection Invalid', [
