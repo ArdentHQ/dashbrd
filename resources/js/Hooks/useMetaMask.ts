@@ -1,6 +1,7 @@
 import { isObject } from "@ardenthq/sdk-helpers";
 import { type VisitOptions } from "@inertiajs/core";
 import { router } from "@inertiajs/react";
+import App from "@inertiajs/react/types/App";
 import axios from "axios";
 import { ethers, utils } from "ethers";
 import { useCallback, useEffect, useState } from "react";
@@ -15,7 +16,6 @@ import {
 import Chains = App.Enums.Chains;
 import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { browserLocale } from "@/Utils/browser-locale";
-import { isTruthy } from "@/Utils/is-truthy";
 
 const networkConfigs: Record<number, object> = {
     1: {
@@ -468,25 +468,63 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         }
 
         try {
-            const data = await axios.post(route("sign"), {
-                intendedUrl: window.location.href,
+            const response = await axios.post<App.Data.AuthData>(route("sign"), {
                 address,
                 signature,
                 chainId,
-                tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                locale: browserLocale(),
             });
 
-            setAuthData?.(data.data.auth);
+            setAuthData?.(response.data);
+
             router.reload();
         } catch (error) {
-            const firstError = [error.address,  error.chainId].find(
-                (value) => typeof value === "string"
-            );
+            const firstError = [error.address, error.chainId].find((value) => typeof value === "string");
 
             onError(ErrorType.Generic, firstError);
         } finally {
-            setAccount(account);
+            setSigning(false);
+
+            setRequiresSignature(false);
+
+            setSigned(true);
+
+            hideConnectOverlay();
+
+            if (onSigned !== undefined) {
+                onSigned();
+            }
+        }
+    }, [requestChainAndAccount, router, onSigned]);
+
+    const connectWallet = useCallback(async () => {
+        setConnecting(true);
+
+        setErrorMessage(undefined);
+
+        const { chainId, account } = await requestChainAndAccount();
+
+        if (account === undefined) {
+            onError(ErrorType.NoAccount);
+            return;
+        }
+
+        router.visit(route("login"), {
+            replace: true,
+            method: "post" as VisitOptions["method"],
+            data: {
+                intendedUrl: window.location.href,
+                address: account,
+                chainId,
+                tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                locale: browserLocale(),
+            },
+            onError: (error) => {
+                const firstError = [error.address, error.chainId].find((value) => typeof value === "string");
+
+                onError(ErrorType.Generic, firstError);
+            },
+            onFinish: () => {
+                setAccount(account);
 
                 setChainId(chainId);
 
@@ -494,48 +532,11 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
                 hideConnectOverlay();
 
-            if (onConnected !== undefined) {
-                onConnected();
-            }
-        }
-
-        // router.visit(route("login"), {
-        //     replace: true,
-        //     method: "post" as VisitOptions["method"],
-        //     data: {
-        //         intendedUrl: window.location.href,
-        //         address,
-        //         signature,
-        //         chainId,
-        //         tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        //         locale: browserLocale(),
-        //     },
-        //     onSuccess: (data) => {
-        //         console.log(data);
-        //     },
-        //     onError: (error) => {
-        //         const firstError = [error.address, error.signature, error.chainId].find(
-        //             (value) => typeof value === "string",
-        //         );
-        //
-        //         onError(ErrorType.Generic, firstError);
-        //     },
-        //     onFinish: () => {
-        //         setAccount(account);
-        //
-        //         setChainId(chainId);
-        //
-        //         setConnecting(false);
-        //
-        //         setRequiresSignature(false);
-        //
-        //         hideConnectOverlay();
-        //
-        //         if (onConnected !== undefined) {
-        //             onConnected();
-        //         }
-        //     },
-        // });
+                if (onConnected !== undefined) {
+                    onConnected();
+                }
+            },
+        });
     }, [requestChainAndAccount, router, onConnected]);
 
     const addNetwork = async (chainId: Chains): Promise<void> => {

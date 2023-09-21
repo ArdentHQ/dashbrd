@@ -12,6 +12,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\SignMessageRequest;
 use App\Http\Requests\Auth\SignRequest;
 use App\Models\User;
+use App\Support\Facades\Signature;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,15 +29,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        /** @var User$user */
+        /** @var User $user */
         $user = $request->user();
 
         $wallet = $user->wallet;
 
-        /** @var UserData */
+        /** @var UserData $userData */
         $userData = $user->getData();
 
-        /** @var WalletData */
+        /** @var WalletData  $walletData */
         $walletData = $wallet->getData();
 
         return response()->json([
@@ -44,9 +45,9 @@ class AuthenticatedSessionController extends Controller
                 $userData,
                 $walletData,
                 $user !== null,
+                $wallet !== null && Signature::walletIsSigned($wallet->id)
             ),
         ]);
-        //        return redirect()->intended($request->get('intendedUrl', RouteServiceProvider::HOME));
     }
 
     /**
