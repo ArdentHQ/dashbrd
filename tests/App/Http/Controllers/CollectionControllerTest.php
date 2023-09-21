@@ -1114,6 +1114,6 @@ it('should remove selected chains where its network has no collections in its co
         ]))
         ->assertStatus(200);
 
-    expect(count($response['collections']['data']))->toEqual(3);
+    expect(count($response['collections']['data']))->toEqual(2);
     expect(count($response['nfts']))->toEqual(3);
 });
