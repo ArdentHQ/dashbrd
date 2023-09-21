@@ -26,6 +26,7 @@ trait InteractsWithCollections
                 ->first();
 
             $callback($collection);
+
             return;
         }
 

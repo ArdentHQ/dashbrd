@@ -135,7 +135,7 @@ it('should exclude blacklisted collections', function () {
 
     Collection::factory()->create([
         'network_id' => $network->id,
-        'address' => '0x123'
+        'address' => '0x123',
     ]);
 
     $this->artisan('collections:fetch-nfts');

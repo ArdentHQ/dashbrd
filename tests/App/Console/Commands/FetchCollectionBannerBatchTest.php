@@ -7,7 +7,6 @@ use App\Models\Collection;
 use App\Models\Network;
 use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Config;
 
 it('dispatches a job for collections without banners', function () {
     Bus::fake();
