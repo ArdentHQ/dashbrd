@@ -1088,8 +1088,18 @@ it('should remove selected chains where its network has no collections in its co
     $network1 = Network::factory()->create();
     $network2 = Network::factory()->create();
 
-    $collection1 = Collection::factory()->create(['user_id' => $user->id, 'network_id' => $network1->id]);
-    $collection2 = Collection::factory()->create(['user_id' => $user->id, 'network_id' => $network2->id]);
+    $collection1 = Collection::factory()->create([ 'network_id' => $network1->id]);
+    $collection2 = Collection::factory()->create([ 'network_id' => $network2->id]);
+
+    Nft::factory()->create([
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection1->id,
+    ]);
+
+    Nft::factory()->create([
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection2->id,
+    ]);
 
     $this->actingAs($user)
         ->get(route('collections', [
