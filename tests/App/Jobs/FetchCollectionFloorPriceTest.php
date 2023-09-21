@@ -15,7 +15,7 @@ it('should fetch nft collection floor price', function () {
         'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $token = Token::factory(['network_id' => $network->id])->matic()->create();
 
@@ -46,7 +46,7 @@ it('should fetch nft collection floor price and handle null', function () {
             200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $token = Token::factory()->create(['network_id' => $network->id, 'symbol' => 'eth']);
 
     $collection = Collection::factory()->create([
@@ -70,7 +70,7 @@ it('should fetch nft collection floor price and handle null', function () {
 });
 
 it('should use the collection address and network id as a unique job identifier', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'address' => '0x12345',

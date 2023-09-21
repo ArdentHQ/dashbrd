@@ -9,6 +9,7 @@ declare namespace App.Data {
         user: App.Data.UserData | null;
         wallet: App.Data.Wallet.WalletData | null;
         authenticated: boolean;
+        signed: boolean;
     };
     export type CurrencyPriceData = {
         price: number;
@@ -21,8 +22,8 @@ declare namespace App.Data {
     };
     export type NetworkData = {
         name: string;
-        chainId: number;
         isMainnet: boolean;
+        chainId: number;
         publicRpcProvider: string;
         explorerUrl: string;
     };
@@ -113,6 +114,7 @@ declare namespace App.Data.Collections {
         floorPriceFiat: number | null;
         image: string | null;
         banner: string | null;
+        bannerUpdatedAt: string | null;
         website: string | null;
         twitter: string | null;
         discord: string | null;
@@ -192,6 +194,7 @@ declare namespace App.Data.Gallery {
         floorPriceDecimals: number | null;
         image: string | null;
         banner: string | null;
+        bannerUpdatedAt: string | null;
         website: string | null;
         nftsCount: number | null;
     };
@@ -395,6 +398,11 @@ declare namespace App.Data.Wallet {
         small: string | null;
         small2x: string | null;
     };
+    export type WalletBalance = {
+        address: string;
+        balance: string;
+        formattedBalance: string;
+    };
     export type WalletData = {
         address: string;
         domain: string | null;
@@ -415,6 +423,17 @@ declare namespace App.Data.Wallet {
     };
 }
 declare namespace App.Data.Web3 {
+    export type Web3ContractMetadata = {
+        contractAddress: string;
+        collectionName: string | null;
+        totalSupply: number | null;
+        mintedBlock: number | null;
+        collectionSlug: string | null;
+        imageUrl: string | null;
+        floorPrice: number | null;
+        bannerImageUrl: string | null;
+        description: string | null;
+    };
     export type Web3Erc20TokenData = {
         tokenAddress: string;
         networkId: number;
@@ -449,6 +468,8 @@ declare namespace App.Data.Web3 {
         collectionImage: string | null;
         collectionWebsite: string | null;
         collectionDescription: string | null;
+        collectionBannerImageUrl: string | null;
+        collectionBannerUpdatedAt: string | null;
         collectionSocials: Array<any> | null;
         collectionSupply: number | null;
         name: string | null;

@@ -165,9 +165,9 @@ export const TraitsCarousel = ({
                                     {t("pages.collections.rarity")}
                                 </span>
 
-                                <div className="relative h-2 w-25 bg-theme-hint-200 md:w-full">
+                                <div className="relative h-2 w-25 bg-theme-primary-200 md:w-full">
                                     <div
-                                        className="left-0 h-full bg-theme-hint-600 md:absolute"
+                                        className="left-0 h-full bg-theme-primary-600 md:absolute"
                                         style={{ width: `${trait.nftsPercentage}%` }}
                                     />
                                 </div>
@@ -183,9 +183,13 @@ export const TraitsCarousel = ({
         <div data-testid="TraitsCarousel">
             <div className="mb-3 hidden items-end justify-between lg:flex">
                 <div className="flex flex-col space-y-0.5 font-medium">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center gap-2.5">
                         <span className="leading-6">{t("pages.collections.properties")}</span>
-                        <span className="text-sm leading-5.5 text-theme-secondary-700">{traits.length}</span>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-secondary-200 backdrop-blur-md">
+                            <span className="text-sm font-medium leading-5.5 text-theme-secondary-700">
+                                {traits.length}
+                            </span>
+                        </div>
                     </div>
 
                     <span className="text-sm leading-5.5 text-theme-secondary-700">
@@ -196,7 +200,7 @@ export const TraitsCarousel = ({
                 <div
                     data-testid="TraitsCarousel__controls"
                     className={cn(
-                        "items-center space-x-3",
+                        "traits-carousel-controls items-center space-x-3",
                         traits.length > carouselOptions.slidesPerView * carouselOptions.grid.rows ? "flex" : "hidden",
                     )}
                 >

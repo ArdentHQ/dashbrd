@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftCollectionTrait;
 use App\Data\Web3\Web3NftData;
@@ -118,7 +117,7 @@ class LiveUserSeeder extends UserSeeder
                 switch ($what) {
                     case 'nfts':
 
-                        (new Web3NftHandler(wallet: WalletData::fromModel($localTestingWallet)))
+                        (new Web3NftHandler(wallet: $localTestingWallet))
                             ->store($this->loadWalletNftsFixtures($file->getFilename(), $networkId));
                         break;
 
@@ -156,6 +155,8 @@ class LiveUserSeeder extends UserSeeder
             collectionDescription: $nft['collectionDescription'],
             collectionSocials: $nft['collectionSocials'],
             collectionSupply: $nft['collectionSupply'],
+            collectionBannerImageUrl: $nft['collectionBannerImageUrl'] ?? null,
+            collectionBannerUpdatedAt: null,
             name: $nft['name'],
             description: $nft['description'],
             extraAttributes: $nft['extraAttributes'],

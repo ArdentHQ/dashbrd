@@ -1,13 +1,14 @@
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { Button } from "@/Components/Buttons";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { Pagination } from "@/Components/Pagination";
 import { Tooltip } from "@/Components/Tooltip";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 const Index = ({
     title,
@@ -25,6 +26,8 @@ const Index = ({
 
     const createGalleryUrl = route("my-galleries.create");
 
+    const { signedAction } = useAuthorizedAction();
+
     return (
         <LayoutWrapper>
             <Head title={title} />
@@ -41,29 +44,25 @@ const Index = ({
                         <>
                             <Tooltip content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}>
                                 <div className="sm:hidden">
-                                    <ButtonLink
-                                        href={createGalleryUrl}
+                                    <Button
                                         icon="Plus"
                                         variant="icon-primary"
                                         disabled={true}
-                                    ></ButtonLink>
+                                    />
                                 </div>
                             </Tooltip>
 
                             <Tooltip content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}>
                                 <div className="hidden sm:block">
-                                    <ButtonLink
-                                        href={createGalleryUrl}
-                                        disabled={true}
-                                    >
+                                    <Button disabled={true}>
                                         <span className="flex items-center space-x-2">
                                             <Icon
                                                 name="Plus"
                                                 size="md"
                                             />
-                                            <span>{t("pages.galleries.my_galleries.new_gallery")}</span>
+                                            <span>{t("common.create_gallery")}</span>
                                         </span>
-                                    </ButtonLink>
+                                    </Button>
                                 </div>
                             </Tooltip>
                         </>
@@ -71,15 +70,23 @@ const Index = ({
 
                     {nftCount > 0 && (
                         <>
-                            <ButtonLink
-                                href={createGalleryUrl}
+                            <Button
+                                onClick={() => {
+                                    signedAction(() => {
+                                        router.get(createGalleryUrl);
+                                    });
+                                }}
                                 className="sm:hidden"
                                 icon="Plus"
                                 variant="icon-primary"
-                            ></ButtonLink>
+                            ></Button>
 
-                            <ButtonLink
-                                href={createGalleryUrl}
+                            <Button
+                                onClick={() => {
+                                    signedAction(() => {
+                                        router.get(createGalleryUrl);
+                                    });
+                                }}
                                 className="hidden sm:block"
                             >
                                 <span className="flex items-center space-x-2">
@@ -87,9 +94,9 @@ const Index = ({
                                         name="Plus"
                                         size="md"
                                     />
-                                    <span>{t("pages.galleries.my_galleries.new_gallery")}</span>
+                                    <span>{t("common.create_gallery")}</span>
                                 </span>
-                            </ButtonLink>
+                            </Button>
                         </>
                     )}
                 </div>

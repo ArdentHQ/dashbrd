@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Data\NetworkData;
 use App\Jobs\FetchUserNfts;
 use App\Models\Gallery;
 use App\Models\Network;
+use App\Models\Wallet;
 use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
@@ -42,14 +42,15 @@ class MaintainGalleries extends Command
             $gallery = Gallery::where('user_id', $userId)->firstOrFail();
             $this->handleUser($gallery['user_id'], $networks);
         } else {
-            Gallery::query()
-                ->distinct('user_id')
-                ->orderBy('user_id')
-                ->chunk(
-                    100,
-                    fn ($galleries) => $galleries
-                        ->each(fn ($gallery) => $this->handleUser($gallery['user_id'], $networks))
-                );
+            $wallets = Wallet::notRecentlyActive()->whereHas('user', function ($query) {
+                return $query->whereHas('galleries');
+            });
+
+            $wallets->chunk(
+                100,
+                fn ($chunk) => $chunk
+                    ->each(fn ($wallet) => $this->handleUser($wallet->user_id, $networks))
+            );
         }
     }
 
@@ -59,9 +60,7 @@ class MaintainGalleries extends Command
     private function handleUser(int $userId, Collection $networks): void
     {
         $networks->each(function ($network) use ($userId) {
-            $networkData = NetworkData::from($network);
-
-            FetchUserNfts::dispatch($userId, $networkData)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
+            FetchUserNfts::dispatch($userId, $network)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
         });
     }
 }

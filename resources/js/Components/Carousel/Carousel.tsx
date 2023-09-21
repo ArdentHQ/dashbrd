@@ -42,7 +42,7 @@ export const CarouselControls = ({
         >
             <div className="flex items-center">
                 <Link
-                    className="ml-2 text-theme-hint-600 sm:hidden"
+                    className="ml-2 text-theme-primary-600 sm:hidden"
                     href={viewAllPath}
                 >
                     <Icon name="ArrowRight" />
@@ -133,8 +133,9 @@ export const CarouselPreviousButton = ({
 }): JSX.Element => (
     <IconButton
         className={`carousel-button-previous-${carouselKey}`}
-        data-testid="CarouseNavigationButtons__previous"
+        data-testid="CarouselNavigationButtons__previous"
         icon="ChevronLeftSmall"
+        iconSize="xs"
         disabled={disabled}
     />
 );
@@ -149,9 +150,10 @@ export const CarouselNextButton = ({
     disabled?: boolean;
 }): JSX.Element => (
     <IconButton
-        data-testid="CarouseNavigationButtons__next"
+        data-testid="CarouselNavigationButtons__next"
         className={cn(`carousel-button-next-${carouselKey}`, className)}
         icon="ChevronRightSmall"
+        iconSize="xs"
         disabled={disabled}
     />
 );

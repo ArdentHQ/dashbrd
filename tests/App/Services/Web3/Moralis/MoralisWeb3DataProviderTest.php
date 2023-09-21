@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -25,12 +23,12 @@ it('should getWalletTokens', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.erc20'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new MoralisWeb3DataProvider();
-    $tokens = $provider->getWalletTokens($wallet, NetworkData::from($network));
+    $tokens = $provider->getWalletTokens($wallet, $network);
 
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(3)
@@ -43,12 +41,12 @@ it('should getWalletNfts', function () {
         'https://deep-index.moralis.io/api/v2/*/nft?*' => Http::response(fixtureData('moralis.nfts'), 200),
     ]);
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon();
 
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new MoralisWeb3DataProvider();
-    $tokens = $provider->getWalletNfts($wallet, $networkData)->nfts;
+    $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(47)
@@ -84,7 +82,7 @@ it('can get native balance for a wallet', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.native'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $wallet = Wallet::factory()->create();
 
@@ -164,11 +162,11 @@ it('should filter out nfts', function () {
             ->push(fixtureData('moralis.nfts_lowestprice'), 200),
     ]);
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $provider = new MoralisWeb3DataProvider();
-    $nfts = $provider->getWalletNfts(WalletData::from($wallet), $networkData)->nfts;
+    $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($nfts)->toHaveCount(4)
         ->and($nfts->first()->name)->toBeNull()
@@ -187,7 +185,7 @@ it('can get block data for a network', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::response(fixtureData('moralis.block'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new MoralisWeb3DataProvider();
 
@@ -201,7 +199,7 @@ it('should cache the block data', function () {
         'https://deep-index.moralis.io/api/v2/*' => Http::sequence()->push(fixtureData('moralis.block'), 200)->push(fixtureData('moralis.block_alternate', 200)),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $cache = Cache::tags([MoralisWeb3DataProvider::class, MoralisWeb3DataProvider::class.'-getBlockTimestamp']);
     $cacheKey = $network->id.'-100000000';

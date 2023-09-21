@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CollectionController;
-use App\Http\Controllers\CollectionNftController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GalleryController;
@@ -13,9 +12,11 @@ use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\HiddenCollectionController;
 use App\Http\Controllers\MyGalleryCollectionController;
 use App\Http\Controllers\MyGalleryController;
+use App\Http\Controllers\NftController;
 use App\Http\Controllers\NftReportController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\RefreshCsrfTokenController;
+use App\Http\Controllers\WalletController;
 use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Middleware\RecordGalleryView;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-
 
 Route::middleware('auth')->group(function () {
     Route::get('/get-started', [OnboardingController::class, 'show'])->name('onboarding');
+    Route::get('/wallet-data', WalletController::class)->name('wallet');
 
     // Settings
     Route::get('/settings', [GeneralSettingsController::class, 'edit'])->name('settings.general');
@@ -36,10 +38,14 @@ Route::middleware('auth')->group(function () {
     // Gallery
     Route::group(['prefix' => 'my-galleries', 'middleware' => 'features:galleries'], function () {
         Route::get('', [MyGalleryController::class, 'index'])->name('my-galleries')->middleware(EnsureOnboarded::class);
-        Route::get('create', [MyGalleryController::class, 'create'])->name('my-galleries.create')->middleware(EnsureOnboarded::class);
-        Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
-        Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
-        Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');
+
+        Route::group(['middleware' => 'signed_wallet'], function () {
+            Route::get('create', [MyGalleryController::class, 'create'])->name('my-galleries.create')->middleware(EnsureOnboarded::class);
+            Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
+            Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
+            Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');
+        });
+
         Route::get('collections', [MyGalleryCollectionController::class, 'index'])->name('my-galleries.collections');
         Route::get('{collection:slug}/nfts', [MyGalleryCollectionController::class, 'nfts'])->name('my-galleries.nfts');
     });
@@ -52,24 +58,25 @@ Route::middleware('auth')->group(function () {
         Route::post('{collection:address}/reports', [
             CollectionReportController::class, 'store',
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
-        Route::get('{collection:slug}/{nft:token_number}', [CollectionNftController::class, 'view'])->name('collection-nfts.view');
     });
 
     Route::group(['prefix' => 'nfts'], function () {
-        Route::post('{nft:token_number}/reports', [NftReportController::class, 'store'])->name('nft-reports.create')->middleware('throttle:nft:reports');
+        Route::post('{nft:id}/reports', [NftReportController::class, 'store'])->name('nft-reports.create')->middleware('throttle:nft:reports');
     });
 
     Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
 
         Route::post('{gallery:slug}/reports',
-            [GalleryReportController::class, 'store'])->name('reports.create')->middleware('throttle:gallery:reports');
+            [GalleryReportController::class, 'store'])
+                ->name('reports.create')
+                ->middleware(['throttle:gallery:reports', 'signed_wallet']);
     });
 });
 
 Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
     Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
     Route::get('{collection:slug}', [CollectionController::class, 'view'])->name('collections.view');
-
+    Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
 });
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {

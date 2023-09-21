@@ -15,7 +15,7 @@ final class NftImageUrl
     public static function getAllSizes(?string $url): array
     {
         /** @var array{thumb: string | null, small: string | null, large: string | null} $result */
-        $result = collect(ImageSize::cases())
+        $result = collect(ImageSize::defaultList())
             ->mapWithKeys(fn ($size) => [$size->value => ($url ? self::get($url, $size) : null)])
             ->all();
 
@@ -54,7 +54,7 @@ final class NftImageUrl
             $path = $parts['path'];
 
             $size = 'w_'.$imageSize->width().',h_'.$imageSize->height();
-            $newPath = preg_replace('/(?<=\/)upload(?=\/)/', "upload/$size", $path);
+            $newPath = preg_replace('/(?<=\/)upload(?=\/)/', "upload/{$size}", $path);
 
             $url = str_replace($path, $newPath, $url);
         }
@@ -65,7 +65,7 @@ final class NftImageUrl
     private static function getOpenSeaCdn(string $url, ?ImageSize $imageSize): ?string
     {
         // https://i.seadn.io/gcs/files/5ff2b7fa5c94616f34a27e37eadfbfd1.png?h=256&w=96&auto=format
-        if (! preg_match('/^https:\/\/i\.seadn\.io\/gcs\/files\/.*/', $url)) {
+        if (! preg_match('/^https:\/\/i\.seadn\.io\/.*/', $url)) {
             return null;
         }
 
@@ -102,14 +102,15 @@ final class NftImageUrl
         // }
         //
         $extension = pathinfo($url, PATHINFO_EXTENSION);
-        $filename = basename($url, ".$extension");
-        $baseUrl = str_replace("/$filename.$extension", '', $url);
+        $filename = basename($url, ".{$extension}");
+        $baseUrl = str_replace("/{$filename}.{$extension}", '', $url);
 
         if ($imageSize || empty($extension)) {
             $moralisSize = match ($imageSize ?? ImageSize::Large) {
                 ImageSize::Thumb => 'low',
                 ImageSize::Small => 'medium',
                 ImageSize::Large => 'high',
+                ImageSize::Banner => 'high',
             };
 
             $url = "{$baseUrl}/{$moralisSize}.jpeg";

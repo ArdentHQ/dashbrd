@@ -5,7 +5,6 @@ import { SliderContext } from "@/Components/Slider";
 import { type ToastMessage } from "@/Components/Toast";
 
 interface Properties {
-    auth?: App.Data.AuthData;
     header?: React.ReactNode;
     children?: React.ReactNode;
     error?: any; // eslint-disable-line @typescript-eslint/no-explicit-any

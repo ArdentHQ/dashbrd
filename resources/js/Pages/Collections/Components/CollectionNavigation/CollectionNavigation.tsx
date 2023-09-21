@@ -31,13 +31,13 @@ const CollectionNavigationTab = forwardRef<
                             icon={icon}
                             variant="primary"
                             iconClass={classNames("w-[18px] h-auto", {
-                                "text-theme-hint-600": !selected && !disabled,
+                                "text-theme-primary-600": !selected && !disabled,
                                 "text-theme-secondary-500": disabled,
                             })}
                             className={classNames(
                                 "w-full justify-center disabled:bg-transparent disabled:text-theme-secondary-500 sm:w-auto",
                                 {
-                                    "bg-transparent text-theme-hint-900": !selected,
+                                    "bg-transparent text-theme-primary-900": !selected,
                                     [hoverClass]: !selected && !disabled,
                                 },
                             )}
@@ -86,7 +86,7 @@ export const CollectionNavigation = ({
             selectedIndex={selectedIndex}
             onChange={tabChangeHandler}
         >
-            <div className="backdrop-blur-7 -mx-6 mt-6 bg-gradient-to-r from-theme-secondary-100 via-theme-secondary-200 to-theme-danger-100 px-6 py-3 sm:-mx-8 sm:px-8 lg:mx-0 lg:rounded-xl lg:px-5">
+            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 px-6 py-3 sm:-mx-8 sm:px-8 lg:mx-0 lg:rounded-xl lg:px-5">
                 <Tab.List className="flex justify-between">
                     <div className="w-full sm:w-auto">
                         <Tabs className="space-x-1 bg-transparent">

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Support;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
 use App\Jobs\DetermineCollectionMintingDate;
@@ -15,6 +13,7 @@ use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Nft;
 use App\Models\User;
+use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -30,8 +29,8 @@ class Web3NftHandler
     private bool $persistLastIndexedTokenNumber = false;
 
     public function __construct(
-        private ?WalletData $wallet = null,
-        private ?NetworkData $network = null,
+        private ?Wallet $wallet = null,
+        private ?Network $network = null,
         private ?CollectionModel $collection = null,
     ) {
         //
@@ -66,6 +65,9 @@ class Web3NftHandler
                     'image' => $nftData->collectionImage,
                     'website' => $nftData->collectionWebsite,
                     'socials' => $nftData->collectionSocials,
+                    'banner' => $nftData->collectionBannerImageUrl,
+                    'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
+
                 ]),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
@@ -88,7 +90,7 @@ class Web3NftHandler
                 "
     insert into collections
         (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, last_indexed_token_number, created_at, updated_at)
-    values $valuesPlaceholders
+    values {$valuesPlaceholders}
     on conflict (address, network_id) do update
         set name = trim(coalesce(excluded.name, collections.name)),
             symbol = coalesce(excluded.symbol, collections.symbol),
@@ -99,7 +101,7 @@ class Web3NftHandler
             extra_attributes = excluded.extra_attributes,
             minted_block = excluded.minted_block,
             minted_at = excluded.minted_at,
-            last_indexed_token_number = excluded.last_indexed_token_number
+            last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
     returning id, address, floor_price, supply
      ",
                 $collectionsData->toArray(),
@@ -224,7 +226,7 @@ class Web3NftHandler
         }
 
         if ($this->network) {
-            return $this->network->chainId;
+            return $this->network->chain_id;
         }
 
         throw new RuntimeException('Unable to determine chain id');
@@ -343,7 +345,7 @@ class Web3NftHandler
     public function cleanupNftsAndGalleries(Carbon $lastUpdateTimestamp): void
     {
         // We skip cleanup for the LOCAL_TESTING_ADDRESS as it would cause the seeded NFTs to be removed.
-        if ($this->wallet->isLocalTestingAddress) {
+        if ($this->wallet->isLocalTestingAddress()) {
             return;
         }
 

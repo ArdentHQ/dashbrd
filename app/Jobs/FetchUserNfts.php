@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
+use App\Models\Network;
 use App\Models\Wallet;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -24,7 +23,7 @@ class FetchUserNfts implements ShouldBeUnique, ShouldQueue
      */
     public function __construct(
         public int $userId,
-        public NetworkData $network
+        public Network $network
     ) {
         //
     }
@@ -36,11 +35,11 @@ class FetchUserNfts implements ShouldBeUnique, ShouldQueue
     {
         $wallets = Wallet::where('user_id', $this->userId)->get();
 
-        $wallets->each(fn ($wallet) => FetchWalletNfts::dispatch(WalletData::from($wallet), $this->network)->onQueue($this->queue));
+        $wallets->each(fn ($wallet) => FetchWalletNfts::dispatch($wallet, $this->network)->onQueue($this->queue));
     }
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->userId.':'.$this->network->chainId;
+        return self::class.':'.$this->userId.':'.$this->network->chain_id;
     }
 }

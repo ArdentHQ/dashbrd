@@ -9,6 +9,18 @@ use App\Models\Nft;
 use Illuminate\Support\Facades\Queue;
 
 it('dispatches onto the queue', function () {
+    [$matic] = seedTokens();
+
+    $network = Network::polygon();
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'floor_price' => 3.5 * 1e18,
+        'floor_price_token_id' => $matic->id,
+    ]);
+
+    createUser();
+
     Queue::fake();
 
     $this->artisan('collections:update-fiat-value');
@@ -25,7 +37,7 @@ it('dispatches onto the queue', function () {
 it('updates the collection fiat values', function () {
     [$matic, $sand, $weth] = seedTokens();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     // 1 MATIC = 1.052 USD
     $collectionInMatic = Collection::factory()->create([

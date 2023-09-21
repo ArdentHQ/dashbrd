@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Console\Commands\FetchCoingeckoTokens;
-use App\Console\Commands\FetchCollectionBanner;
+use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
+use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
@@ -70,6 +71,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('telescope:prune')->dailyAt('1:00');
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
         $schedule->command('queue:prune-batches --hours=48')->dailyAt('1:10');
+        $schedule->command('queue:prune-failed --hours=720')->daily(); // 30 days
 
         if (Feature::active(Features::Portfolio->value)) {
             $this->scheduleJobsForPortfolio($schedule);
@@ -132,9 +134,8 @@ class Kernel extends ConsoleKernel
             ->everyThirtyMinutes();
 
         // Fetch banners for collections that don't have one yet
-        // (More often according to config)
         $schedule
-            ->command(FetchCollectionBanner::class, [
+            ->command(FetchCollectionBannerBatch::class, [
                 '--missing-only',
             ])
             ->withoutOverlapping()
@@ -144,6 +145,11 @@ class Kernel extends ConsoleKernel
             ->command(FetchCollectionNfts::class)
             ->withoutOverlapping()
             ->dailyAt('11:00');
+
+        $schedule
+            ->command(FetchCollectionMetadata::class)
+            ->withoutOverlapping()
+            ->weeklyOn(Schedule::THURSDAY);
 
         $schedule
             ->command(SyncSpamContracts::class)

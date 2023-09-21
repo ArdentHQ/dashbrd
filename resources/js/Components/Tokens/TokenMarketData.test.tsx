@@ -27,6 +27,7 @@ describe("TokenMarketData", () => {
             user,
             wallet,
             authenticated: true,
+            signed: false,
             showAuthOverlay: false,
             showCloseButton: false,
             closeOverlay: vi.fn(),

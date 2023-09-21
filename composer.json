@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^7.8",
         "halaxa/json-machine": "^1.1",
         "inertiajs/inertia-laravel": "^0.6",
+        "jeffgreco13/filament-breezy": "^2.1",
         "kornrunner/keccak": "^1.1",
         "laravel/framework": "^10.21",
         "laravel/horizon": "^5.19",
@@ -45,7 +46,7 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/larastan": "^2.6",
         "pestphp/pest": "^2.17",
-        "rector/rector": "0.17.6",
+        "rector/rector": "^0.18.2",
         "spatie/laravel-ignition": "^2.3"
     },
     "autoload": {

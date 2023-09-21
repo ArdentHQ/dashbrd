@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Data\NetworkData;
 use App\Data\Wallet\WalletData;
 use App\Jobs\FetchEnsDetails;
 use App\Jobs\FetchNativeBalances;
@@ -92,6 +91,21 @@ class Wallet extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeNotRecentlyActive(Builder $query): Builder
+    {
+        /**
+         * @var int $activeThreshold
+         */
+        $activeThreshold = config('dashbrd.wallets.active_threshold');
+
+        return $query->whereNull('last_activity_at')
+            ->orWhere('last_activity_at', '<=', now()->subSeconds($activeThreshold + 1));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeOnline(Builder $query): Builder
     {
         /**
@@ -155,9 +169,6 @@ class Wallet extends Model
 
     public function dispatchIndexingJobs(Network $network, ?bool $onPriorityQueue = false): void
     {
-        $networkData = NetworkData::fromModel($network);
-        $walletData = WalletData::from($this);
-
         FetchEnsDetails::dispatch($this)
             ->afterCommit()
             ->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::DEFAULT);
@@ -166,12 +177,12 @@ class Wallet extends Model
             ->afterCommit()
             ->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::DEFAULT);
 
-        FetchTokens::dispatch($walletData, $networkData)
+        FetchTokens::dispatch($this, $network)
             ->afterCommit()
             ->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::DEFAULT);
 
         $batch = Bus::batch([
-            (new FetchUserNfts($this->user_id, $networkData))->afterCommit(),
+            (new FetchUserNfts($this->user_id, $network))->afterCommit(),
         ]);
 
         $batch->onQueue($onPriorityQueue ? Queues::PRIORITY : Queues::NFTS);

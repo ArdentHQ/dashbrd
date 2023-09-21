@@ -10,9 +10,8 @@ use App\Data\Wallet\WalletData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\SignMessageRequest;
-use App\Http\Requests\Auth\SwitchAccountRequest;
+use App\Http\Requests\Auth\SignRequest;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,11 +57,11 @@ class AuthenticatedSessionController extends Controller
         return response()->json(['message' => $request->getMessage()]);
     }
 
-    public function switchAccount(SwitchAccountRequest $request): RedirectResponse
+    public function sign(SignRequest $request): RedirectResponse
     {
-        $request->updatePrimaryWallet();
+        $request->sign();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->back();
     }
 
     /**

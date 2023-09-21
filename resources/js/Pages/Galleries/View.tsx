@@ -7,9 +7,8 @@ import { GalleryHeading } from "@/Components/Galleries/GalleryPage/GalleryHeadin
 import { GalleryNfts } from "@/Components/Galleries/GalleryPage/GalleryNfts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
-interface Properties {
+interface Properties extends PageProps {
     title: string;
-    auth: PageProps["auth"];
     gallery: App.Data.Gallery.GalleryData;
     stats: App.Data.Gallery.GalleryStatsData;
     collections: App.Data.Nfts.NftCollectionData[];
@@ -31,10 +30,7 @@ const GalleriesView = ({
     const { props } = usePage();
 
     return (
-        <DefaultLayout
-            auth={auth}
-            toastMessage={props.toast}
-        >
+        <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
 
             <div className="mx-6 sm:mx-8 2xl:mx-0">

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Enums\Chains;
 use App\Exceptions\NotImplementedException;
 use App\Jobs\Middleware\RateLimited;
@@ -33,7 +31,7 @@ it('can get nft floor price and lookup fungible token', function () {
         'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -57,7 +55,7 @@ it('can handle missing nft floor price', function () {
         'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price_null'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -68,24 +66,21 @@ it('can handle missing nft floor price', function () {
         ->toBeNull();
 });
 
-it('should throw NotImplementedException', function ($name) {
-    Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
-    ]);
-
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
-
-    $provider = new MnemonicWeb3DataProvider();
-    expect(fn () => call_user_func([$provider, $name], $wallet, $networkData))->toThrow(NotImplementedException::class);
-})->with([
-    'getWalletTokens',
-    'getWalletNfts',
-]);
-
 it('throws a not implemented exception when trying to fetch ENS domain', function () {
     (new MnemonicWeb3DataProvider)->getEnsDomain(
         Wallet::factory()->create()
+    );
+})->throws(NotImplementedException::class);
+
+it('throws a not implemented exception when trying to fetch wallet tokens', function () {
+    (new MnemonicWeb3DataProvider)->getWalletTokens(
+        Wallet::factory()->create(), Network::factory()->create()
+    );
+})->throws(NotImplementedException::class);
+
+it('throws a not implemented exception when trying to fetch NFTs for a wallet', function () {
+    (new MnemonicWeb3DataProvider)->getWalletNfts(
+        Wallet::factory()->create(), Network::factory()->create()
     );
 })->throws(NotImplementedException::class);
 
@@ -110,7 +105,7 @@ it('should getCollectionsNfts and throw NotImplementedException', function () {
 });
 
 it('should throw an exception trying to fetch the block creation date', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new MnemonicWeb3DataProvider();
 

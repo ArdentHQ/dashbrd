@@ -8,8 +8,8 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
 import { formatAddress } from "@/Utils/format-address";
@@ -63,8 +63,8 @@ const NftImage = ({
             <div
                 data-testid={`NftImageGrid__selected--${nft.tokenNumber}`}
                 className={cn("transition-default pointer-events-none absolute inset-0 rounded-xl", {
-                    "border-2 border-theme-hint-600": isSelected,
-                    "border-theme-hint-100 group-hover:border-3": !isSelected,
+                    "border-2 border-theme-primary-600": isSelected,
+                    "border-theme-primary-100 group-hover:border-3": !isSelected,
                 })}
             >
                 <div
@@ -75,7 +75,7 @@ const NftImage = ({
                         },
                     )}
                 >
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-hint-600 text-white">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-primary-600 text-white">
                         <Icon name="CheckSmall" />
                     </div>
                 </div>
@@ -235,7 +235,7 @@ export const GalleryHeading = ({
                 delay={[500, 0]}
             >
                 <Heading
-                    className="transition-default truncate pt-0.5 group-hover:text-theme-hint-700"
+                    className="transition-default truncate pt-0.5 group-hover:text-theme-primary-700"
                     level={4}
                     ref={truncateReference}
                 >
@@ -249,20 +249,19 @@ export const GalleryHeading = ({
 const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { likes, hasLiked, like } = useLikes({ count: gallery.likes, hasLiked: gallery.hasLiked });
 
-    const { authenticated } = useAuth();
-
-    const { showConnectOverlay } = useMetaMaskContext();
+    const { signedAction } = useAuthorizedAction();
 
     const likeButtonHandler: MouseEventHandler<HTMLElement> = (event): void => {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!authenticated) {
-            showConnectOverlay();
-            return;
-        }
+        signedAction(({ authenticated }) => {
+            // If user wasnt authenticated, foce a positive
+            // like since we dont know if he liked it before
+            const likeValue = !authenticated ? true : undefined;
 
-        void like(gallery.slug);
+            void like(gallery.slug, likeValue);
+        });
     };
 
     return (

@@ -1,13 +1,12 @@
 import { router } from "@inertiajs/react";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { IconButton, LikeButton } from "@/Components/Buttons";
-import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { Button, IconButton, LikeButton } from "@/Components/Buttons";
 import { Clipboard } from "@/Components/Clipboard";
 import { GalleryCurator } from "@/Components/Galleries/GalleryPage/GalleryCurator";
 import { GalleryReportModal } from "@/Components/Galleries/GalleryPage/GalleryReportModal";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
+import { Tooltip } from "@/Components/Tooltip";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useLikes } from "@/Hooks/useLikes";
 
 export const GalleryControls = ({
@@ -33,9 +32,7 @@ export const GalleryControls = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { authenticated } = useAuth();
-
-    const { showConnectOverlay } = useMetaMaskContext();
+    const { signedAction } = useAuthorizedAction();
 
     const { likes, hasLiked, like } = useLikes({
         count: likesCount ?? 0,
@@ -65,19 +62,17 @@ export const GalleryControls = ({
                             icon="Heart"
                             className={cn(hasLiked && "button-like-selected")}
                             onClick={() => {
-                                if (!authenticated) {
-                                    showConnectOverlay(() => {
-                                        void like(gallery.slug, true);
+                                signedAction(({ authenticated }) => {
+                                    // If user wasnt authenticated, force a positive
+                                    // like since we dont know if he liked it before
+                                    const likeValue = !authenticated ? true : undefined;
 
-                                        router.reload({
-                                            only: ["stats", "gallery"],
-                                        });
+                                    void like(gallery.slug, likeValue);
+
+                                    router.reload({
+                                        only: ["stats", "gallery"],
                                     });
-
-                                    return;
-                                }
-
-                                void like(gallery.slug);
+                                });
                             }}
                             data-testid="GalleryControls__like-button"
                         >
@@ -119,13 +114,21 @@ export const GalleryControls = ({
                 )}
 
                 {gallery?.isOwner === true && showEditAction && (
-                    <ButtonLink
-                        data-testid="GalleryControls__edit-button"
-                        disabled={isDisabled}
-                        icon="Pencil"
-                        variant="icon-primary"
-                        href={route("my-galleries.edit", { slug: gallery.slug })}
-                    />
+                    <Tooltip content={t("common.edit")}>
+                        <span>
+                            <Button
+                                data-testid="GalleryControls__edit-button"
+                                disabled={isDisabled}
+                                icon="Pencil"
+                                variant="icon-primary"
+                                onClick={() => {
+                                    signedAction(() => {
+                                        router.get(route("my-galleries.edit", { slug: gallery.slug }));
+                                    });
+                                }}
+                            />
+                        </span>
+                    </Tooltip>
                 )}
             </div>
         </div>

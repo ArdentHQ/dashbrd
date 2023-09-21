@@ -18,6 +18,11 @@ export const getSampleMetaMaskState = (overrides: Partial<MetaMaskState> = {}): 
     account: "0xE68cDB02e9453DD7c66f53AceA5CEeAD2ecd637A",
     hideConnectOverlay: vi.fn(),
     showConnectOverlay: vi.fn(),
+    askForSignature: vi.fn(),
+    signWallet: vi.fn(),
+    signing: false,
+    signed: false,
     isShowConnectOverlay: false,
+    onDisconnected: vi.fn(),
     ...overrides,
 });

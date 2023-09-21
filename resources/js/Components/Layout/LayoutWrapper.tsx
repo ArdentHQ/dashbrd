@@ -14,17 +14,19 @@ interface LayoutWrapperProperties extends HTMLAttributes<HTMLDivElement> {
     withSlider?: boolean;
     toastMessage?: ToastMessage;
     isMaintenanceModeActive?: boolean;
+    belowHeader?: React.ReactNode;
 }
 
 export const LayoutWrapper = ({
     children,
+    belowHeader,
     className,
     useVerticalOffset = true,
     withSlider = false,
     toastMessage,
     isMaintenanceModeActive,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth();
+    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay, signed } = useAuth();
 
     const { setAuthData } = useActiveUser();
 
@@ -33,6 +35,7 @@ export const LayoutWrapper = ({
             authenticated,
             wallet,
             user,
+            signed,
         });
     }, [authenticated, user, wallet]);
 
@@ -56,12 +59,17 @@ export const LayoutWrapper = ({
             </header>
 
             <AuthOverlay
-                showAuthOverlay={showAuthOverlay}
+                show={showAuthOverlay}
                 showCloseButton={showCloseButton}
                 closeOverlay={closeOverlay}
             />
 
-            <div className={cn("flex flex-1 flex-col", { blur: showAuthOverlay })}>
+            {belowHeader}
+
+            <div
+                id="layout"
+                className={cn("flex flex-1 flex-col")}
+            >
                 <main
                     className={cn(
                         "mx-auto flex w-full max-w-content flex-1 flex-col",

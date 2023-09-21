@@ -7,11 +7,10 @@ import { ClipboardButton } from "@/Components/Clipboard";
 import { Icon, type IconName } from "@/Components/Icon";
 import { Link } from "@/Components/Link";
 import { Popover } from "@/Components/Popover";
-import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
+import { PortfolioBreakdownLine, usePortfolioBreakdown } from "@/Components/PortfolioBreakdown";
 import { TokenActions } from "@/Components/Tokens/TokenActions";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
-import { usePortfolioBreakdownContext } from "@/Contexts/PortfolioBreakdownContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
 import { FormatFiat } from "@/Utils/Currency";
 import { formatAddress } from "@/Utils/format-address";
@@ -32,7 +31,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
     const { setTransactionAsset, setTransactionSliderDirection } = useTransactionSliderContext();
 
-    const { breakdownAssets } = usePortfolioBreakdownContext();
+    const { assets } = usePortfolioBreakdown(wallet);
 
     return (
         <Popover className="sm:relative">
@@ -94,7 +93,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                             />
                                         </div>
                                         <div>
-                                            <PortfolioBreakdownLine assets={breakdownAssets} />
+                                            <PortfolioBreakdownLine assets={assets} />
                                             <div className="mt-2 flex items-center justify-between">
                                                 <p className="text-sm font-medium leading-5.5 text-theme-secondary-700">
                                                     {t("common.tokens")}:{" "}
@@ -106,9 +105,9 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                 <Link
                                                     href={route("dashboard")}
                                                     className={cn(
-                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-hint-600 outline-none ",
-                                                        "hover:text-theme-hint-700",
-                                                        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300 focus-visible:ring-offset-2",
+                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none ",
+                                                        "hover:text-theme-primary-700",
+                                                        "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 focus-visible:ring-offset-2",
                                                     )}
                                                 >
                                                     {t("common.my_wallet")}
@@ -242,7 +241,7 @@ const DropdownNavigationLink = ({
         as={as}
         className={cn(
             "transition-default flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 md-lg:px-6",
-            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-hint-300",
+            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300",
         )}
     >
         <div className="flex items-center space-x-3 rounded-full">

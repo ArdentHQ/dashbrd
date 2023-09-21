@@ -1,14 +1,11 @@
-import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import { NftBackButton } from "@/Components/Collections/Nfts/NftBackButton";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { NftHeading } from "@/Pages/Collections/Nfts/Components/NftHeading";
-import { assertUser } from "@/Utils/assertions";
 
 interface Properties {
     title: string;
-    auth: PageProps["auth"];
     nft: App.Data.Nfts.NftData;
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
@@ -16,10 +13,10 @@ interface Properties {
     collectionDetails: App.Data.Collections.CollectionBasicDetailsData;
     traits: App.Data.Collections.CollectionTraitData[];
     nativeToken: App.Data.Token.TokenData;
+    showReportModal: boolean;
 }
 
 const CollectionsNftsView = ({
-    auth,
     title,
     nft,
     reportAvailableIn,
@@ -28,16 +25,13 @@ const CollectionsNftsView = ({
     collectionDetails,
     traits,
     nativeToken,
+    showReportModal,
 }: Properties): JSX.Element => {
-    assertUser(auth.user);
     const { props } = usePage();
 
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
-            <DefaultLayout
-                auth={auth}
-                toastMessage={props.toast}
-            >
+            <DefaultLayout toastMessage={props.toast}>
                 <Head title={title} />
 
                 <NftBackButton
@@ -45,7 +39,7 @@ const CollectionsNftsView = ({
                     url={route("collections.view", {
                         slug: nft.collection.slug,
                     })}
-                    className="-mt-2 mb-10 px-6 sm:mb-14 sm:px-8 lg:mb-4 2xl:px-0"
+                    className="-mt-6 mb-6 bg-theme-secondary-50 px-6 py-4 sm:-mt-8 sm:mb-8 lg:-mt-4 lg:mb-0 lg:bg-white lg:px-8 2xl:px-0"
                 />
 
                 <NftHeading
@@ -57,6 +51,7 @@ const CollectionsNftsView = ({
                     reportAvailableIn={reportAvailableIn}
                     reportReasons={props.reportReasons}
                     traits={traits}
+                    showReportModal={showReportModal}
                 />
             </DefaultLayout>
         </ExternalLinkContextProvider>

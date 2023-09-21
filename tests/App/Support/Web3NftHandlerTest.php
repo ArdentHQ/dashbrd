@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
 use App\Data\Web3\Web3NftData;
 use App\Enums\TraitDisplayType;
 use App\Models\Collection;
@@ -18,12 +17,12 @@ use Illuminate\Support\Str;
 it('trims collection names', function () {
     Bus::fake();
 
-    $networkData = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $handler = new Web3NftHandler(
-        network: $networkData,
-        wallet: $wallet->getData(),
+        network: $network,
+        wallet: $wallet,
     );
 
     $token = Token::factory()->create();
@@ -39,6 +38,8 @@ it('trims collection names', function () {
         collectionDescription: null,
         collectionSocials: null,
         collectionSupply: null,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: null,
         name: null,
         description: null,
         extraAttributes: [],
@@ -76,6 +77,8 @@ it('should throw an exception if no wallet or collection passed', function () {
             collectionDescription: null,
             collectionSocials: null,
             collectionSupply: null,
+            collectionBannerImageUrl: null,
+            collectionBannerUpdatedAt: null,
             name: null,
             description: null,
             extraAttributes: [],
@@ -109,6 +112,8 @@ it('should not insert traits with long values', function () {
         collectionDescription: null,
         collectionSocials: null,
         collectionSupply: null,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: null,
         name: null,
         description: null,
         extraAttributes: [],

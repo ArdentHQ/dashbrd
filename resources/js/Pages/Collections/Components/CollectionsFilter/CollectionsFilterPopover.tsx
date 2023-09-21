@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Toggle } from "@/Components/Form/Toggle";
 import { Popover } from "@/Components/Popover";
+import { Tooltip } from "@/Components/Tooltip";
 import { useDebounce } from "@/Hooks/useDebounce";
 
 interface Properties {
@@ -42,11 +43,13 @@ export const CollectionsFilterPopover = ({
             {({ open }) => (
                 <>
                     <div className="sm:relative">
-                        <Popover.Button
-                            as={IconButton}
-                            icon="Funnel"
-                            disabled={disabled}
-                        />
+                        <Tooltip content={t("common.filter")}>
+                            <Popover.Button
+                                as={IconButton}
+                                icon="Funnel"
+                                disabled={disabled}
+                            />
+                        </Tooltip>
 
                         {hidden && <PulsatingDot />}
                     </div>
@@ -91,7 +94,7 @@ export const CollectionsFilterPopover = ({
 
 const PulsatingDot = (): JSX.Element => (
     <>
-        <span className="absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-hint-600 ring-4 ring-white" />
-        <span className="animate-ping-slow absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-hint-600" />
+        <span className="absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-primary-600 ring-4 ring-white" />
+        <span className="animate-ping-slow absolute right-0 top-0 mr-1 mt-0.5 flex h-1.5 w-1.5 rounded-full bg-theme-primary-600" />
     </>
 );

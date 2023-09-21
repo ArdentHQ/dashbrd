@@ -1,11 +1,64 @@
+import { router } from "@inertiajs/react";
 import { t } from "i18next";
 import React from "react";
+import { expect, type SpyInstance } from "vitest";
 import { Report } from "./Report";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
+import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
+let routerSpy: SpyInstance;
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
+
 describe("Report", () => {
+    const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
+        callback();
+    });
+
+    beforeEach(() => {
+        const function_ = vi.fn();
+        routerSpy = vi.spyOn(router, "reload").mockImplementation(function_);
+
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+        });
+    });
+
+    beforeAll(() => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...getSampleMetaMaskState(),
+            showConnectOverlay: showConnectOverlayMock,
+        });
+
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: true,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            signed: true,
+            closeOverlay: vi.fn(),
+        });
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+    });
+
+    afterEach(() => {
+        routerSpy.mockRestore();
+        useAuthorizedActionSpy.mockRestore();
+    });
+
     it("should render with nft", () => {
         const nft = new NftFactory().create();
 
@@ -13,6 +66,7 @@ describe("Report", () => {
             <Report
                 model={nft}
                 modelType={"nft"}
+                show={false}
             />,
         );
 
@@ -27,6 +81,7 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
@@ -41,6 +96,7 @@ describe("Report", () => {
             <Report
                 model={nft}
                 modelType={"nft"}
+                show={false}
             />,
         );
 
@@ -58,6 +114,7 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
@@ -68,6 +125,65 @@ describe("Report", () => {
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
     });
 
+    it("show report modal on load", () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+                show={true}
+            />,
+        );
+
+        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+    });
+
+    it("doesnt show report modal on load if cant report", () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+                show={true}
+                allowReport={false}
+            />,
+        );
+
+        expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
+    });
+
+    it("should show auth overlay if guest clicks on it", async () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            showAuthOverlay: false,
+            showCloseButton: false,
+            signed: false,
+            closeOverlay: vi.fn(),
+        });
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+                show={false}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("Report_flag"));
+
+        expect(routerSpy).toHaveBeenCalledWith({
+            data: {
+                report: true,
+            },
+        });
+    });
+
     it("should render with default tooltip if display default tooltip is true", async () => {
         const nft = new NftFactory().create();
 
@@ -76,6 +192,7 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 displayDefaultTooltip={true}
+                show={false}
             />,
         );
 
@@ -91,10 +208,26 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 displayDefaultTooltip={false}
+                show={false}
             />,
         );
 
         await userEvent.hover(screen.getByTestId("Report_flag"));
         expect(screen.queryByText(t("common.report"))).not.toBeInTheDocument();
+    });
+
+    it("should render with custom class names for icon button", () => {
+        const nft = new NftFactory().create();
+
+        render(
+            <Report
+                model={nft}
+                modelType={"nft"}
+                className="custom-class"
+                show={false}
+            />,
+        );
+
+        expect(screen.getByTestId("Report_flag")).toHaveClass("custom-class");
     });
 });

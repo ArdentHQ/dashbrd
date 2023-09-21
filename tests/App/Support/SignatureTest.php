@@ -93,3 +93,17 @@ it('should allow forgetting the nonce that is stored in the session', function (
 it('should generate a nonce', function () {
     expect(Signature::nonce())->toBeString();
 });
+
+it('should set wallet as signed and not signed', function () {
+    Signature::setWalletIsSigned(123);
+
+    expect(Session::get('wallet-is-signed.123'))->toBeTrue();
+
+    expect(Signature::walletIsSigned(123))->toBeTrue();
+
+    Signature::setWalletIsNotSigned(123);
+
+    expect(Session::get('wallet-is-signed.123'))->toBeNull();
+
+    expect(Signature::walletIsSigned(123))->toBeFalse();
+});

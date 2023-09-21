@@ -4,7 +4,7 @@ import { LinkButton } from "@/Components/Link";
 import { PortfolioBreakdownLine } from "@/Components/PortfolioBreakdown";
 import { Skeleton } from "@/Components/Skeleton";
 
-export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
+export const BalanceHeaderMobileSkeleton = ({ animated }: { animated: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -16,12 +16,14 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         <Skeleton
                             height={15}
                             width={100}
+                            animated={animated}
                         />
                     </div>
 
                     <Skeleton
                         height={20}
                         width={20}
+                        animated={animated}
                     />
                 </div>
             </div>
@@ -33,6 +35,7 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         <Skeleton
                             height={32}
                             width={120}
+                            animated={animated}
                         />
                     </div>
                 </div>
@@ -42,18 +45,21 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         width={40}
                         height={40}
                         isCircle
+                        animated={animated}
                     />
 
                     <Skeleton
                         width={40}
                         height={40}
                         isCircle
+                        animated={animated}
                     />
 
                     <Skeleton
                         width={40}
                         height={40}
                         isCircle
+                        animated={animated}
                     />
                 </div>
             </div>
@@ -70,15 +76,16 @@ export const BalanceHeaderMobileSkeleton = (): JSX.Element => {
                         <Skeleton
                             height={12}
                             width={20}
+                            animated={animated}
                         />
                     </div>
 
                     <LinkButton
                         data-testid="BalanceHeaderMobile__more-details"
                         className={cn(
-                            "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-hint-600 outline-none ",
-                            "hover:border-theme-hint-700 hover:text-theme-hint-700",
-                            "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-hint-300 focus-visible:ring-offset-2",
+                            "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none ",
+                            "hover:border-theme-primary-700 hover:text-theme-primary-700",
+                            "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 focus-visible:ring-offset-2",
                         )}
                     >
                         {t("common.more_details")}

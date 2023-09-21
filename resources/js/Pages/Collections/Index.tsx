@@ -95,10 +95,7 @@ const CollectionsIndex = ({
     };
 
     return (
-        <DefaultLayout
-            auth={auth}
-            toastMessage={props.toast}
-        >
+        <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
 
             <div>
@@ -122,7 +119,7 @@ const CollectionsIndex = ({
                         activeSort={sortBy}
                         onSort={sort}
                         onChangeVisibilityStatus={(isHidden) => {
-                            reload({ showHidden: isHidden });
+                            reload({ showHidden: isHidden, page: 1 });
                         }}
                     />
                 </div>

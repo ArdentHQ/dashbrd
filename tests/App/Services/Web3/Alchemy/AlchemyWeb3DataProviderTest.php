@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Data\NetworkData;
-use App\Data\Wallet\WalletData;
 use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
@@ -35,12 +33,12 @@ it('should getWalletTokens', function () {
         };
     });
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
-    $tokens = $provider->getWalletTokens($wallet, NetworkData::from($network));
+    $tokens = $provider->getWalletTokens($wallet, $network);
 
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(5)
@@ -126,11 +124,11 @@ it('should paginate getWalletTokens', function () {
             ),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
-    $tokens = $provider->getWalletTokens(WalletData::from($wallet), NetworkData::from($network));
+    $tokens = $provider->getWalletTokens($wallet, $network);
 
     expect($tokens)->toHaveCount(4)
         ->and($tokens->first()->tokenAddress)->toEqual('0x1111111111111111111111111111111111111111')
@@ -142,9 +140,9 @@ it('should getWalletNfts', function () {
         '*' => Http::response(fixtureData('alchemy.nfts'), 200),
     ]);
 
-    $network = NetworkData::from(Network::polygon()->firstOrFail());
+    $network = Network::polygon();
 
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
@@ -164,8 +162,8 @@ it('should extract nft images', function () {
         '*' => Http::response(fixtureData('alchemy.nfts_media'), 200),
     ]);
 
-    $network = NetworkData::from(Network::polygon()->firstOrFail());
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
@@ -180,8 +178,8 @@ it('should extract nft traits', function () {
         '*' => Http::response(fixtureData('alchemy.nfts_traits'), 200),
     ]);
 
-    $network = NetworkData::from(Network::polygon()->firstOrFail());
-    $wallet = WalletData::fromModel(Wallet::factory()->create());
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
@@ -282,7 +280,7 @@ it('should get balance for a native token', function () {
         };
     });
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
@@ -302,7 +300,7 @@ it('should get block data for a network', function () {
         };
     });
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $provider = new AlchemyWeb3DataProvider();
     $timestamp = $provider->getBlockTimestamp($network, blockNumber: 100000000);
@@ -316,7 +314,7 @@ it('should cache the block data', function () {
         '*' => Http::sequence()->push(fixtureData('alchemy.block_data'), 200)->push(fixtureData('alchemy.block_data_alternate', 200)),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $cacheKey = $network->id.'-100000000';
     $cache = Cache::tags([AlchemyWeb3DataProvider::class, AlchemyWeb3DataProvider::class.'-getBlockTimestamp']);
@@ -432,11 +430,11 @@ it('should filter out nfts', function () {
             ]]),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
     $wallet = Wallet::factory()->create();
 
     $provider = new AlchemyWeb3DataProvider();
-    $nfts = $provider->getWalletNfts(WalletData::from($wallet), NetworkData::from($network))->nfts;
+    $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($nfts)->toHaveCount(5)
         ->and($nfts->first()->name)->toBeNull()
@@ -454,7 +452,7 @@ it('should getCollectionsNfts', function () {
         '*' => Http::sequence()->push($original, 200)->push($altered, 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = CollectionModel::factory()->create([
         'network_id' => $network->id,

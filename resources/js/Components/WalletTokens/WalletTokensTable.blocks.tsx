@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Button, IconButton } from "@/Components/Buttons";
 import { PriceChart } from "@/Components/PortfolioBreakdown";
 import { PriceChange } from "@/Components/PriceChange/PriceChange";
-import { Skeleton } from "@/Components/Skeleton";
 import { TokenLogo } from "@/Components/Tokens/TokenLogo";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
@@ -70,7 +69,7 @@ export const Token = memo(
                 <button
                     data-testid="WalletTokensTable__token"
                     type="button"
-                    className="transition-default group/token flex items-center space-x-3 rounded-2xl outline-none outline-3 outline-offset-4 focus-visible:outline-theme-hint-300"
+                    className="transition-default group/token flex items-center space-x-3 rounded-2xl outline-none outline-3 outline-offset-4 focus-visible:outline-theme-primary-300"
                     onClick={() => {
                         onClick(asset);
                     }}
@@ -94,7 +93,7 @@ export const Token = memo(
                 <div className="flex flex-col items-start space-y-0.5 whitespace-nowrap font-medium">
                     <span
                         data-testid="WalletTokensTable__token_symbol"
-                        className="text-sm leading-5.5 text-theme-secondary-900 group-hover/token:text-theme-hint-700 sm:text-base sm:leading-6"
+                        className="text-sm leading-5.5 text-theme-secondary-900 group-hover/token:text-theme-primary-700 sm:text-base sm:leading-6"
                     >
                         {asset.symbol}
                     </span>
@@ -280,15 +279,6 @@ export const Chart = ({ asset }: Omit<Properties, "onClick">): JSX.Element => {
     const labels = useMemo<string[]>(() => Object.keys(values), [values]);
 
     const isErrored = useMemo(() => symbolLoaded && !hasData, [hasData, symbolLoaded]);
-
-    if (!symbolLoaded) {
-        return (
-            <Skeleton
-                data-testloading
-                className="h-10 w-25"
-            />
-        );
-    }
 
     return (
         <Tooltip

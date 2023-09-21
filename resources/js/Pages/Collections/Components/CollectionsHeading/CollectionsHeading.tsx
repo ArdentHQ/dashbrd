@@ -37,7 +37,7 @@ export const CollectionsHeading = ({
                 components={[
                     <span
                         key="0"
-                        className="text-theme-hint-600"
+                        className="text-theme-primary-600"
                     />,
                 ]}
             />

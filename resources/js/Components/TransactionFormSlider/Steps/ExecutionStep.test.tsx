@@ -8,7 +8,7 @@ import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
-import { render, userEvent } from "@/Tests/testing-library";
+import { render, TestProviders, userEvent } from "@/Tests/testing-library";
 import { Breakpoint } from "@/Tests/utils";
 
 describe("ExecutionStep", () => {
@@ -221,7 +221,11 @@ describe("ExecutionStep", () => {
             },
         };
 
-        rerender(<ExecutionStep {...withEthNativeToken} />);
+        rerender(
+            <TestProviders>
+                <ExecutionStep {...withEthNativeToken} />
+            </TestProviders>,
+        );
 
         expect(screen.getByTestId("Ethereum")).toBeInTheDocument();
     });

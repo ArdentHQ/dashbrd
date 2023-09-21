@@ -118,6 +118,7 @@ describe("ResultStep", () => {
             user,
             wallet: null,
             authenticated: false,
+            signed: false,
             showAuthOverlay: true,
             showCloseButton: false,
             closeOverlay: vi.fn(),

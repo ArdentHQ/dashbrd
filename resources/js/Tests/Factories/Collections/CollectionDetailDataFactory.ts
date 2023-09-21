@@ -16,6 +16,7 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
             floorPriceFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
             image: this.optional(faker.image.avatar(), 0.9),
             banner: this.optional(faker.image.avatar()),
+            bannerUpdatedAt: this.optional(faker.date.recent().toISOString()),
             website: this.optional(faker.internet.url()),
             twitter: this.optional(faker.internet.url()),
             discord: this.optional(faker.internet.url()),

@@ -4,49 +4,29 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Data\NetworkData;
 use App\Enums\Chains;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Spatie\LaravelData\WithData;
+use Illuminate\Support\Collection;
 
 class Network extends Model
 {
-    use HasFactory, WithData;
+    use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $guarded = [];
 
+    /**
+     * @var array<string, string>
+     */
     protected $casts = [
-        'is_mainnet' => 'boolean',
+        'is_mainnet' => 'bool',
     ];
-
-    protected string $dataClass = NetworkData::class;
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeOnlyMainnet(Builder $query): Builder
-    {
-        return $query->where('is_mainnet', true);
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopePolygon(Builder $query): Builder
-    {
-        return $query->where('chain_id', Chains::Polygon);
-    }
-
-    public function chain(): Chains
-    {
-        return Chains::from($this->chain_id);
-    }
 
     /**
      * @return HasMany<Token>
@@ -65,18 +45,45 @@ class Network extends Model
     }
 
     /**
-     * @return Builder<self>
+     * Usually only used for testing purposes to quickly find the Polygon network.
      */
-    public static function scopeOnlyActive(): Builder
+    public static function polygon(): self
     {
-        return Network::when(app()->environment('production') || ! config('dashbrd.testnet_enabled'), static fn ($query) => $query->onlyMainnet());
+        return static::where('chain_id', Chains::Polygon)->firstOrFail();
+    }
+
+    public function chain(): Chains
+    {
+        return Chains::from($this->chain_id);
     }
 
     /**
-     * @return array<int, int>
+     * @return Collection<int, int>
      */
-    public static function activeChainIds(): array
+    public static function activeChainIds(): Collection
     {
-        return Network::onlyActive()->get()->map(fn ($network) => $network->chain_id)->all();
+        return static::onlyActive()->pluck('chain_id');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOnlyMainnet(Builder $query): Builder
+    {
+        return $query->where('is_mainnet', true);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOnlyActive(Builder $query): Builder
+    {
+        if (app()->isProduction() || ! config('dashbrd.testnet_enabled')) {
+            return $query->onlyMainnet();
+        }
+
+        return $query;
     }
 }
