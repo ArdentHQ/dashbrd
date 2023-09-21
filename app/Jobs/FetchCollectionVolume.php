@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchCollectionVolume implements ShouldQueue
 {
@@ -34,12 +35,21 @@ class FetchCollectionVolume implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchCollectionVolume Job: Processing', [
+            'collection' => $this->collection->address,
+        ]);
+
         $volume = Mnemonic::getNftCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
 
         $this->collection->update([
+            'volume' => $volume,
+        ]);
+
+        Log::info('FetchCollectionVolume Job: Handled', [
+            'collection' => $this->collection->address,
             'volume' => $volume,
         ]);
     }
