@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Support;
 
+use App\Models\Wallet;
+use Carbon\Carbon;
 use Elliptic\EC;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -43,6 +45,8 @@ class Signature
 
     public static function setWalletIsSigned(int $walletId): void
     {
+        Wallet::where('id', $walletId)->update(['last_signed_at' => Carbon::now()]);
+
         Session::put('wallet-is-signed.'.$walletId, true);
     }
 
