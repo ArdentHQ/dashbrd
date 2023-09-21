@@ -62,7 +62,7 @@ const networkConfigs: Record<number, object> = {
     },
 };
 
-const hasMetaMask = (): boolean => window.ethereum !== undefined;
+const hasMetaMask = (): boolean => window.ethereum?.isMetaMask !== undefined;
 
 const getEthereum = (): Ethereum => window.ethereum as Ethereum;
 
