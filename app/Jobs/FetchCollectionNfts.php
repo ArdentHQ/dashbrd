@@ -34,13 +34,10 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 
     /**
      * Execute the job.
+     * Attention! This job assumes that you already filtered invalid collections.
      */
     public function handle(): void
     {
-        if ($this->collection->isInvalid(withSpamCheck: false)) {
-            return;
-        }
-
         $result = $this->getWeb3DataProvider()->getCollectionsNfts($this->collection, $this->startToken);
 
         (new Web3NftHandler(collection: $this->collection))
