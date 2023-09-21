@@ -1087,9 +1087,11 @@ it('should remove selected chains where its network has no collections in its co
     $user = createUser();
     $network1 = Network::factory()->create();
     $network2 = Network::factory()->create();
+    $network3 = Network::factory()->create();
 
     $collection1 = Collection::factory()->create(['network_id' => $network1->id]);
     $collection2 = Collection::factory()->create(['network_id' => $network2->id]);
+    $collection3 = Collection::factory()->create(['network_id' => $network2->id]);
 
     Nft::factory()->create([
         'wallet_id' => $user->wallet_id,
@@ -1101,11 +1103,17 @@ it('should remove selected chains where its network has no collections in its co
         'collection_id' => $collection2->id,
     ]);
 
-    $this->actingAs($user)
+    Nft::factory()->create([
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection3->id,
+    ]);
+
+    $response = $this->actingAs($user)
         ->get(route('collections', [
-            'chain' => [$network1->chainId, $network2->chainId],
+            'chain' => [$network1->chainId, $network2->chainId, $network3->chainId],
         ]))
-        ->assertSee($collection1->name)
-        ->assertSee($collection2->name)
         ->assertStatus(200);
+
+    expect(count($response['collections']['data']))->toEqual(3);
+    expect(count($response['nfts']))->toEqual(3);
 });
