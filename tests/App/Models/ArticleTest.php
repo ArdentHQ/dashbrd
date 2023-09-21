@@ -2,16 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Enums\CurrencyCode;
-use App\Enums\NftTransferType;
 use App\Models\Article;
 use App\Models\Collection;
-use App\Models\CollectionTrait;
-use App\Models\Gallery;
-use App\Models\Nft;
-use App\Models\NftActivity;
-use App\Models\User;
-use App\Models\Wallet;
 
 it('should create an article', function () {
     $article = Article::factory()->create();
