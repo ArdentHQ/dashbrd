@@ -12,6 +12,8 @@ interface Properties {
 }
 
 export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Properties): JSX.Element => {
+    const { t } = useTranslation();
+
     if (disabled) {
         return (
             <IconButton
@@ -20,8 +22,6 @@ export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Pro
             />
         );
     }
-
-    const { t } = useTranslation();
 
     return (
         <Dropdown

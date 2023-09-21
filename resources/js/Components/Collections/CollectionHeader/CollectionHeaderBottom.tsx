@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { GridHeader } from "@/Components/GridHeader";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { useActiveUser } from "@/Contexts/ActiveUserContext";
-import { assertUser } from "@/Utils/assertions";
 import { FormatCrypto, FormatNumber } from "@/Utils/Currency";
 import { toMonthYear } from "@/Utils/dates";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -15,7 +14,6 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
     const { t } = useTranslation();
 
     const { user } = useActiveUser();
-    assertUser(user);
 
     const token: Pick<App.Data.Token.TokenData, "symbol" | "name" | "decimals"> = {
         name: "",
