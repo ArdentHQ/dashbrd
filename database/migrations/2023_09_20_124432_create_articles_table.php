@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('category');
-            $table->date('date')->nullable();
+            $table->date('published_at')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('content');
             $table->foreignIdFor(User::class)->index()->constrained()->cascadeOnDelete();
