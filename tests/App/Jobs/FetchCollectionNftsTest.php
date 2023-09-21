@@ -149,8 +149,6 @@ it('should not store nfts if the collection supply is higher than COLLECTIONS_MA
     expect(NftTrait::count())->toBe(0);
 });
 
-
-
 it('does not store NFTs for collections that do not report a total supply', function () {
     Bus::fake();
 
