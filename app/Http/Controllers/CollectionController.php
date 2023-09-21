@@ -77,6 +77,11 @@ class CollectionController extends Controller
         $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
         $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
 
+        $selectedChainIds = array_filter($selectedChainIds, function ($id) use ($networks) {
+            return $networks->firstWhere('id', $id)?->collectionsCount > 0;
+        });
+
+
         if ($request->wantsJson()) {
             $searchQuery = $request->get('query');
 
@@ -118,8 +123,6 @@ class CollectionController extends Controller
                 'availableNetworks' => $networks,
             ]);
         }
-
-        $selectedChainIds = array_filter($selectedChainIds, fn ($id) => $networks->firstWhere('id', $id) !== null);
 
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
