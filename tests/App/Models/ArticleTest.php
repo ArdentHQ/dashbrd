@@ -21,19 +21,3 @@ it('should have a collection', function () {
 
     expect($article->collections->first()->id)->toBe($collection->id);
 });
-
-it('should add a like to an article', function () {
-    $article = Article::factory()->create();
-
-    expect($article->likes()->count())->toBe(0);
-
-    $users = User::factory(3)->create();
-
-    foreach ($users as $user) {
-        $article->addLike($user);
-    }
-
-    expect($article->likes()->count())->toBe(3)
-        ->and($article->likeCount)->toBe(3)
-        ->and($article->likes()->pluck('id'))->toContain(...$users->pluck('id'));
-});

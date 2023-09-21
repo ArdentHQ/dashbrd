@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Traits\BelongsToUser;
-use App\Models\Traits\CanBeLiked;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,14 +16,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Article extends Model implements HasMedia, Viewable
 {
-    use BelongsToUser, CanBeLiked, HasFactory, InteractsWithMedia, InteractsWithViews, SoftDeletes;
+    use BelongsToUser, HasFactory, InteractsWithMedia, InteractsWithViews, SoftDeletes;
 
     public $guarded = ['id'];
-
-    protected function likesTable(): string
-    {
-        return 'article_likes';
-    }
 
     /**
      * @return BelongsToMany<Collection>
