@@ -120,6 +120,7 @@ class CollectionController extends Controller
                 'alreadyReportedByCollection' => $alreadyReportedByCollection,
                 'hiddenCollectionAddresses' => $hiddenCollections,
                 'availableNetworks' => $networks,
+                'selectedChainIds' => $selectedChainIds,
             ]);
         }
 
