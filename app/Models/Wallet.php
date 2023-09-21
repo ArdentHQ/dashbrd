@@ -41,7 +41,6 @@ class Wallet extends Model
         'active',
         'total_usd',
         'last_activity_at',
-        'last_signed_at',
         'onboarded_at',
     ];
 
@@ -49,7 +48,6 @@ class Wallet extends Model
         'extra_attributes' => SchemalessAttributes::class,
         'total_usd' => 'float',
         'last_activity_at' => 'datetime',
-        'last_signed_at' => 'datetime',
         'onboarded_at' => 'datetime',
     ];
 
@@ -96,7 +94,7 @@ class Wallet extends Model
      */
     public function scopeHasBeenSigned(Builder $query): Builder
     {
-        return $query->whereNotNull('last_signed_at');
+        return $query->whereNotNull('extra_attributes->last_signed_at');
     }
 
     /**

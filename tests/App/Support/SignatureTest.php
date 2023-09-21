@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Models\Wallet;
 use App\Support\Signature;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
 it('should generate a signature', function () {
@@ -102,8 +101,8 @@ it('should set wallet as signed and not signed and set last_signed_at', function
 
     Signature::setWalletIsSigned($wallet->id);
 
-    expect($wallet->fresh()->last_signed_at)->toBeInstanceOf(Carbon::class);
-    expect($otherWallet->fresh()->last_signed_at)->toBeNull();
+    expect($wallet->fresh()->extra_attributes->get('last_signed_at'))->not->toBeNull();
+    expect($otherWallet->fresh()->extra_attributes->get('last_signed_at'))->toBeNull();
 
     expect(Session::get('wallet-is-signed.'.$wallet->id))->toBeTrue();
 
