@@ -466,4 +466,13 @@ class Collection extends Model
     {
         return BlacklistedCollections::includes($this->address);
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWithSignedWallet(Builder $query): Builder
+    {
+        return $query->whereHas('nfts', fn ($nftQuery) => $nftQuery->whereHas('wallet', fn ($walletQuery) => $walletQuery->hasBeenSigned()));
+    }
 }
