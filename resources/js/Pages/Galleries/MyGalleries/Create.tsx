@@ -55,7 +55,6 @@ const Create = ({
         gallery,
     });
 
-    /* TODO (@alfonsobries) [2023-09-01]: calculate the value (https://app.clickup.com/t/862jkb9e2) */
     const totalValue = 0;
 
     assertUser(auth.user);
@@ -112,7 +111,6 @@ const Create = ({
                     selectedNfts={gallery?.nfts.paginated.data}
                     nftLimit={nftLimit}
                 >
-                    {/* TODO (@alexbarnsley) [2023-09-01] calculate gallery value on the fly - https://app.clickup.com/t/862jkb9e2 */}
                     <GalleryHeading
                         value={totalValue}
                         nftsCount={data.nfts.length}
