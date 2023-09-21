@@ -29,24 +29,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        /** @var User $user */
-        $user = $request->user();
-
-        $wallet = $user->wallet;
-
-        /** @var UserData $userData */
-        $userData = $user->getData();
-
-        /** @var WalletData  $walletData */
-        $walletData = $wallet->getData();
-
-        return response()->json([
-            'auth' => new AuthData(
-                $userData,
-                $walletData,
-                $user !== null,
-                $wallet !== null && Signature::walletIsSigned($wallet->id)
-            ),
+        response()->json([
+            'auth' => $this->getAuthData($request)
         ]);
     }
 
@@ -58,11 +42,13 @@ class AuthenticatedSessionController extends Controller
         return response()->json(['message' => $request->getMessage()]);
     }
 
-    public function sign(SignRequest $request): RedirectResponse
+    public function sign(SignRequest $request): JsonResponse
     {
         $request->sign();
 
-        return redirect()->back();
+        response()->json([
+            'auth' => $this->getAuthData($request)
+        ]);
     }
 
     /**
@@ -77,5 +63,26 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('galleries');
+    }
+
+    private function getAuthData(Request $request): AuthData
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $wallet = $user->wallet;
+
+        /** @var UserData $userData */
+        $userData = $user->getData();
+
+        /** @var WalletData  $walletData */
+        $walletData = $wallet->getData();
+
+        return new AuthData(
+            $userData,
+            $walletData,
+            $user !== null,
+            Signature::walletIsSigned($wallet->id)
+        );
     }
 }
