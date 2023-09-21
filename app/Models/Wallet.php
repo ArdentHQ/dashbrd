@@ -86,7 +86,17 @@ class Wallet extends Model
         $activeThreshold = config('dashbrd.wallets.active_threshold');
 
         return $query->whereNotNull('last_activity_at')
-            ->where('last_activity_at', '>', now()->subSeconds($activeThreshold + 1));
+
+        ->where('last_activity_at', '>', now()->subSeconds($activeThreshold + 1));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeHasBeenSigned(Builder $query): Builder
+    {
+        return $query->whereNotNull('last_signed_at');
     }
 
     /**
