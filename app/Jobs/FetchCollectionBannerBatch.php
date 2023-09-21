@@ -42,6 +42,11 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchCollectionBannerBatch Job: Processing', [
+            'collectionAddresses' => $this->collectionAddresses,
+            'network_id' => $this->network->id,
+        ]);
+
         $metadata = Alchemy::getContractMetadataBatch($this->collectionAddresses, $this->network);
 
         $collections = Collection::query()
@@ -57,7 +62,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
                 $collection = $collections->first(fn ($collection) => $address === Str::lower($collection->address));
 
                 if ($collection) {
-                    Log::info('Updating collection banner', [
+                    Log::info('FetchCollectionBannerBatch Job: Updating collection banner', [
                         'collection_address' => $address,
                         'banner' => $data->bannerImageUrl,
                     ]);
