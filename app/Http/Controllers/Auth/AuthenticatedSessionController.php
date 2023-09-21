@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
         /** @var UserData $userData */
         $userData = $user->getData();
 
-        /** @var WalletData  $walletData */
+        /** @var WalletData $walletData */
         $walletData = $wallet->getData();
 
         return response()->json([
