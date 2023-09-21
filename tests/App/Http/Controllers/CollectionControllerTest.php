@@ -1082,3 +1082,20 @@ it('can sort by value', function () {
         ->assertStatus(200)
         ->assertJsonCount(6);
 });
+
+it('should remove selected chains where its network has no collections in its count', function () {
+    $user = createUser();
+    $network1 = Network::factory()->create();
+    $network2 = Network::factory()->create();
+
+    $collection1 = Collection::factory()->create(['user_id' => $user->id, 'network_id' => $network1->id]);
+    $collection2 = Collection::factory()->create(['user_id' => $user->id, 'network_id' => $network2->id]);
+
+    $this->actingAs($user)
+        ->get(route('collections', [
+            'chain' => [$network1->chainId, $network2->chainId],
+        ]))
+        ->assertSee($collection1->name)
+        ->assertSee($collection2->name)
+        ->assertStatus(200);
+});
