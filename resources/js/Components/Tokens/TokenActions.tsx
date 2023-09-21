@@ -23,7 +23,7 @@ export const TokenActions = ({ className, balance, onSend, onReceive, ...propert
             <Tooltip
                 zIndex={50}
                 content={sendingDisabled ? t("pages.token_panel.insufficient_funds") : t("common.send")}
-                disableOnTouch={!sendingDisabled}
+                touch={sendingDisabled}
             >
                 <span
                     tabIndex={-1}
@@ -44,7 +44,6 @@ export const TokenActions = ({ className, balance, onSend, onReceive, ...propert
             <Tooltip
                 zIndex={50}
                 content={t("common.receive")}
-                disableOnTouch
             >
                 <span
                     tabIndex={-1}
