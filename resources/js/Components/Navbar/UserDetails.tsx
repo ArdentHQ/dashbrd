@@ -158,6 +158,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
                                             <li>
                                                 <DropdownNavigationLink
+                                                    data-testid="UserDetails__settings"
                                                     href="#"
                                                     onClick={(event) => {
                                                         event.preventDefault();
