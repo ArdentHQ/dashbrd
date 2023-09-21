@@ -45,12 +45,15 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
         $collection = $this->nft->collection;
 
         Log::info('FetchNftActivity Job: Processing', [
+            'collection_name' => $collection->name,
+            'collection_address' => $collection->address,
             'token_number' => $this->nft->token_number,
         ]);
 
         if ($collection->isInvalid()) {
             Log::info('FetchNftActivity Job: Ignored, Collection Invalid', [
                 'token_number' => $this->nft->token_number,
+                'collection_name' => $collection->name,
                 'collection_address' => $collection->address,
             ]);
 
@@ -75,7 +78,7 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
             from: $latestActivityDate
         );
 
-        $upserted = NftActivity::upsert(
+        $upsertedCount = NftActivity::upsert(
             $nftActivity->map(function (Web3NftTransfer $activity) {
                 return [
                     'nft_id' => $this->nft->id,
@@ -99,10 +102,11 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
         }
 
         Log::info('FetchNftActivity Job: Handled', [
-            'address' => $collection->address,
+            'collection_name' => $collection->name,
+            'collection_address' => $collection->address,
             'network' => $collection->network->id,
             'token_number' => $this->nft->token_number,
-            'upserted_activities' => $upserted,
+            'upserted_activities_count' => $upsertedCount,
             'dispatched_for_more' => $limit === $nftActivity->count(),
         ]);
 
