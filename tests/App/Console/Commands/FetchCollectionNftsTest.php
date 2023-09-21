@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use App\Jobs\FetchCollectionNfts;
 use App\Models\Collection;
+use App\Models\Network;
 use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Config;
 
 it('dispatches a job for all collections', function () {
     Bus::fake();
@@ -89,4 +91,54 @@ it('dispatches multiple jobs in chunks for non-spam collections', function () {
     $this->artisan('collections:fetch-nfts');
 
     Bus::assertDispatchedTimes(FetchCollectionNfts::class, 101);
+});
+
+it('should exclude collections with an invalid supply', function () {
+    Bus::fake();
+
+    Config::set('dashbrd.collections_max_cap', 5000);
+
+    $network = Network::factory()->create();
+
+    $collection1 = Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 3000,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => null,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 5001,
+    ]);
+
+    $this->artisan('collections:fetch-nfts');
+
+    Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->collection->address === $collection1->address);
+});
+
+it('should exclude blacklisted collections', function () {
+    Bus::fake();
+
+    config(['dashbrd.blacklisted_collections' => [
+        '0x123',
+    ]]);
+
+    $network = Network::factory()->create();
+
+    $collection1 = Collection::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'address' => '0x123'
+    ]);
+
+    $this->artisan('collections:fetch-nfts');
+
+    Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->collection->address === $collection1->address);
 });
