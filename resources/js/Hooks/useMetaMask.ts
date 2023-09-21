@@ -63,7 +63,7 @@ const networkConfigs: Record<number, object> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-const hasMetaMask = (): boolean => window.ethereum?.isMetaMask === true;
+const hasMetaMask = (): boolean => window.ethereum?.isMetaMask ?? false
 
 const getEthereum = (): Ethereum => window.ethereum as Ethereum;
 
