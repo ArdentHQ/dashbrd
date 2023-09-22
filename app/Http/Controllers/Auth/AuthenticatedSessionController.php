@@ -14,7 +14,6 @@ use App\Http\Requests\Auth\SignRequest;
 use App\Models\User;
 use App\Support\Facades\Signature;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +29,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         return response()->json([
-            'auth' => $this->getAuthData($request)
+            'auth' => $this->getAuthData($request),
         ]);
     }
 
@@ -47,7 +46,7 @@ class AuthenticatedSessionController extends Controller
         $request->sign();
 
         return response()->json([
-            'auth' => $this->getAuthData($request)
+            'auth' => $this->getAuthData($request),
         ]);
     }
 
@@ -73,7 +72,7 @@ class AuthenticatedSessionController extends Controller
         /** @var UserData $userData */
         $userData = $user->getData();
 
-        /** @var WalletData  $walletData */
+        /** @var WalletData $walletData */
         $walletData = $wallet->getData();
 
         return new AuthData(
