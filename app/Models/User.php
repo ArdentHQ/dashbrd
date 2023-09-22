@@ -174,7 +174,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function scopeManagers(Builder $query): Builder
     {
         return $query->whereHas('roles', function ($query) {
-            $query->whereIn('name', [Role::Admin->value, Role::Superadmin->value]);
+            $query->whereIn('name', [Role::Admin->value, Role::Superadmin->value, Role::Editor->value]);
         });
     }
 }
