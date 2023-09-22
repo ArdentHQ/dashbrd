@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionNfts as Job;
+use App\Jobs\FetchCollectionNfts as FetchCollectionNftsJob;
 use Illuminate\Console\Command;
 
 class FetchCollectionNfts extends Command
@@ -31,7 +31,7 @@ class FetchCollectionNfts extends Command
     public function handle(): int
     {
         $this->forEachCollection(function ($collection) {
-            Job::dispatch(
+            FetchCollectionNftsJob::dispatch(
                 $collection,
                 startToken: $this->option('start-token') ?? $collection->last_indexed_token_number,
                 skipIfPotentiallyFull: true,

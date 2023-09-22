@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionFloorPrice as Job;
+use App\Jobs\FetchCollectionFloorPrice as FetchCollectionFloorPriceJob;
 use Illuminate\Console\Command;
 
 class FetchCollectionFloorPrice extends Command
@@ -31,7 +31,7 @@ class FetchCollectionFloorPrice extends Command
     public function handle(): int
     {
         $this->forEachCollection(function ($collection) {
-            Job::dispatch($collection->network->chain_id, $collection->address);
+            FetchCollectionFloorPriceJob::dispatch($collection->network->chain_id, $collection->address);
         });
 
         return Command::SUCCESS;

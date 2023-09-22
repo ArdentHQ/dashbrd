@@ -7,7 +7,6 @@ namespace App\Jobs;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
-use App\Support\BlacklistedCollections;
 use App\Support\Queues;
 use App\Support\Web3NftHandler;
 use DateTime;
@@ -18,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 {
@@ -36,18 +36,14 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 
     /**
      * Execute the job.
+     * Attention! This job assumes that you already filtered invalid collections.
      */
     public function handle(): void
     {
-        // Ignore explicitly blacklisted collections
-        if (BlacklistedCollections::includes($this->collection->address)) {
-            return;
-        }
-
-        // Ignore collections above the supply cap
-        if ($this->collection->supply === null || $this->collection->supply > config('dashbrd.collections_max_cap')) {
-            return;
-        }
+        Log::info('FetchCollectionNfts Job: Processing', [
+            'collection' => $this->collection->address,
+            'startToken' => $this->startToken,
+        ]);
 
         if ($this->skipIfPotentiallyFull && $this->collection->isPotentiallyFull()) {
             return;
@@ -67,6 +63,13 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
                 '--start-token' => $result->nextToken,
             ]);
         }
+
+        Log::info('FetchCollectionNfts Job: Handled', [
+            'collection' => $this->collection->address,
+            'startToken' => $this->startToken,
+            'nfts_count' => $result->nfts->count(),
+            'nextToken' => $result->nextToken,
+        ]);
     }
 
     public function uniqueId(): string
