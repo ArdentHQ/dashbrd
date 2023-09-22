@@ -52,8 +52,8 @@ it('should sign a user', function () {
     $data = $response->json();
 
     expect($response->status())->toBe(200)
-        ->and($data['auth']['signed'])->toBeTrue()
-        ->and($data['auth']['authenticated'])->toBeTrue();
+        ->and($data['signed'])->toBeTrue()
+        ->and($data['authenticated'])->toBeTrue();
 });
 
 it('should throw a validation exception when nonce is not available in session', function () {
@@ -114,8 +114,8 @@ it('should handle an incoming authentication request for a new user', function (
     $data = $response->json();
 
     expect($response->status())->toBe(200)
-        ->and($data['auth']['signed'])->toBeFalse()
-        ->and($data['auth']['authenticated'])->toBeTrue();
+        ->and($data['signed'])->toBeFalse()
+        ->and($data['authenticated'])->toBeTrue();
 });
 
 it('should handle invalid credentials', function () {
@@ -160,8 +160,8 @@ it('should handle an incoming authentication request for a user with a new walle
     $data = $response->json();
 
     expect($response->status())->toBe(200)
-        ->and($data['auth']['signed'])->toBeFalse()
-        ->and($data['auth']['authenticated'])->toBeTrue();
+        ->and($data['signed'])->toBeFalse()
+        ->and($data['authenticated'])->toBeTrue();
 });
 
 it('should handle an incoming authentication request for an existing user', function () {
@@ -183,8 +183,8 @@ it('should handle an incoming authentication request for an existing user', func
     $data = $response->json();
 
     expect($response->status())->toBe(200)
-        ->and($data['auth']['signed'])->toBeFalse()
-        ->and($data['auth']['authenticated'])->toBeTrue();
+        ->and($data['signed'])->toBeFalse()
+        ->and($data['authenticated'])->toBeTrue();
 });
 
 it('should handle an invalid incoming authentication request', function () {
@@ -270,8 +270,8 @@ it('should switch account', function () {
     $data = $response->json();
 
     expect($response->status())->toBe(200)
-        ->and($data['auth']['signed'])->toBeFalse()
-        ->and($data['auth']['authenticated'])->toBeTrue()
+        ->and($data['signed'])->toBeFalse()
+        ->and($data['authenticated'])->toBeTrue()
         ->and($user->fresh()->wallet_id)->toBe($newWallet->id);
 
 });

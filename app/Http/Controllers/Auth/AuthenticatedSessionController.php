@@ -30,9 +30,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->json([
-            'auth' => $this->getAuthData($request),
-        ]);
+        return response()->json($this->getAuthData($request));
     }
 
     /**
@@ -47,9 +45,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->sign();
 
-        return response()->json([
-            'auth' => $this->getAuthData($request),
-        ]);
+        return response()->json($this->getAuthData($request));
     }
 
     /**
