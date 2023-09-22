@@ -960,7 +960,7 @@ it('can determine whether the collection is potentially full', function () {
 
     // arbitrary value
     $collection = Collection::factory()->create([
-        'last_indexed_token_number' => 100000,
+        'last_indexed_token_number' => '115790067969782405922571518180952299168544685841472255659504762311331546978981',
         'supply' => 10,
     ]);
 

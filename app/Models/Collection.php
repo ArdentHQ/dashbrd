@@ -471,7 +471,7 @@ class Collection extends Model
         // Some collection NFT IDs start from 0 so we gotta take that into account...
         if (
             is_int($lastToken) &&
-            $this->supply === $lastToken - 1 &&
+            $this->supply === $lastToken + 1 &&
             $this->supply === $count
         ) {
             return true;
