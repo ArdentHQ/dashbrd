@@ -468,17 +468,17 @@ describe("Pagination", () => {
         fireEvent.click(button);
         fireEvent.change(input, {
             target: {
-                value: "",
+                value: null,
             },
         });
-        expect(button.textContent).toBe("Page 2 of 3");
+        expect(button.textContent).toBe("Page 1 of 3");
 
         fireEvent.click(button);
         fireEvent.change(input, {
             target: {
-                value: null,
+                value: "",
             },
         });
-        expect(button.textContent).toBe("Page 2 of 3");
+        expect(button.textContent).toBe("Page 1 of 3");
     });
 });
