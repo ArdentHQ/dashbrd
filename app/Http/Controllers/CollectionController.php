@@ -121,12 +121,17 @@ class CollectionController extends Controller
                 'hiddenCollectionAddresses' => $hiddenCollections,
                 'availableNetworks' => $networks,
                 'selectedChainIds' => $selectedChainIds,
+                'stats' => new CollectionStatsData(
+                    nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
+                    collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
+                    value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
+                ),
             ]);
         }
 
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
-            'stats' => new CollectionStatsData(
+            'initialStats' => new CollectionStatsData(
                 nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
                 collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
                 value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
