@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('wallets', function (Blueprint $table) {
-            $table->timestamp('last_signed_at')->after('last_activity_at')->nullable();
+            $table->timestamp('last_signed_at')->nullable();
 
             $table->index('last_signed_at');
         });
