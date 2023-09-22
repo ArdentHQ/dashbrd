@@ -16,7 +16,7 @@ class FetchCollectionNfts extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-nfts {--collection-id=} {--start-token=} {--only-signed}';
+    protected $signature = 'collections:fetch-nfts {--collection-id=} {--start-token=} {--only-signed} {--limit=}';
 
     /**
      * The console command description.
@@ -30,20 +30,26 @@ class FetchCollectionNfts extends Command
      */
     public function handle(): int
     {
-
         $onlySigned = (bool) $this->option('only-signed');
+
+        $limit = $this->option('limit');
 
         $this->forEachCollection(
             callback: function ($collection) {
+
                 FetchCollectionNftsJob::dispatch(
                     $collection,
                     $this->option('start-token') ?? $collection->last_indexed_token_number
                 );
             },
-            queryCallback: fn ($query) => $query->when(
-                $onlySigned,
-                fn ($query) => $query->withSignedWallet()
-            )
+            queryCallback: fn ($query) => $query
+                ->when($limit !== null, fn ($query) => $query->take((int) $limit))
+                ->orderByOldestNftLastFetchedAt()
+                ->when(
+                    $onlySigned,
+                    fn ($query) => $query->withSignedWallet()
+                ),
+            limit: $limit === null ? null : (int) $limit
         );
 
         return Command::SUCCESS;
