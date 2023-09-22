@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Auth\Web3UserProvider;
 use App\Support\Currency;
+use App\Support\Facades\Signature;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,7 @@ class AuthServiceProvider extends ServiceProvider
             $wallet = $this->ensureTestingWalletExists();
 
             Auth::login($wallet->user);
+            Signature::setWalletIsSigned($wallet->id);
         }
     }
 

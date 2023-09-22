@@ -10,13 +10,6 @@ use Illuminate\Support\Facades\Cache;
 
 final class Timezone
 {
-    public static function find(?string $timezone, string $default = 'UTC'): string
-    {
-        return in_array($timezone, self::all())
-                    ? $timezone
-                    : $default;
-    }
-
     /**
      * @return string[]
      */

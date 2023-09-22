@@ -256,25 +256,7 @@ it('should destroy the session', function () {
         ->assertRedirect(route('galleries'));
 });
 
-it("stores user's timezone if specified", function () {
-    $network = Network::polygon();
-
-    $this->post(route('login'), [
-        'address' => '0x1231231231231231231231231231231231231231',
-        'chainId' => $network->chain_id,
-        'tz' => 'Europe/Zagreb',
-        'locale' => 'en-GB',
-    ])->assertRedirect(route('galleries'));
-
-    $user = User::first();
-
-    expect($user->extra_attributes->currency)->toBe('GBP');
-    expect($user->extra_attributes->date_format)->toBe(DateFormat::D->value);
-    expect($user->extra_attributes->time_format)->toBe('24');
-    expect($user->extra_attributes->timezone)->toBe('Europe/Zagreb');
-});
-
-it("defaults user's timezone to UTC if not specified", function () {
+it("defaults user's timezone to UTC and currency to USD", function () {
     $network = Network::polygon();
 
     $this->post(route('login'), [
@@ -288,39 +270,4 @@ it("defaults user's timezone to UTC if not specified", function () {
     expect($user->extra_attributes->date_format)->toBe(DateFormat::D->value);
     expect($user->extra_attributes->time_format)->toBe('24');
     expect($user->extra_attributes->timezone)->toBe('UTC');
-});
-
-it("defaults user's timezone to UTC if timezone is not valid", function () {
-    $network = Network::polygon();
-
-    $this->post(route('login'), [
-        'address' => '0x1231231231231231231231231231231231231231',
-        'chainId' => $network->chain_id,
-        'tz' => 'Something/Random',
-    ])->assertRedirect(route('galleries'));
-
-    $user = User::first();
-
-    expect($user->extra_attributes->currency)->toBe('USD');
-    expect($user->extra_attributes->date_format)->toBe(DateFormat::D->value);
-    expect($user->extra_attributes->time_format)->toBe('24');
-    expect($user->extra_attributes->timezone)->toBe('UTC');
-});
-
-it('defaults currency to USD if locale is not valid', function () {
-    $network = Network::polygon();
-
-    $this->post(route('login'), [
-        'address' => '0x1231231231231231231231231231231231231231',
-        'chainId' => $network->chain_id,
-        'tz' => 'Europe/Zagreb',
-        'locale' => 'invalid',
-    ])->assertRedirect(route('galleries'));
-
-    $user = User::first();
-
-    expect($user->extra_attributes->currency)->toBe('USD');
-    expect($user->extra_attributes->date_format)->toBe(DateFormat::D->value);
-    expect($user->extra_attributes->time_format)->toBe('24');
-    expect($user->extra_attributes->timezone)->toBe('Europe/Zagreb');
 });
