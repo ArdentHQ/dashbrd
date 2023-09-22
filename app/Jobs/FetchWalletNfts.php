@@ -20,6 +20,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
 {
@@ -43,6 +44,13 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchWalletNfts Job: Processing', [
+            'wallet' => $this->wallet->address,
+            'network' => $this->network->id,
+            'cursor' => $this->cursor,
+            'start_timestamp' => $this->startTimestamp?->toDateTimeString(),
+        ]);
+
         $result = $this->getWeb3DataProvider()->getWalletNfts($this->wallet, $this->network, $this->cursor);
 
         $nftHandler = new Web3NftHandler(wallet: $this->wallet, network: $this->network);
@@ -58,6 +66,13 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
         );
 
         if ($result->nextToken === null) {
+            Log::info('FetchWalletNfts Job: run cleanupNftsAndGalleries', [
+                'wallet' => $this->wallet->address,
+                'network' => $this->network->id,
+                'cursor' => $this->cursor,
+                'start_timestamp' => $this->startTimestamp?->toDateTimeString(),
+            ]);
+
             $nftHandler->cleanupNftsAndGalleries($this->startTimestamp);
         }
 
@@ -65,6 +80,15 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
         GalleryCache::clearAllDirty();
 
         UserCache::clearAll($this->wallet->user);
+
+        Log::info('FetchWalletNfts Job: handled with Web3NftHandler', [
+            'nfts_count' => $result->nfts->count(),
+            'wallet' => $this->wallet->address,
+            'network' => $this->network->id,
+            'next_token' => $result->nextToken,
+            'cursor' => $this->cursor,
+            'start_timestamp' => $this->startTimestamp?->toDateTimeString(),
+        ]);
     }
 
     public function uniqueId(): string

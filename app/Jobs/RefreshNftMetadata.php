@@ -19,6 +19,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 {
@@ -39,13 +40,33 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
      */
     public function handle(AlchemyWeb3DataProvider $provider): void
     {
+
         if (SpamContract::isSpam($this->collection->address, $this->collection->network)) {
+            Log::info('RefreshNftMetadata Job: Ignored for spam contract', [
+                'address' => $this->collection->address,
+                'network' => $this->collection->network->id,
+                'token_number' => $this->nft->token_number,
+            ]);
+
             return;
         }
+
+        Log::info('RefreshNftMetadata Job: Processing', [
+            'address' => $this->collection->address,
+            'network' => $this->collection->network->id,
+            'token_number' => $this->nft->token_number,
+        ]);
 
         $result = $provider->getCollectionsNfts($this->collection, $this->nft->token_number, 1);
 
         (new Web3NftHandler(collection: $this->collection))->store($result->nfts);
+
+        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
+            'nfts_count' => $result->nfts->count(),
+            'address' => $this->collection->address,
+            'network' => $this->collection->network->id,
+            'token_number' => $this->nft->token_number,
+        ]);
     }
 
     public function uniqueId(): string
