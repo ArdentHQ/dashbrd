@@ -25,7 +25,7 @@ export const LayoutWrapper = ({
     toastMessage,
     isMaintenanceModeActive,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay, signed } = useAuth();
+    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth();
 
     const { connectWallet, initialized, connecting } = useMetaMaskContext();
 

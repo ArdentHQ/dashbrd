@@ -138,10 +138,6 @@ interface Properties {
     initialAuth: App.Data.AuthData;
 }
 
-interface AxiosErrorBody {
-    message: string;
-}
-
 /**
  * Note consider that the `initialAuth` property is not reactive, it contains
  * the initial auth state when page is loaded.
@@ -171,6 +167,24 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
     const { setAuthData } = useActiveUser();
+
+    const onError = useCallback((error: ErrorType, errorMessage?: string) => {
+        setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());
+
+        setConnecting(false);
+    }, []);
+
+    const handleAxiosError = (error: unknown): void => {
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 422) {
+                onError(ErrorType.Generic, (error.response.data as { message: string }).message);
+            } else {
+                onError(ErrorType.Generic);
+            }
+        } else {
+            onError(ErrorType.Generic);
+        }
+    };
 
     const switchUserWallet = async ({
         account: address,
@@ -370,24 +384,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         },
         [ethereumProvider],
     );
-
-    const onError = useCallback((error: ErrorType, errorMessage?: string) => {
-        setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());
-
-        setConnecting(false);
-    }, []);
-
-    const handleAxiosError = (error: unknown): void => {
-        if (axios.isAxiosError(error)) {
-            if (error.response?.status === 422) {
-                onError(ErrorType.Generic, (error.response.data as AxiosErrorBody).message);
-            } else {
-                onError(ErrorType.Generic);
-            }
-        } else {
-            onError(ErrorType.Generic);
-        }
-    };
 
     const showConnectOverlay = (onConnected?: () => void): void => {
         setShowConnectOverlay(true);
