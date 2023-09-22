@@ -162,6 +162,7 @@ export const ListboxOptions = ({
                 "absolute z-10 mt-1 max-h-60 w-full max-w-full overflow-auto bg-white px-0 py-3.5 text-base shadow-dropdown focus:outline-none ",
                 className,
             )}
+            data-testid="ListboxOptions"
         >
             {children}
         </HeadlessListbox.Options>

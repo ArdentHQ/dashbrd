@@ -77,7 +77,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
         <nav
             aria-label="Pagination"
             data-testid="Pagination"
-            className="!m-0 w-full sm:w-fit"
+            className="w-full sm:w-fit"
             {...properties}
         >
             <div className="mt-3 xs:hidden">

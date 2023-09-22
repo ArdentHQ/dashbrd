@@ -63,4 +63,33 @@ describe("Pagination__SelectPageLimit", () => {
         expect(screen.getByText("20")).toBeInTheDocument();
         expect(screen.getByText("Items")).toBeInTheDocument();
     });
+
+    it("should render with custom className", () => {
+        render(
+            <SelectPageLimit
+                value={20}
+                options={[10, 20]}
+                suffix={t("common.items")}
+                className="custom-class"
+            />,
+        );
+
+        expect(screen.getByTestId("Listbox")).toHaveClass("custom-class");
+    });
+
+    it("should render with custom option className", async () => {
+        render(
+            <SelectPageLimit
+                value={20}
+                options={[10, 20]}
+                suffix={t("common.items")}
+                optionClassName="custom-option-class"
+            />,
+        );
+
+        await userEvent.click(screen.getByText("20"));
+
+        expect(screen.getByTestId("ListboxOptions")).toBeInTheDocument();
+        expect(screen.getByTestId("ListboxOptions")).toHaveClass("custom-option-class");
+    });
 });

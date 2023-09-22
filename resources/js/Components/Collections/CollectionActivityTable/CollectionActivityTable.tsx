@@ -158,6 +158,8 @@ export const CollectionActivityTable = ({
                                     onPageLimitChange(Number(value));
                                 }}
                                 suffix={t("common.records")}
+                                className="xs:w-60"
+                                optionClassName="w-40"
                             />
                             {activities.paginated.meta.last_page > 1 && <Pagination data={activities.paginated} />}
                         </div>
@@ -169,22 +171,27 @@ export const CollectionActivityTable = ({
                         : (children: React.ReactNode) => (
                               <div
                                   data-testid="CollectionActivityTable__Mobile"
-                                  className="flex flex-col space-y-3"
+                                  className="flex flex-col"
                               >
                                   {children}
 
                                   {activities.paginated.meta.total > 10 && (
-                                      <div className="flex flex-col items-center justify-center space-y-3">
+                                      <div className="mt-3 flex flex-col items-center justify-center">
                                           <SelectPageLimit
                                               value={pageLimit}
                                               onChange={({ value }) => {
                                                   onPageLimitChange(Number(value));
                                               }}
                                               suffix={t("common.records")}
+                                              className="xs:w-60"
+                                              optionClassName="w-40"
                                           />
 
                                           {activities.paginated.meta.last_page > 1 && (
-                                              <Pagination data={activities.paginated} />
+                                              <Pagination
+                                                  data={activities.paginated}
+                                                  className="flex w-full justify-center sm:w-fit"
+                                              />
                                           )}
                                       </div>
                                   )}

@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import { Listbox } from "@/Components/Form/Listbox";
 
@@ -9,18 +10,22 @@ export const SelectPageLimit = ({
     onChange,
     options = defaultOptions,
     suffix,
+    className,
+    optionClassName,
 }: {
     value?: string | number;
     options?: Array<string | number>;
     onChange?: ({ value, url }: { value: string | number; url: string }) => void;
     suffix: string;
+    className?: string;
+    optionClassName?: string;
 }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <Listbox
-            className="w-full xs:w-48 sm:flex sm:justify-between"
-            optionsClassName="right-0 w-32 bottom-16 rounded-xl"
+            className={cn("w-full xs:w-48 sm:flex sm:justify-between", className)}
+            optionsClassName={cn("right-0 w-32 bottom-16 rounded-xl", optionClassName)}
             onChange={(value) => {
                 const urlParameters = new URLSearchParams(window.location.href);
                 urlParameters.set(urlParameterKey, String(value));
