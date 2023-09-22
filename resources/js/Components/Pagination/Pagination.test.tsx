@@ -470,6 +470,27 @@ describe("Pagination", () => {
         expect(button.textContent).toBe("Page 1 of 3");
     });
 
+    it("should set page as currentPage if page is set as null on edit", async () => {
+        render(<Pagination data={paginationData} />);
+
+        const button = screen.getByTestId("Pagination__MobileButton");
+        fireEvent.click(button);
+
+        await waitFor(() => {
+            expect(screen.getByTestId("Pagination__PageInput__input")).toBeInTheDocument();
+        });
+
+        const input = screen.getByTestId("Pagination__PageInput__input");
+
+        fireEvent.change(input, {
+            target: {
+                value: null,
+            },
+        });
+
+        expect(button.textContent).toBe("Page 1 of 3");
+    });
+
     it("should set page as number in input if page is provided on edit", async () => {
         render(<Pagination data={paginationData} />);
 
