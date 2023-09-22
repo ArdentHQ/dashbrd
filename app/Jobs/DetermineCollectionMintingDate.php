@@ -27,10 +27,9 @@ class DetermineCollectionMintingDate implements ShouldQueue
     public function handle(): void
     {
         Log::info('DetermineCollectionMintingDate Job: Processing', [
-            'network' => $this->nft->networkId,
-            'minted_block' => $this->nft->mintedBlock,
-            'token_number' => $this->nft->tokenNumber,
-            'token_address' => $this->nft->tokenAddress,
+            'network' => $this->collection->network->id,
+            'minted_block' => $this->collection->minted_block,
+            'token_address' => $this->collection->address,
         ]);
 
         $existing = Collection::query()
@@ -46,10 +45,9 @@ class DetermineCollectionMintingDate implements ShouldQueue
             ]);
 
             Log::info('DetermineCollectionMintingDate Job: Setting date from existing', [
-                'network' => $this->nft->networkId,
-                'minted_block' => $this->nft->mintedBlock,
-                'token_number' => $this->nft->tokenNumber,
-                'token_address' => $this->nft->tokenAddress,
+                'network' => $this->collection->network->id,
+                'minted_block' => $this->collection->minted_block,
+                'token_address' => $this->collection->address,
             ]);
 
             return;
