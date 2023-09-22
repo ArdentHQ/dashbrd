@@ -28,8 +28,8 @@ class ArticleSeeder extends Seeder
             $imageUrl = fake()->imageUrl(640, 480, null, false);
             $article->addMediaFromUrl($imageUrl)->toMediaCollection();
 
-            $collections = Collection::factory(2)->createMany([
-                'network' => $network->id,
+            $collections = Collection::factory()->count(2)->create([
+                'network_id' => $network->id,
             ]);
 
             $article->collections()->attach($collections, ['order_index' => 1]);

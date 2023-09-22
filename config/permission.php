@@ -10,17 +10,23 @@ return [
         'user:view' => 'View User',
         'user:assignRole' => 'Assign User Role',
         'user:assignPermissions' => 'Assign User Permissions',
+        'article:create' => 'Create Article',
+        'article:viewAny' => 'View Article',
+        'article:updateAny' => 'Update any Article',
+        'article:deleteAny' => 'Delete any Article',
         'admin:access' => 'Allow access to Admin panel',
     ],
 
     'roles' => [
         Role::Superadmin->value => [
             'user:viewAny', 'user:view', 'user:restore', 'user:assignRole', 'user:assignPermissions',
+            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny',
             'admin:access',
         ],
 
         Role::Admin->value => [
             'user:viewAny', 'user:view', 'user:assignRole',
+            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny',
             'admin:access',
         ],
     ],
