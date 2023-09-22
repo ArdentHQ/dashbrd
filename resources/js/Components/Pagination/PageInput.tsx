@@ -2,26 +2,21 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
 import { Icon } from "@/Components/Icon";
 import { type PageInputProperties } from "@/Components/Pagination/Pagination.contracts";
+import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const PageInput = ({
-    onSubmit,
-    onChange,
-    onClose,
-    totalPages,
-    currentPage,
-}: PageInputProperties): JSX.Element => {
+export const PageInput = ({ onSubmit, onChange, onClose, totalPages }: PageInputProperties): JSX.Element => {
     const { t } = useTranslation();
+    const { isSmAndAbove } = useBreakpoint();
 
     return (
-        <div className="mt-3 flex items-center space-x-1 px-3">
+        <div className="mt-3  grid grid-cols-[1fr_2.5rem] gap-1 sm:mt-0">
             <form
                 onSubmit={onSubmit}
-                className="relative flex w-full"
+                className="relative flex items-center justify-center xs:w-max"
                 data-testid="Pagination__PageInput__form"
             >
                 <input
                     type="number"
-                    value={currentPage}
                     min={1}
                     max={totalPages}
                     step={1}
@@ -30,8 +25,12 @@ export const PageInput = ({
                     onChange={(event) => {
                         onChange(event.target.value);
                     }}
-                    className="transition-default hidden-arrows w-full appearance-none rounded-full border border-theme-secondary-300 py-2 pl-4 pr-10 outline-4 outline-offset-0 placeholder:text-theme-secondary-500 focus:border-theme-primary-600 focus:outline-offset-0 focus:outline-theme-primary-300 focus:ring-0"
-                    placeholder={t("common.pagination_input_placeholder")}
+                    className="transition-default hidden-arrows h-10 w-full appearance-none rounded-full border border-theme-secondary-300 py-2 pl-4 pr-10 outline-4 outline-offset-0 placeholder:text-theme-secondary-500 focus:border-theme-primary-600 focus:outline-offset-0 focus:outline-theme-primary-300 focus:ring-0"
+                    placeholder={
+                        isSmAndAbove
+                            ? t("common.pagination_input_placeholder")
+                            : t("common.pagination_input_placeholder_mobile")
+                    }
                     data-testid="Pagination__PageInput__input"
                 />
 
@@ -51,6 +50,7 @@ export const PageInput = ({
                 icon="X"
                 onClick={onClose}
                 data-testid="Pagination__PageInput__closeButton"
+                className="flex h-10 w-10 items-center justify-center rounded-full"
             />
         </div>
     );

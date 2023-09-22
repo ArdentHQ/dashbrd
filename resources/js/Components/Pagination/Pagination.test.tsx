@@ -328,8 +328,8 @@ describe("Pagination", () => {
 
         render(<Pagination data={data} />);
 
-        expect(screen.getAllByTestId("Pagination__NextPageLink__link")).toHaveLength(2);
-        expect(screen.queryAllByTestId("Pagination__NextPageLink__link")[0]).toHaveAttribute("disabled");
+        expect(screen.getByTestId("Pagination__NextPageLink__link")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__NextPageLink__link")).toHaveAttribute("disabled");
     });
 
     it("shows 'before' ellipsis if there are more than 3 pages and user is browsing page larger than 3", () => {

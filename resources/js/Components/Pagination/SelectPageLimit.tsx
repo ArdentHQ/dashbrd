@@ -20,7 +20,7 @@ export const SelectPageLimit = ({
     return (
         <Listbox
             className="w-full xs:w-[12rem] sm:flex sm:justify-between"
-            optionsClassName="right-0 w-full xs:w-16 bottom-16 rounded-xl"
+            optionsClassName="right-0 w-32 bottom-16 rounded-xl"
             onChange={(value) => {
                 const urlParameters = new URLSearchParams(window.location.href);
                 urlParameters.set(urlParameterKey, String(value));

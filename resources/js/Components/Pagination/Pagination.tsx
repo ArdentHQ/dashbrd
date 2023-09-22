@@ -80,9 +80,16 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
             className="!m-0 w-full sm:w-fit"
             {...properties}
         >
+            <div className="mt-3 xs:hidden">
+                <MobileButton
+                    page={pageAsNumber}
+                    totalPages={totalPages}
+                    onClick={handleClick}
+                />
+            </div>
+
             {showInput ? (
                 <PageInput
-                    currentPage={page}
                     totalPages={totalPages}
                     onSubmit={goToPage}
                     onChange={setPage}
@@ -93,13 +100,14 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                 />
             ) : (
                 <>
-                    <div className="mt-3 hidden items-center space-x-3 xs:flex sm:mt-0 sm:w-fit">
+                    <div className="mt-3 hidden items-center space-x-3 xs:flex xs:space-x-1 sm:mt-0 sm:w-fit sm:space-x-2 md:space-x-3">
                         {data.meta.current_page > 1 && (
                             <ButtonLink
                                 href={data.meta.first_page_url}
                                 variant="icon"
                                 icon="DoubleChevronLeftSmall"
                                 data-testid="Pagination__firstPageLink"
+                                iconSize="xs"
                             />
                         )}
 
@@ -142,7 +150,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                             )}
                         </div>
 
-                        <NextPageLink href={data.meta.next_page_url ?? null} />
+                        {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
 
                         {data.meta.current_page !== data.meta.last_page && (
                             <ButtonLink
@@ -150,18 +158,13 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                 variant="icon"
                                 icon="DoubleChevronRightSmall"
                                 data-testid="Pagination__lastPageLink"
+                                iconSize="xs"
                             />
                         )}
                     </div>
 
-                    <div className="mt-3 px-3 xs:hidden">
+                    <div className="mt-3 xs:hidden">
                         <div className="flex w-full flex-col items-center gap-3">
-                            <MobileButton
-                                page={pageAsNumber}
-                                totalPages={totalPages}
-                                onClick={handleClick}
-                            />
-
                             <div className="flex w-full flex-row items-center justify-between">
                                 <ButtonLink
                                     href={data.meta.first_page_url}
@@ -169,6 +172,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                     icon="DoubleChevronLeftSmall"
                                     data-testid="Pagination__firstPageLink_mobile"
                                     disabled={data.meta.current_page === 1}
+                                    iconSize="xs"
                                 />
 
                                 <PreviousPageLink href={data.meta.prev_page_url} />
@@ -187,6 +191,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                     icon="DoubleChevronRightSmall"
                                     data-testid="Pagination__lastPageLink_mobile"
                                     disabled={data.meta.current_page === data.meta.last_page}
+                                    iconSize="xs"
                                 />
                             </div>
                         </div>

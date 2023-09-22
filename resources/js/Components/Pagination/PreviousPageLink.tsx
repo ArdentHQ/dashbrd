@@ -7,5 +7,6 @@ export const PreviousPageLink = ({ href }: { href: string | null }): JSX.Element
         variant="icon"
         icon="ChevronLeftSmall"
         data-testid="Pagination__PreviousPageLink__link"
+        iconSize="xs"
     />
 );
