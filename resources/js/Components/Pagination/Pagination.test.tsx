@@ -448,4 +448,32 @@ describe("Pagination", () => {
 
         expect(screen.queryByTestId("Pagination")).not.toBeInTheDocument();
     });
+
+    it("should render page 5 if pages.length is 5", () => {
+        const data = {
+            data: [{ id: "0", name: "John Doe", email: "" }],
+            links: [
+                { url: null, label: "&laquo; Previous", active: false },
+                { url: "http://dashbrd.test?page=1", label: "1", active: true },
+            ],
+            meta: {
+                current_page: 5,
+                first_page_url: "http://dashbrd.test?page=1",
+                from: 1,
+                last_page: 5,
+                last_page_url: "http://dashbrd.test?page=1",
+                next_page_url: "http://dashbrd.test?page=1",
+                path: "http://dashbrd.test",
+                per_page: 5,
+                prev_page_url: null,
+                to: 5,
+                total: 15,
+            },
+        };
+
+        render(<Pagination data={data} />);
+
+        expect(screen.getByTestId("Pagination__MobileButton")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__MobileButton")).toHaveTextContent("Page 5 of 5");
+    });
 });
