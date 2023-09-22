@@ -276,7 +276,7 @@ it('should switch account', function () {
 
 });
 
-it('should destroy the session', function () {
+it('should destroy the session and redirect', function () {
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create();
 
@@ -286,6 +286,21 @@ it('should destroy the session', function () {
     $this->actingAs($user)
         ->post(route('logout'))
         ->assertRedirect(route('galleries'));
+});
+
+it('should destroy the session and return response', function () {
+    $user = User::factory()->create();
+    $wallet = Wallet::factory()->create();
+
+    $user->wallet()->associate($wallet);
+    $user->save();
+
+    $response = $this->actingAs($user)
+        ->postJson(route('logout'), [], ['Referer' => '/collections']);
+
+    expect($response->status())->toBe(200)
+        ->and($response->json('redirectTo'))->toBe('galleries');
+
 });
 
 it("defaults user's timezone to UTC and currency to USD", function () {

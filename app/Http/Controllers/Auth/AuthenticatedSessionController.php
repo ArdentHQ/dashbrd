@@ -69,7 +69,7 @@ class AuthenticatedSessionController extends Controller
 
         if ($request->wantsJson()) {
             return response()->json([
-                'action' => $requiresRedirect ? 'galleries' : null,
+                'redirectTo' => $requiresRedirect ? 'galleries' : null,
             ]);
         }
 
