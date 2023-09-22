@@ -48,7 +48,11 @@ export const useCollections = ({
     showHidden,
     sortBy,
     view,
-    initialStats,
+    initialStats = {
+        nfts: 0,
+        collections: 0,
+        value: null,
+    },
 }: {
     view: CollectionDisplayType;
     initialStats: App.Data.Collections.CollectionStatsData;
