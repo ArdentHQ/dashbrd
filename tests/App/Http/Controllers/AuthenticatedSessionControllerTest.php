@@ -38,13 +38,22 @@ it('should sign a user', function () {
         ->andReturnUndefined()
         ->shouldReceive('forgetSessionNonce')
         ->once()
-        ->andReturnUndefined();
+        ->andReturnUndefined()
+        ->shouldReceive('walletIsSigned')
+        ->once()
+        ->andReturn(true);
 
-    $this->actingAs($user)->post(route('sign'), [
+    $response = $this->actingAs($user)->post(route('sign'), [
         'address' => '0x1231231231231231231231231231231231231231',
         'signature' => '0x0000000000000000000000000000000000001010000000000000000000000000000000000000101000000000000000000000000000000000000010101010101010',
         'chainId' => $network->chain_id,
-    ])->assertRedirect(route('galleries'));
+    ]);
+
+    $data = $response->json();
+
+    expect($response->status())->toBe(200)
+        ->and($data['auth']['signed'])->toBeTrue()
+        ->and($data['auth']['authenticated'])->toBeTrue();
 });
 
 it('should throw a validation exception when nonce is not available in session', function () {
@@ -97,13 +106,19 @@ it('should handle an incoming authentication request for a new user', function (
 
     $network = Network::polygon()->first();
 
-    $this->post(route('login'), [
+    $response = $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
         'chainId' => $network->chain_id,
-    ])->assertRedirect(route('galleries'));
+    ]);
+
+    $data = $response->json();
+
+    expect($response->status())->toBe(200)
+        ->and($data['auth']['signed'])->toBeFalse()
+        ->and($data['auth']['authenticated'])->toBeTrue();
 });
 
-it('should handle invalid credentails', function () {
+it('should handle invalid credentials', function () {
     Auth::shouldReceive('attempt')
         ->andReturn(false)
         ->once()
@@ -136,11 +151,17 @@ it('should handle an incoming authentication request for a user with a new walle
     $user->wallet()->associate($wallet);
     $user->save();
 
-    $this->actingAs($user)
+    $response = $this->actingAs($user)
         ->post(route('login'), [
             'address' => '0x0000000000000000000000000000000000001010',
             'chainId' => $network->chain_id,
-        ])->assertRedirect(route('galleries'));
+        ]);
+
+    $data = $response->json();
+
+    expect($response->status())->toBe(200)
+        ->and($data['auth']['signed'])->toBeFalse()
+        ->and($data['auth']['authenticated'])->toBeTrue();
 });
 
 it('should handle an incoming authentication request for an existing user', function () {
@@ -153,11 +174,17 @@ it('should handle an incoming authentication request for an existing user', func
     $user->wallet()->associate($wallet);
     $user->save();
 
-    $this->actingAs($user)
+    $response = $this->actingAs($user)
         ->post(route('login'), [
             'address' => $wallet->address,
             'chainId' => $network->chain_id,
-        ])->assertRedirect(route('galleries'));
+        ]);
+
+    $data = $response->json();
+
+    expect($response->status())->toBe(200)
+        ->and($data['auth']['signed'])->toBeFalse()
+        ->and($data['auth']['authenticated'])->toBeTrue();
 });
 
 it('should handle an invalid incoming authentication request', function () {
@@ -234,14 +261,19 @@ it('should switch account', function () {
         'total_usd' => 1,
     ]);
 
-    $this->actingAs($user)
+    $response = $this->actingAs($user)
         ->post(route('login'), [
             'address' => $newWallet->address,
             'chainId' => $network->chain_id,
-        ])
-        ->assertRedirect(route('galleries'));
+        ]);
 
-    expect($user->fresh()->wallet_id)->toBe($newWallet->id);
+    $data = $response->json();
+
+    expect($response->status())->toBe(200)
+        ->and($data['auth']['signed'])->toBeFalse()
+        ->and($data['auth']['authenticated'])->toBeTrue()
+        ->and($user->fresh()->wallet_id)->toBe($newWallet->id);
+
 });
 
 it('should destroy the session', function () {
@@ -262,7 +294,7 @@ it("defaults user's timezone to UTC and currency to USD", function () {
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
         'chainId' => $network->chain_id,
-    ])->assertRedirect(route('galleries'));
+    ])->assertStatus(200);
 
     $user = User::first();
 
