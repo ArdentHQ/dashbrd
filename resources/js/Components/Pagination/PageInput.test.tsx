@@ -14,7 +14,6 @@ describe("Pagination__PageInput", () => {
                 onChange={function2}
                 onClose={function3}
                 totalPages={10}
-                currentPage="1"
             />,
         );
 
