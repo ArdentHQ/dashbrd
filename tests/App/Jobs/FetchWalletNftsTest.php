@@ -90,6 +90,12 @@ it('should fetch nfts for wallet and skip floor price job if already present', f
     $wallet = Wallet::factory()->create();
     Token::factory()->create(['network_id' => $network->id, 'symbol' => 'eth']);
 
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
+        'floor_price' => 10,
+    ]);
+
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
 
     (new FetchWalletNfts($wallet, $network))->handle();
