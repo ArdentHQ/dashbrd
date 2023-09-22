@@ -460,7 +460,7 @@ class Collection extends Model
 
         return $this->supply === $this->nfts()->count();
     }
-  
+
     public function isInvalid(bool $withSpamCheck = true): bool
     {
         // Ignore collections above the supply cap
