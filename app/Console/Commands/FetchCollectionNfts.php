@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionNfts as FetchCollectionNftsJob;
+use App\Models\Collection;
 use Illuminate\Console\Command;
 
 class FetchCollectionNfts extends Command
@@ -31,26 +32,27 @@ class FetchCollectionNfts extends Command
     public function handle(): int
     {
         $onlySigned = (bool) $this->option('only-signed');
-
         $limit = $this->option('limit');
 
-        $this->forEachCollection(
-            callback: function ($collection) {
-
+        if ($onlySigned) {
+            Collection::getWithSignedWallet()->each(function (Collection $collection) {
                 FetchCollectionNftsJob::dispatch(
                     $collection,
                     $this->option('start-token') ?? $collection->last_indexed_token_number
                 );
-            },
-            queryCallback: fn ($query) => $query
-                ->when($limit !== null, fn ($query) => $query->take((int) $limit))
-                ->orderByOldestNftLastFetchedAt()
-                ->when(
-                    $onlySigned,
-                    fn ($query) => $query->withSignedWallet()
-                ),
-            limit: $limit === null ? null : (int) $limit
-        );
+            });
+        } else {
+            $this->forEachCollection(
+                callback: function ($collection) {
+                    FetchCollectionNftsJob::dispatch(
+                        $collection,
+                        $this->option('start-token') ?? $collection->last_indexed_token_number
+                    );
+                },
+                queryCallback: fn ($query) => $query->orderByOldestNftLastFetchedAt(),
+                limit: $limit === null ? null : (int) $limit
+            );
+        }
 
         return Command::SUCCESS;
     }

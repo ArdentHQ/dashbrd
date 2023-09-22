@@ -1006,17 +1006,13 @@ it('should exclude collections with an invalid supply', function () {
 
 it('filters collections that belongs to wallets that have been signed at least one time', function () {
     $signed = Wallet::factory()->create([
-        'extra_attributes' => [
-            'last_signed_at' => now(),
-        ],
+        'last_signed_at' => now(),
     ]);
 
     $notSigned = Wallet::factory()->create();
 
     $signed2 = Wallet::factory()->create([
-        'extra_attributes' => [
-            'last_signed_at' => now(),
-        ],
+        'last_signed_at' => now(),
     ]);
 
     // Has a signed wallet and a not signed wallet
@@ -1047,7 +1043,7 @@ it('filters collections that belongs to wallets that have been signed at least o
         'collection_id' => $collection4->id,
     ]);
 
-    $filtered = Collection::withSignedWallet()->get();
+    $filtered = Collection::getWithSignedWallet();
 
     expect($filtered->count())->toBe(2);
 

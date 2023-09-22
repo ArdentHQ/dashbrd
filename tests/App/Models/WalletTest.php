@@ -282,9 +282,7 @@ it('gets the native_balances_fetched_at if not set', function () {
 
 it('filters wallets that have been signed at least one time', function () {
     $signed = Wallet::factory()->create([
-        'extra_attributes' => [
-            'last_signed_at' => now(),
-        ],
+        'last_signed_at' => now(),
     ]);
 
     Wallet::factory()->create();
