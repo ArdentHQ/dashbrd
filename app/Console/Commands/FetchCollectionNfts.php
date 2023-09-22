@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionNfts as FetchCollectionNftsJob;
+use App\Models\Collection;
 use Illuminate\Console\Command;
 
 class FetchCollectionNfts extends Command
@@ -33,18 +34,21 @@ class FetchCollectionNfts extends Command
 
         $onlySigned = (bool) $this->option('only-signed');
 
-        $this->forEachCollection(
-            callback: function ($collection) {
+        if ($onlySigned) {
+            Collection::getWithSignedWallet()->each(function (Collection $collection) {
                 FetchCollectionNftsJob::dispatch(
                     $collection,
                     $this->option('start-token') ?? $collection->last_indexed_token_number
                 );
-            },
-            queryCallback: fn ($query) => $query->when(
-                $onlySigned,
-                fn ($query) => $query->withSignedWallet()
-            )
-        );
+            });
+        } else {
+            $this->forEachCollection(function ($collection) {
+                FetchCollectionNftsJob::dispatch(
+                    $collection,
+                    $this->option('start-token') ?? $collection->last_indexed_token_number
+                );
+            });
+        }
 
         return Command::SUCCESS;
     }

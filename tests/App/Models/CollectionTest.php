@@ -1043,7 +1043,7 @@ it('filters collections that belongs to wallets that have been signed at least o
         'collection_id' => $collection4->id,
     ]);
 
-    $filtered = Collection::withSignedWallet()->get();
+    $filtered = Collection::getWithSignedWallet();
 
     expect($filtered->count())->toBe(2);
 

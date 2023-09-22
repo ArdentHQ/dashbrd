@@ -11,6 +11,7 @@ use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -469,10 +470,12 @@ class Collection extends Model
 
     /**
      * @param  Builder<self>  $query
-     * @return Builder<self>
+     * @return EloquentCollection<self>
      */
-    public function scopeWithSignedWallet(Builder $query): Builder
+    public static function getWithSignedWallet(): EloquentCollection
     {
-        return $query->whereHas('nfts', fn ($nftQuery) => $nftQuery->whereHas('wallet', fn ($walletQuery) => $walletQuery->hasBeenSigned()));
+        $result = DB::select(get_query('collections.get_with_signed_wallet'));
+
+        return self::hydrate($result);
     }
 }
