@@ -89,7 +89,7 @@
         "jsdom": "^21.1.2",
         "laravel-vite-plugin": "^0.7.8",
         "lodash": "^4.17.21",
-        "markdown-to-jsx": "^7.2.1",
+        "markdown-to-jsx": "^7.3.2",
         "mockdate": "^3.0.5",
         "msw": "^1.2.3",
         "php-parser": "^3.1.5",
@@ -147,10 +147,5 @@
         "string-hash": "^1.1.3",
         "tailwind-merge": "^1.14.0",
         "tippy.js": "^6.3.7"
-    },
-    "pnpm": {
-        "patchedDependencies": {
-            "markdown-to-jsx@7.3.2": "patches/markdown-to-jsx@7.2.1.patch"
-        }
     }
 }
