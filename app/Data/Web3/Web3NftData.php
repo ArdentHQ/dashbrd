@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Data\Web3;
 
 use App\Enums\TraitDisplayType;
-use App\Models\Token;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
@@ -40,17 +39,5 @@ class Web3NftData extends Data
         public int $mintedBlock,
         public ?Carbon $mintedAt,
     ) {
-    }
-
-    public function token(): ?Token
-    {
-        if ($this->floorPrice === null) {
-            return null;
-        }
-
-        return Token::firstWhere([
-            'symbol' => $this->floorPrice->currency,
-            'network_id' => $this->networkId,
-        ]);
     }
 }

@@ -137,34 +137,27 @@ class Web3NftHandler
         );
 
         // @phpstan-ignore-next-line
-        return $nftsInCollection->map->first()->map(function (Web3NftData $nft) use ($nftsInCollection) {
-            $token = $nft->token();
-
-            return [
-                'address' => $nft->tokenAddress,
-                'network_id' => $nft->networkId,
-                'name' => trim($nft->collectionName),
-                'slug' => $this->getSlug($nft->collectionName),
-                'symbol' => $nft->collectionSymbol,
-                'description' => $nft->collectionDescription !== null ? strip_tags($nft->collectionDescription) : null,
-                'supply' => $nft->collectionSupply,
-                'floor_price' => $token ? $nft->floorPrice?->price : null,
-                'floor_price_token_id' => $token?->id,
-                'floor_price_retrieved_at' => $token ? $nft->floorPrice?->retrievedAt : null,
-                'extra_attributes' => json_encode([
-                    'image' => $nft->collectionImage,
-                    'website' => $nft->collectionWebsite,
-                    'socials' => $nft->collectionSocials,
-                    'banner' => $nft->collectionBannerImageUrl,
-                    'banner_updated_at' => $nft->collectionBannerImageUrl ? now() : null,
-                ]),
-                'minted_block' => $nft->mintedBlock,
-                'minted_at' => $nft->mintedAt?->toDateTimeString(),
-                'last_indexed_token_number' => $this->lastRetrievedTokenNumber($nftsInCollection->get(Str::lower($nft->tokenAddress))),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        });
+        return $nftsInCollection->map->first()->map(fn (Web3NftData $nft) => [
+            'address' => $nft->tokenAddress,
+            'network_id' => $nft->networkId,
+            'name' => trim($nft->collectionName),
+            'slug' => $this->getSlug($nft->collectionName),
+            'symbol' => $nft->collectionSymbol,
+            'description' => $nft->collectionDescription !== null ? strip_tags($nft->collectionDescription) : null,
+            'supply' => $nft->collectionSupply,
+            'extra_attributes' => json_encode([
+                'image' => $nft->collectionImage,
+                'website' => $nft->collectionWebsite,
+                'socials' => $nft->collectionSocials,
+                'banner' => $nft->collectionBannerImageUrl,
+                'banner_updated_at' => $nft->collectionBannerImageUrl ? now() : null,
+            ]),
+            'minted_block' => $nft->mintedBlock,
+            'minted_at' => $nft->mintedAt?->toDateTimeString(),
+            'last_indexed_token_number' => $this->lastRetrievedTokenNumber($nftsInCollection->get(Str::lower($nft->tokenAddress))),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     private function shouldKeepNft(CollectionModel $collection): bool
