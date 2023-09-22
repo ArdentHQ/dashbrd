@@ -21,6 +21,7 @@ interface QueryParameters {
 interface CollectionsResponse {
     collections: PaginationData<App.Data.Collections.CollectionData>;
     nfts: App.Data.Collections.CollectionNftData[];
+    stats: App.Data.Collections.CollectionStatsData;
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
     hiddenCollectionAddresses: string[];
@@ -35,6 +36,7 @@ interface CollectionsState {
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
     hiddenCollectionAddresses: string[];
+    stats: App.Data.Collections.CollectionStatsData;
     search: (searchQuery: string) => void;
     query: string;
     isSearching: boolean;
@@ -46,8 +48,10 @@ export const useCollections = ({
     showHidden,
     sortBy,
     view,
+    initialStats,
 }: {
     view: CollectionDisplayType;
+    initialStats: App.Data.Collections.CollectionStatsData;
     showHidden: boolean;
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
@@ -59,6 +63,7 @@ export const useCollections = ({
     const [pageMeta, setPageMeta] = useState({ currentPage: 1, lastPage: 1 });
 
     const [hiddenCollectionAddresses, setHiddenCollectionAddresses] = useState<string[]>([]);
+    const [stats, setStats] = useState<App.Data.Collections.CollectionStatsData>(initialStats);
     const [alreadyReportedByCollection, setAlreadyReportedByCollection] = useState<AlreadyReportedByCollection>({});
     const [reportByCollectionAvailableIn, setSeportByCollectionAvailableIn] = useState<ReportByCollectionAvailableIn>(
         {},
@@ -98,6 +103,7 @@ export const useCollections = ({
             setNfts(data.nfts);
         }
         setHiddenCollectionAddresses(data.hiddenCollectionAddresses);
+        setStats(data.stats);
         setAlreadyReportedByCollection(data.alreadyReportedByCollection);
         setSeportByCollectionAvailableIn(data.reportByCollectionAvailableIn);
 
@@ -176,6 +182,7 @@ export const useCollections = ({
         reportByCollectionAvailableIn,
         search,
         query,
+        stats,
         isSearching,
         reportCollection: (address: string) => {
             alreadyReportedByCollection[address] = true;
