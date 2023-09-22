@@ -469,8 +469,7 @@ class Collection extends Model
     }
 
     /**
-     * @param  Builder<self>  $query
-     * @return EloquentCollection<self>
+     * @return EloquentCollection<int, self>
      */
     public static function getWithSignedWallet(): EloquentCollection
     {
