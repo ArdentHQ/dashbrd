@@ -108,6 +108,9 @@ class ArticleResource extends Resource
         ];
     }
 
+    /**
+     * @return Builder<Article>
+     */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
