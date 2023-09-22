@@ -17,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -54,13 +55,25 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): void
+    public function destroy(Request $request): JsonResponse | RedirectResponse
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        $previousRoute = Route::getRoutes()->match(request()->create(url()->previousPath()))->getName();
+
+        $requiresRedirect = in_array($previousRoute, ['dashboard', 'collections']);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'action' => $requiresRedirect ? 'galleries' : null,
+            ]);
+        }
+
+        return $requiresRedirect ? redirect()->route('galleries') : redirect()->back();
     }
 
     private function getAuthData(Request $request): AuthData

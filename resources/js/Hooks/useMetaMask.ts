@@ -202,11 +202,12 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         setSwitching(true);
 
         try {
-            await axios.post<App.Data.AuthData>(route("login"));
+            const response = await axios.post<{ action: string | null }>(route("logout"));
 
             setAuthData?.();
 
-            router.reload();
+            const action = response.data.action;
+            action === null ? router.reload() : router.get(route(action));
         } catch (error) {
             handleAxiosError(error);
         } finally {
