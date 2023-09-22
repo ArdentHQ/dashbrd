@@ -493,7 +493,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
         try {
             const response = await axios.post<App.Data.AuthData>(route("login"), {
-                intendedUrl: window.location.href,
                 address: account,
                 chainId,
                 tz: Intl.DateTimeFormat().resolvedOptions().timeZone,

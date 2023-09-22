@@ -14,6 +14,7 @@ use App\Http\Requests\Auth\SignRequest;
 use App\Models\User;
 use App\Support\Facades\Signature;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -54,7 +55,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): JsonResponse|RedirectResponse
+    public function destroy(Request $request): RedirectResponse|JsonResponse
     {
         Auth::guard('web')->logout();
 
