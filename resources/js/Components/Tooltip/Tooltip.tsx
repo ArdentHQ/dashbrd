@@ -11,7 +11,6 @@ import { isTruthy } from "@/Utils/is-truthy";
 interface Properties extends TippyProps {
     variant?: "default" | "danger";
     hideAfter?: number;
-    disableOnTouch?: boolean;
 }
 
 export const Tooltip = ({
@@ -19,11 +18,11 @@ export const Tooltip = ({
     offset,
     variant = "default",
     hideAfter,
-    disableOnTouch,
+    touch = false,
     disabled,
     ...properties
 }: Properties): JSX.Element => {
-    const { handleShow, isDisabled } = useTooltip({ hideAfter, disableOnTouch });
+    const { handleShow } = useTooltip({ hideAfter });
 
     return (
         <Tippy
@@ -42,7 +41,8 @@ export const Tooltip = ({
                 },
             )}
             onShown={handleShow}
-            disabled={isTruthy(disabled) || isDisabled}
+            disabled={isTruthy(disabled)}
+            touch={touch}
             {...properties}
         />
     );

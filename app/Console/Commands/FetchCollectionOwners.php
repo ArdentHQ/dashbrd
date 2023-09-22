@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionOwners as Job;
+use App\Jobs\FetchCollectionOwners as FetchCollectionOwnersJob;
 use Illuminate\Console\Command;
 
 class FetchCollectionOwners extends Command
@@ -31,7 +31,7 @@ class FetchCollectionOwners extends Command
     public function handle(): int
     {
         $this->forEachCollection(function ($collection) {
-            Job::dispatch($collection);
+            FetchCollectionOwnersJob::dispatch($collection);
         });
 
         return Command::SUCCESS;

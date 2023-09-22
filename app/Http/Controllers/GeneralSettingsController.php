@@ -17,13 +17,14 @@ use Inertia\Response;
 
 class GeneralSettingsController extends Controller
 {
-    public function edit(): Response
+    public function edit(Request $request): Response
     {
         return Inertia::render('Settings/General', [
             'title' => trans('metatags.settings.title'),
             'currencies' => Currency::all(),
             'dateFormats' => DateFormat::all(),
             'timezones' => Timezone::formatted(),
+            'reset' => $request->boolean('reset'),
         ]);
     }
 
