@@ -19,10 +19,15 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use RecoversFromProviderErrors;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -43,11 +48,25 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        $result = $provider->getCollectionsNfts($this->collection, $this->nft->token_number, 1);
 
-        (new Web3NftHandler(collection: $this->collection))->store(
-            $result->nfts, dispatchJobs: true
-        );
+        $nfts = Nft::whereNotNull('metadata_requested_at')
+            ->where(function ($query) {
+                $query->whereNull('metadata_fetched_at')->orWhereRaw('metadata_fetched_at < metadata_requested_at');
+            })->get();
+
+
+
+        try {
+            $result = $provider->getNftMetadata($nfts);
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+
+        //
+        // (new Web3NftHandler(collection: $this->collection))->store(
+        //     $result->nfts,
+        //     dispatchJobs: true
+        // );
     }
 
     public function uniqueId(): string
@@ -62,7 +81,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
     {
         return [
             new RateLimited('nft-refresh'),
-            new RecoverProviderErrors,
+            new RecoverProviderErrors(),
         ];
     }
 

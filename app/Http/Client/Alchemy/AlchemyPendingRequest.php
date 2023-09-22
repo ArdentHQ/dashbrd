@@ -32,6 +32,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use stdClass;
 use Throwable;
@@ -215,6 +216,36 @@ class AlchemyPendingRequest extends PendingRequest
             nfts: $nfts,
             nextToken: Arr::get($data, 'pageKey'),
         );
+    }
+
+    /**
+     * @see https://docs.alchemy.com/reference/getnftmetadatabatch
+     */
+    public function nftMetadata(collection $nfts): Web3NftsChunk
+    {
+        $this->apiUrl = $this->getNftV2ApiUrl();
+
+        // $this->chain = AlchemyChain::fromChainId($collection->network->chain_id);
+
+        $tokens = $nfts->map(function ($nft) {
+            return [
+                'contractAddress' => $nft->collection->address,
+                'tokenId' => $nft->token_number
+            ];
+        });
+
+        $response = self::post('getNFTMetadataBatch', [
+            'tokens' => $tokens
+        ])->json();
+
+        $nftResponse = collect($response)
+            ->filter(fn ($nft) => $this->filterNft($nft))
+            ->map(fn ($nft) => $this->parseNft($nft, $nft->collection->network_id))
+            ->values();
+
+        Log::info($nftResponse->toJson());
+
+        return new Web3NftsChunk(nfts: $nfts, nextToken: null);
     }
 
     /**

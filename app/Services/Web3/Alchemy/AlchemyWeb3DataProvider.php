@@ -43,6 +43,11 @@ final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
         return Alchemy::collectionNfts($collection, $startToken, $limit);
     }
 
+    public function getNftMetadata(collection $nfts): Web3NftsChunk
+    {
+        return Alchemy::nftMetadata($nfts);
+    }
+
     public function getEnsDomain(Wallet $wallet): ?string
     {
         throw new NotImplementedException();
