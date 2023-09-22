@@ -9,10 +9,10 @@ export const PageInput = ({ onSubmit, onChange, onClose, totalPages }: PageInput
     const { isSmAndAbove } = useBreakpoint();
 
     return (
-        <div className="mt-3  grid grid-cols-[1fr_2.5rem] gap-1 sm:mt-0">
+        <div className="mt-3 grid grid-cols-[1fr_2.5rem] gap-1 md:mt-0">
             <form
                 onSubmit={onSubmit}
-                className="relative flex items-center justify-center xs:w-max lg:w-64"
+                className="relative flex items-center justify-center xs:w-64"
                 data-testid="Pagination__PageInput__form"
             >
                 <input
