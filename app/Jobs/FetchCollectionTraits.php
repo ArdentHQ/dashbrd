@@ -17,6 +17,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchCollectionTraits implements ShouldBeUnique, ShouldQueue
 {
@@ -36,12 +37,21 @@ class FetchCollectionTraits implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchCollectionTraits Job: Processing', [
+            'collection' => $this->collection->address,
+        ]);
+
         $traits = Mnemonic::getNftCollectionTraits(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
 
         (new Web3NftCollectionHandler())->storeTraits($this->collection->id, $traits);
+
+        Log::info('FetchCollectionTraits Job: Handled', [
+            'collection' => $this->collection->address,
+            'traits_count' => $traits->count(),
+        ]);
     }
 
     public function retryUntil(): DateTime

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionBanner as Job;
+use App\Jobs\FetchCollectionBanner as FetchCollectionBannerJob;
 use Illuminate\Console\Command;
 
 class FetchCollectionBanner extends Command
@@ -37,7 +37,7 @@ class FetchCollectionBanner extends Command
         }
 
         $this->forEachCollection(function ($collection) {
-            Job::dispatch($collection);
+            FetchCollectionBannerJob::dispatch($collection);
         });
 
         return Command::SUCCESS;
