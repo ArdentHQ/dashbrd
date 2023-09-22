@@ -937,6 +937,36 @@ it('can determine whether the collection is potentially full', function () {
     Nft::factory(10)->recycle($collection)->create();
 
     expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // zero-based NFT token numbers
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 9,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // burning
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 1,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(20)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // arbitrary value
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 100000,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
 });
 
 it('should mark collection as invalid - unacceptable supply', function () {
