@@ -35,7 +35,7 @@ export const SelectPageLimit = ({
 
                         <div className="px-4 text-theme-secondary-700">
                             {value}
-                            <span className="sm:hidden md:inline-block">&nbsp; {suffix}</span>
+                            <span className=" md:inline-block">&nbsp; {suffix}</span>
                         </div>
                     </div>
                 </Listbox.Button>
