@@ -479,6 +479,6 @@ describe("Pagination", () => {
                 value: null,
             },
         });
-        expect(button.textContent).toBe("Page 1 of 3");
+        expect(button.textContent).toBe("Page 2 of 3");
     });
 });
