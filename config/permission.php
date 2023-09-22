@@ -29,6 +29,12 @@ return [
             'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny',
             'admin:access',
         ],
+
+        Role::Editor->value => [
+            // For the moment `article:create` also allows to update and delete own articles
+            'article:viewAny', 'article:create',
+            'admin:access',
+        ],
     ],
 
     'user_role' => [

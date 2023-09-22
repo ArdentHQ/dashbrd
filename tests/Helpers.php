@@ -12,8 +12,6 @@ function setUpPermissions(string $guard = 'admin'): void
     $permissions = PermissionRepository::all();
     $roles = config('permission.roles');
 
-    app()[PermissionRegistrar::class]->forgetCachedPermissions();
-
     Permission::insert($permissions->map(fn ($permission) => [
         'name' => $permission,
         'guard_name' => $guard,
@@ -25,4 +23,6 @@ function setUpPermissions(string $guard = 'admin'): void
         'name' => $role,
         'guard_name' => $guard,
     ])->givePermissionTo($permissions));
+
+    app()[PermissionRegistrar::class]->forgetCachedPermissions();
 }
