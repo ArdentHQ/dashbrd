@@ -12,7 +12,7 @@ export const PageInput = ({ onSubmit, onChange, onClose, totalPages }: PageInput
         <div className="mt-3  grid grid-cols-[1fr_2.5rem] gap-1 sm:mt-0">
             <form
                 onSubmit={onSubmit}
-                className="relative flex items-center justify-center xs:w-max"
+                className="relative flex items-center justify-center xs:w-max lg:w-64"
                 data-testid="Pagination__PageInput__form"
             >
                 <input
