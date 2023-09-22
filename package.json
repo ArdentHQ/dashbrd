@@ -150,7 +150,7 @@
     },
     "pnpm": {
         "patchedDependencies": {
-            "markdown-to-jsx@7.2.1": "patches/markdown-to-jsx@7.2.1.patch"
+            "markdown-to-jsx@7.3.2": "patches/markdown-to-jsx@7.2.1.patch"
         }
     }
 }
