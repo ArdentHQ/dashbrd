@@ -45,6 +45,6 @@ trait InteractsWithCollections
                     ->filter(fn ($collection) => ! $collection->isBlacklisted())
                     ->each($callback);
             }, 'collections.id', 'id'));
-        )
+
     }
 }
