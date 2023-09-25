@@ -1,11 +1,10 @@
 import cn from "classnames";
-import { type HTMLAttributes, useEffect, useState } from "react";
+import { type HTMLAttributes, useState } from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
 import { Footer } from "@/Components/Layout/Footer";
 import { Navbar } from "@/Components/Layout/Navbar";
 import { SliderContext } from "@/Components/Slider";
 import { ToastContainer, type ToastMessage } from "@/Components/Toast";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 
@@ -26,18 +25,7 @@ export const LayoutWrapper = ({
     toastMessage,
     isMaintenanceModeActive,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay, signed } = useAuth();
-
-    const { setAuthData } = useActiveUser();
-
-    useEffect(() => {
-        setAuthData?.({
-            authenticated,
-            wallet,
-            user,
-            signed,
-        });
-    }, [authenticated, user, wallet]);
+    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth();
 
     const { connectWallet, initialized, connecting } = useMetaMaskContext();
 
