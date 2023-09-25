@@ -20,6 +20,7 @@ export const AuthOverlay = ({
     show,
     closeOverlay,
     showCloseButton,
+    mustBeSigned,
     ...properties
 }: AuthOverlayProperties): JSX.Element => {
     const { t } = useTranslation();
@@ -34,12 +35,15 @@ export const AuthOverlay = ({
         switching,
         errorMessage,
         waitingSignature,
-        requiresSignature,
+        requiresSignature: metaMaskRequiresSignature,
+        signed,
     } = useMetaMaskContext();
 
+    const requiresSignature = (mustBeSigned && !signed) || metaMaskRequiresSignature;
+
     const showSignMessage = useMemo(
-        () => requiresSignature && !waitingSignature && errorMessage === undefined && !connecting,
-        [requiresSignature, waitingSignature, errorMessage, connecting],
+        () => metaMaskRequiresSignature && !waitingSignature && errorMessage === undefined && !connecting,
+        [metaMaskRequiresSignature, waitingSignature, errorMessage, connecting],
     );
 
     return (

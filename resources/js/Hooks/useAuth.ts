@@ -2,7 +2,11 @@ import { usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
-export const useAuth = (): App.Data.AuthData & {
+interface Properties {
+    mustBeSigned?: boolean;
+}
+
+export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.AuthData & {
     showAuthOverlay: boolean;
     showCloseButton: boolean;
     signed: boolean;
@@ -50,9 +54,14 @@ export const useAuth = (): App.Data.AuthData & {
     }, [connecting]);
 
     const showAuthOverlay = useMemo<boolean>(() => {
+        if (mustBeSigned && !signed) {
+            return true;
+        }
+
         if (requiresSignature) {
             return true;
         }
+
         if (isShowConnectOverlay) {
             return true;
         }
@@ -92,6 +101,8 @@ export const useAuth = (): App.Data.AuthData & {
         allowsGuests,
         manuallyClosed,
         isShowConnectOverlay,
+        signed,
+        mustBeSigned,
     ]);
 
     const showCloseButton = allowsGuests || requiresSignature;
