@@ -3,7 +3,7 @@ import { type OverlayProperties } from "@/Components/Layout/Overlay/Overlay.cont
 export interface AuthOverlayProperties extends Omit<OverlayProperties, "showOverlay"> {
     show: boolean;
     closeOverlay: () => void;
-    mustBeSigned: boolean;
+    mustBeSigned?: boolean;
 }
 
 export interface ConnectWalletProperties {

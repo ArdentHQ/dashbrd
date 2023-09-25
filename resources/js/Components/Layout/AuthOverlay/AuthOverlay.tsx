@@ -20,7 +20,7 @@ export const AuthOverlay = ({
     show,
     closeOverlay,
     showCloseButton,
-    mustBeSigned,
+    mustBeSigned = false,
     ...properties
 }: AuthOverlayProperties): JSX.Element => {
     const { t } = useTranslation();
