@@ -72,14 +72,18 @@ export const CollectionHeaderTop = ({
 }: CollectionHeaderTopProperties): JSX.Element => {
     const { t } = useTranslation();
     const address = formatAddress(collection.address);
-    const { isPolygon } = useNetwork();
+    const { isPolygon, isTestnet } = useNetwork();
 
     const contractUrl = useMemo<string>(() => {
         if (isPolygon(collection.chainId)) {
-            return t("urls.explorers.polygonscan.addresses", { address });
+            return isTestnet(collection.chainId)
+                ? t("urls.explorers.mumbai.addresses", { address })
+                : t("urls.explorers.polygonscan.addresses", { address });
         }
 
-        return t("urls.explorers.etherscan.addresses", { address });
+        return isTestnet(collection.chainId)
+            ? t("urls.explorers.goerli.addresses", { address })
+            : t("urls.explorers.etherscan.addresses", { address });
     }, [collection]);
 
     return (

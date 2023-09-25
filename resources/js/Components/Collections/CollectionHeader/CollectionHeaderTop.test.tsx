@@ -247,6 +247,36 @@ describe("CollectionHeaderTop", () => {
         );
     });
 
+    it("should use goerli url for address", () => {
+        const collection = new CollectionDetailDataFactory().create({
+            chainId: 5,
+        });
+
+        render(<CollectionHeaderTop collection={collection} />);
+
+        expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
+        expect(screen.getByTestId("CollectionHeaderTop__address")).toBeInTheDocument();
+        expect(screen.getByTestId("CollectionHeaderTop__address")).toHaveAttribute(
+            "href",
+            `https://goerli.etherscan.io/address/${collection.address}`,
+        );
+    });
+
+    it("should use mumbai url for address", () => {
+        const collection = new CollectionDetailDataFactory().create({
+            chainId: 80001,
+        });
+
+        render(<CollectionHeaderTop collection={collection} />);
+
+        expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
+        expect(screen.getByTestId("CollectionHeaderTop__address")).toBeInTheDocument();
+        expect(screen.getByTestId("CollectionHeaderTop__address")).toHaveAttribute(
+            "href",
+            `https://mumbai.polygonscan.com/address/${collection.address}`,
+        );
+    });
+
     it("should handle missing image", () => {
         process.env.REACT_APP_IS_UNIT = "false";
 
