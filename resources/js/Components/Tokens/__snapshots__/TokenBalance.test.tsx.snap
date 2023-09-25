@@ -638,10 +638,10 @@ exports[`TokenBalance > should render in sm screen 1`] = `
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>
