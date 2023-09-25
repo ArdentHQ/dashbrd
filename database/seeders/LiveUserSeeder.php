@@ -96,9 +96,9 @@ class LiveUserSeeder extends UserSeeder
                 ->first() ?? User::factory()->create();
 
             $chainId = collect(Chains::cases())->firstOrFail(fn ($case) => Str::lower($case->name) === Str::lower($networkName))->value;
-            $networkId = Network::firstWhere('chain_id', $chainId)->id;
+            $network = Network::firstWhere('chain_id', $chainId);
 
-            Wallet::withoutEvents(function () use ($address, $networkId, $user, $what, $file) {
+            Wallet::withoutEvents(function () use ($address, $network, $user, $what, $file) {
                 $localTestingWallet = Wallet::where('address', getenv('LOCAL_TESTING_ADDRESS'))
                     ->firstOrFail();
 
@@ -116,9 +116,9 @@ class LiveUserSeeder extends UserSeeder
 
                 switch ($what) {
                     case 'nfts':
-
-                        (new Web3NftHandler(wallet: $localTestingWallet))
-                            ->store($this->loadWalletNftsFixtures($file->getFilename(), $networkId));
+                        (new Web3NftHandler(wallet: $localTestingWallet, network: $network))->store(
+                            $this->loadWalletNftsFixtures($file->getFilename(), $network->id)
+                        );
                         break;
 
                     default:

@@ -94,9 +94,11 @@ class Web3NftHandler
             if (Feature::active(Features::Collections->value)) {
                 $this->upsertTraits($nfts, $collections, $now);
 
-                $collections->each(function ($collection) {
-                    if ($collection->floor_price === null) {
-                        FetchCollectionFloorPrice::dispatch($this->getChainId(), $collection->address)
+                $chainId = $this->getChainId();
+
+                $collections->each(function ($collection) use ($chainId) {
+                    if ($collection->floor_price === null && $chainId !== null) {
+                        FetchCollectionFloorPrice::dispatch($chainId, $collection->address)
                                 ->afterCommit()
                                 ->onQueue(Queues::NFTS);
                     }
@@ -198,7 +200,7 @@ class Web3NftHandler
                         : $this->collection?->last_indexed_token_number;
     }
 
-    private function getChainId(): int
+    private function getChainId(): ?int
     {
         if ($this->collection) {
             return $this->collection->network->chain_id;
@@ -208,7 +210,7 @@ class Web3NftHandler
             return $this->network->chain_id;
         }
 
-        throw new RuntimeException('Unable to determine chain id');
+        return null;
     }
 
     /**
