@@ -13,7 +13,6 @@ use App\Models\NftActivity;
 use App\Models\SpamContract;
 use App\Models\User;
 use App\Models\Wallet;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
 it('can create a basic collection', function () {
