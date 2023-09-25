@@ -14,19 +14,21 @@ return [
         'article:viewAny' => 'View Article',
         'article:updateAny' => 'Update any Article',
         'article:deleteAny' => 'Delete any Article',
+        'article:restore' => 'Restore Deleted Article',
+        'article:forceDelete' => 'Force Delete Article',
         'admin:access' => 'Allow access to Admin panel',
     ],
 
     'roles' => [
         Role::Superadmin->value => [
             'user:viewAny', 'user:view', 'user:restore', 'user:assignRole', 'user:assignPermissions',
-            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny',
+            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
             'admin:access',
         ],
 
         Role::Admin->value => [
             'user:viewAny', 'user:view', 'user:assignRole',
-            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny',
+            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
             'admin:access',
         ],
 

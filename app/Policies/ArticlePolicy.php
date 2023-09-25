@@ -47,13 +47,11 @@ final class ArticlePolicy
 
     public function restore(User $user, Article $article): bool
     {
-        // If users can delete, they can restore
-        return $this->delete($user, $article);
+        return $user->hasPermissionTo('article:restore', 'admin');
     }
 
     public function forceDelete(User $user, Article $article): bool
     {
-        // If users can delete, can force delete
-        return $this->delete($user, $article);
+        return $user->hasPermissionTo('article:forceDelete', 'admin');
     }
 }

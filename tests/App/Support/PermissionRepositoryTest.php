@@ -18,14 +18,14 @@ it('should cache permissions and refresh every 5 days', function () {
 
     Config::set('permission.roles', $config);
 
-    expect(PermissionRepository::all())->toHaveCount(10);
+    expect(PermissionRepository::all())->toHaveCount(12);
 
     $this->travel(4)->days();
 
-    expect(PermissionRepository::all())->toHaveCount(10);
+    expect(PermissionRepository::all())->toHaveCount(12);
 
     $this->travel(1)->days();
     $this->travel(1)->minute();
 
-    expect(PermissionRepository::all())->toHaveCount(11);
+    expect(PermissionRepository::all())->toHaveCount(12);
 });

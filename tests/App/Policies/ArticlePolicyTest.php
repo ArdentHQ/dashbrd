@@ -125,12 +125,12 @@ it('should be able to restore a single article', function () {
     expect($this->instance->restore($this->admin, $article))->toBeTrue();
 });
 
-it('should be able to restore a single article that owns', function () {
+it('should not be able to restore an article', function () {
     $article = Article::factory()->create([
         'user_id' => $this->editor->id,
     ]);
 
-    expect($this->instance->restore($this->editor, $article))->toBeTrue();
+    expect($this->instance->restore($this->editor, $article))->toBeFalse();
 });
 
 it('should not be able to forceDelete a single article', function () {
@@ -146,10 +146,10 @@ it('should be able to forceDelete a single article', function () {
     expect($this->instance->forceDelete($this->admin, $article))->toBeTrue();
 });
 
-it('should be able to forceDelete a single article that owns', function () {
+it('should not be able to forceDelete a single', function () {
     $article = Article::factory()->create([
         'user_id' => $this->editor->id,
     ]);
 
-    expect($this->instance->forceDelete($this->editor, $article))->toBeTrue();
+    expect($this->instance->forceDelete($this->editor, $article))->toBeFalse();
 });
