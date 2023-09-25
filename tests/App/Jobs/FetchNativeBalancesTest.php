@@ -22,7 +22,7 @@ it('should fetch native balance for a wallet', function () {
         'address' => '0x123',
         'extra_attributes' => [
             'prop' => 'value',
-        ]
+        ],
     ]);
 
     $wallet2 = Wallet::factory()->create([
