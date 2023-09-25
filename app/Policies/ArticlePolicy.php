@@ -31,7 +31,7 @@ final class ArticlePolicy
             return true;
         }
 
-        // If users can create, they can update his own
+        // If users can create, they can update their own
         return $this->create($user) && ($user->is($article->user));
     }
 
@@ -41,7 +41,7 @@ final class ArticlePolicy
             return true;
         }
 
-        // If users can create, they can delete his own
+        // If users can create, they can delete their own
         return $this->create($user) && ($user->is($article->user));
     }
 
