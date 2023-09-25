@@ -32,7 +32,6 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use stdClass;
 use Throwable;
@@ -232,12 +231,12 @@ class AlchemyPendingRequest extends PendingRequest
         $tokens = $nfts->map(function ($nft) {
             return [
                 'contractAddress' => $nft->collection->address,
-                'tokenId' => $nft->token_number
+                'tokenId' => $nft->token_number,
             ];
         });
 
         $response = self::post('getNFTMetadataBatch', [
-            'tokens' => $tokens
+            'tokens' => $tokens,
         ])->json();
 
         $nftItems = collect($response)
@@ -246,7 +245,6 @@ class AlchemyPendingRequest extends PendingRequest
                 return $this->parseNft($nft, $collection->network_id);
             })
             ->values();
-
 
         return new Web3NftsChunk(nfts: $nftItems, nextToken: null);
     }
