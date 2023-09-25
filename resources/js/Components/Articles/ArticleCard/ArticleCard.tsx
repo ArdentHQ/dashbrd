@@ -3,6 +3,7 @@ import { Img } from "@/Components/Image";
 
 interface Properties {
     // TODO(@alfonsobries)[2023-09-30]. Replace with a dynamic type once defined
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     article: any;
     collections: Array<Pick<App.Data.Nfts.NftCollectionData, "image" | "slug">>;
 }
@@ -28,6 +29,7 @@ const ArticleCardCollection = ({
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ArticleCard = ({ article, collections }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
