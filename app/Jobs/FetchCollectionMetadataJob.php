@@ -61,6 +61,7 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
                         'total_supply' => $data->totalSupply,
                         'description' => $data->description,
                         'banner' => $data->bannerImageUrl,
+                        'opensea_slug' => $data->collectionSlug,
                     ]);
 
                     if ($data->collectionName) {
@@ -82,6 +83,11 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
                     if ($data->bannerImageUrl) {
                         $collection->extra_attributes->set('banner', $data->bannerImageUrl);
                         $collection->extra_attributes->set('banner_updated_at', now());
+                    }
+
+                    if($data->collectionSlug) {
+                        $collection->extra_attributes->set('opensea_slug', $data->collectionSlug);
+                        $collection->extra_attributes->set('opensea_slug_updated_at', now());
                     }
 
                     $collection->save();
