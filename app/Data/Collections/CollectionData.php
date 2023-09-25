@@ -57,6 +57,7 @@ class CollectionData extends Data
          * floor_price_decimals: int | null,
          * image: string | null,
          * banner: string | null,
+         * opensea_slug: string | null,
          * website: string,
          * nfts_count: int,
          * } $collection
