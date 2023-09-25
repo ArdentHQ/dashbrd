@@ -29,14 +29,14 @@ const sort = (sortBy: string, direction?: string): void => {
 
 const CollectionsIndex = ({
     auth,
-    stats,
+    initialStats,
     title,
     sortBy,
     sortDirection,
 }: {
     title: string;
     auth: PageProps["auth"];
-    stats: App.Data.Collections.CollectionStatsData;
+    initialStats: App.Data.Collections.CollectionStatsData;
     sortBy: string | null;
     sortDirection: "asc" | "desc";
 }): JSX.Element => {
@@ -63,6 +63,7 @@ const CollectionsIndex = ({
         alreadyReportedByCollection,
         reportByCollectionAvailableIn,
         query,
+        stats,
         search,
         isSearching,
         reportCollection,
@@ -70,6 +71,7 @@ const CollectionsIndex = ({
         showHidden,
         sortBy,
         view: displayType,
+        initialStats,
         onSearchError: () => {
             showToast({
                 message: t("pages.collections.search.error"),
@@ -101,9 +103,7 @@ const CollectionsIndex = ({
             <div>
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     <CollectionsHeading
-                        value={stats.value}
-                        collectionsCount={stats.collections}
-                        nftsCount={stats.nfts}
+                        stats={stats}
                         currency={auth.user?.attributes.currency ?? "USD"}
                     />
 
@@ -119,7 +119,7 @@ const CollectionsIndex = ({
                         activeSort={sortBy}
                         onSort={sort}
                         onChangeVisibilityStatus={(isHidden) => {
-                            reload({ showHidden: isHidden });
+                            reload({ showHidden: isHidden, page: 1 });
                         }}
                     />
                 </div>

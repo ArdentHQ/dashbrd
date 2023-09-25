@@ -7,10 +7,13 @@ use App\Enums\NftTransferType;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\Gallery;
+use App\Models\Network;
 use App\Models\Nft;
 use App\Models\NftActivity;
+use App\Models\SpamContract;
 use App\Models\User;
 use App\Models\Wallet;
+use Illuminate\Support\Facades\Config;
 
 it('can create a basic collection', function () {
     $collection = Collection::factory()->create();
@@ -901,4 +904,151 @@ it('can determine whether collection was recently viewed', function () {
     ]);
 
     expect($collection->recentlyViewed())->toBeFalse();
+});
+
+it('should mark collection as invalid - unacceptable supply', function () {
+    $collection = new Collection([
+        'supply' => null,
+    ]);
+
+    expect($collection->isInvalid())->toBeTrue();
+
+    Config::set('dashbrd.collections_max_cap', 5000);
+
+    $collection = new Collection([
+        'supply' => 5001,
+    ]);
+
+    expect($collection->isInvalid())->toBeTrue();
+});
+
+it('should mark collection as invalid - spam check', function () {
+    $network = new Network(['id' => 1]);
+
+    $collection1 = new Collection([
+        'supply' => 3000,
+        'address' => '0x123',
+    ]);
+
+    $collection1->setAttribute('network', $network);
+
+    $collection2 = new Collection([
+        'supply' => 3000,
+        'address' => '0x1234',
+    ]);
+
+    $collection2->setAttribute('network', $network);
+
+    SpamContract::query()->insert([
+        'address' => $collection1->address,
+        'network_id' => $network->id,
+    ]);
+
+    expect($collection1->isInvalid(withSpamCheck: false))->toBeFalse()
+        ->and($collection1->isInvalid())->toBeTrue()
+        ->and($collection2->isInvalid())->toBeFalse();
+});
+
+it('should mark collection as invalid - blacklisted', function () {
+    config(['dashbrd.blacklisted_collections' => [
+        '0x123',
+    ]]);
+
+    $collection1 = new Collection([
+        'supply' => 3000,
+        'address' => '0x123',
+    ]);
+
+    expect($collection1->isInvalid())->toBeTrue();
+});
+
+it('should exclude spam contracts', function () {
+    $network = Network::factory()->create();
+
+    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
+
+    SpamContract::query()->insert([
+        'address' => $collections->first()->address,
+        'network_id' => $collections->first()->network_id,
+    ]);
+
+    $validCollections = Collection::query()->withoutSpamContracts()->get();
+
+    expect($validCollections->count())->toBe(1)
+        ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
+});
+
+it('should exclude collections with an invalid supply', function () {
+    Config::set('dashbrd.collections_max_cap', 5000);
+
+    $network = Network::factory()->create();
+
+    $collection1 = Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 3000,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => null,
+    ]);
+
+    Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => 5001,
+    ]);
+
+    $validCollections = Collection::query()->withAcceptableSupply()->get();
+
+    expect($validCollections->count())->toBe(1)
+        ->and($validCollections->first()->slug)->toBe($collection1->slug);
+});
+
+it('filters collections that belongs to wallets that have been signed at least one time', function () {
+    $signed = Wallet::factory()->create([
+        'last_signed_at' => now(),
+    ]);
+
+    $notSigned = Wallet::factory()->create();
+
+    $signed2 = Wallet::factory()->create([
+        'last_signed_at' => now(),
+    ]);
+
+    // Has a signed wallet and a not signed wallet
+    $collection1 = Collection::factory()->create();
+    Nft::factory()->create([
+        'wallet_id' => $signed->id,
+        'collection_id' => $collection1->id,
+    ]);
+    Nft::factory()->create([
+        'wallet_id' => $notSigned->id,
+        'collection_id' => $collection1->id,
+    ]);
+
+    // Has a not signed wallet
+    $collection2 = Collection::factory()->create();
+    Nft::factory()->create([
+        'wallet_id' => $notSigned->id,
+        'collection_id' => $collection2->id,
+    ]);
+
+    // Does not have any wallet
+    $collection3 = Collection::factory()->create();
+
+    // Has a signed wallet
+    $collection4 = Collection::factory()->create();
+    Nft::factory()->create([
+        'wallet_id' => $signed2->id,
+        'collection_id' => $collection4->id,
+    ]);
+
+    $filtered = Collection::getWithSignedWallet();
+
+    expect($filtered->count())->toBe(2);
+
+    expect($filtered->pluck('id')->sort()->toArray())->toEqual([
+        $collection1->id,
+        $collection4->id,
+    ]);
 });

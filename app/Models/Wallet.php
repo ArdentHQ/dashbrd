@@ -40,6 +40,7 @@ class Wallet extends Model
         'avatar',
         'active',
         'total_usd',
+        'last_signed_at',
         'last_activity_at',
         'onboarded_at',
     ];
@@ -48,6 +49,7 @@ class Wallet extends Model
         'extra_attributes' => SchemalessAttributes::class,
         'total_usd' => 'float',
         'last_activity_at' => 'datetime',
+        'last_signed_at' => 'datetime',
         'onboarded_at' => 'datetime',
     ];
 
@@ -84,7 +86,17 @@ class Wallet extends Model
         $activeThreshold = config('dashbrd.wallets.active_threshold');
 
         return $query->whereNotNull('last_activity_at')
-            ->where('last_activity_at', '>', now()->subSeconds($activeThreshold + 1));
+
+        ->where('last_activity_at', '>', now()->subSeconds($activeThreshold + 1));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeHasBeenSigned(Builder $query): Builder
+    {
+        return $query->whereNotNull('last_signed_at');
     }
 
     /**

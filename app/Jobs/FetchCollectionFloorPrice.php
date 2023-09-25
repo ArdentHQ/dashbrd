@@ -18,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
@@ -39,6 +40,11 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchCollectionFloorPrice Job: Processing', [
+            'chainId' => $this->chainId,
+            'address' => $this->address,
+        ]);
+
         $web3DataProvider = $this->getWeb3DataProvider();
         $floorPrice = $web3DataProvider->getNftCollectionFloorPrice(
             Chains::from($this->chainId), $this->address
@@ -54,15 +60,31 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
                 'floor_price_token_id' => null,
                 'floor_price_retrieved_at' => Carbon::now(),
             ]);
+
+            Log::info('FetchCollectionFloorPrice Job: Cleared floor price', [
+                'chainId' => $this->chainId,
+                'address' => $this->address,
+                'collection' => $collection->address,
+            ]);
         } else {
             $token = Token::bySymbol(Str::upper($floorPrice->currency))
                 ->orderBy('id')
                 ->first();
 
+            $price = $token ? $floorPrice->price : null;
+
             $collection->update([
-                'floor_price' => $token ? $floorPrice->price : null,
+                'floor_price' => $price,
                 'floor_price_token_id' => $token?->id,
                 'floor_price_retrieved_at' => $token ? $floorPrice->retrievedAt : null,
+            ]);
+
+            Log::info('FetchCollectionFloorPrice Job: Set floor price', [
+                'chainId' => $this->chainId,
+                'address' => $this->address,
+                'collection' => $collection->address,
+                'floor_price' => $price,
+                'floor_price_token_id' => $token?->id,
             ]);
         }
 
