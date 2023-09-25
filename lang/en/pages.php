@@ -29,6 +29,10 @@ return [
         ],
     ],
 
+    'articles' => [
+        'featured_collections' => 'Featured Collections',
+    ],
+
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
