@@ -10,6 +10,7 @@ import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataF
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 import { Breakpoint } from "@/Tests/utils";
+import { ExplorerChains } from "@/Utils/Explorer";
 
 const user = new UserDataFactory().withUSDCurrency().create();
 
@@ -251,7 +252,7 @@ describe("ExplorerButton", () => {
     it("should not render for unknown chain", () => {
         render(
             <ExplorerButton
-                chainId={10000}
+                chainId={10000 as ExplorerChains.EthereumMainnet}
                 address="1"
                 tokenAddress="test"
             />,
