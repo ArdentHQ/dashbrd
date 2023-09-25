@@ -798,6 +798,7 @@ it('queries the collections for the collection data object', function () {
         'floor_price_decimals' => $collection1->floorPriceToken->decimals,
         'image' => 'https://example.com/image.png',
         'banner' => 'https://example.com/banner.png',
+        'opensea_slug' => 'test-collection',
         'website' => 'https://example.com',
         'nfts_count' => 0,
     ]);
@@ -814,6 +815,7 @@ it('queries the collections for the collection data object', function () {
         'floor_price_decimals' => $collection2->floorPriceToken->decimals,
         'image' => null,
         'banner' => null,
+        'opensea_slug' => null,
         'website' => 'https://example2.com',
         'nfts_count' => 0,
     ]);
