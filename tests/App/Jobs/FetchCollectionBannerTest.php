@@ -22,7 +22,7 @@ it('should fetch nft collection banner', function () {
         'floor_price_retrieved_at' => null,
         'extra_attributes' => [
             'image' => 'image-url',
-        ]
+        ],
     ]);
 
     expect($collection->banner())->toBeNull();
