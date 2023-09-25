@@ -38,7 +38,12 @@ class FetchNativeBalances implements ShouldBeUnique, ShouldQueue
         Collection|Wallet $wallets,
         public Network $network,
     ) {
-        $this->wallets = $wallets instanceof Wallet ? collect([$wallets]) : $wallets;
+        $wallets = $wallets instanceof Wallet ? collect([$wallets]) : $wallets;
+
+        $this->wallets = Wallet::query()
+            ->select(['id', 'address', 'extra_attributes'])
+            ->whereIn('id', $wallets->pluck('id'))
+            ->get();
     }
 
     public function handle(): void
