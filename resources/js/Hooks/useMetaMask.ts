@@ -1,5 +1,4 @@
 import { isObject } from "@ardenthq/sdk-helpers";
-import { type VisitOptions } from "@inertiajs/core";
 import { router } from "@inertiajs/react";
 import axios from "axios";
 import { ethers, utils } from "ethers";
@@ -13,6 +12,7 @@ import {
     type SendTransactionResponse,
 } from "./useMetaMask.contracts";
 import Chains = App.Enums.Chains;
+import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { browserLocale } from "@/Utils/browser-locale";
 
 const networkConfigs: Record<number, object> = {
@@ -166,6 +166,26 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
+    const { setAuthData } = useActiveUser();
+
+    const onError = useCallback((error: ErrorType, errorMessage?: string) => {
+        setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());
+
+        setConnecting(false);
+    }, []);
+
+    const handleAxiosError = (error: unknown): void => {
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 422) {
+                onError(ErrorType.Generic, (error.response.data as { message: string }).message);
+            } else {
+                onError(ErrorType.Generic);
+            }
+        } else {
+            onError(ErrorType.Generic);
+        }
+    };
+
     const switchUserWallet = async ({
         account: address,
         chainId,
@@ -175,48 +195,40 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     }): Promise<void> => {
         setSwitching(true);
 
-        await new Promise<void>((resolve) => {
-            router.visit(route("login"), {
-                replace: true,
-                method: "post" as VisitOptions["method"],
-                preserveState: true,
-                preserveScroll: true,
-                data: {
-                    address,
-                    chainId,
-                },
-                onError: (error) => {
-                    const firstError = [error.address, error.chainId].find((value) => typeof value === "string");
-
-                    onError(ErrorType.Generic, firstError);
-                },
-                onFinish: () => {
-                    setSwitching(false);
-
-                    setSigned(false);
-
-                    resolve();
-                },
+        try {
+            const response = await axios.post<App.Data.AuthData>(route("login"), {
+                address,
+                chainId,
             });
-        });
+
+            setAuthData?.(response.data);
+
+            router.reload();
+        } catch (error) {
+            handleAxiosError(error);
+        } finally {
+            setSwitching(false);
+
+            setSigned(false);
+        }
     };
 
     const logout = async (): Promise<void> => {
         setSwitching(true);
 
-        await new Promise<void>((resolve) => {
-            router.visit(route("logout"), {
-                replace: true,
-                method: "post" as VisitOptions["method"],
-                onFinish: () => {
-                    setSwitching(false);
+        try {
+            const response = await axios.post<{ redirectTo: string | null }>(route("logout"));
 
-                    setSigned(false);
+            setAuthData?.();
 
-                    resolve();
-                },
-            });
-        });
+            const redirectTo = response.data.redirectTo;
+            redirectTo === null ? router.reload() : router.get(route(redirectTo));
+        } catch (error) {
+            handleAxiosError(error);
+        } finally {
+            setSwitching(false);
+            setSigned(false);
+        }
     };
 
     useEffect(() => {
@@ -373,12 +385,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         [ethereumProvider],
     );
 
-    const onError = useCallback((error: ErrorType, errorMessage?: string) => {
-        setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());
-
-        setConnecting(false);
-    }, []);
-
     const showConnectOverlay = (onConnected?: () => void): void => {
         setShowConnectOverlay(true);
 
@@ -424,23 +430,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         try {
             signMessage = await getSignMessage(chainId);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response?.status === 422) {
-                    onError(
-                        ErrorType.Generic,
-                        (
-                            error.response.data as {
-                                message: string;
-                            }
-                        ).message,
-                    );
-                } else {
-                    onError(ErrorType.Generic);
-                }
-            } else {
-                onError(ErrorType.Generic);
-            }
-
+            handleAxiosError(error);
             return;
         }
 
@@ -462,35 +452,31 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             return;
         }
 
-        router.visit(route("sign"), {
-            replace: true,
-            method: "post" as VisitOptions["method"],
-            data: {
+        try {
+            const response = await axios.post<App.Data.AuthData>(route("sign"), {
                 address,
                 signature,
                 chainId,
-            },
-            onError: (error) => {
-                const firstError = [error.address, error.chainId, error.signature].find(
-                    (value) => typeof value === "string",
-                );
+            });
 
-                onError(ErrorType.Generic, firstError);
-            },
-            onFinish: () => {
-                setSigning(false);
+            setAuthData?.(response.data);
 
-                setRequiresSignature(false);
+            setSigned(true);
 
-                setSigned(true);
+            hideConnectOverlay();
 
-                hideConnectOverlay();
+            router.reload();
 
-                if (onSigned !== undefined) {
-                    onSigned();
-                }
-            },
-        });
+            if (onSigned !== undefined) {
+                onSigned();
+            }
+        } catch (error) {
+            handleAxiosError(error);
+        } finally {
+            setSigning(false);
+
+            setRequiresSignature(false);
+        }
     }, [requestChainAndAccount, router, onSigned]);
 
     const connectWallet = useCallback(async () => {
@@ -505,35 +491,32 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             return;
         }
 
-        router.visit(route("login"), {
-            replace: true,
-            method: "post" as VisitOptions["method"],
-            data: {
-                intendedUrl: window.location.href,
+        try {
+            const response = await axios.post<App.Data.AuthData>(route("login"), {
                 address: account,
                 chainId,
                 tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 locale: browserLocale(),
-            },
-            onError: (error) => {
-                const firstError = [error.address, error.chainId].find((value) => typeof value === "string");
+            });
 
-                onError(ErrorType.Generic, firstError);
-            },
-            onFinish: () => {
-                setAccount(account);
+            setAuthData?.(response.data);
 
-                setChainId(chainId);
+            hideConnectOverlay();
 
-                setConnecting(false);
+            router.reload();
 
-                hideConnectOverlay();
+            if (onConnected !== undefined) {
+                onConnected();
+            }
+        } catch (error) {
+            handleAxiosError(error);
+        } finally {
+            setAccount(account);
 
-                if (onConnected !== undefined) {
-                    onConnected();
-                }
-            },
-        });
+            setChainId(chainId);
+
+            setConnecting(false);
+        }
     }, [requestChainAndAccount, router, onConnected]);
 
     const addNetwork = async (chainId: Chains): Promise<void> => {

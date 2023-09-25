@@ -5,7 +5,9 @@ declare(strict_types=1);
 use App\Jobs\FetchCollectionNfts;
 use App\Models\Collection;
 use App\Models\Network;
+use App\Models\Nft;
 use App\Models\SpamContract;
+use App\Models\Wallet;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Config;
 
@@ -19,6 +21,33 @@ it('dispatches a job for all collections', function () {
     $this->artisan('collections:fetch-nfts');
 
     Bus::assertDispatchedTimes(FetchCollectionNfts::class, 3);
+});
+
+it('dispatches a job for collections that belongs to signed wallets', function () {
+    Bus::fake();
+
+    Collection::factory()->count(2)->create();
+
+    $signedCollection = Collection::factory()->create();
+
+    $signedWallet = Wallet::factory()->create([
+        'last_signed_at' => now(),
+    ]);
+
+    Nft::factory()->create([
+        'wallet_id' => $signedWallet->id,
+        'collection_id' => $signedCollection->id,
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 0);
+
+    $this->artisan('collections:fetch-nfts', [
+        '--only-signed' => true,
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 1);
+
+    Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->collection->is($signedCollection));
 });
 
 it('dispatches a job for a specific collection', function () {
