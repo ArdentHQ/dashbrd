@@ -13,6 +13,26 @@ describe('user is not signed', function () {
             ->get(route('settings.general'))
             ->assertStatus(200);
     });
+
+    it('cant update user general preferences if not signed', function () {
+        $user = createUser([
+            'extra_attributes' => [
+                'currency' => 'USD',
+                'date_format' => DateFormat::D,
+                'time_format' => '24',
+                'timezone' => 'UTC',
+            ],
+        ]);
+
+        $this->actingAs($user)
+            ->put(route('settings.general'), [
+                'currency' => 'EUR',
+                'date_format' => DateFormat::C->value,
+                'time_format' => '12',
+                'timezone' => 'Europe/Amsterdam',
+            ])
+            ->assertRedirect();
+    });
 });
 
 describe('user is signed', function () {
