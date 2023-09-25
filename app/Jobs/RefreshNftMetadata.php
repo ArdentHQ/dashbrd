@@ -48,25 +48,32 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-
         $nfts = Nft::whereNotNull('metadata_requested_at')
             ->where(function ($query) {
-                $query->whereNull('metadata_fetched_at')->orWhereRaw('metadata_fetched_at < metadata_requested_at');
+                $query->whereRaw('metadata_fetched_at < metadata_requested_at');
             })->get();
 
+        Log::info('RefreshNftMetadata Job: Processing', [
+            'address' => $this->collection->address,
+            'network' => $this->collection->network->id,
+            'token_numbers' => $this->nft->token_number,
+        ]);
 
+        // TODO: chunks of 100 (Alchemy limit).
+        $result = $provider->getNftMetadata($nfts);
 
-        try {
-            $result = $provider->getNftMetadata($nfts);
-        } catch (\Throwable $th) {
-            Log::info($th);
-        }
+        (new Web3NftHandler(collection: $this->collection))->store(
+            $result->nfts,
+            dispatchJobs: true
+        );
 
-        //
-        // (new Web3NftHandler(collection: $this->collection))->store(
-        //     $result->nfts,
-        //     dispatchJobs: true
-        // );
+        Nft::whereIn('id', $result->nfts->map(fn ($nft) => $nft->id))->update(['metadata_fetched_at' => now()]);
+
+        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
+            'nfts_count' => $result->nfts->count(),
+            'address' => $this->collection->address,
+            'network' => $this->collection->network->id,
+        ]);
     }
 
     public function uniqueId(): string
