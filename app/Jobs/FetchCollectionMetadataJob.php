@@ -85,7 +85,7 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
                         $collection->extra_attributes->set('banner_updated_at', now());
                     }
 
-                    if($data->collectionSlug) {
+                    if ($data->collectionSlug) {
                         $collection->extra_attributes->set('opensea_slug', $data->collectionSlug);
                         $collection->extra_attributes->set('opensea_slug_updated_at', now());
                     }
