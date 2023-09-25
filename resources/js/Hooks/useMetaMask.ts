@@ -465,11 +465,11 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
             hideConnectOverlay();
 
+            router.reload();
+
             if (onSigned !== undefined) {
                 onSigned();
             }
-
-            router.reload();
         } catch (error) {
             handleAxiosError(error);
         } finally {
@@ -503,11 +503,11 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
             hideConnectOverlay();
 
+            router.reload();
+
             if (onConnected !== undefined) {
                 onConnected();
             }
-
-            router.reload();
         } catch (error) {
             handleAxiosError(error);
         } finally {
