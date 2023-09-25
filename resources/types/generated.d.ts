@@ -99,6 +99,7 @@ declare namespace App.Data.Collections {
         floorPriceDecimals: number | null;
         image: string | null;
         banner: string | null;
+        openSeaSlug: string | null;
         website: string;
         nftsCount: number;
     };
@@ -327,6 +328,7 @@ declare namespace App.Data.Nfts {
         floorPrice: string | null;
         website: string;
         image: string | null;
+        openSeaSlug: string | null;
     };
     export type NftData = {
         id: number;

@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { useTranslation } from "react-i18next";
 
 import { CollectionDescription } from "@/Components/Collections/CollectionDescription";
@@ -7,6 +8,7 @@ import { NftOwner } from "@/Components/Collections/Nfts/NftHeader/NftOwner";
 import { Marketplaces } from "@/Components/Marketplaces";
 import { Point } from "@/Components/Point";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
     nft: App.Data.Nfts.NftData;
@@ -45,14 +47,18 @@ export const NftHeader = ({
                                 description={nft.collection.description}
                                 linkClassName="font-medium text-sm"
                             />
-                            <Point />
 
-                            <Marketplaces
-                                type="nft"
-                                nftId={nft.tokenNumber}
-                                address={nft.collection.address}
-                                chainId={nft.collection.chainId}
-                            />
+                            {isTruthy(nft.collection.openSeaSlug) && (
+                                <div className="flex flex-row items-center gap-2">
+                                    <Point />
+                                    <Marketplaces
+                                        type="nft"
+                                        nftId={nft.tokenNumber}
+                                        address={nft.collection.address}
+                                        chainId={nft.collection.chainId}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -87,17 +93,24 @@ export const NftHeader = ({
                         linkClassName="font-medium text-sm"
                     />
 
-                    <div className="hidden sm:block">
+                    <div
+                        className={cn("hidden", {
+                            "sm:block": isTruthy(nft.collection.openSeaSlug),
+                        })}
+                        data-testid="NftHeader__mobile__marketplaces_point"
+                    >
                         <Point />
                     </div>
                 </div>
                 <div>
-                    <Marketplaces
-                        type="nft"
-                        nftId={nft.tokenNumber}
-                        address={nft.collection.address}
-                        chainId={nft.collection.chainId}
-                    />
+                    {isTruthy(nft.collection.openSeaSlug) && (
+                        <Marketplaces
+                            type="nft"
+                            nftId={nft.tokenNumber}
+                            address={nft.collection.address}
+                            chainId={nft.collection.chainId}
+                        />
+                    )}
                 </div>
             </div>
 

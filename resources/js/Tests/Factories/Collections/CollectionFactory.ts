@@ -15,6 +15,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             floorPriceDecimals: this.optional(18),
             image: this.optional(faker.image.avatar(), 0.9),
             banner: this.optional(faker.image.avatar()),
+            openSeaSlug: this.optional(faker.lorem.slug()),
             website: faker.internet.url(),
             nftsCount: 0,
         };
