@@ -1,11 +1,11 @@
 import React from "react";
-import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { WalletTokensTable } from "@/Components/WalletTokens/WalletTokensTable";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import TokenTransactionsFixture from "@/Tests/Fixtures/token_transactions.json";
 import { setNativeTokenHandler } from "@/Tests/Mocks/Handlers/nativeToken";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
 import { render, screen, userEvent } from "@/Tests/testing-library";

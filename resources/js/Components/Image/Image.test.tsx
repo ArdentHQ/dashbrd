@@ -1,7 +1,7 @@
 import React from "react";
-import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { Img } from "./Image";
 import * as ImageLoaderHook from "./useImageLoader";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { act, render, screen, waitFor } from "@/Tests/testing-library";
 
 describe("Image", () => {
