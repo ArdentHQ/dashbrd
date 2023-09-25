@@ -7,7 +7,7 @@ interface Properties {
     type: "nft" | "collection";
     chainId: App.Enums.Chains;
     address: App.Data.Nfts.NftCollectionData["address"];
-    nftId: App.Data.Nfts.NftData["tokenNumber"];
+    nftId?: App.Data.Nfts.NftData["tokenNumber"];
 }
 
 const getNetworkName = (chainId: App.Enums.Chains): string | null => {

@@ -261,4 +261,24 @@ describe("CollectionHeaderTop", () => {
 
         process.env.REACT_APP_IS_UNIT = "true";
     });
+
+    it("should render marketplaces if collection has openSea slug", () => {
+        const collection = new CollectionDetailDataFactory().create({
+            openSeaSlug: "test",
+        });
+
+        render(<CollectionHeaderTop collection={collection} />);
+
+        expect(screen.getByTestId("NftMarketplaces")).toBeInTheDocument();
+    });
+
+    it("should not render marketplaces if collection has no openSea slug", () => {
+        const collection = new CollectionDetailDataFactory().create({
+            openSeaSlug: null,
+        });
+
+        render(<CollectionHeaderTop collection={collection} />);
+
+        expect(screen.queryByTestId("NftMarketplaces")).not.toBeInTheDocument();
+    });
 });
