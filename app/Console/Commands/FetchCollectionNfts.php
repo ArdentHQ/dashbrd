@@ -46,7 +46,7 @@ class FetchCollectionNfts extends Command
             }
         }, queryCallback: function (Builder $query) use ($onlySigned) {
             return $query
-                ->when($onlySigned, fn($q) => $q->distinct('collections.id')->withSignedWallets())
+                ->when($onlySigned, fn ($q) => $q->distinct('collections.id')->withSignedWallets())
                 ->withAcceptableSupply();
         });
 
