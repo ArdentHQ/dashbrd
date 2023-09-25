@@ -1,4 +1,4 @@
-import { mockViewportVisibilitySensor } from "vitest.setup";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { CollectionsGrid } from "./CollectionsGrid";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import { render } from "@/Tests/testing-library";

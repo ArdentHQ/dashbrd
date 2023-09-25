@@ -1,5 +1,5 @@
 import React from "react";
-import { mockViewportVisibilitySensor } from "vitest.setup";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { Img } from "./Image";
 import * as ImageLoaderHook from "./useImageLoader";
 import { act, render, screen, waitFor } from "@/Tests/testing-library";
