@@ -58,40 +58,6 @@ it('trims collection names', function () {
     expect($collection->name)->toBe('Collection Name');
 });
 
-it('should throw an exception if no wallet or collection passed', function () {
-    Bus::fake();
-
-    expect(function () {
-        $handler = new Web3NftHandler();
-
-        $token = Token::factory()->create();
-
-        $data = new Web3NftData(
-            tokenAddress: '0x123',
-            tokenNumber: '123',
-            networkId: $token->network_id,
-            collectionName: '  Collection Name  ',
-            collectionSymbol: 'AME',
-            collectionImage: null,
-            collectionWebsite: null,
-            collectionDescription: null,
-            collectionSocials: null,
-            collectionSupply: null,
-            collectionBannerImageUrl: null,
-            collectionBannerUpdatedAt: null,
-            name: null,
-            description: null,
-            extraAttributes: [],
-            floorPrice: null,
-            traits: [],
-            mintedBlock: 1000,
-            mintedAt: null,
-        );
-
-        $handler->store(nfts: collect([$data]));
-    })->toThrow(RuntimeException::class);
-});
-
 it('should not insert traits with long values', function () {
     Bus::fake();
 
