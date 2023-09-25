@@ -22,7 +22,7 @@ export default mergeConfig(
             server: {
                 deps: {
                     inline: ["@ardenthq/sdk-intl"],
-                }
+                },
             },
             coverage: {
                 all: true,
