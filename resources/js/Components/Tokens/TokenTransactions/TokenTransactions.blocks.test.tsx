@@ -10,7 +10,7 @@ import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataF
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 import { Breakpoint } from "@/Tests/utils";
-import { ExplorerChains } from "@/Utils/Explorer";
+import { type ExplorerChains } from "@/Utils/Explorer";
 
 const user = new UserDataFactory().withUSDCurrency().create();
 
