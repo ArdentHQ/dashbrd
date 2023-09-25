@@ -22,12 +22,10 @@ trait InteractsWithCollections
             $collection = Collection::query()
                 ->select('collections.*')
                 ->where('collections.id', '=', $this->option('collection-id'))
-                ->filterInvalid()
+                ->withoutSpamContracts()
                 ->first();
 
-            if ($collection && ! $collection->isBlacklisted()) {
-                $callback($collection);
-            }
+            $collection && $callback($collection);
 
             return;
         }
@@ -35,11 +33,9 @@ trait InteractsWithCollections
         Collection::query()
             ->when($queryCallback !== null, $queryCallback)
             ->select('collections.*')
-            ->filterInvalid()
+            ->withoutSpamContracts()
             ->chunkById(100, function ($collections) use ($callback) {
-                $collections
-                    ->filter(fn ($collection) => ! $collection->isBlacklisted())
-                    ->each($callback);
+                $collections->each($callback);
             }, 'collections.id', 'id');
     }
 }

@@ -7,7 +7,6 @@ use App\Models\Collection;
 use App\Models\Network;
 use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Config;
 
 it('dispatches a job for collections without banners', function () {
     Bus::fake();
@@ -51,37 +50,6 @@ it('should exclude spam contracts', function () {
 
     Bus::assertDispatched(FetchCollectionBannerBatch::class, function ($job) use ($collections) {
         return ! in_array($collections->first()->address, $job->collectionAddresses);
-    });
-});
-
-it('should exclude collections with an invalid supply', function () {
-    Bus::fake();
-
-    Config::set('dashbrd.collections_max_cap', 5000);
-
-    $network = Network::factory()->create();
-
-    $collection1 = Collection::factory()->create([
-        'network_id' => $network->id,
-        'supply' => 3000,
-    ]);
-
-    Collection::factory()->create([
-        'network_id' => $network->id,
-        'supply' => null,
-    ]);
-
-    Collection::factory()->create([
-        'network_id' => $network->id,
-        'supply' => 5001,
-    ]);
-
-    $this->artisan('nfts:fetch-collection-banner-batch');
-
-    Bus::assertDispatched(FetchCollectionBannerBatch::class, function ($job) use ($collection1) {
-        $addresses = $job->collectionAddresses;
-
-        return in_array($collection1->address, $addresses) && count($addresses) === 1;
     });
 });
 

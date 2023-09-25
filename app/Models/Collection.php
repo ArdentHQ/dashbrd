@@ -352,15 +352,6 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeFilterInvalid(Builder $query): Builder
-    {
-        return $query->withAcceptableSupply()->withoutSpamContracts();
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
     public function scopeForCollectionData(Builder $query, User $user = null): Builder
     {
         $extraAttributeSelect = "CASE

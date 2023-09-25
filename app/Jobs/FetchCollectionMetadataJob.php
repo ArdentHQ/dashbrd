@@ -45,7 +45,7 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
 
         $collections = Collection::query()
             ->whereIn('address', $metadata->pluck('contractAddress'))
-            ->select(['id', 'address'])
+            ->select(['id', 'address', 'extra_attributes'])
             ->get();
 
         $metadata
@@ -59,7 +59,7 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
                         'collection_address' => $address,
                         'name' => $data->collectionName,
                         'total_supply' => $data->totalSupply,
-                        'description' => $data->description,
+                        'description' => $data->description ? Str::length($data->description) : null,
                         'banner' => $data->bannerImageUrl,
                         'opensea_slug' => $data->collectionSlug,
                     ]);
