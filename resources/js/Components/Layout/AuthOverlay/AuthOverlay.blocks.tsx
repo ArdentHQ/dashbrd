@@ -7,6 +7,8 @@ import { Icon } from "@/Components/Icon";
 import { OverlayButtonsWrapper } from "@/Components/Layout/Overlay/Overlay.blocks";
 const metamaskDownloadUrl = "https://metamask.io/download/";
 
+const closeText = "common.close";
+
 export const InstallMetamask = ({
     showCloseButton,
     closeOverlay,
@@ -25,7 +27,7 @@ export const InstallMetamask = ({
                     onClick={closeOverlay}
                     className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
                 >
-                    {t("common.close")}
+                    {t(closeText)}
                 </Button>
             )}
 
@@ -60,7 +62,7 @@ export const ConnectionError = ({
                     onClick={closeOverlay}
                     className="w-full min-w-[81px] justify-center xs:w-auto"
                 >
-                    {t("common.close")}
+                    {t(closeText)}
                 </Button>
             )}
             <Button
@@ -124,7 +126,7 @@ export const ConnectWallet = ({
                     onClick={closeOverlay}
                     className="w-full justify-center whitespace-nowrap"
                 >
-                    {t("common.close")}
+                    {t(closeText)}
                 </Button>
             )}
 

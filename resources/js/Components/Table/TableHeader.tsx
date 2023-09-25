@@ -1,4 +1,5 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+/* eslint-disable sonarjs/no-duplicate-string */
 import cn from "classnames";
 import React from "react";
 import { type HeaderGroup } from "react-table";

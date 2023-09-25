@@ -17,6 +17,8 @@ import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
+const commonText = "common.from";
+
 export const AddressLink = ({
     address,
     chainId,
@@ -252,7 +254,7 @@ export const Type = ({
                 {!isMdAndAbove && (
                     <div className="ml-auto flex flex-col items-end">
                         <div className="flex items-center space-x-2">
-                            <Label>{t("common.from")}</Label>
+                            <Label>{t(commonText)}</Label>
                             <AddressLink
                                 chainId={collection.chainId}
                                 address={activity.sender}
@@ -675,7 +677,7 @@ export const CollectionActivityTableItem = ({
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <Label>{t("common.from")}</Label>
+                    <Label>{t(commonText)}</Label>
                     <AddressLink
                         chainId={collection.chainId}
                         address={activity.sender}
@@ -742,7 +744,7 @@ export const CollectionActivityTableItem = ({
                     })}
                 >
                     <div className="flex items-center space-x-2">
-                        {!isXlAndAbove && <span>{t("common.from")}</span>}
+                        {!isXlAndAbove && <span>{t(commonText)}</span>}
                         <AddressLink
                             address={activity.sender}
                             chainId={collection.chainId}

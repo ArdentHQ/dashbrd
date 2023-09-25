@@ -1,4 +1,5 @@
-/* eslint-disable import/export,import/no-namespace */
+/* eslint-disable import/export,import/no-namespace, @typescript-eslint/ban-ts-comment */
+
 import * as inertia from "@inertiajs/react";
 import { type InertiaFormProps } from "@inertiajs/react/types/useForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
