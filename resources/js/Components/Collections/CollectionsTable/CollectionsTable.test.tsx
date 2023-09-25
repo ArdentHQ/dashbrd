@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react";
-import { mockViewportVisibilitySensor } from "vitest.setup";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { CollectionsTable } from "./CollectionsTable";
 import * as useAuthMock from "@/Hooks/useAuth";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";

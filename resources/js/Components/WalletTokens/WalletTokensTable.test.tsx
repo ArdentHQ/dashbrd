@@ -1,5 +1,5 @@
 import React from "react";
-import { mockViewportVisibilitySensor } from "vitest.setup";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { WalletTokensTable } from "@/Components/WalletTokens/WalletTokensTable";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
