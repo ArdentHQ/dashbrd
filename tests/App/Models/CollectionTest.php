@@ -1035,7 +1035,7 @@ it('should exclude spam contracts', function () {
         'network_id' => $collections->first()->network_id,
     ]);
 
-    $validCollections = Collection::query()->filterInvalid()->get();
+    $validCollections = Collection::query()->withoutSpamContracts()->get();
 
     expect($validCollections->count())->toBe(1)
         ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
@@ -1061,7 +1061,7 @@ it('should exclude collections with an invalid supply', function () {
         'supply' => 5001,
     ]);
 
-    $validCollections = Collection::query()->filterInvalid()->get();
+    $validCollections = Collection::query()->withAcceptableSupply()->get();
 
     expect($validCollections->count())->toBe(1)
         ->and($validCollections->first()->slug)->toBe($collection1->slug);
