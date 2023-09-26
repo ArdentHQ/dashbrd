@@ -24,7 +24,6 @@ class GeneralSettingsController extends Controller
             'currencies' => Currency::all(),
             'dateFormats' => DateFormat::all(),
             'timezones' => Timezone::formatted(),
-            'reset' => $request->boolean('reset'),
         ]);
     }
 
