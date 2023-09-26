@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionNfts as FetchCollectionNftsJob;
-use App\Models\Collection;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 

@@ -356,7 +356,7 @@ class Collection extends Model
                     ->selectRaw('DISTINCT nfts.collection_id')
                     ->whereRaw('nfts.wallet_id = signed_wallets.id'),
                 'distinct_collections',
-               null // @phpstan-ignore-line
+                null // @phpstan-ignore-line
             );
 
         return $query
