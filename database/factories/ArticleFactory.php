@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\ArticleCategoryEnum;
 use App\Models\Article;
 use App\Models\User;
 use Database\Factories\Traits\RandomTimestamps;
@@ -25,7 +26,7 @@ class ArticleFactory extends Factory
     {
         return [
             'title' => fake()->name(),
-            'category' => fake()->name(),
+            'category' => fake()->randomElement([ArticleCategoryEnum::News->value]),
             'published_at' => fake()->date(),
             'meta_description' => fake()->text(),
             'content' => fake()->text(),
