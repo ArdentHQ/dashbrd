@@ -50,7 +50,7 @@ it('dispatches a job for collections that belongs to signed wallets', function (
     Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->collection->is($signedCollection));
 });
 
-it('should not dispatch a job for a spam collection that belongs to signed wallets', function () {
+it('should not dispatch a job for a spam collection that belongs to signed wallet', function () {
     Bus::fake();
 
     $spamCollection = Collection::factory()->create();
