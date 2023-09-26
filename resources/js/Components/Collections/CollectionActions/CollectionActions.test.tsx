@@ -93,7 +93,38 @@ describe("CollectionActions", () => {
         expect(screen.getByTestId("CollectionActions__report")).toHaveAttribute("disabled");
     });
 
-    it("can hide a collection", async () => {
+    it("should not hide a collection if wallet is not signed", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: false });
+        });
+
+        const routerReloadSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        render(
+            <CollectionActions
+                collection={collection}
+                onChanged={vi.fn()}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("CollectionActions__trigger"));
+
+        await waitFor(() => {
+            expect(screen.queryByTestId("CollectionActions__popup")).toBeInTheDocument();
+        });
+
+        const hideButton = screen.getByTestId("CollectionActions__hide");
+
+        const function_ = vi.fn();
+        const routerPostSpy = vi.spyOn(router, "post").mockImplementation(function_);
+
+        await userEvent.click(hideButton);
+
+        expect(routerReloadSpy).toHaveBeenCalled();
+        expect(routerPostSpy).not.toHaveBeenCalled();
+    });
+
+    it("can hide a collection if wallet is signed", async () => {
         render(
             <CollectionActions
                 collection={collection}
