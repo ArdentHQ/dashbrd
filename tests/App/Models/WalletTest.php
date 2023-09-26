@@ -279,3 +279,17 @@ it('gets the native_balances_fetched_at if not set', function () {
 
     expect($wallet->nativeBalancesFetchedAt())->toBeNull();
 });
+
+it('filters wallets that have been signed at least one time', function () {
+    $signed = Wallet::factory()->create([
+        'last_signed_at' => now(),
+    ]);
+
+    Wallet::factory()->create();
+
+    $filtered = Wallet::hasBeenSigned()->get();
+
+    expect($filtered->count())->toBe(1);
+
+    expect($filtered->first()->id)->toBe($signed->id);
+});

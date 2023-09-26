@@ -142,7 +142,9 @@ class Kernel extends ConsoleKernel
             ->dailyAt('5:30');
 
         $schedule
-            ->command(FetchCollectionNfts::class)
+            ->command(FetchCollectionNfts::class, [
+                '--only-signed',
+            ])
             ->withoutOverlapping()
             ->dailyAt('11:00');
 
