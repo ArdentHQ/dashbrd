@@ -972,7 +972,7 @@ it('should exclude spam contracts', function () {
         'network_id' => $collections->first()->network_id,
     ]);
 
-    $validCollections = Collection::query()->filterInvalid()->get();
+    $validCollections = Collection::query()->withoutSpamContracts()->get();
 
     expect($validCollections->count())->toBe(1)
         ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
@@ -998,7 +998,7 @@ it('should exclude collections with an invalid supply', function () {
         'supply' => 5001,
     ]);
 
-    $validCollections = Collection::query()->filterInvalid()->get();
+    $validCollections = Collection::query()->withAcceptableSupply()->get();
 
     expect($validCollections->count())->toBe(1)
         ->and($validCollections->first()->slug)->toBe($collection1->slug);
@@ -1043,12 +1043,12 @@ it('filters collections that belongs to wallets that have been signed at least o
         'collection_id' => $collection4->id,
     ]);
 
-    $filtered = Collection::getWithSignedWallet();
+    $filtered = Collection::query()->withSignedWallets()->get();
 
-    expect($filtered->count())->toBe(2);
+    expect($filtered->count())->toBe(2)
+        ->and($filtered->pluck('id')->sort()->toArray())->toEqual([
+            $collection1->id,
+            $collection4->id,
+        ]);
 
-    expect($filtered->pluck('id')->sort()->toArray())->toEqual([
-        $collection1->id,
-        $collection4->id,
-    ]);
 });

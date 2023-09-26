@@ -20,6 +20,9 @@ it('should fetch nft collection banner', function () {
         'floor_price' => null,
         'floor_price_token_id' => null,
         'floor_price_retrieved_at' => null,
+        'extra_attributes' => [
+            'image' => 'image-url',
+        ],
     ]);
 
     expect($collection->banner())->toBeNull();
@@ -28,7 +31,8 @@ it('should fetch nft collection banner', function () {
 
     $collection->refresh();
 
-    expect($collection->banner())->toBe('https://i.seadn.io/gcs/files/f0d3006fb5a1f09d1619a024762f5aee.png?w=1378&auto=format');
+    expect($collection->banner())->toBe('https://i.seadn.io/gcs/files/f0d3006fb5a1f09d1619a024762f5aee.png?w=1378&auto=format')
+        ->and($collection->image())->toBe('image-url');
 });
 
 it('should fetch nft collection banner in case no image', function () {
