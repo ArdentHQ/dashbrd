@@ -41,6 +41,10 @@ class DatabaseSeeder extends Seeder
             $this->call(GalleryLikesSeeder::class);
         }
 
+        if (Feature::active(Features::Articles->value)) {
+            $this->call(ArticleSeeder::class);
+        }
+
         Cache::clear();
     }
 }
