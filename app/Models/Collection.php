@@ -349,7 +349,7 @@ class Collection extends Model
             ->whereNotNull('last_signed_at');
 
         $distinctCollectionIds = DB::query()
-            ->select('distinct_collections.id as id')
+            ->select('distinct_collections.collection_id as id')
             ->withExpression('signed_wallets', $signedWallets)
             ->from('signed_wallets')
             ->joinSubLateral(
