@@ -11,7 +11,6 @@ use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -484,16 +483,6 @@ class Collection extends Model
     public function isBlacklisted(): bool
     {
         return BlacklistedCollections::includes($this->address);
-    }
-
-    /**
-     * @return EloquentCollection<int, self>
-     */
-    public static function getWithSignedWallet(): EloquentCollection
-    {
-        $result = DB::select(get_query('collections.get_with_signed_wallet'));
-
-        return self::hydrate($result);
     }
 
     /**
