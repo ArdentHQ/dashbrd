@@ -45,7 +45,7 @@ export const CollectionsFilterPopover = ({
         }
     }, [debouncedQuery]);
 
-    const isNetowrkFilterActive =
+    const isNetworkFilterActive =
         isLoading ||
         availableNetworks
             .filter((network) => network.collectionsCount > 0)
