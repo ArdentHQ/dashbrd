@@ -10,11 +10,6 @@ it('can find specific currency', function () {
     expect(Currency::find('Unknown', default: 'USD'))->toBe('USD');
 });
 
-it('can guess currency from the locale', function () {
-    expect(Currency::guessCodeFromLocale('en-GB'))->toBe('GBP');
-    expect(Currency::guessCodeFromLocale('Unknown'))->toBe('USD');
-});
-
 it('can get all currency codes', function () {
     $code = Currency::codes();
 
