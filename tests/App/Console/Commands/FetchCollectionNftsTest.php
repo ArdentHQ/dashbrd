@@ -50,6 +50,47 @@ it('dispatches a job for collections that belongs to signed wallets', function (
     Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->collection->is($signedCollection));
 });
 
+it('should not dispatch a job for a spam collection that belongs to signed wallets', function () {
+    Bus::fake();
+
+    $spamCollection = Collection::factory()->create();
+
+    SpamContract::query()->insert([
+        'address' => $spamCollection->address,
+        'network_id' => $spamCollection->network_id,
+    ]);
+
+    $spamCollectionWallet = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
+
+    Nft::factory()->create([
+        'wallet_id' => $spamCollectionWallet->id,
+        'collection_id' => $spamCollection->id,
+    ]);
+
+    $signedCollection = Collection::factory()->create();
+
+    $signedWallet = Wallet::factory()->create([
+        'last_signed_at' => now(),
+    ]);
+
+    Nft::factory()->create([
+        'wallet_id' => $signedWallet->id,
+        'collection_id' => $signedCollection->id,
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 0);
+
+    $this->artisan('collections:fetch-nfts', [
+        '--only-signed' => true,
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 1);
+
+    Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->collection->is($signedCollection));
+});
+
 it('dispatches a job for a specific collection', function () {
     Bus::fake();
 
