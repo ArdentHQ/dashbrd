@@ -61,7 +61,7 @@ it('should not dispatch a job for a spam collection that belongs to signed walle
     ]);
 
     $spamCollectionWallet = Wallet::factory()->create([
-        'last_signed_at' => null,
+        'last_signed_at' => now(),
     ]);
 
     Nft::factory()->create([
