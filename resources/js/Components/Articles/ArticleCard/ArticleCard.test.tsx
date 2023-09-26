@@ -9,7 +9,9 @@ describe("ArticleCard", () => {
 
         render(
             <ArticleCard
-                article={{}}
+                article={{
+                    title: "title",
+                }}
                 collections={collections}
             />,
         );
@@ -21,7 +23,9 @@ describe("ArticleCard", () => {
 
         render(
             <ArticleCard
-                article={{}}
+                article={{
+                    title: "title",
+                }}
                 collections={collections}
             />,
         );
