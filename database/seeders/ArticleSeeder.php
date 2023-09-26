@@ -16,17 +16,26 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        $articles = Article::factory()->createMany(10);
-
         $network = Network::query()->first();
 
         if (! $network) {
             $network = Network::factory()->create();
+
         }
 
-        $articles->map(function ($article) use ($network) {
-            $imageUrl = fake()->imageUrl(640, 480, null, false);
-            $article->addMediaFromUrl($imageUrl)->toMediaCollection();
+        $articlesData = collect(json_decode(file_get_contents(database_path('seeders/fixtures/articles/articles.json')), true));
+
+        $articlesData->shuffle()->take(10)->each(function ($articleData) use ($network) {
+            $article = Article::factory()->create([
+                'title' => $articleData['name'],
+                'category' => 'news',
+                'published_at' => $articleData['published_at'],
+                'content' => $articleData['body'],
+            ]);
+
+            $imagePath = database_path('seeders/fixtures/articles/images/'.$articleData['slug'].'.png');
+
+            $article->addMedia($imagePath)->preservingOriginal()->toMediaCollection();
 
             $collections = Collection::factory()->count(2)->create([
                 'network_id' => $network->id,
