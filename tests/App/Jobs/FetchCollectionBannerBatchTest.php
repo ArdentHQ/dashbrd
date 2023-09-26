@@ -25,6 +25,7 @@ it('should fetch nft collection banner', function () {
         'network_id' => $network->id,
         'extra_attributes' => [
             'banner' => null,
+            'image' => 'image-url',
         ],
     ]);
 
@@ -37,6 +38,7 @@ it('should fetch nft collection banner', function () {
     $updatedAt = Carbon::parse($collection->bannerUpdatedAt());
 
     expect($updatedAt->timestamp)->toBe($now->timestamp)
+        ->and($collection->image())->toBe('image-url')
         ->and($collection->banner())->toBe('https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format');
 });
 

@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionNfts as FetchCollectionNftsJob;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class FetchCollectionNfts extends Command
 {
@@ -16,7 +17,7 @@ class FetchCollectionNfts extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-nfts {--collection-id=} {--start-token=}';
+    protected $signature = 'collections:fetch-nfts {--collection-id=} {--start-token=} {--only-signed}';
 
     /**
      * The console command description.
@@ -30,11 +31,19 @@ class FetchCollectionNfts extends Command
      */
     public function handle(): int
     {
+        $onlySigned = (bool) $this->option('only-signed');
+
         $this->forEachCollection(function ($collection) {
-            FetchCollectionNftsJob::dispatch(
-                $collection,
-                $this->option('start-token') ?? $collection->last_indexed_token_number
-            );
+            if (! $collection->isBlacklisted()) {
+                FetchCollectionNftsJob::dispatch(
+                    $collection,
+                    $this->option('start-token') ?? $collection->last_indexed_token_number
+                );
+            }
+        }, queryCallback: function (Builder $query) use ($onlySigned) {
+            return $query
+                ->when($onlySigned, fn ($q) => $q->withSignedWallets())
+                ->withAcceptableSupply();
         });
 
         return Command::SUCCESS;
