@@ -1,13 +1,32 @@
 import { type Page, type PageProps, type VisitOptions } from "@inertiajs/core";
 import { router } from "@inertiajs/react";
 import React from "react";
+import { type SpyInstance } from "vitest";
 import { CollectionActions } from "./CollectionActions";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import { render, screen, userEvent, waitFor } from "@/Tests/testing-library";
+
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
 
 const collection = new CollectionFactory().create();
 
 describe("CollectionActions", () => {
+    beforeEach(() => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+        });
+    });
+
+    afterEach(() => {
+        useAuthorizedActionSpy.mockRestore();
+    });
+
     it.each([true, false])("should render", (isHidden) => {
         render(
             <CollectionActions
@@ -141,7 +160,39 @@ describe("CollectionActions", () => {
         expect(routerSpy).toHaveBeenCalled();
     });
 
-    it("can show and manage report modal state", async () => {
+    it("should not show report modal if wallet is not signed", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: false });
+        });
+
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        render(
+            <CollectionActions
+                collection={collection}
+                isHidden={false}
+                onChanged={vi.fn()}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("CollectionActions__trigger"));
+
+        expect(screen.queryByTestId("CollectionActions__popup")).toBeInTheDocument();
+
+        const reportButton = screen.getByTestId("CollectionActions__report");
+
+        await userEvent.click(reportButton);
+
+        expect(routerSpy).toHaveBeenCalled();
+
+        routerSpy.mockRestore();
+    });
+
+    it("can show and manage report modal state if wallet is signed", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
         render(
             <CollectionActions
                 collection={collection}
@@ -170,6 +221,10 @@ describe("CollectionActions", () => {
     });
 
     it("should report a collection", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
         const onReportMock = vi.fn();
 
         const t: unknown = {};
