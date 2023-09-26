@@ -145,7 +145,7 @@ class Kernel extends ConsoleKernel
             ->command(FetchCollectionNfts::class, [
                 // Limit the number of collections to fetch for unsigned wallets, since
                 // it sorts the collections by last_fetched_at eventually it will
-                // fetch all collections nfts
+                // fetch nfts for all collections.
                 '--limit' => config('dashbrd.daily_max_collection_nft_retrieval_for_unsigned_wallets'),
             ])
             ->withoutOverlapping()
