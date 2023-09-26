@@ -125,11 +125,6 @@ class Collection extends Model
         return $this->extra_attributes->get('opensea_slug');
     }
 
-    public function openSeaSlugUpdatedAt(): ?string
-    {
-        return $this->extra_attributes->get('opensea_slug_updated_at');
-    }
-
     public function website(bool $defaultToExplorer = true): ?string
     {
         $website = $this->extra_attributes->get('website');

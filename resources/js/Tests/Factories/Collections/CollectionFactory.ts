@@ -31,7 +31,6 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             banner: faker.image.avatar(),
             bannerUpdatedAt: faker.date.recent().toISOString(),
             openSeaSlug: faker.lorem.slug(),
-            openSeaSlugUpdatedAt: faker.date.recent().toISOString(),
             website: faker.internet.url(),
         }));
     }
