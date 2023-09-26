@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
         Route::get('{collection:slug}/nfts', [MyGalleryCollectionController::class, 'nfts'])->name('my-galleries.nfts');
     });
 
-    Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
+    Route::group(['prefix' => 'collections', 'middleware' => ['features:collections', 'signed_wallet']], function () {
         Route::post('{collection:address}/hidden',
             [HiddenCollectionController::class, 'store'])->name('hidden-collections.store');
         Route::delete('{collection:address}/hidden',
@@ -62,11 +62,11 @@ Route::middleware('auth')->group(function () {
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
     });
 
-    Route::group(['prefix' => 'nfts'], function () {
+    Route::group(['prefix' => 'nfts', 'middleware' => 'signed_wallet'], function () {
         Route::post('{nft:id}/reports', [NftReportController::class, 'store'])->name('nft-reports.create')->middleware('throttle:nft:reports');
     });
 
-    Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
+    Route::group(['prefix' => 'galleries', 'middleware' => ['features:galleries', 'signed_wallet']], function () {
 
         Route::post('{gallery:slug}/reports',
             [GalleryReportController::class, 'store'])
