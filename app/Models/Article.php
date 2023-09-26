@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\ArticleCategoryEnum;
 use App\Models\Traits\BelongsToUser;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
@@ -19,6 +20,11 @@ class Article extends Model implements HasMedia, Viewable
     use BelongsToUser, HasFactory, InteractsWithMedia, InteractsWithViews, SoftDeletes;
 
     public $guarded = ['id'];
+
+    protected $casts = [
+        'category' => ArticleCategoryEnum::class,
+        'published_at' => 'timestamp',
+    ];
 
     /**
      * @return BelongsToMany<Collection>

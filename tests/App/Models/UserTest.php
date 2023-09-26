@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 use App\Enums\CurrencyCode;
+use App\Enums\Role;
 use App\Models\Collection;
 use App\Models\Gallery;
 use App\Models\Network;
 use App\Models\Nft;
+use App\Models\Role as RoleModel;
 use App\Models\User;
 use App\Models\Wallet;
 use Filament\Panel;
@@ -296,4 +298,35 @@ it('can get filament access', function () {
     app()['env'] = 'local';
 
     expect($user->canAccessPanel(new Panel))->toBeTrue();
+});
+
+it('filters managers', function () {
+    setUpPermissions();
+
+    $user = User::factory()->create();
+    $superadmin = User::factory()->create();
+    $admin = User::factory()->create();
+    $editor = User::factory()->create();
+
+    $editor->assignRole([
+        RoleModel::where('name', Role::Editor->value)->where('guard_name', 'admin')->firstOrFail(),
+    ])->save();
+
+    $admin->assignRole([
+        RoleModel::where('name', Role::Admin->value)->where('guard_name', 'admin')->firstOrFail(),
+    ])->save();
+
+    $superadmin->assignRole([
+        RoleModel::where('name', Role::Superadmin->value)->where('guard_name', 'admin')->firstOrFail(),
+    ])->save();
+
+    $managers = User::managers()->get();
+
+    expect($managers)->toHaveCount(3);
+
+    expect($managers->pluck('id')->toArray())->toEqualCanonicalizing([
+        $superadmin->id,
+        $admin->id,
+        $editor->id,
+    ]);
 });
