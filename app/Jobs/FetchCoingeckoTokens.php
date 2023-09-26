@@ -29,6 +29,7 @@ class FetchCoingeckoTokens implements ShouldQueue
      */
     public function handle(): void
     {
+
         $provider = new CoingeckoProvider();
         $tokenList = $provider->fetchTokens();
 
