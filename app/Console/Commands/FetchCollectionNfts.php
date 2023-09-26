@@ -44,9 +44,10 @@ class FetchCollectionNfts extends Command
                     );
                 }
             },
-            queryCallback: function (Builder $query) use ($onlySigned) {
+            queryCallback: function (Builder $query) use ($onlySigned, $limit) {
                 return $query
                     ->when($onlySigned, fn ($q) => $q->withSignedWallets())
+                    ->when($limit !== null, fn ($q) => $q->orderByOldestNftLastFetchedAt())
                     ->withAcceptableSupply();
             },
             limit: $limit === null ? null : (int) $limit
