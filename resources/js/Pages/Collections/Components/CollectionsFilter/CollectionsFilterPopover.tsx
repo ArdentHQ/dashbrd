@@ -54,7 +54,7 @@ export const CollectionsFilterPopover = ({
             .every((network) => selectedChainIds.includes(network.chainId)) ||
         selectedChainIds.filter((chainId) => {
             const network = availableNetworks.find((network) => network.chainId === chainId);
-            return network && network.collectionsCount > 0;
+            return network != null && network.collectionsCount > 0;
         }).length === 0;
 
     return (
