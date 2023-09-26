@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Collection;
-use App\Models\SpamContract;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -20,13 +19,13 @@ trait InteractsWithCollections
         // Apply `$queryCallback` to modify the query before fetching collections...
 
         if ($this->option('collection-id')) {
-            $collection = Collection::find($this->option('collection-id'));
+            $collection = Collection::query()
+                ->select('collections.*')
+                ->where('collections.id', '=', $this->option('collection-id'))
+                ->withoutSpamContracts()
+                ->first();
 
-            if (SpamContract::isSpam($collection->address, $collection->network)) {
-                return;
-            }
-
-            $callback($collection);
+            $collection && $callback($collection);
 
             return;
         }
@@ -35,9 +34,8 @@ trait InteractsWithCollections
             ->when($queryCallback !== null, $queryCallback)
             ->select('collections.*')
             ->withoutSpamContracts()
-            ->chunkById(
-                100,
-                static fn ($collections) => $collections->each($callback),
-                'collections.id', 'id');
+            ->chunkById(100, function ($collections) use ($callback) {
+                $collections->each($callback);
+            }, 'collections.id', 'id');
     }
 }
