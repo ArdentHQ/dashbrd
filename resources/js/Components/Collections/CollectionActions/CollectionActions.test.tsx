@@ -98,7 +98,7 @@ describe("CollectionActions", () => {
             action({ authenticated: true, signed: false });
         });
 
-        const routerReloadSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
 
         render(
             <CollectionActions
@@ -115,13 +115,9 @@ describe("CollectionActions", () => {
 
         const hideButton = screen.getByTestId("CollectionActions__hide");
 
-        const function_ = vi.fn();
-        const routerPostSpy = vi.spyOn(router, "post").mockImplementation(function_);
-
         await userEvent.click(hideButton);
 
-        expect(routerReloadSpy).toHaveBeenCalled();
-        expect(routerPostSpy).not.toHaveBeenCalled();
+        expect(routerSpy).toHaveBeenCalled();
     });
 
     it("can hide a collection if wallet is signed", async () => {

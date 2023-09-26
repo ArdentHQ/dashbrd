@@ -152,9 +152,8 @@ export const CollectionActions = ({
                                                     report: true,
                                                 },
                                             });
-                                        } else {
-                                            toggleVisibility();
                                         }
+                                        toggleVisibility();
                                     });
                                 }}
                             >
