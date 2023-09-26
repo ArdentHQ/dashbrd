@@ -20,7 +20,7 @@ describe('user without a signed wallet', function () {
 
         $this->actingAs($user)->post(route('nft-reports.create', $nft), [
             'reason' => 'spam',
-        ])->assertRedirect();;
+        ])->assertRedirect();
 
         expect($nft->reports()->count())->toBe(0);
     });

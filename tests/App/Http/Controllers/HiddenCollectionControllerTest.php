@@ -28,7 +28,6 @@ describe('user without a signed wallet', function () {
         expect($user->hiddenCollections()->get()->contains($collection))->not()->toBeTrue();
     });
 
-
 });
 
 describe('user with a signed wallet', function () {
