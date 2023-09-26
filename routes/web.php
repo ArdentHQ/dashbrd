@@ -32,8 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/wallet-data', WalletController::class)->name('wallet');
 
     // Settings
+    Route::get('/settings', [GeneralSettingsController::class, 'edit'])->name('settings.general');
+
     Route::group(['middleware' => 'signed_wallet'], function () {
-        Route::get('/settings', [GeneralSettingsController::class, 'edit'])->name('settings.general');
         Route::put('/settings', [GeneralSettingsController::class, 'update'])->middleware('signed_wallet');
     });
 

@@ -9,12 +9,17 @@ const Layout = ({
     title,
     toastMessage,
     children,
+    mustBeSigned = false,
 }: {
     title: string;
     children: ReactNode;
     toastMessage?: ToastMessage;
+    mustBeSigned?: boolean;
 }): JSX.Element => (
-    <LayoutWrapper toastMessage={toastMessage}>
+    <LayoutWrapper
+        toastMessage={toastMessage}
+        mustBeSigned={mustBeSigned}
+    >
         <Head title={title} />
 
         <div className="block xl:hidden">
