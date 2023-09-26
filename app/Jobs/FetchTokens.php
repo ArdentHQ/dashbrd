@@ -21,6 +21,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FetchTokens implements ShouldBeUnique, ShouldQueue
 {
@@ -40,6 +41,11 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('FetchTokens Job: Processing', [
+            'wallet' => $this->wallet->address,
+            'network' => $this->network->id,
+        ]);
+
         $web3DataProvider = $this->getWeb3DataProvider();
 
         $tokens = $web3DataProvider->getWalletTokens($this->wallet, $this->network);
@@ -81,7 +87,7 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
 
         // Delete balances that are not in the list of tokens and are not native
         // tokens (which are handled on the `FetchNativeTokens` job)
-        $this->wallet->balances()
+        $deleted = $this->wallet->balances()
             ->whereHas('token', fn ($query) => $query
                     ->where('network_id', $this->network->id)
                     ->whereNotIn('id', $tokens->pluck('id'))
@@ -93,6 +99,13 @@ class FetchTokens implements ShouldBeUnique, ShouldQueue
 
         $this->wallet->extra_attributes->set('tokens_fetched_at', Carbon::now());
         $this->wallet->save();
+
+        Log::info('FetchTokens Job: Handled', [
+            'tokens' => $tokens->pluck('id')->toArray(),
+            'wallet' => $this->wallet->address,
+            'network' => $this->network->id,
+            'deleted_balances_count' => $deleted,
+        ]);
     }
 
     public function uniqueId(): string

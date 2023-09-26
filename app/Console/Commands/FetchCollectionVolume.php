@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionVolume as Job;
+use App\Jobs\FetchCollectionVolume as FetchCollectionVolumeJob;
 use Illuminate\Console\Command;
 
 class FetchCollectionVolume extends Command
@@ -31,7 +31,7 @@ class FetchCollectionVolume extends Command
     public function handle(): int
     {
         $this->forEachCollection(function ($collection) {
-            Job::dispatch($collection);
+            FetchCollectionVolumeJob::dispatch($collection);
         });
 
         return Command::SUCCESS;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Jobs\FetchCollectionBannerBatch;
 use App\Models\Collection;
 use App\Models\Network;
+use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
 
 it('dispatches a job for collections without banners', function () {
@@ -29,6 +30,27 @@ it('dispatches a job for collections without banners', function () {
     ]);
 
     Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 2);
+});
+
+it('should exclude spam contracts', function () {
+    Bus::fake();
+
+    $network = Network::factory()->create();
+
+    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
+
+    SpamContract::query()->insert([
+        'address' => $collections->first()->address,
+        'network_id' => $collections->first()->network_id,
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 0);
+
+    $this->artisan('nfts:fetch-collection-banner-batch');
+
+    Bus::assertDispatched(FetchCollectionBannerBatch::class, function ($job) use ($collections) {
+        return ! in_array($collections->first()->address, $job->collectionAddresses);
+    });
 });
 
 it('dispatches a job for collections', function () {

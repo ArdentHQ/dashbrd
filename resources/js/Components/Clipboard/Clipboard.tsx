@@ -44,6 +44,7 @@ export const Clipboard = ({
             trigger={!isLgAndAbove ? "click" : "mouseenter focus"}
             hideAfter={!isLgAndAbove ? 1000 : undefined}
             zIndex={zIndex}
+            touch
         >
             <div
                 ref={reference}
