@@ -54,31 +54,25 @@ const CollectionNavigationTab = forwardRef<
 
 CollectionNavigationTab.displayName = "CollectionNavigationTab";
 
+export type TabName = "collection" | "articles" | "activity";
+
+const tabs: TabName[] = ["collection", "articles", "activity"];
+
 export const CollectionNavigation = ({
     children,
     selectedTab,
     onTabChange,
 }: {
     children: JSX.Element[];
-    selectedTab: "collection" | "activity";
-    onTabChange: (tab: "collection" | "activity") => void;
+    selectedTab: "collection" | "activity" | "articles";
+    onTabChange: (tab: "collection" | "activity" | "articles") => void;
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const selectedIndex = useMemo(() => {
-        if (selectedTab === "activity") {
-            return 1;
-        }
-
-        return 0;
-    }, [selectedTab]);
+    const selectedIndex = useMemo(() => tabs.findIndex((tab) => tab === selectedTab), [selectedTab]);
 
     const tabChangeHandler = (index: number): void => {
-        if (index === 1) {
-            onTabChange("activity");
-        } else {
-            onTabChange("collection");
-        }
+        onTabChange(tabs[index]);
     };
 
     return (
@@ -92,6 +86,10 @@ export const CollectionNavigation = ({
                         <Tabs className="space-x-1 bg-transparent">
                             <CollectionNavigationTab icon="DiamondOpacity">
                                 {t("pages.collections.menu.collection")}
+                            </CollectionNavigationTab>
+
+                            <CollectionNavigationTab icon="NewspaperOpacity">
+                                {t("pages.collections.menu.articles")}
                             </CollectionNavigationTab>
 
                             <CollectionNavigationTab

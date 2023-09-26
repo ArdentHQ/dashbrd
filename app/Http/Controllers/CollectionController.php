@@ -182,7 +182,7 @@ class CollectionController extends Controller
         // Allow any number but not more than 100
         $activityPageLimit = min($request->has('activityPageLimit') ? (int) $request->get('activityPageLimit') : 10, 100);
 
-        $tab = $request->get('tab') === 'activity' ? 'activity' : 'collection';
+        $tab = in_array($request->get('tab'), ['collection', 'articles', 'activiy']) ? $request->get('tab') : 'collection';
 
         $activities = $collection->activities()->latest('timestamp')->where('type', '!=', NftTransferType::Transfer)->paginate($activityPageLimit)->appends([
             'tab' => 'activity',

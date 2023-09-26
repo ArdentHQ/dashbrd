@@ -16,24 +16,24 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        $articles = Article::factory()->createMany(10);
+        // $articles = Article::factory()->createMany(10);
 
-        $network = Network::query()->first();
+        // $network = Network::query()->first();
 
-        if (! $network) {
-            $network = Network::factory()->create();
-        }
+        // if (! $network) {
+        //     $network = Network::factory()->create();
+        // }
 
-        $articles->map(function ($article) use ($network) {
-            $imageUrl = fake()->imageUrl(640, 480, null, false);
-            $article->addMediaFromUrl($imageUrl)->toMediaCollection();
+        // $articles->map(function ($article) use ($network) {
+        //     $imageUrl = fake()->imageUrl(640, 480, null, false);
+        //     $article->addMediaFromUrl($imageUrl)->toMediaCollection();
 
-            $collections = Collection::factory()->count(2)->create([
-                'network_id' => $network->id,
-            ]);
+        //     $collections = Collection::factory()->count(2)->create([
+        //         'network_id' => $network->id,
+        //     ]);
 
-            $article->collections()->attach($collections, ['order_index' => 1]);
-        });
+        //     $article->collections()->attach($collections, ['order_index' => 1]);
+        // });
 
     }
 }
