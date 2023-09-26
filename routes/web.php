@@ -71,7 +71,7 @@ Route::middleware('auth')->group(function () {
         Route::post('{gallery:slug}/reports',
             [GalleryReportController::class, 'store'])
                 ->name('reports.create')
-                ->middleware(['throttle:gallery:reports', 'signed_wallet']);
+                ->middleware('throttle:gallery:reports');
     });
 });
 

@@ -4,87 +4,121 @@ declare(strict_types=1);
 
 use App\Models\Collection;
 use App\Models\Nft;
+use App\Support\Facades\Signature;
 
-it('can hide a collection for the user', function () {
-    $user = createUser();
+describe('user without a signed wallet', function () {
+    beforeEach(function () {
+        Signature::shouldReceive('walletIsSigned')
+            ->andReturn(false);
+    });
 
-    $collection = Collection::factory()->create();
+    it('cannot hide a collection for the user', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
 
-    Nft::factory()->create([
-        'collection_id' => $collection->id,
-        'wallet_id' => $user->wallet->id,
-    ]);
+        Nft::factory()->create([
+            'collection_id' => $collection->id,
+            'wallet_id' => $user->wallet->id,
+        ]);
 
-    $this->actingAs($user)
-        ->post(route('hidden-collections.store', $collection))
-        ->assertStatus(302);
+        $this->actingAs($user)
+            ->post(route('hidden-collections.store', $collection))
+            ->assertRedirect();
 
-    expect($user->hiddenCollections()->get()->contains($collection))->toBeTrue();
+        expect($user->hiddenCollections()->get()->contains($collection))->not()->toBeTrue();
+    });
+
+
 });
 
-it('cannot hide a collection that belong to somebody else', function () {
-    $user = createUser();
+describe('user with a signed wallet', function () {
+    beforeEach(function () {
+        Signature::shouldReceive('walletIsSigned')
+            ->andReturn(true);
+    });
 
-    $collection = Collection::factory()->create();
+    it('can hide a collection for the user', function () {
+        $user = createUser();
 
-    Nft::factory()->create([
-        'collection_id' => $collection->id,
-    ]);
+        $collection = Collection::factory()->create();
 
-    $this->actingAs($user)
-        ->post(route('hidden-collections.store', $collection))
-        ->assertStatus(404);
+        Nft::factory()->create([
+            'collection_id' => $collection->id,
+            'wallet_id' => $user->wallet->id,
+        ]);
 
-    expect($user->hiddenCollections->contains($collection))->toBeFalse();
-});
+        $this->actingAs($user)
+            ->post(route('hidden-collections.store', $collection))
+            ->assertStatus(302);
 
-it('prevents guests from hiding a collection', function () {
-    $collection = Collection::factory()->create();
+        expect($user->hiddenCollections()->get()->contains($collection))->toBeTrue();
+    });
 
-    $this->post(route('hidden-collections.store', $collection))
-        ->assertStatus(302);
-});
+    it('cannot hide a collection that belong to somebody else', function () {
+        $user = createUser();
 
-it('can show a collection for the user', function () {
-    $user = createUser();
+        $collection = Collection::factory()->create();
 
-    $collection = Collection::factory()->create();
+        Nft::factory()->create([
+            'collection_id' => $collection->id,
+        ]);
 
-    $user->hiddenCollections()->attach($collection);
+        $this->actingAs($user)
+            ->post(route('hidden-collections.store', $collection))
+            ->assertStatus(404);
 
-    Nft::factory()->create([
-        'collection_id' => $collection->id,
-        'wallet_id' => $user->wallet->id,
-    ]);
+        expect($user->hiddenCollections->contains($collection))->toBeFalse();
+    });
 
-    $this->actingAs($user)
-        ->delete(route('hidden-collections.destroy', $collection))
-        ->assertStatus(302);
+    it('prevents guests from hiding a collection', function () {
+        $collection = Collection::factory()->create();
 
-    expect($user->hiddenCollections()->get()->contains($collection))->toBeFalse();
-});
+        $this->post(route('hidden-collections.store', $collection))
+            ->assertStatus(302);
+    });
 
-it('prevents guests from showing a collection', function () {
-    $collection = Collection::factory()->create();
+    it('can show a collection for the user', function () {
+        $user = createUser();
 
-    $this->delete(route('hidden-collections.destroy', $collection))
-        ->assertStatus(302);
-});
+        $collection = Collection::factory()->create();
 
-it('cannot show a collection that belong to somebody else', function () {
-    $user = createUser();
+        $user->hiddenCollections()->attach($collection);
 
-    $collection = Collection::factory()->create();
+        Nft::factory()->create([
+            'collection_id' => $collection->id,
+            'wallet_id' => $user->wallet->id,
+        ]);
 
-    $user->hiddenCollections()->attach($collection);
+        $this->actingAs($user)
+            ->delete(route('hidden-collections.destroy', $collection))
+            ->assertStatus(302);
 
-    Nft::factory()->create([
-        'collection_id' => $collection->id,
-    ]);
+        expect($user->hiddenCollections()->get()->contains($collection))->toBeFalse();
+    });
 
-    $this->actingAs($user)
-        ->delete(route('hidden-collections.destroy', $collection))
-        ->assertStatus(404);
+    it('prevents guests from showing a collection', function () {
+        $collection = Collection::factory()->create();
 
-    expect($user->hiddenCollections()->get()->contains($collection))->toBeTrue();
+        $this->delete(route('hidden-collections.destroy', $collection))
+            ->assertStatus(302);
+    });
+
+    it('cannot show a collection that belong to somebody else', function () {
+        $user = createUser();
+
+        $collection = Collection::factory()->create();
+
+        $user->hiddenCollections()->attach($collection);
+
+        Nft::factory()->create([
+            'collection_id' => $collection->id,
+        ]);
+
+        $this->actingAs($user)
+            ->delete(route('hidden-collections.destroy', $collection))
+            ->assertStatus(404);
+
+        expect($user->hiddenCollections()->get()->contains($collection))->toBeTrue();
+    });
+
 });
