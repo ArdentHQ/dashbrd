@@ -27,5 +27,5 @@ it('should cache permissions and refresh every 5 days', function () {
     $this->travel(1)->days();
     $this->travel(1)->minute();
 
-    expect(PermissionRepository::all())->toHaveCount(12);
+    expect(PermissionRepository::all())->toHaveCount(13);
 });
