@@ -64,8 +64,8 @@ export const CollectionNavigation = ({
     onTabChange,
 }: {
     children: JSX.Element[];
-    selectedTab: "collection" | "activity" | "articles";
-    onTabChange: (tab: "collection" | "activity" | "articles") => void;
+    selectedTab: TabName;
+    onTabChange: (tab: TabName) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
 
