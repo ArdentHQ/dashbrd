@@ -15,12 +15,15 @@ export const Default = {
         }>;
     }) => {
         return (
-            <div className="sm:space-y-2">
+            <div>
                 {sets.map(({ collections, article }, index) => (
-                    <ArticleListItem
-                        collections={collections}
-                        article={article}
-                    />
+                    <>
+                        <ArticleListItem
+                            collections={collections}
+                            article={article}
+                        />
+                        <span className="block h-1 bg-theme-secondary-100 sm:h-1.5 sm:bg-transparent"></span>
+                    </>
                 ))}
             </div>
         );
