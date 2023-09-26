@@ -52,7 +52,9 @@ export const CollectionsFilterPopover = ({
         availableNetworks
             .filter((network) => network.collectionsCount > 0)
             .every((network) => selectedChainIds.includes(network.chainId)) ||
-        selectedChainIds.length === 0;
+        selectedChainIds.filter(
+            (chainId) => availableNetworks.find((network) => network.chainId === chainId)?.collectionsCount > 0,
+        ).length === 0;
 
     return (
         <Popover className="sm:relative">
