@@ -7,6 +7,7 @@ import { SetDefaultsButton } from "./SetDefaultsButton";
 import { Button } from "@/Components/Buttons/Button";
 import { InputGroup } from "@/Components/Form/InputGroup";
 import { Listbox } from "@/Components/Form/Listbox";
+import { Toggle } from "@/Components/Form/Toggle";
 import { Form } from "@/Pages/Settings/Form";
 
 interface Currency {
@@ -229,6 +230,23 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
                                     </Listbox>
                                 )}
                             </InputGroup>
+                        </div>
+                    </div>
+                </Form.Section>
+
+                <Form.Separator />
+
+                <Form.Section
+                    title={"Dark Mode"}
+                    subtitle={"Test only"}
+                >
+                    <div className="space-y-4">
+                        <div>
+                            <Toggle
+                                className="ml-auto"
+                                checked={true}
+                                onChange={() => {}}
+                            />
                         </div>
                     </div>
                 </Form.Section>
