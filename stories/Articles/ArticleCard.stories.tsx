@@ -81,7 +81,7 @@ Default.args = {
         },
         {
             article: {
-                title: "A single article 2",
+                title: "A single article 2 with a super long title that should be truncated even if it have more text than the other articles",
             },
             collections: [
                 {

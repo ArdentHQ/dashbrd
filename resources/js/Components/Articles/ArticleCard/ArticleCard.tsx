@@ -3,8 +3,9 @@ import { Img } from "@/Components/Image";
 
 interface Properties {
     // TODO(@alfonsobries)[2023-09-30]. Replace with a dynamic type once defined
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    article: any;
+    article: {
+        title: string;
+    };
     collections: Array<Pick<App.Data.Nfts.NftCollectionData, "image" | "slug">>;
 }
 
@@ -29,7 +30,6 @@ const ArticleCardCollection = ({
     );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ArticleCard = ({ article, collections }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -51,7 +51,7 @@ export const ArticleCard = ({ article, collections }: Properties): JSX.Element =
                 <div className="text-sm font-medium text-theme-secondary-700">24 Oct 2023</div>
 
                 <h4 className="mt-1 line-clamp-2 text-lg font-medium leading-7 text-theme-secondary-900">
-                    Japan Eyeing a Digital Transformation With NFTs and more text that should be truncated
+                    {article.title}
                 </h4>
             </div>
 
