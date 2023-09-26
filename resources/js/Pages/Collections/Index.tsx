@@ -138,6 +138,7 @@ const CollectionsIndex = ({
                         availableNetworks={availableNetworks}
                         handleSelectedChainIds={handleSelectedChainIds}
                         selectedChainIds={selectedChainIds}
+                        collectionsCount={collections.length}
                     />
                 </div>
 

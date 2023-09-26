@@ -16,6 +16,7 @@ interface Properties {
     availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
     handleSelectedChainIds: (chainId: number) => void;
     selectedChainIds: number[];
+    collectionsCount: number;
 }
 
 const debounceTimeout = 400;
@@ -29,6 +30,7 @@ export const CollectionsFilterPopover = ({
     availableNetworks,
     handleSelectedChainIds,
     selectedChainIds,
+    collectionsCount,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [hidden, setHidden] = useState(showHidden);
@@ -46,7 +48,7 @@ export const CollectionsFilterPopover = ({
     }, [debouncedQuery]);
 
     const isNetworkFilterActive =
-        isLoading ||
+        (isLoading && collectionsCount > 0) ||
         availableNetworks
             .filter((network) => network.collectionsCount > 0)
             .every((network) => selectedChainIds.includes(network.chainId)) ||
@@ -64,7 +66,7 @@ export const CollectionsFilterPopover = ({
                                 disabled={disabled}
                             />
                         </Tooltip>
-                        {(hidden || !isNetowrkFilterActive) && <PulsatingDot />}
+                        {(hidden || !isNetworkFilterActive) && <PulsatingDot />}
                     </div>
 
                     <Popover.Transition show={open}>

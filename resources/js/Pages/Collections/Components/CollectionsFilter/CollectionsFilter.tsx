@@ -27,6 +27,7 @@ export const CollectionsFilter = ({
     availableNetworks,
     handleSelectedChainIds,
     selectedChainIds,
+    collectionsCount,
 }: {
     searchQuery: string;
     setSearchQuery: (query: string) => void;
@@ -42,6 +43,7 @@ export const CollectionsFilter = ({
     availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
     handleSelectedChainIds: (chainId: number) => void;
     selectedChainIds: number[];
+    collectionsCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -103,6 +105,7 @@ export const CollectionsFilter = ({
                         availableNetworks={availableNetworks}
                         handleSelectedChainIds={handleSelectedChainIds}
                         selectedChainIds={selectedChainIds}
+                        collectionsCount={collectionsCount}
                     />
                 </div>
             </div>
