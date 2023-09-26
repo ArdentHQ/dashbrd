@@ -35,6 +35,7 @@ export const ArticleCard = ({ article, collections }: Properties): JSX.Element =
 
     return (
         <a
+            data-testid="ArticleCard"
             href="#"
             className="group flex w-full max-w-[335px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-white"
         >
