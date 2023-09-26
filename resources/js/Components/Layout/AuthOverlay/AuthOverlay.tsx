@@ -1,5 +1,4 @@
 import cn from "classnames";
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
     ConnectingWallet,
@@ -41,10 +40,7 @@ export const AuthOverlay = ({
 
     const requiresSignature = (mustBeSigned && !signed) || metaMaskRequiresSignature;
 
-    const showSignMessage = useMemo(
-        () => metaMaskRequiresSignature && !waitingSignature && errorMessage === undefined && !connecting,
-        [metaMaskRequiresSignature, waitingSignature, errorMessage, connecting],
-    );
+    const showSignMessage = metaMaskRequiresSignature && !waitingSignature && errorMessage === undefined && !connecting;
 
     return (
         <Overlay
