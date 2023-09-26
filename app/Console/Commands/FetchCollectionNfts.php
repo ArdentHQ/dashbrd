@@ -34,9 +34,6 @@ class FetchCollectionNfts extends Command
     {
         $onlySigned = (bool) $this->option('only-signed');
 
-        $x = Collection::query()->withSignedWallets()->get();
-        dd($x);
-
         $this->forEachCollection(function ($collection) {
             if (! $collection->isBlacklisted()) {
                 FetchCollectionNftsJob::dispatch(
@@ -46,7 +43,7 @@ class FetchCollectionNfts extends Command
             }
         }, queryCallback: function (Builder $query) use ($onlySigned) {
             return $query
-                ->when($onlySigned, fn ($q) => $q->distinct('collections.id')->withSignedWallets())
+                ->when($onlySigned, fn ($q) => $q->withSignedWallets())
                 ->withAcceptableSupply();
         });
 
