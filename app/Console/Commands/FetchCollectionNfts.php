@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionNfts as FetchCollectionNftsJob;
-use App\Models\Collection;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -34,25 +33,18 @@ class FetchCollectionNfts extends Command
     {
         $onlySigned = (bool) $this->option('only-signed');
 
-        if ($onlySigned) {
-            Collection::getWithSignedWallet()->each(function (Collection $collection) {
-                if (! $collection->isBlacklisted()) {
-                    FetchCollectionNftsJob::dispatch(
-                        $collection,
-                        $this->option('start-token') ?? $collection->last_indexed_token_number
-                    );
-                }
-            });
-        } else {
-            $this->forEachCollection(function ($collection) {
-                if (! $collection->isBlacklisted()) {
-                    FetchCollectionNftsJob::dispatch(
-                        $collection,
-                        $this->option('start-token') ?? $collection->last_indexed_token_number
-                    );
-                }
-            }, queryCallback: fn (Builder $query) => $query->withAcceptableSupply());
-        }
+        $this->forEachCollection(function ($collection) {
+            if (! $collection->isBlacklisted()) {
+                FetchCollectionNftsJob::dispatch(
+                    $collection,
+                    $this->option('start-token') ?? $collection->last_indexed_token_number
+                );
+            }
+        }, queryCallback: function (Builder $query) use ($onlySigned) {
+            return $query
+                ->when($onlySigned, fn ($q) => $q->withSignedWallets())
+                ->withAcceptableSupply();
+        });
 
         return Command::SUCCESS;
     }

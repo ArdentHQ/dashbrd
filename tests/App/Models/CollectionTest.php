@@ -1046,14 +1046,14 @@ it('filters collections that belongs to wallets that have been signed at least o
         'collection_id' => $collection4->id,
     ]);
 
-    $filtered = Collection::getWithSignedWallet();
+    $filtered = Collection::query()->withSignedWallets()->get();
 
-    expect($filtered->count())->toBe(2);
+    expect($filtered->count())->toBe(2)
+        ->and($filtered->pluck('id')->sort()->toArray())->toEqual([
+            $collection1->id,
+            $collection4->id,
+        ]);
 
-    expect($filtered->pluck('id')->sort()->toArray())->toEqual([
-        $collection1->id,
-        $collection4->id,
-    ]);
 });
 
 it('should get openSeaSlug', function () {
