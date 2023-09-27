@@ -6,6 +6,7 @@ import { CollectionReportModal } from "@/Components/Collections/CollectionReport
 import { Dropdown } from "@/Components/Dropdown";
 import { Icon } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 interface ActionProperties extends Omit<React.HTMLProps<HTMLButtonElement>, "type"> {}
 
@@ -41,6 +42,7 @@ export const CollectionActions = ({
     onReportCollection,
 }: CollectionActionsProperties): JSX.Element => {
     const { t } = useTranslation();
+    const { signedAction } = useAuthorizedAction();
     const [showReportModal, setShowReportModal] = useState(false);
 
     const reportTooltip = useMemo(() => {
@@ -105,7 +107,7 @@ export const CollectionActions = ({
                 </Dropdown.Trigger>
 
                 <Dropdown.Content
-                    className="w-full px-6 sm:w-auto sm:px-0"
+                    className="-z-1 w-full px-6 sm:w-auto sm:px-0"
                     contentClasses="shadow-3xl flex w-full select-none flex-col rounded-xl bg-white py-3.5 sm:w-auto"
                 >
                     {({ setOpen }) => (
@@ -118,7 +120,18 @@ export const CollectionActions = ({
                                     <Action
                                         title={t("common.report")}
                                         onClick={() => {
-                                            setShowReportModal(true);
+                                            setOpen(false);
+                                            signedAction(({ signed }) => {
+                                                setShowReportModal(true);
+
+                                                if (!signed) {
+                                                    router.reload({
+                                                        data: {
+                                                            report: true,
+                                                        },
+                                                    });
+                                                }
+                                            });
                                         }}
                                         disabled={reportAvailableIn != null || alreadyReported === true}
                                         data-testid="CollectionActions__report"

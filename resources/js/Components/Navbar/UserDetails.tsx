@@ -1,4 +1,4 @@
-import { Link as InertiaLink, type InertiaLinkProps, router } from "@inertiajs/react";
+import { Link as InertiaLink, type InertiaLinkProps } from "@inertiajs/react";
 import cn from "classnames";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,6 @@ import { TokenActions } from "@/Components/Tokens/TokenActions";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
-import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { FormatFiat } from "@/Utils/Currency";
 import { formatAddress } from "@/Utils/format-address";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
@@ -34,11 +33,9 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
     const { assets } = usePortfolioBreakdown(wallet);
 
-    const { signedAction } = useAuthorizedAction();
-
     return (
         <Popover className="sm:relative">
-            {({ open, close }) => (
+            {({ open }) => (
                 <>
                     <Trigger wallet={wallet} />
 
@@ -159,16 +156,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                             <li>
                                                 <DropdownNavigationLink
                                                     data-testid="UserDetails__settings"
-                                                    href="#"
-                                                    onClick={(event) => {
-                                                        event.preventDefault();
-
-                                                        signedAction(() => {
-                                                            router.get(route("settings.general"));
-                                                        });
-
-                                                        close();
-                                                    }}
+                                                    href={route("settings.general")}
                                                     icon="Cog"
                                                     label={t("pages.settings.title")}
                                                     as="button"

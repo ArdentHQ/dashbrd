@@ -143,10 +143,10 @@ class Kernel extends ConsoleKernel
 
         $schedule
             ->command(FetchCollectionNfts::class, [
-                // Limit the number of NFTs to fetch for unsigned wallets, since
+                // Limit the number of collections to fetch for unsigned wallets, since
                 // it sorts the collections by last_fetched_at eventually it will
-                // fetch all NFTs for all collections
-                '--limit' => config('dashbrd.daily_max_nft_retrieval_for_unsigned_wallets'),
+                // fetch nfts for all collections.
+                '--limit' => config('dashbrd.daily_max_collection_nft_retrieval_for_unsigned_wallets'),
             ])
             ->withoutOverlapping()
             ->dailyAt('12:00');

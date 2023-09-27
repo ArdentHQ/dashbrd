@@ -181,7 +181,7 @@ return [
     */
 
     // The maximum number of NFTs that can be retrieved from a collection that belongs to a wallet that has never beed signed
-    'daily_max_nft_retrieval_for_unsigned_wallets' => env('DAILY_MAX_NFT_RETRIEVAL_FOR_UNVERIFIED_WALLETS', 100),
+    'daily_max_collection_nft_retrieval_for_unsigned_wallets' => env('DAILY_MAX_COLLECTION_NFT_RETRIEVAL_FOR_UNVERIFIED_WALLETS', 100),
     'collections_max_cap' => env('COLLECTIONS_MAX_CAP', 50000),
 
     'trait_value_max_length' => env('TRAIT_VALUE_MAX_LENGTH', 25),

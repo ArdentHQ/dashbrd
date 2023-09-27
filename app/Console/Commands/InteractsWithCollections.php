@@ -30,21 +30,19 @@ trait InteractsWithCollections
             return;
         }
 
-        $query = Collection::query()
+        Collection::query()
             ->when($queryCallback !== null, $queryCallback)
             ->select('collections.*')
             ->withoutSpamContracts()
             ->when($limit !== null, fn ($query) => $query
                 ->limit($limit)
                 ->get()
-                ->filter(fn ($collection) => ! $collection->isBlacklisted())
                 ->each($callback)
             )
-            ->when($limit == null, fn ($query) => $query->chunkById(100, function ($collections) use ($callback) {
-                $collections
-                    ->filter(fn ($collection) => ! $collection->isBlacklisted())
-                    ->each($callback);
-            }, 'collections.id', 'id'));
-
+            ->when($limit == null, fn ($query) => $query->chunkById(
+                100,
+                fn ($collections) => $collections->each($callback),
+                'collections.id', 'id')
+            );
     }
 }
