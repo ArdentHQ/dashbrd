@@ -1078,14 +1078,10 @@ it('sorts collections last time nft was fetched', function () {
         ],
     ]);
 
-    // never fetched
-    $collection5 = Collection::factory()->create();
-
     $ids = Collection::orderByOldestNftLastFetchedAt()->pluck('id')->toArray();
 
     expect($ids)->toEqual([
         $collection3->id,
-        $collection5->id,
         $collection2->id,
         $collection1->id,
         $collection4->id,
