@@ -11,7 +11,7 @@ let useMetaMaskContextSpy: SpyInstance;
 let askForSignature: Mock;
 let showConnectOverlay: Mock;
 
-describe("useAuthorizedAction", () => {
+describe("useAuthorizedAction signedAction", () => {
     describe("not authenticated", () => {
         beforeEach(() => {
             useAuthSpy = vi.spyOn(useAuthMock, "useAuth").mockReturnValue({
@@ -176,6 +176,90 @@ describe("useAuthorizedAction", () => {
 
             expect(showConnectOverlay).not.toHaveBeenCalled();
             expect(askForSignature).not.toHaveBeenCalled();
+            expect(action).toHaveBeenCalled();
+        });
+    });
+});
+
+describe("useAuthorizedAction authenticatedAction", () => {
+    describe("not authenticated", () => {
+        beforeEach(() => {
+            useAuthSpy = vi.spyOn(useAuthMock, "useAuth").mockReturnValue({
+                authenticated: false,
+            } as any);
+
+            showConnectOverlay = vi.fn();
+
+            useMetaMaskContextSpy = vi.spyOn(metamaskContextMock, "useMetaMaskContext").mockReturnValue({
+                signed: false,
+                showConnectOverlay,
+            } as any);
+        });
+
+        afterEach(() => {
+            useAuthSpy.mockRestore();
+            useMetaMaskContextSpy.mockRestore();
+        });
+
+        it("should show connect overlay if not authenticated", () => {
+            const { authenticatedAction } = renderHook(() => useAuthorizedAction()).result.current;
+
+            const action = vi.fn();
+
+            authenticatedAction(() => {
+                action();
+            });
+
+            expect(showConnectOverlay).toHaveBeenCalled();
+            expect(action).not.toHaveBeenCalled();
+        });
+
+        it("should run the action after connected", () => {
+            showConnectOverlay.mockImplementation((onConnected) => {
+                onConnected();
+            });
+
+            const { authenticatedAction } = renderHook(() => useAuthorizedAction()).result.current;
+
+            const action = vi.fn();
+
+            authenticatedAction(() => {
+                action();
+            });
+
+            expect(showConnectOverlay).toHaveBeenCalled();
+            expect(action).toHaveBeenCalled();
+        });
+    });
+
+    describe("authenticated", () => {
+        beforeEach(() => {
+            useAuthSpy = vi.spyOn(useAuthMock, "useAuth").mockReturnValue({
+                authenticated: true,
+            } as any);
+
+            showConnectOverlay = vi.fn();
+
+            useMetaMaskContextSpy = vi.spyOn(metamaskContextMock, "useMetaMaskContext").mockReturnValue({
+                showConnectOverlay,
+            } as any);
+        });
+
+        afterEach(() => {
+            useAuthSpy.mockRestore();
+            useMetaMaskContextSpy.mockRestore();
+        });
+
+        it("should run the action", () => {
+            const { authenticatedAction } = renderHook(() => useAuthorizedAction()).result.current;
+
+            const action = vi.fn();
+
+            authenticatedAction(() => {
+                action();
+            });
+
+            expect(showConnectOverlay).not.toHaveBeenCalled();
             expect(action).toHaveBeenCalled();
         });
     });
