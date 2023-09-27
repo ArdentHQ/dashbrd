@@ -144,8 +144,17 @@ export const CollectionActions = ({
                             <Action
                                 data-testid="CollectionActions__hide"
                                 onClick={() => {
-                                    toggleVisibility();
                                     setOpen(false);
+                                    signedAction(({ signed }) => {
+                                        if (!signed) {
+                                            router.reload({
+                                                data: {
+                                                    report: true,
+                                                },
+                                            });
+                                        }
+                                        toggleVisibility();
+                                    });
                                 }}
                             >
                                 {isHidden
