@@ -166,7 +166,10 @@ it('should detach no longer owned nfts', function () {
     Notification::assertSentTo(
         new AnonymousNotifiable(),
         function (GalleryNftsChanged $notification) use ($wallet) {
+            $slackMessage = $notification->toSlack(new AnonymousNotifiable())->attachments[0];
+
             expect($notification->walletAddress)->toBe($wallet->address);
+            expect($slackMessage->fields['nfts'])->toBeString();
 
             return true;
         }

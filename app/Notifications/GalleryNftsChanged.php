@@ -15,6 +15,9 @@ final class GalleryNftsChanged extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * @param array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}> $deletedNfts
+     */
     public function __construct(
         public string $walletAddress,
         public array $deletedNfts
@@ -37,7 +40,7 @@ final class GalleryNftsChanged extends Notification implements ShouldQueue
             ->attachment(function (SlackAttachment $attachment) {
                 $attachment
                     ->title('Affected NFTs')
-                    ->fields(['nfts' => implode(', ', $this->deletedNfts)]);
+                    ->fields(['nfts' => implode('| ', array_map((fn ($nft) => implode(', ', $nft)), $this->deletedNfts))]);
             });
     }
 

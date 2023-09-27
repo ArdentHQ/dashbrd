@@ -370,6 +370,7 @@ class Web3NftHandler
                 })
                 ->where('updated_at', '<', $lastUpdateTimestamp);
 
+                /** @var array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}> $nftsToBeDeleted */
                 $nftsToBeDeleted = $query->clone()->select('token_number', 'collection_id', 'name', 'updated_at')->get()->toArray();
                 if (count($nftsToBeDeleted) > 0) {
                     // Log the NFTs that were not updated
