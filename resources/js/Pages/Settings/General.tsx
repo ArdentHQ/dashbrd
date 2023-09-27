@@ -107,6 +107,27 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
         });
     };
 
+    //! NOTE: This is just for testing, remove after testing
+    if (localStorage.theme === "dark") {
+        document.documentElement.classList.add("dark");
+    } else {
+        document.documentElement.classList.remove("dark");
+    }
+
+    const [dark, setDark] = useState<boolean>(localStorage.theme === "dark");
+
+    const themeToggle = (): void => {
+        if (localStorage.theme === "dark") {
+            document.documentElement.classList.remove("dark");
+            localStorage.removeItem("theme");
+            setDark(false);
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+            setDark(true);
+        }
+    };
+
     return (
         <Layout
             title="General"
@@ -244,8 +265,8 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
                         <div>
                             <Toggle
                                 className="ml-auto"
-                                checked={true}
-                                onChange={() => {}}
+                                checked={dark}
+                                onChange={themeToggle}
                             />
                         </div>
                     </div>
