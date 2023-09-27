@@ -78,9 +78,7 @@ const Index = ({
                         <>
                             <Button
                                 onClick={() => {
-                                    signedAction(() => {
-                                        router.get(createGalleryUrl);
-                                    });
+                                    router.visit(createGalleryUrl);
                                 }}
                                 className="sm:hidden"
                                 icon="Plus"
@@ -89,9 +87,7 @@ const Index = ({
 
                             <Button
                                 onClick={() => {
-                                    signedAction(() => {
-                                        router.get(createGalleryUrl);
-                                    });
+                                    router.visit(createGalleryUrl);
                                 }}
                                 className="hidden sm:block"
                             >
