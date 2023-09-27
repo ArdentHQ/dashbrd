@@ -23,6 +23,20 @@ it('dispatches a job for all collections', function () {
     Bus::assertDispatchedTimes(FetchCollectionNfts::class, 3);
 });
 
+it('dispatches a job for all collections with limit', function () {
+    Bus::fake();
+
+    Collection::factory()->count(3)->create();
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 0);
+
+    $this->artisan('collections:fetch-nfts', [
+        '--limit' => '2',
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionNfts::class, 2);
+});
+
 it('dispatches a job for collections that belongs to signed wallets', function () {
     Bus::fake();
 
