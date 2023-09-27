@@ -11,6 +11,7 @@ use App\Models\Token;
 use App\Models\Wallet;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 
@@ -127,16 +128,21 @@ it('should not insert traits with long values', function () {
         ->and($traitCount)->toBe(1);
 });
 
-it('should return null if it has no network or collection', function () {
+
+
+it("should thrown an exception if network id is null for either the collection or network", function () {
     $wallet = Wallet::factory()->create();
 
+    // Create a Web3NftHandler instance with null network and collection.
     $handler = new Web3NftHandler(
         network: null,
         collection: null,
         wallet: $wallet,
     );
+    $lastUpdateTimestamp = Carbon::now();
 
-    $result = $handler->getChainId();
+    // Expect this to fail and throw a ModelNotFoundException.
+    $this->expectException(ModelNotFoundException::class);
+    $handler->cleanupNftsAndGalleries($lastUpdateTimestamp);
 
-    $this->assertNull($result);
 });
