@@ -33,7 +33,7 @@
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
     </head>
-    <body class="w-full font-sans antialiased">
+    <body class="w-full font-sans antialiased dark:bg-theme-dark-900">
         @inertia
 
         @if (config('services.google_analytics.tracking_code'))
