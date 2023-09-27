@@ -199,7 +199,7 @@ class Web3NftHandler
                         : $this->collection?->last_indexed_token_number;
     }
 
-    private function getChainId(): ?int
+    public function getChainId(): ?int
     {
         if ($this->collection) {
             return $this->collection->network->chain_id;

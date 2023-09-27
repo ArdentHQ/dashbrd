@@ -126,3 +126,17 @@ it('should not insert traits with long values', function () {
     expect(Collection::count())->toBe(1)
         ->and($traitCount)->toBe(1);
 });
+
+it('should return null if it has no network or collection', function () {
+    $wallet = Wallet::factory()->create();
+
+    $handler = new Web3NftHandler(
+        network: null,
+        collection: null,
+        wallet: $wallet,
+    );
+
+    $result = $handler->getChainId();
+
+    $this->assertNull($result);
+});
