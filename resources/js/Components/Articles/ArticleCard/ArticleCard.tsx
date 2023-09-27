@@ -1,34 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { Img } from "@/Components/Image";
+import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.block";
+import { type ArticleCardCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 
 interface Properties {
     // TODO(@alfonsobries)[2023-09-30]. Replace with a dynamic type once defined
     article: {
         title: string;
     };
-    collections: Array<Pick<App.Data.Nfts.NftCollectionData, "image" | "slug">>;
+    collections: ArticleCardCollections;
 }
-
-const ArticleCardCollection = ({
-    collection,
-}: {
-    collection: Pick<App.Data.Nfts.NftCollectionData, "image" | "slug">;
-}): JSX.Element => {
-    if (collection.image === null) {
-        return (
-            <div className="relative z-10 -ml-[1.5px] block h-6 w-6 rounded-full bg-theme-secondary-300 outline outline-4 outline-theme-secondary-50" />
-        );
-    }
-
-    return (
-        <div className="relative z-10 -ml-[1.5px] h-6 w-6 shrink-0 overflow-hidden rounded-full bg-white outline outline-4 outline-theme-secondary-50">
-            <Img
-                className="h-auto w-full rounded-full object-cover"
-                src={collection.image}
-            />
-        </div>
-    );
-};
 
 export const ArticleCard = ({ article, collections }: Properties): JSX.Element => {
     const { t } = useTranslation();
@@ -60,14 +40,7 @@ export const ArticleCard = ({ article, collections }: Properties): JSX.Element =
                     {t("pages.articles.featured_collections")}:
                 </span>
 
-                <div className="flex">
-                    {collections.map((collection) => (
-                        <ArticleCardCollection
-                            key={collection.slug}
-                            collection={collection}
-                        />
-                    ))}
-                </div>
+                <FeaturedCollections collections={collections} />
             </div>
         </a>
     );

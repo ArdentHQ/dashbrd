@@ -24,7 +24,7 @@ describe("useResizeObserver", () => {
         resizeObserverMock.mockRestore();
     });
 
-    it("should call the callback when the element resizes", async () => {
+    it("should call the callback when the element resizes", () => {
         const div = document.createElement("div");
         document.body.appendChild(div);
 
