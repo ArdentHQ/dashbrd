@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
-use App\Models\Nft;
-use App\Models\Wallet;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\AnonymousNotifiable;
