@@ -105,7 +105,7 @@ const CollectionCircles = (): JSX.Element => {
 
     return (
         <div
-            className="1h-6 flex grow flex-wrap"
+            className="flex h-6 grow flex-wrap"
             ref={container}
         >
             {collections.slice(0, visibleCount).map((collection, index) => (
