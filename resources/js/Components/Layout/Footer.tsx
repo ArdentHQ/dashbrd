@@ -91,7 +91,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
                             variant="link"
                             href={t("urls.landing")}
                             textColor="text-theme-primary-600"
-                            className="text-xs md:text-sm"
+                            className="text-xs active:no-underline md:text-sm"
                         >
                             {appName()}
                         </Link>
@@ -107,7 +107,7 @@ export const Footer = ({ withActionToolbar = false }: FooterProperties): JSX.Ele
                             variant="link"
                             href={t("urls.privacy_policy")}
                             useAnchorTag
-                            className="text-xs md:text-sm"
+                            className="text-xs active:no-underline md:text-sm"
                         >
                             {t("footer.privacy_policy")}
                         </Link>
