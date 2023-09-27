@@ -199,11 +199,11 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 const Trigger = ({ wallet }: { wallet: App.Data.Wallet.WalletData }): JSX.Element => (
     <Popover.Button
         data-testid="UserDetails__trigger"
-        className="group/trigger button-secondary select-none border-theme-secondary-300 bg-white p-0 sm:border sm:py-2 sm:pl-4 sm:pr-3"
+        className="group/trigger button-secondary select-none border-theme-secondary-300 bg-white p-0 dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:bg-theme-dark-700 sm:border sm:py-2 sm:pl-4 sm:pr-3"
     >
         <div className="flex items-center">
-            <div className="hidden items-center space-x-3 divide-x divide-theme-secondary-300 group-hover/trigger:divide-theme-secondary-400 group-focus/trigger:divide-theme-secondary-400 sm:flex">
-                <span className="flex overflow-auto text-sm font-medium leading-5.5 text-theme-secondary-700">
+            <div className="hidden items-center space-x-3 divide-x divide-theme-secondary-300 group-hover/trigger:divide-theme-secondary-400 group-focus/trigger:divide-theme-secondary-400 dark:divide-theme-dark-700 dark:group-hover/trigger:divide-theme-dark-700 dark:group-focus/trigger:divide-theme-dark-700 sm:flex">
+                <span className="flex overflow-auto text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200">
                     {wallet.domain !== null ? (
                         <span
                             data-testid="UserDetails__domain"
@@ -255,7 +255,7 @@ const DropdownNavigationLink = ({
         as={as}
         className={cn(
             "transition-default flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 md-lg:px-6",
-            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300",
+            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300 dark:focus-visible:outline-theme-primary-700",
         )}
         {...properties}
     >
