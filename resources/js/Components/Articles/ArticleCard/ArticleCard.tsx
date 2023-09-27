@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.block";
+import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
 import { type ArticleCardCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 
 interface Properties {

@@ -9,15 +9,10 @@ describe("useResizeObserver", () => {
     beforeEach(() => {
         resizeObserverMock = vi.spyOn(window, "ResizeObserver");
 
-        resizeObserverMock.mockImplementation(
-            (callback: (properties: [{ contentRect: { width: number } }]) => void) => ({
-                observe: () => {
-                    // eslint-disable-next-line n/no-callback-literal
-                    callback([{ contentRect: { width: 50 } }]);
-                },
-                disconnect: vi.fn(),
-            }),
-        );
+        resizeObserverMock.mockImplementation((callback: () => void) => ({
+            observe: callback,
+            disconnect: vi.fn(),
+        }));
     });
 
     afterEach(() => {
