@@ -9,6 +9,7 @@ use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
+use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -338,6 +339,44 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeWithAcceptableSupply(Builder $query): Builder
+    {
+        return $query
+            ->where('collections.supply', '<=', config('dashbrd.collections_max_cap'))
+            ->whereNotNull('collections.supply');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWithSignedWallets(Builder $query): Builder
+    {
+        $signedWallets = Wallet::query()
+            ->select('id')
+            ->whereNotNull('last_signed_at');
+
+        $distinctCollectionIds = DB::query()
+            ->selectRaw('DISTINCT distinct_collections.collection_id as id')
+            ->withExpression('signed_wallets', $signedWallets)
+            ->from('signed_wallets')
+            ->joinSubLateral(
+                Nft::query()
+                    ->selectRaw('DISTINCT nfts.collection_id')
+                    ->whereRaw('nfts.wallet_id = signed_wallets.id'),
+                'distinct_collections',
+                null // @phpstan-ignore-line
+            );
+
+        return $query
+            ->withExpression('distinct_collection_ids', $distinctCollectionIds)
+            ->join('distinct_collection_ids', 'distinct_collection_ids.id', 'collections.id');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeForCollectionData(Builder $query, User $user = null): Builder
     {
         $extraAttributeSelect = "CASE
@@ -429,5 +468,29 @@ class Collection extends Model
         }
 
         return $this->last_viewed_at->gte(now()->subDays(1));
+    }
+
+    public function isInvalid(bool $withSpamCheck = true): bool
+    {
+        // Ignore collections above the supply cap
+        if ($this->supply === null || $this->supply > config('dashbrd.collections_max_cap')) {
+            return true;
+        }
+
+        // Ignore explicitly blacklisted collections
+        if ($this->isBlacklisted()) {
+            return true;
+        }
+
+        if ($withSpamCheck && SpamContract::isSpam($this->address, $this->network)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isBlacklisted(): bool
+    {
+        return BlacklistedCollections::includes($this->address);
     }
 }

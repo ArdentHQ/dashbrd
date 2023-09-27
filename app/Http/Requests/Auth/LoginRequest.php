@@ -66,9 +66,6 @@ class LoginRequest extends FormRequest
             // Passing the `userId` in case is logged so we can associate the wallet
             // to a existing user on the web3 auth provider
             'userId' => $this->user()?->id,
-            // Passing the user locale information from frontend...
-            'timezone' => $this->input('tz', 'UTC'),
-            'locale' => $this->input('locale', 'en-US'),
         ];
     }
 }
