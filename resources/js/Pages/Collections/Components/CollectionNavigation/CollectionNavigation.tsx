@@ -80,15 +80,18 @@ export const CollectionNavigation = ({
             selectedIndex={selectedIndex}
             onChange={tabChangeHandler}
         >
-            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 px-6 py-3 sm:-mx-8 sm:px-8 lg:mx-0 lg:rounded-xl lg:px-5">
+            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 py-3 sm:-mx-8  lg:mx-0 lg:rounded-xl ">
                 <Tab.List className="flex justify-between">
                     <div className="w-full sm:w-auto">
-                        <Tabs className="space-x-1 bg-transparent">
+                        <Tabs
+                            className="space-x-1 bg-transparent"
+                            wrapperClassName="px-6 lg:px-5 sm:px-8"
+                        >
                             <CollectionNavigationTab icon="DiamondOpacity">
                                 {t("pages.collections.menu.collection")}
                             </CollectionNavigationTab>
 
-                            <CollectionNavigationTab icon="NewspaperOpacity">
+                            <CollectionNavigationTab icon="Newspaper">
                                 {t("pages.collections.menu.articles")}
                             </CollectionNavigationTab>
 
