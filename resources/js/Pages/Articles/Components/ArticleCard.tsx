@@ -48,7 +48,7 @@ const collections = [
     },
 ];
 
-export const ArticleCard = () => (
+export const ArticleCard = (): JSX.Element => (
     <div className="transition-default flex flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-white">
         <div>
             <div
