@@ -381,7 +381,7 @@ class Web3NftHandler
                     ]);
 
                     // Notify
-                    Notification::route('slack', config('dashbrd.reports.slack_webhook_url'))->notify(
+                    Notification::route('slack', config('dashbrd.gallery.logs.slack_webhook_url'))->notify(
                         (new GalleryNftsChanged($this->wallet->address, $nftsToBeDeleted))->onQueue(Queues::DEFAULT)
                     );
                 }

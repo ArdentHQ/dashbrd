@@ -115,7 +115,7 @@ it('should detach no longer owned nfts', function () {
     Notification::fake();
 
     config([
-        'dashbrd.reports.enabled' => true,
+        'dashbrd.gallery.logs.enabled' => true,
     ]);
 
     Alchemy::fake([

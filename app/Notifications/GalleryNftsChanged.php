@@ -46,6 +46,6 @@ final class GalleryNftsChanged extends Notification implements ShouldQueue
 
     public function shouldSend(): bool
     {
-        return config('dashbrd.reports.enabled');
+        return config('dashbrd.gallery.logs.enabled');
     }
 }
