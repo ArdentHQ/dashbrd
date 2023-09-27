@@ -9,6 +9,7 @@ use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
 use App\Support\Queues;
 use App\Support\Web3NftHandler;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -63,6 +64,9 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
                 '--start-token' => $result->nextToken,
             ]);
         }
+
+        $this->collection->extra_attributes->set('nft_last_fetched_at', Carbon::now());
+        $this->collection->save();
 
         Log::info('FetchCollectionNfts Job: Handled', [
             'collection' => $this->collection->address,
