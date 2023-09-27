@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
 
-it('should fetch nft collections and trigger the job again with the next token', function () {
+it('should fetch nft collections, trigger the job again with the next token and set nft_last_fetched_at date', function () {
     Bus::fake();
 
     Alchemy::fake([
@@ -34,6 +34,8 @@ it('should fetch nft collections and trigger the job again with the next token',
 
     expect(Nft::count())->toBe(100);
     expect(NftTrait::count())->toBe(585);
+
+    expect($collection->fresh()->extra_attributes->get('nft_last_fetched_at'))->not->toBeNull();
 });
 
 it('should fetch nft collections without triggering another job if no next token', function () {
