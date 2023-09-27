@@ -12,15 +12,18 @@ use App\Models\Nft;
 use App\Models\Token;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Notifications\GalleryNftsChanged;
 use App\Support\Cache\GalleryCache;
 use App\Support\Cache\UserCache;
 use App\Support\Facades\Alchemy;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Notification;
 
 it('should fetch nfts for wallet', function () {
     Bus::fake();
@@ -109,6 +112,11 @@ it('should use the wallet id as a unique job identifier', function () {
 
 it('should detach no longer owned nfts', function () {
     Bus::fake();
+    Notification::fake();
+
+    config([
+        'dashbrd.reports.enabled' => true,
+    ]);
 
     Alchemy::fake([
         '*' => Http::sequence()
@@ -154,6 +162,15 @@ it('should detach no longer owned nfts', function () {
     (new FetchWalletNfts($wallet, $network))->handle();
 
     expect($wallet->nfts()->count())->toBe(2)->and(Nft::count())->toBe(3);
+
+    Notification::assertSentTo(
+        new AnonymousNotifiable(),
+        function (GalleryNftsChanged $notification) use ($wallet) {
+            expect($notification->walletAddress)->toBe($wallet->address);
+
+            return true;
+        }
+    );
 });
 
 it('should delete gallery when all nfts have been removed', function () {

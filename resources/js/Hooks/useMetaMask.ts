@@ -657,7 +657,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         connectWallet,
         connecting,
         signing,
-        signed,
+        signed: true,
         initialized,
         needsMetaMask,
         supportsMetaMask,
