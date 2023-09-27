@@ -23,18 +23,18 @@ interface Galleries {
     mostValuable: App.Data.Gallery.GalleryData[];
 }
 
+const guestBannerClickHandler = (): void => {
+    router.visit(
+        route("my-galleries.create", {
+            redirectTo: "my-galleries.create",
+        }),
+    );
+};
+
 const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     const { initialized, connecting } = useMetaMaskContext();
-
-    const guestBannerClickHandler = (): void => {
-        router.visit(
-            route("my-galleries.create", {
-                redirectTo: "my-galleries.create",
-            }),
-        );
-    };
 
     const { props } = usePage();
     const { slidesPerView, horizontalOffset } = useGalleryCarousel();
