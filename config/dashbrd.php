@@ -120,7 +120,7 @@ return [
         'logs' => [
             'enabled' => env('SLACK_GALLERY_LOGS_ENABLED', false),
             'slack_webhook_url' => env('SLACK_GALLERY_LOGS_WEBHOOK_URL', null),
-        ]
+        ],
     ],
 
     'collections' => [
