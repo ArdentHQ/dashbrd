@@ -128,9 +128,7 @@ it('should not insert traits with long values', function () {
         ->and($traitCount)->toBe(1);
 });
 
-
-
-it("should thrown an exception if network id is null for either the collection or network", function () {
+it('should thrown an exception if network id is null for either the collection or network', function () {
     $wallet = Wallet::factory()->create();
 
     // Create a Web3NftHandler instance with null network and collection.
