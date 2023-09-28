@@ -99,6 +99,14 @@ Another data provider is Mnemonic, for which they provide a [first steps](https:
 MNEMONIC_API_KEY=your-api-key
 ```
 
+### Opensea
+
+For Opensea you can get your API by following the instructions at this [link](https://docs.opensea.io/reference/api-keys). Once you have one, set it in the `.env` as follows:
+
+```bash
+OPENSEA_API_KEY=your-api-key
+```
+
 ### Coingecko
 
 Coingecko is used as a data provider for token prices. Their free tier does not require an API key, but if you're a pro user you can set it as follows in your `.env` (but it's not a requirement for Dashbrd to work):
