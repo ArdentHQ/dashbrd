@@ -66,7 +66,7 @@ export const Navbar = ({
         <nav
             data-testid="Navbar"
             className={cn(
-                "flex h-14 items-center justify-between border-b border-theme-secondary-300 bg-white px-6 py-2 dark:border-theme-dark-700 dark:bg-theme-dark-900 xs:h-18 sm:px-8 sm:py-0",
+                "transition-default flex h-14 items-center justify-between border-b border-theme-secondary-300 bg-white px-6 py-2 dark:border-theme-dark-700 dark:bg-theme-dark-900 xs:h-18 sm:px-8 sm:py-0",
                 className,
             )}
             {...properties}
