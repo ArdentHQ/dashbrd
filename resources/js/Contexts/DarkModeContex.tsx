@@ -1,15 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface ContextProperties {
-    isDark?: boolean;
-    toggleDarkMode?: () => void;
+    isDark: boolean;
+    toggleDarkMode: () => void;
 }
 
 interface ProviderProperties {
     children: React.ReactNode;
 }
 
-const DarkModeContext = createContext<ContextProperties | undefined>({});
+const DarkModeContext = createContext<ContextProperties | undefined>(undefined);
 
 export const DarkModeContextProvider = ({ children }: ProviderProperties): JSX.Element => {
     const [isDark, setIsDark] = useState<boolean>(false);
@@ -50,3 +50,5 @@ export const useDarkModeContext = (): ContextProperties => {
 
     return context;
 };
+
+export default DarkModeContextProvider;
