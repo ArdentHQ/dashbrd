@@ -472,9 +472,9 @@ class AlchemyPendingRequest extends PendingRequest
         }
 
         return new Web3NftCollectionFloorPrice(
-            CryptoUtils::convertToWei($priceInfo['floorPrice'], CryptoCurrencyDecimals::forCurrency($priceInfo['priceCurrency'])),
-            Str::lower($priceInfo['priceCurrency']),
-            Carbon::parse($priceInfo['retrievedAt']),
+            price: CryptoUtils::convertToWei($priceInfo['floorPrice'], CryptoCurrencyDecimals::forCurrency($priceInfo['priceCurrency'])),
+            currency: Str::lower($priceInfo['priceCurrency']),
+            retrievedAt: Carbon::parse($priceInfo['retrievedAt']),
         );
     }
 
