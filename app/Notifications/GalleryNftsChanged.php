@@ -40,7 +40,7 @@ final class GalleryNftsChanged extends Notification implements ShouldQueue
             ->attachment(function (SlackAttachment $attachment) {
                 $attachment
                     ->title('Affected NFTs')
-                    ->fields(['nfts' => implode('| ', array_map((fn ($nft) => implode(', ', $nft)), $this->deletedNfts))]);
+                    ->fields(['nfts' => implode('| ', array_map((fn ($nft) => implode(', ', $nft)), $this->unassignedNfts))]);
             });
     }
 
