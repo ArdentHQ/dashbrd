@@ -16,6 +16,7 @@ describe("CollectionsGrid", () => {
 
         useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
             signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
         });
     });
 

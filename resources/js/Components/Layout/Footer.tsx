@@ -25,6 +25,7 @@ const PoweredBy = (): JSX.Element => {
 
 const SocialIcons = (): JSX.Element => {
     const { t } = useTranslation();
+  
     const defaultAnchorStyles =
         "button-icon group h-8 w-8 border-transparent bg-transparent p-1 text-theme-secondary-700 hover:bg-theme-secondary-300 hover:text-theme-secondary-700 active:bg-theme-secondary-400 active:text-theme-primary-900 dark:border-0 dark:text-theme-dark-300 dark:focus-within:outline-3 dark:focus-within:outline-theme-primary-700 dark:focus-within:text-theme-secondary-700 dark:focus-within:bg-transparent dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-200 dark:active:bg-theme-dark-800 dark:active:text-theme-dark-100 md:flex transition-default";
 

@@ -212,7 +212,7 @@ describe("Pagination", () => {
         });
     });
 
-    it("does not show first page link if on first page", () => {
+    it("doesn't show first page button if on first page", () => {
         const data = {
             ...paginationData,
             meta: {
@@ -238,9 +238,10 @@ describe("Pagination", () => {
         render(<Pagination data={data} />);
 
         expect(screen.getByTestId("Pagination__firstPageLink")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__firstPageLink_mobile")).toBeInTheDocument();
     });
 
-    it("does not show last page link if on last page", () => {
+    it("doesn't show last page button if on last page", () => {
         const data = {
             ...paginationData,
             meta: {
@@ -266,6 +267,7 @@ describe("Pagination", () => {
         render(<Pagination data={data} />);
 
         expect(screen.getByTestId("Pagination__lastPageLink")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__lastPageLink_mobile")).toBeInTheDocument();
     });
 
     it("shows previous page url if there is a previous page", () => {
@@ -284,7 +286,7 @@ describe("Pagination", () => {
         }
     });
 
-    it("does not show previous page url if there is no previous page", () => {
+    it("show disabled previous page button if there is no previous page", () => {
         const data = {
             ...paginationData,
             meta: {
@@ -295,7 +297,8 @@ describe("Pagination", () => {
 
         render(<Pagination data={data} />);
 
-        expect(screen.queryByTestId("Pagination__PreviousPageLink__link")).not.toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__PreviousPageLink__link")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__PreviousPageLink__link")).toHaveAttribute("disabled");
     });
 
     it("shows next page url if there is a next page", () => {
@@ -325,8 +328,8 @@ describe("Pagination", () => {
 
         render(<Pagination data={data} />);
 
-        expect(screen.queryByTestId("Pagination__NextPageLink__link")).toBeInTheDocument();
-        expect(screen.queryByTestId("Pagination__NextPageLink__link")).toHaveAttribute("disabled");
+        expect(screen.getByTestId("Pagination__NextPageLink__link")).toBeInTheDocument();
+        expect(screen.getByTestId("Pagination__NextPageLink__link")).toHaveAttribute("disabled");
     });
 
     it("shows 'before' ellipsis if there are more than 3 pages and user is browsing page larger than 3", () => {
@@ -444,5 +447,38 @@ describe("Pagination", () => {
         render(<Pagination data={data} />);
 
         expect(screen.queryByTestId("Pagination")).not.toBeInTheDocument();
+    });
+
+    it("should set page as currentPage in input if page is not provided on edit", () => {
+        render(<Pagination data={paginationData} />);
+
+        const button = screen.getByTestId("Pagination__MobileButton");
+        fireEvent.click(button);
+
+        const input = screen.getByTestId("Pagination__PageInput__input");
+
+        fireEvent.change(input, {
+            target: {
+                value: "2",
+            },
+        });
+
+        expect(button.textContent).toBe("Page 2 of 3");
+
+        fireEvent.click(button);
+        fireEvent.change(input, {
+            target: {
+                value: null,
+            },
+        });
+        expect(button.textContent).toBe("Page 1 of 3");
+
+        fireEvent.click(button);
+        fireEvent.change(input, {
+            target: {
+                value: "",
+            },
+        });
+        expect(button.textContent).toBe("Page 1 of 3");
     });
 });
