@@ -749,25 +749,25 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
-it('can sort collections by name', function() {
+it('can sort collections by name', function () {
     $first = Collection::factory()->create([
-        'name' => ' '
+        'name' => ' ',
     ]);
 
     $second = Collection::factory()->create([
-        'name' => 'A'
+        'name' => 'A',
     ]);
 
     $third = Collection::factory()->create([
-        'name' => 'aB'
+        'name' => 'aB',
     ]);
 
     $fourth = Collection::factory()->create([
-        'name' => 'AZ'
+        'name' => 'AZ',
     ]);
 
     $fitfh = Collection::factory()->create([
-        'name' => 'B'
+        'name' => 'B',
     ]);
 
     $collections = Collection::orderByName('asc')->get();
