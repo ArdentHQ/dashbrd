@@ -82,6 +82,18 @@ const colors = {
         "bg-theme-info-800",
         "bg-theme-info-900",
     ],
+    hint: [
+        "bg-theme-hint-50",
+        "bg-theme-hint-100",
+        "bg-theme-hint-200",
+        "bg-theme-hint-300",
+        "bg-theme-hint-400",
+        "bg-theme-hint-500",
+        "bg-theme-hint-600",
+        "bg-theme-hint-700",
+        "bg-theme-hint-800",
+        "bg-theme-hint-900",
+    ],
 };
 
 /**

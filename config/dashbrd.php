@@ -118,6 +118,10 @@ return [
             'nfts_per_page' => env('GALLERY_NFTS_PER_PAGE', 20),
         ],
         'nft_limit' => 16,
+        'logs' => [
+            'enabled' => env('SLACK_GALLERY_LOGS_ENABLED', false),
+            'slack_webhook_url' => env('SLACK_GALLERY_LOGS_WEBHOOK_URL', null),
+        ],
     ],
 
     'collections' => [
@@ -181,6 +185,8 @@ return [
     |
     */
 
+    // The maximum number of NFTs that can be retrieved from a collection that belongs to a wallet that has never beed signed
+    'daily_max_collection_nft_retrieval_for_unsigned_wallets' => env('DAILY_MAX_COLLECTION_NFT_RETRIEVAL_FOR_UNVERIFIED_WALLETS', 100),
     'collections_max_cap' => env('COLLECTIONS_MAX_CAP', 50000),
 
     'trait_value_max_length' => env('TRAIT_VALUE_MAX_LENGTH', 25),

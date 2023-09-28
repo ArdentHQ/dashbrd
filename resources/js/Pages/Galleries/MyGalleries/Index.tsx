@@ -8,7 +8,6 @@ import { Icon } from "@/Components/Icon";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { Pagination } from "@/Components/Pagination";
 import { Tooltip } from "@/Components/Tooltip";
-import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 const Index = ({
     title,
@@ -25,8 +24,6 @@ const Index = ({
     const userGalleries = galleries.paginated;
 
     const createGalleryUrl = route("my-galleries.create");
-
-    const { signedAction } = useAuthorizedAction();
 
     return (
         <LayoutWrapper>
@@ -78,9 +75,7 @@ const Index = ({
                         <>
                             <Button
                                 onClick={() => {
-                                    signedAction(() => {
-                                        router.get(createGalleryUrl);
-                                    });
+                                    router.visit(createGalleryUrl);
                                 }}
                                 className="sm:hidden"
                                 icon="Plus"
@@ -89,9 +84,7 @@ const Index = ({
 
                             <Button
                                 onClick={() => {
-                                    signedAction(() => {
-                                        router.get(createGalleryUrl);
-                                    });
+                                    router.visit(createGalleryUrl);
                                 }}
                                 className="hidden sm:block"
                             >
@@ -128,7 +121,7 @@ const Index = ({
 
                 {userGalleries.meta.last_page > 1 && (
                     <Pagination
-                        className="mb-6 mt-6 flex w-full items-center justify-center lg:mb-0"
+                        className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
                         data={userGalleries}
                     />
                 )}

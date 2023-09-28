@@ -1,11 +1,9 @@
-import { router } from "@inertiajs/react";
 import { within } from "@testing-library/react";
 import React from "react";
 import { type SpyInstance } from "vitest";
 import { UserDetails } from "@/Components/Navbar/UserDetails";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import * as environmentContextMock from "@/Contexts/EnvironmentContext";
-import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
 import { render, screen, userEvent } from "@/Tests/testing-library";
@@ -21,9 +19,6 @@ const environmentDefault = {
 };
 
 let environmentSpy: SpyInstance;
-let useAuthorizedActionSpy: SpyInstance;
-
-const signedActionMock = vi.fn();
 
 const wallet = new WalletFactory().create();
 
@@ -32,18 +27,10 @@ describe("UserDetails", () => {
 
     beforeEach(() => {
         environmentSpy = vi.spyOn(environmentContextMock, "useEnvironmentContext").mockReturnValue(environmentDefault);
-
-        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
-            signedAction: signedActionMock,
-        });
     });
 
     afterEach(() => {
         environmentSpy.mockRestore();
-
-        useAuthorizedActionSpy.mockRestore();
-
-        signedActionMock.mockReset();
     });
 
     it("should render", async () => {
@@ -64,35 +51,6 @@ describe("UserDetails", () => {
 
         expect(screen.getByTestId("AccountNavigation__galleries")).toBeInTheDocument();
         expect(screen.getByTestId("AccountNavigation__collections")).toBeInTheDocument();
-    });
-
-    it("should redirect to the settings page with signature", async () => {
-        const function_ = vi.fn();
-        const routerSpy = vi.spyOn(router, "get").mockImplementation(function_);
-        const wallet = new WalletFactory().withoutAvatar().create();
-
-        signedActionMock.mockImplementation((callback) => {
-            callback();
-        });
-
-        render(
-            <UserDetails
-                wallet={wallet}
-                galleriesCount={0}
-                collectionCount={0}
-                currency="USD"
-            />,
-        );
-
-        expect(screen.getByTestId("UserDetails__trigger")).toBeInTheDocument();
-
-        await userEvent.click(screen.getByTestId("UserDetails__trigger"));
-
-        expect(screen.getByTestId("UserDetails__settings")).toBeInTheDocument();
-
-        await userEvent.click(screen.getByTestId("UserDetails__settings"));
-
-        expect(routerSpy).toHaveBeenCalled();
     });
 
     it("should render without galleries", async () => {
