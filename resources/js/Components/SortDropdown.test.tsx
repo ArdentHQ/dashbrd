@@ -43,4 +43,17 @@ describe("DropdownButton", () => {
 
         expect(screen.getByTestId("DropdownButton")).toBeInTheDocument();
     });
+
+    it("should render component in disabled state", () => {
+        render(
+            <DropdownButton
+                onClick={vi.fn()}
+                isActive={false}
+            >
+                <span>hello</span>
+            </DropdownButton>,
+        );
+
+        expect(screen.getByTestId("DropdownButton")).not.toHaveClass("bg-theme-primary-100");
+    });
 });
