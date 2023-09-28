@@ -47,14 +47,14 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                             data-testid="UserDetails__content"
                             className="absolute inset-x-4 mt-4 w-auto origin-top-right bg-transparent sm:left-auto sm:right-0 sm:mt-6 sm:w-72"
                         >
-                            <div className="overflow-hidden rounded-2xl bg-white p-0">
-                                <section className="bg-theme-secondary-50 px-6 py-2">
+                            <div className="overflow-hidden rounded-2xl bg-white p-0 dark:border dark:border-theme-dark-700 dark:bg-theme-dark-950 dark:shadow-xl">
+                                <section className="bg-theme-secondary-50 px-6 py-2 dark:bg-theme-dark-900">
                                     <div className="flex items-center justify-between">
                                         <div className="text-sm font-medium leading-5.5">
-                                            <span className="mr-1 text-theme-secondary-700">
+                                            <span className="mr-1 text-theme-secondary-700 dark:text-theme-dark-200">
                                                 {t("common.my_address")}:
                                             </span>
-                                            <span>
+                                            <span className="dark:text-theme-dark-50">
                                                 <TruncateMiddle
                                                     length={10}
                                                     text={address}
@@ -73,10 +73,10 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                     <div className="mb-6 mt-8 px-6">
                                         <div className="mb-4 flex flex-col items-center">
                                             <div className="mb-4 text-center">
-                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-500">
+                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400">
                                                     {t("common.my_balance")}
                                                 </p>
-                                                <p className="text-xl font-medium leading-8 text-theme-secondary-900">
+                                                <p className="text-xl font-medium leading-8 text-theme-secondary-900 dark:text-theme-dark-50">
                                                     <FormatFiat
                                                         value={wallet.totalBalanceInCurrency}
                                                         currency={currency}
@@ -98,9 +98,9 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                         <div>
                                             <PortfolioBreakdownLine assets={assets} />
                                             <div className="mt-2 flex items-center justify-between">
-                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-700">
+                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-600">
                                                     {t("common.tokens")}:{" "}
-                                                    <span className="text-theme-secondary-900">
+                                                    <span className="text-theme-secondary-900 dark:text-theme-dark-200">
                                                         {Math.max(wallet.totalTokens, 1)}
                                                     </span>
                                                 </p>
@@ -108,7 +108,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                 <Link
                                                     href={route("dashboard")}
                                                     className={cn(
-                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none ",
+                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none dark:text-theme-primary-400",
                                                         "hover:text-theme-primary-700",
                                                         "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 focus-visible:ring-offset-2",
                                                     )}
@@ -120,7 +120,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                     </div>
                                 </section>
 
-                                <section className="bg-theme-secondary-50 py-3.5">
+                                <section className="bg-theme-secondary-50 py-3.5 dark:bg-theme-dark-900">
                                     <nav aria-label="Account navigation">
                                         <ul className="list-none p-0">
                                             {features.galleries && (
@@ -131,7 +131,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                         label={
                                                             <>
                                                                 {t("pages.galleries.my_galleries.title")}{" "}
-                                                                <span className="text-theme-secondary-500">
+                                                                <span className="text-theme-secondary-50 dark:text-theme-dark-400">
                                                                     ({galleriesCount})
                                                                 </span>
                                                             </>
@@ -147,7 +147,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                         label={
                                                             <>
                                                                 {t("pages.collections.title")}{" "}
-                                                                <span className="text-theme-secondary-500">
+                                                                <span className="text-theme-secondary-500 dark:text-theme-dark-400">
                                                                     ({collectionCount})
                                                                 </span>
                                                             </>
@@ -254,16 +254,18 @@ const DropdownNavigationLink = ({
         method={method}
         as={as}
         className={cn(
-            "transition-default flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 md-lg:px-6",
-            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300 dark:focus-visible:outline-theme-primary-700",
+            "transition-default group flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 dark:text-theme-dark-200 dark:hover:text-theme-dark-50 md-lg:px-6",
+            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300 dark:hover:bg-theme-dark-800 dark:focus-visible:outline-theme-primary-700 ",
         )}
         {...properties}
     >
         <div className="flex items-center space-x-3 rounded-full">
-            <Icon
-                name={icon}
-                size="lg"
-            />
+            <div className="dark:text-theme-dark-300 dark:group-hover:text-theme-dark-200">
+                <Icon
+                    name={icon}
+                    size="lg"
+                />
+            </div>
 
             <span>{label}</span>
         </div>
