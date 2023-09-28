@@ -68,6 +68,7 @@ import { ReactComponent as Menu } from "@icons/menu.svg";
 import { ReactComponent as MetamaskColored } from "@icons/metamask-colored.svg";
 import { ReactComponent as Metamask } from "@icons/metamask.svg";
 import { ReactComponent as Minus } from "@icons/minus.svg";
+import { ReactComponent as Newspaper } from "@icons/newspaper.svg";
 import { ReactComponent as DiamondOpacity } from "@icons/opacity/diamond.svg";
 import { ReactComponent as ImageOpacity } from "@icons/opacity/image.svg";
 import { ReactComponent as UserTeamOpacity } from "@icons/opacity/user-team.svg";
@@ -184,6 +185,7 @@ export const SvgCollection = {
     UserWithSpeechBalloon,
     Wallet,
     WalletOpacity,
+    Newspaper,
     XInCircle,
     X,
     FatXInCircle,
