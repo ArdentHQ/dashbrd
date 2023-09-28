@@ -21,6 +21,7 @@ describe("CollectionsTable", () => {
 
         useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
             signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
         });
     });
 

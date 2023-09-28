@@ -42,8 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'my-galleries', 'middleware' => 'features:galleries'], function () {
         Route::get('', [MyGalleryController::class, 'index'])->name('my-galleries')->middleware(EnsureOnboarded::class);
 
+        Route::get('create', [MyGalleryController::class, 'create'])->name('my-galleries.create')->middleware(EnsureOnboarded::class);
+
         Route::group(['middleware' => 'signed_wallet'], function () {
-            Route::get('create', [MyGalleryController::class, 'create'])->name('my-galleries.create')->middleware(EnsureOnboarded::class);
             Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
             Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
             Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');

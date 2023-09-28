@@ -24,6 +24,7 @@ describe("ActionsPopup", () => {
 
         useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
             signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
         });
     });
 
