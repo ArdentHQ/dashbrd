@@ -37,13 +37,13 @@ export const ArticleCard = ({ article, collections }: Properties): JSX.Element =
         <a
             data-testid="ArticleCard"
             href="#"
-            className="group flex w-full max-w-[335px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-white"
+            className="group flex w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-white"
         >
-            <div className="mx-2 mt-2 aspect-[16/9] overflow-hidden rounded-lg bg-theme-secondary-300">
+            <div className="mx-2 mt-2 aspect-video overflow-hidden rounded-lg bg-theme-secondary-300">
                 <img
                     className="w-full object-cover"
                     alt="TBD"
-                    src="https://images.unsplash.com/photo-1638803040283-7a5ffd48dad5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2592&q=80"
+                    src="https://i.ibb.co/42VMb58/CnUnPNz.png"
                 />
             </div>
 
