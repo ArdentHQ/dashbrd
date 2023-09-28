@@ -84,7 +84,7 @@ class CollectionController extends Controller
                 ->when($sortBy === 'value', fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
                 ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
-                ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, $sortDirection))
+                ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
                 ->search($user, $searchQuery)
                 ->paginate(25);
 
