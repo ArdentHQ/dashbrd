@@ -1063,7 +1063,7 @@ it('should get openSeaSlug', function () {
         ],
     ]);
 
-    expect($collection->openSeaSlug())->toBe('test-collection');  
+    expect($collection->openSeaSlug())->toBe('test-collection');
 });
 
 it('sorts collections last time nft was fetched', function () {
