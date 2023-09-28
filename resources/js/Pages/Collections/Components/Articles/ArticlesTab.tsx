@@ -73,7 +73,7 @@ export const ArticlesTab = (): JSX.Element => {
             )}
             {articlesCount === 0 && query !== "" && (
                 <div className="mt-6">
-                    <EmptyBlock>{t("pages.collections.articles.no_articles")}</EmptyBlock>
+                    <EmptyBlock>{t("pages.collections.articles.no_articles_with_filters")}</EmptyBlock>
                 </div>
             )}
             <ArticlePagination

@@ -25,7 +25,7 @@ describe("SortDropdown", () => {
             </SortDropdown>,
         );
 
-        expect(screen.getByTestId("SortDropdown")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("SortDropdown")).not.toBeInTheDocument();
         expect(screen.getByTestId("SortDropdown_Disabled")).toBeInTheDocument();
     });
 });
