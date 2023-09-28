@@ -8,9 +8,12 @@ use App\Models\Network;
 use App\Models\Token;
 use App\Support\Facades\Mnemonic;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 it('should fetch nft collection floor price', function () {
+    Config::set('dashbrd.web3_providers.'.FetchCollectionFloorPrice::class, 'mnemonic');
+
     Mnemonic::fake([
         'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
     ]);
@@ -41,6 +44,8 @@ it('should fetch nft collection floor price', function () {
 });
 
 it('should fetch nft collection floor price and handle null', function () {
+    Config::set('dashbrd.web3_providers.'.FetchCollectionFloorPrice::class, 'mnemonic');
+
     Mnemonic::fake([
         'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price_null'),
             200),
