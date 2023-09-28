@@ -67,7 +67,7 @@ return [
         App\Jobs\FetchCollectionNfts::class => 'alchemy', // No other provider gives us `totalSupply` that we use in jobs...
         App\Jobs\FetchEnsDetails::class => 'moralis',
         App\Jobs\FetchNativeBalances::class => env('WEB3_PROVIDER_FETCH_NATIVE_BALANCES', 'moralis'),
-        App\Jobs\FetchCollectionFloorPrice::class => env('WEB3_PROVIDER_FETCH_NFT_COLLECTION_FLOOR_PRICE', 'mnemonic'),
+        App\Jobs\FetchCollectionFloorPrice::class => env('WEB3_PROVIDER_FETCH_NFT_COLLECTION_FLOOR_PRICE', 'alchemy'),
         App\Jobs\DetermineCollectionMintingDate::class => env('WEB3_PROVIDER_DETERMINE_COLLECTION_MINTING_DATE', 'alchemy'),
     ],
 
