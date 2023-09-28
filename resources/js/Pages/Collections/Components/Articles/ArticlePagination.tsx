@@ -15,6 +15,7 @@ export const ArticlePagination = ({ pagination, onPageLimitChange }: Properties)
     return (
         <div className="mt-6 flex w-full flex-col items-center justify-between space-x-3 space-y-3 rounded-b border-theme-secondary-300 xs:w-auto sm:w-full sm:flex-row sm:space-y-0">
             <SelectPageLimit
+                suffix="items"
                 value={pagination.meta.per_page}
                 options={[12, 24, 48, 96]}
                 onChange={({ value }) => {

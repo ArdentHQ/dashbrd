@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
-import { ArticleDisplayType, DisplayType } from "@/Pages/Collections/Components/Articles/ArticleDisplayType";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
 import { ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
+import {SamplePageMeta} from "@/Tests/SampleData";
 
 export const ArticlesTab = (): JSX.Element => {
     const { t } = useTranslation();
@@ -19,7 +20,7 @@ export const ArticlesTab = (): JSX.Element => {
     const [pageLimit, setPageLimit] = useState<number>(24);
 
     const [displayType, setDisplayType] = useState(
-        queryParameters.view === "list" ? DisplayType.List : DisplayType.Grid,
+        queryParameters.view === "list" ? DisplayTypes.List : DisplayTypes.Grid,
     );
 
     // replace this with articles count
@@ -28,7 +29,7 @@ export const ArticlesTab = (): JSX.Element => {
     return (
         <div>
             <div className="mb-3 mt-6 flex items-center justify-between gap-x-3 sm:mb-4">
-                <ArticleDisplayType
+                <DisplayType
                     displayType={displayType}
                     onSelectDisplayType={(type) => {
                         setDisplayType(type);
@@ -51,7 +52,6 @@ export const ArticlesTab = (): JSX.Element => {
                     onSort={() => 1}
                 />
             </div>
-
             <div className="mb-4 sm:hidden">
                 <SearchInput
                     placeholder={"Search in Articles"}
@@ -61,9 +61,9 @@ export const ArticlesTab = (): JSX.Element => {
                     }}
                 />
             </div>
-
-            {articlesCount > 0 && displayType === DisplayType.Grid && <ArticlesGrid />}
-            {articlesCount > 0 && displayType === DisplayType.List && <ArticlesList />}
+            {/* eslint-disable @typescript-eslint/no-unnecessary-condition */}
+            {articlesCount > 0 && displayType === DisplayTypes.Grid && <ArticlesGrid />}
+            {articlesCount > 0 && displayType === DisplayTypes.List && <ArticlesList />}
 
             {articlesCount === 0 && query === "" && (
                 <div className="mt-6">
@@ -76,22 +76,10 @@ export const ArticlesTab = (): JSX.Element => {
                     <EmptyBlock>{t("pages.collections.articles.no_articles")}</EmptyBlock>
                 </div>
             )}
-
             <ArticlePagination
-                pagination={
-                    {
-                        meta: {
-                            per_page: 24,
-                            total: 240,
-                            last_page: 10,
-                            current_page: 1,
-                            first_page_url: "https://",
-                            last_page_url: "https://",
-                            next_page_url: "https://",
-                            prev_page_url: "https://",
-                        },
-                    } as PaginationData<unknown>
-                }
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                // @ts-ignore
+                pagination={SamplePageMeta as PaginationData<unknown>}
                 onPageLimitChange={(limit: number) => {
                     setPageLimit(limit);
                 }}

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { DropdownButton, SortDropdown } from "@/Pages/Collections/Components/Articles/SortDropdown";
+import { DropdownButton, SortDropdown } from "@/Components/SortDropdown";
 
 interface Properties {
     activeSort: string | null;

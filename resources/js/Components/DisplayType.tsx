@@ -3,17 +3,17 @@ import { Fragment } from "react";
 import { Tabs } from "@/Components/Tabs";
 
 interface Properties {
-    displayType: DisplayType;
+    displayType: DisplayTypes;
     disabled?: boolean;
-    onSelectDisplayType?: (type: DisplayType) => void;
+    onSelectDisplayType?: (type: DisplayTypes) => void;
 }
 
-export enum DisplayType {
+export enum DisplayTypes {
     List = "list",
     Grid = "grid",
 }
 
-export const ArticleDisplayType = ({ displayType, disabled, onSelectDisplayType }: Properties): JSX.Element => (
+export const DisplayType = ({ displayType, disabled, onSelectDisplayType }: Properties): JSX.Element => (
     <Tab.Group
         as="div"
         defaultIndex={0}
@@ -23,18 +23,18 @@ export const ArticleDisplayType = ({ displayType, disabled, onSelectDisplayType 
                 <Tab as={Fragment}>
                     <Tabs.Button
                         icon="Bars"
-                        selected={displayType === DisplayType.List}
+                        selected={displayType === DisplayTypes.List}
                         disabled={disabled}
-                        onClick={() => onSelectDisplayType?.(DisplayType.List)}
+                        onClick={() => onSelectDisplayType?.(DisplayTypes.List)}
                     />
                 </Tab>
 
                 <Tab as={Fragment}>
                     <Tabs.Button
                         icon="GridDots"
-                        selected={displayType === DisplayType.Grid}
+                        selected={displayType === DisplayTypes.Grid}
                         disabled={disabled}
-                        onClick={() => onSelectDisplayType?.(DisplayType.Grid)}
+                        onClick={() => onSelectDisplayType?.(DisplayTypes.Grid)}
                     />
                 </Tab>
             </Tabs>
