@@ -39,7 +39,7 @@ export const ArticlesTab = (): JSX.Element => {
                 <div className="flex-1">
                     <SearchInput
                         className="hidden sm:block"
-                        placeholder={"Search in Articles"}
+                        placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
                         onChange={(query) => {
                             setQuery(query);
@@ -48,13 +48,13 @@ export const ArticlesTab = (): JSX.Element => {
                 </div>
 
                 <ArticleSortDropdown
-                    activeSort={"id"}
+                    activeSort={"latest"}
                     onSort={() => 1}
                 />
             </div>
             <div className="mb-4 sm:hidden">
                 <SearchInput
-                    placeholder={"Search in Articles"}
+                    placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
                     onChange={(query) => {
                         setQuery(query);

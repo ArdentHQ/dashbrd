@@ -66,6 +66,9 @@ return [
         'articles' => [
             'no_articles' => 'No articles have been linked to this collection as of now.',
             'no_articles_with_filters' => 'We could not find any articles matching your search criteria, please try again!',
+            'search_placeholder' => 'Search in Articles',
+            'sort_latest' => 'Latest',
+            'sort_popularity' => 'Most Popular',
         ],
         'search' => [
             'loading_results' => 'Loading results...',

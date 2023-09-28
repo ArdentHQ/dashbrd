@@ -18,7 +18,7 @@ export const ArticleSortDropdown = ({ activeSort, onSort }: Properties): JSX.Ele
                         onSort("id");
                     }}
                 >
-                    {t("latest")}
+                    {t("pages.collections.articles.sort_latest")}
                 </DropdownButton>
 
                 <DropdownButton
@@ -27,7 +27,7 @@ export const ArticleSortDropdown = ({ activeSort, onSort }: Properties): JSX.Ele
                         onSort("popularity");
                     }}
                 >
-                    {t("most-popular")}
+                    {t("pages.collections.articles.sort_popularity")}
                 </DropdownButton>
             </>
         </SortDropdown>
