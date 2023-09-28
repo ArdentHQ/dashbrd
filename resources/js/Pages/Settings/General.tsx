@@ -8,6 +8,7 @@ import { Button } from "@/Components/Buttons/Button";
 import { InputGroup } from "@/Components/Form/InputGroup";
 import { Listbox } from "@/Components/Form/Listbox";
 import { Toggle } from "@/Components/Form/Toggle";
+import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 import { Form } from "@/Pages/Settings/Form";
 
 interface Currency {
@@ -107,26 +108,7 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
         });
     };
 
-    //! NOTE: This is just for testing, remove after testing
-    if (localStorage.theme === "dark") {
-        document.documentElement.classList.add("dark");
-    } else {
-        document.documentElement.classList.remove("dark");
-    }
-
-    const [dark, setDark] = useState<boolean>(localStorage.theme === "dark");
-
-    const themeToggle = (): void => {
-        if (localStorage.theme === "dark") {
-            document.documentElement.classList.remove("dark");
-            localStorage.removeItem("theme");
-            setDark(false);
-        } else {
-            document.documentElement.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-            setDark(true);
-        }
-    };
+    const { isDark, toggleDarkMode } = useDarkModeContext();
 
     return (
         <Layout
@@ -255,22 +237,25 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
                     </div>
                 </Form.Section>
 
-                <Form.Separator />
-
-                <Form.Section
-                    title={"Dark Mode"}
-                    subtitle={"Test only"}
-                >
-                    <div className="space-y-4">
-                        <div>
-                            <Toggle
-                                className="ml-auto"
-                                checked={dark}
-                                onChange={themeToggle}
-                            />
-                        </div>
-                    </div>
-                </Form.Section>
+                {["local", "test_e2e"].includes(props.environment) && (
+                    <>
+                        <Form.Separator />
+                        <Form.Section
+                            title={"Dark Mode"}
+                            subtitle={"Test only"}
+                        >
+                            <div className="space-y-4">
+                                <div>
+                                    <Toggle
+                                        className="ml-auto"
+                                        checked={isDark}
+                                        onChange={toggleDarkMode}
+                                    />
+                                </div>
+                            </div>
+                        </Form.Section>
+                    </>
+                )}
             </Form>
         </Layout>
     );
