@@ -13,6 +13,4 @@ enum Service: string
     case Mnemonic = 'mnemonic';
 
     case Alchemy = 'alchemy';
-
-    case Footprint = 'footprint';
 }

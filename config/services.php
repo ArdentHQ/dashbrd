@@ -80,11 +80,6 @@ return [
         ],
     ],
 
-    'footprint' => [
-        'key' => env('FOOTPRINT_API_KEY', null),
-        'endpoint' => env('FOOTPRINT_API_ENDPOINT', 'https://api.footprint.network/api/v2/'),
-    ],
-
     'google_analytics' => [
         'tracking_code' => env('GOOGLE_ANALYTICS_TRACKING_CODE'),
     ],

@@ -99,14 +99,6 @@ Another data provider is Mnemonic, for which they provide a [first steps](https:
 MNEMONIC_API_KEY=your-api-key
 ```
 
-### Footprint Analytics
-
-Although only one endpoint is currently supported in Dashbrd for this provider, you can still make use of it if you want. You can read their [API introduction document](https://docs.footprint.network/reference/introduction) to get yourself set up with an API key. This can then be added to your `.env`:
-
-```bash
-FOOTPRINT_API_KEY=your-api-key
-```
-
 ### Coingecko
 
 Coingecko is used as a data provider for token prices. Their free tier does not require an API key, but if you're a pro user you can set it as follows in your `.env` (but it's not a requirement for Dashbrd to work):

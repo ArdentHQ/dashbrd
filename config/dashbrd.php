@@ -85,9 +85,6 @@ return [
             'getBlockTimestamp' => 60 * 60 * 24 * 10, // 10 days... Creation date for blocks will never change, so we can safely cache in a distant future...
             'getNftCollectionFloorPrice' => 60, // 1 minute
         ],
-        'footprint' => [
-            'getNftCollectionFloorPrice' => 60, // 1 minute
-        ],
         'coingecko' => [
             'getPriceHistory' => [
                 Period::DAY->value => env('API_CACHE_TTL_COINGECKO_PRICE_HISTORY_DAY_TTL', 60 * 60), // 1 hour

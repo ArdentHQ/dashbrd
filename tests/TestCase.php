@@ -14,7 +14,6 @@ use App\Jobs\FetchUserNfts;
 use App\Jobs\FetchWalletNfts;
 use App\Support\Facades\Alchemy;
 use App\Support\Facades\Coingecko;
-use App\Support\Facades\Footprint;
 use App\Support\Facades\Mnemonic;
 use App\Support\Facades\Moralis;
 use Database\Seeders\NetworkSeeder;
@@ -41,7 +40,6 @@ abstract class TestCase extends BaseTestCase
         Alchemy::preventStrayRequests();
         Moralis::preventStrayRequests();
         Mnemonic::preventStrayRequests();
-        Footprint::preventStrayRequests();
 
         // These ensure that tests run fast
         Config::set('services.coingecko.retryDelay', 1);
