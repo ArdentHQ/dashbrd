@@ -272,6 +272,9 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
                 origin: { x: event.clientX / width, y: event.clientY / height },
                 disableForReducedMotion: true,
             });
+
+            let audio = new Audio("/confetti-yay.mp3");
+            audio.play();
         });
     };
 
