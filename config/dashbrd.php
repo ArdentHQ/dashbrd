@@ -117,6 +117,10 @@ return [
             'nfts_per_page' => env('GALLERY_NFTS_PER_PAGE', 20),
         ],
         'nft_limit' => 16,
+        'logs' => [
+            'enabled' => env('SLACK_GALLERY_LOGS_ENABLED', false),
+            'slack_webhook_url' => env('SLACK_GALLERY_LOGS_WEBHOOK_URL', null),
+        ],
     ],
 
     'collections' => [
