@@ -32,6 +32,7 @@ export const SortDropdown = ({ disabled = false, children }: Properties): JSX.El
                     <Tooltip content={t("common.sort")}>
                         <IconButton
                             icon="FunnelBars"
+                            data-testid="SortDropdown"
                             disabled={disabled}
                         />
                     </Tooltip>

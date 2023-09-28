@@ -28,5 +28,6 @@ describe("DisplayType", () => {
         await userEvent.click(screen.getByTestId("icon-GridDots").closest("button") as HTMLButtonElement);
 
         expect(onSelect).toHaveBeenCalledOnce();
+        expect(onSelect).toHaveBeenCalledWith(DisplayTypes.Grid);
     });
 });
