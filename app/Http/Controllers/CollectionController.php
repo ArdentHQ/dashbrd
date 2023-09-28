@@ -67,7 +67,7 @@ class CollectionController extends Controller
         $cache = new UserCache($user);
 
         $sortBy = in_array($request->query('sort'), ['oldest', 'received', 'name', 'floor-price', 'value', 'chain']) ? $request->query('sort') : null;
-        $defaultSortDirection = $sortBy === null ? 'desc' : 'asc';
+        $defaultSortDirection = $sortBy === null ? 'asc' : 'desc';
 
         $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
 
@@ -79,12 +79,12 @@ class CollectionController extends Controller
                 ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
-                ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
+                ->when($sortBy === 'name' || $sortBy === null, fn ($q) => $q->orderByName($sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
-                ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
+                ->when($sortBy === 'value', fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
                 ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
-                ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
+                ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, $sortDirection))
                 ->search($user, $searchQuery)
                 ->paginate(25);
 

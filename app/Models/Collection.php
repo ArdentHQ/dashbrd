@@ -219,6 +219,17 @@ class Collection extends Model
      * @param  'asc'|'desc'  $direction
      * @return Builder<self>
      */
+    public function scopeOrderByName(Builder $query, string $direction): Builder {
+        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @param  'asc'|'desc'  $direction
+     * @return Builder<self>
+     */
     public function scopeOrderByMintDate(Builder $query, string $direction): Builder
     {
         if ($direction === 'asc') {

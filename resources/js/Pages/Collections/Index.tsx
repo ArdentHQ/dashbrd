@@ -95,7 +95,7 @@ const CollectionsIndex = ({
             view: displayType,
         });
     };
-
+    console.log(props);
     return (
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
