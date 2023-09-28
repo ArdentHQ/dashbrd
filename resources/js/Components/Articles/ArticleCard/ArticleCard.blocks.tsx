@@ -24,7 +24,7 @@ export const FeaturedCollections = ({ collections }: { collections: ArticleCardC
     const container = useRef<HTMLDivElement>(null);
 
     useResizeObserver(container, () => {
-        setVisibleCount(calculateCircleCount(totalCount, container.current!.clientWidth));
+        setVisibleCount(calculateCircleCount(totalCount, container.current?.clientWidth ?? 30));
     });
 
     return (
