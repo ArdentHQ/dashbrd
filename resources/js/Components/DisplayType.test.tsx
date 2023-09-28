@@ -29,5 +29,12 @@ describe("DisplayType", () => {
 
         expect(onSelect).toHaveBeenCalledOnce();
         expect(onSelect).toHaveBeenCalledWith(DisplayTypes.Grid);
+
+        onSelect.mockReset();
+
+        await userEvent.click(screen.getByTestId("icon-Bars").closest("button") as HTMLButtonElement);
+
+        expect(onSelect).toHaveBeenCalledOnce();
+        expect(onSelect).toHaveBeenCalledWith(DisplayTypes.List);
     });
 });

@@ -17,6 +17,7 @@ export const SortDropdown = ({ disabled = false, children }: Properties): JSX.El
         return (
             <IconButton
                 icon="FunnelBars"
+                data-testid="SortDropdown_Disabled"
                 disabled={disabled}
             />
         );
@@ -59,6 +60,7 @@ export const DropdownButton = ({
     children: ReactNode;
 }): JSX.Element => (
     <button
+        data-testid="DropdownButton"
         className={cn(
             "transition-default cursor-pointer whitespace-nowrap px-6 py-2.5 text-left text-base font-medium",
             isActive
