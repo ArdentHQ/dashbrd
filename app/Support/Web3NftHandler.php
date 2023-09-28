@@ -14,10 +14,13 @@ use App\Models\Network;
 use App\Models\Nft;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Notifications\GalleryNftsChanged;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 use RuntimeException;
@@ -67,7 +70,7 @@ class Web3NftHandler
                     'socials' => $nftData->collectionSocials,
                     'banner' => $nftData->collectionBannerImageUrl,
                     'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
-
+                    'opensea_slug' => $nftData->collectionOpenSeaSlug,
                 ]),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
@@ -359,13 +362,33 @@ class Web3NftHandler
         $network = Network::where('chain_id', $this->getChainId())->firstOrFail();
 
         $ownedCollections->pluck('address')->each(
-            fn ($address) => Nft::where('wallet_id', $this->wallet->id)
+            function ($address) use ($network, $lastUpdateTimestamp) {
+                $query = Nft::where('wallet_id', $this->wallet->id)
                 ->whereHas('collection', function (Builder $query) use ($address, $network) {
                     $query->where('network_id', $network->id)
                         ->where('address', $address);
                 })
-                ->where('updated_at', '<', $lastUpdateTimestamp)
-                ->update(['wallet_id' => null])
+                ->where('updated_at', '<', $lastUpdateTimestamp);
+
+                /** @var array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}> $nftsToBeUnassigned */
+                $nftsToBeUnassigned = $query->clone()->select('token_number', 'collection_id', 'name', 'updated_at')->get()->toArray();
+                if (count($nftsToBeUnassigned) > 0) {
+                    // Log the NFTs that were not updated
+                    Log::debug('No longer owned NFTs', [
+                        'wallet' => $this->wallet->address,
+                        'lastUpdateTimestamp' => $lastUpdateTimestamp,
+                        'nfts' => $nftsToBeUnassigned,
+                    ]);
+
+                    // Notify
+                    Notification::route('slack', config('dashbrd.gallery.logs.slack_webhook_url'))->notify(
+                        (new GalleryNftsChanged($this->wallet->address, $nftsToBeUnassigned))->onQueue(Queues::DEFAULT)
+                    );
+                }
+
+                // Unassign NFTs that were not updated as they are no longer owned
+                $query->update(['wallet_id' => null]);
+            }
         );
 
         // Empty galleries are deleted via trigger (see `2023_03_29_080204_create_prune_galleries_trigger.php`)

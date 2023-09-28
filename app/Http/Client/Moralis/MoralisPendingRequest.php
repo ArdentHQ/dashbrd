@@ -160,6 +160,7 @@ class MoralisPendingRequest extends PendingRequest
                 collectionDescription: null,
                 collectionBannerImageUrl: null,
                 collectionBannerUpdatedAt: null,
+                collectionOpenSeaSlug: null,
                 collectionSocials: null,
                 collectionSupply: null,
                 name: $this->getNftName($nft),
@@ -243,9 +244,9 @@ class MoralisPendingRequest extends PendingRequest
             ])->json();
 
             return new Web3NftCollectionFloorPrice(
-                price: $data['price'],
-                currency: 'eth', // always eth for moralis
-                retrievedAt: Carbon::parse($data['block_timestamp']),
+                $data['price'],
+                'eth', // always eth for moralis
+                Carbon::parse($data['block_timestamp']),
             );
         } catch (ClientException $e) {
             if ($e->getCode() === 404) {
