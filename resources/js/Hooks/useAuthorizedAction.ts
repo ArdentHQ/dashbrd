@@ -3,6 +3,7 @@ import { useAuth } from "@/Hooks/useAuth";
 
 export const useAuthorizedAction = (): {
     signedAction: (action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => void) => void;
+    authenticatedAction: (action: ({ authenticated }: { authenticated: boolean }) => void) => void;
 } => {
     const { authenticated } = useAuth();
     const { showConnectOverlay, signed, askForSignature } = useMetaMaskContext();
@@ -33,5 +34,19 @@ export const useAuthorizedAction = (): {
         action({ authenticated, signed });
     };
 
-    return { signedAction };
+    const authenticatedAction = (action: ({ authenticated }: { authenticated: boolean }) => void): void => {
+        const onAction = (): void => {
+            action({ authenticated });
+        };
+
+        if (!authenticated) {
+            showConnectOverlay(onAction);
+
+            return;
+        }
+
+        action({ authenticated });
+    };
+
+    return { signedAction, authenticatedAction };
 };

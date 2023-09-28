@@ -1,7 +1,7 @@
 import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import uniqBy from "lodash/uniqBy";
-import { type MouseEvent, useCallback, useMemo, useState } from "react";
+import { type FormEvent, type MouseEvent, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
@@ -14,6 +14,7 @@ import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext"
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
@@ -43,6 +44,8 @@ const Create = ({
 
     const { t } = useTranslation();
     const { props } = usePage();
+
+    const { signedAction } = useAuthorizedAction();
 
     const [isGalleryFormSliderOpen, setIsGalleryFormSliderOpen] = useState(false);
     const [gallerySliderActiveTab, setGallerySliderActiveTab] = useState<GalleryFormSliderTabs>();
@@ -88,6 +91,12 @@ const Create = ({
         },
         [gallery],
     );
+
+    const publishHandler = (event: FormEvent<Element>): void => {
+        signedAction(() => {
+            submit(event);
+        });
+    };
 
     return (
         <LayoutWrapper
@@ -170,7 +179,7 @@ const Create = ({
                 onCancel={() => {
                     router.visit(route("my-galleries"));
                 }}
-                onPublish={submit}
+                onPublish={publishHandler}
             />
 
             <GalleryFormSlider
