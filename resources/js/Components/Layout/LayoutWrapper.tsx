@@ -14,6 +14,7 @@ interface LayoutWrapperProperties extends HTMLAttributes<HTMLDivElement> {
     toastMessage?: ToastMessage;
     isMaintenanceModeActive?: boolean;
     belowHeader?: React.ReactNode;
+    mustBeSigned?: boolean;
 }
 
 export const LayoutWrapper = ({
@@ -24,8 +25,11 @@ export const LayoutWrapper = ({
     withSlider = false,
     toastMessage,
     isMaintenanceModeActive,
+    mustBeSigned = false,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth();
+    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth({
+        mustBeSigned,
+    });
 
     const { connectWallet, initialized, connecting } = useMetaMaskContext();
 
@@ -49,6 +53,7 @@ export const LayoutWrapper = ({
             <AuthOverlay
                 show={showAuthOverlay}
                 showCloseButton={showCloseButton}
+                mustBeSigned={mustBeSigned}
                 closeOverlay={closeOverlay}
             />
 

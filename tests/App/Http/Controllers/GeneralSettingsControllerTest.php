@@ -6,12 +6,12 @@ use App\Enums\DateFormat;
 use App\Support\Facades\Signature;
 
 describe('user is not signed', function () {
-    it('cant render the General Settings page', function () {
+    it('can render the general settings page ', function () {
         $user = createUser();
 
         $this->actingAs($user)
             ->get(route('settings.general'))
-            ->assertRedirect();
+            ->assertStatus(200);
     });
 
     it('cant update user general preferences if not signed', function () {
