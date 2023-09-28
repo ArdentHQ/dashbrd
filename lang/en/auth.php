@@ -37,7 +37,7 @@ return [
         'sign' => 'Sign Message',
         'sign_message' => "Welcome to Dashbrd. In order to login, sign this message with your wallet. It doesn't cost you anything!\n\nSigning ID (you can ignore this): :nonce",
         'connect_subtitle' => 'Click on the MetaMask icon in your browser to confirm the action and connect your wallet.',
-        'requires_signature' => 'To perform this action we first require you to sign a message to prove ownership of the address.',
+        'requires_signature' => 'In order to prevent impersonation, we require a signature to perform this action. This signature is only a signed message and does not give any access to your wallet.',
     ],
 
     'errors' => [
