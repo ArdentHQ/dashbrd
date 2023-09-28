@@ -370,19 +370,19 @@ class Web3NftHandler
                 })
                 ->where('updated_at', '<', $lastUpdateTimestamp);
 
-                /** @var array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}> $nftsToBeDeleted */
-                $nftsToBeDeleted = $query->clone()->select('token_number', 'collection_id', 'name', 'updated_at')->get()->toArray();
-                if (count($nftsToBeDeleted) > 0) {
+                /** @var array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}> $nftsToBeUnassigned */
+                $nftsToBeUnassigned = $query->clone()->select('token_number', 'collection_id', 'name', 'updated_at')->get()->toArray();
+                if (count($nftsToBeUnassigned) > 0) {
                     // Log the NFTs that were not updated
                     Log::debug('No longer owned NFTs', [
                         'wallet' => $this->wallet->address,
                         'lastUpdateTimestamp' => $lastUpdateTimestamp,
-                        'nfts' => $nftsToBeDeleted,
+                        'nfts' => $nftsToBeUnassigned,
                     ]);
 
                     // Notify
                     Notification::route('slack', config('dashbrd.gallery.logs.slack_webhook_url'))->notify(
-                        (new GalleryNftsChanged($this->wallet->address, $nftsToBeDeleted))->onQueue(Queues::DEFAULT)
+                        (new GalleryNftsChanged($this->wallet->address, $nftsToBeUnassigned))->onQueue(Queues::DEFAULT)
                     );
                 }
 

@@ -16,11 +16,11 @@ final class GalleryNftsChanged extends Notification implements ShouldQueue
     use Queueable;
 
     /**
-     * @param  array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}>  $deletedNfts
+     * @param  array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}>  $unassignedNfts
      */
     public function __construct(
         public string $walletAddress,
-        public array $deletedNfts
+        public array $unassignedNfts
     ) {
     }
 
