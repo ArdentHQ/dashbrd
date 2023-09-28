@@ -257,9 +257,7 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
         event.preventDefault();
         event.stopPropagation();
 
-        console.log(event.clientX, event.clientY);
         const { innerWidth: width, innerHeight: height } = window;
-        console.log(width, height);
 
         signedAction(({ authenticated }) => {
             // If user wasnt authenticated, foce a positive
@@ -272,6 +270,7 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
                 particleCount: 150,
                 spread: 60,
                 origin: { x: event.clientX / width, y: event.clientY / height },
+                disableForReducedMotion: true,
             });
         });
     };
