@@ -749,6 +749,40 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
+it('can sort collections by name', function () {
+    $first = Collection::factory()->create([
+        'name' => ' ',
+    ]);
+
+    $second = Collection::factory()->create([
+        'name' => 'A',
+    ]);
+
+    $third = Collection::factory()->create([
+        'name' => 'aB',
+    ]);
+
+    $fourth = Collection::factory()->create([
+        'name' => 'AZ',
+    ]);
+
+    $fitfh = Collection::factory()->create([
+        'name' => 'B',
+    ]);
+
+    $collections = Collection::orderByName('asc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $first->id, $second->id, $third->id, $fourth->id,   $fitfh->id,
+    ]);
+
+    $collections = Collection::orderByName('desc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $fitfh->id, $fourth->id, $third->id, $second->id, $first->id,
+    ]);
+});
+
 it('queries the collections for the collection data object', function () {
     $collection1 = Collection::factory()->create([
         'floor_price' => '123456789',
