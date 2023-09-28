@@ -16,6 +16,8 @@ import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
+import confetti from "canvas-confetti";
+
 interface NftImageProperties {
     nft: App.Data.Gallery.GalleryNftData;
     isSelected?: boolean;
@@ -255,12 +257,22 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
         event.preventDefault();
         event.stopPropagation();
 
+        console.log(event.clientX, event.clientY);
+        const { innerWidth: width, innerHeight: height } = window;
+        console.log(width, height);
+
         signedAction(({ authenticated }) => {
             // If user wasnt authenticated, foce a positive
             // like since we dont know if he liked it before
             const likeValue = !authenticated ? true : undefined;
 
             void like(gallery.slug, likeValue);
+
+            confetti({
+                particleCount: 150,
+                spread: 60,
+                origin: { x: event.clientX / width, y: event.clientY / height },
+            });
         });
     };
 
