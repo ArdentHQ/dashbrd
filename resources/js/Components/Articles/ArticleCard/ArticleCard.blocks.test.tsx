@@ -1,5 +1,5 @@
 import React from "react";
-import { expect } from "vitest";
+import { expect, type SpyInstance } from "vitest";
 import { calculateCircleCount, FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
 import { type ArticleCardCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 import { render, screen } from "@/Tests/testing-library";
@@ -25,7 +25,7 @@ describe("ArticleCardBlocks", () => {
         expect(screen.getByTestId("FeaturedCollections")).toBeInTheDocument();
     });
 
-    it("should display number of collections that fit the available space", () => {
+    it("should display count of the collections that fit the available space", () => {
         render(
             <FeaturedCollections
                 collections={
@@ -37,8 +37,32 @@ describe("ArticleCardBlocks", () => {
             />,
         );
 
-        screen.debug();
-
         expect(screen.queryByTestId("FeaturedCollections_Hidden")).not.toBeInTheDocument();
+    });
+
+    it("should call resize to fit featured collections within the available space", () => {
+        const resizeObserverMock: SpyInstance = vi.spyOn(window, "ResizeObserver");
+
+        const observeMock = vi.fn();
+
+        resizeObserverMock.mockImplementation(() => ({
+            observe: observeMock,
+            disconnect: vi.fn(),
+        }));
+
+        render(
+            <FeaturedCollections
+                collections={[
+                    {
+                        name: "Collection 1",
+                        image: "image",
+                    },
+                ]}
+            />,
+        );
+
+        expect(observeMock).toHaveBeenCalled();
+
+        resizeObserverMock.mockRestore();
     });
 });
