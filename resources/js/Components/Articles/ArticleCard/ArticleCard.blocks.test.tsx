@@ -45,8 +45,11 @@ describe("ArticleCardBlocks", () => {
 
         const observeMock = vi.fn();
 
-        resizeObserverMock.mockImplementation(() => ({
-            observe: observeMock,
+        resizeObserverMock.mockImplementation((callback: () => void) => ({
+            observe: () => {
+                callback();
+                observeMock();
+            },
             disconnect: vi.fn(),
         }));
 
