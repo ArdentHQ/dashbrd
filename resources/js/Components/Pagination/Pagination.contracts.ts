@@ -16,7 +16,6 @@ export interface PageInputProperties {
     onChange: (page: string) => void;
     onClose: () => void;
     totalPages: number;
-    currentPage: string;
 }
 
 export interface PaginationData<T> {

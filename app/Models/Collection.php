@@ -490,4 +490,13 @@ class Collection extends Model
     {
         return BlacklistedCollections::includes($this->address);
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
+    }
 }
