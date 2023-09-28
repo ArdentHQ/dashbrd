@@ -63,6 +63,9 @@ return [
                 'LABEL_SALE' => 'Sale',
             ],
         ],
+        'articles' => [
+            'no_articles' => 'No articles have been linked to this collection as of now.',
+        ],
         'search' => [
             'loading_results' => 'Loading results...',
             'no_results' => 'We could not find anything matching your search criteria, please try again!',
@@ -82,6 +85,7 @@ return [
         ],
         'menu' => [
             'collection' => 'Collection',
+            'articles' => 'Articles',
             'activity' => 'Activity',
         ],
         'hidden_modal' => [

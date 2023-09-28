@@ -54,31 +54,25 @@ const CollectionNavigationTab = forwardRef<
 
 CollectionNavigationTab.displayName = "CollectionNavigationTab";
 
+export type TabName = "collection" | "articles" | "activity";
+
+const tabs: TabName[] = ["collection", "articles", "activity"];
+
 export const CollectionNavigation = ({
     children,
     selectedTab,
     onTabChange,
 }: {
     children: JSX.Element[];
-    selectedTab: "collection" | "activity";
-    onTabChange: (tab: "collection" | "activity") => void;
+    selectedTab: TabName;
+    onTabChange: (tab: TabName) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const selectedIndex = useMemo(() => {
-        if (selectedTab === "activity") {
-            return 1;
-        }
-
-        return 0;
-    }, [selectedTab]);
+    const selectedIndex = useMemo(() => tabs.findIndex((tab) => tab === selectedTab), [selectedTab]);
 
     const tabChangeHandler = (index: number): void => {
-        if (index === 1) {
-            onTabChange("activity");
-        } else {
-            onTabChange("collection");
-        }
+        onTabChange(tabs[index]);
     };
 
     return (
@@ -86,12 +80,19 @@ export const CollectionNavigation = ({
             selectedIndex={selectedIndex}
             onChange={tabChangeHandler}
         >
-            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 px-6 py-3 sm:-mx-8 sm:px-8 lg:mx-0 lg:rounded-xl lg:px-5">
+            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 py-3 sm:-mx-8  lg:mx-0 lg:rounded-xl ">
                 <Tab.List className="flex justify-between">
                     <div className="w-full sm:w-auto">
-                        <Tabs className="space-x-1 bg-transparent">
+                        <Tabs
+                            className="space-x-1 bg-transparent"
+                            wrapperClassName="px-6 lg:px-5 sm:px-8"
+                        >
                             <CollectionNavigationTab icon="DiamondOpacity">
                                 {t("pages.collections.menu.collection")}
+                            </CollectionNavigationTab>
+
+                            <CollectionNavigationTab icon="Newspaper">
+                                {t("pages.collections.menu.articles")}
                             </CollectionNavigationTab>
 
                             <CollectionNavigationTab
