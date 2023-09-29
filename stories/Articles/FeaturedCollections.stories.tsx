@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react";
-import {FeaturedCollections} from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
-import {ArticleCollections} from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
+import { ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 
 export default {
     title: "Articles/FeaturedCollections",
@@ -17,11 +17,14 @@ export const Default = {
     }) => {
         return (
             <>
-                {sets.map(({ collections, width}, index) => (
-                    <div className="flex flex-1 w-full">
+                {sets.map(({ collections, width }, index) => (
+                    <div className="flex w-full flex-1">
                         <span>Featured collections:</span>
-                        <div className={`flex flex-1`} style={{maxWidth: width}}>
-                            <FeaturedCollections collections={collections}/>
+                        <div
+                            className={`flex flex-1`}
+                            style={{ maxWidth: width }}
+                        >
+                            <FeaturedCollections collections={collections} />
                         </div>
                     </div>
                 ))}
@@ -51,13 +54,13 @@ const collections = [
         image: "https://res.cloudinary.com/alchemyapi/image/upload/w_256,h_256/thumbnailv2/eth-mainnet/3a62f5acd387614e2bdc48ffee1e5ec6",
         name: "Whiskers",
     },
-]
+];
 
 Default.args = {
     sets: [
         {
-            width: '70px',
-            collections: collections.slice(0, 4)
+            width: "70px",
+            collections: collections.slice(0, 4),
         },
     ],
 };
