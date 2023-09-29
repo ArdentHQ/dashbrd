@@ -1,7 +1,7 @@
 import type { Meta } from "@storybook/react";
 import { ArticleListItem } from "@/Components/Articles/ArticleListItem";
 import { ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
-import {collections} from "./mockCollections";
+import { collections } from "./mockCollections";
 
 export default {
     title: "Articles/ArticleListItem",
@@ -57,13 +57,13 @@ Default.args = {
             article: {
                 title: "A single article 2 with a super long title that should be truncated even if it have more text than the other articles",
             },
-            collections: collections.slice(0, 5)
+            collections: collections.slice(0, 5),
         },
         {
             article: {
                 title: "A single article 3",
             },
-            collections: collections.slice(0, 2)
+            collections: collections.slice(0, 2),
         },
-    ]
+    ],
 };

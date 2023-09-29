@@ -19,8 +19,11 @@ export const Default = {
             <>
                 {sets.map(({ collections, width }, index) => (
                     <div className="mb-4">
-                        <div> Collection count: {collections.length} | Max width: {width} </div>
-                        <div className="flex w-full flex-1 mt-2">
+                        <div>
+                            {" "}
+                            Collection count: {collections.length} | Max width: {width}{" "}
+                        </div>
+                        <div className="mt-2 flex w-full flex-1">
                             <strong className="pr-2">Featured collections:</strong>
                             <div
                                 className={`flex flex-1`}
