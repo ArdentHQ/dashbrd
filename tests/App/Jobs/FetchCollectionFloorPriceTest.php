@@ -81,7 +81,7 @@ it('should handle null floor price in response', function () {
 
 it('should handle non existing collection when fetching floor price', function () {
     Opensea::fake([
-        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_missing_collection')),
+        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_missing_collection'), 404),
     ]);
 
     $network = Network::where('chain_id', Chains::ETH->value)->first();

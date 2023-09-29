@@ -73,24 +73,32 @@ class OpenseaPendingRequest extends PendingRequest
      */
     public function getNftCollectionFloorPrice(string $collectionSlug): ?Web3NftCollectionFloorPrice
     {
-        $response = self::get(sprintf('collection/%s/stats', $collectionSlug));
+        try {
+            $response = self::get(sprintf('collection/%s/stats', $collectionSlug));
 
-        $floorPrice = $response->json('stats.floor_price');
+            $floorPrice = $response->json('stats.floor_price');
 
-        $currency = 'eth'; // OpenSea reports everything in ETH
+            $currency = 'eth'; // OpenSea reports everything in ETH
 
-        // In case of no floor price we return and don't update the value
-        if ($floorPrice === null) {
-            return null;
+            // In case of no floor price we return and don't update the value
+            if ($floorPrice === null) {
+                return null;
+            }
+
+            return new Web3NftCollectionFloorPrice(
+                price: CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::forCurrency($currency)),
+                currency: $currency,
+                // For the rest of the providers we get the timestamp from the response
+                // but for Opensea we dont have any value we can use so im using the
+                // current time.
+                retrievedAt: Carbon::now(),
+            );
+        } catch (ClientException $exception) {
+            if ($exception->getCode() === 404) {
+                return null;
+            }
+
+            throw $exception;
         }
-
-        return new Web3NftCollectionFloorPrice(
-            price: CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::forCurrency($currency)),
-            currency: $currency,
-            // For the rest of the providers we get the timestamp from the response
-            // but for Opensea we dont have any value we can use so im using the
-            // current time.
-            retrievedAt: Carbon::now(),
-        );
     }
 }
