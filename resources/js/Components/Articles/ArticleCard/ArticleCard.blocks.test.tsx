@@ -23,23 +23,4 @@ describe("ArticleCardBlocks", () => {
 
         expect(screen.getByTestId("FeaturedCollections")).toBeInTheDocument();
     });
-
-    // it("should display count of the collections that fit the available space", () => {
-    //     render(
-    //         <div style={{ width: "100px" }}>
-    //             <FeaturedCollections
-    //                 collections={
-    //                     Array.from({ length: 2 }).fill({
-    //                         name: "Collection 1",
-    //                         image: "image",
-    //                     }) as ArticleCollections
-    //                 }
-    //             />
-    //         </div>,
-    //     );
-    //
-    //     screen.debug();
-    //
-    //     expect(screen.queryByTestId("FeaturedCollections_Hidden")).not.toBeInTheDocument();
-    // });
 });
