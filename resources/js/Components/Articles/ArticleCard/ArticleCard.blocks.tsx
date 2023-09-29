@@ -17,6 +17,8 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
     return totalCount - showCount > 1 ? showCount : totalCount;
 };
 
+// Note: This component uses width to detect number of collections to display, so the parent must have fix width
+// (or flex-1 to take the available with) otherwise you may experience infinite loop due to `setVisibleCount` call
 export const FeaturedCollections = ({ collections }: { collections: ArticleCollections }): JSX.Element => {
     const totalCount = collections.length;
 

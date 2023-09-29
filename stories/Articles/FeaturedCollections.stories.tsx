@@ -18,13 +18,16 @@ export const Default = {
         return (
             <>
                 {sets.map(({ collections, width }, index) => (
-                    <div className="flex w-full flex-1">
-                        <span>Featured collections:</span>
-                        <div
-                            className={`flex flex-1`}
-                            style={{ maxWidth: width }}
-                        >
-                            <FeaturedCollections collections={collections} />
+                    <div className="mb-4">
+                        <div> Collection count: {collections.length} | Max width: {width} </div>
+                        <div className="flex w-full flex-1 mt-2">
+                            <strong className="pr-2">Featured collections:</strong>
+                            <div
+                                className={`flex flex-1`}
+                                style={{ maxWidth: width }}
+                            >
+                                <FeaturedCollections collections={collections} />
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -61,6 +64,16 @@ Default.args = {
         {
             width: "70px",
             collections: collections.slice(0, 4),
+        },
+
+        {
+            width: "70px",
+            collections: collections.slice(0, 1),
+        },
+
+        {
+            width: "140px",
+            collections: collections,
         },
     ],
 };
