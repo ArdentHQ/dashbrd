@@ -82,7 +82,7 @@ return [
 
     'opensea' => [
         'key' => env('OPENSEA_API_KEY', null),
-        'endpoint' => env('OPENSEA_API_ENDPOINT', 'https://api.footprint.network/api/v2/'),
+        'endpoint' => env('OPENSEA_API_ENDPOINT', 'https://api.opensea.io/'),
     ],
 
     'google_analytics' => [
