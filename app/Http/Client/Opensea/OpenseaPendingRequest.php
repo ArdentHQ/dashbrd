@@ -11,7 +11,6 @@ use App\Exceptions\RateLimitException;
 use App\Support\CryptoUtils;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
 use Illuminate\Http\Client\Factory;
