@@ -16,7 +16,6 @@ use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class OpenseaPendingRequest extends PendingRequest
