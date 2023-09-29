@@ -14,7 +14,7 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
 
     const showCount = maxCirclesCount - Math.ceil(hiddenLabelWidth / circleWidth);
 
-    if(maxCirclesCount === totalCount || showCount < 0) {
+    if (maxCirclesCount === totalCount || showCount < 0) {
         return totalCount;
     }
 
