@@ -1,7 +1,7 @@
 import type { Meta } from "@storybook/react";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
 import { ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
-import {collections} from './mockCollections';
+import { collections } from "./mockCollections";
 
 export default {
     title: "Articles/ArticleCard",
@@ -29,7 +29,6 @@ export const Default = {
     },
 };
 
-
 Default.args = {
     // TODO(@alfonsobries)[2023-09-30]. Add real articles object
     sets: [
@@ -55,13 +54,13 @@ Default.args = {
             article: {
                 title: "A single article 2 with a super long title that should be truncated even if it have more text than the other articles",
             },
-            collections: collections.slice(0, 5)
+            collections: collections.slice(0, 5),
         },
         {
             article: {
                 title: "A single article 3",
             },
-            collections: collections.slice(0, 2)
+            collections: collections.slice(0, 2),
         },
     ],
 };
