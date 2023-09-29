@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Client\Opensea;
 
 use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Enums\CryptoCurrencyDecimals;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
+use App\Support\CryptoUtils;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -75,9 +77,11 @@ class OpenseaPendingRequest extends PendingRequest
 
         $floorPrice = $response->json('stats.floor_price');
 
+        $currency = 'eth';
+
         return new Web3NftCollectionFloorPrice(
-            price: (string) $floorPrice,
-            currency: 'eth',
+            price: CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::forCurrency($currency)),
+            currency: $currency,
             // For the rest of the providers we get the timestamp from the response
             // but for Opensea we dont have any value we can use so im using the
             // current time.
