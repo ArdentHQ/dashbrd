@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
-import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
@@ -76,8 +75,16 @@ export const ArticlesTab = (): JSX.Element => {
                     <EmptyBlock>{t("pages.collections.articles.no_articles_with_filters")}</EmptyBlock>
                 </div>
             )}
+
             <ArticlePagination
-                pagination={SamplePageMeta.paginated as PaginationData<unknown>}
+                pagination={{
+                    meta: {
+                        ...SamplePageMeta.paginated.meta,
+                        total: 30,
+                    },
+                    links: SamplePageMeta.paginated.links,
+                    data: [],
+                }}
                 onPageLimitChange={(limit: number) => {
                     setPageLimit(limit);
                 }}
