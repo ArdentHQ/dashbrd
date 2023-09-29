@@ -53,7 +53,19 @@ final class OpenseaWeb3DataProvider extends AbstractWeb3DataProvider
     public function getNftCollectionFloorPrice(Chains $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return $this->fromCache(
-            static fn () => Opensea::getNftCollectionFloorPrice($chain, $contractAddress),
+            function () use ($contractAddress, $chain) {
+                $collection = CollectionModel::where('address', $contractAddress)
+                    ->whereHas('network', fn ($query) => $query->where('chain_id', $chain->value))
+                    ->firstOrFail();
+
+                $openseaSlug = $collection->openSeaSlug();
+
+                if ($openseaSlug === null) {
+                    return null;
+                }
+
+                return Opensea::getNftCollectionFloorPrice($openseaSlug);
+            },
             [$chain->name, $contractAddress]
         );
     }

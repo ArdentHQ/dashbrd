@@ -9,6 +9,7 @@ use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Services\Web3\Fake\FakeWeb3DataProvider;
 use App\Services\Web3\Mnemonic\MnemonicWeb3DataProvider;
 use App\Services\Web3\Moralis\MoralisWeb3DataProvider;
+use App\Services\Web3\Opensea\OpenseaWeb3DataProvider;
 use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
@@ -82,6 +83,7 @@ trait LoadsFromCache
             MnemonicWeb3DataProvider::class => 'mnemonic',
             FakeWeb3DataProvider::class => 'fake',
             CoingeckoProvider::class => 'coingecko',
+            OpenseaWeb3DataProvider::class => 'opensea',
             default => throw new InvalidArgumentException('No cache key for ['.static::class.'].'),
         };
     }
