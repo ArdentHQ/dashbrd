@@ -237,7 +237,7 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
                     </div>
                 </Form.Section>
 
-                {["local", "test_e2e"].includes(props.environment) && (
+                {["local", "testing_e2e"].includes(props.environment) && (
                     <>
                         <Form.Separator />
                         <Form.Section
