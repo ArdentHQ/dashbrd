@@ -133,7 +133,9 @@ export const PortfolioBreakdownLine = ({
 
     return (
         <div className={cn("flex h-2 w-full", className)}>
-            {(assets.length === 0 || allTokensAreZero) && <div className="flex w-full bg-theme-secondary-200" />}
+            {(assets.length === 0 || allTokensAreZero) && (
+                <div className="flex w-full bg-theme-secondary-200 dark:bg-theme-dark-600" />
+            )}
 
             {assets.length > 0 &&
                 !allTokensAreZero &&
