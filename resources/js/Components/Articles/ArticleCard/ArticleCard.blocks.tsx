@@ -1,9 +1,9 @@
 import cn from "classnames";
 import { useRef, useState } from "react";
-import { type ArticleCardCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { useResizeDetector } from "react-resize-detector";
+import { type ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
-import { useResizeObserver } from "@/Hooks/useResizeObserver";
 
 export const calculateCircleCount = (totalCount: number, availableWidth: number): number => {
     const circleWidth = 20;
@@ -17,20 +17,24 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
     return totalCount - showCount > 1 ? showCount : totalCount;
 };
 
-export const FeaturedCollections = ({ collections }: { collections: ArticleCardCollections }): JSX.Element => {
+export const FeaturedCollections = ({ collections }: { collections: ArticleCollections }): JSX.Element => {
     const totalCount = collections.length;
 
     const [visibleCount, setVisibleCount] = useState(totalCount);
     const container = useRef<HTMLDivElement>(null);
 
-    useResizeObserver(container, () => {
-        /* istanbul ignore next -- @preserve */
-        setVisibleCount(calculateCircleCount(totalCount, container.current?.clientWidth ?? 30));
+    useResizeDetector<HTMLDivElement>({
+        handleHeight: false,
+        onResize: () => {
+            /* istanbul ignore next -- @preserve */
+            setVisibleCount(calculateCircleCount(totalCount, container.current?.clientWidth ?? 30));
+        },
+        targetRef: container,
     });
 
     return (
         <div
-            className="flex h-6 grow flex-wrap"
+            className="flex max-h-6 w-full flex-1 grow flex-wrap overflow-hidden"
             ref={container}
             id="FeaturedCollections"
             data-testid="FeaturedCollections"

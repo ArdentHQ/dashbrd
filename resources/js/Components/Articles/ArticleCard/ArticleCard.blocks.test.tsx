@@ -1,7 +1,7 @@
 import React from "react";
 import { expect, type SpyInstance } from "vitest";
 import { calculateCircleCount, FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
-import { type ArticleCardCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { type ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 import { render, screen } from "@/Tests/testing-library";
 
 describe("ArticleCardBlocks", () => {
@@ -32,7 +32,7 @@ describe("ArticleCardBlocks", () => {
                     Array.from({ length: 2 }).fill({
                         name: "Collection 1",
                         image: "image",
-                    }) as ArticleCardCollections
+                    }) as ArticleCollections
                 }
             />,
         );

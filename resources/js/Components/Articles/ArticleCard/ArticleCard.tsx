@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
-import { type ArticleCardCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { type ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 
 interface Properties {
     // TODO(@alfonsobries)[2023-09-30]. Replace with a dynamic type once defined
     article: {
         title: string;
     };
-    collections: ArticleCardCollections;
+    collections: ArticleCollections;
 }
 
 export const ArticleCard = ({ article, collections }: Properties): JSX.Element => {
@@ -36,7 +36,7 @@ export const ArticleCard = ({ article, collections }: Properties): JSX.Element =
             </div>
 
             <div className="flex items-center bg-theme-secondary-50 px-6 py-3">
-                <span className="mr-2 text-sm font-medium text-theme-secondary-700">
+                <span className="mr-2 shrink-0 text-sm font-medium text-theme-secondary-700">
                     {t("pages.articles.featured_collections")}:
                 </span>
 

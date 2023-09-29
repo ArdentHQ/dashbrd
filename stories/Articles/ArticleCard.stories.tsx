@@ -1,5 +1,6 @@
 import type { Meta } from "@storybook/react";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
+import {ArticleCollections} from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 
 export default {
     title: "Articles/ArticleCard",
@@ -10,7 +11,7 @@ export const Default = {
         sets,
     }: {
         sets: Array<{
-            collections: Array<Pick<App.Data.Nfts.NftCollectionData, "image" | "slug">>;
+            collections: ArticleCollections;
             article: any;
         }>;
     }) => {
@@ -36,15 +37,15 @@ Default.args = {
             },
             collections: [
                 {
-                    slug: "slug-1",
+                    name: "name-1",
                     image: "https://i.seadn.io/gae/4XS5eZoT650ZUZSmJAqA5Tw6BIeZevkvZEdb1kPiB80J17GhgYclqrMVGFTnFWkI5svRElDgaPhCUVPNzg-0hbnnAU2TKsunhtVtYw?w=500&amp;auto=format",
                 },
                 {
-                    slug: "slug-2",
+                    name: "name-2",
                     image: null,
                 },
                 {
-                    slug: "slug-3",
+                    name: "name-3",
                     image: "https://i.seadn.io/gae/AMcucsCR-7ZeFTR2dt-v949IO-hpwUPzKSDbgiR32I-lXJHejH1D9RA-DBxylQC2-GJouUEbnBpV0qdbNZq3ssguamCxmELZO1WGoA?w=500&auto=format",
                 },
             ],
@@ -55,15 +56,15 @@ Default.args = {
             },
             collections: [
                 {
-                    slug: "slug-1",
+                    name: "name-1",
                     image: "https://i.seadn.io/gae/4XS5eZoT650ZUZSmJAqA5Tw6BIeZevkvZEdb1kPiB80J17GhgYclqrMVGFTnFWkI5svRElDgaPhCUVPNzg-0hbnnAU2TKsunhtVtYw?w=500&amp;auto=format",
                 },
                 {
-                    slug: "slug-2",
+                    name: "name-2",
                     image: "https://i.seadn.io/gcs/files/2fcc60cfe712bf9d62a1f521e8f952ad.jpg?w=500&auto=format",
                 },
                 {
-                    slug: "slug-3",
+                    name: "name-3",
                     image: "https://i.seadn.io/gae/AMcucsCR-7ZeFTR2dt-v949IO-hpwUPzKSDbgiR32I-lXJHejH1D9RA-DBxylQC2-GJouUEbnBpV0qdbNZq3ssguamCxmELZO1WGoA?w=500&auto=format",
                 },
             ],
@@ -74,7 +75,7 @@ Default.args = {
             },
             collections: [
                 {
-                    slug: "slug-1",
+                    name: "name-1",
                     image: "https://i.seadn.io/gae/4XS5eZoT650ZUZSmJAqA5Tw6BIeZevkvZEdb1kPiB80J17GhgYclqrMVGFTnFWkI5svRElDgaPhCUVPNzg-0hbnnAU2TKsunhtVtYw?w=500&amp;auto=format",
                 },
             ],
@@ -85,11 +86,11 @@ Default.args = {
             },
             collections: [
                 {
-                    slug: "slug-1",
+                    name: "name-1",
                     image: "https://i.seadn.io/gae/4XS5eZoT650ZUZSmJAqA5Tw6BIeZevkvZEdb1kPiB80J17GhgYclqrMVGFTnFWkI5svRElDgaPhCUVPNzg-0hbnnAU2TKsunhtVtYw?w=500&amp;auto=format",
                 },
                 {
-                    slug: "slug-3",
+                    name: "name-3",
                     image: "https://i.seadn.io/gae/AMcucsCR-7ZeFTR2dt-v949IO-hpwUPzKSDbgiR32I-lXJHejH1D9RA-DBxylQC2-GJouUEbnBpV0qdbNZq3ssguamCxmELZO1WGoA?w=500&auto=format",
                 },
             ],
@@ -100,11 +101,11 @@ Default.args = {
             },
             collections: [
                 {
-                    slug: "slug-1",
+                    name: "name-1",
                     image: "https://i.seadn.io/gae/4XS5eZoT650ZUZSmJAqA5Tw6BIeZevkvZEdb1kPiB80J17GhgYclqrMVGFTnFWkI5svRElDgaPhCUVPNzg-0hbnnAU2TKsunhtVtYw?w=500&amp;auto=format",
                 },
                 {
-                    slug: "slug-3",
+                    name: "name-3",
                     image: "https://i.seadn.io/gae/AMcucsCR-7ZeFTR2dt-v949IO-hpwUPzKSDbgiR32I-lXJHejH1D9RA-DBxylQC2-GJouUEbnBpV0qdbNZq3ssguamCxmELZO1WGoA?w=500&auto=format",
                 },
             ],
