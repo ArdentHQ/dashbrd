@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Enums\Chains;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Support\Facades\Opensea;
@@ -49,4 +50,24 @@ it('can get floor price for the collection', function () {
     $data = Opensea::getNftCollectionFloorPrice($collectionSlug);
 
     expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
+});
+
+it('can get nft collection slug', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v2*' => Opensea::response(fixtureData('opensea.nft')),
+    ]);
+
+    $chain = Chains::Polygon;
+
+    $address = '0x670fd103b1a08628e9557cd66b87ded841115190';
+
+    $identifier = '2428';
+
+    $data = Opensea::nft(
+        chains: $chain,
+        address: $address,
+        identifier: $identifier
+    );
+
+    expect($data->collectionSlug())->toBe('y00ts');
 });
