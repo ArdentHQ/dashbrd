@@ -9,6 +9,7 @@ use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
+use App\Console\Commands\FetchCollectionOpenseaSlug;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
 use App\Console\Commands\FetchTokens;
