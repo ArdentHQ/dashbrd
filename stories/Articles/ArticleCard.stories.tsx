@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
-import {ArticleCollections} from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 
 export default {
     title: "Articles/ArticleCard",
