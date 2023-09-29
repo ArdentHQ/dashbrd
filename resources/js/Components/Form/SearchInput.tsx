@@ -45,7 +45,7 @@ export const SearchInput = ({
                 <Icon
                     name="X"
                     size="md"
-                    className="text-theme-primary-900"
+                    className="text-theme-primary-900 dark:text-theme-dark-200"
                 />
             </button>
         )}
