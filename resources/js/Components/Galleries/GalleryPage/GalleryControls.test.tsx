@@ -20,6 +20,7 @@ describe("GalleryControls", () => {
 
         useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
             signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
         });
     });
 
