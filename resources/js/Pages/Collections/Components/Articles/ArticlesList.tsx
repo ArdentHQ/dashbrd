@@ -12,7 +12,7 @@ export const ArticlesList = (): JSX.Element => (
                     }}
                     collections={[
                         {
-                            slug: "hello",
+                            name: "hello",
                             image: "https://res.cloudinary.com/alchemyapi/image/upload/w_512,h_512/thumbnailv2/eth-mainnet/eca1c33c4e569ce7c4dee9a477ad945e",
                         },
                     ]}

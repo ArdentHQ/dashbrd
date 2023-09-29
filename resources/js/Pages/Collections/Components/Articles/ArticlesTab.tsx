@@ -61,34 +61,33 @@ export const ArticlesTab = (): JSX.Element => {
                 />
             </div>
 
-            {articlesCount > 0 && displayType === DisplayTypes.Grid && <ArticlesGrid />}
+            <div className="flex flex-col items-center space-y-6">
+                {articlesCount > 0 && displayType === DisplayTypes.Grid && <ArticlesGrid />}
 
-            {articlesCount > 0 && displayType === DisplayTypes.List && <ArticlesList />}
+                {articlesCount > 0 && displayType === DisplayTypes.List && <ArticlesList />}
 
-            {articlesCount === 0 && query === "" && (
-                <div className="mt-6">
+                {articlesCount === 0 && query === "" && (
                     <EmptyBlock>{t("pages.collections.articles.no_articles")}</EmptyBlock>
-                </div>
-            )}
-            {articlesCount === 0 && query !== "" && (
-                <div className="mt-6">
+                )}
+                {articlesCount === 0 && query !== "" && (
                     <EmptyBlock>{t("pages.collections.articles.no_articles_with_filters")}</EmptyBlock>
-                </div>
-            )}
+                )}
 
-            <ArticlePagination
-                pagination={{
-                    meta: {
-                        ...SamplePageMeta.paginated.meta,
-                        total: 30,
-                    },
-                    links: SamplePageMeta.paginated.links,
-                    data: [],
-                }}
-                onPageLimitChange={(limit: number) => {
-                    setPageLimit(limit);
-                }}
-            />
+                <ArticlePagination
+                    pagination={{
+                        meta: {
+                            ...SamplePageMeta.paginated.meta,
+                            total: 30,
+                            per_page: 12,
+                        },
+                        links: SamplePageMeta.paginated.links,
+                        data: [],
+                    }}
+                    onPageLimitChange={(limit: number) => {
+                        setPageLimit(limit);
+                    }}
+                />
+            </div>
         </div>
     );
 };

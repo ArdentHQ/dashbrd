@@ -16,7 +16,7 @@ export const ArticlePagination = ({ pagination, onPageLimitChange }: Properties)
     }
 
     return (
-        <div className="mt-6 flex w-full flex-col items-center justify-between space-x-3 space-y-3 rounded-b border-theme-secondary-300 xs:w-auto sm:w-full sm:flex-row sm:space-y-0">
+        <div className="flex w-full flex-col items-center justify-between rounded-b border-theme-secondary-300 xs:w-auto sm:space-y-0 md:w-full md:flex-row">
             <SelectPageLimit
                 suffix={t("common.items")}
                 value={pagination.meta.per_page}
