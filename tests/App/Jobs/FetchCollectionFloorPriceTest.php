@@ -43,6 +43,78 @@ it('should fetch nft collection floor price', function () {
         ->and($collection->floor_price_token_id)->toBe($token->id);
 });
 
+it('should handle null floor price in response', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_floor_price_null')),
+    ]);
+
+    $network = Network::where('chain_id', Chains::ETH->value)->first();
+
+    $token = Token::factory(['network_id' => $network->id])->create([
+        'symbol' => 'ETH',
+    ]);
+
+    $retrievedAt = Carbon::now()->subDay(1);
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'floor_price' => 123,
+        'floor_price_token_id' => $token->id,
+        'floor_price_retrieved_at' => $retrievedAt,
+        'extra_attributes' => ['opensea_slug' => 'testy'],
+    ]);
+
+    $this->assertDatabaseCount('collections', 1);
+
+    expect($collection->floor_price)->toBe(123)
+        ->and($collection->floor_price_token_id)->toBe($token->id)
+        ->and($collection->floor_price_retrieved_at->timestamp)->toBe($retrievedAt->timestamp);
+
+    (new FetchCollectionFloorPrice($network->chain_id, $collection->address))->handle();
+
+    $collection->refresh();
+
+    expect($collection->floor_price)->toBe(null)
+        ->and($collection->floor_price_token_id)->toBe(null)
+        ->and($collection->floor_price_retrieved_at->gt($retrievedAt))->toBe(true);
+});
+
+it('should handle non existing collection when fetching floor price', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_missing_collection')),
+    ]);
+
+    $network = Network::where('chain_id', Chains::ETH->value)->first();
+
+    $token = Token::factory(['network_id' => $network->id])->create([
+        'symbol' => 'ETH',
+    ]);
+
+    $retrievedAt = Carbon::now()->subDay(1);
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'floor_price' => 123,
+        'floor_price_token_id' => $token->id,
+        'floor_price_retrieved_at' => $retrievedAt,
+        'extra_attributes' => ['opensea_slug' => 'testy'],
+    ]);
+
+    $this->assertDatabaseCount('collections', 1);
+
+    expect($collection->floor_price)->toBe(123)
+        ->and($collection->floor_price_token_id)->toBe($token->id)
+        ->and($collection->floor_price_retrieved_at->timestamp)->toBe($retrievedAt->timestamp);
+
+    (new FetchCollectionFloorPrice($network->chain_id, $collection->address))->handle();
+
+    $collection->refresh();
+
+    expect($collection->floor_price)->toBe(null)
+        ->and($collection->floor_price_token_id)->toBe(null)
+        ->and($collection->floor_price_retrieved_at->gt($retrievedAt))->toBe(true);
+});
+
 it('should fetch nft collection floor price and handle null', function () {
     $network = Network::polygon();
     $token = Token::factory()->create(['network_id' => $network->id, 'symbol' => 'eth']);

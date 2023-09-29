@@ -16,6 +16,7 @@ use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class OpenseaPendingRequest extends PendingRequest
@@ -78,6 +79,11 @@ class OpenseaPendingRequest extends PendingRequest
         $floorPrice = $response->json('stats.floor_price');
 
         $currency = 'eth'; // OpenSea reports everything in ETH
+
+        // In case of no floor price we return and don't update the value
+        if ($floorPrice === null) {
+            return null;
+        }
 
         return new Web3NftCollectionFloorPrice(
             price: CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::forCurrency($currency)),
