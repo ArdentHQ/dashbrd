@@ -790,6 +790,7 @@ it('queries the collections for the collection data object', function () {
             'image' => 'https://example.com/image.png',
             'banner' => 'https://example.com/banner.png',
             'website' => 'https://example.com',
+            'opensea_slug' => 'test-collection',
         ],
     ]);
 
@@ -1085,6 +1086,16 @@ it('filters collections that belongs to wallets that have been signed at least o
             $collection4->id,
         ]);
 
+});
+
+it('should get openSeaSlug', function () {
+    $collection = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug' => 'test-collection',
+        ],
+    ]);
+
+    expect($collection->openSeaSlug())->toBe('test-collection');
 });
 
 it('sorts collections last time nft was fetched', function () {

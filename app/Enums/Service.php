@@ -14,5 +14,5 @@ enum Service: string
 
     case Alchemy = 'alchemy';
 
-    case Footprint = 'footprint';
+    case Opensea = 'opensea';
 }

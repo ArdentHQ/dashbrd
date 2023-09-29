@@ -470,6 +470,7 @@ declare namespace App.Data.Web3 {
         collectionDescription: string | null;
         collectionBannerImageUrl: string | null;
         collectionBannerUpdatedAt: string | null;
+        collectionOpenSeaSlug: string | null;
         collectionSocials: Array<any> | null;
         collectionSupply: number | null;
         name: string | null;

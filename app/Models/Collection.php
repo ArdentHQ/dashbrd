@@ -119,6 +119,11 @@ class Collection extends Model
         return $this->extra_attributes->get('banner_updated_at');
     }
 
+    public function openSeaSlug(): ?string
+    {
+        return $this->extra_attributes->get('opensea_slug');
+    }
+
     public function website(bool $defaultToExplorer = true): ?string
     {
         $website = $this->extra_attributes->get('website');
