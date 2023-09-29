@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enums\Service;
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
@@ -78,5 +80,15 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
         // The job needs to be retried a lot of times because is called
         // multiple times until no more NFTs are found.
         return now()->addHours(3);
+    }
+
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<int, object>
+     */
+    public function middleware(): array
+    {
+        return [new RateLimited(Service::Opensea)];
     }
 }

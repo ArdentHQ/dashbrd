@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Enums\Chains;
+use App\Enums\Service;
+use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
@@ -99,5 +101,15 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
     public function retryUntil(): DateTime
     {
         return now()->addMinutes(30);
+    }
+
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<int, object>
+     */
+    public function middleware(): array
+    {
+        return [new RateLimited(Service::Opensea)];
     }
 }

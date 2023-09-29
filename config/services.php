@@ -83,6 +83,14 @@ return [
     'opensea' => [
         'key' => env('OPENSEA_API_KEY', null),
         'endpoint' => env('OPENSEA_API_ENDPOINT', 'https://api.opensea.io/api/'),
+
+        // @see https://docs.opensea.io/v1.0/reference/api-overview#api-faqs
+        'rate' => [
+            // Notice that the limit for POST request is 2, but currently we only
+            // use GET requests
+            'max_requests' => env('OPENSEA_MAX_REQUESTS', 4),
+            'per_seconds' => env('COPENSEA_MAX_REQUESTS_SECONDS', 1),
+        ],
     ],
 
     'google_analytics' => [
