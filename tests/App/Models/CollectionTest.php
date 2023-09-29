@@ -1063,3 +1063,38 @@ it('filters collections that belongs to wallets that have been signed at least o
         ]);
 
 });
+
+it('sorts collections last time nft was fetched', function () {
+    // fetched yesterday
+    $collection1 = Collection::factory()->create([
+        'extra_attributes' => [
+            'nft_last_fetched_at' => now()->subDays(1),
+        ],
+    ]);
+
+    // fetched one month ago
+    $collection2 = Collection::factory()->create([
+        'extra_attributes' => [
+            'nft_last_fetched_at' => now()->subMonth(),
+        ],
+    ]);
+
+    // never fetched
+    $collection3 = Collection::factory()->create();
+
+    // fetched now
+    $collection4 = Collection::factory()->create([
+        'extra_attributes' => [
+            'nft_last_fetched_at' => now(),
+        ],
+    ]);
+
+    $ids = Collection::orderByOldestNftLastFetchedAt()->pluck('id')->toArray();
+
+    expect($ids)->toEqual([
+        $collection3->id,
+        $collection2->id,
+        $collection1->id,
+        $collection4->id,
+    ]);
+});

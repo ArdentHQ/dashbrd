@@ -1,6 +1,7 @@
 import { Pagination } from "@/Components/Pagination";
 import { SelectPageLimit } from "@/Components/Pagination/SelectPageLimit";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default {
     title: "Base/Pagination",
@@ -266,12 +267,15 @@ export const MiddleManyPages = () => (
 
 export const CustomPageLimitSelection = () => {
     const [value, setValue] = useState<string | number>();
+    const { t } = useTranslation();
+
     return (
         <SelectPageLimit
             onChange={({ value }) => {
                 setValue(value);
             }}
             value={value}
+            suffix={t("common.records")}
         />
     );
 };

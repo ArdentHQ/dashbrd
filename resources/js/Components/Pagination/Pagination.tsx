@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { type FormEvent, useMemo, useState } from "react";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { IconButton } from "@/Components/Buttons/IconButton";
 import { Ellipsis } from "@/Components/Pagination/Ellipsis";
 import { MobileButton } from "@/Components/Pagination/MobileButton";
 import { NextPageLink } from "@/Components/Pagination/NextPageLink";
@@ -67,15 +68,28 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
         return <></>;
     }
 
+    const handleClick = (): void => {
+        setShowInput(true);
+        setPage(data.meta.current_page.toString());
+    };
+
     return (
         <nav
             aria-label="Pagination"
             data-testid="Pagination"
+            className="w-full sm:w-fit"
             {...properties}
         >
+            <div className="mt-3 xs:hidden">
+                <MobileButton
+                    page={pageAsNumber}
+                    totalPages={totalPages}
+                    onClick={handleClick}
+                />
+            </div>
+
             {showInput ? (
                 <PageInput
-                    currentPage={page}
                     totalPages={totalPages}
                     onSubmit={goToPage}
                     onChange={setPage}
@@ -86,13 +100,14 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                 />
             ) : (
                 <>
-                    <div className="hidden items-center space-x-3 sm:flex">
+                    <div className="mt-3 hidden items-center space-x-3 xs:flex xs:space-x-1 sm:w-fit  md:mt-0 ">
                         {data.meta.current_page > 1 && (
                             <ButtonLink
                                 href={data.meta.first_page_url}
                                 variant="icon"
                                 icon="DoubleChevronLeftSmall"
                                 data-testid="Pagination__firstPageLink"
+                                iconSize="xs"
                             />
                         )}
 
@@ -135,7 +150,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                             )}
                         </div>
 
-                        <NextPageLink href={data.meta.next_page_url ?? null} />
+                        {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
 
                         {data.meta.current_page !== data.meta.last_page && (
                             <ButtonLink
@@ -143,23 +158,42 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                 variant="icon"
                                 icon="DoubleChevronRightSmall"
                                 data-testid="Pagination__lastPageLink"
+                                iconSize="xs"
                             />
                         )}
                     </div>
 
-                    <div className="sm:hidden">
-                        <div className="flex items-center space-x-3">
-                            <MobileButton
-                                page={pageAsNumber}
-                                totalPages={totalPages}
-                                onClick={() => {
-                                    setShowInput(true);
-                                    setPage(data.meta.current_page.toString());
-                                }}
-                            />
+                    <div className="mt-3 xs:hidden">
+                        <div className="flex w-full flex-col items-center gap-3">
+                            <div className="flex w-full flex-row items-center justify-between">
+                                <ButtonLink
+                                    href={data.meta.first_page_url}
+                                    variant="icon"
+                                    icon="DoubleChevronLeftSmall"
+                                    data-testid="Pagination__firstPageLink_mobile"
+                                    disabled={data.meta.current_page === 1}
+                                    iconSize="xs"
+                                />
 
-                            {data.meta.prev_page_url !== null && <PreviousPageLink href={data.meta.prev_page_url} />}
-                            {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
+                                <PreviousPageLink href={data.meta.prev_page_url} />
+
+                                <IconButton
+                                    icon="MagnifyingGlass"
+                                    data-testid="Pagination__search"
+                                    onClick={handleClick}
+                                />
+
+                                <NextPageLink href={data.meta.next_page_url} />
+
+                                <ButtonLink
+                                    href={data.meta.last_page_url}
+                                    variant="icon"
+                                    icon="DoubleChevronRightSmall"
+                                    data-testid="Pagination__lastPageLink_mobile"
+                                    disabled={data.meta.current_page === data.meta.last_page}
+                                    iconSize="xs"
+                                />
+                            </div>
                         </div>
                     </div>
                 </>

@@ -27,19 +27,8 @@ interface Galleries {
 const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
+    const { authenticatedAction } = useAuthorizedAction();
     const { initialized, connecting } = useMetaMaskContext();
-
-    const { signedAction } = useAuthorizedAction();
-
-    const guestBannerClickHandler = (): void => {
-        signedAction(() => {
-            router.visit(
-                route("my-galleries.create", {
-                    redirectTo: "my-galleries.create",
-                }),
-            );
-        });
-    };
 
     const { props } = usePage();
     const { slidesPerView, horizontalOffset } = useGalleryCarousel();
@@ -57,6 +46,12 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     useEffect(() => {
         void loadGalleries();
     }, []);
+
+    const guestBannerClickHandler = (): void => {
+        authenticatedAction(() => {
+            router.visit(route("my-galleries.create"));
+        });
+    };
 
     return (
         <DefaultLayout toastMessage={props.toast}>
