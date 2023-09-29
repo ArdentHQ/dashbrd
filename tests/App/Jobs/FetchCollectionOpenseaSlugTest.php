@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Jobs\FetchCollectionOpenseaSlug;
+use App\Jobs\Middleware\RateLimited;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\Nft;
@@ -48,4 +49,13 @@ it('should not update opensea slug if no result', function () {
 
     expect($collection->fresh()->extra_attributes->get('opensea_slug'))->toBeNull();
     expect($collection->fresh()->extra_attributes->get('opensea_slug_last_fetched_at'))->not->toBeNull();
+});
+
+it('should have rate limit middleware', function () {
+    $collection = Collection::factory()->create();
+
+    $middlewares = (new FetchCollectionOpenseaSlug($collection))->middleware();
+
+    expect($middlewares)->toHaveCount(1);
+    expect($middlewares[0])->toBeInstanceOf(RateLimited::class);
 });

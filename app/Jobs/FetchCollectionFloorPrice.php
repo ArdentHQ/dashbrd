@@ -20,6 +20,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -110,6 +111,10 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
      */
     public function middleware(): array
     {
-        return [new RateLimited(Service::Opensea)];
+        if (Config::get('dashbrd.web3_providers.'.self::class) === 'opensea') {
+            return [new RateLimited(Service::Opensea)];
+        }
+
+        return [];
     }
 }
