@@ -6,7 +6,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionOpenseaSlug as FetchCollectionOpenseaSlugJob;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 
 class FetchCollectionOpenseaSlug extends Command
 {
@@ -35,7 +34,7 @@ class FetchCollectionOpenseaSlug extends Command
             callback: function ($collection) {
                 FetchCollectionOpenseaSlugJob::dispatch($collection);
             },
-            queryCallback: fn (Builder $query) => $query
+            queryCallback: fn ($query) => $query
                 // Does not have an opensea slug
                 ->whereNull('extra_attributes->opensea_slug')
                 // Has not been fetched

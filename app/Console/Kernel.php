@@ -102,7 +102,7 @@ class Kernel extends ConsoleKernel
             // so in most cases it will not run any request
             ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
-            ->hourly(5);
+            ->hourly();
 
         $schedule
             ->command(FetchCollectionFloorPrice::class)
