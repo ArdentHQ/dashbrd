@@ -79,6 +79,11 @@ class OpenseaPendingRequest extends PendingRequest
 
         $currency = 'eth'; // OpenSea reports everything in ETH
 
+        // In case of no floor price we return and don't update the value
+        if ($floorPrice === null) {
+            return null;
+        }
+
         return new Web3NftCollectionFloorPrice(
             price: CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::forCurrency($currency)),
             currency: $currency,
