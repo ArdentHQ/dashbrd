@@ -77,7 +77,7 @@ class OpenseaPendingRequest extends PendingRequest
 
         $floorPrice = $response->json('stats.floor_price');
 
-        $currency = 'eth';
+        $currency = 'eth'; // OpenSea reports everything in ETH
 
         return new Web3NftCollectionFloorPrice(
             price: CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::forCurrency($currency)),
