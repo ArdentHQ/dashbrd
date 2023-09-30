@@ -10,7 +10,6 @@ use App\Models\Collection;
 use App\Support\Facades\Opensea;
 use App\Support\Queues;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -71,12 +70,5 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return self::class.':'.$this->collection->id;
-    }
-
-    public function retryUntil(): DateTime
-    {
-        // The job needs to be retried a lot of times because is called
-        // multiple times until no more NFTs are found.
-        return now()->addHours(3);
     }
 }

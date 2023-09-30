@@ -91,3 +91,21 @@ it('handles not found exception', function () {
 
     expect($data)->toBeNull();
 });
+
+it('handles not found exception for nft', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v2*' => Opensea::response('', 404),
+    ]);
+
+    $chain = Chains::Polygon;
+
+    $address = '0x670fd103b1a08628e9557cd66b87ded841115190';
+
+    $identifier = '2428';
+
+    Opensea::nft(
+        chains: $chain,
+        address: $address,
+        identifier: $identifier
+    );
+})->throws(ClientException::class);
