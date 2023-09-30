@@ -83,7 +83,7 @@ class OpenseaPendingRequest extends PendingRequest
 
             return new OpenseaNftDetails($response->json('nft'));
         } catch (ClientException $exception) {
-            if ($exception->getCode() === 404) {
+            if ($exception->getCode() === 400) {
                 return null;
             }
 

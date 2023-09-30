@@ -30,8 +30,10 @@ it('should fetch opensea slug', function () {
     expect($collection->fresh()->extra_attributes->get('opensea_slug_last_fetched_at'))->not->toBeNull();
 });
 
-it('should not update opensea slug if no result', function () {
-    Opensea::shouldReceive('nft')->andReturnNull();
+it('should handle nft is not found', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v2*' => Opensea::response(fixtureData('opensea.nft_not_found'), 400),
+    ]);
 
     $network = Network::polygon();
 
