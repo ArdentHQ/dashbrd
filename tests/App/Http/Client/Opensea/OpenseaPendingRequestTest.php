@@ -74,7 +74,7 @@ it('can get nft collection slug', function () {
 
 it('handles not found exception', function () {
     Opensea::fake([
-        'https://api.opensea.io/api/v2*' => Opensea::response(null, 400),
+        'https://api.opensea.io/api/v2*' => Opensea::response(fixtureData('opensea.nft_not_found'), 400),
     ]);
 
     $chain = Chains::Polygon;
@@ -89,4 +89,23 @@ it('handles not found exception', function () {
         identifier: $identifier
     );
 
+    expect($data)->toBeNull();
+});
+
+it('handles not found exception for nft', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v2*' => Opensea::response('', 404),
+    ]);
+
+    $chain = Chains::Polygon;
+
+    $address = '0x670fd103b1a08628e9557cd66b87ded841115190';
+
+    $identifier = '2428';
+
+    Opensea::nft(
+        chains: $chain,
+        address: $address,
+        identifier: $identifier
+    );
 })->throws(ClientException::class);
