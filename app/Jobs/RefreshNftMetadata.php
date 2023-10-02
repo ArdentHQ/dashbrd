@@ -55,19 +55,29 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 
         if (count($nfts) === 0) {
             Log::info('RefreshNftMetadata Job: No nfts found for metadate update. Aborting.');
-
             return;
         }
 
-        $result = $provider->getNftMetadata($nfts, $this->collection);
+        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
+            'nfts_count' => $nfts->count(),
+            'address' => $this->collection->address,
+            'network' => $this->collection->network->id,
+        ]);
 
-        (new Web3NftHandler(collection: $this->collection))->store(
-            $result->nfts,
-            dispatchJobs: true,
-        );
+        // Chunk by 100 to comply with Alchemy's nfts batch limit.
+        $nfts->chunk(100)->map(function ($nftsChunk) use ($provider) {
+
+            $result = $provider->getNftMetadata($nftsChunk, $this->collection);
+
+            (new Web3NftHandler(collection: $this->collection))->store(
+                $result->nfts,
+                dispatchJobs: true,
+            );
+        });
+
 
         Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
-            'nfts_count' => $result->nfts->count(),
+            'nfts_count' => $nfts->count(),
             'address' => $this->collection->address,
             'network' => $this->collection->network->id,
         ]);
