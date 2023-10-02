@@ -262,7 +262,7 @@ export const ExplorerButton = ({
     tokenAddress,
     isNativeToken = false,
 }: {
-    chainId: number;
+    chainId: ExplorerChains;
     address?: string;
     tokenAddress: string;
     isNativeToken?: boolean;
