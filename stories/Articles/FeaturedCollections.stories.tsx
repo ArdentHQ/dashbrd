@@ -1,6 +1,5 @@
 import type { Meta } from "@storybook/react";
 import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
-import { ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 
 export default {
     title: "Articles/FeaturedCollections",
@@ -10,10 +9,7 @@ export const Default = {
     render: ({
         sets,
     }: {
-        sets: Array<{
-            collections: ArticleCollections;
-            width: string;
-        }>;
+        sets: Array<App.Data.Articles.ArticleData["featuredCollections"]>;
     }) => {
         return (
             <>

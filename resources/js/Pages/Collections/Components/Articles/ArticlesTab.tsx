@@ -31,7 +31,7 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
     }
 
     // replace this with articles count
-    const articlesCount = articles.paginated.meta.total ?? 0;
+    const articlesCount = articles.paginated.meta.total;
 
     return (
         <div>
@@ -70,9 +70,13 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
             </div>
 
             <div className="flex flex-col items-center space-y-6">
-                {articlesCount > 0 && displayType === DisplayTypes.Grid && <ArticlesGrid />}
+                {articlesCount > 0 && displayType === DisplayTypes.Grid && (
+                    <ArticlesGrid articles={articles.paginated.data} />
+                )}
 
-                {articlesCount > 0 && displayType === DisplayTypes.List && <ArticlesList />}
+                {articlesCount > 0 && displayType === DisplayTypes.List && (
+                    <ArticlesList articles={articles.paginated.data} />
+                )}
 
                 {articlesCount === 0 && query === "" && (
                     <EmptyBlock>{t("pages.collections.articles.no_articles")}</EmptyBlock>
@@ -82,7 +86,7 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
                 )}
 
                 <ArticlePagination
-                    pagination={articles}
+                    pagination={articles.paginated}
                     onPageLimitChange={(limit: number) => {
                         setPageLimit(limit);
                     }}

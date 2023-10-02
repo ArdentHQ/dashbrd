@@ -1,29 +1,26 @@
 import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
-import { type ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { Img } from "@/Components/Image";
 
 interface Properties {
-    // TODO(@alfonsobries)[2023-09-30]. Replace with a dynamic type once defined
-    article: {
-        title: string;
-    };
-    collections: ArticleCollections;
+    article: App.Data.Articles.ArticleData;
 }
 
-export const ArticleCard = ({ article, collections }: Properties): JSX.Element => {
+export const ArticleCard = ({ article }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <a
             data-testid="ArticleCard"
-            href="#"
+            href={`/articles/${article.slug}`}
             className="group flex w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-white"
         >
             <div className="mx-2 mt-2 aspect-video overflow-hidden rounded-lg bg-theme-secondary-300">
-                <img
-                    className="w-full object-cover"
-                    alt="TBD"
-                    src="https://i.ibb.co/42VMb58/CnUnPNz.png"
+                <Img
+                    className="h-full w-full object-cover"
+                    wrapperClassName="h-full [&>span]:h-full"
+                    alt={article.title}
+                    src={article.image}
                 />
             </div>
 
@@ -40,7 +37,7 @@ export const ArticleCard = ({ article, collections }: Properties): JSX.Element =
                     {t("pages.articles.featured_collections")}:
                 </span>
 
-                <FeaturedCollections collections={collections} />
+                <FeaturedCollections collections={article.featuredCollections} />
             </div>
         </a>
     );

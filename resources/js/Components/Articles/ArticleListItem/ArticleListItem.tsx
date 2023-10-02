@@ -1,29 +1,22 @@
 import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
-import { type ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { Img } from "@/Components/Image";
 
-interface Properties {
-    // TODO(@alfonsobries)[2023-09-30]. Replace with a dynamic type once defined
-    article: {
-        title: string;
-    };
-    collections: ArticleCollections;
-}
-
-export const ArticleListItem = ({ article, collections }: Properties): JSX.Element => {
+export const ArticleListItem = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <a
             data-testid="ArticleListItem"
-            href="#"
+            href={`/articles/${article.slug}`}
             className="flex space-x-3 border-b-4  border-theme-secondary-100 bg-white p-6 lg:rounded-lg lg:border lg:border-theme-secondary-300"
         >
-            <div className="aspect-video h-11 flex-shrink-0 overflow-hidden rounded-[4px] bg-theme-secondary-300 sm:h-16">
-                <img
-                    className="w-full object-cover"
-                    alt="TBD"
-                    src="https://i.ibb.co/42VMb58/CnUnPNz.png"
+            <div className="aspect-video h-11 flex-shrink-0 overflow-hidden rounded bg-theme-secondary-300 sm:h-16">
+                <Img
+                    className="h-full w-full overflow-hidden rounded object-cover"
+                    wrapperClassName="h-full [&>span]:h-full"
+                    alt={article.title}
+                    src={article.image}
                 />
             </div>
 
@@ -39,7 +32,7 @@ export const ArticleListItem = ({ article, collections }: Properties): JSX.Eleme
                         <span className="mr-2 hidden shrink-0 text-sm font-medium text-theme-secondary-700 sm:block">
                             {t("pages.articles.featured_collections")}:
                         </span>
-                        <FeaturedCollections collections={collections} />
+                        <FeaturedCollections collections={article.featuredCollections} />
                     </div>
                 </div>
             </div>

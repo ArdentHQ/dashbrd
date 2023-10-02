@@ -86,10 +86,12 @@ declare namespace App.Data.Articles {
     export type ArticleData = {
         id: number;
         title: string;
+        slug: string;
         category: App.Enums.ArticleCategoryEnum;
         content: string;
         userId: number;
         featuredCollections: any;
+        image: string | null;
         publishedAt: string | null;
         metaDescription: string | null;
     };

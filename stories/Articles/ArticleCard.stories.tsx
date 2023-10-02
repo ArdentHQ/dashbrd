@@ -1,6 +1,5 @@
 import type { Meta } from "@storybook/react";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
-import { ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 import { collections } from "./mockCollections";
 
 export default {
@@ -11,18 +10,12 @@ export const Default = {
     render: ({
         sets,
     }: {
-        sets: Array<{
-            collections: ArticleCollections;
-            article: any;
-        }>;
+        sets: App.Data.Articles.ArticleData[];
     }) => {
         return (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4">
-                {sets.map(({ collections, article }, index) => (
-                    <ArticleCard
-                        collections={collections}
-                        article={article}
-                    />
+                {sets.map((article , index) => (
+                    <ArticleCard article={article}/>
                 ))}
             </div>
         );
@@ -30,37 +23,36 @@ export const Default = {
 };
 
 Default.args = {
-    // TODO(@alfonsobries)[2023-09-30]. Add real articles object
     sets: [
         {
-            article: {
-                title: "Japan Eyeing a Digital Transformation With NFTs and more text that should be truncated",
-            },
-            collections: collections,
+            title: "Japan Eyeing a Digital Transformation With NFTs and more text that should be truncated",
+            slug: "japan-eyeing",
+            image: "https://i.ibb.co/Wvp5cYs/image.png",
+            featuredCollections: collections,
         },
         {
-            article: {
-                title: "Short title",
-            },
-            collections: collections,
+            title: "Short title",
+            slug: "short-title",
+            image: "https://i.ibb.co/Wvp5cYs/image.png",
+            featuredCollections: collections,
         },
         {
-            article: {
-                title: "A single article 1",
-            },
-            collections: collections.slice(0, 1),
+            title: "A single article 1",
+            slug: "a-single-article-1",
+            image: "https://i.ibb.co/Wvp5cYs/image.png",
+            featuredCollections: collections.slice(0, 1),
         },
         {
-            article: {
-                title: "A single article 2 with a super long title that should be truncated even if it have more text than the other articles",
-            },
-            collections: collections.slice(0, 5),
+            title: "A single article 2 with a super long title that should be truncated even if it have more text than the other articles",
+            slug: "a-single-article-2",
+            image: "https://i.ibb.co/Wvp5cYs/image.png",
+            featuredCollections: collections.slice(0, 5),
         },
         {
-            article: {
-                title: "A single article 3",
-            },
-            collections: collections.slice(0, 2),
+            title: "A single article 3",
+            slug: "a-single-article-3",
+            image: "https://i.ibb.co/Wvp5cYs/image.png",
+            featuredCollections: collections.slice(0, 2),
         },
     ],
 };

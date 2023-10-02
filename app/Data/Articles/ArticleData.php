@@ -21,11 +21,13 @@ class ArticleData extends Data
     public function __construct(
         public int $id,
         public string $title,
+        public string $slug,
         #[LiteralTypeScriptType('App.Enums.ArticleCategoryEnum')]
         public ArticleCategoryEnum $category,
         public string $content,
         public int $userId,
         public Collection $featuredCollections,
+        public ?string $image,
         public ?DateTime $publishedAt,
         public ?string $metaDescription,
     ) {
@@ -36,6 +38,7 @@ class ArticleData extends Data
         return new self(
             id: $article->id,
             title: $article->title,
+            slug: $article->slug,
             category: $article->category,
             content: $article->content,
             userId: $article->user_id,
@@ -43,6 +46,7 @@ class ArticleData extends Data
                 $collection->name,
                 $collection->collection_image
             )),
+            image: $article->getMedia()->first()?->getUrl(),
             publishedAt: $article->published_at,
             metaDescription: $article->metaDescription,
         );

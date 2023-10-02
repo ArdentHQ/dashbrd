@@ -1,9 +1,9 @@
 import cn from "classnames";
 import { useRef, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
-import { type ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
+import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
 
 export const calculateCircleCount = (totalCount: number, availableWidth: number): number => {
     const circleWidth = 20;
@@ -23,7 +23,7 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
 
 // Note: This component uses width to detect number of collections to display, so the parent must have fix width
 // (or flex-1 to take the available with) otherwise you may experience infinite loop due to `setVisibleCount` call
-export const FeaturedCollections = ({ collections }: { collections: ArticleCollections }): JSX.Element => {
+export const FeaturedCollections = ({ collections }: { collections: FeaturedCollectionData[] }): JSX.Element => {
     const totalCount = collections.length;
 
     const [visibleCount, setVisibleCount] = useState(totalCount);
