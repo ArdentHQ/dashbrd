@@ -165,7 +165,7 @@ class Web3NftHandler
             });
 
             // Passing an empty array means we update all collections which is undesired here.
-            if (!$ids->isEmpty()) {
+            if (! $ids->isEmpty()) {
                 CollectionModel::updateFiatValue($ids->toArray());
             }
 
@@ -177,7 +177,7 @@ class Web3NftHandler
             })->pluck('users.id')->toArray();
 
             // Passing an empty array means we update all users which is undesired here.
-            if (!empty($affectedUsersIds)) {
+            if (! empty($affectedUsersIds)) {
                 User::updateCollectionsValue($affectedUsersIds);
             }
         }
