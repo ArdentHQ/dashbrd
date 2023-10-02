@@ -343,11 +343,15 @@ it('should delete gallery of previous owner if it becomes empty', function () {
     Cache::flush();
     (new FetchWalletNfts($wallet2, $network))->handle();
 
-    $this->assertDatabaseCount('galleries', 1);
-    expect(Nft::where('wallet_id', $wallet1->id)->get())->toHaveCount(2)
-        ->and(Nft::where('wallet_id', $wallet2->id)->get())->toHaveCount(1)
+    expect(Gallery::count())->toBe(1);
+    expect(Gallery::withTrashed()->count())->toBe(2);
+
+    expect($wallet1->nfts()->count())->toBe(2)
+        ->and($wallet2->nfts()->count())->toBe(1)
         ->and(Gallery::where('name', 'BRDY')->first())->not()->toBeNull()
-        ->and(Gallery::where('name', 'BRDY2')->first())->toBeNull();
+        ->and(Gallery::where('name', 'BRDY2')->first())->toBeNull()
+        ->and(Gallery::where('name', 'BRDY2')->withTrashed()->first())->not()->toBeNull();
+
 });
 
 it('should not delete gallery/nfts of local testing wallet', function () {
@@ -390,7 +394,7 @@ it('should not delete gallery/nfts of local testing wallet', function () {
     $galleries[0]->nfts()->attach($nfts[1], ['order_index' => 0]);
     $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
 
-    $this->assertDatabaseCount('galleries', 2);
+    expect(Gallery::count())->toBe(2);
 
     // Fetch wallet2, which now owns the NFT from wallet1's second gallery thus deleting the second gallery.
     Carbon::setTestNow(now()->addSecond());
@@ -399,7 +403,7 @@ it('should not delete gallery/nfts of local testing wallet', function () {
 
     (new FetchWalletNfts($wallet1, $network))->handle();
 
-    $this->assertDatabaseCount('galleries', 2);
+    expect(Gallery::count())->toBe(2);
     expect(Nft::where('wallet_id', $wallet1->id)->get())->toHaveCount(3)
         ->and(Gallery::where('name', 'BRDY')->first())->not()->toBeNull()
         ->and(Gallery::where('name', 'BRDY2')->first())->not()->toBeNull();
@@ -413,7 +417,8 @@ it('should not delete gallery/nfts of local testing wallet', function () {
 
     (new FetchWalletNfts($wallet1, $network))->handle();
 
-    $this->assertDatabaseCount('galleries', 0);
+    expect(Gallery::count())->toBe(0);
+
     expect(Nft::where('wallet_id', $wallet1->id)->get())->toHaveCount(0);
 });
 
