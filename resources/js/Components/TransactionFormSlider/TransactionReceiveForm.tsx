@@ -13,23 +13,28 @@ export const TransactionReceiveForm = ({ wallet }: { wallet: App.Data.Wallet.Wal
 
     return (
         <div data-testid="TransactionReceiveForm">
-            <div className="rounded-xl border border-theme-secondary-400">
+            <div className="rounded-xl border border-theme-secondary-400 dark:border-theme-dark-700">
                 <div className="flex items-center justify-center p-4">
-                    <QRCode value={address} />
+                    <QRCode
+                        value={address}
+                        className="rounded-xl bg-white p-2"
+                    />
                 </div>
 
-                <div className="flex items-end justify-between border-t border-theme-secondary-400 p-4">
+                <div className="flex items-end justify-between border-t border-theme-secondary-400 p-4  dark:border-theme-dark-700">
                     <div>
-                        <p className="text-sm font-medium text-theme-secondary-500">{t("common.your_address")}</p>
+                        <p className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300">
+                            {t("common.your_address")}
+                        </p>
 
-                        <p className="mt-0.5 hidden font-medium text-theme-secondary-900 sm:block">
+                        <p className="mt-0.5 hidden font-medium text-theme-secondary-900 dark:text-theme-dark-50 sm:block">
                             <TruncateMiddle
                                 length={28}
                                 text={address}
                             />
                         </p>
 
-                        <p className="mt-0.5 font-medium text-theme-secondary-900 sm:hidden">
+                        <p className="mt-0.5 font-medium text-theme-secondary-900 dark:text-theme-dark-50 sm:hidden">
                             <TruncateMiddle
                                 length={16}
                                 text={address}
