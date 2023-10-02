@@ -23,18 +23,6 @@ UPDATE nft_gallery
 FROM removed_nfts rm
 WHERE nft_gallery.gallery_id = rm.gallery_id AND nft_gallery.nft_id = rm.nft_id;
 
--- recover nfts that were soft deleted but are now owned by the wallet again
-WITH recovered_nfts AS (
-    SELECT gallery_id, nft_id FROM galleries
-    JOIN nft_gallery ng ON galleries.id = ng.gallery_id
-    JOIN nfts n ON ng.nft_id = n.id AND n.id = NEW.id AND n.wallet_id IS NOT NULL
-    WHERE user_id = _user_id
-)
-UPDATE nft_gallery
-    SET deleted_at = NULL
-FROM recovered_nfts rec
-WHERE nft_gallery.gallery_id = rec.gallery_id AND nft_gallery.nft_id = rec.nft_id;
-
 -- Mark all galleries with only soft deleted nfts as soft deleted
 WITH soft_deleted_nfts AS (
     SELECT gallery_id
@@ -54,6 +42,7 @@ AND
         FROM soft_deleted_nfts
         WHERE galleries.id = soft_deleted_nfts.gallery_id
     );
+
 
 -- Lastly, delete all empty galleries of old user
 DELETE FROM galleries

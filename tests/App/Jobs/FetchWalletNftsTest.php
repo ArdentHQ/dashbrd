@@ -277,6 +277,8 @@ it('should recover a soft deleted gallery if a nft is added again', function () 
     $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
 
     expect($wallet->nfts()->count())->toBe(3);
+    expect($galleries[0]->nfts()->count())->toBe(2);
+    expect($galleries[1]->nfts()->count())->toBe(1);
     expect(Gallery::count())->toBe(2);
 
     // Fetch, should soft delete the galleries and nfts
@@ -285,6 +287,8 @@ it('should recover a soft deleted gallery if a nft is added again', function () 
     (new FetchWalletNfts($wallet, $network))->handle();
 
     expect($wallet->nfts()->count())->toBe(0);
+    expect($galleries[0]->nfts()->count())->toBe(0);
+    expect($galleries[1]->nfts()->count())->toBe(0);
     expect(Gallery::count())->toBe(0);
 
     // Fetch again, should recover the galleries and nfts
@@ -292,7 +296,9 @@ it('should recover a soft deleted gallery if a nft is added again', function () 
     Cache::flush();
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    expect($wallet->nfts()->count())->toBe(3);
+    expect($wallet->fresh()->nfts()->count())->toBe(3);
+    expect($galleries[0]->nfts()->count())->toBe(2);
+    expect($galleries[1]->nfts()->count())->toBe(1);
     expect(Gallery::count())->toBe(2);
 });
 
