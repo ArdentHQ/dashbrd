@@ -25,7 +25,7 @@ describe("BalanceHeader", () => {
             { breakpoint },
         );
 
-        if (breakpoint !== "xs") {
+        if (breakpoint !== Breakpoint.xs) {
             expect(screen.getByTestId("BalanceHeader")).toBeInTheDocument();
             expect(screen.getAllByText("$34,253.75")).toBeTruthy();
             expect(screen.getByText("0x123456…34567890")).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("BalanceHeader", () => {
             { breakpoint },
         );
 
-        if (breakpoint !== "xs") {
+        if (breakpoint !== Breakpoint.xs) {
             expect(screen.getByTestId("BalanceHeaderSkeleton")).toBeInTheDocument();
         } else {
             expect(screen.getByTestId("BalanceHeaderMobileSkeleton")).toBeInTheDocument();
