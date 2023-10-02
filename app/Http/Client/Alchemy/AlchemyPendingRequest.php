@@ -245,7 +245,7 @@ class AlchemyPendingRequest extends PendingRequest
         $nftItems = collect($response)
             ->filter(fn ($nft) => $this->filterNft($nft))
             ->map(function ($nft) use ($collection) {
-                return $this->parseNft($nft, $collection->network_id);
+                return $this->parseNft($nft, $collection->network_id, convertTokenNumber: false);
             })
             ->values();
 
@@ -358,7 +358,7 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @param  array<mixed>  $nft
      */
-    public function parseNft(array $nft, int $networkId): Web3NftData
+    public function parseNft(array $nft, int $networkId, bool $convertTokenNumber = true): Web3NftData
     {
         $extractedFloorPrice = $this->tryExtractFloorPrice($nft);
         $collectionName = $this->collectionName($nft);
@@ -390,9 +390,11 @@ class AlchemyPendingRequest extends PendingRequest
             $bannerImageUrl = null;
         }
 
+        $tokenNumber = $convertTokenNumber === true ? CryptoUtils::hexToBigIntStr($nft['id']['tokenId']) : $nft['id']['tokenId'];
+
         return new Web3NftData(
             tokenAddress: $nft['contract']['address'],
-            tokenNumber: $nft['id']['tokenId'],
+            tokenNumber: $tokenNumber,
             networkId: $networkId,
             collectionName: $collectionName ?? Arr::get($nft, 'contractMetadata.symbol'),
             collectionSymbol: Arr::get($nft, 'contractMetadata.symbol') ?? $collectionName,
