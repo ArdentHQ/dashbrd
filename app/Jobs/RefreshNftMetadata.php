@@ -55,6 +55,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 
         if (count($nfts) === 0) {
             Log::info('RefreshNftMetadata Job: No nfts found for metadate update. Aborting.');
+
             return;
         }
 
@@ -74,7 +75,6 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
                 dispatchJobs: true,
             );
         });
-
 
         Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
             'nfts_count' => $nfts->count(),
