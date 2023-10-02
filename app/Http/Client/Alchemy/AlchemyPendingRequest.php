@@ -19,6 +19,7 @@ use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection as CollectionModel;
 use App\Models\Network;
+use App\Models\Nft;
 use App\Models\Token;
 use App\Models\Wallet;
 use App\Support\CryptoUtils;
@@ -219,6 +220,10 @@ class AlchemyPendingRequest extends PendingRequest
 
     /**
      * @see https://docs.alchemy.com/reference/getnftmetadatabatch
+     *
+     * @param  collection<int, Nft>  $nfts
+     * @param  CollectionModel  $collection
+     * @return Web3NftsChunk
      */
     public function nftMetadata(collection $nfts, CollectionModel $collection): Web3NftsChunk
     {
