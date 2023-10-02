@@ -130,6 +130,8 @@ return [
     'empty_transactions' => "You don't have any transactions yet. Once transactions have been made, they will show up here.",
     'error' => 'Error',
     'refresh_metadata' => 'Refresh Metadata',
+    'refresh_collection_title' => 'Refresh your collection',
+    'refresh_collection_description' => 'You can refresh data every 15 minutes.',
     'refreshing_metadata' => 'Refreshing Metadata... Please check back later.',
     'pending_confirmation' => 'Pending Confirmation',
     'confirmed_transaction' => 'Confirmed Transaction',
