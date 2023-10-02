@@ -6,11 +6,7 @@ export default {
 } as Meta<typeof FeaturedCollections>;
 
 export const Default = {
-    render: ({
-        sets,
-    }: {
-        sets: Array<App.Data.Articles.ArticleData["featuredCollections"]>;
-    }) => {
+    render: ({ sets }: { sets: Array<App.Data.Articles.ArticleData["featuredCollections"]> }) => {
         return (
             <>
                 {sets.map(({ collections, width }, index) => (

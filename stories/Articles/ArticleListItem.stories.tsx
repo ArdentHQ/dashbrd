@@ -7,16 +7,12 @@ export default {
 } as Meta<typeof ArticleListItem>;
 
 export const Default = {
-    render: ({
-        sets,
-    }: {
-        sets: App.Data.Articles.ArticleData[];
-    }) => {
+    render: ({ sets }: { sets: App.Data.Articles.ArticleData[] }) => {
         return (
             <div>
                 {sets.map((article, index) => (
                     <>
-                        <ArticleListItem article={article}/>
+                        <ArticleListItem article={article} />
                         <span className="block h-1 bg-theme-secondary-100 sm:h-1.5 sm:bg-transparent"></span>
                     </>
                 ))}
