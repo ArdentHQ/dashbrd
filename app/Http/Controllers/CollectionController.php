@@ -35,7 +35,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\PaginatedDataCollection;
-use function response as responseAlias;
 
 class CollectionController extends Controller
 {
