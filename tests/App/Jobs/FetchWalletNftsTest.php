@@ -234,6 +234,68 @@ it('should soft delete gallery when all nfts have been removed', function () {
     $this->assertDatabaseCount('galleries', 2);
 });
 
+it('should recover a soft deleted gallery if a nft is added again', function () {
+    Bus::fake();
+
+    Alchemy::fake([
+        '*' => Http::sequence()
+            ->push(getTestNfts(3))
+            ->push(['ownedNfts' => []])
+            ->push(getTestNfts(3)),
+    ]);
+
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
+
+    $this->assertDatabaseCount('collections', 0);
+    $this->assertDatabaseCount('nfts', 0);
+    $this->assertDatabaseCount('galleries', 0);
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect(Nft::count())->toBe(3);
+
+    $this->assertDatabaseCount('galleries', 0);
+
+    // Create 2 galleries with NFTs
+    $galleries = Gallery::factory()->createMany([
+        [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY',
+            'cover_image' => 'BRDY',
+        ], [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY2',
+            'cover_image' => 'BRDY2',
+        ],
+    ]);
+
+    $nfts = Nft::where('wallet_id', $wallet->id)->orderBy('collection_id')->orderBy('id')->get();
+
+    $galleries[0]->nfts()->attach($nfts[0], ['order_index' => 0]);
+    $galleries[0]->nfts()->attach($nfts[1], ['order_index' => 0]);
+    $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
+
+    expect($wallet->nfts()->count())->toBe(3);
+    expect(Gallery::count())->toBe(2);
+
+    // Fetch, should soft delete the galleries and nfts
+    Carbon::setTestNow(now()->addSecond());
+    Cache::flush();
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($wallet->nfts()->count())->toBe(0);
+    expect(Gallery::count())->toBe(0);
+
+    // Fetch again, should recover the galleries and nfts
+    Carbon::setTestNow(now()->addSecond());
+    Cache::flush();
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($wallet->nfts()->count())->toBe(3);
+    expect(Gallery::count())->toBe(2);
+});
+
 it('should handle NFT owner changes', function () {
     Bus::fake();
 
