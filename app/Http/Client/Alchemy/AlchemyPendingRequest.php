@@ -241,7 +241,7 @@ class AlchemyPendingRequest extends PendingRequest
             'tokens' => $tokens,
         ])->json();
 
-        /** @var collection<int, Nft>  $response */
+        /** @var Collection<int, Nft>  $response */
         $nftItems = collect($response)
             ->filter(fn ($nft) => $this->filterNft($nft))
             ->map(function ($nft) use ($collection) {
