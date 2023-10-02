@@ -45,7 +45,7 @@ export const SearchInput = ({
                 <Icon
                     name="X"
                     size="md"
-                    className="text-theme-primary-900"
+                    className="text-theme-primary-900 dark:text-theme-dark-200"
                 />
             </button>
         )}
@@ -54,8 +54,8 @@ export const SearchInput = ({
             name="MagnifyingGlass"
             size="md"
             className={classNames("pointer-events-none absolute right-0 top-0 mr-4 mt-4", {
-                "text-theme-primary-900": !disabled,
-                "text-theme-secondary-500": disabled,
+                "text-theme-primary-900 dark:text-theme-dark-200": !disabled,
+                "text-theme-secondary-500 dark:text-theme-dark-500": disabled,
             })}
         />
     </div>
