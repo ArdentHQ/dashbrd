@@ -60,14 +60,25 @@ export const FeaturedCollections = ({ collections }: { collections: ArticleColle
                     </div>
                 </Tooltip>
             ))}
-            {totalCount - visibleCount > 0 && (
-                <span
-                    data-testid="FeaturedCollections_Hidden"
-                    className="z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full bg-theme-hint-100 px-2 text-xs font-medium text-theme-hint-900 ring-2 ring-white"
-                >
-                    +{totalCount - visibleCount}
-                </span>
-            )}
+            <MoreCollectionsLabel
+                total={totalCount}
+                visible={visibleCount}
+            />
         </div>
     );
+};
+
+export const MoreCollectionsLabel = ({ total, visible }: { total: number; visible: number }): JSX.Element => {
+    if (total - visible > 0) {
+        return (
+            <span
+                data-testid="MoreCollectionsLabel"
+                className="z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full bg-theme-hint-100 px-2 text-xs font-medium text-theme-hint-900 ring-2 ring-white"
+            >
+                +{total - visible}
+            </span>
+        );
+    }
+
+    return <></>;
 };
