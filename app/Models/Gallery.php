@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -28,7 +29,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Gallery extends Model implements Viewable
 {
-    use BelongsToUser, CanBeLiked, HasFactory, HasSlug, InteractsWithViews, Reportable;
+    use BelongsToUser, CanBeLiked, HasFactory, HasSlug, InteractsWithViews, Reportable, SoftDeletes;
 
     /**
      * @var array<string>

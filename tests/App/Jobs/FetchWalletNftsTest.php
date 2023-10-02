@@ -20,6 +20,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 it('should fetch nfts for wallet', function () {
@@ -156,7 +157,7 @@ it('should detach no longer owned nfts', function () {
     expect($wallet->nfts()->count())->toBe(2)->and(Nft::count())->toBe(3);
 });
 
-it('should delete gallery when all nfts have been removed', function () {
+it('should soft delete gallery when all nfts have been removed', function () {
     Bus::fake();
 
     Alchemy::fake([
@@ -208,11 +209,16 @@ it('should delete gallery when all nfts have been removed', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('nft_gallery', 1);
-    $this->assertDatabaseCount('galleries', 1);
+    // Same amout
+    $this->assertDatabaseCount('nft_gallery', 3);
+    $this->assertDatabaseCount('galleries', 2);
 
-    expect(Nft::where('wallet_id', $wallet->id)->get())->toHaveCount(1)
+    // Only one gallery is not deleted
+    expect(DB::select('select count(*) as count from nft_gallery where deleted_at is null')[0]->count)->toBe(1);
+
+    expect($wallet->nfts()->count())->toBe(1)
         ->and(Gallery::where('name', 'BRDY')->first())->toBeNull()
+        ->and(Gallery::withTrashed()->where('name', 'BRDY')->first())->not->toBeNull()
         ->and(Gallery::where('name', 'BRDY2')->first())->not()->toBeNull();
 
     // Fetch once more, now all galleries are deleted due to the wallet no longner owning any NFTs
@@ -222,8 +228,10 @@ it('should delete gallery when all nfts have been removed', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    expect(Nft::where('wallet_id', $wallet->id)->get())->toHaveCount(0);
-    $this->assertDatabaseCount('galleries', 0);
+    expect($wallet->nfts()->count())->toBe(0);
+
+    // Still two in the database since both were soft deleted
+    $this->assertDatabaseCount('galleries', 2);
 });
 
 it('should handle NFT owner changes', function () {
