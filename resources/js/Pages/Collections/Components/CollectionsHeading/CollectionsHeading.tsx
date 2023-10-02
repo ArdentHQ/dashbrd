@@ -38,7 +38,7 @@ export const CollectionsHeading = ({
                         data-testid={"NftCollection__refresh"}
                         icon="Refresh"
                         disabled={false}
-                        className="bg-transparent"
+                        className="border-none bg-transparent md:border-solid"
                     />
                 </Tooltip>
             </div>
