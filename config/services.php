@@ -89,7 +89,7 @@ return [
             // Notice that the limit for POST request is 2, but currently we only
             // use GET requests
             'max_requests' => env('OPENSEA_MAX_REQUESTS', 4),
-            'per_seconds' => env('COPENSEA_MAX_REQUESTS_SECONDS', 1),
+            'per_seconds' => env('OPENSEA_MAX_REQUESTS_SECONDS', 1),
         ],
     ],
 
