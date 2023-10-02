@@ -11,7 +11,6 @@ use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -342,9 +341,27 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeFilterInvalid(Builder $query): Builder
+    public function scopeWithSignedWallets(Builder $query): Builder
     {
-        return $query->withAcceptableSupply()->withoutSpamContracts();
+        $signedWallets = Wallet::query()
+            ->select('id')
+            ->whereNotNull('last_signed_at');
+
+        $distinctCollectionIds = DB::query()
+            ->selectRaw('DISTINCT distinct_collections.collection_id as id')
+            ->withExpression('signed_wallets', $signedWallets)
+            ->from('signed_wallets')
+            ->joinSubLateral(
+                Nft::query()
+                    ->selectRaw('DISTINCT nfts.collection_id')
+                    ->whereRaw('nfts.wallet_id = signed_wallets.id'),
+                'distinct_collections',
+                null // @phpstan-ignore-line
+            );
+
+        return $query
+            ->withExpression('distinct_collection_ids', $distinctCollectionIds)
+            ->join('distinct_collection_ids', 'distinct_collection_ids.id', 'collections.id');
     }
 
     /**
@@ -469,12 +486,11 @@ class Collection extends Model
     }
 
     /**
-     * @return EloquentCollection<int, self>
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
-    public static function getWithSignedWallet(): EloquentCollection
+    public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
     {
-        $result = DB::select(get_query('collections.get_with_signed_wallet'));
-
-        return self::hydrate($result);
+        return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
     }
 }

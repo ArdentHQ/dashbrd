@@ -53,9 +53,9 @@ const Dialog = ({
                 leaveTo="opacity-0"
             >
                 {hasBlurryOverlay ? (
-                    <div className="fixed inset-0 bg-white/60 backdrop-blur-sm transition-opacity" />
+                    <div className="fixed inset-0 bg-white/60 backdrop-blur-sm transition-opacity dark:bg-theme-dark-950/60" />
                 ) : (
-                    <div className="fixed inset-0 bg-theme-secondary-900/15 transition-opacity" />
+                    <div className="fixed inset-0 bg-theme-secondary-900/15 transition-opacity dark:bg-theme-dark-950/90" />
                 )}
             </Transition.Child>
 
@@ -77,12 +77,12 @@ const Dialog = ({
                         <HeadlessDialog.Panel
                             as="div"
                             data-testid="Dialog__panel"
-                            className="flex h-screen w-full flex-col overflow-hidden bg-white text-left transition-all sm:block sm:h-auto sm:max-w-md sm:rounded-2xl sm:shadow-dialog"
+                            className="flex h-screen w-full flex-col overflow-hidden bg-white text-left transition-all dark:bg-theme-dark-900 sm:block sm:h-auto sm:max-w-md sm:rounded-2xl sm:shadow-dialog"
                         >
-                            <div className="flex items-center justify-between border-b border-theme-secondary-300 px-6 pb-4 pt-6">
+                            <div className="flex items-center justify-between border-b border-theme-secondary-300 px-6 pb-4 pt-6 dark:border-theme-dark-700">
                                 <HeadlessDialog.Title
                                     as="h3"
-                                    className="text-lg font-medium text-theme-secondary-900"
+                                    className="text-lg font-medium text-theme-secondary-900 dark:text-theme-dark-50"
                                 >
                                     {title}
                                 </HeadlessDialog.Title>
@@ -91,7 +91,7 @@ const Dialog = ({
                                     <div data-testid="Dialog__close">
                                         <button
                                             type="button"
-                                            className="transition-default flex h-8 w-8 items-center justify-center rounded-full text-theme-primary-900 hover:bg-theme-secondary-300"
+                                            className="transition-default flex h-8 w-8 items-center justify-center rounded-full text-theme-primary-900 hover:bg-theme-secondary-300 dark:bg-theme-dark-900 dark:text-theme-dark-300 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-300"
                                             onClick={onClose}
                                         >
                                             <Icon

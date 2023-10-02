@@ -57,7 +57,6 @@ class TokenListItemData extends Data
     }
 
     /**
-     * @param  int  $currentPage
      * @param  Collection<int, int>  $chainIds
      * @return PaginatedDataCollection<int, TokenListItemData>
      */
