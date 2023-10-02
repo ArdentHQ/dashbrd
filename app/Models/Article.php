@@ -14,12 +14,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\Sluggable\SlugOptions;
 use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Article extends Model implements HasMedia, Viewable
 {
-    use BelongsToUser, HasFactory, InteractsWithMedia, InteractsWithViews, SoftDeletes, HasSlug;
+    use BelongsToUser, HasFactory, HasSlug, InteractsWithMedia, InteractsWithViews, SoftDeletes;
 
     public $guarded = ['id'];
 
@@ -36,7 +36,7 @@ class Article extends Model implements HasMedia, Viewable
         return $this->belongsToMany(Collection::class, 'article_collection');
     }
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
