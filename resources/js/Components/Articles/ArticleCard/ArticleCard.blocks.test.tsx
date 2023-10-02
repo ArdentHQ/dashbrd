@@ -7,6 +7,7 @@ describe("ArticleCardBlocks", () => {
     it("should calculate featured collection counts", () => {
         expect(calculateCircleCount(10, 140)).toBe(4);
         expect(calculateCircleCount(5, 150)).toBe(5);
+        expect(calculateCircleCount(1, 45)).toBe(1);
     });
 
     it("should render FeaturedCollections element", () => {
