@@ -119,6 +119,11 @@ class Collection extends Model
         return $this->extra_attributes->get('banner_updated_at');
     }
 
+    public function openSeaSlug(): ?string
+    {
+        return $this->extra_attributes->get('opensea_slug');
+    }
+
     public function website(bool $defaultToExplorer = true): ?string
     {
         $website = $this->extra_attributes->get('website');
@@ -212,6 +217,18 @@ class Collection extends Model
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
         )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @param  'asc'|'desc'  $direction
+     * @return Builder<self>
+     */
+    public function scopeOrderByName(Builder $query, string $direction): Builder
+    {
+        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
     }
 
     /**
