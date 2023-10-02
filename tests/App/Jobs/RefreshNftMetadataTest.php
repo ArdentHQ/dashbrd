@@ -45,7 +45,7 @@ it('should refresh NFT metadata', function () {
     (new RefreshNftMetadata($collection, $nft))->handle(app(AlchemyWeb3DataProvider::class));
 
     expect($collection->fresh()['name'])->toEqual('Unrevealed Collection');
-    expect($nft->fresh()['name'])->toEqual('#0');
+    expect($nft->fresh()['name'])->toEqual('Unrevealed Token');
 });
 
 it('should skip refreshing NFT metadata for a spam collection', function () {
