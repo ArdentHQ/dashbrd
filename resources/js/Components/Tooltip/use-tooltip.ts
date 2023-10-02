@@ -11,9 +11,12 @@ export const useTooltip = (properties?: {
             return;
         }
 
-        setTimeout(() => {
-            instance.hide();
-        }, properties?.hideAfter);
+        setTimeout(
+            () => {
+                instance.hide();
+            },
+            properties?.hideAfter,
+        );
     };
 
     return {

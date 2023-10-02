@@ -90,6 +90,18 @@ export const PoweredByIcons = (): JSX.Element => {
                     }
                 />
             </li>
+            <li>
+                <PoweredByLink
+                    url={t("urls.opensea")}
+                    title="OpenSea"
+                    icon={
+                        <Icon
+                            name="OpenseaCircle"
+                            aria-hidden="true"
+                        />
+                    }
+                />
+            </li>
         </ul>
     );
 };

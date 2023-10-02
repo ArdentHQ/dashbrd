@@ -16,6 +16,7 @@ return [
     'alchemy' => 'https://www.alchemy.com',
     'moralis' => 'https://moralis.io',
     'mnemonic' => 'https://www.mnemonichq.com',
+    'opensea' => 'https://opensea.io/',
     'explorers' => [
         'etherscan' => [
             'token_transactions' => 'https://etherscan.io/token/:token?a=:address',

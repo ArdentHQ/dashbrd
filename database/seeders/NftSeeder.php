@@ -169,9 +169,9 @@ class NftSeeder extends Seeder
                 'minted_block' => 15047648,
                 'minted_at' => Carbon::createFromTimestamp(1656548114),
                 'nfts' => [
-                    ['Puppy #0x02040e160b0200', 1914, 'https://i.seadn.io/gcs/files/25e59eef2e42b666b3f306119c08d4d7.gif?auto=format&w=1000'],
-                    ['Puppy #0x10090426120800', 1971, 'https://i.seadn.io/gcs/files/3c5e4ef85aed2cf76dbfd9dc767927cb.gif?auto=format&w=1000'],
-                    ['Puppy #0x1403010c120800', 469, 'https://i.seadn.io/gcs/files/f50c1a295159aac3686cbf1ff357de50.gif?auto=format&w=1000'],
+                    ['Puppy #0x02040e160b0200', 72625002537222656, 'https://i.seadn.io/gcs/files/25e59eef2e42b666b3f306119c08d4d7.gif?auto=format&w=1000'],
+                    ['Puppy #0x10090426120800', 76571107088533504, 'https://i.seadn.io/gcs/files/3c5e4ef85aed2cf76dbfd9dc767927cb.gif?auto=format&w=1000'],
+                    ['Puppy #0x1403010c120800', 77690396604499968, 'https://i.seadn.io/gcs/files/f50c1a295159aac3686cbf1ff357de50.gif?auto=format&w=1000'],
                 ],
                 'traits' => [
                     ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
