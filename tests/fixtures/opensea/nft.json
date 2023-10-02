@@ -1,0 +1,93 @@
+{
+    "nft": {
+        "identifier": "2428",
+        "collection": "y00ts",
+        "contract": "0x670fd103b1a08628e9557cd66b87ded841115190",
+        "token_standard": "erc721",
+        "name": "y00t #2429",
+        "description": "y00ts is a generative art project of 15,000 NFTs. y00topia is a curated community of builders and creators. Each y00t was designed by De Labs in Los Angeles, CA.",
+        "image_url": "https://metadata.y00ts.com/y/2428.png",
+        "metadata_url": "https://metadata.y00ts.com/y/2428.json",
+        "created_at": "",
+        "updated_at": "2023-07-06T17:00:38.742631",
+        "is_disabled": true,
+        "is_nsfw": false,
+        "animation_url": "https://animation-url.y00ts.com?tokenId=2428",
+        "is_suspicious": false,
+        "creator": "0xa45d808eafde8b8e6b6b078fd246e28ad13030e8",
+        "traits": [
+            {
+                "trait_type": "1/1",
+                "display_type": null,
+                "max_value": null,
+                "trait_count": 0,
+                "order": null,
+                "value": "None"
+            },
+            {
+                "trait_type": "Face",
+                "display_type": null,
+                "max_value": null,
+                "trait_count": 0,
+                "order": null,
+                "value": "Chill"
+            },
+            {
+                "trait_type": "Clothes",
+                "display_type": null,
+                "max_value": null,
+                "trait_count": 0,
+                "order": null,
+                "value": "Fast Jacket"
+            },
+            {
+                "trait_type": "Background",
+                "display_type": null,
+                "max_value": null,
+                "trait_count": 0,
+                "order": null,
+                "value": "Antique White"
+            },
+            {
+                "trait_type": "Head",
+                "display_type": null,
+                "max_value": null,
+                "trait_count": 0,
+                "order": null,
+                "value": "McY00ts Visor"
+            },
+            {
+                "trait_type": "Eyewear",
+                "display_type": null,
+                "max_value": null,
+                "trait_count": 0,
+                "order": null,
+                "value": "Last Supper Squares"
+            },
+            {
+                "trait_type": "Fur",
+                "display_type": null,
+                "max_value": null,
+                "trait_count": 0,
+                "order": null,
+                "value": "Eggnog"
+            }
+        ],
+        "owners": [
+            {
+                "address": "0xde2c48f1f2dcacef45995a4e48c8cf81701df808",
+                "quantity": 1
+            }
+        ],
+        "rarity": {
+            "strategy_id": null,
+            "strategy_version": null,
+            "rank": 2814,
+            "score": null,
+            "calculated_at": "",
+            "max_rank": null,
+            "tokens_scored": 0,
+            "ranking_features": null
+        }
+    }
+}
