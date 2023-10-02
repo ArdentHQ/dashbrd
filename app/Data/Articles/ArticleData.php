@@ -42,7 +42,7 @@ class ArticleData extends Data
             category: $article->category,
             content: $article->content,
             userId: $article->user_id,
-            featuredCollections: $article->collections->map(fn($collection) => new FeaturedCollectionData(
+            featuredCollections: $article->collections->map(fn ($collection) => new FeaturedCollectionData(
                 $collection->name,
                 $collection->collection_image
             )),
