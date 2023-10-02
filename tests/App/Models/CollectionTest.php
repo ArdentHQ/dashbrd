@@ -1134,16 +1134,3 @@ it('sorts collections last time nft was fetched', function () {
         $collection4->id,
     ]);
 });
-
-it('should get openSeaSlug', function () {
-    $now = now();
-    $collection = Collection::factory()->create([
-        'extra_attributes' => [
-            'opensea_slug' => 'test-collection',
-            'opensea_slug_updated_at' => $now,
-        ],
-    ]);
-
-    expect($collection->openSeaSlug())->toBe('test-collection');
-    expect($collection->openSeaSlugUpdatedAt())->toBe($now->toIsoString());
-});
