@@ -49,7 +49,7 @@ final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
      *
      * @param  Collection<int, Nft>  $nfts
      */
-    public function getNftMetadata(collection $nfts, CollectionModel $collection): Web3NftsChunk
+    public function getNftMetadata(Collection $nfts, CollectionModel $collection): Web3NftsChunk
     {
         return Alchemy::nftMetadata($nfts, $collection);
     }
