@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Http;
  * @method static Collection<int, Web3Erc20TokenData> getWalletTokens(Wallet $wallet, Network $network) $query = [])
  * @method static Web3NftsChunk getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null, ?int $limit = null) $query = [])
  * @method static Web3NftsChunk collectionNfts(CollectionModel $collection, ?string $startToken = null, ?int $limit = null)
- * @method static Web3NftsChunk nftMetadata(collection $nfts, CollectionModel $collection)
+ * @method static Web3NftsChunk nftMetadata(Collection $nfts, CollectionModel $collection)
  * @method static array collectionNftsRaw(CollectionModel $collection, ?string $startToken = null)
  * @method static array<string> getSpamContracts(Network $network)
  * @method static Collection<int, Web3ContractMetadata> getContractMetadataBatch(array $contractAddresses, Network $network)
