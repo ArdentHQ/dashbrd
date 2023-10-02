@@ -99,6 +99,7 @@ declare namespace App.Data.Collections {
         floorPriceDecimals: number | null;
         image: string | null;
         banner: string | null;
+        openSeaSlug: string | null;
         website: string;
         nftsCount: number;
     };
@@ -115,6 +116,7 @@ declare namespace App.Data.Collections {
         image: string | null;
         banner: string | null;
         bannerUpdatedAt: string | null;
+        openSeaSlug: string | null;
         website: string | null;
         twitter: string | null;
         discord: string | null;
@@ -195,6 +197,7 @@ declare namespace App.Data.Gallery {
         image: string | null;
         banner: string | null;
         bannerUpdatedAt: string | null;
+        openSeaSlug: string | null;
         website: string | null;
         nftsCount: number | null;
     };
@@ -334,6 +337,7 @@ declare namespace App.Data.Nfts {
         floorPrice: string | null;
         website: string;
         image: string | null;
+        openSeaSlug: string | null;
     };
     export type NftData = {
         id: number;
@@ -481,6 +485,7 @@ declare namespace App.Data.Web3 {
         collectionDescription: string | null;
         collectionBannerImageUrl: string | null;
         collectionBannerUpdatedAt: string | null;
+        collectionOpenSeaSlug: string | null;
         collectionSocials: Array<any> | null;
         collectionSupply: number | null;
         name: string | null;

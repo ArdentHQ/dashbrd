@@ -41,7 +41,7 @@ describe("CollectionActivityTable", () => {
             { breakpoint },
         );
 
-        if (breakpoint === "xs") {
+        if (breakpoint === Breakpoint.xs) {
             expect(screen.getByTestId("CollectionActivityTable__Mobile")).toBeInTheDocument();
         } else {
             expect(screen.getByTestId("CollectionActivityTable")).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe("CollectionActivityTable", () => {
             { breakpoint },
         );
 
-        if (breakpoint === "xs") {
+        if (breakpoint === Breakpoint.xs) {
             expect(screen.getByTestId("CollectionActivityTable__Mobile")).toBeInTheDocument();
         } else {
             expect(screen.getByTestId("CollectionActivityTable")).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe("CollectionActivityTable", () => {
             { breakpoint },
         );
 
-        if (breakpoint === "xs") {
+        if (breakpoint === Breakpoint.xs) {
             expect(screen.getByTestId("CollectionActivityTable__Mobile")).toBeInTheDocument();
         } else {
             expect(screen.getByTestId("CollectionActivityTable")).toBeInTheDocument();
@@ -262,7 +262,7 @@ describe("CollectionActivityTable", () => {
     });
 
     it.each(allBreakpoints)("should render AddressLink when isMd", (breakpoint) => {
-        const isMd = breakpoint === "md";
+        const isMd = breakpoint === Breakpoint.md;
         const address = "0x1234567890123456789012345678901234567890";
 
         render(

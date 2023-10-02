@@ -9,6 +9,7 @@ use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
+use App\Console\Commands\FetchCollectionOpenseaSlug;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
 use App\Console\Commands\FetchTokens;
@@ -97,6 +98,13 @@ class Kernel extends ConsoleKernel
 
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
+        $schedule
+            // Command only fetches collections that doesn't have a slug yet
+            // so in most cases it will not run any request
+            ->command(FetchCollectionOpenseaSlug::class)
+            ->withoutOverlapping()
+            ->hourly();
+
         $schedule
             ->command(FetchCollectionFloorPrice::class)
             ->withoutOverlapping()

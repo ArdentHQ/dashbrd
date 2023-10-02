@@ -14,9 +14,9 @@ use App\Jobs\FetchUserNfts;
 use App\Jobs\FetchWalletNfts;
 use App\Support\Facades\Alchemy;
 use App\Support\Facades\Coingecko;
-use App\Support\Facades\Footprint;
 use App\Support\Facades\Mnemonic;
 use App\Support\Facades\Moralis;
+use App\Support\Facades\Opensea;
 use Database\Seeders\NetworkSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Bus;
@@ -41,7 +41,7 @@ abstract class TestCase extends BaseTestCase
         Alchemy::preventStrayRequests();
         Moralis::preventStrayRequests();
         Mnemonic::preventStrayRequests();
-        Footprint::preventStrayRequests();
+        Opensea::preventStrayRequests();
 
         // These ensure that tests run fast
         Config::set('services.coingecko.retryDelay', 1);
