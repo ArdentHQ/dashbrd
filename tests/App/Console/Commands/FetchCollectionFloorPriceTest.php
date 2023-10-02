@@ -6,8 +6,23 @@ use App\Jobs\FetchCollectionFloorPrice;
 use App\Models\Collection;
 use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Config;
 
 it('dispatches a job for collections', function () {
+    Bus::fake();
+
+    Collection::factory(3)->create();
+
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
+
+    $this->artisan('nfts:fetch-collection-floor-price');
+
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 3);
+});
+
+it('dispatches a job for collections if provider is not opensea', function () {
+    Config::set('dashbrd.web3_providers.'.FetchCollectionFloorPrice::class, 'mnemonic');
+
     Bus::fake();
 
     Collection::factory(3)->create();

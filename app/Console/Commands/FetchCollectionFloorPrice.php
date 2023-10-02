@@ -47,7 +47,7 @@ class FetchCollectionFloorPrice extends Command
     public function getRetryUntil(): DateTime
     {
         // Only opensea is rate limited
-        if (Config::get('dashbrd.web3_providers.'.self::class) !== 'opensea') {
+        if (Config::get('dashbrd.web3_providers.'.FetchCollectionFloorPriceJob::class) !== 'opensea') {
             return now()->addMinutes(30);
         }
 
