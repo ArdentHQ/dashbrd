@@ -220,10 +220,9 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @see https://docs.alchemy.com/reference/getnftmetadatabatch
      */
-    public function nftMetadata(collection $nfts): Web3NftsChunk
+    public function nftMetadata(collection $nfts, CollectionModel $collection): Web3NftsChunk
     {
         $this->apiUrl = $this->getNftV2ApiUrl();
-        $collection = $nfts->first()->collection;
 
         // All the requests need to have chain id defined.
         $this->chain = AlchemyChain::fromChainId($collection->network->chain_id);
@@ -389,7 +388,7 @@ class AlchemyPendingRequest extends PendingRequest
 
         return new Web3NftData(
             tokenAddress: $nft['contract']['address'],
-            tokenNumber: CryptoUtils::hexToBigIntStr($nft['id']['tokenId']),
+            tokenNumber: $nft['id']['tokenId'],
             networkId: $networkId,
             collectionName: $collectionName ?? Arr::get($nft, 'contractMetadata.symbol'),
             collectionSymbol: Arr::get($nft, 'contractMetadata.symbol') ?? $collectionName,

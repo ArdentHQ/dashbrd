@@ -41,8 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->middleware(['signed_wallet']);
 
     Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
-            ->name('nft.refresh')
-            ->middleware('throttle:nft:refresh');
+            ->name('nft.refresh');
 
     Route::get('/networks/{chainId}', Controllers\NetworkController::class)
             ->name('network-by-chain');

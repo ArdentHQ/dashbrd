@@ -50,24 +50,22 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 
         $nfts = Nft::whereNotNull('metadata_requested_at')
             ->where(function ($query) {
-                $query->whereRaw('metadata_fetched_at < metadata_requested_at');
+                $query->whereNull("metadata_fetched_at")->orWhereRaw('metadata_fetched_at < metadata_requested_at');
             })->get();
 
-        Log::info('RefreshNftMetadata Job: Processing', [
-            'address' => $this->collection->address,
-            'network' => $this->collection->network->id,
-            'token_numbers' => $this->nft->token_number,
-        ]);
 
-        // TODO: chunks of 100 (Alchemy limit).
-        $result = $provider->getNftMetadata($nfts);
+        if(count($nfts) === 0) {
+            Log::info('RefreshNftMetadata Job: No nfts found for metadate update. Aborting.');
+            return;
+        }
+
+        $result = $provider->getNftMetadata($nfts, $this->collection);
+
 
         (new Web3NftHandler(collection: $this->collection))->store(
             $result->nfts,
-            dispatchJobs: true
+            dispatchJobs: true,
         );
-
-        Nft::whereIn('id', $result->nfts->map(fn ($nft) => $nft->id))->update(['metadata_fetched_at' => now()]);
 
         Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
             'nfts_count' => $result->nfts->count(),
