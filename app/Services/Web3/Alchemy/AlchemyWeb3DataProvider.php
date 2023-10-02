@@ -48,9 +48,6 @@ final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
      * @see https://docs.alchemy.com/reference/getnftmetadatabatch
      *
      * @param  collection<int, Nft>  $nfts
-     * @param  CollectionModel  $collection
-     *
-     * @return Web3NftsChunk
      */
     public function getNftMetadata(collection $nfts, CollectionModel $collection): Web3NftsChunk
     {
