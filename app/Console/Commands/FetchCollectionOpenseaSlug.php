@@ -18,7 +18,7 @@ class FetchCollectionOpenseaSlug extends Command
      *
      * @var string
      */
-    protected $signature = '     {--collection-id=}';
+    protected $signature = 'nfts:fetch-collection-opensea-slug {--collection-id=}';
 
     /**
      * The console command description.
