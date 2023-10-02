@@ -12,6 +12,7 @@ use App\Models\Collection;
 use App\Support\Facades\Opensea;
 use App\Support\Queues;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,7 +29,8 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public Collection $collection
+        public Collection $collection,
+        public DateTime $retryUntil,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -82,5 +84,10 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
     public function middleware(): array
     {
         return [new RateLimited(Service::Opensea)];
+    }
+
+    public function retryUntil(): DateTime
+    {
+        return $this->retryUntil;
     }
 }

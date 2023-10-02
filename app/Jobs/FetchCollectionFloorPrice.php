@@ -34,6 +34,7 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
     public function __construct(
         public int $chainId,
         public string $address,
+        public ?DateTime $retryUntil = null,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -101,7 +102,11 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
 
     public function retryUntil(): DateTime
     {
-        return now()->addMinutes(30);
+        if ($this->retryUntil === null) {
+            return now()->addMinutes(30);
+        }
+
+        return $this->retryUntil;
     }
 
     /**
