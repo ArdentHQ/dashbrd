@@ -58,7 +58,7 @@ export const ListboxOption = ({
         data-testid="ListboxOption"
         className={({ active, selected }: { active: boolean; selected: boolean }) =>
             cn(
-                "transition-default group relative flex h-11 cursor-default select-none items-center px-6 py-3",
+                "transition-default group relative flex h-11 cursor-default select-none items-center justify-start px-6 py-3",
                 {
                     "cursor-pointer text-theme-secondary-700 hover:bg-theme-primary-50 hover:text-theme-secondary-900":
                         !selected && isDisabled !== true,
@@ -159,9 +159,10 @@ export const ListboxOptions = ({
         <HeadlessListbox.Options
             as={as}
             className={twMerge(
-                "absolute z-10 mt-1 max-h-60 w-full max-w-full overflow-auto bg-white px-0 py-3.5 text-base shadow-dropdown focus:outline-none sm:w-auto",
+                "absolute z-10 mt-1 max-h-60 w-full max-w-full overflow-auto bg-white px-0 py-3.5 text-base shadow-dropdown focus:outline-none ",
                 className,
             )}
+            data-testid="ListboxOptions"
         >
             {children}
         </HeadlessListbox.Options>
