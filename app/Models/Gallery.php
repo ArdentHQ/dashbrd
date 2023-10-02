@@ -73,7 +73,9 @@ class Gallery extends Model implements Viewable
      */
     public function nfts(): BelongsToMany
     {
-        return $this->belongsToMany(Nft::class, 'nft_gallery')->withPivot('order_index');
+        return $this->belongsToMany(Nft::class, 'nft_gallery')
+            ->whereNull('nft_gallery.deleted_at')
+            ->withPivot('order_index');
     }
 
     public function value(CurrencyCode $currency): ?float
