@@ -7,9 +7,10 @@ namespace App\Data\Articles;
 use App\Enums\ArticleCategoryEnum;
 use App\Models\Article;
 use DateTime;
-use Illuminate\Support\Collection;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -26,7 +27,8 @@ class ArticleData extends Data
         public ArticleCategoryEnum $category,
         public string $content,
         public int $userId,
-        public Collection $featuredCollections,
+        #[DataCollectionOf(FeaturedCollectionData::class)]
+        public DataCollection $featuredCollections,
         public ?string $image,
         public ?DateTime $publishedAt,
         public ?string $metaDescription,
@@ -42,10 +44,7 @@ class ArticleData extends Data
             category: $article->category,
             content: $article->content,
             userId: $article->user_id,
-            featuredCollections: $article->collections->map(fn ($collection) => new FeaturedCollectionData(
-                $collection->name,
-                $collection->collection_image
-            )),
+            featuredCollections: FeaturedCollectionData::collection($article->collections),
             image: $article->getMedia()->first()?->getUrl(),
             publishedAt: $article->published_at,
             metaDescription: $article->metaDescription,

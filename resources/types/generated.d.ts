@@ -90,7 +90,7 @@ declare namespace App.Data.Articles {
         category: App.Enums.ArticleCategoryEnum;
         content: string;
         userId: number;
-        featuredCollections: any;
+        featuredCollections: Array<App.Data.Articles.FeaturedCollectionData>;
         image: string | null;
         publishedAt: string | null;
         metaDescription: string | null;

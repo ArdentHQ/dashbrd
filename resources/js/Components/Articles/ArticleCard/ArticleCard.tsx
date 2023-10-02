@@ -2,11 +2,7 @@ import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
 import { Img } from "@/Components/Image";
 
-interface Properties {
-    article: App.Data.Articles.ArticleData;
-}
-
-export const ArticleCard = ({ article }: Properties): JSX.Element => {
+export const ArticleCard = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
     const { t } = useTranslation();
 
     return (

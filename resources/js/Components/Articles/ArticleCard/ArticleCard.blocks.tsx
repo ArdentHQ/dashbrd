@@ -1,9 +1,9 @@
 import cn from "classnames";
 import { useRef, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
+import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
-import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
 
 export const calculateCircleCount = (totalCount: number, availableWidth: number): number => {
     const circleWidth = 20;
