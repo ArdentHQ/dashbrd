@@ -4,7 +4,7 @@ import { type PaginationData } from "@/Components/Pagination/Pagination.contract
 import { SelectPageLimit } from "@/Components/Pagination/SelectPageLimit";
 
 interface Properties {
-    pagination: PaginationData<unknown>;
+    pagination: PaginationData<App.Data.Articles.ArticlesData>;
     onPageLimitChange: (limit: number) => void;
 }
 

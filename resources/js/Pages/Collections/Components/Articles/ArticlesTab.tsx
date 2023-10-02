@@ -3,16 +3,20 @@ import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
+import { useCollectionArticles } from "@/Hooks/useCollectionArticles";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
 import { ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
-import { SamplePageMeta } from "@/Tests/SampleData";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
+import { isTruthy } from "@/Utils/is-truthy";
 
-export const ArticlesTab = (): JSX.Element => {
+export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.CollectionDetailData }): JSX.Element => {
     const { t } = useTranslation();
     const [query, setQuery] = useState("");
+
+    const { articles, isLoading } = useCollectionArticles(collection.slug);
+    console.log(articles);
 
     const queryParameters = getQueryParameters();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,8 +26,12 @@ export const ArticlesTab = (): JSX.Element => {
         queryParameters.view === "list" ? DisplayTypes.List : DisplayTypes.Grid,
     );
 
+    if (isLoading || !isTruthy(articles)) {
+        return <>is loading</>;
+    }
+
     // replace this with articles count
-    const articlesCount = Math.random() * 10;
+    const articlesCount = articles.paginated.meta.total ?? 0;
 
     return (
         <div>
@@ -74,15 +82,7 @@ export const ArticlesTab = (): JSX.Element => {
                 )}
 
                 <ArticlePagination
-                    pagination={{
-                        meta: {
-                            ...SamplePageMeta.paginated.meta,
-                            total: 30,
-                            per_page: 12,
-                        },
-                        links: SamplePageMeta.paginated.links,
-                        data: [],
-                    }}
+                    pagination={articles}
                     onPageLimitChange={(limit: number) => {
                         setPageLimit(limit);
                     }}

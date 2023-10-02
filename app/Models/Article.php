@@ -23,7 +23,7 @@ class Article extends Model implements HasMedia, Viewable
 
     protected $casts = [
         'category' => ArticleCategoryEnum::class,
-        'published_at' => 'timestamp',
+        'published_at' => 'date',
     ];
 
     /**

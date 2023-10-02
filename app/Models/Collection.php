@@ -110,7 +110,16 @@ class Collection extends Model
      */
     public function articles(): BelongsToMany
     {
-        return $this->belongsToMany(Article::class, 'article_collection');
+        return $this->belongsToMany(Article::class, 'article_collection')->withPivot('order_index');
+    }
+
+    public function scopeArticlesWithCollections(): BelongsToMany
+    {
+        return $this->belongsToMany(Article::class, 'article_collection')
+            ->with(['collections' => function ($query) {
+                $query->where('collections.id', '!=', $this->id)
+                    ->select(['collections.name', 'collections.extra_attributes->image as collection_image']);
+            }]);
     }
 
     public function image(): ?string

@@ -315,7 +315,7 @@ const CollectionsView = ({
                         </Tab.Panel>
 
                         <Tab.Panel>
-                            <ArticlesTab />
+                            <ArticlesTab collection={collection} />
                         </Tab.Panel>
 
                         <Tab.Panel>

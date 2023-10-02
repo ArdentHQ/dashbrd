@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Data\Articles\ArticleData;
+use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionNftData;
@@ -33,6 +35,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\PaginatedDataCollection;
+use function response as responseAlias;
 
 class CollectionController extends Controller
 {
@@ -220,6 +223,23 @@ class CollectionController extends Controller
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
             'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),
             'image' => trans('metatags.collections.view.image'),
+        ]);
+    }
+
+    public function articles(Collection $collection, Request $request): JsonResponse
+    {
+        $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 12, 96);
+
+        $articles = $collection
+            ->articlesWithCollections()
+            ->orderByPivot('order_index', 'asc')
+            ->paginate(2);
+
+        /** @var PaginatedDataCollection<int, ArticleData> */
+        $paginated = ArticleData::collection($articles);
+
+        return response()->json([
+            'articles' => new ArticlesData($paginated),
         ]);
     }
 

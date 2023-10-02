@@ -82,6 +82,41 @@ declare namespace App.Data {
         attributes: Attributes;
     };
 }
+declare namespace App.Data.Articles {
+    export type ArticleData = {
+        id: number;
+        title: string;
+        category: App.Enums.ArticleCategoryEnum;
+        content: string;
+        userId: number;
+        featuredCollections: any;
+        publishedAt: string | null;
+        metaDescription: string | null;
+    };
+    export type ArticlesData = {
+        paginated: {
+            data: Array<App.Data.Articles.ArticleData>;
+            links: Array<{ url: string | null; label: string; active: boolean }>;
+            meta: {
+                current_page: number;
+                first_page_url: string;
+                from: number | null;
+                last_page: number;
+                last_page_url: string;
+                next_page_url: string | null;
+                path: string;
+                per_page: number;
+                prev_page_url: string | null;
+                to: number | null;
+                total: number;
+            };
+        };
+    };
+    export type FeaturedCollectionData = {
+        name: string;
+        image: string | null;
+    };
+}
 declare namespace App.Data.Collections {
     export type CollectionBasicDetailsData = {
         slug: string;
