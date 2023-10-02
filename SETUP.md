@@ -99,12 +99,12 @@ Another data provider is Mnemonic, for which they provide a [first steps](https:
 MNEMONIC_API_KEY=your-api-key
 ```
 
-### Footprint Analytics
+### Opensea
 
-Although only one endpoint is currently supported in Dashbrd for this provider, you can still make use of it if you want. You can read their [API introduction document](https://docs.footprint.network/reference/introduction) to get yourself set up with an API key. This can then be added to your `.env`:
+For Opensea you can get your API by following the instructions at this [link](https://docs.opensea.io/reference/api-keys). Once you have one, set it in the `.env` as follows:
 
 ```bash
-FOOTPRINT_API_KEY=your-api-key
+OPENSEA_API_KEY=your-api-key
 ```
 
 ### Coingecko
