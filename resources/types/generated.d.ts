@@ -117,7 +117,6 @@ declare namespace App.Data.Collections {
         banner: string | null;
         bannerUpdatedAt: string | null;
         openSeaSlug: string | null;
-        openSeaSlugUpdatedAt: string | null;
         website: string | null;
         twitter: string | null;
         discord: string | null;
@@ -199,7 +198,6 @@ declare namespace App.Data.Gallery {
         banner: string | null;
         bannerUpdatedAt: string | null;
         openSeaSlug: string | null;
-        openSeaSlugUpdatedAt: string | null;
         website: string | null;
         nftsCount: number | null;
     };
@@ -477,7 +475,6 @@ declare namespace App.Data.Web3 {
         collectionBannerImageUrl: string | null;
         collectionBannerUpdatedAt: string | null;
         collectionOpenSeaSlug: string | null;
-        collectionOpenSeaSlugUpdatedAt: string | null;
         collectionSocials: Array<any> | null;
         collectionSupply: number | null;
         name: string | null;

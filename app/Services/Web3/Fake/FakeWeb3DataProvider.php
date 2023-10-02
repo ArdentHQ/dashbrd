@@ -79,7 +79,6 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
                 collectionBannerImageUrl: null,
                 collectionBannerUpdatedAt: null,
                 collectionOpenSeaSlug: null,
-                collectionOpenSeaSlugUpdatedAt: null,
                 name: $nft->name,
                 description: null,
                 extraAttributes: $nft['extra_attributes']->toArray(),

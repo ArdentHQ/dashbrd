@@ -11,7 +11,6 @@ use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -125,11 +124,6 @@ class Collection extends Model
         return $this->extra_attributes->get('opensea_slug');
     }
 
-    public function openSeaSlugUpdatedAt(): ?string
-    {
-        return $this->extra_attributes->get('opensea_slug_updated_at');
-    }
-
     public function website(bool $defaultToExplorer = true): ?string
     {
         $website = $this->extra_attributes->get('website');
@@ -223,6 +217,18 @@ class Collection extends Model
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
         )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @param  'asc'|'desc'  $direction
+     * @return Builder<self>
+     */
+    public function scopeOrderByName(Builder $query, string $direction): Builder
+    {
+        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
     }
 
     /**
@@ -352,6 +358,33 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeWithSignedWallets(Builder $query): Builder
+    {
+        $signedWallets = Wallet::query()
+            ->select('id')
+            ->whereNotNull('last_signed_at');
+
+        $distinctCollectionIds = DB::query()
+            ->selectRaw('DISTINCT distinct_collections.collection_id as id')
+            ->withExpression('signed_wallets', $signedWallets)
+            ->from('signed_wallets')
+            ->joinSubLateral(
+                Nft::query()
+                    ->selectRaw('DISTINCT nfts.collection_id')
+                    ->whereRaw('nfts.wallet_id = signed_wallets.id'),
+                'distinct_collections',
+                null // @phpstan-ignore-line
+            );
+
+        return $query
+            ->withExpression('distinct_collection_ids', $distinctCollectionIds)
+            ->join('distinct_collection_ids', 'distinct_collection_ids.id', 'collections.id');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeForCollectionData(Builder $query, User $user = null): Builder
     {
         $extraAttributeSelect = "CASE
@@ -471,12 +504,11 @@ class Collection extends Model
     }
 
     /**
-     * @return EloquentCollection<int, self>
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
-    public static function getWithSignedWallet(): EloquentCollection
+    public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
     {
-        $result = DB::select(get_query('collections.get_with_signed_wallet'));
-
-        return self::hydrate($result);
+        return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
     }
 }

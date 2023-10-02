@@ -164,6 +164,7 @@ describe("CollectionHeaderTop", () => {
 
         const useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
             signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
         });
 
         render(<CollectionHeaderTop collection={collection} />);

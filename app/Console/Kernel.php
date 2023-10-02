@@ -9,6 +9,7 @@ use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
+use App\Console\Commands\FetchCollectionOpenseaSlug;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
 use App\Console\Commands\FetchTokens;
@@ -98,6 +99,13 @@ class Kernel extends ConsoleKernel
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
         $schedule
+            // Command only fetches collections that doesn't have a slug yet
+            // so in most cases it will not run any request
+            ->command(FetchCollectionOpenseaSlug::class)
+            ->withoutOverlapping()
+            ->hourly();
+
+        $schedule
             ->command(FetchCollectionFloorPrice::class)
             ->withoutOverlapping()
             ->hourlyAt(5);
@@ -141,6 +149,17 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->dailyAt('5:30');
 
+        $schedule
+            ->command(FetchCollectionNfts::class, [
+                // Limit the number of collections to fetch for unsigned wallets, since
+                // it sorts the collections by last_fetched_at eventually it will
+                // fetch nfts for all collections.
+                '--limit' => config('dashbrd.daily_max_collection_nft_retrieval_for_unsigned_wallets'),
+            ])
+            ->withoutOverlapping()
+            ->dailyAt('12:00');
+
+        // Fetch signed collections
         $schedule
             ->command(FetchCollectionNfts::class, [
                 '--only-signed',

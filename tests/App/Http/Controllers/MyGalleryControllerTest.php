@@ -622,14 +622,14 @@ describe('user is not signed', function () {
             ->andReturn(false);
     });
 
-    it('cant render the "create" page', function () {
+    it('can render the "create" page', function () {
         $user = createUser();
 
         Nft::factory()->create(['wallet_id' => $user->wallet->id]);
 
         $this->actingAs($user)
             ->get(route('my-galleries.create'))
-            ->assertRedirect();
+            ->assertStatus(200);
     });
 
     it('cant render the "edit" page if owns the gallery', function () {

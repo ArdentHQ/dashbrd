@@ -54,7 +54,7 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
             ->whereHas('network', fn ($query) => $query->where('chain_id', $this->chainId))
             ->first();
 
-        if ($floorPrice == null) {
+        if ($floorPrice === null) {
             $collection->update([
                 'floor_price' => null,
                 'floor_price_token_id' => null,

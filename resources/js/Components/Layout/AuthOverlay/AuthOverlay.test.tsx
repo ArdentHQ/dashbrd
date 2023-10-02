@@ -37,6 +37,7 @@ describe("AuthOverlay", () => {
 
         expect(connectWalletMock).toHaveBeenCalled();
     });
+
     it("should sign if requires signature", async () => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
             ...defaultMetamaskConfig,
@@ -48,6 +49,25 @@ describe("AuthOverlay", () => {
                 show={true}
                 showCloseButton={false}
                 closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
+        expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
+        expect(screen.getAllByTestId("Button")).toHaveLength(1);
+
+        await userEvent.click(screen.getByTestId("Button"));
+
+        expect(signWalletSpy).toHaveBeenCalled();
+    });
+
+    it("should sign if must be signed prop", async () => {
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                closeOverlay={vi.fn()}
+                mustBeSigned={true}
             />,
         );
 
