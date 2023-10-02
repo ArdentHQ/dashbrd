@@ -58,7 +58,7 @@ export const ConfirmationDialog = ({
             >
                 <div className={cn("flex-1 px-6 pb-6 pt-4", childrenClassName)}>{children}</div>
 
-                <footer className="flex items-center justify-end space-x-3 border-t border-theme-secondary-300 px-6 py-4 sm:px-6 sm:pb-6 sm:pt-4">
+                <footer className="flex items-center justify-end space-x-3 border-t border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700 sm:px-6 sm:pb-6 sm:pt-4">
                     {!isStatic && (
                         <Button
                             data-testid="ConfirmationDialog__close"

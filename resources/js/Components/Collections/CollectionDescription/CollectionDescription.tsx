@@ -43,7 +43,7 @@ export const CollectionDescription = ({
                     <LinkButton
                         data-testid="CollectionHeaderTop__about"
                         className={cn(
-                            "transition-default border-b border-dashed border-theme-secondary-900 hover:border-transparent hover:text-theme-primary-700",
+                            "transition-default border-b border-dashed border-theme-secondary-900 hover:border-transparent hover:text-theme-primary-700 dark:border-theme-dark-50 dark:text-theme-dark-50 dark:hover:border-theme-dark-200 dark:hover:text-theme-dark-200",
                             linkClassName,
                         )}
                         onClick={() => {
@@ -54,7 +54,7 @@ export const CollectionDescription = ({
                     </LinkButton>
 
                     <Dialog
-                        title={t("pages.nfts.about_nft")}
+                        title={t("pages.collections.about_collection")}
                         isOpen={showDescriptionModal}
                         onClose={() => {
                             setShowDescriptionModal(false);
@@ -64,7 +64,7 @@ export const CollectionDescription = ({
                             data-testid="CollectionHeaderTop__description_modal"
                             className={cn(
                                 "text-theme-secondary-700 [&_div]:space-y-6",
-                                "[&_a]:text-theme-primary-600 hover:[&_a]:underline",
+                                "dark:text-theme-dark-200 [&_a]:text-theme-primary-600 hover:[&_a]:underline",
                             )}
                         >
                             <Markdown
@@ -96,7 +96,7 @@ export const MarkdownImage = ({ alt, src }: { alt: string; src: string }): JSX.E
 const MarkdownLink = ({ href, children }: { href: string; children: ReactNode }): JSX.Element => (
     <span className="inline-flex flex-wrap">
         <Link
-            className="outline-offset-3 transition-default flex items-center space-x-2 whitespace-nowrap rounded-full text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300"
+            className="outline-offset-3 transition-default flex items-center space-x-2 whitespace-nowrap rounded-full text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
             href={href}
             external
             confirmBeforeProceeding
