@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 use RuntimeException;
@@ -167,6 +168,12 @@ class Web3NftHandler
             // Passing an empty array means we update all collections which is undesired here.
             if (! $ids->isEmpty()) {
                 CollectionModel::updateFiatValue($ids->toArray());
+            } else {
+                Log::info('Web3NftHandler: skipping updateFiatValue because no ids given', [
+                    'wallet' => $this->wallet?->address,
+                    'collectionId' => $this->collection?->id,
+                    'chainId' => $this->getChainId(),
+                ]);
             }
 
             // Users that own NFTs from the collections that were updated
@@ -179,6 +186,12 @@ class Web3NftHandler
             // Passing an empty array means we update all users which is undesired here.
             if (! empty($affectedUsersIds)) {
                 User::updateCollectionsValue($affectedUsersIds);
+            } else {
+                Log::info('Web3NftHandler: skipping updateCollectionsValue because no user affected', [
+                    'wallet' => $this->wallet?->address,
+                    'collectionId' => $this->collection?->id,
+                    'chainId' => $this->getChainId(),
+                ]);
             }
         }
     }
