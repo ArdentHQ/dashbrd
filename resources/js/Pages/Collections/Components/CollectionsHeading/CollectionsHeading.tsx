@@ -35,7 +35,7 @@ export const CollectionsHeading = ({
                     zIndex={50}
                 >
                     <IconButton
-                        data-testid={"NftCollection__refresh"}
+                        data-testid={"Collection__refresh"}
                         icon="Refresh"
                         disabled={false}
                         className="border-none bg-transparent md:border-solid"
