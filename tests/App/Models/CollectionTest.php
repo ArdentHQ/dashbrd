@@ -749,6 +749,40 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
+it('can sort collections by name', function () {
+    $first = Collection::factory()->create([
+        'name' => ' ',
+    ]);
+
+    $second = Collection::factory()->create([
+        'name' => 'A',
+    ]);
+
+    $third = Collection::factory()->create([
+        'name' => 'aB',
+    ]);
+
+    $fourth = Collection::factory()->create([
+        'name' => 'AZ',
+    ]);
+
+    $fitfh = Collection::factory()->create([
+        'name' => 'B',
+    ]);
+
+    $collections = Collection::orderByName('asc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $first->id, $second->id, $third->id, $fourth->id,   $fitfh->id,
+    ]);
+
+    $collections = Collection::orderByName('desc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $fitfh->id, $fourth->id, $third->id, $second->id, $first->id,
+    ]);
+});
+
 it('queries the collections for the collection data object', function () {
     $collection1 = Collection::factory()->create([
         'floor_price' => '123456789',
@@ -756,6 +790,7 @@ it('queries the collections for the collection data object', function () {
             'image' => 'https://example.com/image.png',
             'banner' => 'https://example.com/banner.png',
             'website' => 'https://example.com',
+            'opensea_slug' => 'test-collection',
         ],
     ]);
 
@@ -1051,6 +1086,16 @@ it('filters collections that belongs to wallets that have been signed at least o
             $collection4->id,
         ]);
 
+});
+
+it('should get openSeaSlug', function () {
+    $collection = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug' => 'test-collection',
+        ],
+    ]);
+
+    expect($collection->openSeaSlug())->toBe('test-collection');
 });
 
 it('sorts collections last time nft was fetched', function () {

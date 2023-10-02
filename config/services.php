@@ -80,9 +80,9 @@ return [
         ],
     ],
 
-    'footprint' => [
-        'key' => env('FOOTPRINT_API_KEY', null),
-        'endpoint' => env('FOOTPRINT_API_ENDPOINT', 'https://api.footprint.network/api/v2/'),
+    'opensea' => [
+        'key' => env('OPENSEA_API_KEY', null),
+        'endpoint' => env('OPENSEA_API_ENDPOINT', 'https://api.opensea.io/api/'),
     ],
 
     'google_analytics' => [

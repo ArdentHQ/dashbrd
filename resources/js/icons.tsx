@@ -15,6 +15,7 @@ import { ReactComponent as GitHubOutline } from "@icons/brands/github-outline.sv
 import { ReactComponent as GitHub } from "@icons/brands/github.svg";
 import { ReactComponent as Mnemonic } from "@icons/brands/mnemonic.svg";
 import { ReactComponent as Moralis } from "@icons/brands/moralis.svg";
+import { ReactComponent as OpenseaCircle } from "@icons/brands/opensea-circle.svg";
 import { ReactComponent as Opensea } from "@icons/brands/opensea.svg";
 import { ReactComponent as Polygonscan } from "@icons/brands/polygonscan.svg";
 import { ReactComponent as TwitterLg } from "@icons/brands/twitter-lg.svg";
@@ -120,6 +121,7 @@ export const SvgCollection = {
     TwitterLg,
     Uniswap,
     Opensea,
+    OpenseaCircle,
     OpenseaColor,
     Blur,
     Calendar,
