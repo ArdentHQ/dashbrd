@@ -1,4 +1,5 @@
-/* eslint-disable import/export,import/no-namespace */
+/* eslint-disable import/export,import/no-namespace, @typescript-eslint/ban-ts-comment */
+
 import * as inertia from "@inertiajs/react";
 import { type InertiaFormProps } from "@inertiajs/react/types/useForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -59,4 +60,6 @@ interface InertiaUseFormProperties extends Partial<Omit<InertiaFormProps<Record<
 }
 
 export const mockInertiaUseForm = (properties: InertiaUseFormProperties): SpyInstance =>
+    // TODO(@goga-m)[2023-09-30]: Remove ts-ignore and construct an object that matches the return type.
+    // @ts-ignore
     vi.spyOn(inertia, "useForm").mockReturnValue(properties as InertiaFormProps<Record<string, unknown>>);
