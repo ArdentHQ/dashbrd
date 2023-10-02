@@ -222,6 +222,9 @@ class AlchemyPendingRequest extends PendingRequest
      * @see https://docs.alchemy.com/reference/getnftmetadatabatch
      *
      * @param  collection<int, Nft>  $nfts
+     * @param  CollectionModel  $collection
+     *
+     * @return Web3NftsChunk
      */
     public function nftMetadata(collection $nfts, CollectionModel $collection): Web3NftsChunk
     {
@@ -241,6 +244,7 @@ class AlchemyPendingRequest extends PendingRequest
             'tokens' => $tokens,
         ])->json();
 
+        /** @var collection<int, Nft>  $response */
         $nftItems = collect($response)
             ->filter(fn ($nft) => $this->filterNft($nft))
             ->map(function ($nft) use ($collection) {
