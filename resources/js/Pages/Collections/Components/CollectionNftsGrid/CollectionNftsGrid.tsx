@@ -29,7 +29,7 @@ export const CollectionNftsGrid = ({
             </div>
 
             {nfts.paginated.meta.total >= 12 && (
-                <div className="flex w-full flex-col items-center justify-between  rounded-b border-theme-secondary-300 xs:w-auto sm:space-y-0 md:w-full md:flex-row">
+                <div className="flex w-full flex-col items-center justify-between rounded-b border-theme-secondary-300 xs:w-auto sm:space-y-0 md:w-full md:flex-row">
                     <SelectPageLimit
                         value={pageLimit}
                         options={[12, 24, 48, 96]}
