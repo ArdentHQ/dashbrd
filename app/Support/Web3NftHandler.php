@@ -164,7 +164,10 @@ class Web3NftHandler
                 DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
             });
 
-            CollectionModel::updateFiatValue($ids->toArray());
+            // Passing an empty array means we update all collections which is undesired here.
+            if (!$ids->isEmpty()) {
+                CollectionModel::updateFiatValue($ids->toArray());
+            }
 
             // Users that own NFTs from the collections that were updated
             $affectedUsersIds = User::whereHas('wallets', function (Builder $walletQuery) use ($ids) {
@@ -173,7 +176,10 @@ class Web3NftHandler
                 });
             })->pluck('users.id')->toArray();
 
-            User::updateCollectionsValue($affectedUsersIds);
+            // Passing an empty array means we update all users which is undesired here.
+            if (!empty($affectedUsersIds)) {
+                User::updateCollectionsValue($affectedUsersIds);
+            }
         }
     }
 
