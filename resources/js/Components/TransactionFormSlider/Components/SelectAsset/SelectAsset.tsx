@@ -55,7 +55,7 @@ export const SelectAsset = ({
                     className="z-20"
                     onChange={onSelectAsset}
                     buttonClassName="sm:max-w-[160px]"
-                    optionsClassName="max-h-96 top-12 pt-1 rounded-none sm:rounded-xl mt-px sm:mt-1"
+                    optionsClassName="max-h-96 top-12 pt-1 rounded-none sm:rounded-xl mt-px sm:mt-1 w-fit"
                     optionsAs="div"
                     avatar={<AssetAvatar asset={asset} />}
                     after={after}
