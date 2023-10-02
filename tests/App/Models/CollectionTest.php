@@ -972,7 +972,7 @@ it('should exclude spam contracts', function () {
         'network_id' => $collections->first()->network_id,
     ]);
 
-    $validCollections = Collection::query()->filterInvalid()->get();
+    $validCollections = Collection::query()->withoutSpamContracts()->get();
 
     expect($validCollections->count())->toBe(1)
         ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
@@ -998,8 +998,92 @@ it('should exclude collections with an invalid supply', function () {
         'supply' => 5001,
     ]);
 
-    $validCollections = Collection::query()->filterInvalid()->get();
+    $validCollections = Collection::query()->withAcceptableSupply()->get();
 
     expect($validCollections->count())->toBe(1)
         ->and($validCollections->first()->slug)->toBe($collection1->slug);
+});
+
+it('filters collections that belongs to wallets that have been signed at least one time', function () {
+    $signed = Wallet::factory()->create([
+        'last_signed_at' => now(),
+    ]);
+
+    $notSigned = Wallet::factory()->create();
+
+    $signed2 = Wallet::factory()->create([
+        'last_signed_at' => now(),
+    ]);
+
+    // Has a signed wallet and a not signed wallet
+    $collection1 = Collection::factory()->create();
+    Nft::factory()->create([
+        'wallet_id' => $signed->id,
+        'collection_id' => $collection1->id,
+    ]);
+    Nft::factory()->create([
+        'wallet_id' => $notSigned->id,
+        'collection_id' => $collection1->id,
+    ]);
+
+    // Has a not signed wallet
+    $collection2 = Collection::factory()->create();
+    Nft::factory()->create([
+        'wallet_id' => $notSigned->id,
+        'collection_id' => $collection2->id,
+    ]);
+
+    // Does not have any wallet
+    $collection3 = Collection::factory()->create();
+
+    // Has a signed wallet
+    $collection4 = Collection::factory()->create();
+    Nft::factory()->create([
+        'wallet_id' => $signed2->id,
+        'collection_id' => $collection4->id,
+    ]);
+
+    $filtered = Collection::query()->withSignedWallets()->get();
+
+    expect($filtered->count())->toBe(2)
+        ->and($filtered->pluck('id')->sort()->toArray())->toEqual([
+            $collection1->id,
+            $collection4->id,
+        ]);
+
+});
+
+it('sorts collections last time nft was fetched', function () {
+    // fetched yesterday
+    $collection1 = Collection::factory()->create([
+        'extra_attributes' => [
+            'nft_last_fetched_at' => now()->subDays(1),
+        ],
+    ]);
+
+    // fetched one month ago
+    $collection2 = Collection::factory()->create([
+        'extra_attributes' => [
+            'nft_last_fetched_at' => now()->subMonth(),
+        ],
+    ]);
+
+    // never fetched
+    $collection3 = Collection::factory()->create();
+
+    // fetched now
+    $collection4 = Collection::factory()->create([
+        'extra_attributes' => [
+            'nft_last_fetched_at' => now(),
+        ],
+    ]);
+
+    $ids = Collection::orderByOldestNftLastFetchedAt()->pluck('id')->toArray();
+
+    expect($ids)->toEqual([
+        $collection3->id,
+        $collection2->id,
+        $collection1->id,
+        $collection4->id,
+    ]);
 });

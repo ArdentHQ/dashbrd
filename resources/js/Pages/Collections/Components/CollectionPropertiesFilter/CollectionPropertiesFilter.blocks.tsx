@@ -31,10 +31,10 @@ const CollectionPropertiesFilterItem = ({
     }, [initiallyExpanded]);
 
     return (
-        <div className="flex flex-col border-t border-theme-secondary-300 px-6 py-4">
+        <div className="flex flex-col border-t border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700">
             <button
                 type="button"
-                className="transition-default group -mx-3 -my-2 inline-flex h-11 items-center justify-between rounded-xl px-3 py-4 font-medium enabled:hover:bg-theme-secondary-100"
+                className="transition-default group -mx-3 -my-2 inline-flex h-11 items-center justify-between rounded-xl px-3 py-4 font-medium enabled:hover:bg-theme-secondary-100 dark:enabled:hover:bg-theme-dark-800"
                 disabled={disabled}
                 onClick={() => {
                     setExpanded(!expanded);
@@ -43,7 +43,8 @@ const CollectionPropertiesFilterItem = ({
                 <span
                     className={classNames({
                         "text-theme-secondary-500": disabled,
-                        "transition-default text-theme-secondary-700 group-hover:text-theme-secondary-900": !disabled,
+                        "transition-default text-theme-secondary-700 group-hover:text-theme-secondary-900 dark:text-theme-dark-200 dark:group-hover:text-theme-dark-50":
+                            !disabled,
                     })}
                 >
                     {label}
@@ -53,7 +54,7 @@ const CollectionPropertiesFilterItem = ({
                     <span
                         className={classNames({
                             "text-theme-secondary-500": disabled,
-                            "text-theme-secondary-700": !disabled,
+                            "text-theme-secondary-700 dark:text-theme-dark-200": !disabled,
                         })}
                     >
                         {count}
@@ -64,7 +65,7 @@ const CollectionPropertiesFilterItem = ({
                         className={classNames("transform transition duration-100", {
                             "rotate-180": expanded,
                             "text-theme-secondary-500": disabled,
-                            "text-theme-secondary-900": !disabled,
+                            "text-theme-secondary-900 dark:text-theme-dark-50": !disabled,
                         })}
                     />
                 </div>
@@ -72,7 +73,7 @@ const CollectionPropertiesFilterItem = ({
 
             {!disabled && (
                 <div
-                    className={classNames("space-y-3", {
+                    className={classNames("transition-default space-y-3", {
                         "h-0 overflow-hidden": !expanded,
                         "mt-4": expanded,
                     })}
@@ -116,14 +117,14 @@ const CollectionPropertiesFilterCheckbox = ({
                 >
                     <span
                         ref={reference}
-                        className="transition-default w-full truncate text-theme-secondary-700 group-hover:text-theme-secondary-900"
+                        className="transition-default w-full truncate text-theme-secondary-700 group-hover:text-theme-secondary-900 dark:text-theme-dark-200 dark:group-hover:text-theme-dark-50"
                     >
                         {value}
                     </span>
                 </Tooltip>
             </div>
 
-            <div className="font-medium text-theme-secondary-700">{count}</div>
+            <div className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">{count}</div>
         </label>
     );
 };

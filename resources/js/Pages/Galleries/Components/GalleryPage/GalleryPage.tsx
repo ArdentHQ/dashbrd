@@ -129,7 +129,7 @@ export const GalleryPage = ({
 
                 {!loading && isTruthy(galleries) && galleries.meta.last_page > 1 && (
                     <Pagination
-                        className="mb-6 mt-6 flex w-full items-center justify-center lg:mb-0"
+                        className="my-3 flex w-full flex-col justify-center px-6 xs:items-center  sm:px-8"
                         data={galleries}
                     />
                 )}

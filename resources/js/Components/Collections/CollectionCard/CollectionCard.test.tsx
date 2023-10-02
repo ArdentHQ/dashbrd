@@ -1,6 +1,8 @@
 import { router } from "@inertiajs/react";
 import React from "react";
+import { type SpyInstance } from "vitest";
 import { CollectionCard } from "./CollectionCard";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
@@ -11,7 +13,25 @@ const nfts = new CollectionNftDataFactory().createMany(3, {
     collectionId: collection.id,
 });
 
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
+
 describe("ActionsPopup", () => {
+    beforeEach(() => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        useAuthorizedActionSpy.mockRestore();
+    });
+
     it.each([true, false])("should render", (isHidden) => {
         render(
             <CollectionCard

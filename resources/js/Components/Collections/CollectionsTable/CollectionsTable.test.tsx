@@ -1,6 +1,8 @@
 import { router } from "@inertiajs/react";
+import { type SpyInstance } from "vitest";
 import { CollectionsTable } from "./CollectionsTable";
 import * as useAuthMock from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
@@ -8,7 +10,25 @@ import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
+
 describe("CollectionsTable", () => {
+    beforeEach(() => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        useAuthorizedActionSpy.mockRestore();
+    });
+
     const collections = new CollectionFactory().withPrices().createMany(3);
 
     const nfts = collections.flatMap((collection) =>

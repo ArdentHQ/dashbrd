@@ -1,4 +1,4 @@
-import { Link as InertiaLink, type InertiaLinkProps, router } from "@inertiajs/react";
+import { Link as InertiaLink, type InertiaLinkProps } from "@inertiajs/react";
 import cn from "classnames";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,6 @@ import { TokenActions } from "@/Components/Tokens/TokenActions";
 import { TransactionDirection } from "@/Components/TransactionFormSlider";
 import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
-import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { FormatFiat } from "@/Utils/Currency";
 import { formatAddress } from "@/Utils/format-address";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
@@ -34,11 +33,9 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 
     const { assets } = usePortfolioBreakdown(wallet);
 
-    const { signedAction } = useAuthorizedAction();
-
     return (
         <Popover className="sm:relative">
-            {({ open, close }) => (
+            {({ open }) => (
                 <>
                     <Trigger wallet={wallet} />
 
@@ -47,14 +44,14 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                             data-testid="UserDetails__content"
                             className="absolute inset-x-4 mt-4 w-auto origin-top-right bg-transparent sm:left-auto sm:right-0 sm:mt-6 sm:w-72"
                         >
-                            <div className="overflow-hidden rounded-2xl bg-white p-0">
-                                <section className="bg-theme-secondary-50 px-6 py-2">
+                            <div className="overflow-hidden rounded-2xl bg-white p-0 dark:border dark:border-theme-dark-700 dark:bg-theme-dark-950 dark:shadow-xl">
+                                <section className="bg-theme-secondary-50 px-6 py-2 dark:bg-theme-dark-900">
                                     <div className="flex items-center justify-between">
                                         <div className="text-sm font-medium leading-5.5">
-                                            <span className="mr-1 text-theme-secondary-700">
+                                            <span className="mr-1 text-theme-secondary-700 dark:text-theme-dark-200">
                                                 {t("common.my_address")}:
                                             </span>
-                                            <span>
+                                            <span className="dark:text-theme-dark-50">
                                                 <TruncateMiddle
                                                     length={10}
                                                     text={address}
@@ -73,10 +70,10 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                     <div className="mb-6 mt-8 px-6">
                                         <div className="mb-4 flex flex-col items-center">
                                             <div className="mb-4 text-center">
-                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-500">
+                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400">
                                                     {t("common.my_balance")}
                                                 </p>
-                                                <p className="text-xl font-medium leading-8 text-theme-secondary-900">
+                                                <p className="text-xl font-medium leading-8 text-theme-secondary-900 dark:text-theme-dark-50">
                                                     <FormatFiat
                                                         value={wallet.totalBalanceInCurrency}
                                                         currency={currency}
@@ -98,9 +95,9 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                         <div>
                                             <PortfolioBreakdownLine assets={assets} />
                                             <div className="mt-2 flex items-center justify-between">
-                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-700">
+                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-600">
                                                     {t("common.tokens")}:{" "}
-                                                    <span className="text-theme-secondary-900">
+                                                    <span className="text-theme-secondary-900 dark:text-theme-dark-200">
                                                         {Math.max(wallet.totalTokens, 1)}
                                                     </span>
                                                 </p>
@@ -108,7 +105,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                 <Link
                                                     href={route("dashboard")}
                                                     className={cn(
-                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none ",
+                                                        "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none dark:text-theme-primary-400",
                                                         "hover:text-theme-primary-700",
                                                         "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 focus-visible:ring-offset-2",
                                                     )}
@@ -120,7 +117,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                     </div>
                                 </section>
 
-                                <section className="bg-theme-secondary-50 py-3.5">
+                                <section className="bg-theme-secondary-50 py-3.5 dark:bg-theme-dark-900">
                                     <nav aria-label="Account navigation">
                                         <ul className="list-none p-0">
                                             {features.galleries && (
@@ -131,7 +128,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                         label={
                                                             <>
                                                                 {t("pages.galleries.my_galleries.title")}{" "}
-                                                                <span className="text-theme-secondary-500">
+                                                                <span className="text-theme-secondary-50 dark:text-theme-dark-400">
                                                                     ({galleriesCount})
                                                                 </span>
                                                             </>
@@ -147,7 +144,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                         label={
                                                             <>
                                                                 {t("pages.collections.title")}{" "}
-                                                                <span className="text-theme-secondary-500">
+                                                                <span className="text-theme-secondary-500 dark:text-theme-dark-400">
                                                                     ({collectionCount})
                                                                 </span>
                                                             </>
@@ -159,16 +156,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                             <li>
                                                 <DropdownNavigationLink
                                                     data-testid="UserDetails__settings"
-                                                    href="#"
-                                                    onClick={(event) => {
-                                                        event.preventDefault();
-
-                                                        signedAction(() => {
-                                                            router.get(route("settings.general"));
-                                                        });
-
-                                                        close();
-                                                    }}
+                                                    href={route("settings.general")}
                                                     icon="Cog"
                                                     label={t("pages.settings.title")}
                                                     as="button"
@@ -199,11 +187,11 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
 const Trigger = ({ wallet }: { wallet: App.Data.Wallet.WalletData }): JSX.Element => (
     <Popover.Button
         data-testid="UserDetails__trigger"
-        className="group/trigger button-secondary select-none border-theme-secondary-300 bg-white p-0 sm:border sm:py-2 sm:pl-4 sm:pr-3"
+        className="group/trigger button-secondary select-none border-theme-secondary-300 bg-white p-0 dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:bg-theme-dark-700 sm:border sm:py-2 sm:pl-4 sm:pr-3"
     >
         <div className="flex items-center">
-            <div className="hidden items-center space-x-3 divide-x divide-theme-secondary-300 group-hover/trigger:divide-theme-secondary-400 group-focus/trigger:divide-theme-secondary-400 sm:flex">
-                <span className="flex overflow-auto text-sm font-medium leading-5.5 text-theme-secondary-700">
+            <div className="hidden items-center space-x-3 divide-x divide-theme-secondary-300 group-hover/trigger:divide-theme-secondary-400 group-focus/trigger:divide-theme-secondary-400 dark:divide-theme-dark-700 dark:group-hover/trigger:divide-theme-dark-700 dark:group-focus/trigger:divide-theme-dark-700 sm:flex">
+                <span className="flex overflow-auto text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200">
                     {wallet.domain !== null ? (
                         <span
                             data-testid="UserDetails__domain"
@@ -254,16 +242,18 @@ const DropdownNavigationLink = ({
         method={method}
         as={as}
         className={cn(
-            "transition-default flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 md-lg:px-6",
-            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300",
+            "transition-default group flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 dark:text-theme-dark-200 dark:hover:text-theme-dark-50 md-lg:px-6",
+            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300 dark:hover:bg-theme-dark-800 dark:focus-visible:outline-theme-primary-700 ",
         )}
         {...properties}
     >
         <div className="flex items-center space-x-3 rounded-full">
-            <Icon
-                name={icon}
-                size="lg"
-            />
+            <div className="dark:text-theme-dark-300 dark:group-hover:text-theme-dark-200">
+                <Icon
+                    name={icon}
+                    size="lg"
+                />
+            </div>
 
             <span>{label}</span>
         </div>

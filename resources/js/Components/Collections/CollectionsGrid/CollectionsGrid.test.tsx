@@ -1,9 +1,29 @@
+import { type SpyInstance } from "vitest";
 import { CollectionsGrid } from "./CollectionsGrid";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { render } from "@/Tests/testing-library";
 
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
+
 describe("CollectionsGrid", () => {
+    beforeEach(() => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        useAuthorizedActionSpy.mockRestore();
+    });
+
     it("should render loading state", () => {
         const { getByTestId } = render(
             <CollectionsGrid
