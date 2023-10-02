@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./AuthOverlay.contracts";
@@ -6,8 +8,6 @@ import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Icon } from "@/Components/Icon";
 import { OverlayButtonsWrapper } from "@/Components/Layout/Overlay/Overlay.blocks";
 const metamaskDownloadUrl = "https://metamask.io/download/";
-
-const closeText = "common.close";
 
 export const InstallMetamask = ({
     showCloseButton,
@@ -27,7 +27,7 @@ export const InstallMetamask = ({
                     onClick={closeOverlay}
                     className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
                 >
-                    {t(closeText)}
+                    {t("common.close")}
                 </Button>
             )}
 
@@ -62,7 +62,7 @@ export const ConnectionError = ({
                     onClick={closeOverlay}
                     className="w-full min-w-[81px] justify-center xs:w-auto"
                 >
-                    {t(closeText)}
+                    {t("common.close")}
                 </Button>
             )}
             <Button
@@ -126,7 +126,7 @@ export const ConnectWallet = ({
                     onClick={closeOverlay}
                     className="w-full justify-center whitespace-nowrap"
                 >
-                    {t(closeText)}
+                    {t("common.close")}
                 </Button>
             )}
 

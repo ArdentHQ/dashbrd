@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import { router } from "@inertiajs/core";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
@@ -16,8 +18,6 @@ import { toHuman } from "@/Utils/dates";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
-
-const commonText = "common.from";
 
 export const AddressLink = ({
     address,
@@ -254,7 +254,7 @@ export const Type = ({
                 {!isMdAndAbove && (
                     <div className="ml-auto flex flex-col items-end">
                         <div className="flex items-center space-x-2">
-                            <Label>{t(commonText)}</Label>
+                            <Label>{t("common.from")}</Label>
                             <AddressLink
                                 chainId={collection.chainId}
                                 address={activity.sender}
@@ -677,7 +677,7 @@ export const CollectionActivityTableItem = ({
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <Label>{t(commonText)}</Label>
+                    <Label>{t("common.from")}</Label>
                     <AddressLink
                         chainId={collection.chainId}
                         address={activity.sender}
@@ -744,7 +744,7 @@ export const CollectionActivityTableItem = ({
                     })}
                 >
                     <div className="flex items-center space-x-2">
-                        {!isXlAndAbove && <span>{t(commonText)}</span>}
+                        {!isXlAndAbove && <span>{t("common.from")}</span>}
                         <AddressLink
                             address={activity.sender}
                             chainId={collection.chainId}
