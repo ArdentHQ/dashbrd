@@ -222,8 +222,6 @@ class AlchemyPendingRequest extends PendingRequest
      * @see https://docs.alchemy.com/reference/getnftmetadatabatch
      *
      * @param  collection<int, Nft>  $nfts
-     * @param  CollectionModel  $collection
-     * @return Web3NftsChunk
      */
     public function nftMetadata(collection $nfts, CollectionModel $collection): Web3NftsChunk
     {
