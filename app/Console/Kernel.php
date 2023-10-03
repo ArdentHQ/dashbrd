@@ -104,7 +104,7 @@ class Kernel extends ConsoleKernel
         if (Config::get('dashbrd.web3_providers.'.FetchCollectionFloorPriceJob::class) === 'opensea') {
             $schedule
                 ->command(FetchCollectionFloorPrice::class, [
-                    'limit' => config('services.opensea.rate.max_requests'),
+                    '--limit' => config('services.opensea.rate.max_requests'),
                 ])
                 ->withoutOverlapping()
                 // Opensea allows 4 requests per second, using 5 seconds to leave
@@ -121,7 +121,7 @@ class Kernel extends ConsoleKernel
             // Command only fetches collections that doesn't have a slug yet
             // so in most cases it will not run any request
             ->command(FetchCollectionOpenseaSlug::class, [
-                'limit' => config('services.opensea.rate.max_requests'),
+                '--limit' => config('services.opensea.rate.max_requests'),
             ])
             ->withoutOverlapping()
             // Using something far from the second time frame that opensea allows
