@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import { DropdownButton, SortDropdown } from "@/Components/SortDropdown";
-import { render, screen } from "@/Tests/testing-library";
+import { render, screen, userEvent } from "@/Tests/testing-library";
 
 describe("SortDropdown", () => {
     it("should render the component", () => {
@@ -18,10 +18,13 @@ describe("SortDropdown", () => {
         expect(screen.getByTestId("SortDropdown")).toBeInTheDocument();
     });
 
-    it("should render the component if a function is passed as children", () => {
+    it("should render the component if a function passed as children", async () => {
         render(<SortDropdown>{() => <p>hello</p>}</SortDropdown>);
 
         expect(screen.getByTestId("SortDropdown")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("SortDropdown"));
+
         expect(screen.getByText("hello")).toBeInTheDocument();
     });
 

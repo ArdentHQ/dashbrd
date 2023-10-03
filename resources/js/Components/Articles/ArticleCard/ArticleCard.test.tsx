@@ -1,8 +1,8 @@
 import React from "react";
 import { ArticleCard } from "./ArticleCard";
+import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import { render, screen } from "@/Tests/testing-library";
-import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
 
 describe("ArticleCard", () => {
     const collections = new NFTCollectionFactory().withImage().createMany(3) as FeaturedCollectionData[];
