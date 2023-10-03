@@ -81,6 +81,40 @@ it('does not dispatch another job in the chain if there are no activities at all
     expect($collection->activity_updated_at)->not->toBeNull();
 });
 
+it('does not dispatch another job in the chain if there are no activities with the proper label', function () {
+    $collection = Collection::factory()->create([
+        'is_fetching_activity' => false,
+        'network_id' => Network::polygon()->first()->id,
+        'activity_updated_at' => null,
+    ]);
+
+    $mock = $this->mock(
+        MnemonicWeb3DataProvider::class,
+        fn ($mock) => $mock->shouldReceive('getCollectionActivity')->once()->andReturn(collect([
+            new CollectionActivity(
+                contractAddress: 'test-address',
+                tokenId: '1',
+                sender: 'test-sender',
+                recipient: 'test-recipient',
+                txHash: 'test-tx-hash',
+                logIndex: '1',
+                type: null,
+                timestamp: now(),
+                totalNative: 0,
+                totalUsd: 0,
+                extraAttributes: [],
+            )
+        ]))
+    );
+
+    (new FetchCollectionActivity($collection))->handle($mock);
+
+    $collection->refresh();
+
+    expect($collection->is_fetching_activity)->toBeFalse();
+    expect($collection->activity_updated_at)->not->toBeNull();
+});
+
 it('does not dispatch another job in the chain if there are less than 500 activities returned from the provider', function () {
     Bus::fake([FetchCollectionActivity::class]);
 
