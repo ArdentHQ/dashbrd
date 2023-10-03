@@ -71,7 +71,6 @@ class Web3NftHandler
                     'banner' => $nftData->collectionBannerImageUrl,
                     'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
                     'opensea_slug' => $nftData->collectionOpenSeaSlug,
-
                 ]),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),

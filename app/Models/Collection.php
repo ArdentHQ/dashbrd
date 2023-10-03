@@ -406,6 +406,7 @@ class Collection extends Model
             DB::raw('tokens.decimals as floor_price_decimals'),
             DB::raw(sprintf($extraAttributeSelect, 'image', 'image').' as image'),
             DB::raw(sprintf($extraAttributeSelect, 'banner', 'banner').' as banner'),
+            DB::raw(sprintf($extraAttributeSelect, 'opensea_slug', 'opensea_slug').' as opensea_slug'),
             // gets the website url with the same logic used on the `website` method
             DB::raw(sprintf('COALESCE(%s, CONCAT(networks.explorer_url, \'%s\', collections.address)) as website', sprintf($extraAttributeSelect, 'website', 'website'), '/token/')),
             DB::raw('COUNT(collection_nfts.id) as nfts_count'),

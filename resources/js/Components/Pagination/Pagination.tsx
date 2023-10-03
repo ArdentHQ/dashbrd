@@ -110,14 +110,12 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                 iconSize="xs"
                             />
                         )}
-
                         {data.meta.prev_page_url !== null && <PreviousPageLink href={data.meta.prev_page_url} />}
-
                         <div className="flex items-center space-x-0.5">
                             {showBeforeEllipsis && (
                                 <button
                                     type="button"
-                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-primary-300"
+                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-primary-300 dark:text-theme-dark-200 dark:hover:bg-theme-dark-800 dark:focus-visible:ring-theme-dark-800"
                                     data-testid="Pagination__EllipsisButton"
                                     onClick={() => {
                                         setShowInput(true);
@@ -139,7 +137,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                             {showAfterEllipsis && (
                                 <button
                                     type="button"
-                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-primary-300"
+                                    className="transition-default flex h-10 w-10 items-center space-x-4 rounded-full text-theme-secondary-700 outline-none ring-[3px] ring-transparent hover:bg-theme-secondary-300 focus-visible:ring-theme-primary-300 dark:text-theme-dark-200 dark:hover:bg-theme-dark-800 dark:focus-visible:ring-theme-dark-800"
                                     data-testid="Pagination__EllipsisButton__after"
                                     onClick={() => {
                                         setShowInput(true);
@@ -149,9 +147,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                 </button>
                             )}
                         </div>
-
                         {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
-
                         {data.meta.current_page !== data.meta.last_page && (
                             <ButtonLink
                                 href={data.meta.last_page_url}
