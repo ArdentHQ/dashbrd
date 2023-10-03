@@ -4,6 +4,7 @@ import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useCollectionArticles } from "@/Hooks/useCollectionArticles";
+import { useDebounce } from "@/Hooks/useDebounce";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
@@ -15,6 +16,7 @@ import { replaceUrlQuery } from "@/Utils/replace-url-query";
 const defaults = {
     sortBy: ArticleSortBy.latest,
     pageLimit: 24,
+    debounce: 400,
 };
 
 export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.CollectionDetailData }): JSX.Element => {
@@ -23,12 +25,12 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
     const { pageLimit: perPage, view, sort, search } = getQueryParameters();
 
     const [query, setQuery] = useState<string>(isTruthy(search) ? search : "");
+    const [debouncedQuery] = useDebounce(query, defaults.debounce);
 
     const [pageLimit, setPageLimit] = useState<number>(isTruthy(perPage) ? Number(perPage) : defaults.pageLimit);
 
     const [displayType, setDisplayType] = useState(view === "list" ? DisplayTypes.List : DisplayTypes.Grid);
 
-    console.log(ArticleSortBy);
     const [sortBy, setSortBy] = useState<ArticleSortBy>(
         (sort in ArticleSortBy ? sort : defaults.sortBy) as ArticleSortBy,
     );
@@ -36,16 +38,15 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
     const queryParameters: Record<string, string> = {
         pageLimit: pageLimit.toString(),
         sort: sortBy,
-        search: query,
+        search: debouncedQuery,
         view: displayType,
     };
-    console.log(queryParameters);
 
     useEffect(() => {
         replaceUrlQuery(queryParameters);
     }, [JSON.stringify(queryParameters)]);
 
-    const { articles, isLoading } = useCollectionArticles(collection.slug);
+    const { articles, isLoading } = useCollectionArticles(collection.slug, queryParameters);
 
     if (isLoading || !isTruthy(articles)) {
         return <>is loading</>;
