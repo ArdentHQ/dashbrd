@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Filament\Resources\UserResource\Pages\Traits;
 
 use App\Enums\Role;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 trait HandleRole
 {
-    private function setRole(Model $model, string $role)
+    private function setRole(User $model, string $role): void
     {
         /** @var User */
         $user = auth()->user();

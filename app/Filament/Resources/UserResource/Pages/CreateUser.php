@@ -6,6 +6,7 @@ namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
 use App\Filament\Resources\UserResource\Pages\Traits\HandleRole;
+use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,6 +25,7 @@ class CreateUser extends CreateRecord
 
         unset($data['role']);
 
+        /** @var User */
         $model = parent::handleRecordCreation($data);
 
         $this->setRole($model, $role);

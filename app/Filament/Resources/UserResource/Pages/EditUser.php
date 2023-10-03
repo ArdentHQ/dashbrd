@@ -6,6 +6,7 @@ namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
 use App\Filament\Resources\UserResource\Pages\Traits\HandleRole;
+use App\Models\User;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,7 @@ class EditUser extends EditRecord
 
         unset($data['role']);
 
+        /** @var User */
         $model = parent::handleRecordUpdate($record, $data);
 
         $this->setRole($model, $role);

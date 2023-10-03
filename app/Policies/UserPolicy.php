@@ -30,7 +30,7 @@ final class UserPolicy
         }
 
         // If users can create, they can update their own
-        return $this->create($user) && ($user->is($targetUser->user));
+        return $this->create($user) && $user->is($targetUser);
     }
 
     public function delete(User $user, User $targetUser): bool

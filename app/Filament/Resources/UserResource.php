@@ -8,6 +8,7 @@ use App\Enums\Role;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
+use App\Models\Role as RoleModel;
 use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -78,7 +79,12 @@ class UserResource extends Resource
 
                 TextColumn::make('role')
                     ->label('Role')
-                    ->getStateUsing(fn (User $user): string => Str::title($user->roles->first()->name))
+                    ->getStateUsing(function (User $user): string {
+                        /** @var RoleModel */
+                        $role = $user->roles()->first();
+
+                        return Str::title($role->name);
+                    })
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('email')
@@ -110,7 +116,10 @@ class UserResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->managers();
+        /** @var Builder<User> */
+        $query = parent::getEloquentQuery();
+
+        return $query->managers();
     }
 
     public static function getPages(): array
