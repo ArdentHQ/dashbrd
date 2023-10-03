@@ -1098,3 +1098,38 @@ it('sorts collections last time nft was fetched', function () {
         $collection4->id,
     ]);
 });
+
+it('sorts collections last time floor price was fetched', function () {
+    // fetched yesterday
+    $collection1 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => now()->subDays(1),
+        ],
+    ]);
+
+    // fetched one month ago
+    $collection2 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => now()->subMonth(),
+        ],
+    ]);
+
+    // never fetched
+    $collection3 = Collection::factory()->create();
+
+    // fetched now
+    $collection4 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => now(),
+        ],
+    ]);
+
+    $ids = Collection::orderByFloorPriceLastFetchedAt()->pluck('id')->toArray();
+
+    expect($ids)->toEqual([
+        $collection3->id,
+        $collection2->id,
+        $collection1->id,
+        $collection4->id,
+    ]);
+});

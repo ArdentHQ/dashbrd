@@ -498,4 +498,13 @@ class Collection extends Model
     {
         return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByFloorPriceLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'floor_price_last_fetched_at\' ASC NULLS FIRST');
+    }
 }
