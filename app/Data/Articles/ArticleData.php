@@ -47,7 +47,7 @@ class ArticleData extends Data
             category: $article->category,
             content: $article->content,
             image: $article->getMedia()->first()->getUrl(),
-            publishedAt: (int)$article->published_at->timestamp,
+            publishedAt: (int) $article->published_at->timestamp,
             userId: $article->user_id,
             featuredCollections: FeaturedCollectionData::collection($article->collections),
             metaDescription: $article->meta_description,
