@@ -214,7 +214,7 @@ it('should handle null values for opensea slug', function () {
         'minted_block' => $data->mintedBlock,
         'extra_attributes' => [
             'opensea_slug' => 'test123',
-        ]
+        ],
     ]);
 
     expect(Collection::count())->toBe(1);
@@ -280,7 +280,7 @@ it('should handle opensea slugs', function () {
         'minted_block' => $data->mintedBlock,
         'extra_attributes' => [
             'opensea_slug' => 'test123',
-        ]
+        ],
     ]);
 
     expect(Collection::count())->toBe(1);
@@ -348,7 +348,7 @@ it('should not overwrite existing extra_attributes opensea data', function () {
             'banner' => null,
             'banner_updated_at' => null,
             'website' => 'test_website',
-        ]
+        ],
     ]);
 
     expect(Collection::count())->toBe(1);
@@ -418,7 +418,7 @@ it('should handle empty extra_attribute objects', function () {
         'slug' => Str::slug($data->collectionName),
         'symbol' => $data->collectionSymbol,
         'minted_block' => $data->mintedBlock,
-        'extra_attributes' => '{}'
+        'extra_attributes' => '{}',
     ]);
 
     expect(Collection::count())->toBe(1);
