@@ -88,6 +88,15 @@ class FetchCollectionActivity implements ShouldQueue
                 'extra_attributes' => json_encode($activity->extraAttributes),
             ])->toArray();
 
+        if (count($formattedActivities) === 0) {
+            $this->collection->update([
+                'is_fetching_activity' => false,
+                'activity_updated_at' => now(),
+            ]);
+
+            return;
+        }
+
         DB::transaction(function () use ($formattedActivities, $activities) {
             NftActivity::upsert($formattedActivities, uniqueBy: ['tx_hash', 'log_index', 'collection_id', 'token_number', 'type']);
 

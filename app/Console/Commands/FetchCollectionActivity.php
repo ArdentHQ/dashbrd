@@ -16,7 +16,7 @@ class FetchCollectionActivity extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-activity {--collection-id=}';
+    protected $signature = 'collections:fetch-activity {--collection-id=}';
 
     /**
      * The console command description.
