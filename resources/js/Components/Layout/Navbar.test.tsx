@@ -1,8 +1,6 @@
 import React from "react";
-import { type SpyInstance } from "vitest";
 import { Navbar } from "@/Components/Layout/Navbar";
 import * as useAuth from "@/Hooks/useAuth";
-import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
@@ -11,20 +9,8 @@ const user = new UserDataFactory().create();
 
 const wallet = new WalletFactory().create();
 
-let useAuthorizedActionSpy: SpyInstance;
-
 describe("Navbar", () => {
     useTransactionSliderContextSpy();
-
-    beforeEach(() => {
-        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
-            signedAction: vi.fn(),
-        });
-    });
-
-    afterEach(() => {
-        useAuthorizedActionSpy.mockRestore();
-    });
 
     it("should render", () => {
         vi.spyOn(useAuth, "useAuth").mockReturnValue({

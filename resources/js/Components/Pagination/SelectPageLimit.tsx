@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import { Listbox } from "@/Components/Form/Listbox";
 
@@ -8,17 +9,23 @@ export const SelectPageLimit = ({
     value = 10,
     onChange,
     options = defaultOptions,
+    suffix,
+    className,
+    optionClassName,
 }: {
     value?: string | number;
     options?: Array<string | number>;
     onChange?: ({ value, url }: { value: string | number; url: string }) => void;
+    suffix: string;
+    className?: string;
+    optionClassName?: string;
 }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <Listbox
-            className="w-full sm:w-40 md:w-[13.5rem]"
-            optionsClassName="right-0 w-full sm :w-40 bottom-14"
+            className={cn("w-full xs:w-48 sm:flex sm:justify-between", className)}
+            optionsClassName={cn("right-0 w-32 bottom-16 rounded-xl", optionClassName)}
             onChange={(value) => {
                 const urlParameters = new URLSearchParams(window.location.href);
                 urlParameters.set(urlParameterKey, String(value));
@@ -27,13 +34,13 @@ export const SelectPageLimit = ({
             button={
                 <Listbox.Button data-testid="Listbox__trigger">
                     <div className="absolute inset-0 flex h-full items-center">
-                        <div className="flex h-full items-center rounded-l-xl border-r border-theme-secondary-400 bg-theme-secondary-50 px-4 text-theme-secondary-700">
+                        <div className="flex h-full items-center rounded-l-xl border-r border-theme-secondary-400 bg-theme-secondary-50 px-4 text-theme-secondary-700 dark:border-theme-dark-500 dark:bg-theme-dark-800 dark:text-theme-dark-200">
                             {t("common.show")}
                         </div>
 
-                        <div className="px-4 text-theme-secondary-700">
+                        <div className="px-4 text-theme-secondary-700 dark:text-theme-dark-200">
                             {value}
-                            <span className="sm:hidden md:inline-block">&nbsp;{t("common.records")}</span>
+                            <span> {suffix}</span>
                         </div>
                     </div>
                 </Listbox.Button>
@@ -43,6 +50,7 @@ export const SelectPageLimit = ({
                 <Listbox.Option
                     key={key}
                     value={value}
+                    hasGradient
                 >
                     {value}
                 </Listbox.Option>

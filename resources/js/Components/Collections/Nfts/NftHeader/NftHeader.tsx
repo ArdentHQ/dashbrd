@@ -1,10 +1,14 @@
+import cn from "classnames";
 import { useTranslation } from "react-i18next";
+
 import { CollectionDescription } from "@/Components/Collections/CollectionDescription";
 import { NftActions } from "@/Components/Collections/Nfts/NftHeader/NftActions";
 import { NftBasicInfo } from "@/Components/Collections/Nfts/NftHeader/NftBasicInfo";
 import { NftOwner } from "@/Components/Collections/Nfts/NftHeader/NftOwner";
+import { Marketplaces } from "@/Components/Marketplaces";
 import { Point } from "@/Components/Point";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
     nft: App.Data.Nfts.NftData;
@@ -43,6 +47,18 @@ export const NftHeader = ({
                                 description={nft.description}
                                 linkClassName="font-medium text-sm"
                             />
+
+                            {isTruthy(nft.collection.openSeaSlug) && (
+                                <div className="flex flex-row items-center gap-2">
+                                    <Point />
+                                    <Marketplaces
+                                        type="nft"
+                                        nftId={nft.tokenNumber}
+                                        address={nft.collection.address}
+                                        chainId={nft.collection.chainId}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -63,18 +79,39 @@ export const NftHeader = ({
     return (
         <>
             <div
-                className="flex w-full flex-row items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur xs:px-8 sm:border-none sm:pb-4"
+                className="flex w-full flex-col items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur xs:px-8 sm:flex-row sm:border-none sm:pb-4"
                 data-testid="NftHeader__mobile"
             >
-                <NftOwner nft={nft} />
+                <div className="flex flex-row items-center justify-center gap-2">
+                    <NftOwner nft={nft} />
 
-                <Point />
+                    <Point />
 
-                <CollectionDescription
-                    name={t("pages.nfts.about_nft")}
-                    description={nft.description}
-                    linkClassName="font-medium text-sm"
-                />
+                    <CollectionDescription
+                        name={t("pages.nfts.about_nft")}
+                        description={nft.description}
+                        linkClassName="font-medium text-sm"
+                    />
+
+                    <div
+                        className={cn("hidden", {
+                            "sm:block": isTruthy(nft.collection.openSeaSlug),
+                        })}
+                        data-testid="NftHeader__mobile__marketplaces_point"
+                    >
+                        <Point />
+                    </div>
+                </div>
+                <div>
+                    {isTruthy(nft.collection.openSeaSlug) && (
+                        <Marketplaces
+                            type="nft"
+                            nftId={nft.tokenNumber}
+                            address={nft.collection.address}
+                            chainId={nft.collection.chainId}
+                        />
+                    )}
+                </div>
             </div>
 
             <div className="mb-6 flex w-full flex-col gap-4 border-b border-solid border-theme-secondary-300 bg-white pb-6 pt-4">

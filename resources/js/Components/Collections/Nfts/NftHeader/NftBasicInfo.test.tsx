@@ -14,7 +14,7 @@ describe("NftBasicInfo", () => {
     });
 
     it("should render collection image and name", () => {
-        const collection = new NFTCollectionFactory().create();
+        const collection = new NFTCollectionFactory().withImage().create();
 
         const nft = new NftFactory().create({
             collection,

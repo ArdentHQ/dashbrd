@@ -3,6 +3,8 @@ import GalleryNftDataFactory from "./GalleryNftDataFactory";
 import GalleryWalletDataFactory from "./GalleryWalletDataFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
 
+const url = "http://test.test";
+
 export default class GalleryDataFactory extends ModelFactory<App.Data.Gallery.GalleryData> {
     protected factory(): App.Data.Gallery.GalleryData {
         return {
@@ -21,17 +23,17 @@ export default class GalleryDataFactory extends ModelFactory<App.Data.Gallery.Ga
                     data: new GalleryNftDataFactory().createMany(faker.datatype.number({ min: 0, max: 3 })),
                     links: [
                         {
-                            url: "http://test.test",
+                            url,
                             label: "test",
                             active: true,
                         },
                     ],
                     meta: {
                         current_page: 1,
-                        first_page_url: "http://test.test",
+                        first_page_url: url,
                         from: 1,
                         last_page: 1,
-                        last_page_url: "http://test.test",
+                        last_page_url: url,
                         next_page_url: null,
                         path: "test",
                         per_page: 10,

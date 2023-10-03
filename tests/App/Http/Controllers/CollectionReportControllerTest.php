@@ -5,136 +5,165 @@ declare(strict_types=1);
 use App\Enums\ToastType;
 use App\Models\Collection;
 use App\Models\Report;
+use App\Support\Facades\Signature;
 
-it('can create a new report', function () {
-    $user = createUser();
-    $collection = Collection::factory()->create();
+describe('user without a signed wallet', function () {
+    beforeEach(function () {
+        Signature::shouldReceive('walletIsSigned')
+            ->andReturn(false);
+    });
 
-    expect($collection->reports()->count())->toBe(0);
+    it('cannot create a new report', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
 
-    $this->actingAs($user)->post(route('collection-reports.create', $collection), [
-        'reason' => 'spam',
-    ]);
+        expect($collection->reports()->count())->toBe(0);
 
-    expect($collection->reports()->count())->toBe(1);
+        $this->actingAs($user)->post(route('collection-reports.create', $collection), [
+            'reason' => 'spam',
+        ])->assertRedirect();
 
-    $report = $collection->reports()->first();
-
-    expect($report->user->is($user))->toBeTrue();
-    expect($report->reason)->toBe('spam');
+        expect($collection->reports()->count())->toBe(0);
+    });
 });
 
-it('requires a reason', function () {
-    $user = createUser();
-    $collection = Collection::factory()->create();
+describe('user with a signed wallet', function () {
+    beforeEach(function () {
+        Signature::shouldReceive('walletIsSigned')
+            ->andReturn(true);
+    });
 
-    expect($collection->reports()->count())->toBe(0);
+    it('can create a new report', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
 
-    $this->actingAs($user)->post(route('collection-reports.create', $collection), [
-        'reason' => '',
-    ])->assertSessionHasErrors('reason');
+        expect($collection->reports()->count())->toBe(0);
 
-    expect($collection->reports()->count())->toBe(0);
-});
-
-it('requires a valid reason', function () {
-    $user = createUser();
-    $collection = Collection::factory()->create();
-
-    expect($collection->reports()->count())->toBe(0);
-
-    $this->actingAs($user)->post(route('collection-reports.create', $collection), [
-        'reason' => 'invalid',
-    ])->assertSessionHasErrors('reason');
-
-    expect($collection->reports()->count())->toBe(0);
-});
-
-it('should throttle 1 report per day per collection', function () {
-    $user = createUser();
-    $collection = Collection::factory()->create();
-    $secondCollection = Collection::factory()->create();
-
-    expect($collection->reports()->count())->toBe(0);
-
-    $this->actingAs($user)
-        ->post(route('collection-reports.create', $collection), [
+        $this->actingAs($user)->post(route('collection-reports.create', $collection), [
             'reason' => 'spam',
         ]);
 
-    $this->actingAs($user)
-        ->post(route('collection-reports.create', $collection), [
-            'reason' => 'spam',
-        ])
-        ->assertSessionHas([
-            'toast:message' => trans('pages.reports.throttle', [
-                'time' => trans_choice('common.n_hours', 23, ['count' => 23]),
-            ]),
-            'toast:type' => ToastType::Warning->value,
-        ]);
+        expect($collection->reports()->count())->toBe(1);
 
-    expect($collection->reports()->count())->toBe(1);
+        $report = $collection->reports()->first();
 
-    $report = $collection->reports()->first();
+        expect($report->user->is($user))->toBeTrue();
+        expect($report->reason)->toBe('spam');
+    });
 
-    expect($report->user->is($user))->toBeTrue();
-    expect($report->reason)->toBe('spam');
+    it('requires a reason', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
 
-    $this->actingAs($user)
-        ->post(route('collection-reports.create', $secondCollection), [
-            'reason' => 'spam',
-        ]);
+        expect($collection->reports()->count())->toBe(0);
 
-    $this->actingAs($user)
-        ->post(route('collection-reports.create', $secondCollection), [
-            'reason' => 'spam',
-        ])
-        ->assertSessionHas([
-            'toast:message' => trans('pages.reports.throttle', [
-                'time' => trans_choice('common.n_hours', 23, ['count' => 23]),
-            ]),
-            'toast:type' => ToastType::Warning->value,
-        ]);
+        $this->actingAs($user)->post(route('collection-reports.create', $collection), [
+            'reason' => '',
+        ])->assertSessionHasErrors('reason');
 
-    expect($secondCollection->reports()->count())->toBe(1);
+        expect($collection->reports()->count())->toBe(0);
+    });
 
-    $report = $secondCollection->reports()->first();
+    it('requires a valid reason', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
 
-    expect($report->user->is($user))->toBeTrue();
-    expect($report->reason)->toBe('spam');
+        expect($collection->reports()->count())->toBe(0);
 
-    expect(Report::where('user_id', $user->id)->count())->toBe(2);
-});
+        $this->actingAs($user)->post(route('collection-reports.create', $collection), [
+            'reason' => 'invalid',
+        ])->assertSessionHasErrors('reason');
 
-it('should throttle 6 reports total per hour', function () {
-    $user = createUser();
+        expect($collection->reports()->count())->toBe(0);
+    });
 
-    $collections = Collection::factory(6)->create();
-    $otherCollections = Collection::factory(4)->create();
+    it('should throttle 1 report per day per collection', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
+        $secondCollection = Collection::factory()->create();
 
-    foreach ($collections as $collection) {
+        expect($collection->reports()->count())->toBe(0);
+
         $this->actingAs($user)
             ->post(route('collection-reports.create', $collection), [
                 'reason' => 'spam',
-            ])
-            ->assertSessionHas([
-                'toast:message' => trans('pages.reports.success'),
-                'toast:type' => ToastType::Success->value,
             ]);
-    }
 
-    foreach ($otherCollections as $collection) {
         $this->actingAs($user)
             ->post(route('collection-reports.create', $collection), [
                 'reason' => 'spam',
             ])
             ->assertSessionHas([
                 'toast:message' => trans('pages.reports.throttle', [
-                    'time' => trans_choice('common.n_minutes', 59, ['count' => 59]),
+                    'time' => trans_choice('common.n_hours', 23, ['count' => 23]),
                 ]),
                 'toast:type' => ToastType::Warning->value,
             ]);
-    }
 
-    expect(Report::where('user_id', $user->id)->count())->toBe(6);
+        expect($collection->reports()->count())->toBe(1);
+
+        $report = $collection->reports()->first();
+
+        expect($report->user->is($user))->toBeTrue();
+        expect($report->reason)->toBe('spam');
+
+        $this->actingAs($user)
+            ->post(route('collection-reports.create', $secondCollection), [
+                'reason' => 'spam',
+            ]);
+
+        $this->actingAs($user)
+            ->post(route('collection-reports.create', $secondCollection), [
+                'reason' => 'spam',
+            ])
+            ->assertSessionHas([
+                'toast:message' => trans('pages.reports.throttle', [
+                    'time' => trans_choice('common.n_hours', 23, ['count' => 23]),
+                ]),
+                'toast:type' => ToastType::Warning->value,
+            ]);
+
+        expect($secondCollection->reports()->count())->toBe(1);
+
+        $report = $secondCollection->reports()->first();
+
+        expect($report->user->is($user))->toBeTrue();
+        expect($report->reason)->toBe('spam');
+
+        expect(Report::where('user_id', $user->id)->count())->toBe(2);
+    });
+
+    it('should throttle 6 reports total per hour', function () {
+        $user = createUser();
+
+        $collections = Collection::factory(6)->create();
+        $otherCollections = Collection::factory(4)->create();
+
+        foreach ($collections as $collection) {
+            $this->actingAs($user)
+                ->post(route('collection-reports.create', $collection), [
+                    'reason' => 'spam',
+                ])
+                ->assertSessionHas([
+                    'toast:message' => trans('pages.reports.success'),
+                    'toast:type' => ToastType::Success->value,
+                ]);
+        }
+
+        foreach ($otherCollections as $collection) {
+            $this->actingAs($user)
+                ->post(route('collection-reports.create', $collection), [
+                    'reason' => 'spam',
+                ])
+                ->assertSessionHas([
+                    'toast:message' => trans('pages.reports.throttle', [
+                        'time' => trans_choice('common.n_minutes', 59, ['count' => 59]),
+                    ]),
+                    'toast:type' => ToastType::Warning->value,
+                ]);
+        }
+
+        expect(Report::where('user_id', $user->id)->count())->toBe(6);
+    });
+
 });
