@@ -20,6 +20,20 @@ it('dispatches a job for collections', function () {
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 3);
 });
 
+it('dispatches a job for collections with a limit', function () {
+    Bus::fake();
+
+    Collection::factory(3)->create();
+
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
+
+    $this->artisan('nfts:fetch-collection-floor-price', [
+        '--limit' => '2',
+    ]);
+
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 2);
+});
+
 it('dispatches a job for collections if provider is not opensea', function () {
     Config::set('dashbrd.web3_providers.'.FetchCollectionFloorPrice::class, 'mnemonic');
 
