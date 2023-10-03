@@ -231,7 +231,6 @@ class CollectionController extends Controller
 
         $articles = $collection
             ->articlesWithCollections()
-            ->orderByPivot('order_index', 'asc')
             ->paginate($pageLimit);
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
