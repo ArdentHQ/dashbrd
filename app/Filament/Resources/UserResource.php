@@ -73,10 +73,8 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('username')
-                    ->label('Username')
-                    ->sortable()
-                    ->searchable(),
+                SpatieMediaLibraryImageColumn::make('avatar')->collection('avatar')->conversion('thumb@2x'),
+
                 TextColumn::make('role')
                     ->label('Role')
                     ->getStateUsing(fn (User $user): string => Str::title($user->roles->first()->name))
@@ -90,8 +88,10 @@ class UserResource extends Resource
                     ->label('Display Name')
                     ->sortable()
                     ->searchable(),
-                SpatieMediaLibraryImageColumn::make('avatar')->collection('avatar')->conversion('thumb@2x'),
-
+                TextColumn::make('username')
+                    ->label('Username')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
