@@ -18,6 +18,13 @@ describe("SortDropdown", () => {
         expect(screen.getByTestId("SortDropdown")).toBeInTheDocument();
     });
 
+    it("should render the component if a function is passed as children", () => {
+        render(<SortDropdown>{() => <p>hello</p>}</SortDropdown>);
+
+        expect(screen.getByTestId("SortDropdown")).toBeInTheDocument();
+        expect(screen.getByText("hello")).toBeInTheDocument();
+    });
+
     it("should render component in disabled state", () => {
         render(
             <SortDropdown disabled={true}>

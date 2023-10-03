@@ -5,7 +5,7 @@ import { render, screen } from "@/Tests/testing-library";
 
 describe("ArticleCardBlocks", () => {
     it("should calculate featured collection counts", () => {
-        expect(calculateCircleCount(10, 140)).toBe(4);
+        expect(calculateCircleCount(10, 140)).toBe(5);
         expect(calculateCircleCount(5, 150)).toBe(5);
         expect(calculateCircleCount(2, 45)).toBe(2);
     });

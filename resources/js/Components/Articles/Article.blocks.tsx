@@ -12,13 +12,14 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
 
     const maxCirclesCount = Math.floor((availableWidth - overlapWidth) / circleWidth);
 
-    // if all circles or only one circle doesn't fit then return total count
+    // if all circles fit or only one circle doesn't fit then return total count
     if (Math.abs(maxCirclesCount - totalCount) <= 1) {
         return totalCount;
     }
 
     let showCount = maxCirclesCount - 2;
 
+    // if there is no enough space show only 1 collection
     if (showCount < 1) {
         return 1;
     }
