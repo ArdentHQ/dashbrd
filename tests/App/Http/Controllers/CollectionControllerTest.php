@@ -1149,3 +1149,32 @@ it('should return collection articles', function () {
     expect(count($response['paginated']['data']))->toEqual(2)
         ->and(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(7);
 });
+
+it('should return collection articles with the given pageLimit', function ($pageLimit, $resultCount) {
+    $collections = Collection::factory(2)->create();
+
+    $articles = Article::factory(35)->create([
+        'published_at' => now()->format('Y-m-d')
+    ]);
+
+    $articles->map(fn($article) => $article
+        ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
+        ->preservingOriginal()
+        ->toMediaCollection()
+    );
+
+    $collections->map(function ($collection) use ($articles) {
+        $collection->articles()->attach($articles, ['order_index' => 1]);
+    });
+
+    $response = $this->getJson(route('collections.articles', [
+        'collection' => $collections->first(),
+        'pageLimit' => $pageLimit
+    ]))->json('articles');
+
+    expect(count($response['paginated']['data']))->toEqual($resultCount);
+})->with([
+    [123, 35],
+    [12, 12],
+    [24, 24],
+]);
