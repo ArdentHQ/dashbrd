@@ -90,7 +90,6 @@ module.exports = {
         "sonarjs/cognitive-complexity": "error",
         "sonarjs/no-all-duplicated-branches": "error",
         "sonarjs/no-collapsible-if": "error",
-        "sonarjs/no-duplicate-string": ["error", 5],
         "sonarjs/no-identical-expressions": "error",
         "sonarjs/no-identical-functions": "error",
         "sonarjs/no-redundant-jump": "error",

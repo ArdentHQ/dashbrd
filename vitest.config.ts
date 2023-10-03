@@ -19,8 +19,10 @@ export default mergeConfig(
             environment: "jsdom",
             isolate: true,
             setupFiles: ["./vitest.setup.tsx"],
-            deps: {
-                inline: ["@ardenthq/sdk-intl"],
+            server: {
+                deps: {
+                    inline: ["@ardenthq/sdk-intl"],
+                },
             },
             coverage: {
                 all: true,

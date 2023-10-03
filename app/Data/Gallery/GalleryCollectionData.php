@@ -31,6 +31,7 @@ class GalleryCollectionData extends Data
         public ?string $image,
         public ?string $banner,
         public ?string $bannerUpdatedAt,
+        public ?string $openSeaSlug,
         public ?string $website,
         public ?int $nftsCount,
     ) {
@@ -52,6 +53,7 @@ class GalleryCollectionData extends Data
             image: $collection->extra_attributes->get('image'),
             banner: $collection->extra_attributes->get('banner'),
             bannerUpdatedAt: $collection->extra_attributes->get('banner_updated_at'),
+            openSeaSlug: $collection->extra_attributes->get('opensea_slug'),
             website: $collection->website(),
             nftsCount: $collection->nfts_count ?? null,
         );

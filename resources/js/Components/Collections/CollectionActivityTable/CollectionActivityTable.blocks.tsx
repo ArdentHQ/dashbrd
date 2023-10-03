@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import { router } from "@inertiajs/core";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";

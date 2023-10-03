@@ -16,6 +16,7 @@ return [
     'alchemy' => 'https://www.alchemy.com',
     'moralis' => 'https://moralis.io',
     'mnemonic' => 'https://www.mnemonichq.com',
+    'opensea' => 'https://opensea.io/',
     'explorers' => [
         'etherscan' => [
             'token_transactions' => 'https://etherscan.io/token/:token?a=:address',
@@ -40,6 +41,24 @@ return [
             'addresses' => 'https://goerli.etherscan.io/address/:address',
             'transactions' => 'https://goerli.etherscan.io/tx/:id',
             'nft' => 'https://goerli.etherscan.io/nft/:address/:nftId',
+        ],
+    ],
+    'marketplaces' => [
+        'opensea' => [
+            'collection' => 'https://opensea.io/assets/:network/:address',
+            'nft' => 'https://opensea.io/assets/:network/:address/:nftId',
+        ],
+        'rarible' => [
+            'collection' => 'https://rarible.com/collection/:address/items',
+            'nft' => 'https://rarible.com/token/:address::nftId',
+        ],
+        'blur' => [
+            'collection' => 'https://blur.io/collection/:address',
+            'nft' => 'https://blur.io/asset/:address/:nftId',
+        ],
+        'looksrare' => [
+            'collection' => 'https://looksrare.org/collections/:address',
+            'nft' => 'https://looksrare.org/collections/:address/:nftId',
         ],
     ],
 ];

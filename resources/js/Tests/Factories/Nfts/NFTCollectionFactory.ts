@@ -12,6 +12,7 @@ export default class NFTCollectionFactory extends ModelFactory<App.Data.Nfts.Nft
             floorPrice: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
             website: faker.internet.url(),
             image: this.optional(faker.image.avatar(), 0.9),
+            openSeaSlug: this.optional(faker.lorem.slug()),
         };
     }
 
