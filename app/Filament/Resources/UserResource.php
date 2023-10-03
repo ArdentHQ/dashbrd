@@ -31,7 +31,6 @@ class UserResource extends Resource
         return $form
             ->schema([
                 TextInput::make('email')->required()->columnSpan('full')->email(),
-                TextInput::make('username')->columnSpan('full'),
                 TextInput::make('password')->columnSpan('full')->password()
                     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                     ->dehydrated(fn (?string $state): bool => filled($state))
@@ -86,10 +85,6 @@ class UserResource extends Resource
                     ->searchable(),
                 TextColumn::make('display_name')
                     ->label('Display Name')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('username')
-                    ->label('Username')
                     ->sortable()
                     ->searchable(),
             ])
