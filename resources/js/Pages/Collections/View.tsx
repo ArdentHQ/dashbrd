@@ -170,7 +170,7 @@ const CollectionsView = ({
     const tabChangeHandler = (tab: TabName): void => {
         setSelectedTab(tab);
 
-        setFilterIsDirty(true);
+        // setFilterIsDirty(true);
     };
 
     const activityPageLimitChangeHandler = (pageLimit: number): void => {

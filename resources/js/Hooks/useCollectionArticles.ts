@@ -7,7 +7,7 @@ interface Properties {
 }
 
 export const useCollectionArticles = (collectionSlug: string): Properties => {
-    const queryKey: QueryKey = ["collection-article-" + collectionSlug];
+    const queryKey: QueryKey = ["collection-articles-" + collectionSlug];
 
     const { data, isLoading } = useQuery({
         queryKey,

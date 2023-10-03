@@ -7,7 +7,7 @@ import { Tooltip } from "@/Components/Tooltip";
 
 interface Properties {
     disabled?: boolean;
-    children: ReactElement;
+    children: ReactElement | (({ setOpen }: { setOpen: (open: boolean) => void }) => JSX.Element | JSX.Element[]);
 }
 
 export const SortDropdown = ({ disabled = false, children }: Properties): JSX.Element => {
@@ -44,7 +44,7 @@ export const SortDropdown = ({ disabled = false, children }: Properties): JSX.El
                 className="left-0 right-0 z-10 w-full origin-top-right px-6 sm:left-auto sm:mt-2 sm:h-fit sm:w-48 sm:px-0"
                 contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5"
             >
-                {children}
+                {({ setOpen }) => (typeof children === "function" ? children({ setOpen }) : children)}
             </Dropdown.Content>
         </Dropdown>
     );

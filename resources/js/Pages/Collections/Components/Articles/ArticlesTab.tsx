@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
@@ -7,30 +7,50 @@ import { useCollectionArticles } from "@/Hooks/useCollectionArticles";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
-import { ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
+import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
+
+const defaults = {
+    sortBy: ArticleSortBy.latest,
+    pageLimit: 24,
+};
 
 export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.CollectionDetailData }): JSX.Element => {
     const { t } = useTranslation();
-    const [query, setQuery] = useState("");
+
+    const { pageLimit: perPage, view, sort, search } = getQueryParameters();
+
+    const [query, setQuery] = useState<string>(isTruthy(search) ? search : "");
+
+    const [pageLimit, setPageLimit] = useState<number>(isTruthy(perPage) ? Number(perPage) : defaults.pageLimit);
+
+    const [displayType, setDisplayType] = useState(view === "list" ? DisplayTypes.List : DisplayTypes.Grid);
+
+    console.log(ArticleSortBy);
+    const [sortBy, setSortBy] = useState<ArticleSortBy>(
+        (sort in ArticleSortBy ? sort : defaults.sortBy) as ArticleSortBy,
+    );
+
+    const queryParameters: Record<string, string> = {
+        pageLimit: pageLimit.toString(),
+        sort: sortBy,
+        search: query,
+        view: displayType,
+    };
+    console.log(queryParameters);
+
+    useEffect(() => {
+        replaceUrlQuery(queryParameters);
+    }, [JSON.stringify(queryParameters)]);
 
     const { articles, isLoading } = useCollectionArticles(collection.slug);
-    console.log(articles);
-
-    const queryParameters = getQueryParameters();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [pageLimit, setPageLimit] = useState<number>(24);
-
-    const [displayType, setDisplayType] = useState(
-        queryParameters.view === "list" ? DisplayTypes.List : DisplayTypes.Grid,
-    );
 
     if (isLoading || !isTruthy(articles)) {
         return <>is loading</>;
     }
 
-    // replace this with articles count
     const articlesCount = articles.paginated.meta.total;
 
     return (
@@ -55,8 +75,10 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
                 </div>
 
                 <ArticleSortDropdown
-                    activeSort={"latest"}
-                    onSort={() => 1}
+                    activeSort={sortBy}
+                    onSort={(sort) => {
+                        setSortBy(sort);
+                    }}
                 />
             </div>
             <div className="mb-4 sm:hidden">
