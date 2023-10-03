@@ -1129,10 +1129,10 @@ it('should return collection articles', function () {
     $collections = Collection::factory(8)->create();
 
     $articles = Article::factory(2)->create([
-        'published_at' => now()->format('Y-m-d')
+        'published_at' => now()->format('Y-m-d'),
     ]);
 
-    $articles->map(fn($article) => $article
+    $articles->map(fn ($article) => $article
         ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
         ->preservingOriginal()
         ->toMediaCollection()
@@ -1154,10 +1154,10 @@ it('should return collection articles with the given pageLimit', function ($page
     $collections = Collection::factory(2)->create();
 
     $articles = Article::factory(35)->create([
-        'published_at' => now()->format('Y-m-d')
+        'published_at' => now()->format('Y-m-d'),
     ]);
 
-    $articles->map(fn($article) => $article
+    $articles->map(fn ($article) => $article
         ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
         ->preservingOriginal()
         ->toMediaCollection()
@@ -1169,7 +1169,7 @@ it('should return collection articles with the given pageLimit', function ($page
 
     $response = $this->getJson(route('collections.articles', [
         'collection' => $collections->first(),
-        'pageLimit' => $pageLimit
+        'pageLimit' => $pageLimit,
     ]))->json('articles');
 
     expect(count($response['paginated']['data']))->toEqual($resultCount);
