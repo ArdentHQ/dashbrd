@@ -2,7 +2,7 @@ import { t } from "i18next";
 import React from "react";
 import { PageInput } from "./PageInput";
 import { render, screen } from "@/Tests/testing-library";
-import { allBreakpoints } from "@/Tests/utils";
+import { allBreakpoints, Breakpoint } from "@/Tests/utils";
 
 describe("Pagination__PageInput", () => {
     it("renders", () => {
@@ -33,7 +33,7 @@ describe("Pagination__PageInput", () => {
             { breakpoint },
         );
 
-        if (breakpoint === "xs") {
+        if (breakpoint === Breakpoint.xs) {
             expect(screen.getByTestId("Pagination__PageInput__input")).toHaveAttribute(
                 "placeholder",
                 t("common.pagination_input_placeholder_mobile").toString(),

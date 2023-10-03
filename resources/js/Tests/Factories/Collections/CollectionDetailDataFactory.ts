@@ -17,6 +17,7 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
             image: this.optional(faker.image.avatar(), 0.9),
             banner: this.optional(faker.image.avatar()),
             bannerUpdatedAt: this.optional(faker.date.recent().toISOString()),
+            openSeaSlug: this.optional(faker.lorem.slug()),
             website: this.optional(faker.internet.url()),
             twitter: this.optional(faker.internet.url()),
             discord: this.optional(faker.internet.url()),

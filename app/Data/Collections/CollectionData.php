@@ -28,6 +28,7 @@ class CollectionData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?string $banner,
+        public ?string $openSeaSlug,
         public string $website,
         public int $nftsCount,
     ) {
@@ -53,6 +54,7 @@ class CollectionData extends Data
          * floor_price_decimals: int | null,
          * image: string | null,
          * banner: string | null,
+         * opensea_slug: string | null,
          * website: string,
          * nfts_count: int,
          * } $collection
@@ -69,6 +71,7 @@ class CollectionData extends Data
             floorPriceDecimals: $collection->floor_price_decimals,
             image: $collection->image,
             banner: $collection->banner,
+            openSeaSlug: $collection->opensea_slug,
             website: $collection->website,
             nftsCount: $collection->nfts_count,
         );

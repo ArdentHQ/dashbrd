@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Web3\Footprint;
+namespace App\Services\Web3\Opensea;
 
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
@@ -15,12 +15,12 @@ use App\Models\Network;
 use App\Models\Wallet;
 use App\Services\Traits\LoadsFromCache;
 use App\Services\Web3\AbstractWeb3DataProvider;
-use App\Support\Facades\Footprint;
+use App\Support\Facades\Opensea;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection;
 
-final class FootprintWeb3DataProvider extends AbstractWeb3DataProvider
+final class OpenseaWeb3DataProvider extends AbstractWeb3DataProvider
 {
     use LoadsFromCache;
     use WithFaker;
@@ -53,7 +53,19 @@ final class FootprintWeb3DataProvider extends AbstractWeb3DataProvider
     public function getNftCollectionFloorPrice(Chains $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return $this->fromCache(
-            static fn () => Footprint::getNftCollectionFloorPrice($chain, $contractAddress),
+            function () use ($contractAddress, $chain) {
+                $collection = CollectionModel::where('address', $contractAddress)
+                    ->whereHas('network', fn ($query) => $query->where('chain_id', $chain->value))
+                    ->firstOrFail();
+
+                $openseaSlug = $collection->openSeaSlug();
+
+                if ($openseaSlug === null) {
+                    return null;
+                }
+
+                return Opensea::getNftCollectionFloorPrice($openseaSlug);
+            },
             [$chain->name, $contractAddress]
         );
     }
@@ -70,6 +82,6 @@ final class FootprintWeb3DataProvider extends AbstractWeb3DataProvider
      */
     public function getMiddleware(): array
     {
-        return [new RateLimited(Service::Footprint)];
+        return [new RateLimited(Service::Opensea)];
     }
 }
