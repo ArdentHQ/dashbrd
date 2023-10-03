@@ -72,6 +72,7 @@ RETURN NEW;
 END;
 $_$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS prune_empty_galleries_on_nft_change on nfts;
 CREATE TRIGGER prune_empty_galleries_on_nft_change
     AFTER UPDATE ON nfts
     FOR EACH ROW WHEN ( (OLD.wallet_id IS NOT NULL AND NEW.wallet_id IS NULL) OR (OLD.wallet_id != NEW.wallet_id) OR (OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL))
