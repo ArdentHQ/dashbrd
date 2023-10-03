@@ -40,7 +40,7 @@ class FetchCollectionFloorPrice extends Command
                 );
             },
             queryCallback: function ($query) use ($limit) {
-                $query
+                return $query
                     ->when(
                         $limit !== null,
                         fn ($q) => $q
