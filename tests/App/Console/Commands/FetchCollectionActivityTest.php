@@ -19,7 +19,7 @@ it('dispatches a job only for collections that are not currently already retriev
 
     Bus::assertDispatchedTimes(FetchCollectionActivity::class, 0);
 
-    $this->artisan('nfts:fetch-collection-activity');
+    $this->artisan('collections:fetch-activity');
 
     Bus::assertDispatchedTimes(FetchCollectionActivity::class, 1);
 });
@@ -31,7 +31,7 @@ it('dispatches a job for a specific collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionActivity::class, 0);
 
-    $this->artisan('nfts:fetch-collection-activity', [
+    $this->artisan('collections:fetch-activity', [
         '--collection-id' => $collection->id,
     ]);
 
