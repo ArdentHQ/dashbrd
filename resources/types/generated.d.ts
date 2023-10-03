@@ -89,10 +89,10 @@ declare namespace App.Data.Articles {
         slug: string;
         category: App.Enums.ArticleCategoryEnum;
         content: string;
+        image: string;
+        publishedAt: number;
         userId: number;
         featuredCollections: Array<App.Data.Articles.FeaturedCollectionData>;
-        image: string | null;
-        publishedAt: string | null;
         metaDescription: string | null;
     };
     export type ArticlesData = {

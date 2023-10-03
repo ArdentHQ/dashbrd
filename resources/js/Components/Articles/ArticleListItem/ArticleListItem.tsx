@@ -1,5 +1,6 @@
+import { DateTime } from "@ardenthq/sdk-intl";
 import { useTranslation } from "react-i18next";
-import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
+import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
 
 export const ArticleListItem = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
@@ -26,7 +27,9 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                 </h4>
 
                 <div className="flex items-center space-x-3">
-                    <div className="text-xs font-medium text-theme-secondary-700 sm:text-sm">24 Oct 2023</div>
+                    <div className="text-xs font-medium text-theme-secondary-700 sm:text-sm">
+                        {DateTime.fromUnix(article.publishedAt).format("D MMM YYYY")}
+                    </div>
                     <span className="block h-[5px] w-[5px] rounded-full bg-theme-secondary-400"></span>
                     <div className="flex flex-1 items-center">
                         <span className="mr-2 hidden shrink-0 text-sm font-medium text-theme-secondary-700 sm:block">

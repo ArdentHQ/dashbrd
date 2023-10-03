@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
+import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 
 export default {
     title: "Articles/FeaturedCollections",

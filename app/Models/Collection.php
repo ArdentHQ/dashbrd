@@ -122,6 +122,7 @@ class Collection extends Model
     public function scopeArticlesWithCollections(): BelongsToMany
     {
         return $this->articles()
+            ->isPublished()
             ->orderByPivot('order_index', 'asc')
             ->with(['collections' => function ($query) {
                 $query->where('collections.id', '!=', $this->id)
