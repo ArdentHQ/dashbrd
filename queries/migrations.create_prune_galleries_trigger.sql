@@ -43,7 +43,6 @@ AND
         WHERE galleries.id = soft_deleted_nfts.gallery_id
     );
 
-
 -- Lastly, delete all empty galleries of old user
 DELETE FROM galleries
 WHERE

@@ -3,16 +3,14 @@ RETURNS TRIGGER AS $$
 DECLARE
 _user_id BIGINT;
 BEGIN
-    -- Fetch user id of old wallet
-    SELECT g.user_id INTO _user_id FROM galleries g
-        JOIN wallets w ON g.user_id = w.user_id AND w.id = OLD.wallet_id
-    LIMIT 1;
-
+  
     WITH recovered_nfts AS (
         SELECT ng.gallery_id, ng.nft_id
         FROM nft_gallery ng
         JOIN nfts n ON ng.nft_id = n.id AND n.id = NEW.id AND n.wallet_id IS NOT NULL
         JOIN galleries g ON g.id = ng.gallery_id
+        JOIN wallets w ON g.user_id = w.user_id AND w.id = n.wallet_id
+        where ng.deleted_at IS NOT NULL 
     )
     UPDATE nft_gallery
         SET deleted_at = NULL
