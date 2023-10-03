@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Jobs\FetchCollectionOpenseaSlug;
-use App\Jobs\Middleware\RateLimited;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\Nft;
@@ -51,21 +50,4 @@ it('should handle nft is not found', function () {
 
     expect($collection->fresh()->extra_attributes->get('opensea_slug'))->toBeNull();
     expect($collection->fresh()->extra_attributes->get('opensea_slug_last_fetched_at'))->not->toBeNull();
-});
-
-it('should have rate limit middleware', function () {
-    $collection = Collection::factory()->create();
-
-    $middlewares = (new FetchCollectionOpenseaSlug($collection, now()->addMinute()))->middleware();
-
-    expect($middlewares)->toHaveCount(1);
-    expect($middlewares[0])->toBeInstanceOf(RateLimited::class);
-});
-
-it('should have retry until value', function () {
-    $collection = Collection::factory()->create();
-
-    $retryUntil = now()->addMinutes(10);
-
-    expect((new FetchCollectionOpenseaSlug($collection, $retryUntil))->retryUntil())->toBe($retryUntil);
 });

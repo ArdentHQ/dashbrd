@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\Service;
-use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
 use App\Support\Facades\Opensea;
 use App\Support\Queues;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,8 +26,7 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public Collection $collection,
-        public DateTime $retryUntil,
+        public Collection $collection
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -44,6 +40,9 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
         Log::info('FetchCollectionOpenseaSlug Job: Processing', [
             'collection' => $this->collection->address,
         ]);
+
+        $this->collection->extra_attributes->set('opensea_slug_last_fetched_at', Carbon::now());
+        $this->collection->save();
 
         $nft = $this->collection->nfts()->first();
 
@@ -60,11 +59,8 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
             ]);
 
             $this->collection->extra_attributes->set('opensea_slug', $result->collectionSlug());
+            $this->collection->save();
         }
-
-        $this->collection->extra_attributes->set('opensea_slug_last_fetched_at', Carbon::now());
-
-        $this->collection->save();
 
         Log::info('FetchCollectionOpenseaSlug Job: Handled', [
             'collection' => $this->collection->address,
@@ -74,20 +70,5 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return self::class.':'.$this->collection->id;
-    }
-
-    /**
-     * Get the middleware the job should pass through.
-     *
-     * @return array<int, object>
-     */
-    public function middleware(): array
-    {
-        return [new RateLimited(Service::Opensea)];
-    }
-
-    public function retryUntil(): DateTime
-    {
-        return $this->retryUntil;
     }
 }

@@ -512,6 +512,15 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeOrderByOpenseaSlugLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'opensea_slug_last_fetched_at\' ASC NULLS FIRST');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeFloorPriceNotFetchedInLastHour(Builder $query): Builder
     {
         return $query->whereRaw('extra_attributes->>\'floor_price_last_fetched_at\' < ? OR extra_attributes->>\'floor_price_last_fetched_at\' IS NULL', [now()->subHour()->toISOString()]);

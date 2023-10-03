@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionOpenseaSlug as FetchCollectionOpenseaSlugJob;
-use App\Models\Collection;
-use DateTime;
 use Illuminate\Console\Command;
 
 class FetchCollectionOpenseaSlug extends Command
@@ -18,7 +16,7 @@ class FetchCollectionOpenseaSlug extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-opensea-slug {--collection-id=}';
+    protected $signature = 'nfts:fetch-collection-opensea-slug {--collection-id=} {--limit=}';
 
     /**
      * The console command description.
@@ -32,35 +30,21 @@ class FetchCollectionOpenseaSlug extends Command
      */
     public function handle(): int
     {
+        $limit = $this->option('limit');
+
         $this->forEachCollection(
             callback: function ($collection) {
-                FetchCollectionOpenseaSlugJob::dispatch(
-                    collection: $collection,
-                    retryUntil: $this->getRetryUntil()
-                );
+                FetchCollectionOpenseaSlugJob::dispatch($collection);
             },
             queryCallback: fn ($query) => $query
                 // Does not have an opensea slug
                 ->whereNull('extra_attributes->opensea_slug')
                 // Has not been fetched
-                ->whereNull('extra_attributes->opensea_slug_last_fetched_at'),
+                ->whereNull('extra_attributes->opensea_slug_last_fetched_at')
+                ->when($limit !== null, fn ($q) => $q->orderByOpenseaSlugLastFetchedAt()),
+            limit: $limit === null ? null : (int) $limit
         );
 
         return Command::SUCCESS;
-    }
-
-    public function getRetryUntil(): DateTime
-    {
-        $total = Collection::query()
-            ->whereNull('extra_attributes->opensea_slug')
-            ->whereNull('extra_attributes->opensea_slug_last_fetched_at')
-            ->count();
-
-        $maxRequest = (int) config('services.opensea.rate.max_requests');
-        $perSeconds = (int) config('services.opensea.rate.per_seconds');
-
-        $secondsNeeded = (int) ceil($total / $maxRequest) * $perSeconds;
-
-        return now()->addSeconds($secondsNeeded);
     }
 }

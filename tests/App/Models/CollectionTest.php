@@ -1181,3 +1181,38 @@ it('filters collections whose floor price wasnt fetched in the last hour', funct
         $collection6->id,
     ]);
 });
+
+it('sorts collections last time opesea slug was fetched', function () {
+    // fetched yesterday
+    $collection1 = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug_last_fetched_at' => now()->subDays(1),
+        ],
+    ]);
+
+    // fetched one month ago
+    $collection2 = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug_last_fetched_at' => now()->subMonth(),
+        ],
+    ]);
+
+    // never fetched
+    $collection3 = Collection::factory()->create();
+
+    // fetched now
+    $collection4 = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug_last_fetched_at' => now(),
+        ],
+    ]);
+
+    $ids = Collection::orderByOpenseaSlugLastFetchedAt()->pluck('id')->toArray();
+
+    expect($ids)->toEqual([
+        $collection3->id,
+        $collection2->id,
+        $collection1->id,
+        $collection4->id,
+    ]);
+});

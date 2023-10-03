@@ -100,12 +100,6 @@ class Kernel extends ConsoleKernel
 
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
-        $schedule
-            // Command only fetches collections that doesn't have a slug yet
-            // so in most cases it will not run any request
-            ->command(FetchCollectionOpenseaSlug::class)
-            ->withoutOverlapping()
-            ->hourly();
 
         if (Config::get('dashbrd.web3_providers.'.FetchCollectionFloorPriceJob::class) === 'opensea') {
             $schedule
@@ -122,6 +116,18 @@ class Kernel extends ConsoleKernel
                 ->withoutOverlapping()
                 ->hourlyAt(5);
         }
+
+        $schedule
+            // Command only fetches collections that doesn't have a slug yet
+            // so in most cases it will not run any request
+            ->command(FetchCollectionOpenseaSlug::class, [
+                'limit' => config('services.opensea.rate.max_requests'),
+            ])
+            ->withoutOverlapping()
+            // Using something far from the second time frame that opensea allows
+            // since is not that common that the command makes an actual request
+            // and to prevent overlapping with other tasks that use opensea api
+            ->everyFifteenSeconds();
 
         $schedule
             ->command(FetchWalletNfts::class)
