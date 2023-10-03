@@ -5,53 +5,41 @@ declare(strict_types=1);
 namespace App\Policies;
 
 use App\Models\User;
-use App\Policies\Concerns\HasDefaultPolicyRules;
 
-final class UserPolicy extends Policy
+final class UserPolicy
 {
-    use HasDefaultPolicyRules;
-
-    protected string $resourceName = 'user';
-
     public function viewAny(User $user): bool
     {
-        return $this->hasPermissionTo($user, 'viewAny');
+        return $user->hasPermissionTo('user:viewAny', 'admin');
     }
 
     public function view(User $user, User $targetUser): bool
     {
-        if ($targetUser->id === $user->id) {
-            return true;
-        }
-
-        return $this->hasPermissionTo($user, 'view');
+        return $user->hasPermissionTo('user:view', 'admin');
     }
 
     public function create(User $user): bool
     {
-        return $this->hasPermissionTo($user, 'create');
+        return $user->hasPermissionTo('user:create', 'admin');
     }
 
     public function update(User $user, User $targetUser): bool
     {
-        if ($user->id === $targetUser->id) {
+        if ($user->hasPermissionTo('user:updateAny', 'admin')) {
             return true;
         }
 
-        return false;
+        // If users can create, they can update their own
+        return $this->create($user) && ($user->is($targetUser->user));
     }
 
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, User $targetUser): bool
     {
-        if ($user->id === $model->id) {
+        // Cannot delete self
+        if ($user->is($targetUser->user)) {
             return false;
         }
 
-        return $this->hasPermissionTo($user, 'delete');
-    }
-
-    public function restore(User $user): bool
-    {
-        return $this->hasPermissionTo($user, 'restore');
+        return $user->hasPermissionTo('user:deleteAny', 'admin');
     }
 }
