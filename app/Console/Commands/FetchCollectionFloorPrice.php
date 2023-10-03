@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionFloorPrice as FetchCollectionFloorPriceJob;
-use App\Models\Collection;
-use DateTime;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Config;
 
 class FetchCollectionFloorPrice extends Command
 {
@@ -19,7 +16,7 @@ class FetchCollectionFloorPrice extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-floor-price {--collection-id=}';
+    protected $signature = 'nfts:fetch-collection-floor-price {--collection-id=} {--limit=}';
 
     /**
      * The console command description.
@@ -33,31 +30,28 @@ class FetchCollectionFloorPrice extends Command
      */
     public function handle(): int
     {
-        $this->forEachCollection(function ($collection) {
-            FetchCollectionFloorPriceJob::dispatch(
-                chainId: $collection->network->chain_id,
-                address: $collection->address,
-                retryUntil: $this->getRetryUntil(),
-            );
-        });
+        $limit = $this->option('limit');
+
+        $this->forEachCollection(
+            callback: function ($collection) {
+                FetchCollectionFloorPriceJob::dispatch(
+                    chainId: $collection->network->chain_id,
+                    address: $collection->address,
+                );
+            },
+            queryCallback: function ($query) use ($limit) {
+                $query
+                    ->when(
+                        $limit !== null,
+                        fn ($q) => $q
+                            ->orderByFloorPriceLastFetchedAt()
+                            // So the price in update every hour
+                            ->floorPriceNotFetchedInLastHour()
+                    );
+            },
+            limit: $limit === null ? null : (int) $limit
+        );
 
         return Command::SUCCESS;
-    }
-
-    public function getRetryUntil(): DateTime
-    {
-        // Only opensea is rate limited
-        if (Config::get('dashbrd.web3_providers.'.FetchCollectionFloorPriceJob::class) !== 'opensea') {
-            return now()->addMinutes(30);
-        }
-
-        $total = Collection::withoutSpamContracts()->count();
-
-        $maxRequest = (int) config('services.opensea.rate.max_requests');
-        $perSeconds = (int) config('services.opensea.rate.per_seconds');
-
-        $secondsNeeded = (int) ceil($total / $maxRequest) * $perSeconds;
-
-        return now()->addSeconds($secondsNeeded);
     }
 }

@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Enums\Chains;
-use App\Enums\Service;
-use App\Jobs\Middleware\RateLimited;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
 use App\Models\Token;
 use App\Support\Queues;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -34,7 +30,6 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
     public function __construct(
         public int $chainId,
         public string $address,
-        public ?DateTime $retryUntil = null,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -49,14 +44,17 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
             'address' => $this->address,
         ]);
 
+        $collection = Collection::where('address', $this->address)
+            ->whereHas('network', fn ($query) => $query->where('chain_id', $this->chainId))
+            ->first();
+
+        $collection->extra_attributes->set('floor_price_last_fetched_at', Carbon::now());
+        $collection->save();
+
         $web3DataProvider = $this->getWeb3DataProvider();
         $floorPrice = $web3DataProvider->getNftCollectionFloorPrice(
             Chains::from($this->chainId), $this->address
         );
-
-        $collection = Collection::where('address', $this->address)
-            ->whereHas('network', fn ($query) => $query->where('chain_id', $this->chainId))
-            ->first();
 
         if ($floorPrice === null) {
             $collection->update([
@@ -98,28 +96,5 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return 'fetch-nft-collection-floor-price:'.$this->chainId.'-'.$this->address;
-    }
-
-    public function retryUntil(): DateTime
-    {
-        if ($this->retryUntil === null) {
-            return now()->addMinutes(30);
-        }
-
-        return $this->retryUntil;
-    }
-
-    /**
-     * Get the middleware the job should pass through.
-     *
-     * @return array<int, object>
-     */
-    public function middleware(): array
-    {
-        if (Config::get('dashbrd.web3_providers.'.self::class) === 'opensea') {
-            return [new RateLimited(Service::Opensea)];
-        }
-
-        return [];
     }
 }

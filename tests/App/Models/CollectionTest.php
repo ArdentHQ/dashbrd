@@ -13,6 +13,7 @@ use App\Models\NftActivity;
 use App\Models\SpamContract;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
 it('can create a basic collection', function () {
@@ -1131,5 +1132,52 @@ it('sorts collections last time floor price was fetched', function () {
         $collection2->id,
         $collection1->id,
         $collection4->id,
+    ]);
+});
+
+it('filters collections whose floor price wasnt fetched in the last hour', function () {
+    // fetched one hour ago
+    $collection1 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => Carbon::now()->subHour()->addMinute(),
+        ],
+    ]);
+
+    // fetched one hour and 15 minutes ago
+    $collection2 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => Carbon::now()->subMinutes(75),
+        ],
+    ]);
+
+    // never fetched
+    $collection3 = Collection::factory()->create();
+
+    // fetched now
+    $collection4 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => Carbon::now(),
+        ],
+    ]);
+
+    // fetched 30 minutes ago
+    $collection5 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => Carbon::now()->subMinutes(30),
+        ],
+    ]);
+    // fetched 1 day ago
+    $collection6 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => Carbon::now()->subDay(),
+        ],
+    ]);
+
+    $ids = Collection::floorPriceNotFetchedInLastHour()->pluck('id')->toArray();
+
+    expect($ids)->toEqual([
+        $collection2->id,
+        $collection3->id,
+        $collection6->id,
     ]);
 });
