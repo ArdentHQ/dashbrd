@@ -160,7 +160,7 @@ it('should getWalletNfts', function () {
 
 it('should getNftMetadata', function () {
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/vPBCkZfjIE8rvfBVbVS7yB92LDQqQn8y/getNFTMetadataBatch' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
     ]);
 
     $user = createUser();

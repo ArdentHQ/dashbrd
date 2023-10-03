@@ -88,7 +88,7 @@ it('should fetch nft metadata', function () {
     $nfts->push($nft);
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/vPBCkZfjIE8rvfBVbVS7yB92LDQqQn8y/getNFTMetadataBatch' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
     ]);
 
     $fetchedNfts = Alchemy::nftMetadata($nfts, $collection);
