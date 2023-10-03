@@ -53,9 +53,4 @@ class Article extends Model implements HasMedia, Viewable
             ->saveSlugsTo('slug')
             ->doNotGenerateSlugsOnUpdate();
     }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
 }
