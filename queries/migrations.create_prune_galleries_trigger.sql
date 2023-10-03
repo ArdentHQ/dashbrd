@@ -11,17 +11,29 @@ SELECT g.user_id INTO _user_id FROM galleries g
                                         JOIN wallets w ON g.user_id = w.user_id AND w.id = OLD.wallet_id
     LIMIT 1;
 
--- Cleanup pivot table
-WITH removed_nfts AS (
+-- Mark all gallery nfts as soft deleted if no longer owned by any user
+WITH unassinged_nfts AS (
     SELECT gallery_id, nft_id FROM galleries
                                        JOIN nft_gallery ng on galleries.id = ng.gallery_id
-                                       JOIN nfts n on ng.nft_id = n.id AND (n.wallet_id IS NULL OR n.wallet_id != OLD.wallet_id OR n.deleted_at IS NOT NULL)
+                                       JOIN nfts n on ng.nft_id = n.id AND n.wallet_id IS NULL
     WHERE user_id = _user_id
 )
 UPDATE nft_gallery
     SET deleted_at = NOW()
-FROM removed_nfts rm
+FROM unassinged_nfts un
+WHERE nft_gallery.gallery_id = un.gallery_id AND nft_gallery.nft_id = un.nft_id;
+
+-- remove gallery nfts relationship if nft belongs to another user or is deleted
+WITH removed_nfts AS (
+    SELECT gallery_id, nft_id FROM galleries
+                                       JOIN nft_gallery ng on galleries.id = ng.gallery_id
+                                       JOIN nfts n on ng.nft_id = n.id AND (n.wallet_id != OLD.wallet_id OR n.deleted_at IS NOT NULL)
+    WHERE user_id = _user_id
+)
+DELETE FROM nft_gallery
+    USING removed_nfts rm
 WHERE nft_gallery.gallery_id = rm.gallery_id AND nft_gallery.nft_id = rm.nft_id;
+
 
 -- Mark all galleries with only soft deleted nfts as soft deleted
 WITH soft_deleted_nfts AS (

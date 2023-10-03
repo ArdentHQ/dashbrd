@@ -412,13 +412,13 @@ it('should delete gallery of previous owner if it becomes empty', function () {
     (new FetchWalletNfts($wallet2, $network))->handle();
 
     expect(Gallery::count())->toBe(1);
-    expect(Gallery::withTrashed()->count())->toBe(2);
+    expect(Gallery::withTrashed()->count())->toBe(1);
 
     expect($wallet1->nfts()->count())->toBe(2)
         ->and($wallet2->nfts()->count())->toBe(1)
         ->and(Gallery::where('name', 'BRDY')->first())->not()->toBeNull()
         ->and(Gallery::where('name', 'BRDY2')->first())->toBeNull()
-        ->and(Gallery::where('name', 'BRDY2')->withTrashed()->first())->not()->toBeNull();
+        ->and(Gallery::where('name', 'BRDY2')->withTrashed()->first())->toBeNull();
 
 });
 
