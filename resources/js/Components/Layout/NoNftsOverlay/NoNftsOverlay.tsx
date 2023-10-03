@@ -30,6 +30,7 @@ export const NoNftsOverlay = ({ show }: { show: boolean }): JSX.Element => {
         <Overlay
             showOverlay={show}
             showCloseButton={false}
+            showBackButton={false}
             belowContent={
                 <div className="flex max-w-sm flex-col p-8">
                     <div className="text-center font-medium text-theme-secondary-700">
