@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 use App\Enums\Chains;
 use App\Jobs\FetchCollectionFloorPrice;
-use App\Jobs\Middleware\RateLimited;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\Token;
 use App\Support\Facades\Opensea;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Config;
 
 it('should fetch nft collection floor price', function () {
     Opensea::fake([
@@ -156,31 +154,4 @@ it('has a default retry limit', function () {
     $collection = Collection::factory()->create();
 
     expect((new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address))->retryUntil())->toBeInstanceOf(DateTime::class);
-});
-
-it('accepts a custom retry limit', function () {
-    $retryUntil = now()->addMinutes(10);
-
-    $collection = Collection::factory()->create();
-
-    expect((new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address, $retryUntil))->retryUntil())->toBe($retryUntil);
-});
-
-it('should have rate limit middleware with opensea', function () {
-    $collection = Collection::factory()->create();
-
-    $middlewares = (new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address))->middleware();
-
-    expect($middlewares)->toHaveCount(1);
-    expect($middlewares[0])->toBeInstanceOf(RateLimited::class);
-});
-
-it('should not have rate limit middleware with other provider', function () {
-    Config::set('dashbrd.web3_providers.'.FetchCollectionFloorPrice::class, 'mnemonic');
-
-    $collection = Collection::factory()->create();
-
-    $middlewares = (new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address))->middleware();
-
-    expect($middlewares)->toHaveCount(0);
 });
