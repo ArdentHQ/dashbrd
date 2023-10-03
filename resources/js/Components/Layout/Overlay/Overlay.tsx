@@ -37,10 +37,10 @@ export const Overlay = ({
             ref={reference}
             {...properties}
             className={cn(
-                "fixed inset-0 z-40 mt-14 flex h-screen w-screen flex-col items-center justify-start overflow-auto bg-white xs:mt-18 sm:mt-0 sm:justify-center",
+                "fixed inset-0 z-40 mt-14 flex h-screen w-screen flex-col items-center justify-start overflow-auto bg-white xs:mt-18 sm:mt-0 sm:justify-center ",
                 className,
                 {
-                    "bg-opacity-60": !showCloseButton,
+                    "bg-opacity-80 backdrop-blur-md": !showCloseButton,
                     "bg-opacity-90": showCloseButton,
                 },
             )}

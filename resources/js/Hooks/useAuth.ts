@@ -92,8 +92,8 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
 
         return metamaskErrorMessage !== undefined;
     };
-
     const showCloseButton = allowsGuests || requiresSignature;
+    console.log({ showCloseButton, allowsGuests, requiresSignature });
 
     return {
         authenticated,
