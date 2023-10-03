@@ -1103,7 +1103,7 @@ it('should get published collection articles', function () {
     $collections = Collection::factory(2)->create();
 
     $articles = Article::factory(3)->create([
-        'published_at' => now()->format('Y-m-d')
+        'published_at' => now()->format('Y-m-d'),
     ]);
 
     Article::factory(1)->create([
@@ -1123,7 +1123,7 @@ it('should get collection articles sorted', function () {
     $collection = Collection::factory()->create();
 
     $articles = Article::factory(3)->create([
-        'published_at' => now()->format('Y-m-d')
+        'published_at' => now()->format('Y-m-d'),
     ]);
 
     $collection->articles()->attach($articles[1], ['order_index' => 1]);
@@ -1141,7 +1141,7 @@ it('should get collection article\'s collections', function () {
     $collections = Collection::factory(3)->create();
 
     $articles = Article::factory(3)->create([
-        'published_at' => now()->format('Y-m-d')
+        'published_at' => now()->format('Y-m-d'),
     ]);
 
     $collections->map(function ($collection) use ($articles) {
@@ -1154,4 +1154,3 @@ it('should get collection article\'s collections', function () {
         ->and($result->collections->pluck('name'))->toContain($collections[1]->name)
         ->and($result->collections->pluck('name'))->toContain($collections[2]->name);
 });
-
