@@ -12,13 +12,25 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
 
     const maxCirclesCount = Math.floor((availableWidth - overlapWidth) / circleWidth);
 
-    const showCount = maxCirclesCount - Math.ceil(hiddenLabelWidth / circleWidth);
-
-    if (maxCirclesCount === totalCount || showCount < 0) {
+    // if all circles or only one circle doesn't fit then return total count
+    if (Math.abs(maxCirclesCount - totalCount) <= 1) {
         return totalCount;
     }
 
-    return totalCount - showCount > 1 ? showCount : totalCount;
+    let showCount = maxCirclesCount - 2;
+
+    if (showCount < 1) {
+        return 1;
+    }
+
+    const remainingWidth = availableWidth - (showCount * circleWidth + overlapWidth + hiddenLabelWidth);
+
+    // check whether we can fit one more circle in the available width
+    if (remainingWidth > circleWidth) {
+        showCount++;
+    }
+
+    return showCount;
 };
 
 // Note: This component uses width to detect number of collections to display, so the parent must have fix width
@@ -33,7 +45,7 @@ export const FeaturedCollections = ({ collections }: { collections: FeaturedColl
         handleHeight: false,
         onResize: () => {
             /* istanbul ignore next -- @preserve */
-            setVisibleCount(calculateCircleCount(totalCount, container.current?.clientWidth ?? 30));
+            setVisibleCount(calculateCircleCount(totalCount, container.current?.getBoundingClientRect().width ?? 30));
         },
         targetRef: container,
     });
