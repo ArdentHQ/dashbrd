@@ -20,7 +20,7 @@ class RefreshedNftController extends Controller
         // hence if the user didn't run into a per-user rate limit we consider it still a success.
         // It's supposed to be completely opaque to the user what the "refresh" is doing.
         $nft->touch('metadata_requested_at');
-        RefreshNftMetadata::dispatch($collection, $nft)->onQueue(Queues::NFTS);
+        RefreshNftMetadata::dispatch($collection)->onQueue(Queues::NFTS);
 
         FetchNftActivity::dispatch($nft);
 
