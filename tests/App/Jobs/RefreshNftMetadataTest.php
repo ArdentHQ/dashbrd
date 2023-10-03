@@ -17,35 +17,54 @@ use Illuminate\Support\Facades\Http;
 
 it('should refresh NFT metadata', function () {
     Bus::fake();
-
     $user = createUser();
+
     $network = Network::polygon();
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-        'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
-        'name' => 'Unrevealed Collection',
+    $collection = Collection::factory()->create(['network_id' => $network->id]);
+    $now = now();
+
+    Nft::factory()->create([
+        'wallet_id' => $user->wallet,
+        'collection_id' => $collection,
+        'metadata_fetched_at' => null,
+        'metadata_requested_at' => $now,
     ]);
 
-    /** @var Nft $nft */
-    $nft = Nft::factory()->create([
-        'name' => 'Unrevealed Token',
-        'token_number' => CryptoUtils::hexToBigIntStr('0x0000000000000000000000000000000000000000000000000000000000000000'),
-        'wallet_id' => $user->wallet_id,
-        'collection_id' => $collection->id,
-    ]);
+    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(0);
 
-    expect($collection['name'])->toEqual('Unrevealed Collection');
-    expect($nft['name'])->toEqual('Unrevealed Token');
-
-    $startToken = $nft['token_number'];
     Alchemy::fake([
-        "https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&startToken=$startToken&limit=1" => Http::response(fixtureData('alchemy.refresh_nft_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/vPBCkZfjIE8rvfBVbVS7yB92LDQqQn8y/getNFTMetadataBatch' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
     ]);
 
-    (new RefreshNftMetadata($collection, $nft))->handle(app(AlchemyWeb3DataProvider::class));
+    (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
 
-    expect($collection->fresh()['name'])->toEqual('Unrevealed Collection');
-    expect($nft->fresh()['name'])->toEqual('Unrevealed Token');
+    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(1);
+});
+
+it('should not refresh NFT metadata if not requested', function () {
+    Bus::fake();
+    $user = createUser();
+
+    $network = Network::polygon();
+    $collection = Collection::factory()->create(['network_id' => $network->id]);
+    $now = now();
+
+    Nft::factory()->create([
+        'wallet_id' => $user->wallet,
+        'collection_id' => $collection,
+        'metadata_fetched_at' => null,
+        'metadata_requested_at' => null,
+    ]);
+
+    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(0);
+
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/vPBCkZfjIE8rvfBVbVS7yB92LDQqQn8y/getNFTMetadataBatch' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+    ]);
+
+    (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
+
+    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(0);
 });
 
 it('should skip refreshing NFT metadata for a spam collection', function () {

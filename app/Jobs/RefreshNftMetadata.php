@@ -33,8 +33,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public Collection $collection,
-        public Nft $nft,
+        public Collection $collection
     ) {
         //
     }
@@ -85,7 +84,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->nft->id;
+        return self::class.':'.$this->collection->id;
     }
 
     /**
