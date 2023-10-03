@@ -41,8 +41,7 @@ class FetchCollectionActivity implements ShouldQueue
      */
     public function handle(MnemonicWeb3DataProvider $provider): void
     {
-        // TODO: `isInvalid` when develop merged
-        if ($this->collection->isSpam()) {
+        if ($this->collection->isInvalid()) {
             return;
         }
 
