@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\UserResource\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Filament\Resources\UserResource;
 use App\Filament\Resources\UserResource\Pages\Traits\HandleRole;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 
