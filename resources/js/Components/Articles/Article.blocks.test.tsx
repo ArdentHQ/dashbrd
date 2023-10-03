@@ -1,10 +1,6 @@
 import React from "react";
 import { expect } from "vitest";
-import {
-    calculateCircleCount,
-    FeaturedCollections,
-    MoreCollectionsLabel,
-} from "@/Components/Articles/ArticleCard.blocks";
+import { calculateCircleCount, FeaturedCollections, MoreCollectionsLabel } from "@/Components/Articles/Article.blocks";
 import { render, screen } from "@/Tests/testing-library";
 
 describe("ArticleCardBlocks", () => {

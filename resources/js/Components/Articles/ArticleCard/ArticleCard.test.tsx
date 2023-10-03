@@ -15,7 +15,7 @@ describe("ArticleCard", () => {
         userId: 1,
         content: "content",
         category: "news",
-        publishedAt: "23423423",
+        publishedAt: 1696334540,
         metaDescription: "meta",
         featuredCollections: collections,
     };
