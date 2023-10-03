@@ -30,4 +30,9 @@ class CreateUser extends CreateRecord
 
         return $model;
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
