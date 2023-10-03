@@ -11,10 +11,11 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -56,18 +57,7 @@ class UserResource extends Resource
                     })
                     ->default(Role::Editor->value)
                     ->required(),
-                // Resolve value
-                // ->resolveUsing(fn (string $value): string => dd($value) && Str::title($value)),
-                // Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full'),
-                // Textarea::make('content')->required()->autosize()->columnSpan('full'),
-                // Select::make('user_id')
-                //     ->relationship(
-                //         name: 'user',
-                //         modifyQueryUsing: fn ($query) => $query->managers()->orderBy('username')->orderBy('email')
-                //     )
-                //     ->getOptionLabelFromRecordUsing(fn (User $user) => $user->username ?? $user->email ?? 'ID '.$user->id)
-                //     ->required(),
-                // DatePicker::make('published_at')->nullable(),
+
             ]);
     }
 
@@ -77,6 +67,11 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('username')
                     ->label('Username')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('role')
+                    ->label('Role')
+                    ->getStateUsing(fn (User $user): string => Str::title($user->roles->first()->name))
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('email')
@@ -92,7 +87,14 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make()->using(function (Model $record, array $data): Model {
+                    info(':D');
+                    unset($data['role']);
+
+                    $record->update($data);
+
+                    return $record;
+                }),
             ]);
     }
 
