@@ -103,7 +103,7 @@ it('does not dispatch another job in the chain if there are no activities with t
                 totalNative: 0,
                 totalUsd: 0,
                 extraAttributes: [],
-            )
+            ),
         ]))
     );
 
