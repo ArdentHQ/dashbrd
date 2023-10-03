@@ -15,6 +15,10 @@ final class UserPolicy
 
     public function view(User $user, User $targetUser): bool
     {
+        if ($user->is($targetUser)) {
+            return true;
+        }
+
         return $user->hasPermissionTo('user:view', 'admin');
     }
 
@@ -25,18 +29,17 @@ final class UserPolicy
 
     public function update(User $user, User $targetUser): bool
     {
-        if ($user->hasPermissionTo('user:updateAny', 'admin')) {
+        if ($user->is($targetUser)) {
             return true;
         }
 
-        // If users can create, they can update their own
-        return $this->create($user) && $user->is($targetUser);
+        return $user->hasPermissionTo('user:updateAny', 'admin');
     }
 
     public function delete(User $user, User $targetUser): bool
     {
         // Cannot delete self
-        if ($user->is($targetUser->user)) {
+        if ($user->is($targetUser)) {
             return false;
         }
 

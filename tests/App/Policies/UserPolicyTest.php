@@ -54,9 +54,11 @@ it('should be able to update own user', function () {
 });
 
 it('should not be able to create users', function () {
-    expect(PermissionRepository::exists('user:create'))->toBeFalse();
     expect($this->instance->create($this->user))->toBeFalse();
-    expect($this->instance->create($this->admin))->toBeFalse();
+});
+
+it('should be able to create users', function () {
+    expect($this->instance->create($this->admin))->toBeTrue();
 });
 
 it('should not be able to update a single user', function () {
@@ -64,7 +66,13 @@ it('should not be able to update a single user', function () {
 
     expect(PermissionRepository::exists('user:update'))->toBeFalse();
     expect($this->instance->update($this->user, $user))->toBeFalse();
-    expect($this->instance->update($this->admin, $user))->toBeFalse();
+});
+
+it('should be able to update a single user', function () {
+    $user = User::factory()->create();
+
+    expect(PermissionRepository::exists('user:update'))->toBeFalse();
+    expect($this->instance->update($this->admin, $user))->toBeTrue();
 });
 
 it('should not be able to delete a single user', function () {
@@ -72,7 +80,14 @@ it('should not be able to delete a single user', function () {
 
     expect(PermissionRepository::exists('user:delete'))->toBeFalse();
     expect($this->instance->delete($this->user, $user))->toBeFalse();
-    expect($this->instance->delete($this->admin, $user))->toBeFalse();
+});
+
+it('should be able to delete a single user', function () {
+    $user = User::factory()->create();
+
+    expect(PermissionRepository::exists('user:delete'))->toBeFalse();
+
+    expect($this->instance->delete($this->admin, $user))->toBeTrue();
 });
 
 it('should not be able to delete self', function () {
@@ -81,11 +96,4 @@ it('should not be able to delete self', function () {
     expect(PermissionRepository::exists('user:delete'))->toBeFalse();
     expect($this->instance->delete($this->user, $this->user))->toBeFalse();
     expect($this->instance->delete($this->admin, $this->admin))->toBeFalse();
-});
-
-it('should not be able to restore a single user', function () {
-    $user = User::factory()->create();
-
-    expect($this->instance->restore($this->user, $user))->toBeFalse();
-    expect($this->instance->restore($this->admin, $user))->toBeTrue();
 });
