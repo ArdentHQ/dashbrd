@@ -13,6 +13,7 @@ export interface ConnectWalletProperties {
     onSign: () => void;
     closeOverlay: () => void;
     showCloseButton: boolean;
+    showBackButton: boolean;
 }
 
 export interface ConnectionErrorProperties {

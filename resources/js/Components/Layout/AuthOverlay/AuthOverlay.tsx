@@ -19,6 +19,7 @@ export const AuthOverlay = ({
     show,
     closeOverlay,
     showCloseButton,
+    showBackButton,
     mustBeSigned = false,
     ...properties
 }: AuthOverlayProperties): JSX.Element => {
@@ -48,6 +49,7 @@ export const AuthOverlay = ({
             {...properties}
             showOverlay={show}
             showCloseButton={showCloseButton}
+            showBackButton={showBackButton}
         >
             <div className="text-center">
                 <div className="mb-1 text-theme-secondary-900">
@@ -67,9 +69,7 @@ export const AuthOverlay = ({
                         : t("auth.wallet.connect_long")}
                 </p>
             </div>
-
             {needsMetaMask && <AuthInstallWallet />}
-
             {!needsMetaMask && (
                 <>
                     <AuthConnectWallet />
@@ -114,7 +114,6 @@ export const AuthOverlay = ({
                     </div>
                 </>
             )}
-
             {needsMetaMask && (
                 <InstallMetamask
                     closeOverlay={closeOverlay}
@@ -134,6 +133,7 @@ export const AuthOverlay = ({
                                     showCloseButton={showCloseButton}
                                     isWalletInitialized={initialized}
                                     requiresSignature={requiresSignature}
+                                    showBackButton={showBackButton}
                                     onConnect={() => {
                                         void connectWallet();
                                     }}
