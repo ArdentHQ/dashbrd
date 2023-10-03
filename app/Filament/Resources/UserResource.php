@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enums\Role;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserResource extends Resource
 {
@@ -33,12 +36,28 @@ class UserResource extends Resource
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->autocomplete('new-password'),
                 TextInput::make('display_name')->columnSpan('full'),
-                // Select::make('category')
-                //     ->options([
-                //         ArticleCategoryEnum::News->value => Str::title(ArticleCategoryEnum::News->value),
-                //     ])
-                //     ->default(ArticleCategoryEnum::News->value)
-                //     ->required(),
+                Select::make('role')
+                    ->options(function () {
+                        $options = [
+                            Role::Editor->value => Str::title(Role::Editor->value),
+                        ];
+
+                        /** @var User */
+                        $user = auth()->user();
+
+                        if ($user->hasRole(Role::Admin->value)) {
+                            $options[Role::Admin->value] = Str::title(Role::Admin->value);
+                        } elseif ($user->hasRole(Role::Superadmin->value)) {
+                            $options[Role::Admin->value] = Str::title(Role::Admin->value);
+                            $options[Role::Superadmin->value] = Str::title(Role::Superadmin->value);
+                        }
+
+                        return $options;
+                    })
+                    ->default(Role::Editor->value)
+                    ->required(),
+                // Resolve value
+                // ->resolveUsing(fn (string $value): string => dd($value) && Str::title($value)),
                 // Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full'),
                 // Textarea::make('content')->required()->autosize()->columnSpan('full'),
                 // Select::make('user_id')
