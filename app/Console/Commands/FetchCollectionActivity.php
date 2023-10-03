@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionActivity as Job;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class FetchCollectionActivity extends Command
 {
@@ -30,9 +31,16 @@ class FetchCollectionActivity extends Command
      */
     public function handle(): int
     {
+        // Modify the query to only fetch activities for collections that we index NFTs for...
+        $queryCallback = function (Builder $query) {
+            return $query->where('is_fetching_activity', false)
+                        ->whereNotNull('supply')
+                        ->where('supply', '<=', config('dashbrd.collections_max_cap'));
+        };
+
         $this->forEachCollection(function ($collection) {
             Job::dispatch($collection);
-        }, queryCallback: fn ($q) => $q->where('is_fetching_activity', false));
+        }, $queryCallback);
 
         return Command::SUCCESS;
     }
