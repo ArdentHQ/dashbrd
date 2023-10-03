@@ -176,7 +176,7 @@ export const GalleryActionToolbar = ({
                                     <Button
                                         data-testid="GalleryActionToolbar__publish"
                                         disabled={isProcessing}
-                                        variant="secondary"
+                                        variant="primary"
                                         onClick={onPublish}
                                         icon={isProcessing ? "Spinner" : undefined}
                                         iconClass="animate-spin"
