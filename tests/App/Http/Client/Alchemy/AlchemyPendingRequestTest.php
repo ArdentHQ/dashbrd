@@ -92,7 +92,7 @@ it('should fetch nft metadata', function () {
     ]);
 
     $fetchedNfts = Alchemy::nftMetadata($nfts, $collection);
-    Log::info(["fetchedNfts" => $fetchedNfts]);
+    Log::info(['fetchedNfts' => $fetchedNfts]);
 
     expect($fetchedNfts->nfts)->toHaveCount(1);
 });

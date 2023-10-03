@@ -30,7 +30,7 @@ it('should refresh NFT metadata', function () {
         'metadata_requested_at' => $now,
     ]);
 
-    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(0);
+    expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(0);
 
     Alchemy::fake([
         'https://polygon-mainnet.g.alchemy.com/nft/v2/vPBCkZfjIE8rvfBVbVS7yB92LDQqQn8y/getNFTMetadataBatch' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
@@ -38,7 +38,7 @@ it('should refresh NFT metadata', function () {
 
     (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
 
-    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(1);
+    expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(1);
 });
 
 it('should not refresh NFT metadata if not requested', function () {
@@ -56,7 +56,7 @@ it('should not refresh NFT metadata if not requested', function () {
         'metadata_requested_at' => null,
     ]);
 
-    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(0);
+    expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(0);
 
     Alchemy::fake([
         'https://polygon-mainnet.g.alchemy.com/nft/v2/vPBCkZfjIE8rvfBVbVS7yB92LDQqQn8y/getNFTMetadataBatch' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
@@ -64,7 +64,7 @@ it('should not refresh NFT metadata if not requested', function () {
 
     (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
 
-    expect(Nft::whereNotNull("metadata_fetched_at")->get())->toHaveCount(0);
+    expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(0);
 });
 
 it('should skip refreshing NFT metadata for a spam collection', function () {
