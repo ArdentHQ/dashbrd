@@ -30,7 +30,10 @@ use Spatie\Sluggable\SlugOptions;
 /**
  * @property ?int $supply
  * @property ?string $floor_price
- * @property ?string $last_indexed_token_number.
+ * @property ?string $last_indexed_token_number
+ * @property ?string $image
+ *
+ * @method BelongsToMany<Article> articlesWithCollections()
  */
 class Collection extends Model
 {
@@ -113,12 +116,15 @@ class Collection extends Model
         return $this->belongsToMany(Article::class, 'article_collection')->withPivot('order_index');
     }
 
+    /**
+     * @return BelongsToMany<Article>
+     */
     public function scopeArticlesWithCollections(): BelongsToMany
     {
-        return $this->belongsToMany(Article::class, 'article_collection')
+        return $this->articles()
             ->with(['collections' => function ($query) {
                 $query->where('collections.id', '!=', $this->id)
-                    ->select(['collections.name', 'collections.extra_attributes->image as collection_image']);
+                    ->select(['collections.name', 'collections.extra_attributes->image as image']);
             }]);
     }
 

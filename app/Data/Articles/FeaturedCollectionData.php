@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Articles;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Collection;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
@@ -24,7 +24,7 @@ class FeaturedCollectionData extends Data
     {
         return new self(
             name: $collection->name,
-            image: $collection->collection_image
+            image: $collection->image
         );
     }
 }

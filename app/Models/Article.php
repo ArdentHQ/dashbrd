@@ -33,7 +33,7 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function collections(): BelongsToMany
     {
-        return $this->belongsToMany(Collection::class, 'article_collection');
+        return $this->belongsToMany(Collection::class, 'article_collection')->withPivot('order_index');
     }
 
     public function getSlugOptions(): SlugOptions

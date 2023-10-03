@@ -19,6 +19,9 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[MapInputName(SnakeCaseMapper::class)]
 class ArticleData extends Data
 {
+    /**
+     * @param  DataCollection<int, FeaturedCollectionData>  $featuredCollections
+     */
     public function __construct(
         public int $id,
         public string $title,
@@ -47,7 +50,7 @@ class ArticleData extends Data
             featuredCollections: FeaturedCollectionData::collection($article->collections),
             image: $article->getMedia()->first()?->getUrl(),
             publishedAt: $article->published_at,
-            metaDescription: $article->metaDescription,
+            metaDescription: $article->meta_description,
         );
     }
 }

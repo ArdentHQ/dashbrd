@@ -50,7 +50,7 @@ export const FeaturedCollections = ({ collections }: { collections: FeaturedColl
                     content={collection.name}
                     key={index}
                 >
-                    <div className={cn("flex items-center", { "-ml-1": index > 0 })}>
+                    <div className={cn("mb-1 flex items-center", { "-ml-1": index > 0 })}>
                         <Img
                             src={collection.image}
                             isCircle

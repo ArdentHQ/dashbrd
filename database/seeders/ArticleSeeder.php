@@ -37,7 +37,7 @@ class ArticleSeeder extends Seeder
 
             $article->addMedia($imagePath)->preservingOriginal()->toMediaCollection();
 
-            $collections = Collection::factory()->count(2)->create([
+            $collections = Collection::factory()->count(8)->create([
                 'network_id' => $network->id,
             ]);
 
