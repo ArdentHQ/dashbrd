@@ -12,6 +12,7 @@
         "atymic/twitter": "^3.2",
         "cyrildewit/eloquent-viewable": "dev-master",
         "filament/filament": "^3.0",
+        "filament/spatie-laravel-media-library-plugin": "^3.0-stable",
         "guzzlehttp/guzzle": "^7.8",
         "halaxa/json-machine": "^1.1",
         "inertiajs/inertia-laravel": "^0.6",

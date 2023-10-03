@@ -8,14 +8,15 @@ use App\Enums\Role;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -58,6 +59,13 @@ class UserResource extends Resource
                     ->default(Role::Editor->value)
                     ->required(),
 
+                SpatieMediaLibraryFileUpload::make('avatar')
+                    ->collection('avatar')
+                    ->columnSpan('full')
+                    ->image()
+                    ->imageEditor()
+                    ->imageCropAspectRatio('1:1'),
+
             ]);
     }
 
@@ -82,19 +90,14 @@ class UserResource extends Resource
                     ->label('Display Name')
                     ->sortable()
                     ->searchable(),
+                SpatieMediaLibraryImageColumn::make('avatar')->collection('avatar')->conversion('thumb@2x'),
+
             ])
             ->filters([
                 //
             ])
             ->actions([
-                EditAction::make()->using(function (Model $record, array $data): Model {
-                    info(':D');
-                    unset($data['role']);
-
-                    $record->update($data);
-
-                    return $record;
-                }),
+                EditAction::make(),
             ]);
     }
 
