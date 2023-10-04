@@ -100,8 +100,12 @@ it('should not be able to delete self', function () {
 
 it('should not be able to assign permissions to user', function () {
     expect($this->user->hasPermissionTo('user:assignPermissions', 'admin'))->toBeFalse();
+
+    expect($this->user->can('assignPermissions', User::class))->toBeFalse();
 });
 
 it('should be able to assign permissions to user', function () {
     expect($this->admin->hasPermissionTo('user:assignPermissions', 'admin'))->toBeTrue();
+
+    expect($this->admin->can('assignPermissions', User::class))->toBeTrue();
 });

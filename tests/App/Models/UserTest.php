@@ -12,6 +12,7 @@ use App\Models\Role as RoleModel;
 use App\Models\User;
 use App\Models\Wallet;
 use Filament\Panel;
+use Illuminate\Http\UploadedFile;
 
 it('can create a basic user', function () {
     $user = User::factory()->create();
@@ -329,4 +330,14 @@ it('filters managers', function () {
         $admin->id,
         $editor->id,
     ]);
+});
+
+it('has avatar', function () {
+    $user = User::factory()->create();
+
+    $file = UploadedFile::fake()->image('avatar.png');
+
+    $user->addMedia($file)->toMediaCollection('avatar');
+
+    expect($user->getFirstMediaUrl('avatar'))->toBeString();
 });
