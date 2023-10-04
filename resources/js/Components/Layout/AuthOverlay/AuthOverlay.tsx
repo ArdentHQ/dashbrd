@@ -49,7 +49,6 @@ export const AuthOverlay = ({
             {...properties}
             showOverlay={show}
             showCloseButton={showCloseButton}
-            showBackButton={showBackButton}
         >
             <div className="text-center">
                 <div className="mb-1 text-theme-secondary-900">
