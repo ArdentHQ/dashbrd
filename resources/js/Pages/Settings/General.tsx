@@ -115,6 +115,7 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
             title="General"
             toastMessage={props.toast}
             mustBeSigned
+            showBackButton
         >
             <Head title={title} />
 
