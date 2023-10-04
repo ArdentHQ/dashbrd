@@ -300,7 +300,6 @@ const CollectionsView = ({
                                             nfts={nfts}
                                             pageLimit={nftPageLimit}
                                             onPageLimitChange={nftsPageLimitChangeHandler}
-                                            userNfts={collection.nfts}
                                         />
                                     )}
                                 </div>

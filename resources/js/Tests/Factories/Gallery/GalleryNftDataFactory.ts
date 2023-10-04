@@ -21,6 +21,7 @@ export default class GalleryNftDataFactory extends ModelFactory<App.Data.Gallery
             floorPriceDecimals: this.optional(18),
             lastActivityFetchedAt: new Date().toString(),
             lastViewedAt: new Date().toString(),
+            ownedByCurrentUser: false,
         };
     }
 
