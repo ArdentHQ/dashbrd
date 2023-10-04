@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
 import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
 
 export const ArticleCard = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
@@ -25,7 +26,7 @@ export const ArticleCard = ({ article }: { article: App.Data.Articles.ArticleDat
 
             <div className="flex flex-1 flex-col px-6 py-3">
                 <div className="text-sm font-medium text-theme-secondary-700">
-                    {formatTimestamp((article.publishedAt, user?.attributes.date_format))}
+                    {formatTimestamp(article.publishedAt, user?.attributes.date_format as DateFormat)}
                 </div>
 
                 <h4 className="mt-1 line-clamp-2 text-lg font-medium leading-7 text-theme-secondary-900">

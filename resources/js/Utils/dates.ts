@@ -40,8 +40,8 @@ const getMonthDelimiter = (dateFormat: DateFormat): string => {
     return " ";
 };
 
-export const formatTimestamp = (timestamp: number, format: DateFormat = "d M Y" as DateFormat): string =>
-    DateTime.fromUnix(timestamp).format(format);
+export const formatTimestamp = (timestamp: number, format?: DateFormat): string =>
+    DateTime.fromUnix(timestamp).format(format ?? "d M Y");
 
 const getYearDelimiter = (dateFormat: DateFormat): string => {
     if (dateFormat === DateFormat.D) {
