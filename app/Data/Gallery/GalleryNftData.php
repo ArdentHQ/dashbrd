@@ -34,10 +34,11 @@ class GalleryNftData extends Data
         public ?int $floorPriceDecimals,
         public ?DateTime $lastActivityFetchedAt,
         public ?DateTime $lastViewedAt,
+        public bool $ownedByCurrentUser = false,
     ) {
     }
 
-    public static function fromModel(Nft $nft): self
+    public static function fromModel(Nft $nft, bool $ownedByCurrentUser = false): self
     {
         /** @var Collection $collection */
         $collection = $nft->collection;
@@ -59,6 +60,7 @@ class GalleryNftData extends Data
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
             lastActivityFetchedAt: $nft->last_activity_fetched_at,
             lastViewedAt: $nft->last_viewed_at,
+            ownedByCurrentUser: $ownedByCurrentUser,
         );
     }
 }
