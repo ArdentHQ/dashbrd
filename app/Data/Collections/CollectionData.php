@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
-use App\Data\Collections\Concerns\QueriesCollectionNfts;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
 use Spatie\LaravelData\Attributes\WithTransformer;
@@ -15,8 +14,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 class CollectionData extends Data
 {
-    use QueriesCollectionNfts;
-
     public function __construct(
         public int $id,
         public string $name,

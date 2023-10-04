@@ -125,7 +125,6 @@ declare namespace App.Data.Collections {
         owners: number | null;
         nftsCount: number;
         mintedAt: number | null;
-        nfts: App.Data.Collections.CollectionNftsData;
     };
     export type CollectionNftData = {
         id: number;
@@ -134,9 +133,6 @@ declare namespace App.Data.Collections {
         tokenNumber: string;
         images: App.Data.Nfts.NftImagesData;
         traits: Array<App.Data.Collections.CollectionTraitData>;
-    };
-    export type CollectionNftsData = {
-        paginated: Array<App.Data.Collections.CollectionNftData>;
     };
     export type CollectionStatsData = {
         nfts: number;
@@ -256,6 +252,7 @@ declare namespace App.Data.Gallery {
         floorPriceDecimals: number | null;
         lastActivityFetchedAt: string | null;
         lastViewedAt: string | null;
+        ownedByCurrentUser: boolean;
     };
     export type GalleryNftsData = {
         paginated: {

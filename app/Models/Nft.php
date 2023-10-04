@@ -118,8 +118,7 @@ class Nft extends Model
      */
     public function scopeOwnedBy(Builder $query, User $user): Builder
     {
-        return $query
-            ->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $user->id));
+        return $query->whereHas('wallet', fn ($q) => $q->where('user_id', $user->id));
     }
 
     /**
@@ -273,7 +272,7 @@ class Nft extends Model
             ->select('id')
             ->where('row_number', '<=', $limitPerCollection);
 
-        return $query->whereIn('id', $nftsQuery);
+        return $query->with('traits')->whereIn('id', $nftsQuery);
     }
 
     public function newReportNotification(Report $report): Notification
