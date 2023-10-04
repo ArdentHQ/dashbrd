@@ -24,6 +24,10 @@ export const CollectionsFilter = ({
     onChangeVisibilityStatus,
     displayType,
     isLoading,
+    availableNetworks,
+    handleSelectedChainIds,
+    selectedChainIds,
+    collectionsCount,
 }: {
     searchQuery: string;
     setSearchQuery: (query: string) => void;
@@ -36,6 +40,10 @@ export const CollectionsFilter = ({
     onSort: (sortBy: string) => void;
     onChangeVisibilityStatus?: (isHidden: boolean) => void;
     isLoading?: boolean;
+    availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
+    handleSelectedChainIds: (chainId: number) => void;
+    selectedChainIds: number[];
+    collectionsCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -94,6 +102,10 @@ export const CollectionsFilter = ({
                         showHidden={showHidden}
                         hiddenCount={hiddenCount}
                         onChangeVisibilityStatus={onChangeVisibilityStatus}
+                        availableNetworks={availableNetworks}
+                        handleSelectedChainIds={handleSelectedChainIds}
+                        selectedChainIds={selectedChainIds}
+                        collectionsCount={collectionsCount}
                     />
                 </div>
             </div>

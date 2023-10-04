@@ -23,7 +23,7 @@ const getTabClasses = ({
     className?: string;
 }): string => {
     const baseClassName = cn(
-        "transition-default flex items-center font-medium whitespace-nowrap outline-none outline-3 focus-visible:outline-theme-primary-300",
+        "transition-default flex items-center font-medium whitespace-nowrap outline-none outline-3 focus-visible:outline-theme-primary-300 dark:focus-visible:outline-theme-primary-700",
         {
             "cursor-pointer": !disabled,
             "cursor-not-allowed text-theme-secondary-500": disabled,
@@ -48,9 +48,11 @@ const getTabClasses = ({
             baseClassName,
             "grow sm:grow-0 justify-center select-none rounded-full px-4 h-8 text-sm -outline-offset-[3px]",
             {
-                "border-transparent bg-white text-theme-secondary-900 shadow-sm": selected,
-                "active:bg-theme-secondary-200 hover:bg-theme-secondary-300": !selected && !disabled,
-                "cursor-not-allowed focus:bg-transparent active:bg-transparent": disabled,
+                "border-transparent bg-white text-theme-secondary-900 shadow-sm dark:bg-theme-dark-800 dark:text-theme-dark-50":
+                    selected,
+                "active:bg-theme-secondary-200 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-900":
+                    !selected && !disabled,
+                "cursor-not-allowed focus:bg-transparent active:bg-transparent dark:text-theme-dark-400": disabled,
             },
             className,
         );
@@ -60,8 +62,10 @@ const getTabClasses = ({
         baseClassName,
         "rounded-xl sm:py-2.5 sm:px-3 outline-offset-0",
         {
-            "bg-theme-primary-100": selected,
-            "hover:bg-theme-secondary-100 hover:text-theme-secondary-900": !selected && !disabled,
+            "bg-theme-primary-100 dark:bg-theme-primary-600 dark:text-theme-dark-50": selected,
+            "hover:bg-theme-secondary-100 hover:text-theme-secondary-900 dark:text-theme-dark-200 dark:hover:bg-theme-dark-800 dark:hover:text-theme-dark-50":
+                !selected && !disabled,
+            "dark:text-theme-dark-400": disabled,
         },
         className,
     );
@@ -106,7 +110,10 @@ interface WrapperProperties extends HTMLAttributes<HTMLDivElement> {
 export const List = ({ className, ...properties }: WrapperProperties): JSX.Element => (
     <div className="overflow-x-auto">
         <div
-            className={cn("inline-flex w-full max-w-full rounded-full bg-theme-secondary-100 p-1 sm:w-auto", className)}
+            className={cn(
+                "inline-flex w-full max-w-full rounded-full bg-theme-secondary-100 p-1 dark:bg-theme-dark-950 sm:w-auto",
+                className,
+            )}
             {...properties}
         />
     </div>
