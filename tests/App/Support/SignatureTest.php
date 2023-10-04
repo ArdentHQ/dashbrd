@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Models\Wallet;
 use App\Support\Signature;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
 it('should generate a signature', function () {
@@ -92,4 +94,24 @@ it('should allow forgetting the nonce that is stored in the session', function (
 
 it('should generate a nonce', function () {
     expect(Signature::nonce())->toBeString();
+});
+
+it('should set wallet as signed and not signed and set last_signed_at', function () {
+    $wallet = Wallet::factory()->create();
+    $otherWallet = Wallet::factory()->create();
+
+    Signature::setWalletIsSigned($wallet->id);
+
+    expect($wallet->fresh()->last_signed_at)->toBeInstanceOf(Carbon::class);
+    expect($otherWallet->fresh()->last_signed_at)->toBeNull();
+
+    expect(Session::get('wallet-is-signed.'.$wallet->id))->toBeTrue();
+
+    expect(Signature::walletIsSigned($wallet->id))->toBeTrue();
+
+    Signature::setWalletIsNotSigned($wallet->id);
+
+    expect(Session::get('wallet-is-signed.'.$wallet->id))->toBeNull();
+
+    expect(Signature::walletIsSigned($wallet->id))->toBeFalse();
 });

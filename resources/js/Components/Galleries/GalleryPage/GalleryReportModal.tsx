@@ -5,8 +5,7 @@ import { IconButton } from "@/Components/Buttons";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
 import { Radio } from "@/Components/Form/Radio";
 import { Tooltip } from "@/Components/Tooltip";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 export const GalleryReportModal = ({
     gallery,
@@ -93,9 +92,7 @@ export const GalleryReportModal = ({
 
     const radioButtonReference = useRef<HTMLInputElement>(null);
 
-    const { authenticated } = useAuth();
-
-    const { showConnectOverlay } = useMetaMaskContext();
+    const { signedAction } = useAuthorizedAction();
 
     useEffect(() => {
         if (show && canReport) {
@@ -114,21 +111,17 @@ export const GalleryReportModal = ({
                         icon="Flag"
                         data-testid="GalleryControls__flag-button"
                         onClick={() => {
-                            if (!authenticated) {
-                                showConnectOverlay(() => {
-                                    setOpen(true);
+                            signedAction(({ signed }) => {
+                                setOpen(true);
 
+                                if (!signed) {
                                     router.reload({
                                         data: {
                                             report: true,
                                         },
                                     });
-                                });
-
-                                return;
-                            }
-
-                            setOpen(true);
+                                }
+                            });
                         }}
                         disabled={!canReport}
                     />

@@ -6,7 +6,7 @@ use App\Models\Network;
 use App\Rules\ValidChain;
 
 it('should pass if network is polygon', function () {
-    $polygon = Network::polygon()->firstOrFail();
+    $polygon = Network::polygon();
 
     expect(new ValidChain())->passes(null, $polygon->chain_id)->toBeTrue();
 });

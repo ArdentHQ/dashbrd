@@ -108,12 +108,17 @@ class CollectionController extends Controller
                 'reportByCollectionAvailableIn' => $reportByCollectionAvailableIn,
                 'alreadyReportedByCollection' => $alreadyReportedByCollection,
                 'hiddenCollectionAddresses' => $hiddenCollections,
+                'stats' => new CollectionStatsData(
+                    nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
+                    collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
+                    value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
+                ),
             ]);
         }
 
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
-            'stats' => new CollectionStatsData(
+            'initialStats' => new CollectionStatsData(
                 nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
                 collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
                 value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
@@ -210,6 +215,7 @@ class CollectionController extends Controller
             'nativeToken' => TokenData::fromModel($nativeToken),
             'allowsGuests' => true,
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
+            'showReportModal' => $request->boolean('report'),
         ])->withViewData([
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
             'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),

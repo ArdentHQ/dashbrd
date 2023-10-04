@@ -17,7 +17,7 @@ it('should fetch nft collection banner', function () {
     $now = Carbon::now();
     Carbon::setTestNow($now);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     /** @var Collection $collection */
     $collection = Collection::factory()->create([
@@ -25,6 +25,7 @@ it('should fetch nft collection banner', function () {
         'network_id' => $network->id,
         'extra_attributes' => [
             'banner' => null,
+            'image' => 'image-url',
         ],
     ]);
 
@@ -37,6 +38,7 @@ it('should fetch nft collection banner', function () {
     $updatedAt = Carbon::parse($collection->bannerUpdatedAt());
 
     expect($updatedAt->timestamp)->toBe($now->timestamp)
+        ->and($collection->image())->toBe('image-url')
         ->and($collection->banner())->toBe('https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format');
 });
 
@@ -45,7 +47,7 @@ it('should skip updating banner if it is null', function () {
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getContractMetadataBatch' => Http::response(fixtureData('alchemy.contract-metadata-batch'), 200),
     ]);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     /** @var Collection $collection */
     $collection = Collection::factory()->create([
@@ -67,7 +69,7 @@ it('should skip updating banner if it is null', function () {
 });
 
 it('should use the collection addresses and network id as a unique job identifier', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection1 = Collection::factory()->create([
         'address' => '0xbhello',
@@ -85,7 +87,7 @@ it('should use the collection addresses and network id as a unique job identifie
 });
 
 it('has a retry limit', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,

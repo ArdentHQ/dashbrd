@@ -303,10 +303,14 @@ class AlchemyPendingRequest extends PendingRequest
         $collections = self::post('getContractMetadataBatch', ['contractAddresses' => $contactAddresses])->json();
 
         return collect($collections)->map(function ($collectionMeta) {
+            $supply = Arr::get($collectionMeta, 'contractMetadata.totalSupply');
+            $mintedBlock = Arr::get($collectionMeta, 'contractMetadata.deployedBlockNumber');
+
             return new Web3ContractMetadata(
                 contractAddress: $collectionMeta['address'],
                 collectionName: Arr::get($collectionMeta, 'contractMetadata.name'),
-                totalSupply: Arr::get($collectionMeta, 'contractMetadata.totalSupply'),
+                totalSupply: $supply ? (int) $supply : null,
+                mintedBlock: $mintedBlock ? (int) $mintedBlock : null,
                 collectionSlug: Arr::get($collectionMeta, 'contractMetadata.openSea.collectionSlug'),
                 imageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.imageUrl'),
                 floorPrice: Arr::get($collectionMeta, 'contractMetadata.openSea.floorPrice'),
@@ -362,6 +366,7 @@ class AlchemyPendingRequest extends PendingRequest
             collectionDescription: Arr::get($nft, 'contractMetadata.openSea.description'),
             collectionBannerImageUrl: $bannerImageUrl,
             collectionBannerUpdatedAt: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl') ? Carbon::now() : null,
+            collectionOpenSeaSlug: Arr::get($nft, 'contractMetadata.openSea.collectionSlug'),
             collectionSocials: $socials,
             collectionSupply: $supply,
             name: $this->getNftName($nft),

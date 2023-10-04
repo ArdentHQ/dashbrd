@@ -7,7 +7,7 @@ export const CollectionCardSkeleton = (): JSX.Element => {
     return (
         <div
             data-testid="CollectionCard"
-            className="transition-default relative flex flex-col rounded-xl border border-theme-secondary-300 p-8 outline outline-3 outline-transparent hover:outline-theme-hint-100 focus-visible:outline-theme-hint-300"
+            className="transition-default relative flex flex-col rounded-xl border border-theme-secondary-300 p-8 outline outline-3 outline-transparent hover:outline-theme-primary-100 focus-visible:outline-theme-primary-300"
         >
             <div className="aspect-[3/2] w-full rounded-lg">
                 <div

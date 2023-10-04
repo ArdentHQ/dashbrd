@@ -7,13 +7,12 @@ import {
     GalleryStatsPlaceholder,
     NftImageGrid,
 } from "./NftGalleryCard.blocks";
-import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import * as useLikes from "@/Hooks/useLikes";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 const collectionInfo: Pick<
     App.Data.Gallery.GalleryNftData,
@@ -318,34 +317,37 @@ describe("GalleryStats", () => {
     const user = new UserDataFactory().withUSDCurrency().create();
 
     let useAuthSpy: SpyInstance;
-    let metamaskSpy: SpyInstance;
-
-    const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
-        callback();
-    });
 
     const useAuthState = {
         user,
         wallet: null,
         authenticated: true,
+        signed: false,
         showAuthOverlay: false,
         showCloseButton: false,
         closeOverlay: vi.fn(),
     };
 
+    let useAuthorizedActionSpy: SpyInstance;
+    const signedActionMock = vi.fn();
+
     beforeEach(() => {
         useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
 
-        metamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
-            getSampleMetaMaskState({
-                showConnectOverlay: showConnectOverlayMock,
-            }),
-        );
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
     });
 
     afterEach(() => {
         useAuthSpy.mockRestore();
-        metamaskSpy.mockRestore();
+
+        useAuthorizedActionSpy.mockRestore();
     });
 
     it("should display gallery stats", () => {
@@ -364,6 +366,7 @@ describe("GalleryStats", () => {
             user: null,
             wallet: null,
             authenticated: false,
+            signed: false,
             showAuthOverlay: false,
             showCloseButton: false,
             closeOverlay: vi.fn(),
@@ -487,43 +490,53 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
-    it("should display auth overlay when a guest clicks the like button", async () => {
-        const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({ ...useAuthState, authenticated: false });
-
-        const likeSpy = vi.spyOn(useLikes, "useLikes").mockReturnValue({
-            likes: 0,
-            hasLiked: false,
-            like: vi.fn(),
+    it("should force like if user was not authenticated", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
         });
-
-        render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
-
-        await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
-
-        expect(showConnectOverlayMock).toHaveBeenCalled();
-
-        spy.mockRestore();
-        likeSpy.mockRestore();
-    });
-
-    it("should register like after the guest log in", async () => {
-        const spy = vi.spyOn(useAuth, "useAuth").mockReturnValue({ ...useAuthState, authenticated: false });
 
         const likeMock = vi.fn();
 
         const likeSpy = vi.spyOn(useLikes, "useLikes").mockReturnValue({
-            likes: 0,
-            hasLiked: false,
+            likes: 10,
+            hasLiked: true,
             like: likeMock,
         });
 
         render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
 
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+
+        expect(screen.getByTestId("GalleryStats__likes")).toHaveTextContent("10");
+
         await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
 
-        expect(likeMock).toHaveBeenCalled();
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, true);
 
-        spy.mockRestore();
         likeSpy.mockRestore();
+    });
+
+    it("should toggle like if user was authenticated", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: false });
+        });
+
+        const likeMock = vi.fn();
+
+        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+            likes: 10,
+            hasLiked: true,
+            like: likeMock,
+        });
+
+        render(<GalleryStats gallery={{ ...gallery, hasLiked: false }} />);
+
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+
+        expect(screen.getByTestId("GalleryStats__likes")).toHaveTextContent("10");
+
+        await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
+
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, undefined);
     });
 });

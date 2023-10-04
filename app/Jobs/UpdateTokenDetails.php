@@ -39,6 +39,10 @@ class UpdateTokenDetails implements ShouldBeUnique, ShouldQueue
      */
     public function handle(MarketDataProvider $provider): void
     {
+        Log::info('UpdateTokenDetails Job: Processing', [
+            'token_id' => $this->token->id,
+        ]);
+
         $tokenDetails = $provider->getTokenDetails($this->token);
 
         if ($tokenDetails === null) {
@@ -65,7 +69,7 @@ class UpdateTokenDetails implements ShouldBeUnique, ShouldQueue
             /** @var array<string, float> $priceChanges24h */
             $priceChanges24h = Arr::get($tokenDetails, 'market_data.price_change_24h_in_currency', []);
 
-            DB::table('token_prices')->upsert(collect($prices)->map(function ($price, $currency) use ($guid, $priceChanges24h) {
+            $affected = DB::table('token_prices')->upsert(collect($prices)->map(function ($price, $currency) use ($guid, $priceChanges24h) {
                 $priceChange24hInCurrency = $priceChanges24h[$currency] ?? 0;
                 $priceChangePercent = 0;
 
@@ -83,6 +87,12 @@ class UpdateTokenDetails implements ShouldBeUnique, ShouldQueue
                     'updated_at' => Carbon::now(),
                 ];
             })->all(), ['token_guid', 'currency'], ['price', 'price_change_24h', 'updated_at']);
+
+            Log::info('UpdateTokenDetails Job: Token Prices Upserted', [
+                'total' => $affected,
+                'token_id' => $this->token->id,
+                'token_guid' => $guid->guid,
+            ]);
         });
     }
 

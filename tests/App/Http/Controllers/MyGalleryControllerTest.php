@@ -10,6 +10,7 @@ use App\Models\Token;
 use App\Models\User;
 use App\Support\Cache\GalleryCache;
 use App\Support\Cache\UserCache;
+use App\Support\Facades\Signature;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -51,559 +52,596 @@ it('should include nft count when rendering the "my galleries" page', function (
         ->assertInertia(fn (AssertableInertia $page) => $page->where('nftCount', 10));
 });
 
-it('can render the "create" page', function () {
-    $user = createUser();
-
-    Nft::factory()->create(['wallet_id' => $user->wallet->id]);
-
-    $this->actingAs($user)
-        ->get(route('my-galleries.create'))
-        ->assertStatus(200);
-});
-
-it('should render the "create" page with paginated collections and NFTs', function () {
-    Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-    Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
-
-    $user = createUser();
-
-    $userCollections = Collection::factory()->count(5)->create();
-
-    $userCollections->each(function (Collection $collection) use ($user) {
-        // create fewer NFTs for the last two collections
-
-        Nft::factory()->count(4)->create([
-            'wallet_id' => $user->wallet_id,
-            'collection_id' => $collection->id,
-        ]);
+describe('user is signed', function () {
+    beforeEach(function () {
+        Signature::shouldReceive('walletIsSigned')
+            ->andReturn(true);
     });
 
-    $this->actingAs($user)
-        ->get(route('my-galleries.create'))
-        ->assertStatus(200)
-        ->assertInertia(
-            fn (AssertableInertia $page) => $page
-                ->has('collections.paginated.data', 4)
-                ->where('collections.paginated.data.0.name', $userCollections[0]->name)
-                ->has('nfts', 12)
-        );
-});
+    it('can render the "create" page', function () {
+        $user = createUser();
 
-it('should exclude unowned NFTs in the "create" page', function () {
-    Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-    Config::set('dashbrd.gallery.pagination.nfts_per_page', 5);
+        Nft::factory()->create(['wallet_id' => $user->wallet->id]);
 
-    $user = createUser();
-
-    $userCollections = Collection::factory()->count(5)->create();
-
-    $secondUser = createUser();
-
-    Nft::factory()->count(2)->create([
-        'wallet_id' => $secondUser->wallet_id,
-        'collection_id' => $userCollections->first()->id,
-    ]);
-
-    $userCollections->each(function (Collection $collection) use ($user) {
-        Nft::factory()->count(3)->create([
-            'wallet_id' => $user->wallet_id,
-            'collection_id' => $collection->id,
-        ]);
+        $this->actingAs($user)
+            ->get(route('my-galleries.create'))
+            ->assertStatus(200);
     });
 
-    $this->actingAs($user)
-        ->get(route('my-galleries.create'))
-        ->assertStatus(200)
-        ->assertInertia(
-            fn (AssertableInertia $page) => $page
-                ->has('collections.paginated.data', 4)
-                ->where('collections.paginated.data.0.name', $userCollections[0]->name)
-                ->has('nfts', 12)
-        );
-});
+    it('should render the "create" page with paginated collections and NFTs', function () {
+        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
+        Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
 
-it('can render the "edit" page if owns the gallery', function () {
-    $user = createUser();
+        $user = createUser();
 
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user->id,
-    ]);
+        $userCollections = Collection::factory()->count(5)->create();
 
-    $this->actingAs($user)
-        ->get(route('my-galleries.edit', $gallery))
-        ->assertStatus(200);
-});
+        $userCollections->each(function (Collection $collection) use ($user) {
+            // create fewer NFTs for the last two collections
 
-it('should render the "edit" page with paginated collections and NFTs', function () {
-    Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-    Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
+            Nft::factory()->count(4)->create([
+                'wallet_id' => $user->wallet_id,
+                'collection_id' => $collection->id,
+            ]);
+        });
 
-    $user = createUser();
-
-    $userCollections = Collection::factory()->count(2)->create();
-
-    $userCollections->each(function (Collection $collection) use ($user) {
-        Nft::factory()->count(3)->create([
-            'wallet_id' => $user->wallet_id,
-            'collection_id' => $collection->id,
-        ]);
+        $this->actingAs($user)
+            ->get(route('my-galleries.create'))
+            ->assertStatus(200)
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->has('collections.paginated.data', 4)
+                    ->where('collections.paginated.data.0.name', $userCollections[0]->name)
+                    ->has('nfts', 12)
+            );
     });
 
-    $this->actingAs($user)
-        ->get(route('my-galleries.create'))
-        ->assertStatus(200)
-        ->assertInertia(
-            fn (AssertableInertia $page) => $page
-                ->has('collections.paginated.data', 2)
-                ->has('nfts', 6)
-        );
-});
+    it('should exclude unowned NFTs in the "create" page', function () {
+        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
+        Config::set('dashbrd.gallery.pagination.nfts_per_page', 5);
 
-it('should exclude unowned NFTs in the "edit" page', function () {
-    Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-    Config::set('dashbrd.gallery.pagination.nfts_per_page', 5);
+        $user = createUser();
 
-    $user = createUser();
+        $userCollections = Collection::factory()->count(5)->create();
 
-    $userCollections = Collection::factory()->count(5)->create();
+        $secondUser = createUser();
 
-    $secondUser = createUser();
-
-    Nft::factory()->count(2)->create([
-        'wallet_id' => $secondUser->wallet_id,
-        'collection_id' => $userCollections->first()->id,
-    ]);
-
-    $userCollections->each(function (Collection $collection) use ($user) {
-        Nft::factory()->count(3)->create([
-            'wallet_id' => $user->wallet_id,
-            'collection_id' => $collection->id,
+        Nft::factory()->count(2)->create([
+            'wallet_id' => $secondUser->wallet_id,
+            'collection_id' => $userCollections->first()->id,
         ]);
+
+        $userCollections->each(function (Collection $collection) use ($user) {
+            Nft::factory()->count(3)->create([
+                'wallet_id' => $user->wallet_id,
+                'collection_id' => $collection->id,
+            ]);
+        });
+
+        $this->actingAs($user)
+            ->get(route('my-galleries.create'))
+            ->assertStatus(200)
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->has('collections.paginated.data', 4)
+                    ->where('collections.paginated.data.0.name', $userCollections[0]->name)
+                    ->has('nfts', 12)
+            );
     });
 
-    $this->actingAs($user)
-        ->get(route('my-galleries.create'))
-        ->assertStatus(200)
-        ->assertInertia(
-            fn (AssertableInertia $page) => $page
-                ->has('collections.paginated.data', 4)
-                ->where('collections.paginated.data.0.name', $userCollections[0]->name)
-                ->has('nfts', 12)
-        );
+    it('can render the "edit" page if owns the gallery', function () {
+        $user = createUser();
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('my-galleries.edit', $gallery))
+            ->assertStatus(200);
+    });
+
+    it('should render the "edit" page with paginated collections and NFTs', function () {
+        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
+        Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
+
+        $user = createUser();
+
+        $userCollections = Collection::factory()->count(2)->create();
+
+        $userCollections->each(function (Collection $collection) use ($user) {
+            Nft::factory()->count(3)->create([
+                'wallet_id' => $user->wallet_id,
+                'collection_id' => $collection->id,
+            ]);
+        });
+
+        $this->actingAs($user)
+            ->get(route('my-galleries.create'))
+            ->assertStatus(200)
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->has('collections.paginated.data', 2)
+                    ->has('nfts', 6)
+            );
+    });
+
+    it('should exclude unowned NFTs in the "edit" page', function () {
+        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
+        Config::set('dashbrd.gallery.pagination.nfts_per_page', 5);
+
+        $user = createUser();
+
+        $userCollections = Collection::factory()->count(5)->create();
+
+        $secondUser = createUser();
+
+        Nft::factory()->count(2)->create([
+            'wallet_id' => $secondUser->wallet_id,
+            'collection_id' => $userCollections->first()->id,
+        ]);
+
+        $userCollections->each(function (Collection $collection) use ($user) {
+            Nft::factory()->count(3)->create([
+                'wallet_id' => $user->wallet_id,
+                'collection_id' => $collection->id,
+            ]);
+        });
+
+        $this->actingAs($user)
+            ->get(route('my-galleries.create'))
+            ->assertStatus(200)
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->has('collections.paginated.data', 4)
+                    ->where('collections.paginated.data.0.name', $userCollections[0]->name)
+                    ->has('nfts', 12)
+            );
+    });
+
+    it('cannot open the "edit" page if does not owns the gallery', function () {
+        $user = createUser();
+
+        $gallery = Gallery::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('my-galleries.edit', $gallery))
+            ->assertForbidden();
+    });
+
+    it('can delete a gallery the user owns', function () {
+        $user = createUser();
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->actingAs($user)
+            ->delete(route('my-galleries.destroy', ['gallery' => $gallery]))
+            ->assertRedirect(route('my-galleries'));
+
+        expect($gallery->fresh())->toBeNull();
+    });
+
+    it('cant delete a gallery the user does not owns', function () {
+        $user = createUser();
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => User::factory()->create()->id,
+        ]);
+
+        $this->actingAs($user)
+            ->delete(route('my-galleries.destroy', ['gallery' => $gallery]))
+            ->assertForbidden();
+    });
+
+    it('can create a new gallery by posting required data', function () {
+        $user = createUser();
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => null,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $user->refresh()->galleries()->where('name', 'Test')->first()));
+    });
+
+    it('calculates the value of a new gallery', function () {
+        $weth = Token::factory()->wethWithPrices()->create();
+
+        $user = createUser();
+        $collection = Collection::factory()->create([
+            'floor_price' => 2.1 * 1e18,
+            'floor_price_token_id' => $weth->id,
+        ]);
+        $nft = Nft::factory()->create([
+            'collection_id' => $collection->id,
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => null,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $gallery = $user->refresh()->galleries()->where('name', 'Test')->first()));
+
+        expect(round($gallery->value(CurrencyCode::USD)))->toBe(round(2.1 * 1769.02));
+    });
+
+    it('can not create a gallery without required data', function () {
+        $user = createUser();
+        Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => '',
+                'nfts' => [],
+                'coverImage' => null,
+            ])
+            ->assertInvalid(['name', 'nfts']);
+    });
+
+    it('can not create a gallery with nfts that are not owned by the user', function () {
+        $user = createUser();
+        $nft = Nft::factory()->create();
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => null,
+            ])
+            ->assertInvalid(['nfts.0']);
+    });
+
+    it('can create a gallery with a cover image', function () {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()->image('coverImage.jpg');
+
+        Storage::disk('public')->assertMissing('galleryCoverImages/'.$image->hashName());
+
+        $user = createUser();
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => $image,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $user->refresh()->galleries()->where('name', 'Test')->first()));
+
+        Storage::disk('public')->assertExists('galleryCoverImages/'.$image->hashName());
+    });
+
+    it('does not allow cover images with the wrong mimetype', function () {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()->image('coverImage.svg');
+
+        $user = createUser();
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => $image,
+            ])
+            ->assertInvalid('coverImage');
+    });
+
+    it('can edit a gallery based on id by posting required data', function () {
+        $user = createUser();
+
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $gallery = Gallery::factory()->create(['user_id' => $user]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'id' => $gallery->id,
+                'nfts' => [$nft->id],
+                'coverImage' => null,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $gallery->refresh()));
+
+        expect($gallery->name)->toBe('Test');
+        expect($gallery->nfts)->toHaveCount(1);
+        expect($gallery->nfts->first()->id)->toBe($nft->id);
+    });
+
+    it('can edit a gallery cover image with an uploaded file', function () {
+        Storage::fake('public');
+
+        $image = UploadedFile::fake()->image('coverImage.jpg');
+
+        Storage::disk('public')->assertMissing('galleryCoverImages/'.$image->hashName());
+
+        $user = createUser();
+
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user,
+            'cover_image' => null,
+        ]);
+
+        expect($gallery->coverImage)->toBe(null);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'id' => $gallery->id,
+                'nfts' => [$nft->id],
+                'coverImage' => $image,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $gallery->refresh()));
+
+        expect($gallery->name)->toBe('Test');
+        expect($gallery->nfts)->toHaveCount(1);
+        expect($gallery->nfts->first()->id)->toBe($nft->id);
+
+        Storage::disk('public')->assertExists('galleryCoverImages/'.$image->hashName());
+    });
+
+    it('can edit a gallery and handle the cover image not changing', function () {
+        $user = createUser();
+
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user,
+            'cover_image' => 'galleryCoverImages/testimg.png',
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'id' => $gallery->id,
+                'nfts' => [$nft->id],
+                'coverImage' => $gallery->cover_image,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $gallery->refresh()));
+
+        expect($gallery->name)->toBe('Test');
+        expect($gallery->nfts)->toHaveCount(1);
+        expect($gallery->nfts->first()->id)->toBe($nft->id);
+        expect($gallery->cover_image)->toBe('galleryCoverImages/testimg.png');
+    });
+
+    it('should not edit a gallery if the cover image is a string and does not match existing image', function () {
+        $user = createUser();
+
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user,
+            'name' => 'Awesome Gallery',
+            'cover_image' => 'galleryCoverImages/testimg.png',
+        ]);
+
+        $gallery->nfts()->attach($nft, ['order_index' => 0]);
+
+        $gallery->refresh();
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'id' => $gallery->id,
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => 'different-test-img.png',
+            ])
+            ->assertInvalid('coverImage');
+
+        $gallery->refresh();
+
+        expect($gallery->name)->toBe('Awesome Gallery');
+        expect($gallery->cover_image)->toBe('galleryCoverImages/testimg.png');
+    });
+
+    it('should update nfts when editing a gallery', function () {
+        $user = createUser();
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user,
+            'name' => 'Awesome Gallery',
+            'cover_image' => 'galleryCoverImages/testimg.png',
+        ]);
+
+        $oldNft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $newNft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $gallery->nfts()->attach($oldNft, ['order_index' => 0]);
+
+        $gallery->refresh();
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'id' => $gallery->id,
+                'name' => 'Test',
+                'nfts' => [$newNft->id],
+                'coverImage' => $gallery->cover_image,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $gallery->refresh()));
+
+        expect($gallery->name)->toBe('Test');
+        expect($gallery->nfts)->toHaveCount(1);
+        expect($gallery->nfts->first()->id)->toBe($newNft->id);
+    });
+
+    it('should clear gallery cache when a gallery is updated', function () {
+        $user = createUser();
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user,
+            'name' => 'Awesome Gallery',
+            'cover_image' => 'galleryCoverImages/testimg.png',
+        ]);
+
+        $oldNft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $newNft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $gallery->nfts()->attach($oldNft, ['order_index' => 0]);
+
+        expect((new GalleryCache($gallery))->nftsCount())->toBe(1);
+        expect((new GalleryCache($gallery))->collectionsCount())->toBe(1);
+        expect((new GalleryCache($gallery))->collections(CurrencyCode::USD)->count())->toBe(1);
+
+        $gallery->refresh();
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'id' => $gallery->id,
+                'name' => 'Test',
+                'nfts' => [
+                    $oldNft->id,
+                    $newNft->id,
+                ],
+                'coverImage' => $gallery->cover_image,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $gallery->refresh()));
+
+        expect($gallery->name)->toBe('Test');
+        expect($gallery->nfts)->toHaveCount(2);
+        expect($gallery->nfts->first()->pluck('id')->toArray())->toBe([
+            $oldNft->id,
+            $newNft->id,
+        ]);
+
+        expect((new GalleryCache($gallery))->nftsCount())->toBe(2);
+        expect((new GalleryCache($gallery))->collectionsCount())->toBe(2);
+        expect((new GalleryCache($gallery))->collections(CurrencyCode::USD)->count())->toBe(2);
+    });
+
+    it('should clear user cache when a gallery is updated', function () {
+        $user = createUser();
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $userCache = UserCache::from($user);
+
+        expect($userCache->galleriesCount())->toBe(0);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => null,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $user->refresh()->galleries()->where('name', 'Test')->first()));
+
+        expect($userCache->galleriesCount())->toBe(1);
+    });
+
+    it('should handle uploaded image not saving', function () {
+        $image = UploadedFile::fake()->image('coverImage.jpg');
+
+        $user = createUser();
+
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user,
+            'name' => 'Awesome Gallery',
+            'cover_image' => 'galleryCoverImages/testimg.png',
+        ]);
+
+        $nft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $gallery->nfts()->attach($nft, ['order_index' => 0]);
+
+        expect((new GalleryCache($gallery))->nftsCount())->toBe(1);
+        expect((new GalleryCache($gallery))->collectionsCount())->toBe(1);
+
+        $gallery->refresh();
+
+        Storage::shouldReceive('disk->put')
+            ->andReturn(false);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'id' => $gallery->id,
+                'name' => 'Test',
+                'nfts' => [$nft->id],
+                'coverImage' => $image,
+            ])
+            ->assertValid()
+            ->assertRedirect(route('galleries.view', $gallery->refresh()));
+
+        expect($gallery->name)->toBe('Test');
+        expect($gallery->cover_image)->toBeNull();
+    });
 });
 
-it('cannot open the "edit" page if does not owns the gallery', function () {
-    $user = createUser();
+describe('user is not signed', function () {
+    beforeEach(function () {
+        Signature::shouldReceive('walletIsSigned')
+            ->andReturn(false);
+    });
 
-    $gallery = Gallery::factory()->create();
+    it('can render the "create" page', function () {
+        $user = createUser();
 
-    $this->actingAs($user)
-        ->get(route('my-galleries.edit', $gallery))
-        ->assertForbidden();
-});
+        Nft::factory()->create(['wallet_id' => $user->wallet->id]);
 
-it('can delete a gallery the user owns', function () {
-    $user = createUser();
+        $this->actingAs($user)
+            ->get(route('my-galleries.create'))
+            ->assertStatus(200);
+    });
 
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user->id,
-    ]);
+    it('cant render the "edit" page if owns the gallery', function () {
+        $user = createUser();
 
-    $this->actingAs($user)
-        ->delete(route('my-galleries.destroy', ['gallery' => $gallery]))
-        ->assertRedirect(route('my-galleries'));
+        $gallery = Gallery::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
-    expect($gallery->fresh())->toBeNull();
-});
+        $this->actingAs($user)
+            ->get(route('my-galleries.edit', $gallery))
+            ->assertRedirect();
+    });
 
-it('cant delete a gallery the user does not owns', function () {
-    $user = createUser();
-
-    $gallery = Gallery::factory()->create([
-        'user_id' => User::factory()->create()->id,
-    ]);
-
-    $this->actingAs($user)
-        ->delete(route('my-galleries.destroy', ['gallery' => $gallery]))
-        ->assertForbidden();
-});
-
-it('can create a new gallery by posting required data', function () {
-    $user = createUser();
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => null,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $user->refresh()->galleries()->where('name', 'Test')->first()));
-});
-
-it('calculates the value of a new gallery', function () {
-    $weth = Token::factory()->wethWithPrices()->create();
-
-    $user = createUser();
-    $collection = Collection::factory()->create([
-        'floor_price' => 2.1 * 1e18,
-        'floor_price_token_id' => $weth->id,
-    ]);
-    $nft = Nft::factory()->create([
-        'collection_id' => $collection->id,
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => null,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $gallery = $user->refresh()->galleries()->where('name', 'Test')->first()));
-
-    expect(round($gallery->value(CurrencyCode::USD)))->toBe(round(2.1 * 1769.02));
-});
-
-it('can not create a gallery without required data', function () {
-    $user = createUser();
-    Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => '',
-            'nfts' => [],
-            'coverImage' => null,
-        ])
-        ->assertInvalid(['name', 'nfts']);
-});
-
-it('can not create a gallery with nfts that are not owned by the user', function () {
-    $user = createUser();
-    $nft = Nft::factory()->create();
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => null,
-        ])
-        ->assertInvalid(['nfts.0']);
-});
-
-it('can create a gallery with a cover image', function () {
-    Storage::fake('public');
-
-    $image = UploadedFile::fake()->image('coverImage.jpg');
-
-    Storage::disk('public')->assertMissing('galleryCoverImages/'.$image->hashName());
-
-    $user = createUser();
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => $image,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $user->refresh()->galleries()->where('name', 'Test')->first()));
-
-    Storage::disk('public')->assertExists('galleryCoverImages/'.$image->hashName());
-});
-
-it('does not allow cover images with the wrong mimetype', function () {
-    Storage::fake('public');
-
-    $image = UploadedFile::fake()->image('coverImage.svg');
-
-    $user = createUser();
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => $image,
-        ])
-        ->assertInvalid('coverImage');
-});
-
-it('can edit a gallery based on id by posting required data', function () {
-    $user = createUser();
-
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $gallery = Gallery::factory()->create(['user_id' => $user]);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'id' => $gallery->id,
-            'nfts' => [$nft->id],
-            'coverImage' => null,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $gallery->refresh()));
-
-    expect($gallery->name)->toBe('Test');
-    expect($gallery->nfts)->toHaveCount(1);
-    expect($gallery->nfts->first()->id)->toBe($nft->id);
-});
-
-it('can edit a gallery cover image with an uploaded file', function () {
-    Storage::fake('public');
-
-    $image = UploadedFile::fake()->image('coverImage.jpg');
-
-    Storage::disk('public')->assertMissing('galleryCoverImages/'.$image->hashName());
-
-    $user = createUser();
-
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user,
-        'cover_image' => null,
-    ]);
-
-    expect($gallery->coverImage)->toBe(null);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'id' => $gallery->id,
-            'nfts' => [$nft->id],
-            'coverImage' => $image,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $gallery->refresh()));
-
-    expect($gallery->name)->toBe('Test');
-    expect($gallery->nfts)->toHaveCount(1);
-    expect($gallery->nfts->first()->id)->toBe($nft->id);
-
-    Storage::disk('public')->assertExists('galleryCoverImages/'.$image->hashName());
-});
-
-it('can edit a gallery and handle the cover image not changing', function () {
-    $user = createUser();
-
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user,
-        'cover_image' => 'galleryCoverImages/testimg.png',
-    ]);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'id' => $gallery->id,
-            'nfts' => [$nft->id],
-            'coverImage' => $gallery->cover_image,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $gallery->refresh()));
-
-    expect($gallery->name)->toBe('Test');
-    expect($gallery->nfts)->toHaveCount(1);
-    expect($gallery->nfts->first()->id)->toBe($nft->id);
-    expect($gallery->cover_image)->toBe('galleryCoverImages/testimg.png');
-});
-
-it('should not edit a gallery if the cover image is a string and does not match existing image', function () {
-    $user = createUser();
-
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user,
-        'name' => 'Awesome Gallery',
-        'cover_image' => 'galleryCoverImages/testimg.png',
-    ]);
-
-    $gallery->nfts()->attach($nft, ['order_index' => 0]);
-
-    $gallery->refresh();
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'id' => $gallery->id,
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => 'different-test-img.png',
-        ])
-        ->assertInvalid('coverImage');
-
-    $gallery->refresh();
-
-    expect($gallery->name)->toBe('Awesome Gallery');
-    expect($gallery->cover_image)->toBe('galleryCoverImages/testimg.png');
-});
-
-it('should update nfts when editing a gallery', function () {
-    $user = createUser();
-
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user,
-        'name' => 'Awesome Gallery',
-        'cover_image' => 'galleryCoverImages/testimg.png',
-    ]);
-
-    $oldNft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $newNft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $gallery->nfts()->attach($oldNft, ['order_index' => 0]);
-
-    $gallery->refresh();
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'id' => $gallery->id,
-            'name' => 'Test',
-            'nfts' => [$newNft->id],
-            'coverImage' => $gallery->cover_image,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $gallery->refresh()));
-
-    expect($gallery->name)->toBe('Test');
-    expect($gallery->nfts)->toHaveCount(1);
-    expect($gallery->nfts->first()->id)->toBe($newNft->id);
-});
-
-it('should clear gallery cache when a gallery is updated', function () {
-    $user = createUser();
-
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user,
-        'name' => 'Awesome Gallery',
-        'cover_image' => 'galleryCoverImages/testimg.png',
-    ]);
-
-    $oldNft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $newNft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $gallery->nfts()->attach($oldNft, ['order_index' => 0]);
-
-    expect((new GalleryCache($gallery))->nftsCount())->toBe(1);
-    expect((new GalleryCache($gallery))->collectionsCount())->toBe(1);
-    expect((new GalleryCache($gallery))->collections(CurrencyCode::USD)->count())->toBe(1);
-
-    $gallery->refresh();
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'id' => $gallery->id,
-            'name' => 'Test',
-            'nfts' => [
-                $oldNft->id,
-                $newNft->id,
-            ],
-            'coverImage' => $gallery->cover_image,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $gallery->refresh()));
-
-    expect($gallery->name)->toBe('Test');
-    expect($gallery->nfts)->toHaveCount(2);
-    expect($gallery->nfts->first()->pluck('id')->toArray())->toBe([
-        $oldNft->id,
-        $newNft->id,
-    ]);
-
-    expect((new GalleryCache($gallery))->nftsCount())->toBe(2);
-    expect((new GalleryCache($gallery))->collectionsCount())->toBe(2);
-    expect((new GalleryCache($gallery))->collections(CurrencyCode::USD)->count())->toBe(2);
-});
-
-it('should clear user cache when a gallery is updated', function () {
-    $user = createUser();
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $userCache = UserCache::from($user);
-
-    expect($userCache->galleriesCount())->toBe(0);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => null,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $user->refresh()->galleries()->where('name', 'Test')->first()));
-
-    expect($userCache->galleriesCount())->toBe(1);
-});
-
-it('should handle uploaded image not saving', function () {
-    $image = UploadedFile::fake()->image('coverImage.jpg');
-
-    $user = createUser();
-
-    $gallery = Gallery::factory()->create([
-        'user_id' => $user,
-        'name' => 'Awesome Gallery',
-        'cover_image' => 'galleryCoverImages/testimg.png',
-    ]);
-
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet->id,
-    ]);
-
-    $gallery->nfts()->attach($nft, ['order_index' => 0]);
-
-    expect((new GalleryCache($gallery))->nftsCount())->toBe(1);
-    expect((new GalleryCache($gallery))->collectionsCount())->toBe(1);
-
-    $gallery->refresh();
-
-    Storage::shouldReceive('disk->put')
-        ->andReturn(false);
-
-    $this->actingAs($user)
-        ->post(route('my-galleries.store'), [
-            'id' => $gallery->id,
-            'name' => 'Test',
-            'nfts' => [$nft->id],
-            'coverImage' => $image,
-        ])
-        ->assertValid()
-        ->assertRedirect(route('galleries.view', $gallery->refresh()));
-
-    expect($gallery->name)->toBe('Test');
-    expect($gallery->cover_image)->toBeNull();
 });

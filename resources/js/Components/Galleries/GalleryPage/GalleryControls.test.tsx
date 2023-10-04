@@ -2,43 +2,30 @@ import { router } from "@inertiajs/react";
 import React from "react";
 import { type SpyInstance } from "vitest";
 import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
-import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import * as useLikes from "@/Hooks/useLikes";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
-import UserDataFactory from "@/Tests/Factories/UserDataFactory";
-import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";
-import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 const gallery = new GalleryDataFactory().create();
 
-const user = new UserDataFactory().create();
-const wallet = new WalletFactory().create();
-
-let useAuthSpy: SpyInstance;
-let useMetamaskSpy: SpyInstance;
-
-const defaultMetamaskConfig = getSampleMetaMaskState();
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
 
 describe("GalleryControls", () => {
     beforeEach(() => {
-        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
 
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user,
-            wallet,
-            authenticated: true,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
         });
     });
 
     afterEach(() => {
-        useMetamaskSpy.mockRestore();
-        useAuthSpy.mockRestore();
-        vi.clearAllMocks();
+        useAuthorizedActionSpy.mockRestore();
     });
 
     it("should render", () => {
@@ -90,6 +77,8 @@ describe("GalleryControls", () => {
     });
 
     it("should be possible to add and removes likes from a gallery", async () => {
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
         server.use(
             requestMockOnce(
                 `${BASE_URL}/galleries/like`, // Route based on vitest.setup.ts setupRoute
@@ -120,47 +109,14 @@ describe("GalleryControls", () => {
         expect(screen.queryByText("3")).not.toBeInTheDocument();
 
         expect(screen.queryByText("4")).toBeInTheDocument();
+
+        routerSpy.mockRestore();
     });
 
-    it("can like if gallery is defined", async () => {
-        const likeMock = vi.fn();
-
-        vi.spyOn(useLikes, "useLikes").mockReturnValue({
-            likes: 0,
-            hasLiked: false,
-            like: likeMock,
+    it("does not like if signed action does not finish", async () => {
+        signedActionMock.mockImplementation(() => {
+            // Do nothing
         });
-
-        render(
-            <GalleryControls
-                likesCount={3}
-                wallet={gallery.wallet}
-                gallery={gallery}
-            />,
-        );
-
-        await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
-
-        expect(likeMock).toHaveBeenCalled();
-    });
-
-    it("opens auth overlay if no authenticated", async () => {
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
-        });
-
-        const showConnectOverlay = vi.fn();
-
-        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
-            getSampleMetaMaskState({
-                showConnectOverlay,
-            }),
-        );
 
         const likeMock = vi.fn();
 
@@ -180,7 +136,7 @@ describe("GalleryControls", () => {
 
         await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
 
-        expect(showConnectOverlay).toHaveBeenCalled();
+        expect(signedActionMock).toHaveBeenCalled();
 
         expect(likeMock).not.toHaveBeenCalled();
     });
@@ -188,25 +144,6 @@ describe("GalleryControls", () => {
     it("likes and reloads the page after logged in", async () => {
         const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
 
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
-        });
-
-        const showConnectOverlay = vi.fn().mockImplementation((callback) => {
-            callback();
-        });
-
-        useMetamaskSpy = vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(
-            getSampleMetaMaskState({
-                showConnectOverlay,
-            }),
-        );
-
         const likeMock = vi.fn();
 
         vi.spyOn(useLikes, "useLikes").mockReturnValue({
@@ -225,9 +162,42 @@ describe("GalleryControls", () => {
 
         await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
 
-        expect(showConnectOverlay).toHaveBeenCalled();
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, undefined);
 
-        expect(likeMock).toHaveBeenCalled();
+        expect(signedActionMock).toHaveBeenCalled();
+
+        expect(routerSpy).toHaveBeenCalled();
+
+        routerSpy.mockRestore();
+    });
+
+    it("forces a like if user was not authenticated", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
+        });
+        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
+
+        const likeMock = vi.fn();
+
+        vi.spyOn(useLikes, "useLikes").mockReturnValue({
+            likes: 0,
+            hasLiked: true,
+            like: likeMock,
+        });
+
+        render(
+            <GalleryControls
+                likesCount={3}
+                wallet={gallery.wallet}
+                gallery={gallery}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__like-button"));
+
+        expect(likeMock).toHaveBeenCalledWith(gallery.slug, true);
+
+        expect(signedActionMock).toHaveBeenCalled();
 
         expect(routerSpy).toHaveBeenCalled();
 
@@ -246,5 +216,50 @@ describe("GalleryControls", () => {
         expect(screen.getByTestId("GalleryControls__copy-button")).toBeDisabled();
         expect(screen.getByTestId("GalleryControls__flag-button")).toBeDisabled();
         expect(screen.queryByTestId("GalleryControls__edit-button")).not.toBeInTheDocument();
+    });
+
+    it("edits after checking for signature", async () => {
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        const routerSpy = vi.spyOn(router, "get").mockImplementation(() => vi.fn());
+
+        render(
+            <GalleryControls
+                wallet={gallery.wallet}
+                likesCount={3}
+                gallery={{
+                    ...gallery,
+                    isOwner: true,
+                }}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__edit-button"));
+
+        expect(routerSpy).toHaveBeenCalled();
+    });
+    it("does not edits if no validates signature", async () => {
+        signedActionMock.mockImplementation(() => {
+            // Do nothing...
+        });
+
+        const routerSpy = vi.spyOn(router, "get").mockImplementation(() => vi.fn());
+
+        render(
+            <GalleryControls
+                wallet={gallery.wallet}
+                likesCount={3}
+                gallery={{
+                    ...gallery,
+                    isOwner: true,
+                }}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("GalleryControls__edit-button"));
+
+        expect(routerSpy).not.toHaveBeenCalled();
     });
 });

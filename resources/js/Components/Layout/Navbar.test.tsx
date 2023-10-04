@@ -5,7 +5,6 @@ import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
 import { render, screen, userEvent } from "@/Tests/testing-library";
-
 const user = new UserDataFactory().create();
 
 const wallet = new WalletFactory().create();
@@ -17,6 +16,7 @@ describe("Navbar", () => {
         vi.spyOn(useAuth, "useAuth").mockReturnValue({
             user,
             wallet,
+            signed: false,
             authenticated: true,
             showAuthOverlay: false,
             showCloseButton: false,

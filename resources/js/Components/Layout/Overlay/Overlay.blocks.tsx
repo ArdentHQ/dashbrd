@@ -14,7 +14,7 @@ export const OverlayButtonsWrapper = ({
         )}
         {...properties}
     >
-        <div className="flex w-full flex-col justify-center space-y-3 xs:items-center sm:flex-row sm:space-x-3 sm:space-y-0">
+        <div className="flex w-full flex-col items-center justify-center space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
             {children}
         </div>
     </div>

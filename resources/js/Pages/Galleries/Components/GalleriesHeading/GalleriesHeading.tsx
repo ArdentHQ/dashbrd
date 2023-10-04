@@ -17,18 +17,18 @@ export const GalleriesHeading = ({
 
     return (
         <Heading level={1}>
-            <span className="text-theme-hint-600">{galleriesCount}</span>
+            <span className="text-theme-primary-600">{galleriesCount}</span>
             <span className="lowercase">
                 {" "}
                 {tp("pages.galleries.galleries_count_simple", galleriesCount)} {t("pages.galleries.from")}{" "}
             </span>
-            <span className="text-theme-hint-600">{collectionsCount}</span>
+            <span className="text-theme-primary-600">{collectionsCount}</span>
             <span> {tp("pages.galleries.collections_count_simple", collectionsCount)}, </span>
             <span className="lowercase">{t("pages.galleries.featuring")} </span>
-            <span className="text-theme-hint-600">{nftsCount}</span>
+            <span className="text-theme-primary-600">{nftsCount}</span>
             <span> {tp("pages.galleries.nfts_count_simple", nftsCount)}, </span>
             <span className="lowercase">{t("pages.galleries.curated_by")} </span>
-            <span className="text-theme-hint-600">{usersCount}</span>
+            <span className="text-theme-primary-600">{usersCount}</span>
             <span> {tp("pages.galleries.users_count_simple", usersCount)}</span>
         </Heading>
     );

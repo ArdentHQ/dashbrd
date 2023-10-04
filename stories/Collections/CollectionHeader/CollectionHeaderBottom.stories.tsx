@@ -16,7 +16,7 @@ const user = new UserDataFactory().create();
 export const Bottom = {
     render: (args) => {
         return (
-            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: false }}>
+            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: false, signed: false }}>
                 <CollectionHeaderBottom {...args} />
             </ActiveUserContextProvider>
         );

@@ -1,11 +1,10 @@
 import cn from "classnames";
-import { type HTMLAttributes, useEffect, useState } from "react";
+import { type HTMLAttributes, useState } from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
 import { Footer } from "@/Components/Layout/Footer";
 import { Navbar } from "@/Components/Layout/Navbar";
 import { SliderContext } from "@/Components/Slider";
 import { ToastContainer, type ToastMessage } from "@/Components/Toast";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 
@@ -15,6 +14,7 @@ interface LayoutWrapperProperties extends HTMLAttributes<HTMLDivElement> {
     toastMessage?: ToastMessage;
     isMaintenanceModeActive?: boolean;
     belowHeader?: React.ReactNode;
+    mustBeSigned?: boolean;
 }
 
 export const LayoutWrapper = ({
@@ -25,18 +25,11 @@ export const LayoutWrapper = ({
     withSlider = false,
     toastMessage,
     isMaintenanceModeActive,
+    mustBeSigned = false,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth();
-
-    const { setAuthData } = useActiveUser();
-
-    useEffect(() => {
-        setAuthData?.({
-            authenticated,
-            wallet,
-            user,
-        });
-    }, [authenticated, user, wallet]);
+    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth({
+        mustBeSigned,
+    });
 
     const { connectWallet, initialized, connecting } = useMetaMaskContext();
 
@@ -60,6 +53,7 @@ export const LayoutWrapper = ({
             <AuthOverlay
                 show={showAuthOverlay}
                 showCloseButton={showCloseButton}
+                mustBeSigned={mustBeSigned}
                 closeOverlay={closeOverlay}
             />
 

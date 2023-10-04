@@ -20,7 +20,7 @@ export const listboxButtonClassnames = ({
             "border-transparent font-medium": isNavigation,
         },
         {
-            "enabled:bg-theme-hint-600 enabled:text-white enabled:hover:bg-theme-hint-700": variant === "primary",
+            "enabled:bg-theme-primary-600 enabled:text-white enabled:hover:bg-theme-primary-700": variant === "primary",
             "enabled:bg-theme-danger-400 enabled:text-white enabled:hover:bg-theme-danger-500": variant === "danger",
             "enabled:bg-white enabled:text-theme-secondary-900": variant === undefined,
         },
@@ -40,13 +40,13 @@ export const listboxButtonClassnames = ({
                       "border-theme-secondary-400": !isTruthy(isNavigation),
                   },
                   {
-                      "enabled:border-theme-hint-600": variant === "primary",
+                      "enabled:border-theme-primary-600": variant === "primary",
                       "enabled:border-theme-danger-400": variant === "danger",
                   },
-                  "enabled:focus:ring-2 enabled:focus:ring-theme-hint-300",
+                  "enabled:focus:ring-2 enabled:focus:ring-theme-primary-300",
                   {
-                      "border-theme-hint-600 ring-1 ring-theme-hint-600": isOpen,
-                      "enabled:hover:ring-2 enabled:hover:ring-theme-hint-100": !isOpen,
+                      "border-theme-primary-600 ring-1 ring-theme-primary-600": isOpen,
+                      "enabled:hover:ring-2 enabled:hover:ring-theme-primary-100": !isOpen,
                   },
               ],
         "disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700",

@@ -33,8 +33,8 @@ export const TokenLogo = ({
                         data-testid="TokenLogo__chain"
                         className={cn(
                             "absolute bottom-0 right-0 overflow-hidden rounded-full",
-                            { "border-theme-hint-100 group-hover:border-theme-hint-100": isSelected },
-                            { "border-white group-hover:border-theme-hint-50": !isSelected },
+                            { "border-theme-primary-100 group-hover:border-theme-primary-100": isSelected },
+                            { "border-white group-hover:border-theme-primary-50": !isSelected },
                             { "-m-1.5 border-3": networkIconSize === "sm" },
                             { "-m-3 border-4": networkIconSize === "md" },
                         )}

@@ -4,28 +4,33 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Data\AuthData;
+use App\Data\UserData;
+use App\Data\Wallet\WalletData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\SignMessageRequest;
-use App\Http\Requests\Auth\SwitchAccountRequest;
-use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\SignRequest;
+use App\Models\User;
+use App\Support\Facades\Signature;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended($request->get('intendedUrl', RouteServiceProvider::HOME));
+        return response()->json($this->getAuthData($request));
     }
 
     /**
@@ -36,17 +41,17 @@ class AuthenticatedSessionController extends Controller
         return response()->json(['message' => $request->getMessage()]);
     }
 
-    public function switchAccount(SwitchAccountRequest $request): RedirectResponse
+    public function sign(SignRequest $request): JsonResponse
     {
-        $request->updatePrimaryWallet();
+        $request->sign();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return response()->json($this->getAuthData($request));
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): RedirectResponse|JsonResponse
     {
         Auth::guard('web')->logout();
 
@@ -54,6 +59,37 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('galleries');
+        $previousRoute = Route::getRoutes()->match(request()->create(url()->previousPath()))->getName();
+
+        $requiresRedirect = in_array($previousRoute, ['dashboard', 'collections']);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'redirectTo' => $requiresRedirect ? 'galleries' : null,
+            ]);
+        }
+
+        return $requiresRedirect ? redirect()->route('galleries') : redirect()->back();
+    }
+
+    private function getAuthData(Request $request): AuthData
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $wallet = $user->wallet;
+
+        /** @var UserData $userData */
+        $userData = $user->getData();
+
+        /** @var WalletData $walletData */
+        $walletData = $wallet->getData();
+
+        return new AuthData(
+            $userData,
+            $walletData,
+            $user !== null,
+            Signature::walletIsSigned($wallet->id)
+        );
     }
 }

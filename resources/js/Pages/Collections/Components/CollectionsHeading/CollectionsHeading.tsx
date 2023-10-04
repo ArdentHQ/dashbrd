@@ -4,14 +4,10 @@ import { formatFiat } from "@/Utils/Currency";
 import { tp } from "@/Utils/TranslatePlural";
 
 export const CollectionsHeading = ({
-    value,
-    collectionsCount,
-    nftsCount,
+    stats,
     currency,
 }: {
-    collectionsCount: number;
-    nftsCount: number;
-    value: number | null;
+    stats: App.Data.Collections.CollectionStatsData;
     currency: string;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -24,20 +20,20 @@ export const CollectionsHeading = ({
             <Trans
                 i18nKey="pages.collections.header_title"
                 values={{
-                    nftsCount,
-                    collectionsCount,
-                    collections: tp("common.n_collections", collectionsCount),
-                    nfts: tp("common.n_nfts", nftsCount),
+                    nftsCount: stats.nfts,
+                    collectionsCount: stats.collections,
+                    collections: tp("common.n_collections", stats.collections),
+                    nfts: tp("common.n_nfts", stats.nfts),
                     worth: formatFiat({
                         currency,
-                        value: value !== null ? value.toString() : "0",
+                        value: stats.value !== null ? stats.value.toString() : "0",
                         t,
                     }),
                 }}
                 components={[
                     <span
                         key="0"
-                        className="text-theme-hint-600"
+                        className="text-theme-primary-600"
                     />,
                 ]}
             />

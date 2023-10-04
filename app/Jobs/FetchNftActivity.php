@@ -9,7 +9,6 @@ use App\Enums\Chains;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Nft;
 use App\Models\NftActivity;
-use App\Models\SpamContract;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
@@ -19,6 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class FetchNftActivity implements ShouldBeUnique, ShouldQueue
 {
@@ -44,7 +44,19 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
     {
         $collection = $this->nft->collection;
 
-        if (SpamContract::isSpam($collection->address, $collection->network)) {
+        Log::info('FetchNftActivity Job: Processing', [
+            'collection_name' => $collection->name,
+            'collection_address' => $collection->address,
+            'token_number' => $this->nft->token_number,
+        ]);
+
+        if ($collection->isInvalid()) {
+            Log::info('FetchNftActivity Job: Ignored, Collection Invalid', [
+                'token_number' => $this->nft->token_number,
+                'collection_name' => $collection->name,
+                'collection_address' => $collection->address,
+            ]);
+
             return;
         }
 
@@ -66,7 +78,7 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
             from: $latestActivityDate
         );
 
-        NftActivity::upsert(
+        $upsertedCount = NftActivity::upsert(
             $nftActivity->map(function (Web3NftTransfer $activity) {
                 return [
                     'nft_id' => $this->nft->id,
@@ -88,6 +100,15 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
         if ($limit === $nftActivity->count()) {
             FetchNftActivity::dispatch($this->nft)->onQueue(Queues::SCHEDULED_WALLET_NFTS);
         }
+
+        Log::info('FetchNftActivity Job: Handled', [
+            'collection_name' => $collection->name,
+            'collection_address' => $collection->address,
+            'network' => $collection->network->id,
+            'token_number' => $this->nft->token_number,
+            'upserted_activities_count' => $upsertedCount,
+            'dispatched_for_more' => $limit === $nftActivity->count(),
+        ]);
 
         $this->nft->touch('last_activity_fetched_at');
     }

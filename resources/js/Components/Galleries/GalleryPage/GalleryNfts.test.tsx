@@ -17,14 +17,14 @@ describe("GalleryNfts", () => {
 
         expect(screen.getByTestId("GalleryNfts")).toBeInTheDocument();
 
-        expect(screen.getAllByTestId("GalleryCard")[0]).not.toHaveClass("outline-theme-hint-300");
+        expect(screen.getAllByTestId("GalleryCard")[0]).not.toHaveClass("outline-theme-primary-300");
 
         await userEvent.click(screen.getAllByTestId("GalleryCard")[0]);
 
-        expect(screen.getAllByTestId("GalleryCard")[0]).toHaveClass("outline-theme-hint-300");
+        expect(screen.getAllByTestId("GalleryCard")[0]).toHaveClass("outline-theme-primary-300");
 
         await userEvent.click(screen.getAllByTestId("GalleryCard")[0]);
 
-        expect(screen.getAllByTestId("GalleryCard")[0]).not.toHaveClass("outline-theme-hint-300");
+        expect(screen.getAllByTestId("GalleryCard")[0]).not.toHaveClass("outline-theme-primary-300");
     });
 });

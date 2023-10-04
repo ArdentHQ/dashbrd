@@ -1,17 +1,37 @@
+import { router } from "@inertiajs/react";
 import { t } from "i18next";
 import React from "react";
-import { expect } from "vitest";
+import { expect, type SpyInstance } from "vitest";
 import { Report } from "./Report";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuth from "@/Hooks/useAuth";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
+let routerSpy: SpyInstance;
+let useAuthorizedActionSpy: SpyInstance;
+const signedActionMock = vi.fn();
+
 describe("Report", () => {
     const showConnectOverlayMock = vi.fn().mockImplementation((callback) => {
         callback();
+    });
+
+    beforeEach(() => {
+        const function_ = vi.fn();
+        routerSpy = vi.spyOn(router, "reload").mockImplementation(function_);
+
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: false, signed: false });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
     });
 
     beforeAll(() => {
@@ -26,12 +46,18 @@ describe("Report", () => {
             authenticated: true,
             showAuthOverlay: false,
             showCloseButton: false,
+            signed: true,
             closeOverlay: vi.fn(),
         });
     });
 
     afterAll(() => {
         vi.restoreAllMocks();
+    });
+
+    afterEach(() => {
+        routerSpy.mockRestore();
+        useAuthorizedActionSpy.mockRestore();
     });
 
     it("should render with nft", () => {
@@ -41,6 +67,7 @@ describe("Report", () => {
             <Report
                 model={nft}
                 modelType={"nft"}
+                show={false}
             />,
         );
 
@@ -55,6 +82,7 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
@@ -69,6 +97,7 @@ describe("Report", () => {
             <Report
                 model={nft}
                 modelType={"nft"}
+                show={false}
             />,
         );
 
@@ -86,6 +115,7 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
@@ -93,6 +123,35 @@ describe("Report", () => {
         expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
 
         await userEvent.click(screen.getByTestId("ConfirmationDialog__close"));
+        expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
+    });
+
+    it("show report modal on load", () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+                show={true}
+            />,
+        );
+
+        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+    });
+
+    it("doesnt show report modal on load if cant report", () => {
+        const collection = new CollectionDetailDataFactory().create();
+
+        render(
+            <Report
+                model={collection}
+                modelType={"collection"}
+                show={true}
+                allowReport={false}
+            />,
+        );
+
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
     });
 
@@ -105,6 +164,7 @@ describe("Report", () => {
             authenticated: false,
             showAuthOverlay: false,
             showCloseButton: false,
+            signed: false,
             closeOverlay: vi.fn(),
         });
 
@@ -112,13 +172,17 @@ describe("Report", () => {
             <Report
                 model={collection}
                 modelType={"collection"}
+                show={false}
             />,
         );
 
         await userEvent.click(screen.getByTestId("Report_flag"));
-        expect(showConnectOverlayMock).toHaveBeenCalledOnce();
 
-        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+        expect(routerSpy).toHaveBeenCalledWith({
+            data: {
+                report: true,
+            },
+        });
     });
 
     it("should render with default tooltip if display default tooltip is true", async () => {
@@ -129,6 +193,7 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 displayDefaultTooltip={true}
+                show={false}
             />,
         );
 
@@ -144,6 +209,7 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 displayDefaultTooltip={false}
+                show={false}
             />,
         );
 
@@ -159,6 +225,7 @@ describe("Report", () => {
                 model={nft}
                 modelType={"nft"}
                 className="custom-class"
+                show={false}
             />,
         );
 

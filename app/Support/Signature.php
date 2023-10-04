@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Support;
 
+use App\Models\Wallet;
+use Carbon\Carbon;
 use Elliptic\EC;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -34,6 +36,25 @@ class Signature
     public static function forgetSessionNonce(int $chainId): void
     {
         Session::forget('sign-message.nonce.'.$chainId);
+    }
+
+    public static function walletIsSigned(int $walletId): bool
+    {
+        return Session::get('wallet-is-signed.'.$walletId) === true;
+    }
+
+    public static function setWalletIsSigned(int $walletId): void
+    {
+        $wallet = Wallet::findOrFail($walletId);
+
+        $wallet->update(['last_signed_at' => Carbon::now()]);
+
+        Session::put('wallet-is-signed.'.$walletId, true);
+    }
+
+    public static function setWalletIsNotSigned(int $walletId): void
+    {
+        Session::forget('wallet-is-signed.'.$walletId);
     }
 
     // See https://github.com/ArdentHQ/msq.io/pull/511 for further details

@@ -118,10 +118,10 @@ exports[`TokenBalance > should render 0 if an undefined fiat balance is provided
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>
@@ -248,10 +248,10 @@ exports[`TokenBalance > should render in lg screen 1`] = `
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>
@@ -378,10 +378,10 @@ exports[`TokenBalance > should render in md screen 1`] = `
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>
@@ -508,10 +508,10 @@ exports[`TokenBalance > should render in md-lg screen 1`] = `
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>
@@ -638,10 +638,10 @@ exports[`TokenBalance > should render in sm screen 1`] = `
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>
@@ -768,10 +768,10 @@ exports[`TokenBalance > should render in xl screen 1`] = `
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>
@@ -898,10 +898,10 @@ exports[`TokenBalance > should render in xs screen 1`] = `
         </span>
       </div>
       <div
-        class="h-2 bg-theme-hint-200"
+        class="h-2 bg-theme-primary-200"
       >
         <div
-          class="h-2 bg-theme-hint-600"
+          class="h-2 bg-theme-primary-600"
           style="width: 50%;"
         />
       </div>

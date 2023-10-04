@@ -40,7 +40,7 @@ it('should render collections overview page with collections and NFTs', function
     $response = $this->actingAs($user)
         ->getJson(route('collections'))
         ->assertStatus(200)
-        ->assertJsonCount(5)
+        ->assertJsonCount(6)
         ->json();
 
     expect(count($response['collections']['data']))->toEqual(1);
@@ -52,7 +52,7 @@ it('can render the collections view page', function () {
 
     Bus::fake();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -80,7 +80,7 @@ it('should run FetchCollectionBanner if collection has no banner', function () {
 
     Bus::fake();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -108,7 +108,7 @@ it('should run FetchCollectionBanner if colleciton banner was updated more than 
 
     Bus::fake();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -137,7 +137,7 @@ it('should run FetchCollectionBanner if collection has banner but no banner_upda
 
     Bus::fake();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -165,7 +165,7 @@ it('should not run FetchCollectionBanner if collection has banner and banner_upd
 
     Bus::fake();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -190,7 +190,7 @@ it('should not run FetchCollectionBanner if collection has banner and banner_upd
 });
 
 it('can render the collection details page for guests', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -211,7 +211,7 @@ it('can render the collection details page for guests', function () {
 it('does not dispatch the job to sync collection if it has been recently viewed', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     Bus::fake();
 
@@ -244,7 +244,7 @@ it('should render user owned NFTs first ', function ($owned) {
 
     $secondaryUser = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $userCollection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -291,7 +291,7 @@ it('should render user owned NFTs first ', function ($owned) {
 it('can render the collections view page with owned filter', function ($owned) {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -332,7 +332,7 @@ it('can render the collections view page with owned filter', function ($owned) {
 it('can render the collections view page with falsy owned filter', function ($owned) {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -375,7 +375,7 @@ it('can render the collections view page with falsy owned filter', function ($ow
 it('can render the collections view page with custom nftPageLimit', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -411,7 +411,7 @@ it('can render the collections view page with custom nftPageLimit', function () 
 it('can render the collections view page with traits', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -458,7 +458,7 @@ it('can render the collections view page with traits', function () {
 it('can render the collections view page with activity tab', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -494,7 +494,7 @@ it('can render the collections view page with activity tab', function () {
 it('can render the collections view page with custom activityPageLimit', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -531,7 +531,7 @@ it('can render the collections view page with custom activityPageLimit', functio
 it('can render the collections view page with max activityPageLimit of 100', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -568,7 +568,7 @@ it('can render the collections view page with max activityPageLimit of 100', fun
 it('uses collection tab if another parameter is passed', function () {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -604,7 +604,7 @@ it('uses collection tab if another parameter is passed', function () {
 it('can render the collections view page with invalid traits', function ($invalidTraits) {
     $user = createUser();
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -654,7 +654,7 @@ it('can render the collections view page with invalid traits', function ($invali
 
 it('can render the collections view page with empty traits', function () {
     $user = createUser();
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -742,7 +742,7 @@ it('filters the collections by a search query on json requests', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['query' => 'Test']))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
 });
 
 it('removes the showIndex parameter if user has no hidden collections', function () {
@@ -788,7 +788,7 @@ it('filters hidden collections by a search query on json requests', function () 
             'showHidden' => 'true',
         ]))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
 });
 
 it('returns nfts with traits', function () {
@@ -833,7 +833,7 @@ it('returns nfts with traits', function () {
     $response = $this->actingAs($user)
         ->getJson(route('collections'))
         ->assertStatus(200)
-        ->assertJsonCount(5)
+        ->assertJsonCount(6)
         ->json();
 
     expect($response['nfts'][0]['traits'])->toEqual([
@@ -900,7 +900,7 @@ it('can sort by oldest collection', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'oldest']))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
 });
 
 it('can sort by recently received', function () {
@@ -936,7 +936,7 @@ it('can sort by recently received', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'received']))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
 });
 
 it('can sort by collection name', function () {
@@ -972,7 +972,7 @@ it('can sort by collection name', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'name', 'direction' => 'desc']))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
 });
 
 it('can sort by floor price', function () {
@@ -1008,7 +1008,7 @@ it('can sort by floor price', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'floor-price']))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
 });
 
 it('can sort by chain ID', function () {
@@ -1044,7 +1044,7 @@ it('can sort by chain ID', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'chain']))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
 });
 
 it('can sort by value', function () {
@@ -1080,5 +1080,46 @@ it('can sort by value', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'value']))
         ->assertStatus(200)
-        ->assertJsonCount(5);
+        ->assertJsonCount(6);
+});
+
+it('can get stats', function () {
+    $user = createUser();
+
+    $collection1 = Collection::factory()->create();
+    Nft::factory()->for($collection1)->for($user->wallet)->create();
+
+    $collection2 = Collection::factory()->create();
+    Nft::factory()->for($collection2)->for($user->wallet)->create();
+
+    $hidden = Collection::factory()->create();
+    Nft::factory()->for($hidden)->for($user->wallet)->create();
+
+    $user->hiddenCollections()->attach($hidden);
+
+    $this->actingAs($user)
+        ->get(route('collections'))
+        ->assertInertia(function ($page) {
+            $stats = $page->toArray()['props']['initialStats'];
+
+            return $stats['nfts'] === 2 && $stats['collections'] === 2;
+        });
+
+    $this->actingAs($user)
+        ->get(route('collections', ['showHidden' => 'true']))
+        ->assertInertia(function ($page) {
+            $stats = $page->toArray()['props']['initialStats'];
+
+            return $stats['nfts'] === 1 && $stats['collections'] === 1;
+        });
+
+    $response = $this->actingAs($user)->getJson(route('collections'));
+
+    expect($response['stats']['nfts'] === 2 && $response['stats']['collections'] === 2)->toBeTrue();
+
+    $response = $this->actingAs($user)->getJson(route('collections', [
+        'showHidden' => 'true',
+    ]));
+
+    expect($response['stats']['nfts'] === 1 && $response['stats']['collections'] === 1)->toBeTrue();
 });
