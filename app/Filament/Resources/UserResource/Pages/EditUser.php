@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use App\Filament\Resources\UserResource\Pages\Traits\HandlePermissions;
 use App\Filament\Resources\UserResource\Pages\Traits\HandleRole;
-use App\Models\User;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class EditUser extends EditRecord
 {
-    use HandleRole;
+    use HandlePermissions, HandleRole;
 
     protected static string $resource = UserResource::class;
 
@@ -29,16 +30,19 @@ class EditUser extends EditRecord
      */
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
+        /** @var string $role */
         $role = $data['role'];
-
         unset($data['role']);
 
-        /** @var User */
-        $model = parent::handleRecordUpdate($record, $data);
+        /** @var mixed $permissions */
+        $permissions = Arr::get($data, 'permissions', []);
+        unset($data['permissions']);
 
-        $this->setRole($model, $role);
+        $this->handleRole($record, $role);
 
-        return $model;
+        $this->handlePermissions($record, $permissions);
+
+        return parent::handleRecordUpdate($record, $data);
     }
 
     protected function getRedirectUrl(): string

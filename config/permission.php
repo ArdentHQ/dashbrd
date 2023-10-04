@@ -11,6 +11,7 @@ return [
         'user:create' => 'Create User',
         'user:updateAny' => 'Update any User',
         'user:deleteAny' => 'Delete any User',
+        'user:assignPermissions' => 'Assign Permissions to User',
         'article:create' => 'Create Article',
         'article:viewAny' => 'View Article',
         'article:updateAny' => 'Update any Article',
@@ -23,14 +24,14 @@ return [
 
     'roles' => [
         Role::Superadmin->value => [
-            'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny',
+            'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny', 'user:assignPermissions',
             'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
             'role:assignPermissions',
             'admin:access',
         ],
 
         Role::Admin->value => [
-            'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny',
+            'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny', 'user:assignPermissions',
             'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
             'role:assignPermissions',
             'admin:access',

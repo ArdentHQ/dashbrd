@@ -45,4 +45,9 @@ final class UserPolicy
 
         return $user->hasPermissionTo('user:deleteAny', 'admin');
     }
+
+    public function assignPermissions(User $user): bool
+    {
+        return $user->hasPermissionTo('user:assignPermissions', 'admin');
+    }
 }

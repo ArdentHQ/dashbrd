@@ -10,6 +10,7 @@ use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\Role as RoleModel;
 use App\Models\User;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -78,6 +79,24 @@ class UserResource extends Resource
                     ->imageEditor()
                     ->imageCropAspectRatio('1:1'),
 
+                CheckboxList::make('permissions')
+                    ->options(fn () => config('permission.permissions'))
+                    ->afterStateHydrated(function (CheckboxList $component, $state) use ($form) {
+                        /** @var User|null */
+                        $user = $form->getRecord();
+
+                        if ($user === null) {
+                            return;
+                        }
+
+                        $component->state($user->getPermissionNames());
+                    })
+                    ->hidden(function () {
+                        /** @var User */
+                        $user = auth()->user();
+
+                        return ! $user->can('assignPermissions', User::class);
+                    }),
             ]);
     }
 

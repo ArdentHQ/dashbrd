@@ -6,10 +6,11 @@ namespace App\Filament\Resources\UserResource\Pages\Traits;
 
 use App\Enums\Role;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 trait HandleRole
 {
-    private function setRole(User $model, string $role): void
+    private function handleRole(Model $model, string $role): void
     {
         /** @var User */
         $user = auth()->user();
@@ -24,6 +25,7 @@ trait HandleRole
         }
 
         if (in_array($role, $validRoles)) {
+            /** @var User $model */
             $model->syncRoles([$role]);
         }
     }
