@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION prune_empty_galleries() RETURNS TRIGGER AS $_$
 DECLARE
-_user_id BIGINT;
+    _user_id BIGINT;
 BEGIN
     -- Fetch user id of old wallet
 SELECT g.user_id INTO _user_id FROM galleries g
@@ -33,6 +33,8 @@ WITH soft_deleted_nfts AS (
     SELECT gallery_id
     FROM nft_gallery
     WHERE deleted_at IS NOT NULL
+    AND nft_gallery.nft_id = NEW.id
+    AND NEW.wallet_id IS NULL
     GROUP BY gallery_id
     HAVING COUNT(*) = COUNT(deleted_at)
 )
