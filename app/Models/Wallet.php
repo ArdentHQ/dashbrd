@@ -34,16 +34,7 @@ class Wallet extends Model
     /**
      * @var array<string>
      */
-    protected $fillable = [
-        'address',
-        'domain',
-        'avatar',
-        'active',
-        'total_usd',
-        'last_signed_at',
-        'last_activity_at',
-        'onboarded_at',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'extra_attributes' => SchemalessAttributes::class,
@@ -51,6 +42,8 @@ class Wallet extends Model
         'last_activity_at' => 'datetime',
         'last_signed_at' => 'datetime',
         'onboarded_at' => 'datetime',
+        'is_refreshing_collections' => 'bool',
+        'refreshed_collections_at' => 'datetime',
     ];
 
     public static function findByAddress(string $address): ?self
@@ -72,6 +65,11 @@ class Wallet extends Model
     public function nfts(): HasMany
     {
         return $this->hasMany(Nft::class);
+    }
+
+    public function collections(): HasManyThrough
+    {
+        return $this->hasManyThrough(Collection::class, Nft::class);
     }
 
     /**

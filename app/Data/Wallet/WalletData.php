@@ -6,6 +6,7 @@ namespace App\Data\Wallet;
 
 use App\Models\Wallet;
 use App\Support\Cache\UserCache;
+use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -24,6 +25,8 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
     'collectionsValue' => 'number | null',
     'galleryCount' => 'number',
     'timestamps' => '{tokens_fetched_at: number|null, native_balances_fetched_at: number|null}',
+    'isRefreshingCollections' => 'boolean',
+    'canRefreshCollections' => 'boolean',
 ])]
 class WalletData extends Data
 {
@@ -50,6 +53,9 @@ class WalletData extends Data
          * @var array{tokens_fetched_at: int|null, native_balances_fetched_at: int|null} $timestamps
          */
         public array $timestamps,
+
+        public bool $isRefreshingCollections,
+        public bool $canRefreshCollections,
     ) {
     }
 
@@ -79,7 +85,9 @@ class WalletData extends Data
             [
                 'tokens_fetched_at' => $wallet->tokensFetchedAt()?->getTimestampMs(),
                 'native_balances_fetched_at' => $wallet->nativeBalancesFetchedAt()?->getTimestampMs(),
-            ]
+            ],
+            isRefreshingCollections: $wallet->is_refreshing_collections,
+            canRefreshCollections: $wallet->refreshed_collections_at?->lte(now()->subMinutes(15)) ?? true,
         );
     }
 }
