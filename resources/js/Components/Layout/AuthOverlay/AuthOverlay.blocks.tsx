@@ -109,10 +109,10 @@ export const ConnectingWallet = ({ signing }: { signing: boolean }): JSX.Element
 };
 
 const handleBackClick = (): void => {
-    if (!isTruthy(document.referrer)) {
-        window.location.href = "/";
-    } else {
+    if (isTruthy(document.referrer) && document.referrer.startsWith(window.location.origin)) {
         window.history.back();
+    } else {
+        window.location.href = "/";
     }
 };
 
