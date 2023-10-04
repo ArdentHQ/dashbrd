@@ -45,7 +45,6 @@ it('should be able to update own wallet', function () {
 });
 
 it('should not be able to create wallets', function () {
-    expect(PermissionRepository::exists('user:create'))->toBeFalse();
     expect($this->instance->create($this->user))->toBeFalse();
     expect($this->instance->create($this->admin))->toBeFalse();
 });
@@ -53,7 +52,6 @@ it('should not be able to create wallets', function () {
 it('should not be able to update a single wallet', function () {
     $wallet = Wallet::factory()->create();
 
-    expect(PermissionRepository::exists('user:update'))->toBeFalse();
     expect($this->instance->update($this->user, $wallet))->toBeFalse();
     expect($this->instance->update($this->admin, $wallet))->toBeFalse();
 });

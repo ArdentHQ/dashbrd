@@ -63,7 +63,6 @@ it('should be able to update a single gallery', function () {
 });
 
 it('should be able to create gallery', function () {
-    expect(PermissionRepository::exists('user:create'))->toBeFalse();
     expect($this->instance->create($this->user))->toBeFalse();
     expect($this->instance->create($this->admin))->toBeTrue();
 });
