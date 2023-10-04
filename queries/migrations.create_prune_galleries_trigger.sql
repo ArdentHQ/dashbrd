@@ -12,16 +12,9 @@ SELECT g.user_id INTO _user_id FROM galleries g
     LIMIT 1;
 
 -- Mark all gallery nfts as soft deleted if no longer owned by any user
-WITH unassinged_nfts AS (
-    SELECT gallery_id, nft_id FROM galleries
-                                       JOIN nft_gallery ng on galleries.id = ng.gallery_id
-                                       JOIN nfts n on ng.nft_id = n.id AND n.wallet_id IS NULL
-    WHERE user_id = _user_id
-)
 UPDATE nft_gallery
-    SET deleted_at = NOW()
-FROM unassinged_nfts un
-WHERE nft_gallery.gallery_id = un.gallery_id AND nft_gallery.nft_id = un.nft_id;
+SET deleted_at = NOW()
+WHERE nft_gallery.nft_id = NEW.id AND NEW.wallet_id IS NULL;
 
 -- remove gallery nfts relationship if nft belongs to another user or is deleted
 WITH removed_nfts AS (
@@ -45,7 +38,7 @@ WITH soft_deleted_nfts AS (
 )
 
 UPDATE galleries
-SET deleted_at = NOW()
+    SET deleted_at = NOW()
 WHERE
     user_id = _user_id
 AND
