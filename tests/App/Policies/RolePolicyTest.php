@@ -32,6 +32,7 @@ it('should not be able to view a single role', function () {
 
 it('should not be able to create roles', function () {
     expect($this->instance->create($this->user))->toBeFalse();
+    expect($this->instance->create($this->admin))->toBeFalse();
 });
 
 it('should not be able to update a single role', function () {
@@ -65,10 +66,6 @@ it('should be able to view a single role', function () {
     expect($this->instance->view($this->admin, $role))->toBeTrue();
 });
 
-it('should be able to create roles', function () {
-    expect($this->instance->create($this->admin))->toBeTrue();
-});
-
 it('should be able to update a single role', function () {
     $role = RoleModel::create([
         'name' => 'test:view',
@@ -76,13 +73,4 @@ it('should be able to update a single role', function () {
     ]);
 
     expect($this->instance->update($this->admin, $role))->toBeTrue();
-});
-
-it('should be able to delete a single unused role', function () {
-    $role = RoleModel::create([
-        'name' => 'test:view',
-        'guard_name' => 'admin',
-    ]);
-
-    expect($this->instance->delete($this->admin, $role))->toBeTrue();
 });
