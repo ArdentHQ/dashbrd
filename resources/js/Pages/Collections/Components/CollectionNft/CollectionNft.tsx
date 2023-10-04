@@ -7,13 +7,7 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const CollectionNft = ({
-    nft,
-    owned,
-}: {
-    nft: App.Data.Gallery.GalleryNftData;
-    owned: boolean;
-}): JSX.Element => {
+export const CollectionNft = ({ nft }: { nft: App.Data.Gallery.GalleryNftData }): JSX.Element => {
     const { t } = useTranslation();
 
     const nftTokenNumberReference = useRef<HTMLDivElement>(null);
@@ -55,7 +49,7 @@ export const CollectionNft = ({
                             </span>
                         </Tooltip>
 
-                        {owned && (
+                        {nft.ownedByCurrentUser && (
                             <span className="flex h-5.5 items-center rounded-3xl bg-white px-2 text-xs font-medium text-theme-secondary-900 dark:bg-theme-dark-900 dark:text-theme-dark-50">
                                 {t("pages.collections.owned")}
                             </span>
