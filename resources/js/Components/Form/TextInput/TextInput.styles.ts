@@ -32,7 +32,7 @@ export const textInputDynamicClassnames = ({
             "bg-theme-secondary-50 dark:border-theme-dark-500 dark:bg-theme-dark-800 dark:text-theme-dark-200",
         );
     } else {
-        classes.push("bg-white dark:bg-theme-dark-900");
+        classes.push("bg-white dark:bg-theme-dark-800");
     }
 
     return classes;

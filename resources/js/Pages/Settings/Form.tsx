@@ -13,12 +13,12 @@ interface FormSectionProperties extends HTMLAttributes<HTMLDivElement> {
 
 const FormRoot = ({ footer, children, className, ...properties }: FormProperties): JSX.Element => (
     <form
-        className={cn("border-theme-secondary-300 sm:rounded-xl sm:border", className)}
+        className={cn("border-theme-secondary-300 dark:border-theme-dark-700 sm:rounded-xl sm:border", className)}
         {...properties}
     >
         <div className="px-6 py-6 sm:px-8">{children}</div>
 
-        <footer className="flex items-center justify-end space-x-3 border-t border-theme-secondary-300 px-6 py-4 sm:px-8">
+        <footer className="flex items-center justify-end space-x-3 border-t border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700 sm:px-8">
             {footer}
         </footer>
     </form>
@@ -34,14 +34,14 @@ const Section = ({ title, subtitle, children }: FormSectionProperties): JSX.Elem
                 {title}
             </Heading>
 
-            <p className="mt-1 text-sm leading-6 text-theme-secondary-700">{subtitle}</p>
+            <p className="mt-1 text-sm leading-6 text-theme-secondary-700 dark:text-theme-dark-200">{subtitle}</p>
         </div>
 
         <div className="mt-4 lg:mt-0">{children}</div>
     </section>
 );
 
-const Separator = (): JSX.Element => <hr className="my-6 text-theme-secondary-300" />;
+const Separator = (): JSX.Element => <hr className="my-6 text-theme-secondary-300 dark:text-theme-dark-700" />;
 
 export const Form = Object.assign(FormRoot, {
     Section,

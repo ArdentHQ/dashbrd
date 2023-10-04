@@ -11,6 +11,7 @@ use App\Data\Collections\CollectionStatsData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
+use App\Data\Network\NetworkWithCollectionsData;
 use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
@@ -20,6 +21,7 @@ use App\Enums\TraitDisplayType;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
+use App\Models\Network;
 use App\Models\Nft;
 use App\Models\User;
 use App\Support\Cache\UserCache;
@@ -57,6 +59,9 @@ class CollectionController extends Controller
         $hiddenCollections = $user->hiddenCollections->pluck('address');
         $showHidden = $request->get('showHidden') === 'true';
 
+        $selectedChainIds = array_filter(explode(',', $request->get('chain', '')));
+        $selectedChainIds = array_filter($selectedChainIds, fn ($id) => is_numeric($id));
+
         if ($showHidden && $hiddenCollections->isEmpty()) {
             return redirect()->route('collections', $request->except('showHidden'));
         }
@@ -64,9 +69,14 @@ class CollectionController extends Controller
         $cache = new UserCache($user);
 
         $sortBy = in_array($request->query('sort'), ['oldest', 'received', 'name', 'floor-price', 'value', 'chain']) ? $request->query('sort') : null;
-        $defaultSortDirection = $sortBy === null ? 'asc' : 'desc';
+        $defaultSortDirection = $sortBy === null ? 'desc' : 'asc';
 
         $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
+        $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
+
+        $selectedChainIds = array_filter($selectedChainIds, function ($id) use ($networks) {
+            return $networks->firstWhere('chainId', $id)?->collectionsCount > 0;
+        });
 
         if ($request->wantsJson()) {
             $searchQuery = $request->get('query');
@@ -76,9 +86,10 @@ class CollectionController extends Controller
                 ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
-                ->when($sortBy === 'name' || $sortBy === null, fn ($q) => $q->orderByName($sortDirection))
+                ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
+                ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
-                ->when($sortBy === 'value', fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
+                ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
                 ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
                 ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
@@ -106,6 +117,8 @@ class CollectionController extends Controller
                 'reportByCollectionAvailableIn' => $reportByCollectionAvailableIn,
                 'alreadyReportedByCollection' => $alreadyReportedByCollection,
                 'hiddenCollectionAddresses' => $hiddenCollections,
+                'availableNetworks' => $networks,
+                'selectedChainIds' => $selectedChainIds,
                 'stats' => new CollectionStatsData(
                     nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
                     collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
@@ -124,7 +137,9 @@ class CollectionController extends Controller
             'sortBy' => $sortBy,
             'sortDirection' => $sortDirection,
             'showHidden' => $showHidden,
+            'selectedChainIds' => $selectedChainIds,
             'view' => $request->get('view') === 'grid' ? 'grid' : 'list',
+            'availableNetworks' => $networks,
         ]);
     }
 
