@@ -1,3 +1,4 @@
+import { DateTime } from "@ardenthq/sdk-intl";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
 import { DateFormat } from "@/Types/enums";
 
@@ -38,6 +39,9 @@ const getMonthDelimiter = (dateFormat: DateFormat): string => {
 
     return " ";
 };
+
+export const formatTimestamp = (timestamp: number, format: DateFormat = "d M Y" as DateFormat): string =>
+    DateTime.fromUnix(timestamp).format(format);
 
 const getYearDelimiter = (dateFormat: DateFormat): string => {
     if (dateFormat === DateFormat.D) {
