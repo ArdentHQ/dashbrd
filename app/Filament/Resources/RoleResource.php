@@ -41,9 +41,7 @@ class RoleResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->label('Role name')
-                    ->getStateUsing(function (Role $role): string {
-                        return Str::title($role->name);
-                    })
+                    ->getStateUsing(fn (Role $role) => Str::title($role->name))
                     ->sortable()
                     ->searchable(),
             ])
