@@ -60,10 +60,12 @@ class UserResource extends Resource
                     })
                     ->afterStateHydrated(function (Select $component, $state) use ($form) {
                         /** @var User|null */
-                        $model = $form->getRecord();
+                        $user = $form->getRecord();
+                        /** @var RoleModel|null $role */
+                        $role = $user?->roles()->first();
 
-                        if ($model !== null) {
-                            $component->state($model->roles()->first()->name);
+                        if ($role !== null) {
+                            $component->state($role->name);
                         }
                     })
                     ->default(Role::Editor->value)
