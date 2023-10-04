@@ -32,6 +32,10 @@ class FetchCollectionActivity extends Command
      */
     public function handle(): int
     {
+        if (! config('dashbrd.features.activities')) {
+            return Command::SUCCESS;
+        }
+
         // Modify the query to only fetch activities for collections that we index NFTs for...
         $queryCallback = function (Builder $query) {
             /** @var Builder<Collection> */
