@@ -218,9 +218,14 @@ describe("CollectionHeaderTop", () => {
         expect(screen.getByTestId("Report_flag")).toHaveAttribute("disabled");
     });
 
-    it("should use polygon url for address", () => {
+    it.each([
+        ["https://polygonscan.com/address/", 137],
+        ["https://etherscan.io/address/", 1],
+        ["https://goerli.etherscan.io/address/", 5],
+        ["https://mumbai.polygonscan.com/address/", 80001],
+    ])(`should use %s for address`, (url, chainId) => {
         const collection = new CollectionDetailDataFactory().create({
-            chainId: 137,
+            chainId: chainId as App.Enums.Chains,
         });
 
         render(<CollectionHeaderTop collection={collection} />);
@@ -229,52 +234,7 @@ describe("CollectionHeaderTop", () => {
         expect(screen.getByTestId("CollectionHeaderTop__address")).toBeInTheDocument();
         expect(screen.getByTestId("CollectionHeaderTop__address")).toHaveAttribute(
             "href",
-            `https://polygonscan.com/address/${collection.address}`,
-        );
-    });
-
-    it("should use ethereum url for address", () => {
-        const collection = new CollectionDetailDataFactory().create({
-            chainId: 1,
-        });
-
-        render(<CollectionHeaderTop collection={collection} />);
-
-        expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
-        expect(screen.getByTestId("CollectionHeaderTop__address")).toBeInTheDocument();
-        expect(screen.getByTestId("CollectionHeaderTop__address")).toHaveAttribute(
-            "href",
-            `https://etherscan.io/address/${collection.address}`,
-        );
-    });
-
-    it("should use goerli url for address", () => {
-        const collection = new CollectionDetailDataFactory().create({
-            chainId: 5,
-        });
-
-        render(<CollectionHeaderTop collection={collection} />);
-
-        expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
-        expect(screen.getByTestId("CollectionHeaderTop__address")).toBeInTheDocument();
-        expect(screen.getByTestId("CollectionHeaderTop__address")).toHaveAttribute(
-            "href",
-            `https://goerli.etherscan.io/address/${collection.address}`,
-        );
-    });
-
-    it("should use mumbai url for address", () => {
-        const collection = new CollectionDetailDataFactory().create({
-            chainId: 80001,
-        });
-
-        render(<CollectionHeaderTop collection={collection} />);
-
-        expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
-        expect(screen.getByTestId("CollectionHeaderTop__address")).toBeInTheDocument();
-        expect(screen.getByTestId("CollectionHeaderTop__address")).toHaveAttribute(
-            "href",
-            `https://mumbai.polygonscan.com/address/${collection.address}`,
+            `${url}${collection.address}`,
         );
     });
 
