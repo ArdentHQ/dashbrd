@@ -166,7 +166,7 @@ export const InitiationStep = ({
                                             size={32}
                                         />
                                     ) : (
-                                        <div className="h-8 w-8 rounded-full bg-theme-primary-100"></div>
+                                        <div className="h-8 w-8 rounded-full bg-theme-primary-100 dark:bg-theme-dark-800 "></div>
                                     )}
                                 </TextInput.Avatar>
                             }
