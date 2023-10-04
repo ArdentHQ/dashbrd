@@ -9,7 +9,6 @@ use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionNftData;
 use App\Data\Collections\CollectionStatsData;
 use App\Data\Collections\CollectionTraitFilterData;
-use App\Data\Collections\Concerns\QueriesCollectionNfts;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Network\NetworkWithCollectionsData;
@@ -38,8 +37,6 @@ use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {
-    use QueriesCollectionNfts;
-
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
         $user = $request->user();
@@ -97,6 +94,7 @@ class CollectionController extends Controller
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
                 ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
                 ->search($user, $searchQuery)
+                ->with('reports')
                 ->paginate(25);
 
             $reportByCollectionAvailableIn = $collections->mapWithKeys(function ($collection) use ($request) {
@@ -104,7 +102,7 @@ class CollectionController extends Controller
             });
 
             $alreadyReportedByCollection = $collections->mapWithKeys(function ($collection) use ($user) {
-                return [$collection->address => $collection->wasReportedByUserRecently($user)];
+                return [$collection->address => $collection->wasReportedByUserRecently($user, useRelationship: true)];
             });
 
             $nfts = Nft::forCollections(
@@ -145,7 +143,7 @@ class CollectionController extends Controller
         ]);
     }
 
-    public function view(Request $request, Collection $collection): Response
+    public function show(Request $request, Collection $collection): Response
     {
         /** @var User|null $user */
         $user = $request->user();
@@ -192,6 +190,11 @@ class CollectionController extends Controller
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
             ->when(! $sortByMintDate, fn ($q) => $q->orderBy('token_number', 'asc'))
             ->paginate($nftPageLimit)
+            ->through(function ($nft) use ($collection) {
+                $nft->setRelation('collection', $collection);
+
+                return $nft;
+            })
             ->appends($request->all());
 
         // Allow any number but not more than 100
@@ -199,16 +202,28 @@ class CollectionController extends Controller
 
         $tab = $request->get('tab') === 'activity' ? 'activity' : 'collection';
 
-        $activities = $collection->activities()->latest('timestamp')->where('type', '!=', NftTransferType::Transfer)->paginate($activityPageLimit)->appends([
-            'tab' => 'activity',
-            'activityPageLimit' => $activityPageLimit,
-        ]);
+        $activities = $collection->activities()
+                            ->latest('timestamp')
+                            ->where('type', '!=', NftTransferType::Transfer)
+                            ->paginate($activityPageLimit)
+                            ->appends([
+                                'tab' => 'activity',
+                                'activityPageLimit' => $activityPageLimit,
+                            ]);
 
         /** @var PaginatedDataCollection<int, NftActivityData> */
         $paginated = NftActivityData::collection($activities);
 
+        $ownedNftIds = $user
+                        ? $collection->nfts()->ownedBy($user)->pluck('id')
+                        : collect([]);
+
         /** @var PaginatedDataCollection<int, GalleryNftData> */
-        $paginatedNfts = GalleryNftData::collection($nfts);
+        $paginatedNfts = GalleryNftData::collection($nfts)->through(function (GalleryNftData $data) use ($ownedNftIds) {
+            $data->ownedByCurrentUser = $ownedNftIds->contains($data->id);
+
+            return $data;
+        });
 
         $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
 
