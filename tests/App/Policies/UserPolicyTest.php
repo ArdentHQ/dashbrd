@@ -97,3 +97,11 @@ it('should not be able to delete self', function () {
     expect($this->instance->delete($this->user, $this->user))->toBeFalse();
     expect($this->instance->delete($this->admin, $this->admin))->toBeFalse();
 });
+
+it('should not be able to assign permissions to user', function () {
+    expect($this->user->hasPermissionTo('user:assignPermissions', 'admin'))->toBeFalse();
+});
+
+it('should be able to assign permissions to user', function () {
+    expect($this->admin->hasPermissionTo('user:assignPermissions', 'admin'))->toBeTrue();
+});
