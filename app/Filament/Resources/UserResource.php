@@ -58,6 +58,14 @@ class UserResource extends Resource
 
                         return $options;
                     })
+                    ->afterStateHydrated(function (Select $component, $state) use ($form) {
+                        /** @var User|null */
+                        $model = $form->getRecord();
+
+                        if ($model !== null) {
+                            $component->state($model->roles()->first()->name);
+                        }
+                    })
                     ->default(Role::Editor->value)
                     ->required(),
 
