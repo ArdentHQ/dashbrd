@@ -11,6 +11,7 @@ return [
         'portfolio' => env('PORTFOLIO_ENABLED', true),
         'galleries' => env('GALLERIES_ENABLED', true),
         'collections' => env('COLLECTIONS_ENABLED', true),
+        'activities' => env('ACTIVITIES_ENABLED', false),
     ],
 
     'testing_wallet' => env('LOCAL_TESTING_ADDRESS'),

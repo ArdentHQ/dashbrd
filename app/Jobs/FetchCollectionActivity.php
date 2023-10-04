@@ -41,6 +41,10 @@ class FetchCollectionActivity implements ShouldQueue
      */
     public function handle(MnemonicWeb3DataProvider $provider): void
     {
+        if (! config('dashbrd.features.activities')) {
+            return;
+        }
+
         if ($this->collection->isInvalid()) {
             return;
         }
