@@ -37,33 +37,33 @@ const abortController = new AbortController();
 const { signal } = abortController;
 
 axios.interceptors.request.use((config) => {
-  config.signal = signal;
-  return config;
+    config.signal = signal;
+    return config;
 });
 
 axios.interceptors.response.use(
-  (response) => response,
-  async (error: AxiosError) => {
-    const status = error.response?.status;
+    (response) => response,
+    async (error: AxiosError) => {
+        const status = error.response?.status;
 
-    if (status === 419) {
-        abortController.abort();
+        if (status === 419) {
+            abortController.abort();
 
-      try {
-        await axios.get(route("refresh-csrf-token"), {
-          signal: abortController.signal,
-        });
+            try {
+                await axios.get(route("refresh-csrf-token"), {
+                    signal: abortController.signal,
+                });
 
-        if (error.response != null) {
-          return axios(error.response.config);
+                if (error.response != null) {
+                    return axios(error.response.config);
+                }
+            } catch (abortError: any) {
+                console.error("Request canceled:", abortError.message);
+            }
         }
-      } catch (abortError: any) {
-        console.error('Request canceled:', abortError.message);
-      }
-    }
 
-    return Promise.reject(error);
-  }
+        return Promise.reject(error);
+    },
 );
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler, Title);
