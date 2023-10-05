@@ -4,6 +4,7 @@ import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
+import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
@@ -49,9 +50,14 @@ export const ArticlesView = ({
         view: displayType,
     };
 
+    const isFirstRender = useIsFirstRender();
+
     useEffect(() => {
         replaceUrlQuery(queryParameters);
-        setFilters(queryParameters);
+
+        if (!isFirstRender) {
+            setFilters(queryParameters);
+        }
     }, [JSON.stringify(queryParameters)]);
 
     if (isLoading || !isTruthy(articles)) {

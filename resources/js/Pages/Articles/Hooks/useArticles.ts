@@ -1,6 +1,5 @@
 import { type QueryKey, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { queryClient } from "@/app";
 import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
@@ -11,6 +10,7 @@ interface Properties {
 export const useArticles = (
     initialData: App.Data.Articles.ArticlesData,
     rawFilters: Record<string, string> = {},
+    enabled = true,
 ): Properties => {
     const filters: Record<string, string> = {};
 
@@ -23,24 +23,18 @@ export const useArticles = (
     const queryKey: QueryKey = ["articles", filters];
 
     const { data, isLoading } = useQuery({
+        enabled,
         queryKey,
-        staleTime: 5000,
         refetchOnWindowFocus: false,
         select: ({ data }) => data,
-        initialData: () => ({
-            data: {
-                articles: initialData,
-            },
-        }),
         queryFn: async () =>
             await axios.get<{ articles: App.Data.Articles.ArticlesData }>(route("articles"), {
                 params: filters,
             }),
     });
 
-    console.log(queryClient.getQueryCache());
     return {
-        articles: data.articles,
+        articles: data?.articles,
         isLoading,
     };
 };
