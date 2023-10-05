@@ -102,10 +102,12 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
                 )}
 
                 {articlesCount === 0 && query === "" && (
-                    <EmptyBlock>{t("pages.collections.articles.no_articles")}</EmptyBlock>
+                    <EmptyBlock className="w-full">{t("pages.collections.articles.no_articles")}</EmptyBlock>
                 )}
                 {articlesCount === 0 && query !== "" && (
-                    <EmptyBlock>{t("pages.collections.articles.no_articles_with_filters")}</EmptyBlock>
+                    <EmptyBlock className="w-full">
+                        {t("pages.collections.articles.no_articles_with_filters")}
+                    </EmptyBlock>
                 )}
 
                 <ArticlePagination
