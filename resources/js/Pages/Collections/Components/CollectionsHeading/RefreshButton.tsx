@@ -1,14 +1,15 @@
-import { useTranslation } from "react-i18next";
 import { router } from "@inertiajs/core";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Tooltip } from "@/Components/Tooltip";
-import { useState } from "react";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData | null }): JSX.Element => {
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
 
-    const refresh = () => {
+    const refresh = (): void => {
         setLoading(true);
 
         router.post(
@@ -23,21 +24,19 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
     };
 
     const tooltipContent = (): JSX.Element => {
-        if (wallet?.canRefreshCollections) {
+        if (isTruthy(wallet?.canRefreshCollections)) {
             return (
                 <>
-                    <p className="text-sm font-medium text-white">Refresh your collection</p>
-                    <p className="mt-0.5 text-xs text-theme-secondary-500">You can refresh data every 15 minutes.</p>
+                    <p className="text-sm font-medium text-white">{t("pages.collections.refresh.title")}</p>
+                    <p className="mt-0.5 text-xs text-theme-secondary-500">{t("pages.collections.refresh.notice")}</p>
                 </>
             );
         }
 
         return (
             <>
-                <p className="text-sm font-medium text-white">Refresh your collection</p>
-                <p className="mt-0.5 text-xs text-theme-secondary-500">
-                    Please wait. You can refresh data every 15 minutes.
-                </p>
+                <p className="text-sm font-medium text-white">{t("pages.collections.refresh.title")}</p>
+                <p className="mt-0.5 text-xs text-theme-secondary-500">{t("pages.collections.refresh.notice_wait")}</p>
             </>
         );
     };
@@ -46,7 +45,7 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
         <Tooltip content={tooltipContent()}>
             <IconButton
                 icon="Refresh"
-                disabled={!wallet?.canRefreshCollections || loading}
+                disabled={!isTruthy(wallet?.canRefreshCollections) || loading}
                 type="button"
                 onClick={refresh}
             />

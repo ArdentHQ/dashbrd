@@ -6,7 +6,6 @@ namespace App\Data\Wallet;
 
 use App\Models\Wallet;
 use App\Support\Cache\UserCache;
-use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -87,7 +86,7 @@ class WalletData extends Data
                 'native_balances_fetched_at' => $wallet->nativeBalancesFetchedAt()?->getTimestampMs(),
             ],
             isRefreshingCollections: $wallet->is_refreshing_collections,
-            canRefreshCollections: $wallet->refreshed_collections_at?->lte(now()->subMinutes(15)) ?? true,
+            canRefreshCollections: $wallet->canRefreshCollections(),
         );
     }
 }

@@ -1,8 +1,8 @@
 import { Trans, useTranslation } from "react-i18next";
+import { RefreshButton } from "./RefreshButton";
 import { Heading } from "@/Components/Heading";
 import { formatFiat } from "@/Utils/Currency";
 import { tp } from "@/Utils/TranslatePlural";
-import { RefreshButton } from "./RefreshButton";
 
 export const CollectionsHeading = ({
     stats,

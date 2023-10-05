@@ -67,11 +67,6 @@ class Wallet extends Model
         return $this->hasMany(Nft::class);
     }
 
-    public function collections(): HasManyThrough
-    {
-        return $this->hasManyThrough(Collection::class, Nft::class);
-    }
-
     /**
      * @param  Builder<self>  $query
      * @return Builder<self>
@@ -228,5 +223,20 @@ class Wallet extends Model
     public function onboarded(): bool
     {
         return $this->onboarded_at !== null;
+    }
+
+    public function canRefreshCollections(): bool
+    {
+        if ($this->is_refreshing_collections) {
+            return false;
+        }
+
+        if ($this->refreshed_collections_at === null) {
+            return true;
+        }
+
+        return $this->refreshed_collections_at->lt(
+            now()->subMinutes(15)
+        );
     }
 }

@@ -92,6 +92,11 @@ return [
             this site. Are you sure you wish to continue?',
             'not_show' => 'Do not show this message again.',
         ],
+        'refresh' => [
+            'title' => 'Refresh your collection',
+            'notice' => 'You can refresh data every 15 minutes.',
+            'notice_wait' => 'Please wait. You can refresh data every 15 minutes.',
+        ],
     ],
 
     'nfts' => [

@@ -18,8 +18,7 @@ class RefreshedCollectionController extends Controller
     {
         $wallet = $request->wallet();
 
-        abort_if($wallet->is_refreshing_collections, 403);
-        abort_if($wallet->refreshed_collections_at?->lt(now()->subMinutes(15)), 403);
+        abort_unless($wallet->canRefreshCollections(), 403);
 
         $collections = $wallet->nfts->load('collection.network')->map->collection->flatten()->unique();
 
@@ -27,7 +26,7 @@ class RefreshedCollectionController extends Controller
             'is_refreshing_collections' => true,
         ]);
 
-        Bus::batch($wallet->collections->flatMap(fn ($collection) => [
+        Bus::batch($collections->flatMap(fn ($collection) => [
             new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address),
             new FetchCollectionTraits($collection),
             new FetchCollectionOwners($collection),
