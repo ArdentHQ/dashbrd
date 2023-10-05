@@ -19,7 +19,6 @@ import {
     Tooltip,
 } from "chart.js";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-import get from "lodash/get";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import DarkModeContextProvider from "./Contexts/DarkModeContex";
@@ -44,22 +43,20 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
-        const status = error.response?.status;
+        const { status } = error.response ?? {};
 
         if (status === 419) {
             abortController.abort();
-
-            const { get } = axios;
-            await get(route("refresh-csrf-token"), {
-                signal: abortController.signal,
+            await axios.get(route("refresh-csrf-token"), {
+                signal,
             });
 
             if (error.response != null) {
-                return axios(error.response.config);
+                return await axios(error.response.config);
             }
         }
 
-        return Promise.reject(error);
+        return await Promise.reject(error);
     },
 );
 
