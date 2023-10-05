@@ -3,26 +3,19 @@
 declare(strict_types=1);
 
 use App\Support\PermissionRepository;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 function setUpPermissions(string $guard = 'admin'): void
 {
-    $permissions = PermissionRepository::all();
+    /**
+     * @var array<string, string> $roles
+     */
     $roles = config('permission.roles');
 
-    Permission::insert($permissions->map(fn ($permission) => [
-        'name' => $permission,
-        'guard_name' => $guard,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ])->all());
+    $permissions = PermissionRepository::all();
 
-    collect($roles)->each(fn ($permissions, $role) => Role::create([
-        'name' => $role,
-        'guard_name' => $guard,
-    ])->givePermissionTo($permissions));
+    collect($roles)->each(static fn ($permissions, $role) => Role::where('name', $role)->first()->givePermissionTo($permissions));
 
     app()[PermissionRegistrar::class]->forgetCachedPermissions();
 }

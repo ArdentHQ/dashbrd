@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Support\PermissionRepository;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionSeeder extends Seeder
 {
@@ -20,5 +21,7 @@ class PermissionSeeder extends Seeder
         $permissions = PermissionRepository::all();
 
         collect($roles)->each(static fn ($permissions, $role) => Role::where('name', $role)->first()->givePermissionTo($permissions));
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }
