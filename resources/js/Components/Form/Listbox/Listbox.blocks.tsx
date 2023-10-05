@@ -134,9 +134,9 @@ export const ListboxButtonIcon = ({
             isTruthy(isDisabled)
                 ? "text-theme-secondary-500"
                 : {
-                      "text-white": variant === "primary" || variant === "danger",
+                      "text-white dark:text-theme-dark-50": variant === "primary" || variant === "danger",
                       "text-theme-secondary-700": variant === undefined && !isTruthy(isNavigation),
-                      "text-theme-secondary-900": isNavigation,
+                      "text-theme-secondary-900 dark:text-theme-dark-50": isNavigation,
                   },
         )}
         aria-hidden="true"
@@ -161,7 +161,7 @@ export const ListboxOptions = ({
         <HeadlessListbox.Options
             as={as}
             className={twMerge(
-                "absolute z-10 mt-1 max-h-60 w-full max-w-full overflow-auto bg-white px-0 py-3.5 text-base shadow-dropdown focus:outline-none dark:border dark:border-theme-dark-700 dark:bg-theme-dark-800",
+                "absolute z-10 mt-1 max-h-60 w-full max-w-full overflow-auto rounded-xl bg-white px-0 py-3.5 text-base shadow-dropdown focus:outline-none dark:border dark:border-theme-dark-700 dark:bg-theme-dark-800",
                 className,
             )}
             data-testid="ListboxOptions"
@@ -225,7 +225,7 @@ export const ListboxButton = ({
             {...properties}
         >
             {({ open, disabled }) => (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 dark:text-theme-dark-50">
                     {avatar}
 
                     <span className="block flex-1 truncate">
@@ -240,7 +240,7 @@ export const ListboxButton = ({
                         )}
                     </span>
 
-                    <span className="pointer-events-none flex items-center">
+                    <span className="pointer-events-none flex items-center ">
                         <ListboxButtonIcon
                             isNavigation={isNavigation}
                             isOpen={open}

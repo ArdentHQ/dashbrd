@@ -10,15 +10,18 @@ const Layout = ({
     toastMessage,
     children,
     mustBeSigned = false,
+    showBackButton,
 }: {
     title: string;
     children: ReactNode;
     toastMessage?: ToastMessage;
     mustBeSigned?: boolean;
+    showBackButton?: boolean;
 }): JSX.Element => (
     <LayoutWrapper
         toastMessage={toastMessage}
         mustBeSigned={mustBeSigned}
+        showBackButton={showBackButton}
     >
         <Head title={title} />
 

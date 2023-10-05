@@ -284,6 +284,17 @@ declare namespace App.Data.Gallery {
         avatar: App.Data.Wallet.WalletAvatarData;
     };
 }
+declare namespace App.Data.Network {
+    export type NetworkWithCollectionsData = {
+        id: number;
+        name: string;
+        isMainnet: boolean;
+        chainId: App.Enums.Chains;
+        publicRpcProvider: string;
+        explorerUrl: string;
+        collectionsCount: number;
+    };
+}
 declare namespace App.Data.Nfts {
     export type NftActivitiesData = {
         paginated: {

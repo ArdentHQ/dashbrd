@@ -28,7 +28,7 @@ export const SidebarItem = ({
             {isTruthy(icon) && (
                 <Icon
                     className={cn("transition-default ml-0 mr-2", {
-                        "border-transparent text-theme-primary-600": isSelected,
+                        "border-transparent text-theme-primary-600 dark:text-theme-dark-50": isSelected,
                     })}
                     name={icon}
                     size="lg"

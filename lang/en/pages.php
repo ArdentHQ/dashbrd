@@ -37,6 +37,7 @@ return [
         'header_title' => 'You own <0>:nftsCount</0> :nfts across <0>:collectionsCount</0> :collections, worth about <0><1>:worth</1></0>',
         'search_placeholder' => 'Search by Collection',
         'properties' => 'Properties',
+        'collections_network' => 'Collections Network',
         'property_search_placeholder' => 'Feature Search',
         'floor_price' => 'Floor Price',
         'value' => 'Value',
