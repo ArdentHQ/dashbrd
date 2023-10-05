@@ -50,7 +50,8 @@ axios.interceptors.response.use(
             abortController.abort();
 
             try {
-                await axios.get(route("refresh-csrf-token"), {
+                const { get } = axios;
+                await get(route("refresh-csrf-token"), {
                     signal: abortController.signal,
                 });
 
