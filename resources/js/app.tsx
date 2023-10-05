@@ -57,7 +57,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointE
 
 const appName = window.document.querySelector("title")?.innerText ?? "Dashbrd";
 
-export const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 void createInertiaApp({
     title: (title) => (title !== "" ? title : appName),
