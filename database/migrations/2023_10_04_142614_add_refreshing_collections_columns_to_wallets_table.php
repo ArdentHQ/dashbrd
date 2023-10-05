@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('wallets', function (Blueprint $table) {
             $table->boolean('is_refreshing_collections')->default(false)->after('extra_attributes');
-            $table->boolean('refreshed_collections_at')->nullable()->after('is_refreshing_collections');
+            $table->timestamp('refreshed_collections_at')->nullable()->after('is_refreshing_collections');
         });
     }
 };
