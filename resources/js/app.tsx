@@ -60,7 +60,7 @@ axios.interceptors.response.use(
                 }
             } catch (abortError) {
                 if (abortError instanceof DOMException) {
-                    console.error('Request canceled:', abortError.message);
+                    console.error("Request canceled:", abortError.message);
                 }
             }
         }
