@@ -336,7 +336,7 @@ class Collection extends Model
     public function scopeWithoutSpamContracts(Builder $query): Builder
     {
         return $query->whereDoesntHave('spamContract', function ($query) {
-            $query->selectRaw(1)->whereColumn('collections.network_id', 'spam_contracts.network_id');
+            $query->whereColumn('collections.network_id', 'spam_contracts.network_id');
         });
     }
 
