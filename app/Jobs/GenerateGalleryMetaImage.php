@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Models\Gallery;
+use App\Models\Nft;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\Pool;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
+use Intervention\Image\Facades\Image;
 
 class GenerateGalleryMetaImage implements ShouldQueue
 {
@@ -18,7 +23,7 @@ class GenerateGalleryMetaImage implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(Gallery $gallery)
+    public function __construct(public Gallery $gallery)
     {
         //
     }
@@ -28,6 +33,42 @@ class GenerateGalleryMetaImage implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        $path = storage_path('meta/gallery_template.png');
+
+        $images = $this->getImageUrls();
+
+        $responses = Http::pool(fn (Pool $pool) => $images->map(fn ($imageUrl) => $pool->get($imageUrl))->toArray());
+
+        $successfulReponses = array_filter($responses, fn ($response) => $response->ok());
+
+        $image = Image::make($path);
+
+        foreach ($successfulReponses as $index => $response) {
+
+            $nftImage = Image::make($response->__toString());
+
+            $nftImage->fit(227, 227);
+
+            $image
+                ->insert(
+                    $nftImage,
+                    'top-left',
+                    137 + ($index * (227 + 7)),
+                    430
+                )
+                ->save(storage_path('meta/gallery.png'));
+        }
+
+    }
+
+    private function getImageUrls(): Collection
+    {
+        return $this->gallery->nfts()->get()->map(function (Nft $nft) {
+            $images = $nft->images();
+
+            $size = collect(['large', 'small', 'thumb'])->filter(fn ($size) => (bool) $images[$size])->first();
+
+            return $images[$size];
+        })->filter()->take(4)->values();
     }
 }
