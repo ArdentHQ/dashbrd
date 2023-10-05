@@ -96,6 +96,7 @@ return [
             'title' => 'Refresh your collection',
             'notice' => 'You can refresh data every 15 minutes.',
             'notice_wait' => 'Please wait. You can refresh data every 15 minutes.',
+            'toast' => "We're updating information for your collection.",
         ],
     ],
 
