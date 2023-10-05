@@ -36,7 +36,7 @@ class RefreshedCollectionController extends Controller
                 'is_refreshing_collections' => false,
                 'refreshed_collections_at' => now(),
             ]);
-        })->dispatch();
+        })->name('Refreshing collections for wallet #'.$wallet->id)->dispatch();
 
         return back()->toast(
             trans('pages.collections.refresh.toast'),
