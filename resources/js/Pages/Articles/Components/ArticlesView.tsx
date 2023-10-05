@@ -53,12 +53,14 @@ export const ArticlesView = ({
     const isFirstRender = useIsFirstRender();
 
     useEffect(() => {
-        replaceUrlQuery(queryParameters);
-
         if (!isFirstRender) {
             setFilters(queryParameters);
         }
-    }, [JSON.stringify(queryParameters)]);
+    }, [pageLimit, debouncedQuery, sort]);
+
+    useEffect(() => {
+        replaceUrlQuery(queryParameters);
+    }, [view, debouncedQuery, sort, pageLimit]);
 
     if (isLoading || !isTruthy(articles)) {
         return <>is loading</>;
