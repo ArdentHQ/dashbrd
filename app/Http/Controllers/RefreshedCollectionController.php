@@ -38,6 +38,11 @@ class RefreshedCollectionController extends Controller
             ]);
         })->dispatch();
 
-        return back()->toast('Loading...', type: 'pending', expanded: true);
+        return back()->toast(
+            trans('pages.collections.refresh.toast'),
+            type: 'pending',
+            expanded: true,
+            loading: true
+        );
     }
 }
