@@ -1,4 +1,3 @@
-import { DateTime } from "@ardenthq/sdk-intl";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
 import { DateFormat } from "@/Types/enums";
 
@@ -39,9 +38,6 @@ const getMonthDelimiter = (dateFormat: DateFormat): string => {
 
     return " ";
 };
-
-export const formatTimestamp = (timestamp: number, format?: DateFormat): string =>
-    DateTime.fromUnix(timestamp).format(format ?? "d M Y");
 
 const getYearDelimiter = (dateFormat: DateFormat): string => {
     if (dateFormat === DateFormat.D) {
@@ -169,6 +165,23 @@ export const toHuman = (
         parts,
         options.time_format,
     )}`;
+};
+
+export const formatTimestamp = (date: number, dateFormat?: DateFormat, timezone?: string): string => {
+    dateFormat = dateFormat ?? DateFormat.C;
+
+    const parts = getTimestampParts({
+        timestamp: date,
+        timezone: timezone ?? "UTC",
+        options: {
+            day: "2-digit",
+            month: getMonthFormat(dateFormat),
+            year: "numeric",
+        },
+    });
+    const { month, day, year } = parts;
+
+    return dateFormat.replace("Y", year).replace(/m/i, month).replace("d", day);
 };
 
 /**
