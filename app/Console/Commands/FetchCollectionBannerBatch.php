@@ -41,24 +41,24 @@ class FetchCollectionBannerBatch extends Command
 
         $networks->map(function ($network) {
             Collection::query()
-                ->select(['collections.id', 'collections.address'])
-                ->where('collections.network_id', '=', $network->id)
-                ->withoutSpamContracts()
-                ->when($this->option('missing-only'), function (Builder $query) {
-                    $query->whereNull('extra_attributes->banner');
-                })
-                ->chunkById(100, function (IlluminateCollection $collections) use ($network) {
-                    $collections = $collections->filter(fn ($collection) => ! $collection->isBlacklisted());
+                    ->select('id', 'address')
+                    ->where('network_id', $network->id)
+                    ->withoutSpamContracts()
+                    ->when($this->option('missing-only'), function (Builder $query) {
+                        $query->whereNull('extra_attributes->banner');
+                    })
+                    ->chunkById(100, function (IlluminateCollection $collections) use ($network) {
+                        $collections = $collections->filter(fn ($collection) => ! $collection->isBlacklisted());
 
-                    $addresses = $collections->pluck('address')->toArray();
+                        $addresses = $collections->pluck('address')->toArray();
 
-                    Log::info('Dispatching FetchCollectionBannerBatchJob', [
-                        'network_id' => $network->id,
-                        'collection_addresses' => $addresses,
-                    ]);
+                        Log::info('Dispatching FetchCollectionBannerBatchJob', [
+                            'network_id' => $network->id,
+                            'collection_addresses' => $addresses,
+                        ]);
 
-                    FetchCollectionBannerBatchJob::dispatch($addresses, $network);
-                });
+                        FetchCollectionBannerBatchJob::dispatch($addresses, $network);
+                    });
         });
 
         return Command::SUCCESS;

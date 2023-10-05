@@ -320,15 +320,24 @@ class Collection extends Model
     }
 
     /**
+     * @return HasOne<SpamContract>
+     */
+    public function spamContract(): HasOne
+    {
+        return $this->hasOne(SpamContract::class, 'address', 'address')->when(
+            $this->network_id !== null, fn ($query) => $query->where('network_id', $this->network_id)
+        );
+    }
+
+    /**
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
     public function scopeWithoutSpamContracts(Builder $query): Builder
     {
-        return $query->leftJoin('spam_contracts', function ($join) {
-            $join->on('collections.network_id', '=', 'spam_contracts.network_id')
-                ->on('collections.address', '=', 'spam_contracts.address');
-        })->whereNull('spam_contracts.address');
+        return $query->whereDoesntHave('spamContract', function ($query) {
+            $query->selectRaw(1)->whereColumn('collections.network_id', 'spam_contracts.network_id');
+        });
     }
 
     /**
