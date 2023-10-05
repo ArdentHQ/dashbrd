@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('slug')->unique();
             $table->string('category');
             $table->date('published_at')->nullable();
             $table->text('meta_description')->nullable();

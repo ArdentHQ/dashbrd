@@ -16,6 +16,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { ArticlesTab } from "@/Pages/Collections/Components/Articles/ArticlesTab";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -169,7 +170,7 @@ const CollectionsView = ({
     const tabChangeHandler = (tab: TabName): void => {
         setSelectedTab(tab);
 
-        setFilterIsDirty(true);
+        // setFilterIsDirty(true);
     };
 
     const activityPageLimitChangeHandler = (pageLimit: number): void => {
@@ -235,7 +236,6 @@ const CollectionsView = ({
                         collection={collection}
                     />
                 )}
-
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     <CollectionHeading
                         reportReasons={props.reportReasons}
@@ -315,9 +315,7 @@ const CollectionsView = ({
                         </Tab.Panel>
 
                         <Tab.Panel>
-                            <div className="mt-6">
-                                <EmptyBlock>{t("pages.collections.articles.no_articles")}</EmptyBlock>
-                            </div>
+                            <ArticlesTab collection={collection} />
                         </Tab.Panel>
 
                         <Tab.Panel>
@@ -338,7 +336,6 @@ const CollectionsView = ({
                         </Tab.Panel>
                     </CollectionNavigation>
                 </div>
-
                 <CollectionFilterSlider
                     open={showCollectionFilterSlider}
                     traits={collectionTraits}

@@ -167,6 +167,23 @@ export const toHuman = (
     )}`;
 };
 
+export const formatTimestamp = (date: number, dateFormat?: DateFormat, timezone?: string): string => {
+    dateFormat = dateFormat ?? DateFormat.C;
+
+    const parts = getTimestampParts({
+        timestamp: date,
+        timezone: timezone ?? "UTC",
+        options: {
+            day: "2-digit",
+            month: getMonthFormat(dateFormat),
+            year: "numeric",
+        },
+    });
+    const { month, day, year } = parts;
+
+    return dateFormat.replace("Y", year).replace(/m/i, month).replace("d", day);
+};
+
 /**
  * Formats as `Jan 2023`
  */
