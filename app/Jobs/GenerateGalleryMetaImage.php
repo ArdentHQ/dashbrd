@@ -33,32 +33,32 @@ class GenerateGalleryMetaImage implements ShouldQueue
      */
     public function handle(): void
     {
-        $path = storage_path('meta/gallery_template.png');
-
         $images = $this->getImageUrls();
 
         $responses = Http::pool(fn (Pool $pool) => $images->map(fn ($imageUrl) => $pool->get($imageUrl))->toArray());
 
         $successfulReponses = array_filter($responses, fn ($response) => $response->ok());
 
-        $image = Image::make($path);
+        $image = Image::make(storage_path('meta/gallery_template.png'));
+
+        $mask = Image::make(storage_path('meta/nft_mask.png'));
 
         foreach ($successfulReponses as $index => $response) {
-
             $nftImage = Image::make($response->__toString());
 
-            $nftImage->fit(227, 227);
+            $nftImage
+                ->mask($mask)
+                ->fit(227, 227);
 
-            $image
-                ->insert(
-                    $nftImage,
-                    'top-left',
-                    137 + ($index * (227 + 7)),
-                    430
-                )
-                ->save(storage_path('meta/gallery.png'));
+            $image->insert(
+                $nftImage,
+                'top-left',
+                137 + ($index * (227 + 7)),
+                430
+            );
         }
 
+        $image->save(storage_path('meta/gallery.png'));
     }
 
     private function getImageUrls(): Collection
