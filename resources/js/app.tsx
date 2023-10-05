@@ -33,30 +33,37 @@ import { i18n } from "@/I18n";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
 (window as any).CookieConsent = CookieConsent;
 
-const source = axios.CancelToken.source();
+const abortController = new AbortController();
+const { signal } = abortController;
 
 axios.interceptors.request.use((config) => {
-    config.cancelToken = source.token;
-    return config;
+  config.signal = signal;
+  return config;
 });
 
 axios.interceptors.response.use(
-    (response) => response,
-    async (error: AxiosError) => {
-        const status = get(error, "response.status");
+  (response) => response,
+  async (error: AxiosError) => {
+    const status = error.response?.status;
 
-        if (status === 419) {
-            await axios.get(route("refresh-csrf-token"), {
-                cancelToken: source.token,
-            });
+    if (status === 419) {
+        abortController.abort();
 
-            if (error.response != null) {
-                return await axios(error.response.config);
-            }
+      try {
+        await axios.get(route("refresh-csrf-token"), {
+          signal: abortController.signal,
+        });
+
+        if (error.response != null) {
+          return axios(error.response.config);
         }
+      } catch (abortError: any) {
+        console.error('Request canceled:', abortError.message);
+      }
+    }
 
-        return await Promise.reject(error);
-    },
+    return Promise.reject(error);
+  }
 );
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler, Title);
