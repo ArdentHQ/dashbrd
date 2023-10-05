@@ -1,7 +1,7 @@
 import cn from "classnames";
 import { useRef, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
-import { type ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
 
@@ -12,14 +12,31 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
 
     const maxCirclesCount = Math.floor((availableWidth - overlapWidth) / circleWidth);
 
-    const showCount = maxCirclesCount - Math.ceil(hiddenLabelWidth / circleWidth);
+    // if all circles fit or only one circle doesn't fit then return total count
+    if (Math.abs(maxCirclesCount - totalCount) <= 1) {
+        return totalCount;
+    }
 
-    return totalCount - showCount > 1 ? showCount : totalCount;
+    let showCount = maxCirclesCount - 2;
+
+    // if there is no enough space show only 1 collection
+    if (showCount < 1) {
+        return 1;
+    }
+
+    const remainingWidth = availableWidth - (showCount * circleWidth + overlapWidth + hiddenLabelWidth);
+
+    // check whether we can fit one more circle in the available width
+    if (remainingWidth > circleWidth) {
+        showCount++;
+    }
+
+    return showCount;
 };
 
 // Note: This component uses width to detect number of collections to display, so the parent must have fix width
 // (or flex-1 to take the available with) otherwise you may experience infinite loop due to `setVisibleCount` call
-export const FeaturedCollections = ({ collections }: { collections: ArticleCollections }): JSX.Element => {
+export const FeaturedCollections = ({ collections }: { collections: FeaturedCollectionData[] }): JSX.Element => {
     const totalCount = collections.length;
 
     const [visibleCount, setVisibleCount] = useState(totalCount);
@@ -29,7 +46,7 @@ export const FeaturedCollections = ({ collections }: { collections: ArticleColle
         handleHeight: false,
         onResize: () => {
             /* istanbul ignore next -- @preserve */
-            setVisibleCount(calculateCircleCount(totalCount, container.current?.clientWidth ?? 30));
+            setVisibleCount(calculateCircleCount(totalCount, container.current?.getBoundingClientRect().width ?? 30));
         },
         targetRef: container,
     });
@@ -46,7 +63,7 @@ export const FeaturedCollections = ({ collections }: { collections: ArticleColle
                     content={collection.name}
                     key={index}
                 >
-                    <div className={cn("flex items-center", { "-ml-1": index > 0 })}>
+                    <div className={cn("mb-1 flex items-center", { "-ml-1": index > 0 })}>
                         <Img
                             src={collection.image}
                             isCircle
@@ -56,14 +73,25 @@ export const FeaturedCollections = ({ collections }: { collections: ArticleColle
                     </div>
                 </Tooltip>
             ))}
-            {totalCount - visibleCount > 0 && (
-                <span
-                    data-testid="FeaturedCollections_Hidden"
-                    className="z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full bg-theme-hint-100 px-2 text-xs font-medium text-theme-hint-900 ring-2 ring-white"
-                >
-                    +{totalCount - visibleCount}
-                </span>
-            )}
+            <MoreCollectionsLabel
+                total={totalCount}
+                visible={visibleCount}
+            />
         </div>
     );
+};
+
+export const MoreCollectionsLabel = ({ total, visible }: { total: number; visible: number }): JSX.Element => {
+    if (total - visible > 0) {
+        return (
+            <span
+                data-testid="MoreCollectionsLabel"
+                className="z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full bg-theme-hint-100 px-2 text-xs font-medium text-theme-hint-900 ring-2 ring-white"
+            >
+                +{total - visible}
+            </span>
+        );
+    }
+
+    return <></>;
 };

@@ -1,20 +1,12 @@
 import type { Meta } from "@storybook/react";
-import { FeaturedCollections } from "@/Components/Articles/ArticleCard/ArticleCard.blocks";
-import { ArticleCollections } from "@/Components/Articles/ArticleCard/ArticleCardContracts";
+import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 
 export default {
     title: "Articles/FeaturedCollections",
 } as Meta<typeof FeaturedCollections>;
 
 export const Default = {
-    render: ({
-        sets,
-    }: {
-        sets: Array<{
-            collections: ArticleCollections;
-            width: string;
-        }>;
-    }) => {
+    render: ({ sets }: { sets: Array<App.Data.Articles.ArticleData["featuredCollections"]> }) => {
         return (
             <>
                 {sets.map(({ collections, width }, index) => (
