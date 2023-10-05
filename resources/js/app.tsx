@@ -49,19 +49,13 @@ axios.interceptors.response.use(
         if (status === 419) {
             abortController.abort();
 
-            try {
-                const { get } = axios;
-                await get(route("refresh-csrf-token"), {
-                    signal: abortController.signal,
-                });
+            const { get } = axios;
+            await get(route("refresh-csrf-token"), {
+                signal: abortController.signal,
+            });
 
-                if (error.response != null) {
-                    return axios(error.response.config);
-                }
-            } catch (abortError) {
-                if (abortError instanceof DOMException) {
-                    console.error("Request canceled:", abortError.message);
-                }
+            if (error.response != null) {
+                return axios(error.response.config);
             }
         }
 
