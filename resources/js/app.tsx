@@ -6,7 +6,6 @@ import "../css/app.css";
 import { createInertiaApp } from "@inertiajs/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios, { type AxiosError } from "axios";
-import axiosCancel from "axios-cancel";
 import {
     ArcElement,
     CategoryScale,
@@ -34,8 +33,12 @@ import { i18n } from "@/I18n";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
 (window as any).CookieConsent = CookieConsent;
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-axiosCancel(axios as any);
+const source = axios.CancelToken.source();
+
+axios.interceptors.request.use((config) => {
+    config.cancelToken = source.token;
+    return config;
+});
 
 axios.interceptors.response.use(
     (response) => response,
@@ -43,7 +46,9 @@ axios.interceptors.response.use(
         const status = get(error, "response.status");
 
         if (status === 419) {
-            await axios.get(route("refresh-csrf-token"));
+            await axios.get(route("refresh-csrf-token"), {
+                cancelToken: source.token,
+            });
 
             if (error.response != null) {
                 return await axios(error.response.config);
