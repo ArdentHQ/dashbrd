@@ -80,6 +80,7 @@ class UserResource extends Resource
                     ->imageCropAspectRatio('1:1'),
 
                 CheckboxList::make('permissions')
+                    ->helperText('Selected permissions here will be applied in addition to the assigned user role')
                     ->options(fn () => config('permission.permissions'))
                     ->afterStateHydrated(function (CheckboxList $component, $state) use ($form) {
                         /** @var User|null */
