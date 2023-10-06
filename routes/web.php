@@ -84,7 +84,7 @@ Route::group(['prefix' => 'articles', 'middleware' => 'features:articles'], func
 
 Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
     Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
-    Route::get('{collection:slug}', [CollectionController::class, 'view'])->name('collections.view');
+    Route::get('{collection:slug}', [CollectionController::class, 'show'])->name('collections.view');
     Route::get('{collection:slug}/articles', [CollectionController::class, 'articles'])->name('collections.articles');
     Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
 });

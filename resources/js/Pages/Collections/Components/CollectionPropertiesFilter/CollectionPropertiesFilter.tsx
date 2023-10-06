@@ -18,8 +18,8 @@ export const CollectionPropertiesFilter = ({
     const groupedTraits = useMemo(() => groupBy(traits, "name"), [traits]);
 
     return (
-        <div className="flex flex-col overflow-hidden border-y border-theme-secondary-300 xs:rounded-xl xs:border lg:sticky lg:top-4 lg:max-h-screen">
-            <div className="bg-theme-secondary-50 px-6 py-3 text-sm font-medium text-theme-secondary-700">
+        <div className="flex flex-col overflow-hidden border-y border-theme-secondary-300 dark:border-theme-dark-700 xs:rounded-xl xs:border lg:sticky lg:top-4 lg:max-h-screen">
+            <div className="bg-theme-secondary-50 px-6 py-3 text-sm font-medium text-theme-secondary-700 dark:bg-theme-dark-950 dark:text-theme-dark-200">
                 {t("pages.collections.properties")}
             </div>
 

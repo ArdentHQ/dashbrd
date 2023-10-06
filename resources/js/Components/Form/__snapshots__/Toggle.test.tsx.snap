@@ -4,7 +4,7 @@ exports[`Toggle > should render as checked 1`] = `
 <DocumentFragment>
   <button
     aria-checked="true"
-    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800"
+    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700 bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800 dark:bg-theme-primary-700 dark:hover:bg-theme-primary-600 dark:focus-visible:bg-theme-primary-400 dark:active:bg-theme-primary-400"
     data-headlessui-state="checked"
     data-testid="Toggle"
     id="headlessui-switch-:r0:"
@@ -28,7 +28,7 @@ exports[`Toggle > should render as disabled 1`] = `
 <DocumentFragment>
   <button
     aria-checked="true"
-    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 bg-theme-secondary-200"
+    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700 bg-theme-secondary-200 dark:bg-theme-dark-700"
     data-headlessui-state="checked"
     data-testid="Toggle"
     disabled=""
@@ -43,7 +43,7 @@ exports[`Toggle > should render as disabled 1`] = `
       Disable
     </span>
     <span
-      class="inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out bg-theme-secondary-400 translate-x-[1.375rem]"
+      class="inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out bg-theme-secondary-400 dark:bg-theme-dark-200 translate-x-[1.375rem]"
     />
   </button>
 </DocumentFragment>
@@ -53,7 +53,7 @@ exports[`Toggle > should render as unchecked 1`] = `
 <DocumentFragment>
   <button
     aria-checked="false"
-    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400"
+    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700 bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-700 dark:focus-within:bg-theme-dark-700 dark:hover:bg-theme-dark-800 dark:active:bg-theme-dark-800"
     data-headlessui-state=""
     data-testid="Toggle"
     id="headlessui-switch-:r1:"

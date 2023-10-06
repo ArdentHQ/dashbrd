@@ -70,7 +70,7 @@ export const getButtonVariantClass = (variant: ButtonVariant): string =>
         "icon-secondary": "button-icon-secondary",
         "icon-danger": "button-icon-danger",
         bordered: "button-bordered",
-    }[variant]);
+    })[variant];
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProperties>(
     (

@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./AuthOverlay.contracts";
@@ -5,6 +7,7 @@ import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Icon } from "@/Components/Icon";
 import { OverlayButtonsWrapper } from "@/Components/Layout/Overlay/Overlay.blocks";
+import { isTruthy } from "@/Utils/is-truthy";
 const metamaskDownloadUrl = "https://metamask.io/download/";
 
 export const InstallMetamask = ({
@@ -105,12 +108,21 @@ export const ConnectingWallet = ({ signing }: { signing: boolean }): JSX.Element
     );
 };
 
+const handleBackClick = (): void => {
+    if (isTruthy(document.referrer) && document.referrer.startsWith(window.location.origin)) {
+        window.history.back();
+    } else {
+        window.location.href = "/";
+    }
+};
+
 export const ConnectWallet = ({
     isWalletInitialized,
     requiresSignature,
     onConnect,
     onSign,
     showCloseButton,
+    showBackButton,
     closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
     const { t } = useTranslation();
@@ -125,6 +137,17 @@ export const ConnectWallet = ({
                     className="w-full justify-center whitespace-nowrap"
                 >
                     {t("common.close")}
+                </Button>
+            )}
+
+            {isTruthy(showBackButton) && (
+                <Button
+                    variant="secondary"
+                    onClick={handleBackClick}
+                    className="px-8"
+                    data-testid="AuthOverlay__back-button"
+                >
+                    {t("common.back")}
                 </Button>
             )}
 

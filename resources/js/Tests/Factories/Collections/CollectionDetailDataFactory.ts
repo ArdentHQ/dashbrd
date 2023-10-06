@@ -17,6 +17,7 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
             image: this.optional(faker.image.avatar(), 0.9),
             banner: this.optional(faker.image.avatar()),
             bannerUpdatedAt: this.optional(faker.date.recent().toISOString()),
+            openSeaSlug: this.optional(faker.lorem.slug()),
             website: this.optional(faker.internet.url()),
             twitter: this.optional(faker.internet.url()),
             discord: this.optional(faker.internet.url()),
@@ -25,9 +26,6 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
             owners: this.optional(faker.datatype.number(1000)),
             nftsCount: 0,
             mintedAt: this.optional(faker.date.past().getTime()),
-            nfts: {
-                paginated: new CollectionNftDataFactory().createMany(faker.datatype.number({ min: 0, max: 3 })),
-            },
         };
     }
 

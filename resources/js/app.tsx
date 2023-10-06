@@ -23,6 +23,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import get from "lodash/get";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
+import DarkModeContextProvider from "./Contexts/DarkModeContex";
 import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
 import { CookieConsent } from "./cookieConsent";
 import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
@@ -77,7 +78,9 @@ void createInertiaApp({
                         <ActiveUserContextProvider initialAuth={props.initialPage.props.auth}>
                             <MetaMaskContextProvider initialAuth={props.initialPage.props.auth}>
                                 <TransactionSliderProvider>
-                                    <App {...props} />
+                                    <DarkModeContextProvider>
+                                        <App {...props} />
+                                    </DarkModeContextProvider>
                                 </TransactionSliderProvider>
                             </MetaMaskContextProvider>
                         </ActiveUserContextProvider>
