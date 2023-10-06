@@ -49,7 +49,7 @@ class MetaImageController extends Controller
 
         app(Browsershot::class)->url(route('galleries.view', ['gallery' => $gallery->slug]))
             ->windowSize(1480, 768)
-            ->waitForFunction("document.querySelectorAll('[data-testid=Skeleton]').length === 0")
+            ->waitForFunction("document.querySelectorAll('[data-testid=GalleryNfts__nft]').length > 0 && Array.from(document.querySelectorAll('[data-testid=GalleryNfts__nft]')).slice(0, 4).every(el => ! el.querySelector('[data-testid=Skeleton]'))")
             ->setNodeBinary(config('dashbrd.browsershot.node_binary'))
             ->setNpmBinary(config('dashbrd.browsershot.npm_binary'))
             ->save($tempPath);
