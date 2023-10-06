@@ -140,11 +140,11 @@ export const ConnectWallet = ({
                 </Button>
             )}
 
-            {isTruthy(showBackButton) && (
+            {isTruthy(showBackButton) && !showCloseButton && (
                 <Button
                     variant="secondary"
                     onClick={handleBackClick}
-                    className="px-8"
+                    className="w-full justify-center xs:w-fit xs:px-8"
                     data-testid="AuthOverlay__back-button"
                 >
                     {t("common.back")}
