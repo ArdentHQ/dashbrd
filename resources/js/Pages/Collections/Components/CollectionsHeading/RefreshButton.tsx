@@ -1,12 +1,12 @@
 import { router } from "@inertiajs/core";
+import { usePage } from "@inertiajs/react";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Tooltip } from "@/Components/Tooltip";
 import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
-import axios from "axios";
-import { usePage } from "@inertiajs/react";
 
 export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData | null }): JSX.Element => {
     const [loading, setLoading] = useState(false);
@@ -18,20 +18,22 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
 
     useEffect(() => {
         if (isTruthy(props.auth.wallet?.isRefreshingCollections)) {
-            const interval = setInterval(async () => {
-                const { data } = await axios.get<{
-                    indexing: boolean;
-                }>(route("refreshed-collections-status"));
+            const interval = setInterval(() => {
+                void (async () => {
+                    const { data } = await axios.get<{
+                        indexing: boolean;
+                    }>(route("refreshed-collections-status"));
 
-                if (!data.indexing) {
-                    router.reload({
-                        onFinish: () => {
-                            clear();
+                    if (!data.indexing) {
+                        router.reload({
+                            onFinish: () => {
+                                clear();
 
-                            clearInterval(interval);
-                        },
-                    });
-                }
+                                clearInterval(interval);
+                            },
+                        });
+                    }
+                })();
             }, 1500);
 
             return () => {
@@ -40,20 +42,22 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
         }
     }, []);
 
-    useEffect(() => {
-        return router.on("navigate", (event) => {
-            if (isTruthy(event.detail.page.props.auth.wallet?.isRefreshingCollections)) {
-                clear();
+    useEffect(
+        () =>
+            router.on("navigate", (event) => {
+                if (isTruthy(event.detail.page.props.auth.wallet?.isRefreshingCollections)) {
+                    clear();
 
-                showToast({
-                    message: t("pages.collections.refresh.toast"),
-                    type: "pending",
-                    isExpanded: true,
-                    isLoading: true,
-                });
-            }
-        });
-    }, []);
+                    showToast({
+                        message: t("pages.collections.refresh.toast"),
+                        type: "pending",
+                        isExpanded: true,
+                        isLoading: true,
+                    });
+                }
+            }),
+        [],
+    );
 
     const refresh = (): void => {
         setLoading(true);

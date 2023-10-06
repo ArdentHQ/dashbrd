@@ -29,7 +29,7 @@ export const useToasts = (): {
     clear: () => void;
 } => ({
     showToast,
-    clear: () => {
+    clear: (): void => {
         toastService.dismiss();
     },
 });
