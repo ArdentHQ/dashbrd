@@ -46,7 +46,7 @@ class MetaImageController extends Controller
     {
         $tempPath = storage_path('tmp/'.$gallery->slug.'_screenshot.png');
 
-        Browsershot::url(route('galleries.view', ['gallery' => $gallery->slug]))
+        app(Browsershot::class)->url(route('galleries.view', ['gallery' => $gallery->slug]))
             ->windowSize(1480, 768)
             ->waitForFunction("document.querySelectorAll('[data-testid=Skeleton]').length === 0")
             ->setNodeBinary(config('dashbrd.browsershot.node_binary'))
