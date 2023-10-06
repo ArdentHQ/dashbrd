@@ -25,7 +25,6 @@ class ArticleController extends Controller
             }])
             ->paginate($pageLimit);
 
-
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
         $paginated = ArticleData::collection($articles);
 
@@ -38,7 +37,7 @@ class ArticleController extends Controller
         return Inertia::render('Articles/Index', [
             'articles' => new ArticlesData($paginated),
         ])->withViewData([
-            'title' => 'title'
+            'title' => 'title',
         ]);
     }
 }
