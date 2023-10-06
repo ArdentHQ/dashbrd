@@ -140,7 +140,7 @@ export const ConnectWallet = ({
                 </Button>
             )}
 
-            {isTruthy(showBackButton) && (
+            {isTruthy(showBackButton) && !showCloseButton && (
                 <Button
                     variant="secondary"
                     onClick={handleBackClick}
