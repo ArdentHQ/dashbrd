@@ -34,7 +34,18 @@ class Wallet extends Model
     /**
      * @var array<string>
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'address',
+        'domain',
+        'avatar',
+        'active',
+        'total_usd',
+        'last_signed_at',
+        'last_activity_at',
+        'onboarded_at',
+        'is_refreshing_collections',
+        'refreshed_collections_at',
+    ];
 
     protected $casts = [
         'extra_attributes' => SchemalessAttributes::class,

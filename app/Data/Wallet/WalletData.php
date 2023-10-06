@@ -85,7 +85,7 @@ class WalletData extends Data
                 'tokens_fetched_at' => $wallet->tokensFetchedAt()?->getTimestampMs(),
                 'native_balances_fetched_at' => $wallet->nativeBalancesFetchedAt()?->getTimestampMs(),
             ],
-            isRefreshingCollections: $wallet->is_refreshing_collections,
+            isRefreshingCollections: (bool) $wallet->is_refreshing_collections,
             canRefreshCollections: $wallet->canRefreshCollections(),
         );
     }

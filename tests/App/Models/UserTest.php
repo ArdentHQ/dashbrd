@@ -25,7 +25,6 @@ it('can assign a wallet to a user', function () {
 
     $user->wallets()->create([
         'address' => $address,
-        'network_id' => Network::factory()->create()->id,
         'total_usd' => 100,
     ]);
 
@@ -43,13 +42,11 @@ it('can retrieve the main wallet of the user', function () {
 
     $user->wallets()->create([
         'address' => '0x1231231231231231231231231231231231231231',
-        'network_id' => Network::factory()->create()->id,
         'total_usd' => 100,
     ]);
 
     $wallet = $user->wallets()->create([
         'address' => $address,
-        'network_id' => Network::factory()->create()->id,
         'total_usd' => 100,
     ]);
 
