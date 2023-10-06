@@ -3,6 +3,7 @@ import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
+import * as  useDarkModeContext from "@/Contexts/DarkModeContex";
 
 describe("AuthOverlay", () => {
     const connectWalletMock = vi.fn();
@@ -14,6 +15,7 @@ describe("AuthOverlay", () => {
 
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
     });
 
     afterAll(() => {
