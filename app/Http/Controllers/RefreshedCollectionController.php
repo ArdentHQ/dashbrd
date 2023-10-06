@@ -8,12 +8,20 @@ use App\Jobs\FetchCollectionFloorPrice;
 use App\Jobs\FetchCollectionOwners;
 use App\Jobs\FetchCollectionTraits;
 use App\Jobs\FetchCollectionVolume;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 
 class RefreshedCollectionController extends Controller
 {
+    public function show(Request $request): JsonResponse
+    {
+        return response()->json([
+            'indexing' => $request->wallet()->is_refreshing_collections,
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $wallet = $request->wallet();

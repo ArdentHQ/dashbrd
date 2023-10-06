@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['middleware' => 'signed_wallet'], function () {
         Route::put('/settings', [GeneralSettingsController::class, 'update'])->middleware('signed_wallet');
-        Route::post('/refreshed-collections', [RefreshedCollectionController::class, 'store']);
+        Route::post('/refreshed-collections', [RefreshedCollectionController::class, 'store'])->name('refresh-collections');
     });
 
     // Gallery
