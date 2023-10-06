@@ -145,6 +145,11 @@ class Collection extends Model
         return $this->extra_attributes->get('banner_updated_at');
     }
 
+    public function openSeaSlug(): ?string
+    {
+        return $this->extra_attributes->get('opensea_slug');
+    }
+
     public function website(bool $defaultToExplorer = true): ?string
     {
         $website = $this->extra_attributes->get('website');
@@ -415,6 +420,7 @@ class Collection extends Model
             DB::raw('tokens.decimals as floor_price_decimals'),
             DB::raw(sprintf($extraAttributeSelect, 'image', 'image').' as image'),
             DB::raw(sprintf($extraAttributeSelect, 'banner', 'banner').' as banner'),
+            DB::raw(sprintf($extraAttributeSelect, 'opensea_slug', 'opensea_slug').' as opensea_slug'),
             // gets the website url with the same logic used on the `website` method
             DB::raw(sprintf('COALESCE(%s, CONCAT(networks.explorer_url, \'%s\', collections.address)) as website', sprintf($extraAttributeSelect, 'website', 'website'), '/token/')),
             DB::raw('COUNT(collection_nfts.id) as nfts_count'),
@@ -485,6 +491,49 @@ class Collection extends Model
         }
 
         return $this->last_viewed_at->gte(now()->subDays(1));
+    }
+
+    /**
+     * Determine whether the collection is *potentially* full. We call it "potentially" because there is no way for
+     * us to be 100% sure that the collection is full and we make our best guess.
+     */
+    public function isPotentiallyFull(): bool
+    {
+        // If there is no supply or if the NFTs for the collection haven't been indexed, we know for sure it's not full...
+        if ($this->last_indexed_token_number === null || $this->supply === null) {
+            return false;
+        }
+
+        /** @var string|int $lastToken */
+        $lastToken = $this->last_indexed_token_number;
+
+        // We cast to string as `last_indexed_token_number` can be very, very large (non-integer)...
+        $supply = (string) $this->supply;
+        $lastIndexed = (string) $this->last_indexed_token_number;
+
+        // If supply matches the last indexed NFT, we can assume it's potentially full...
+        if ($supply === $lastIndexed) {
+            return true;
+        }
+
+        $count = $this->nfts()->count();
+
+        // Some collection NFT IDs start from 0 so we gotta take that into account...
+        if (
+            is_int($lastToken) &&
+            $this->supply === $lastToken + 1 &&
+            $this->supply === $count
+        ) {
+            return true;
+        }
+
+        // Handles case where token number is an arbitrary value, but much larger than the supply...
+        if (! is_int($lastToken) && $supply < $lastIndexed && $this->supply === $count) {
+            return true;
+        }
+
+        // Handles the burn scenario, causing the supply to decrease over time...
+        return $this->supply <= $count;
     }
 
     public function isInvalid(bool $withSpamCheck = true): bool

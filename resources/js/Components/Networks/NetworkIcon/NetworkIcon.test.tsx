@@ -15,10 +15,10 @@ describe("NetworkIcon", () => {
         expect(screen.getByTestId("Ethereum")).toBeInTheDocument();
     });
 
-    it.each([137, 80001])("should render without tooltip for polygon networks", (networkId) => {
+    it("should render without tooltip for polygon networks", () => {
         render(
             <NetworkIcon
-                networkId={networkId as 137 | 80001}
+                networkId={137}
                 withoutTooltip
             />,
         );
@@ -27,16 +27,40 @@ describe("NetworkIcon", () => {
         expect(screen.getByTestId("Polygon__text")).toHaveTextContent("Polygon");
     });
 
-    it.each([1, 5])("should render ethereum logo for ethereum networks", (networkId) => {
+    it("should render ethereum logo for ethereum networks", () => {
         render(
             <NetworkIcon
-                networkId={networkId as 1 | 5}
+                networkId={1}
                 withoutTooltip
             />,
         );
 
         expect(screen.getByTestId("Ethereum")).toBeInTheDocument();
         expect(screen.getByTestId("Ethereum__text")).toHaveTextContent("Ethereum");
+    });
+
+    it("should render goerli logo for ethereum testnet network", () => {
+        render(
+            <NetworkIcon
+                networkId={5}
+                withoutTooltip
+            />,
+        );
+
+        expect(screen.getByTestId("Ethereum")).toBeInTheDocument();
+        expect(screen.getByTestId("Goerli__text")).toHaveTextContent("Goerli");
+    });
+
+    it("should render mumbai logo for polygon testnet network", () => {
+        render(
+            <NetworkIcon
+                networkId={80001}
+                withoutTooltip
+            />,
+        );
+
+        expect(screen.getByTestId("Polygon")).toBeInTheDocument();
+        expect(screen.getByTestId("Mumbai__text")).toHaveTextContent("Mumbai");
     });
 
     const sizes: Array<["sm" | "md" | "xl", string]> = [

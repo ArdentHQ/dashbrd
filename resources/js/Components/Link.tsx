@@ -41,14 +41,18 @@ const variantClassName = ({
                 "underline decoration-transparent underline-offset-2",
                 "outline-none outline-3 outline-offset-4",
                 {
-                    "cursor-not-allowed text-theme-secondary-500": disabled === true,
-                    "hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300":
+                    "cursor-not-allowed text-theme-secondary-500 dark:text-theme-dark-200": disabled === true,
+                    "hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 dark:hover:text-theme-dark-50 dark:hover:decoration-theme-dark-50 dark:focus-visible:outline-theme-primary-700 dark:focus-visible:text-theme-secondary-700 dark:active:text-theme-dark-100 dark:active:decoration-transparent":
                         disabled !== true,
                 },
                 className,
             );
 
-            return cn(linkClass, fontSize ?? "text-sm", textColor ?? "text-theme-secondary-700");
+            return cn(
+                linkClass,
+                fontSize ?? "text-sm",
+                textColor ?? "text-theme-secondary-700 dark:text-theme-dark-200",
+            );
         }
 
         return className;

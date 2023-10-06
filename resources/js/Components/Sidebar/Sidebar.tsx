@@ -6,7 +6,7 @@ export const Sidebar = ({ children, title, subtitle }: SidebarProperties): JSX.E
         aria-label="Sidebar Navigation"
         data-testid="Sidebar"
     >
-        <div className="rounded-xl border border-theme-secondary-300">
+        <div className="rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700">
             <SidebarHead
                 className="p-6"
                 title={title}
