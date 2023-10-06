@@ -108,7 +108,12 @@ export const ArticlesView = ({
                 />
             </div>
 
-            {mode === "articles" && <LatestArticles articles={articles.paginated.data.slice(0, 3)} withFullBorder={displayType === DisplayTypes.List} />}
+            {mode === "articles" && (
+                <LatestArticles
+                    articles={articles.paginated.data.slice(0, 3)}
+                    withFullBorder={displayType === DisplayTypes.List}
+                />
+            )}
 
             <div className="flex flex-col items-center space-y-6">
                 {articlesCount > 0 && displayType === DisplayTypes.Grid && (

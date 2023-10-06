@@ -3,7 +3,13 @@ import { ArticleCard } from "@/Components/Articles/ArticleCard";
 import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const LatestArticles = ({ articles, withFullBorder }: { articles: App.Data.Articles.ArticleData[], withFullBorder: boolean}): JSX.Element => {
+export const LatestArticles = ({
+    articles,
+    withFullBorder,
+}: {
+    articles: App.Data.Articles.ArticleData[];
+    withFullBorder: boolean;
+}): JSX.Element => {
     const slidesPerView = useArticlesCarousel();
 
     const pagination = {
@@ -12,7 +18,7 @@ export const LatestArticles = ({ articles, withFullBorder }: { articles: App.Dat
     };
 
     return (
-        <div className={cn("w-full pt-2 ", {"mb-6": !withFullBorder, "lg:mb-6": withFullBorder})}>
+        <div className={cn("w-full pt-2 ", { "mb-6": !withFullBorder, "lg:mb-6": withFullBorder })}>
             <div
                 className={cn("latest-articles-carousel w-full", {
                     "pb-6": slidesPerView < 3,
@@ -34,10 +40,13 @@ export const LatestArticles = ({ articles, withFullBorder }: { articles: App.Dat
                     ))}
                 </Carousel>
             </div>
-            <div className={cn("mt-0", {
-                "-mx-6 space-y-2 sm:-mx-8 lg:mx-0 -mt-6 border-b-4 border-theme-secondary-100 lg:border-theme-secondary-300 lg:border-b-2": withFullBorder,
-                "border-b-2 border-theme-secondary-300": !withFullBorder,
-            })}></div>
+            <div
+                className={cn("mt-0", {
+                    "-mx-6 -mt-6 space-y-2 border-b-4 border-theme-secondary-100 sm:-mx-8 lg:mx-0 lg:border-b-2 lg:border-theme-secondary-300":
+                        withFullBorder,
+                    "border-b-2 border-theme-secondary-300": !withFullBorder,
+                })}
+            ></div>
         </div>
     );
 };
