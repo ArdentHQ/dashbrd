@@ -46,7 +46,7 @@ const CloseButton = ({
 }): JSX.Element => (
     <div className={twMerge("absolute right-6 top-6 z-10 sm:left-0 sm:right-auto sm:-translate-x-1/2", className)}>
         <Button
-            className="h-8 w-8"
+            className="h-8 w-8 dark:bg-theme-dark-900"
             iconSize="xs"
             variant="icon-secondary"
             icon="X"
@@ -57,7 +57,10 @@ const CloseButton = ({
 
 const SliderHeader = ({ className, children, ...properties }: HTMLAttributes<HTMLDivElement>): JSX.Element => (
     <div
-        className={twMerge("flex h-20 items-center border-b border-theme-secondary-300 px-8 py-6", className)}
+        className={twMerge(
+            "flex h-20 items-center border-b border-theme-secondary-300 px-8 py-6 dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:text-theme-dark-50",
+            className,
+        )}
         {...properties}
     >
         {children}
@@ -118,7 +121,7 @@ const SliderContainer = ({
                 >
                     <Dialog.Overlay
                         data-testid="Slider__overlay"
-                        className="fixed inset-0 bg-theme-secondary-900/15"
+                        className="fixed inset-0 bg-theme-secondary-900/15 dark:bg-theme-dark-950/90"
                         onClick={onClose}
                     />
                 </Transition.Child>
@@ -154,7 +157,7 @@ const SliderContainer = ({
                             onClick={onClose}
                         />
 
-                        <CustomScroll className="h-screen bg-white">
+                        <CustomScroll className="h-screen bg-white dark:bg-theme-dark-900">
                             {closeIcon ?? (
                                 <CloseButton
                                     data-testid="Slider__closeButton_mobile"

@@ -14,11 +14,13 @@ use App\Models\Network;
 use App\Models\Nft;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Notifications\GalleryNftsChanged;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 use RuntimeException;
@@ -51,6 +53,18 @@ class Web3NftHandler
         $collectionsData = $nftsGroupedByCollectionAddress->flatMap(function (Web3NftData $nftData) use ($now, $nftsInCollection) {
             $token = $nftData->token();
 
+            $attributes = [
+                'image' => $nftData->collectionImage,
+                'website' => $nftData->collectionWebsite,
+                'socials' => $nftData->collectionSocials,
+                'banner' => $nftData->collectionBannerImageUrl,
+                'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
+            ];
+
+            if ($nftData->collectionOpenSeaSlug !== null) {
+                $attributes['opensea_slug'] = $nftData->collectionOpenSeaSlug;
+            }
+
             return [
                 $nftData->tokenAddress,
                 $nftData->networkId,
@@ -62,15 +76,7 @@ class Web3NftHandler
                 $token ? $nftData->floorPrice?->price : null,
                 $token?->id,
                 $token ? $nftData->floorPrice?->retrievedAt : null,
-                json_encode([
-                    'image' => $nftData->collectionImage,
-                    'website' => $nftData->collectionWebsite,
-                    'socials' => $nftData->collectionSocials,
-                    'banner' => $nftData->collectionBannerImageUrl,
-                    'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
-                    'opensea_slug' => $nftData->collectionOpenSeaSlug,
-
-                ]),
+                json_encode($attributes),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
                 $this->lastRetrievedTokenNumber($nftsInCollection->get($nftData->tokenAddress)),
@@ -98,9 +104,9 @@ class Web3NftHandler
             symbol = coalesce(excluded.symbol, collections.symbol),
             description = coalesce(excluded.description, collections.description),
             supply = coalesce(excluded.supply, collections.supply),
-            floor_price_token_id = excluded.floor_price_token_id,
-            floor_price_retrieved_at = excluded.floor_price_retrieved_at,
-            extra_attributes = excluded.extra_attributes,
+            floor_price_token_id = coalesce(excluded.floor_price_token_id, collections.floor_price_token_id),
+            floor_price_retrieved_at = coalesce(excluded.floor_price_retrieved_at, collections.floor_price_retrieved_at),
+            extra_attributes = coalesce(collections.extra_attributes::jsonb, '{}') || excluded.extra_attributes::jsonb,
             minted_block = excluded.minted_block,
             minted_at = excluded.minted_at,
             last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
@@ -379,13 +385,33 @@ class Web3NftHandler
         $network = Network::where('chain_id', $this->getChainId())->firstOrFail();
 
         $ownedCollections->pluck('address')->each(
-            fn ($address) => Nft::where('wallet_id', $this->wallet->id)
+            function ($address) use ($network, $lastUpdateTimestamp) {
+                $query = Nft::where('wallet_id', $this->wallet->id)
                 ->whereHas('collection', function (Builder $query) use ($address, $network) {
                     $query->where('network_id', $network->id)
                         ->where('address', $address);
                 })
-                ->where('updated_at', '<', $lastUpdateTimestamp)
-                ->update(['wallet_id' => null])
+                ->where('updated_at', '<', $lastUpdateTimestamp);
+
+                /** @var array<int, array{'token_number': string, 'collection_id': int, 'name': string, 'updated_at': string}> $nftsToBeUnassigned */
+                $nftsToBeUnassigned = $query->clone()->select('token_number', 'collection_id', 'name', 'updated_at')->get()->toArray();
+                if (count($nftsToBeUnassigned) > 0) {
+                    // Log the NFTs that were not updated
+                    Log::debug('No longer owned NFTs', [
+                        'wallet' => $this->wallet->address,
+                        'lastUpdateTimestamp' => $lastUpdateTimestamp,
+                        'nfts' => $nftsToBeUnassigned,
+                    ]);
+
+                    // Notify
+                    Notification::route('slack', config('dashbrd.gallery.logs.slack_webhook_url'))->notify(
+                        (new GalleryNftsChanged($this->wallet->address, $nftsToBeUnassigned))->onQueue(Queues::DEFAULT)
+                    );
+                }
+
+                // Unassign NFTs that were not updated as they are no longer owned
+                $query->update(['wallet_id' => null]);
+            }
         );
 
         // Empty galleries are deleted via trigger (see `2023_03_29_080204_create_prune_galleries_trigger.php`)
