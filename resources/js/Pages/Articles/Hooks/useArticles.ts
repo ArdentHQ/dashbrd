@@ -9,10 +9,10 @@ interface Properties {
 
 export const useArticles = (
     initialData: App.Data.Articles.ArticlesData,
-    rawFilters: Record<string, string> = {},
+    rawFilters: Record<string, string | boolean> = {},
     enabled = true,
 ): Properties => {
-    const filters: Record<string, string> = {};
+    const filters: Record<string, string | boolean> = {};
 
     for (const filter of ["pageLimit", "sort", "search"]) {
         if (filter in rawFilters && isTruthy(rawFilters[filter])) {

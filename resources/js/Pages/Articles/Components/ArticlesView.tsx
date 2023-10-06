@@ -26,7 +26,7 @@ export const ArticlesView = ({
 }: {
     isLoading: boolean;
     articles?: App.Data.Articles.ArticlesData;
-    setFilters: (filters: Record<string, string>) => void;
+    setFilters: (filters: Record<string, string | boolean>) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -40,8 +40,10 @@ export const ArticlesView = ({
     const [displayType, setDisplayType] = useState(view === "list" ? DisplayTypes.List : DisplayTypes.Grid);
 
     const [sortBy, setSortBy] = useState<ArticleSortBy>(
-        (sort in ArticleSortBy ? sort : defaults.sortBy) as ArticleSortBy,
+        (sort === "popularity" ? "popularity" : defaults.sortBy) as ArticleSortBy,
     );
+
+    const isFirstRender = useIsFirstRender();
 
     const queryParameters: Record<string, string> = {
         pageLimit: pageLimit.toString(),
@@ -50,17 +52,14 @@ export const ArticlesView = ({
         view: displayType,
     };
 
-    const isFirstRender = useIsFirstRender();
-
-    useEffect(() => {
-        if (!isFirstRender) {
-            setFilters(queryParameters);
-        }
-    }, [pageLimit, debouncedQuery, sort]);
-
     useEffect(() => {
         replaceUrlQuery(queryParameters);
-    }, [view, debouncedQuery, sort, pageLimit]);
+
+        setFilters({
+            ...queryParameters,
+            isFilterDirty: !isFirstRender,
+        });
+    }, [pageLimit, sortBy, debouncedQuery, displayType]);
 
     if (isLoading || !isTruthy(articles)) {
         return <>is loading</>;

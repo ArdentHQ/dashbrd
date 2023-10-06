@@ -5,18 +5,18 @@ import { ArticlesView } from "@/Pages/Articles/Components/ArticlesView";
 import { useArticles } from "@/Pages/Articles/Hooks/useArticles";
 
 const ArticlesIndex = ({ articles: initialArticles }: { articles: App.Data.Articles.ArticlesData }): JSX.Element => {
-    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [filters, setFilters] = useState<Record<string, string | boolean>>({});
 
-    const initialRender = Object.keys(filters).length === 0;
+    const isFilterDirty = Boolean(filters.isFilterDirty);
 
-    const { articles, isLoading } = useArticles(initialArticles, filters, !initialRender);
+    const { articles, isLoading } = useArticles(initialArticles, filters, isFilterDirty);
 
     return (
         <DefaultLayout>
-            <Head title={"haha"} />
+            <Head title={"title"} />
             <ArticlesView
-                articles={initialRender ? initialArticles : articles}
-                isLoading={initialRender ? false : isLoading}
+                articles={isFilterDirty ? articles : initialArticles}
+                isLoading={isFilterDirty ? isLoading : false}
                 setFilters={setFilters}
             />
         </DefaultLayout>
