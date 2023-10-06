@@ -28,27 +28,19 @@ DELETE FROM nft_gallery
 WHERE nft_gallery.gallery_id = rm.gallery_id AND nft_gallery.nft_id = rm.nft_id;
 
 
--- Mark all galleries with only soft deleted nfts as soft deleted
-WITH soft_deleted_nfts AS (
-    SELECT gallery_id
-    FROM nft_gallery
-    WHERE deleted_at IS NOT NULL
-    AND nft_gallery.nft_id = NEW.id
-    AND NEW.wallet_id IS NULL
-    GROUP BY gallery_id
-    HAVING COUNT(*) = COUNT(deleted_at)
-)
-
+-- Mark all galleries with all nfts relationship soft deleted as soft deleted
 UPDATE galleries
-    SET deleted_at = NOW()
-WHERE
-    user_id = _user_id
-AND
-    EXISTS (
-        SELECT 1
-        FROM soft_deleted_nfts
-        WHERE galleries.id = soft_deleted_nfts.gallery_id
-    );
+SET deleted_at = NOW()
+WHERE id IN (
+    SELECT DISTINCT ng.gallery_id
+    FROM nft_gallery ng
+    WHERE ng.nft_id = NEW.id OR ng.nft_id = OLD.id
+)
+AND NOT EXISTS (
+    SELECT 1
+    FROM nft_gallery ng
+    WHERE ng.gallery_id = galleries.id AND ng.deleted_at IS NULL
+);
 
 -- Lastly, delete all empty galleries of old user
 DELETE FROM galleries
