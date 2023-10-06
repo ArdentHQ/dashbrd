@@ -47,9 +47,12 @@ return new class extends Migration
 
         $superAdminRole = Role::where('name', EnumsRole::Superadmin->value)->first();
 
+        if (! $superAdminRole->hasPermissionTo('admin:access')) {
+            $superAdminRole->givePermissionTo('admin:access');
+        }
+
         if (! $superAdminRole->hasPermissionTo('role:assignPermissions')) {
             $superAdminRole->givePermissionTo('role:assignPermissions');
         }
-
     }
 };
