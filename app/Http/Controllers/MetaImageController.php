@@ -86,6 +86,8 @@ class MetaImageController extends Controller
             ->watermarkPosition(Manipulations::POSITION_BOTTOM)
             ->save($imagePath);
 
+        unlink($screenshotPath);
+
         return $imagePath;
     }
 }
