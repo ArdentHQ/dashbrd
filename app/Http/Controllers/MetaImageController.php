@@ -8,10 +8,11 @@ use App\Models\Gallery;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Image\Image;
 use Spatie\Image\Manipulations;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MetaImageController extends Controller
 {
-    public function __invoke(Gallery $gallery)
+    public function __invoke(Gallery $gallery): BinaryFileResponse
     {
         $imagePath = $this->getImagePath($gallery);
 
@@ -60,16 +61,20 @@ class MetaImageController extends Controller
 
     private function resizeScreenshot(string $screenshotPath): void
     {
-        Image::load($screenshotPath)
-            ->width(1006)
-            ->crop(Manipulations::CROP_TOP, 1006, 373)
-            ->save($screenshotPath);
+        $image = Image::load($screenshotPath);
+
+        $image->width(1006)->crop(Manipulations::CROP_TOP, 1006, 373);
+
+        $image->save($screenshotPath);
     }
 
     private function removeExistingImages(Gallery $gallery): void
     {
         $directory = storage_path(sprintf('meta/galleries/'));
 
+        /**
+         * @var string[] $files
+         */
         $files = glob($directory.$gallery->slug.'*');
 
         foreach ($files as $file) {
@@ -83,8 +88,9 @@ class MetaImageController extends Controller
 
         $template
             ->watermark($screenshotPath)
-            ->watermarkPosition(Manipulations::POSITION_BOTTOM)
-            ->save($imagePath);
+            ->watermarkPosition(Manipulations::POSITION_BOTTOM);
+
+        $template->save($imagePath);
 
         unlink($screenshotPath);
 
