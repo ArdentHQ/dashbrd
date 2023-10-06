@@ -54,7 +54,7 @@ const NftImage = ({
         className="group"
     >
         <Img
-            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover", className)}
+            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover dark:bg-theme-dark-800", className)}
             src={nft.images.small ?? undefined}
             data-testid={`NftImageGrid__image--${nft.tokenNumber}`}
         />
@@ -173,14 +173,14 @@ export const NftImageGrid = ({
                 .map((_, index) => (
                     <div
                         key={index}
-                        className="aspect-square w-full rounded-xl bg-theme-secondary-100"
+                        className="aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
                         data-testid={`NftImageGrid__placeholder--${index}`}
                     />
                 ))}
 
             {Array.from({ length: skeletonCount ?? 0 }).map((_, index) => (
                 <Skeleton
-                    className="NFT_Skeleton aspect-square w-full rounded-xl bg-theme-secondary-100"
+                    className="NFT_Skeleton aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
                     key={index}
                 />
             ))}

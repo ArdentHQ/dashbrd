@@ -20,7 +20,7 @@ export const GallerySkeletonItem = ({ className }: { className?: string }): JSX.
                     <div className="mb-3 grid aspect-[3/2] grid-cols-3 gap-1">
                         {Array.from({ length: 6 }).map((_, index) => (
                             <Skeleton
-                                className="aspect-square w-full rounded-xl bg-theme-secondary-100"
+                                className="aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
                                 key={index}
                             />
                         ))}
