@@ -56,9 +56,16 @@ You can always create a new admin user by running `php artisan make:admin` CLI c
 
 ## Dynamic Meta Images
 
-Dashbrd utilizes [`spatie/browsershot`](https://spatie.be/docs/browsershot/v2) to generate dynamic meta images for the galleries section. In order for this package to function properly, Node 7.6.0 or higher and the Puppeteer Node library are required.
+Dashbrd utilizes [`spatie/browsershot`](https://spatie.be/docs/browsershot/v2) to generate dynamic meta images for the galleries section. For this package to function properly, Node 7.6.0 or higher, along with the Puppeteer Node library, are required.
 
-See details on installation [here](https://spatie.be/docs/browsershot/v2/requirements).
+You need to adjust the following .env variables according to your server configuration:
+
+```plaintext
+BROWSERSHOT_NODE_BINARY="/usr/local/bin/node"
+BROWSERSHOT_NPM_BINARY="/usr/local/bin/npm"
+```
+
+For details on driver requirements and installation, [visit here](https://spatie.be/docs/browsershot/v2/requirements).
 
 ## Reports
 

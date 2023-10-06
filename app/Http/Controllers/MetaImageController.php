@@ -32,8 +32,8 @@ class MetaImageController extends Controller
         Browsershot::url(route('galleries.view', ['gallery' => $gallery->slug]))
             ->windowSize(1480, 768)
             ->waitForFunction("document.querySelectorAll('[data-testid=Skeleton]').length === 0")
-            ->setNodeBinary('/Users/alfonsobribiesca/.nvm/versions/node/v18.17.0/bin/node')
-            ->setNpmBinary('/Users/alfonsobribiesca/.nvm/versions/node/v18.17.0/bin/npm')
+            ->setNodeBinary(config('dashbrd.browsershot.node_binary'))
+            ->setNpmBinary(config('dashbrd.browsershot.npm_binary'))
             ->save($tempPath);
 
         $this->resizeScreenshot($tempPath);
