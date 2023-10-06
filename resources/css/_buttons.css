@@ -14,7 +14,7 @@
     }
 
     .button-light {
-        @apply dark:bg-theme-secondary-100 dark:hover:bg-theme-secondary-300 dark:focus-visible:bg-theme-secondary-300 dark:focus-visible:outline-theme-primary-300 dark:text-theme-primary-900 dark:hover:text-theme-primary-900 dark:active:bg-theme-secondary-400 dark:active:text-theme-primary-900 dark:focus-within:ring-theme-primary-300 dark:focus-within:bg-theme-secondary-300 dark:focus-within:text-theme-primary-900
+        @apply dark:bg-theme-secondary-100 dark:text-theme-primary-900 dark:focus-within:bg-theme-secondary-300 dark:focus-within:text-theme-primary-900 dark:focus-within:ring-theme-primary-300 dark:hover:bg-theme-secondary-300 dark:hover:text-theme-primary-900 dark:focus-visible:bg-theme-secondary-300 dark:focus-visible:outline-theme-primary-300 dark:active:bg-theme-secondary-400 dark:active:text-theme-primary-900;
     }
 
     .button-danger,

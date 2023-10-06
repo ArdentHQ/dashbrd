@@ -1,5 +1,5 @@
 @layer components {
     .gallery-guest-banner {
-        @apply bg-[url(../images/gallery/guest-banner-small.svg)] md:bg-[url(../images/gallery/guest-banner.svg)] dark:bg-[url(../images/gallery/guest-banner-small-dark.svg)] dark:md:bg-[url(../images/gallery/guest-banner-dark.svg)];
+        @apply bg-[url(../images/gallery/guest-banner-small.svg)] dark:bg-[url(../images/gallery/guest-banner-small-dark.svg)] md:bg-[url(../images/gallery/guest-banner.svg)] dark:md:bg-[url(../images/gallery/guest-banner-dark.svg)];
     }
 }
