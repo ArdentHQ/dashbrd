@@ -58,7 +58,47 @@ class GenerateGalleryMetaImage implements ShouldQueue
             );
         }
 
-        $image->save(storage_path('meta/gallery.png'));
+        $image
+            ->text($this->gallery->name, 600, 342, function ($font) {
+                $font->file(resource_path('fonts/Ubuntu-Medium.ttf'));
+                $font->color('#31333F');
+                $font->size(21);
+                $font->align('center');
+                $font->valign('middle');
+            })
+            ->save(storage_path('meta/gallery.png'));
+
+        $nftsCount = (string) $this->gallery->nfts()->count();
+        $collectionsCount = (string) 3;
+
+        $label = '%s NFTs from %s collections';
+        $numbers = '%s           %s            ';
+
+        $image
+            ->text(sprintf(
+                $label,
+                str_repeat(' ', strlen($nftsCount)),
+                str_repeat(' ', strlen($collectionsCount))
+            ), 600, 371, function ($font) {
+                $font->file(resource_path('fonts/Ubuntu-Medium.ttf'));
+                // $font->color('#31333F');
+                $font->color('#FF0000');
+                $font->size(14);
+                $font->align('center');
+                $font->valign('middle');
+            })
+            ->save(storage_path('meta/gallery.png'));
+
+        $image
+            ->text(sprintf($numbers, $nftsCount, $collectionsCount), 600, 371, function ($font) {
+                $font->file(resource_path('fonts/Ubuntu-Medium.ttf'));
+                // $font->color('#31333F');
+                $font->color('#0000FF');
+                $font->size(14);
+                $font->align('center');
+                $font->valign('middle');
+            })
+            ->save(storage_path('meta/gallery.png'));
     }
 
     private function getImageUrls(): Collection
