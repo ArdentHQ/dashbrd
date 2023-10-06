@@ -54,7 +54,7 @@ const NftImage = ({
         className="group"
     >
         <Img
-            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover dark:bg-theme-dark-800", className)}
+            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover", className)}
             src={nft.images.small ?? undefined}
             data-testid={`NftImageGrid__image--${nft.tokenNumber}`}
         />
@@ -173,14 +173,14 @@ export const NftImageGrid = ({
                 .map((_, index) => (
                     <div
                         key={index}
-                        className="aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
+                        className="aspect-square w-full rounded-xl bg-theme-secondary-100"
                         data-testid={`NftImageGrid__placeholder--${index}`}
                     />
                 ))}
 
             {Array.from({ length: skeletonCount ?? 0 }).map((_, index) => (
                 <Skeleton
-                    className="NFT_Skeleton aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
+                    className="NFT_Skeleton aspect-square w-full rounded-xl bg-theme-secondary-100"
                     key={index}
                 />
             ))}
@@ -211,7 +211,7 @@ export const GalleryHeading = ({
                 </div>
 
                 <span
-                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 sm:text-sm"
+                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 sm:text-sm dark:text-theme-dark-200"
                     data-testid="GalleryHeading__address"
                 >
                     {wallet.domain !== null ? (
@@ -235,7 +235,7 @@ export const GalleryHeading = ({
                 delay={[500, 0]}
             >
                 <Heading
-                    className="transition-default truncate pt-0.5 group-hover:text-theme-primary-700"
+                    className="transition-default truncate pt-0.5 group-hover:text-theme-primary-700 dark:group-hover:text-theme-primary-400"
                     level={4}
                     ref={truncateReference}
                 >
@@ -297,7 +297,7 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
 
     return (
         <div
-            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium"
+            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium dark:bg-theme-dark-800"
             data-testid="GalleryStats"
         >
             <div className="flex justify-between pt-3">
