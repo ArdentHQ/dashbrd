@@ -28,8 +28,6 @@ Route::get('/wallet', DashboardController::class)->name('dashboard');
 
 Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-token');
 
-Route::get('meta-image/{gallery:slug}.png', MetaImageController::class)->name('meta-image');
-
 Route::middleware('auth')->group(function () {
     Route::get('/get-started', [OnboardingController::class, 'show'])->name('onboarding');
     Route::get('/wallet-data', WalletController::class)->name('wallet');
@@ -96,6 +94,8 @@ Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], fu
     Route::get('{gallery:slug}', [GalleryController::class, 'view'])
         ->middleware(RecordGalleryView::class)
         ->name('galleries.view');
+
+    Route::get('{gallery:slug}/meta-image.png', MetaImageController::class)->name('galleries.meta-image');
 });
 
 require __DIR__.'/auth.php';

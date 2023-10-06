@@ -46,7 +46,7 @@ it('skips image generation if file already exist', function () {
         ->shouldNotReceive('url');
 
     $this
-        ->get(route('meta-image', ['gallery' => $gallery->slug]))
+        ->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))
         ->assertOk();
 });
 
@@ -81,7 +81,7 @@ it('generates an image', function () {
             copy(base_path('tests/fixtures/page-screenshot.png'), $test);
         });
 
-    $this->get(route('meta-image', ['gallery' => $gallery->slug]))->assertOk();
+    $this->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))->assertOk();
 
     $directory = storage_path('meta/galleries/');
 
@@ -129,7 +129,7 @@ it('removes any existing image for the same gallery', function () {
             copy(base_path('tests/fixtures/page-screenshot.png'), $test);
         });
 
-    $this->get(route('meta-image', ['gallery' => $gallery->slug]))->assertOk();
+    $this->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))->assertOk();
 
     $directory = storage_path('meta/galleries/');
 
