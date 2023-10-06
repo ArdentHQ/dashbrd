@@ -12,7 +12,7 @@ export const NftGalleryCard = ({ gallery }: { gallery: App.Data.Gallery.GalleryD
             className={cn(
                 "transition-default m-1 box-content flex flex-col rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700",
                 "outline outline-3 outline-transparent",
-                "group-hover:outline-theme-primary-100",
+                "group-hover:outline-theme-primary-100 dark:group-hover:outline-theme-dark-500",
                 "group-focus-visible:outline-theme-primary-300",
             )}
             data-testid="NftGalleryCard"
