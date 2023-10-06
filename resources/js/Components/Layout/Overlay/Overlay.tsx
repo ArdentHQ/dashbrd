@@ -2,6 +2,7 @@ import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
 import cn from "classnames";
 import { useEffect, useRef } from "react";
 import { type OverlayProperties } from "./Overlay.contracts";
+import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 
 export const Overlay = ({
     className,
@@ -12,6 +13,7 @@ export const Overlay = ({
     ...properties
 }: OverlayProperties): JSX.Element => {
     const reference = useRef<HTMLDivElement>(null);
+    const {isDark} = useDarkModeContext();
 
     useEffect(() => {
         if (!showOverlay || reference.current === null) {
@@ -21,7 +23,9 @@ export const Overlay = ({
         } else {
             disableBodyScroll(reference.current);
 
-            document.querySelector("#layout")?.classList.add("blur");
+            if (!isDark) {
+                document.querySelector("#layout")?.classList.add("blur");
+            }
         }
 
         return () => {
@@ -40,12 +44,12 @@ export const Overlay = ({
                 "fixed inset-0 z-40 mt-14 flex h-screen w-screen flex-col items-center justify-start overflow-auto bg-white xs:mt-18 sm:mt-0 sm:justify-center",
                 className,
                 {
-                    "bg-opacity-60": !showCloseButton,
-                    "bg-opacity-90": showCloseButton,
+                    "bg-opacity-60 dark:bg-theme-dark-950/60": !showCloseButton,
+                    "bg-opacity-90 dark:bg-theme-dark-950/90": showCloseButton,
                 },
             )}
         >
-            <div className="auth-overlay-shadow w-full rounded-none bg-white sm:w-[29rem] sm:rounded-3xl">
+            <div className="auth-overlay-shadow w-full rounded-none bg-white sm:w-[29rem] sm:rounded-3xl dark:bg-theme-dark-950">
                 <div className="mt-8 flex flex-col items-center space-y-6">{children}</div>
             </div>
             {belowContent}
