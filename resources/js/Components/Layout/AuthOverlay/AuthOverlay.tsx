@@ -11,10 +11,10 @@ import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
 import { Overlay } from "@/Components/Layout/Overlay/Overlay";
 import { Toast } from "@/Components/Toast";
+import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { AuthConnectWallet, AuthConnectWalletDark, AuthInstallWallet } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 
 export const AuthOverlay = ({
     show,
