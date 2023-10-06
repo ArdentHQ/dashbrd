@@ -9,7 +9,7 @@ export const OverlayButtonsWrapper = ({
 }: OverlayButtonsWrapperProperties): JSX.Element => (
     <div
         className={cn(
-            "border-t-none w-full justify-center space-y-6 border-theme-secondary-300 px-5 pb-5 pt-0 xs:border-t xs:px-8 xs:py-5 dark:border-theme-dark-700",
+            "border-t-none w-full justify-center space-y-6 border-theme-secondary-300 px-5 pb-5 pt-0 dark:border-theme-dark-700 xs:border-t xs:px-8 xs:py-5",
             className,
         )}
         {...properties}

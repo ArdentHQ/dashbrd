@@ -211,7 +211,7 @@ export const GalleryHeading = ({
                 </div>
 
                 <span
-                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 sm:text-sm dark:text-theme-dark-200"
+                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-sm"
                     data-testid="GalleryHeading__address"
                 >
                     {wallet.domain !== null ? (
@@ -307,7 +307,7 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                     </span>
                     <span
                         data-testid="GalleryStats__value"
-                        className="text-sm sm:text-base dark:text-theme-dark-50"
+                        className="text-sm dark:text-theme-dark-50 sm:text-base"
                     >
                         {gallery.value !== null ? (
                             <DynamicBalance
@@ -323,13 +323,13 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                     <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.nfts")}
                     </span>
-                    <span className="text-sm sm:text-base dark:text-theme-dark-50">{gallery.nftsCount}</span>
+                    <span className="text-sm dark:text-theme-dark-50 sm:text-base">{gallery.nftsCount}</span>
                 </div>
                 <div className="flex flex-col">
                     <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.collections")}
                     </span>
-                    <span className="text-sm sm:text-base dark:text-theme-dark-50">{gallery.collectionsCount}</span>
+                    <span className="text-sm dark:text-theme-dark-50 sm:text-base">{gallery.collectionsCount}</span>
                 </div>
             </div>
             <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
@@ -363,15 +363,21 @@ export const GalleryStatsPlaceholder = (): JSX.Element => {
         >
             <div className="flex space-x-8 pt-3">
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">{t("pages.galleries.value")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">
+                        {t("pages.galleries.value")}
+                    </span>
                     <span className="text-sm sm:text-base">$X.XX</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">{t("pages.galleries.nfts")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">
+                        {t("pages.galleries.nfts")}
+                    </span>
                     <span className="text-sm sm:text-base">XX</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">{t("pages.galleries.collections")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">
+                        {t("pages.galleries.collections")}
+                    </span>
                     <span className="text-sm sm:text-base">X</span>
                 </div>
             </div>
