@@ -15,7 +15,6 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 export const CollectionsTableItem = ({
     collection,
-    nfts,
     uniqueKey,
     user,
     isHidden,
@@ -46,8 +45,6 @@ export const CollectionsTableItem = ({
 
         return 1;
     }, [isXlAndAbove, isLgAndAbove]);
-
-    const collectionNfts = useMemo(() => nfts.filter((nft) => nft.collectionId === collection.id), [nfts]);
 
     const token = {
         symbol: collection.floorPriceCurrency ?? "ETH",
@@ -151,7 +148,7 @@ export const CollectionsTableItem = ({
                     hoverClassName=""
                 >
                     <CollectionImages
-                        nfts={collectionNfts}
+                        nfts={collection.nfts}
                         nftsCount={collection.nftsCount}
                         maxItems={nftsToShow}
                     />

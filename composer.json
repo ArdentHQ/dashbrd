@@ -33,6 +33,7 @@
         "spatie/laravel-schemaless-attributes": "^2.4",
         "spatie/laravel-sluggable": "^3.5",
         "spatie/laravel-typescript-transformer": "^2.3",
+        "staudenmeir/eloquent-eager-limit": "^1.0",
         "tightenco/ziggy": "^1.6",
         "tpetry/laravel-postgresql-enhanced": "^0.31"
     },

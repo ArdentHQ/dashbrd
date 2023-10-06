@@ -4,14 +4,9 @@ import { type SpyInstance } from "vitest";
 import { CollectionCard } from "./CollectionCard";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
-import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 const collection = new CollectionFactory().create();
-
-const nfts = new CollectionNftDataFactory().createMany(3, {
-    collectionId: collection.id,
-});
 
 let useAuthorizedActionSpy: SpyInstance;
 const signedActionMock = vi.fn();
@@ -36,7 +31,6 @@ describe("ActionsPopup", () => {
         render(
             <CollectionCard
                 isHidden={isHidden}
-                nfts={nfts}
                 collection={collection}
                 onChanged={vi.fn()}
             />,
@@ -49,7 +43,6 @@ describe("ActionsPopup", () => {
         render(
             <CollectionCard
                 collection={collection}
-                nfts={nfts}
                 onChanged={vi.fn()}
             />,
         );
@@ -64,7 +57,6 @@ describe("ActionsPopup", () => {
         render(
             <CollectionCard
                 isHidden={false}
-                nfts={nfts}
                 collection={collection}
                 onChanged={vi.fn()}
             />,
@@ -84,7 +76,6 @@ describe("ActionsPopup", () => {
 
         render(
             <CollectionCard
-                nfts={nfts}
                 isHidden={false}
                 collection={collection}
                 onChanged={vi.fn()}
@@ -103,7 +94,6 @@ describe("ActionsPopup", () => {
 
         render(
             <CollectionCard
-                nfts={nfts}
                 isHidden={false}
                 collection={collection}
                 onChanged={vi.fn()}
@@ -121,7 +111,6 @@ describe("ActionsPopup", () => {
 
         render(
             <CollectionCard
-                nfts={nfts}
                 isHidden={false}
                 collection={collection}
                 onChanged={vi.fn()}
@@ -140,7 +129,6 @@ describe("ActionsPopup", () => {
 
         render(
             <CollectionCard
-                nfts={nfts}
                 isHidden={false}
                 collection={collection}
                 onChanged={vi.fn()}

@@ -23,11 +23,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /** @property string $token_number */
 class Nft extends Model
 {
-    use BelongsToWallet, HasFactory, Reportable, SoftDeletes;
+    use BelongsToWallet, HasEagerLimit, HasFactory, Reportable, SoftDeletes;
 
     /**
      * @var array<string>

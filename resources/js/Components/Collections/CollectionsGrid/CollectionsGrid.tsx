@@ -6,7 +6,6 @@ const skeletonsCount = 10;
 
 export const CollectionsGrid = ({
     collections,
-    nfts,
     hiddenCollectionAddresses,
     reportByCollectionAvailableIn,
     alreadyReportedByCollection,
@@ -17,7 +16,6 @@ export const CollectionsGrid = ({
     onReportCollection,
 }: {
     collections: App.Data.Collections.CollectionData[];
-    nfts: App.Data.Collections.CollectionNftData[];
     hiddenCollectionAddresses: string[];
     reportByCollectionAvailableIn: Record<string, string | null>;
     alreadyReportedByCollection: Record<string, boolean>;
@@ -55,7 +53,6 @@ export const CollectionsGrid = ({
                 <CollectionCard
                     isHidden={hiddenCollectionAddresses.includes(collection.address)}
                     collection={collection}
-                    nfts={nfts}
                     key={`${collection.address}-${collection.chainId}`}
                     reportAvailableIn={reportByCollectionAvailableIn[collection.address]}
                     alreadyReported={alreadyReportedByCollection[collection.address]}
