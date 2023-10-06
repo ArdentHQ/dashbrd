@@ -41,7 +41,7 @@ it('should render collections overview page with collections and NFTs', function
     $response = $this->actingAs($user)
         ->getJson(route('collections'))
         ->assertStatus(200)
-        ->assertJsonCount(6)
+        ->assertJsonCount(8)
         ->json();
 
     expect(count($response['collections']['data']))->toEqual(1);
@@ -743,7 +743,7 @@ it('filters the collections by a search query on json requests', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['query' => 'Test']))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
 });
 
 it('removes the showIndex parameter if user has no hidden collections', function () {
@@ -789,7 +789,7 @@ it('filters hidden collections by a search query on json requests', function () 
             'showHidden' => 'true',
         ]))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
 });
 
 it('returns nfts with traits', function () {
@@ -834,7 +834,7 @@ it('returns nfts with traits', function () {
     $response = $this->actingAs($user)
         ->getJson(route('collections'))
         ->assertStatus(200)
-        ->assertJsonCount(6)
+        ->assertJsonCount(8)
         ->json();
 
     expect($response['nfts'][0]['traits'])->toEqual([
@@ -901,7 +901,7 @@ it('can sort by oldest collection', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'oldest']))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
 });
 
 it('can sort by recently received', function () {
@@ -937,7 +937,7 @@ it('can sort by recently received', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'received']))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
 });
 
 it('can sort by collection name', function () {
@@ -973,7 +973,7 @@ it('can sort by collection name', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'name', 'direction' => 'desc']))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
 });
 
 it('can sort by floor price', function () {
@@ -1009,7 +1009,7 @@ it('can sort by floor price', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'floor-price']))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
 });
 
 it('can sort by chain ID', function () {
@@ -1045,7 +1045,7 @@ it('can sort by chain ID', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'chain']))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
 });
 
 it('can sort by value', function () {
@@ -1081,7 +1081,37 @@ it('can sort by value', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'value']))
         ->assertStatus(200)
-        ->assertJsonCount(6);
+        ->assertJsonCount(8);
+});
+
+it('should remove selected chains where its network has no collections in its count', function () {
+    $user = createUser();
+    $network1 = Network::factory()->create();
+    $network2 = Network::factory()->create();
+
+    $collection1 = Collection::factory()->create(['network_id' => $network1->id]);
+    $collection2 = Collection::factory()->create(['network_id' => $network2->id]);
+
+    Nft::factory()->create([
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection1->id,
+    ]);
+
+    Nft::factory()->create([
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection2->id,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->getJson(route('collections', [
+            'chain' => '137',
+        ]))
+        ->assertStatus(200)
+        ->assertJsonCount(8)
+        ->json();
+
+    expect(count($response['selectedChainIds']))->toEqual(0);
+    expect(count($response['nfts']))->toEqual(2);
 });
 
 it('can get stats', function () {

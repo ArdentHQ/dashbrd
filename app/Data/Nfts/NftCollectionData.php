@@ -26,6 +26,7 @@ class NftCollectionData extends Data
         public string $website,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
+        public ?string $openSeaSlug,
     ) {
     }
 
@@ -40,6 +41,7 @@ class NftCollectionData extends Data
             floorPrice: $collection->floor_price,
             website: $collection->website(),
             image: $collection->extra_attributes->get('image'),
+            openSeaSlug: $collection->extra_attributes->get('opensea_slug'),
         );
     }
 }

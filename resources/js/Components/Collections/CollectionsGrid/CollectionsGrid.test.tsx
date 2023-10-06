@@ -1,8 +1,8 @@
 import { type SpyInstance } from "vitest";
-import { mockViewportVisibilitySensor } from "vitest.setup";
 import { CollectionsGrid } from "./CollectionsGrid";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { render } from "@/Tests/testing-library";
 
 let useAuthorizedActionSpy: SpyInstance;

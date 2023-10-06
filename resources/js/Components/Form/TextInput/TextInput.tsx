@@ -69,6 +69,7 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
                     { "cursor-not-allowed": isDisabled },
                     textInputDynamicClassnames({ hasError, isFocused: focused, isMouseOver, isDisabled }),
                     wrapperClassName,
+                    "dark:bg-theme-dark-900",
                 )}
             >
                 {before}
@@ -79,8 +80,8 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
                     onBlur={blurHandler}
                     type={type}
                     className={cn(
-                        "relative block h-full w-full rounded-xl border-0 px-0 py-3 ring-0 transition placeholder:text-theme-secondary-500 focus:outline-none focus:ring-0 enabled:text-theme-secondary-900",
-                        "disabled:cursor-not-allowed disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700",
+                        "relative block h-full w-full rounded-xl border-0 px-0 py-3 ring-0 transition placeholder:text-theme-secondary-500 focus:outline-none focus:ring-0 enabled:text-theme-secondary-900 dark:bg-theme-dark-900 dark:text-theme-dark-50 dark:placeholder:text-theme-dark-400",
+                        "disabled:cursor-not-allowed disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700 dark:disabled:bg-theme-dark-900 dark:disabled:text-theme-dark-200",
                         className,
                     )}
                     ref={input}

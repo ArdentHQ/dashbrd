@@ -90,6 +90,8 @@ return [
     'page' => 'Page',
     'polygon' => 'Polygon',
     'ethereum' => 'Ethereum',
+    'mumbai' => 'Mumbai',
+    'goerli' => 'Goerli',
     'of' => 'of',
     'pagination_input_placeholder' => 'Enter the page number',
     'pagination_input_placeholder_mobile' => 'Page number',

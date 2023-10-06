@@ -4,7 +4,7 @@ import { Icon } from "@/Components/Icon";
 const PoweredByLink = ({ url, icon, title }: { url: string; icon: React.ReactNode; title: string }): JSX.Element => (
     <a
         href={url}
-        className="transition-default text-theme-secondary-700 hover:text-theme-primary-700"
+        className="transition-default text-theme-secondary-700 hover:text-theme-primary-700 dark:text-theme-dark-200 dark:hover:text-theme-dark-300"
         target="_blank"
         rel="noopener nofollow noreferrer"
     >
@@ -85,6 +85,18 @@ export const PoweredByIcons = (): JSX.Element => {
                     icon={
                         <Icon
                             name="Mnemonic"
+                            aria-hidden="true"
+                        />
+                    }
+                />
+            </li>
+            <li>
+                <PoweredByLink
+                    url={t("urls.opensea")}
+                    title="OpenSea"
+                    icon={
+                        <Icon
+                            name="OpenseaCircle"
                             aria-hidden="true"
                         />
                     }

@@ -3,7 +3,7 @@ import { Action, Balance, Chart, Price, Token } from "@/Components/WalletTokens/
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";
 import { render, screen, userEvent, waitFor } from "@/Tests/testing-library";
-import { type Breakpoint } from "@/Tests/utils";
+import { Breakpoint } from "@/Tests/utils";
 import { WithLineChartData } from "@/Utils/Hooks/useLineChartData";
 
 const asset = new TokenListItemDataFactory().create({
@@ -149,11 +149,11 @@ describe("Action Cell", () => {
             { breakpoint },
         );
 
-        if (breakpoint === "sm") {
+        if (breakpoint === Breakpoint.sm) {
             await userEvent.click(screen.getByTestId("WalletTokensTable__action_details"));
         }
 
-        if (breakpoint === "md") {
+        if (breakpoint === Breakpoint.md) {
             await userEvent.click(screen.getByTestId("WalletTokensTable__action_details_small"));
         }
 

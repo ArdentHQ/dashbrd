@@ -53,6 +53,18 @@ class Web3NftHandler
         $collectionsData = $nftsGroupedByCollectionAddress->flatMap(function (Web3NftData $nftData) use ($now, $nftsInCollection) {
             $token = $nftData->token();
 
+            $attributes = [
+                'image' => $nftData->collectionImage,
+                'website' => $nftData->collectionWebsite,
+                'socials' => $nftData->collectionSocials,
+                'banner' => $nftData->collectionBannerImageUrl,
+                'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
+            ];
+
+            if ($nftData->collectionOpenSeaSlug !== null) {
+                $attributes['opensea_slug'] = $nftData->collectionOpenSeaSlug;
+            }
+
             return [
                 $nftData->tokenAddress,
                 $nftData->networkId,
@@ -64,14 +76,7 @@ class Web3NftHandler
                 $token ? $nftData->floorPrice?->price : null,
                 $token?->id,
                 $token ? $nftData->floorPrice?->retrievedAt : null,
-                json_encode([
-                    'image' => $nftData->collectionImage,
-                    'website' => $nftData->collectionWebsite,
-                    'socials' => $nftData->collectionSocials,
-                    'banner' => $nftData->collectionBannerImageUrl,
-                    'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
-
-                ]),
+                json_encode($attributes),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
                 $this->lastRetrievedTokenNumber($nftsInCollection->get($nftData->tokenAddress)),
@@ -99,9 +104,9 @@ class Web3NftHandler
             symbol = coalesce(excluded.symbol, collections.symbol),
             description = coalesce(excluded.description, collections.description),
             supply = coalesce(excluded.supply, collections.supply),
-            floor_price_token_id = excluded.floor_price_token_id,
-            floor_price_retrieved_at = excluded.floor_price_retrieved_at,
-            extra_attributes = excluded.extra_attributes,
+            floor_price_token_id = coalesce(excluded.floor_price_token_id, collections.floor_price_token_id),
+            floor_price_retrieved_at = coalesce(excluded.floor_price_retrieved_at, collections.floor_price_retrieved_at),
+            extra_attributes = coalesce(collections.extra_attributes::jsonb, '{}') || excluded.extra_attributes::jsonb,
             minted_block = excluded.minted_block,
             minted_at = excluded.minted_at,
             last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
@@ -166,7 +171,16 @@ class Web3NftHandler
                 DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
             });
 
-            CollectionModel::updateFiatValue($ids->toArray());
+            // Passing an empty array means we update all collections which is undesired here.
+            if (! $ids->isEmpty()) {
+                CollectionModel::updateFiatValue($ids->toArray());
+            } else {
+                Log::info('Web3NftHandler: skipping updateFiatValue because no ids given', [
+                    'wallet' => $this->wallet?->address,
+                    'collectionId' => $this->collection?->id,
+                    'chainId' => $this->getChainId(),
+                ]);
+            }
 
             // Users that own NFTs from the collections that were updated
             $affectedUsersIds = User::whereHas('wallets', function (Builder $walletQuery) use ($ids) {
@@ -175,7 +189,16 @@ class Web3NftHandler
                 });
             })->pluck('users.id')->toArray();
 
-            User::updateCollectionsValue($affectedUsersIds);
+            // Passing an empty array means we update all users which is undesired here.
+            if (! empty($affectedUsersIds)) {
+                User::updateCollectionsValue($affectedUsersIds);
+            } else {
+                Log::info('Web3NftHandler: skipping updateCollectionsValue because no user affected', [
+                    'wallet' => $this->wallet?->address,
+                    'collectionId' => $this->collection?->id,
+                    'chainId' => $this->getChainId(),
+                ]);
+            }
         }
     }
 

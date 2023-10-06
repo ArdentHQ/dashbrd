@@ -60,10 +60,12 @@ export const ListboxOption = ({
             cn(
                 "transition-default group relative flex h-11 cursor-default select-none items-center justify-start px-6 py-3",
                 {
-                    "cursor-pointer text-theme-secondary-700 hover:bg-theme-primary-50 hover:text-theme-secondary-900":
+                    "cursor-pointer text-theme-secondary-700 hover:bg-theme-primary-50 hover:text-theme-secondary-900 dark:bg-theme-dark-800 dark:text-theme-dark-200 dark:hover:bg-theme-primary-600 dark:hover:text-theme-dark-50":
                         !selected && isDisabled !== true,
-                    "bg-theme-primary-100 text-theme-secondary-900": (selected || isSelected) && !isTruthy(hasGradient),
-                    "bg-theme-primary-100 text-theme-primary-600": (selected || isSelected) && isTruthy(hasGradient),
+                    "bg-theme-primary-100 text-theme-secondary-900 dark:bg-theme-dark-700 dark:text-theme-dark-50":
+                        (selected || isSelected) && !isTruthy(hasGradient),
+                    "bg-theme-primary-100 text-theme-primary-600 dark:bg-theme-dark-700 dark:text-theme-dark-50":
+                        (selected || isSelected) && isTruthy(hasGradient),
                     "bg-theme-primary-50 text-theme-secondary-900": active && !selected,
                     "text-theme-secondary-500 hover:bg-transparent hover:text-theme-secondary-500":
                         isDisabled === true && !selected,
@@ -132,9 +134,9 @@ export const ListboxButtonIcon = ({
             isTruthy(isDisabled)
                 ? "text-theme-secondary-500"
                 : {
-                      "text-white": variant === "primary" || variant === "danger",
+                      "text-white dark:text-theme-dark-50": variant === "primary" || variant === "danger",
                       "text-theme-secondary-700": variant === undefined && !isTruthy(isNavigation),
-                      "text-theme-secondary-900": isNavigation,
+                      "text-theme-secondary-900 dark:text-theme-dark-50": isNavigation,
                   },
         )}
         aria-hidden="true"
@@ -159,7 +161,7 @@ export const ListboxOptions = ({
         <HeadlessListbox.Options
             as={as}
             className={twMerge(
-                "absolute z-10 mt-1 max-h-60 w-full max-w-full overflow-auto bg-white px-0 py-3.5 text-base shadow-dropdown focus:outline-none ",
+                "absolute z-10 mt-1 max-h-60 w-full max-w-full overflow-auto rounded-xl bg-white px-0 py-3.5 text-base shadow-dropdown focus:outline-none dark:border dark:border-theme-dark-700 dark:bg-theme-dark-800",
                 className,
             )}
             data-testid="ListboxOptions"
@@ -223,7 +225,7 @@ export const ListboxButton = ({
             {...properties}
         >
             {({ open, disabled }) => (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 dark:text-theme-dark-50">
                     {avatar}
 
                     <span className="block flex-1 truncate">
@@ -238,7 +240,7 @@ export const ListboxButton = ({
                         )}
                     </span>
 
-                    <span className="pointer-events-none flex items-center">
+                    <span className="pointer-events-none flex items-center ">
                         <ListboxButtonIcon
                             isNavigation={isNavigation}
                             isOpen={open}

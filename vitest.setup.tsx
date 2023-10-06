@@ -6,6 +6,7 @@ import { BASE_URL, server } from "@/Tests/Mocks/server";
 import { isTruthy } from "@/Utils/is-truthy";
 import { DefaultBodyType, MockedRequest } from "msw";
 import * as reactInViewport from "react-in-viewport";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 
 /////////
 // Mocks
@@ -137,20 +138,6 @@ const setupInterSectionObserver = () => {
     }));
 
     vi.stubGlobal("IntersectionObserver", IntersectionObserverMock);
-};
-
-// Used  in `Image.tsx` to mock lazy-loading of images.
-export const mockViewportVisibilitySensor = (properties?: { inViewport?: boolean; onEnterViewport?: () => void }) => {
-    //@ts-ignore
-    vi.spyOn(reactInViewport, "useInViewport").mockImplementation((element, _, __, options) => {
-        if (isTruthy(properties?.inViewport)) {
-            options?.onEnterViewport?.();
-        }
-
-        return {
-            inViewport: properties?.inViewport ?? true,
-        };
-    });
 };
 
 /**

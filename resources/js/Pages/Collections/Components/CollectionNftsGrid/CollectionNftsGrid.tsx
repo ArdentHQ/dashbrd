@@ -5,12 +5,10 @@ import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
 
 export const CollectionNftsGrid = ({
     nfts,
-    userNfts,
     onPageLimitChange,
     pageLimit,
 }: {
     nfts: App.Data.Gallery.GalleryNftsData;
-    userNfts: App.Data.Collections.CollectionNftsData;
     onPageLimitChange: (pageLimit: number) => void;
     pageLimit: number;
 }): JSX.Element => {
@@ -23,13 +21,12 @@ export const CollectionNftsGrid = ({
                     <CollectionNft
                         key={nft.id}
                         nft={nft}
-                        owned={userNfts.paginated.some((userNft) => userNft.id === nft.id)}
                     />
                 ))}
             </div>
 
             {nfts.paginated.meta.total >= 12 && (
-                <div className="flex w-full flex-col items-center justify-between  rounded-b border-theme-secondary-300 xs:w-auto sm:space-y-0 md:w-full md:flex-row">
+                <div className="flex w-full flex-col items-center justify-between rounded-b border-theme-secondary-300 xs:w-auto sm:space-y-0 md:w-full md:flex-row">
                     <SelectPageLimit
                         value={pageLimit}
                         options={[12, 24, 48, 96]}
