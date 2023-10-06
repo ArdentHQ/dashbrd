@@ -234,7 +234,52 @@ it('should soft delete gallery when all nfts have been soft deleted', function (
     $this->assertDatabaseCount('galleries', 2);
 });
 
-it('should soft delete gallery when all nfts have been deleted', function () {
+it('should not soft delete gallery if not all nfts were deleted', function () {
+    Bus::fake();
+
+    Alchemy::fake([
+        '*' => Http::sequence()
+            ->push(getTestNfts(2))
+            ->push(getTestNfts(1)),
+    ]);
+
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
+
+    $this->assertDatabaseCount('collections', 0);
+    $this->assertDatabaseCount('nfts', 0);
+    $this->assertDatabaseCount('galleries', 0);
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect(Nft::count())->toBe(2);
+
+    // Create galleries with NFTs
+    $gallery = Gallery::factory()->create([
+        'user_id' => $wallet->user->id,
+        'name' => 'BRDY',
+        'cover_image' => 'BRDY',
+
+    ]);
+
+    $nfts = Nft::where('wallet_id', $wallet->id)->orderBy('collection_id')->orderBy('id')->get();
+
+    $gallery->nfts()->attach($nfts[0], ['order_index' => 0]);
+    $gallery->nfts()->attach($nfts[1], ['order_index' => 0]);
+
+    // Fetch again, now the first gallery is deleted due to the NFTs being removed from the wallet
+    Carbon::setTestNow(now()->addSecond());
+
+    Cache::flush();
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($gallery->nfts()->count())->toBe(1);
+
+    expect($gallery->fresh()->trashed())->toBeFalse();
+});
+
+it('should delete gallery when all nfts have been deleted', function () {
     Bus::fake();
 
     Alchemy::fake([
