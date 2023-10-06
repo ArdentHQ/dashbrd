@@ -14,11 +14,15 @@ class MetaImageController extends Controller
 {
     public function __invoke(Request $request, Gallery $gallery)
     {
-        $screenshotPath = $this->takeScreenshot($gallery);
+        $imagePath = storage_path('meta/galleries/'.$gallery->slug.'.png');
 
-        $path = $this->storeMetaImage($gallery, $screenshotPath);
+        if (! file_exists($imagePath)) {
+            $screenshotPath = $this->takeScreenshot($gallery);
 
-        return response()->file($path);
+            $this->storeMetaImage($gallery, $imagePath, $screenshotPath);
+        }
+
+        return response()->file($imagePath);
     }
 
     private function takeScreenshot(Gallery $gallery): string
@@ -45,10 +49,8 @@ class MetaImageController extends Controller
             ->save($screenshotPath);
     }
 
-    private function storeMetaImage(Gallery $gallery, string $screenshotPath): string
+    private function storeMetaImage(Gallery $gallery, string $imagePath, string $screenshotPath): string
     {
-        $imagePath = storage_path('meta/galleries/'.$gallery->slug.'.png');
-
         $template = Image::load(resource_path('images/gallery/gallery_template.png'));
 
         $template
