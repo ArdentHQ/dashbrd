@@ -5,24 +5,41 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Gallery;
-use Illuminate\Http\Request;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Image\Image;
 use Spatie\Image\Manipulations;
 
 class MetaImageController extends Controller
 {
-    public function __invoke(Request $request, Gallery $gallery)
+    public function __invoke(Gallery $gallery)
     {
-        $imagePath = storage_path('meta/galleries/'.$gallery->slug.'.png');
+        $imagePath = $this->getImagePath($gallery);
 
         if (! file_exists($imagePath)) {
             $screenshotPath = $this->takeScreenshot($gallery);
+
+            $this->removeExistingImages($gallery);
 
             $this->storeMetaImage($gallery, $imagePath, $screenshotPath);
         }
 
         return response()->file($imagePath);
+    }
+
+    private function getImagePath(Gallery $gallery): string
+    {
+        return storage_path(sprintf('meta/galleries/%s.png', $this->getImageName($gallery)));
+    }
+
+    private function getImageName(Gallery $gallery): string
+    {
+        $parts[] = $gallery->nfts()->orderByPivot('order_index', 'asc')->limit(4)->pluck('id')->join('.');
+
+        $parts[] = $gallery->nfts()->count();
+
+        $parts[] = $gallery->name;
+
+        return $gallery->slug.'_'.md5(implode('_', $parts));
     }
 
     private function takeScreenshot(Gallery $gallery): string
@@ -47,6 +64,17 @@ class MetaImageController extends Controller
             ->width(1006)
             ->crop(Manipulations::CROP_TOP, 1006, 373)
             ->save($screenshotPath);
+    }
+
+    private function removeExistingImages(Gallery $gallery): void
+    {
+        $directory = storage_path(sprintf('meta/galleries/'));
+
+        $files = glob($directory.$gallery->slug.'*');
+
+        foreach ($files as $file) {
+            unlink($file);
+        }
     }
 
     private function storeMetaImage(Gallery $gallery, string $imagePath, string $screenshotPath): string
