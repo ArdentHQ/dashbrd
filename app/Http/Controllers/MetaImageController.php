@@ -47,7 +47,7 @@ class MetaImageController extends Controller
 
     private function storeMetaImage(Gallery $gallery, string $screenshotPath): string
     {
-        $imagePath = storage_path('app/public/meta/galleries/'.$gallery->slug.'.png');
+        $imagePath = storage_path('meta/galleries/'.$gallery->slug.'.png');
 
         $template = Image::load(resource_path('images/gallery/gallery_template.png'));
 
