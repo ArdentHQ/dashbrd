@@ -28,7 +28,7 @@ Route::get('/wallet', DashboardController::class)->name('dashboard');
 
 Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-token');
 
-Route::get('meta-image/{gallery:slug}', MetaImageController::class)->name('meta-image');
+Route::get('meta-image/{gallery:slug}.png', MetaImageController::class)->name('meta-image');
 
 Route::middleware('auth')->group(function () {
     Route::get('/get-started', [OnboardingController::class, 'show'])->name('onboarding');
