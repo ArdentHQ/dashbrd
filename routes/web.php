@@ -10,6 +10,7 @@ use App\Http\Controllers\GalleryFiltersController;
 use App\Http\Controllers\GalleryReportController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\HiddenCollectionController;
+use App\Http\Controllers\MetaImageController;
 use App\Http\Controllers\MyGalleryCollectionController;
 use App\Http\Controllers\MyGalleryController;
 use App\Http\Controllers\NftController;
@@ -26,6 +27,8 @@ Route::get('/', [GalleryController::class, 'index'])->name('galleries');
 Route::get('/wallet', DashboardController::class)->name('dashboard');
 
 Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-token');
+
+Route::get('meta-image/{gallery:slug}', MetaImageController::class)->name('meta-image');
 
 Route::middleware('auth')->group(function () {
     Route::get('/get-started', [OnboardingController::class, 'show'])->name('onboarding');
