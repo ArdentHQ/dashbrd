@@ -7,12 +7,8 @@ interface Properties {
     isLoading: boolean;
 }
 
-export const useArticles = (
-    initialData: App.Data.Articles.ArticlesData,
-    rawFilters: Record<string, string | boolean> = {},
-    enabled = true,
-): Properties => {
-    const filters: Record<string, string | boolean> = {};
+export const useArticles = (rawFilters: Record<string, string> = {}, enabled = true): Properties => {
+    const filters: Record<string, string> = {};
 
     for (const filter of ["pageLimit", "sort", "search"]) {
         if (filter in rawFilters && isTruthy(rawFilters[filter])) {

@@ -36,3 +36,9 @@
         0 116px 70px 0 rgba(33, 42, 131, 0.02), 0 207px 83px 0 rgba(33, 42, 131, 0.01),
         0 323px 90px 0 rgba(33, 42, 131, 0);
 }
+
+.latest-articles-carousel .swiper-pagination-bullets {
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+}

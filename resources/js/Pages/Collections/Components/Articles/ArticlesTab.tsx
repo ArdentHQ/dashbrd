@@ -11,6 +11,7 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
             articles={articles}
             isLoading={isLoading}
             setFilters={setFilters}
+            mode="collection"
         />
     );
 };

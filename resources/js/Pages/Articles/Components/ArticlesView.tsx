@@ -5,6 +5,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
+import { LatestArticles } from "@/Pages/Articles/Components/LatestArticles";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
@@ -23,10 +24,12 @@ export const ArticlesView = ({
     articles,
     isLoading,
     setFilters,
+    mode,
 }: {
     isLoading: boolean;
     articles?: App.Data.Articles.ArticlesData;
-    setFilters: (filters: Record<string, string | boolean>) => void;
+    setFilters: (filters: Record<string, string>) => void;
+    mode: "collection" | "articles";
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -57,7 +60,7 @@ export const ArticlesView = ({
 
         setFilters({
             ...queryParameters,
-            isFilterDirty: !isFirstRender,
+            isFilterDirty: isFirstRender ? "no" : "yes",
         });
     }, [pageLimit, sortBy, debouncedQuery, displayType]);
 
@@ -68,7 +71,7 @@ export const ArticlesView = ({
     const articlesCount = articles.paginated.meta.total;
 
     return (
-        <div>
+        <>
             <div className="mb-3 mt-6 flex items-center justify-between gap-x-3 sm:mb-4">
                 <DisplayType
                     displayType={displayType}
@@ -105,6 +108,8 @@ export const ArticlesView = ({
                 />
             </div>
 
+            {mode === "articles" && <LatestArticles articles={articles.paginated.data.slice(0, 3)} withFullBorder={displayType === DisplayTypes.List} />}
+
             <div className="flex flex-col items-center space-y-6">
                 {articlesCount > 0 && displayType === DisplayTypes.Grid && (
                     <ArticlesGrid articles={articles.paginated.data} />
@@ -130,6 +135,6 @@ export const ArticlesView = ({
                     }}
                 />
             </div>
-        </div>
+        </>
     );
 };
