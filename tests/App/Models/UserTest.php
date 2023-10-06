@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Models\Gallery;
-use App\Models\Network;
 use App\Models\Nft;
 use App\Models\User;
 use App\Models\Wallet;
