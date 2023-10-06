@@ -173,7 +173,7 @@ export const NftImageGrid = ({
                 .map((_, index) => (
                     <div
                         key={index}
-                        className="aspect-square w-full rounded-xl bg-theme-secondary-100"
+                        className="aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
                         data-testid={`NftImageGrid__placeholder--${index}`}
                     />
                 ))}
@@ -272,9 +272,9 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
                 data-testid="GalleryStats__like-button"
             >
                 <Icon
-                    className={cn("transition-all", {
-                        "fill-theme-danger-100 text-theme-danger-400": hasLiked,
-                        "hover:fill-theme-danger-100 hover:text-theme-danger-400": !hasLiked,
+                    className={cn("transition-default", {
+                        "fill-theme-danger-100 text-theme-danger-400 dark:fill-theme-dark-800": hasLiked,
+                        "hover:fill-theme-danger-100 hover:text-theme-danger-400 dark:fill-theme-dark-800": !hasLiked,
                     })}
                     name="Heart"
                     size="lg"
@@ -302,12 +302,12 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
         >
             <div className="flex justify-between pt-3">
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.value")}
                     </span>
                     <span
                         data-testid="GalleryStats__value"
-                        className="text-sm sm:text-base"
+                        className="text-sm sm:text-base dark:text-theme-dark-50"
                     >
                         {gallery.value !== null ? (
                             <DynamicBalance
@@ -320,20 +320,20 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                     </span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.nfts")}
                     </span>
-                    <span className="text-sm sm:text-base">{gallery.nftsCount}</span>
+                    <span className="text-sm sm:text-base dark:text-theme-dark-50">{gallery.nftsCount}</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.collections")}
                     </span>
-                    <span className="text-sm sm:text-base">{gallery.collectionsCount}</span>
+                    <span className="text-sm sm:text-base dark:text-theme-dark-50">{gallery.collectionsCount}</span>
                 </div>
             </div>
-            <hr className="my-3 text-theme-secondary-300" />
-            <div className="flex items-center justify-between text-theme-secondary-700">
+            <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
+            <div className="flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200">
                 <GalleryStatsLikeButton gallery={gallery} />
 
                 <div className="flex items-center space-x-2">
@@ -363,20 +363,20 @@ export const GalleryStatsPlaceholder = (): JSX.Element => {
         >
             <div className="flex space-x-8 pt-3">
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5">{t("pages.galleries.value")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">{t("pages.galleries.value")}</span>
                     <span className="text-sm sm:text-base">$X.XX</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5">{t("pages.galleries.nfts")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">{t("pages.galleries.nfts")}</span>
                     <span className="text-sm sm:text-base">XX</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5">{t("pages.galleries.collections")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-300">{t("pages.galleries.collections")}</span>
                     <span className="text-sm sm:text-base">X</span>
                 </div>
             </div>
-            <hr className="my-3 text-theme-secondary-300" />
-            <div className="flex items-center justify-between">
+            <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
+            <div className="flex items-center justify-between dark:text-theme-dark-200">
                 <div className="flex items-center space-x-2">
                     <Icon
                         name="Heart"
