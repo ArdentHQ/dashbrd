@@ -279,7 +279,7 @@ it('should not soft delete gallery if not all nfts were deleted', function () {
     expect($gallery->fresh()->trashed())->toBeFalse();
 });
 
-it('should delete gallery when all nfts have been deleted', function () {
+it('should delete gallery when all nfts have been assigned to another wallet', function () {
     Bus::fake();
 
     Alchemy::fake([
@@ -337,6 +337,66 @@ it('should delete gallery when all nfts have been deleted', function () {
     $this->assertDatabaseCount('nft_gallery', 0);
 
     $this->assertDatabaseCount('galleries', 0);
+});
+
+it('should keep gallery if only one nft is assigned to another wallet', function () {
+    Bus::fake();
+
+    Alchemy::fake([
+        '*' => Http::sequence()
+            ->push(getTestNfts(3))
+            ->push(getTestNfts(1)),
+    ]);
+
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
+    $wallet2 = Wallet::factory()->create();
+
+    $this->assertDatabaseCount('collections', 0);
+    $this->assertDatabaseCount('nfts', 0);
+    $this->assertDatabaseCount('galleries', 0);
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect(Nft::count())->toBe(3);
+
+    $this->assertDatabaseCount('galleries', 0);
+
+    // Create 2 galleries with NFTs
+    $galleries = Gallery::factory()->createMany([
+        [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY',
+            'cover_image' => 'BRDY',
+        ], [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY2',
+            'cover_image' => 'BRDY2',
+        ],
+    ]);
+
+    $nfts = Nft::where('wallet_id', $wallet->id)->orderBy('collection_id')->orderBy('id')->get();
+
+    $galleries[0]->nfts()->attach($nfts[0], ['order_index' => 0]);
+    $galleries[0]->nfts()->attach($nfts[1], ['order_index' => 0]);
+    $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
+
+    $this->assertDatabaseCount('nft_gallery', 3);
+    $this->assertDatabaseCount('galleries', 2);
+
+    // Fetch again, now the first gallery is deleted due to the NFTs being removed from the wallet
+    Carbon::setTestNow(now()->addSecond());
+
+    Cache::flush();
+
+    // assigning nfts to wallet 2
+    (new FetchWalletNfts($wallet2, $network))->handle();
+
+    // Nft gallery relationship and galleries should be completely deleted
+
+    $this->assertDatabaseCount('nft_gallery', 2);
+
+    $this->assertDatabaseCount('galleries', 2);
 });
 
 it('should recover a soft deleted gallery if a nft is added again', function () {
