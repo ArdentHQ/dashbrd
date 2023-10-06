@@ -144,7 +144,7 @@ export const ConnectWallet = ({
                 <Button
                     variant="secondary"
                     onClick={handleBackClick}
-                    className="px-8"
+                    className="xs:px-8 w-full justify-center xs:w-fit"
                     data-testid="AuthOverlay__back-button"
                 >
                     {t("common.back")}
