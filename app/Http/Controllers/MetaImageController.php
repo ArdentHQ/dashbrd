@@ -20,7 +20,7 @@ class MetaImageController extends Controller
 
             $this->removeExistingImages($gallery);
 
-            $this->storeMetaImage($gallery, $imagePath, $screenshotPath);
+            $this->storeMetaImage($imagePath, $screenshotPath);
         }
 
         return response()->file($imagePath);
@@ -77,7 +77,7 @@ class MetaImageController extends Controller
         }
     }
 
-    private function storeMetaImage(Gallery $gallery, string $imagePath, string $screenshotPath): string
+    private function storeMetaImage(string $imagePath, string $screenshotPath): string
     {
         $template = Image::load(resource_path('images/gallery/gallery_template.png'));
 
