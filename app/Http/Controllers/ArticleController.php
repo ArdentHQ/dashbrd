@@ -21,7 +21,7 @@ class ArticleController extends Controller
 
         $articles = Article::query()
             ->search($request->get('search'))
-            ->when($request->get('sort') !== 'popularity', fn($q) => $q->latest())
+            ->when($request->get('sort') !== 'popularity', fn ($q) => $q->latest())
             ->with(['collections' => function ($query) {
                 $query->select(['collections.name', 'collections.extra_attributes->image as image']);
             }])
