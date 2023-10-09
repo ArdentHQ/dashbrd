@@ -749,6 +749,40 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
+it('can sort collections by name', function () {
+    $first = Collection::factory()->create([
+        'name' => ' ',
+    ]);
+
+    $second = Collection::factory()->create([
+        'name' => 'A',
+    ]);
+
+    $third = Collection::factory()->create([
+        'name' => 'aB',
+    ]);
+
+    $fourth = Collection::factory()->create([
+        'name' => 'AZ',
+    ]);
+
+    $fitfh = Collection::factory()->create([
+        'name' => 'B',
+    ]);
+
+    $collections = Collection::orderByName('asc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $first->id, $second->id, $third->id, $fourth->id,   $fitfh->id,
+    ]);
+
+    $collections = Collection::orderByName('desc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $fitfh->id, $fourth->id, $third->id, $second->id, $first->id,
+    ]);
+});
+
 it('queries the collections for the collection data object', function () {
     $collection1 = Collection::factory()->create([
         'floor_price' => '123456789',
@@ -798,7 +832,6 @@ it('queries the collections for the collection data object', function () {
         'floor_price_decimals' => $collection1->floorPriceToken->decimals,
         'image' => 'https://example.com/image.png',
         'banner' => 'https://example.com/banner.png',
-        'opensea_slug' => 'test-collection',
         'website' => 'https://example.com',
         'nfts_count' => 0,
     ]);
@@ -815,7 +848,6 @@ it('queries the collections for the collection data object', function () {
         'floor_price_decimals' => $collection2->floorPriceToken->decimals,
         'image' => null,
         'banner' => null,
-        'opensea_slug' => null,
         'website' => 'https://example2.com',
         'nfts_count' => 0,
     ]);
