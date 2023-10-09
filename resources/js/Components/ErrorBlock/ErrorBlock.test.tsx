@@ -48,27 +48,36 @@ describe("ErrorBlock", () => {
         expect(screen.getByText("Dashbrd is currently down for scheduled maintenance.")).toBeInTheDocument();
     });
 
-    it.each([401, 403, 404, 419, 429, 500, 503] as ErrorBlockProperties["statusCode"][])("should render light image for error %s if dark mode is disabled", (statusCode) => {
-        render(
-            <ErrorBlock
-                statusCode={statusCode}
-                contactEmail=""
-            />,
-        );
+    it.each([401, 403, 404, 419, 429, 500, 503] as ErrorBlockProperties["statusCode"][])(
+        "should render light image for error %s if dark mode is disabled",
+        (statusCode) => {
+            render(
+                <ErrorBlock
+                    statusCode={statusCode}
+                    contactEmail=""
+                />,
+            );
 
-        expect(screen.getByTestId(`Error__Image${statusCode}Light`)).toBeInTheDocument();
-    });
+            expect(screen.getByTestId(`Error__Image${statusCode}Light`)).toBeInTheDocument();
+        },
+    );
 
-    it.each([401, 403, 404, 419, 429, 500, 503] as ErrorBlockProperties["statusCode"][])("should render alt image for error %s if dark mode is active", (statusCode) => {
-        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+    it.each([401, 403, 404, 419, 429, 500, 503] as ErrorBlockProperties["statusCode"][])(
+        "should render alt image for error %s if dark mode is active",
+        (statusCode) => {
+            vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({
+                isDark: true,
+                toggleDarkMode: vi.fn(),
+            });
 
-        render(
-            <ErrorBlock
-                statusCode={statusCode}
-                contactEmail=""
-            />,
-        );
+            render(
+                <ErrorBlock
+                    statusCode={statusCode}
+                    contactEmail=""
+                />,
+            );
 
-        expect(screen.getByTestId(`Error__Image${statusCode}Dark`)).toBeInTheDocument();
-    });
+            expect(screen.getByTestId(`Error__Image${statusCode}Dark`)).toBeInTheDocument();
+        },
+    );
 });

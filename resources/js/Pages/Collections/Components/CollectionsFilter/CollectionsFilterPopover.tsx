@@ -84,7 +84,7 @@ export const CollectionsFilterPopover = ({
                                     handleSelectedChainIds={handleSelectedChainIds}
                                 />
 
-                                <div className="rounded-xl bg-white p-6 shadow-xl dark:bg-theme-dark-900 dark:border dark:border-theme-dark-700">
+                                <div className="rounded-xl bg-white p-6 shadow-xl dark:border dark:border-theme-dark-700 dark:bg-theme-dark-900">
                                     <label className="flex items-center justify-between">
                                         <span className="flex items-center space-x-2">
                                             <span className="font-medium text-theme-secondary-900 dark:text-theme-dark-50">

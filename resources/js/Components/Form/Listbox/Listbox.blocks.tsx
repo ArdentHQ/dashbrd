@@ -181,7 +181,7 @@ export const ListboxGradientButton = ({ children }: HTMLAttributes<HTMLDivElemen
     >
         {({ open }) => (
             <div className="flex items-center justify-between space-x-3">
-                <span className="flex-1 truncate text-xl font-bold leading-[1.875rem] text-theme-primary-600 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] dark:text-theme-primary-400">
+                <span className="flex-1 truncate text-xl font-bold leading-[1.875rem] text-theme-primary-600 dark:text-theme-primary-400 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]">
                     {children}
                 </span>
 

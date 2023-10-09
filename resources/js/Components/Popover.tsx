@@ -16,7 +16,11 @@ interface PanelProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, "cl
 
 const Panel = forwardRef<HTMLDivElement, PanelProperties>(
     (
-        { className, baseClassName = "rounded-3xl bg-white shadow-3xl dark:bg-theme-dark-900", ...properties }: PanelProperties,
+        {
+            className,
+            baseClassName = "rounded-3xl bg-white shadow-3xl dark:bg-theme-dark-900",
+            ...properties
+        }: PanelProperties,
         reference,
     ): JSX.Element => (
         <HeadlessPopover.Panel

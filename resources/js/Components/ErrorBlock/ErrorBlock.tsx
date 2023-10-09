@@ -1,6 +1,21 @@
 import { useTranslation } from "react-i18next";
 import { ErrorContent } from "./ErrorBlock.blocks";
-import { Error401, Error401Dark, Error403, Error403Dark, Error404, Error404Dark, Error419, Error419Dark, Error429, Error429Dark, Error500, Error500Dark, Error503, Error503Dark } from "@/images";
+import {
+    Error401,
+    Error401Dark,
+    Error403,
+    Error403Dark,
+    Error404,
+    Error404Dark,
+    Error419,
+    Error419Dark,
+    Error429,
+    Error429Dark,
+    Error500,
+    Error500Dark,
+    Error503,
+    Error503Dark,
+} from "@/images";
 import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 
 export interface ErrorBlockProperties {
@@ -10,7 +25,7 @@ export interface ErrorBlockProperties {
 
 export const ErrorBlock = ({ contactEmail, statusCode }: ErrorBlockProperties): JSX.Element => {
     const { t } = useTranslation();
-    const { isDark } = useDarkModeContext()
+    const { isDark } = useDarkModeContext();
 
     const isMaintenance = statusCode === 503;
 
@@ -26,7 +41,10 @@ export const ErrorBlock = ({ contactEmail, statusCode }: ErrorBlockProperties): 
 
     return (
         <>
-            <ErrorImage className="w-full max-w-full" data-testid={`Error__Image${statusCode}${isDark ? "Dark" : "Light"}`} />
+            <ErrorImage
+                className="w-full max-w-full"
+                data-testid={`Error__Image${statusCode}${isDark ? "Dark" : "Light"}`}
+            />
 
             {isMaintenance && (
                 <ErrorContent

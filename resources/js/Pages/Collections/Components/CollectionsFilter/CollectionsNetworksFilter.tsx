@@ -63,9 +63,9 @@ const CollectionsNetworksFilter = ({
     handleSelectedChainIds,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
-console.log({availableNetworks})
+    console.log({ availableNetworks });
     return (
-        <div className="flex flex-col overflow-hidden rounded-xl bg-white shadow-xl lg:max-h-screen dark:bg-theme-dark-900 dark:border dark:border-theme-dark-700">
+        <div className="flex flex-col overflow-hidden rounded-xl bg-white shadow-xl dark:border dark:border-theme-dark-700 dark:bg-theme-dark-900 lg:max-h-screen">
             <div className="bg-theme-secondary-50 px-6 py-3 text-sm font-medium text-theme-secondary-700 dark:bg-theme-dark-950 dark:text-theme-dark-200">
                 {t("pages.collections.collections_network")}
             </div>

@@ -82,7 +82,7 @@ export const GalleryPage = ({
 
             <div>
                 <div className="mx-0 mb-4 lg:mx-8 2xl:mx-0">
-                    <div className="items-center gap-x-2 bg-theme-secondary-100 px-6 py-4 sm:px-8 lg:flex lg:bg-transparent lg:p-0 dark:bg-theme-dark-800 dark:lg:bg-transparent">
+                    <div className="items-center gap-x-2 bg-theme-secondary-100 px-6 py-4 dark:bg-theme-dark-800 sm:px-8 lg:flex lg:bg-transparent lg:p-0 dark:lg:bg-transparent">
                         <div className="hidden lg:block">
                             <Heading level={1}>{t("pages.galleries.title")}:</Heading>
                         </div>
