@@ -19,7 +19,7 @@ export const SliderFormActionsToolbar = ({
     const { t } = useTranslation();
 
     return (
-        <div className="fixed inset-x-0 bottom-0 flex w-full items-center justify-between space-x-3 border-t border-theme-secondary-300 bg-white px-8 py-4 xs:justify-end">
+        <div className="fixed inset-x-0 bottom-0 flex w-full items-center justify-between space-x-3 border-t border-theme-secondary-300 bg-white px-8 py-4 dark:border-theme-dark-700 dark:bg-theme-dark-900 xs:justify-end">
             <Button
                 variant="secondary"
                 onClick={onCancel}

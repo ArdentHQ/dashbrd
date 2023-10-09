@@ -29,17 +29,22 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
                 aria-live="assertive"
                 role="alert"
                 {...properties}
-                className={cn("overflow-hidden rounded-xl", className)}
+                className={cn("overflow-hidden rounded-xl dark:border dark:border-theme-dark-700", className)}
                 ref={reference}
             >
                 <div
                     data-testid="Toast__wrapper"
                     className={cn("flex justify-between font-medium", {
-                        "bg-theme-secondary-200 text-theme-secondary-700": type === "pending",
-                        "bg-theme-success-100 text-theme-success-700": type === "success",
-                        "bg-theme-warning-100 text-theme-warning-800": type === "warning",
-                        "bg-theme-danger-100 text-theme-danger-700": type === "error",
-                        "bg-theme-hint-100 text-theme-hint-700": type === "info",
+                        "bg-theme-secondary-200 text-theme-secondary-700 dark:bg-theme-dark-700 dark:text-theme-dark-100":
+                            type === "pending",
+                        "bg-theme-success-100 text-theme-success-700 dark:bg-theme-success-500 dark:text-white":
+                            type === "success",
+                        "bg-theme-warning-100 text-theme-warning-800 dark:bg-theme-warning-700 dark:text-white":
+                            type === "warning",
+                        "bg-theme-danger-100 text-theme-danger-700 dark:bg-theme-danger-400 dark:text-white":
+                            type === "error",
+                        "bg-theme-hint-100 text-theme-hint-700 dark:bg-theme-primary-600 dark:text-white":
+                            type === "info",
                     })}
                 >
                     <div className="flex items-center space-x-2 px-6 py-3">
@@ -66,13 +71,16 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
 
                 {isExpanded && (
                     <div
-                        className={cn("px-6 py-3 text-sm font-medium leading-6", {
-                            "bg-theme-secondary-100 text-theme-secondary-700": type === "pending",
-                            "bg-theme-success-50 text-theme-secondary-700": type === "success",
-                            "bg-theme-warning-50 text-theme-secondary-700": type === "warning",
-                            "bg-theme-danger-50 text-theme-secondary-700": type === "error",
-                            "bg-theme-primary-50 text-theme-secondary-700": type === "info",
-                        })}
+                        className={cn(
+                            "px-6 py-3 text-sm font-medium leading-6 dark:bg-theme-dark-800 dark:text-theme-dark-200",
+                            {
+                                "bg-theme-secondary-100 text-theme-secondary-700": type === "pending",
+                                "bg-theme-success-50 text-theme-secondary-700": type === "success",
+                                "bg-theme-warning-50 text-theme-secondary-700": type === "warning",
+                                "bg-theme-danger-50 text-theme-secondary-700": type === "error",
+                                "bg-theme-primary-50 text-theme-secondary-700": type === "info",
+                            },
+                        )}
                     >
                         {message}
                     </div>

@@ -28,7 +28,7 @@ const Heading = forwardRef<HTMLHeadingElement, HeadingProperties>(
                 <h1
                     ref={reference}
                     className={cn(
-                        "text-xl leading-[1.875rem] text-theme-secondary-900 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]",
+                        "text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]",
                         weightClass(weight),
                         className,
                     )}
@@ -44,7 +44,7 @@ const Heading = forwardRef<HTMLHeadingElement, HeadingProperties>(
                 <h2
                     ref={reference}
                     className={cn(
-                        "text-xl leading-[1.875rem] text-theme-secondary-900 md:text-2xl md:leading-8",
+                        "text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8",
                         weightClass(weight),
                         className,
                     )}
@@ -60,7 +60,7 @@ const Heading = forwardRef<HTMLHeadingElement, HeadingProperties>(
                 <h3
                     ref={reference}
                     className={cn(
-                        "text-lg leading-7 text-theme-secondary-900 md:text-xl md:leading-[1.875rem]",
+                        "text-lg leading-7 text-theme-secondary-900 dark:text-theme-dark-50 md:text-xl md:leading-[1.875rem]",
                         weightClass(weight),
                         className,
                     )}
@@ -75,7 +75,7 @@ const Heading = forwardRef<HTMLHeadingElement, HeadingProperties>(
             <h4
                 ref={reference}
                 className={cn(
-                    "text-base leading-7 text-theme-secondary-900 sm:text-lg",
+                    "text-base leading-7 text-theme-secondary-900 dark:text-theme-dark-50 sm:text-lg",
                     weightClass(weight),
                     className,
                 )}

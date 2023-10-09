@@ -15,6 +15,7 @@ interface LayoutWrapperProperties extends HTMLAttributes<HTMLDivElement> {
     isMaintenanceModeActive?: boolean;
     belowHeader?: React.ReactNode;
     mustBeSigned?: boolean;
+    showBackButton?: boolean;
 }
 
 export const LayoutWrapper = ({
@@ -26,6 +27,7 @@ export const LayoutWrapper = ({
     toastMessage,
     isMaintenanceModeActive,
     mustBeSigned = false,
+    showBackButton = false,
 }: LayoutWrapperProperties): JSX.Element => {
     const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth({
         mustBeSigned,
@@ -55,6 +57,7 @@ export const LayoutWrapper = ({
                 showCloseButton={showCloseButton}
                 mustBeSigned={mustBeSigned}
                 closeOverlay={closeOverlay}
+                showBackButton={showBackButton}
             />
 
             {belowHeader}

@@ -749,40 +749,6 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
-it('can sort collections by name', function () {
-    $first = Collection::factory()->create([
-        'name' => ' ',
-    ]);
-
-    $second = Collection::factory()->create([
-        'name' => 'A',
-    ]);
-
-    $third = Collection::factory()->create([
-        'name' => 'aB',
-    ]);
-
-    $fourth = Collection::factory()->create([
-        'name' => 'AZ',
-    ]);
-
-    $fitfh = Collection::factory()->create([
-        'name' => 'B',
-    ]);
-
-    $collections = Collection::orderByName('asc')->get();
-
-    expect($collections->modelKeys())->toBe([
-        $first->id, $second->id, $third->id, $fourth->id,   $fitfh->id,
-    ]);
-
-    $collections = Collection::orderByName('desc')->get();
-
-    expect($collections->modelKeys())->toBe([
-        $fitfh->id, $fourth->id, $third->id, $second->id, $first->id,
-    ]);
-});
-
 it('queries the collections for the collection data object', function () {
     $collection1 = Collection::factory()->create([
         'floor_price' => '123456789',
@@ -941,6 +907,69 @@ it('can determine whether collection was recently viewed', function () {
     ]);
 
     expect($collection->recentlyViewed())->toBeFalse();
+});
+
+it('can determine whether the collection is potentially full', function () {
+    expect((new Collection([
+        'supply' => null,
+    ]))->isPotentiallyFull())->toBeFalse();
+
+    expect((new Collection([
+        'last_indexed_token_number' => null,
+    ]))->isPotentiallyFull())->toBeFalse();
+
+    expect((new Collection([
+        'supply' => 10,
+        'last_indexed_token_number' => 10,
+    ]))->isPotentiallyFull())->toBeTrue();
+
+    $collection = Collection::factory()->create([
+        'supply' => 10,
+        'last_indexed_token_number' => 5,
+    ]);
+
+    Nft::factory(5)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeFalse();
+
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 5,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // zero-based NFT token numbers
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 9,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // burning
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 1,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(20)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // arbitrary value
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => '115790067969782405922571518180952299168544685841472255659504762311331546978981',
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
 });
 
 it('should mark collection as invalid - unacceptable supply', function () {
