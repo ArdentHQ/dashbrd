@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
+import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
@@ -14,6 +15,7 @@ describe("AuthOverlay", () => {
 
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
     });
 
     afterAll(() => {
@@ -393,5 +395,52 @@ describe("AuthOverlay", () => {
 
         fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
         expect(backSpy).toHaveBeenCalled();
+    });
+
+    it("should render default image if dark mode is not active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__LightModeImage")).toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__DarkModeImage")).not.toBeInTheDocument();
+    });
+
+    it("should render with alt image if dark mode is active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__DarkModeImage")).toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__LightModeImage")).not.toBeInTheDocument();
+    });
+
+    it("should not set blur to layout if dark mode is active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay")).not.toHaveClass("blur");
     });
 });
