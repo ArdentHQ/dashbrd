@@ -6,9 +6,8 @@ namespace App\Jobs;
 
 use App\Jobs\Middleware\RecoverProviderErrors;
 use App\Jobs\Traits\RecoversFromProviderErrors;
-use App\Models\Collection;
+use App\Models\Network;
 use App\Models\Nft;
-use App\Models\SpamContract;
 use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Support\Web3NftHandler;
 use DateTime;
@@ -32,9 +31,8 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(
-        public Collection $collection
-    ) {
+    public function __construct()
+    {
         //
     }
 
@@ -43,48 +41,17 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
      */
     public function handle(AlchemyWeb3DataProvider $provider): void
     {
-        if (SpamContract::isSpam($this->collection->address, $this->collection->network)) {
-            return;
+        $networks = Network::onlyMainnet()->get();
+
+        foreach ($networks as $network) {
+            $this->refreshNftMetadataByNetwork($network, $provider);
         }
 
-        $nfts = Nft::whereNotNull('metadata_requested_at')
-            ->where(function ($query) {
-                $query->whereNull('metadata_fetched_at')->orWhereRaw('metadata_fetched_at < metadata_requested_at');
-            })->get();
-
-        if (count($nfts) === 0) {
-            Log::info('RefreshNftMetadata Job: No nfts found for metadata update. Aborting.');
-
-            return;
-        }
-
-        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
-            'nfts_count' => $nfts->count(),
-            'address' => $this->collection->address,
-            'network' => $this->collection->network->id,
-        ]);
-
-        // Chunk by 100 to comply with Alchemy's nfts batch limit.
-        $nfts->chunk(100)->map(function ($nftsChunk) use ($provider) {
-
-            $result = $provider->getNftMetadata($nftsChunk, $this->collection);
-
-            (new Web3NftHandler(collection: $this->collection))->store(
-                $result->nfts,
-                dispatchJobs: true,
-            );
-        });
-
-        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
-            'nfts_count' => $nfts->count(),
-            'address' => $this->collection->address,
-            'network' => $this->collection->network->id,
-        ]);
     }
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->collection->id;
+        return self::class;
     }
 
     /**
@@ -101,5 +68,45 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
     public function retryUntil(): DateTime
     {
         return now()->addMinutes(10);
+    }
+
+    private function refreshNftMetadataByNetwork(Network $network, AlchemyWeb3DataProvider $provider)
+    {
+
+        $nfts = Nft::whereNotNull('metadata_requested_at')
+            ->where(function ($query) {
+                $query->whereNull('metadata_fetched_at')->orWhereRaw('metadata_fetched_at < metadata_requested_at');
+            })
+                ->whereHas('collection', function ($query) use ($network) {
+                    $query->where('network_id', $network->id);
+                })
+            ->get();
+
+        if (count($nfts) === 0) {
+            Log::info('RefreshNftMetadata Job: No nfts found for metadata update. Aborting.');
+
+            return;
+        }
+
+        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
+            'nfts_count' => $nfts->count(),
+            'network' => $network->id,
+        ]);
+
+        // Chunk by 100 to comply with Alchemy's nfts batch limit.
+        $nfts->chunk(100)->map(function ($nftsChunk) use ($provider, $network) {
+
+            $result = $provider->getNftMetadata($nftsChunk, $network);
+
+            (new Web3NftHandler())->store(
+                $result->nfts,
+                dispatchJobs: true,
+            );
+        });
+
+        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
+            'nfts_count' => $nfts->count(),
+            'network' => $network->id,
+        ]);
     }
 }

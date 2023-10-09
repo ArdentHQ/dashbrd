@@ -223,12 +223,12 @@ class AlchemyPendingRequest extends PendingRequest
      *
      * @param  Collection<int, Nft>  $nfts
      */
-    public function nftMetadata(Collection $nfts, CollectionModel $collection): Web3NftsChunk
+    public function nftMetadata(Collection $nfts, Network $network): Web3NftsChunk
     {
         $this->apiUrl = $this->getNftV2ApiUrl();
 
         // All the requests need to have chain id defined.
-        $this->chain = AlchemyChain::fromChainId($collection->network->chain_id);
+        $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
         $tokens = $nfts->map(function ($nft) {
             return [
@@ -244,8 +244,8 @@ class AlchemyPendingRequest extends PendingRequest
         /** @var Collection<int, Nft>  $response */
         $nftItems = collect($response)
             ->filter(fn ($nft) => $this->filterNft($nft))
-            ->map(function ($nft) use ($collection) {
-                return $this->parseNft($nft, $collection->network_id, convertTokenNumber: false);
+            ->map(function ($nft) use ($network) {
+                return $this->parseNft($nft, $network->id, convertTokenNumber: false);
             })
             ->values();
 
