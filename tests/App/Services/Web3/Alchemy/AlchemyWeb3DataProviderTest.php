@@ -176,7 +176,7 @@ it('should getNftMetadata', function () {
     $nfts->push($nft);
 
     $provider = new AlchemyWeb3DataProvider();
-    $tokens = $provider->getNftMetadata($nfts, $collection)->nfts;
+    $tokens = $provider->getNftMetadata($nfts, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(1)
