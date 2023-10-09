@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
+use App\Models\Traits\HasEagerLimit;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
@@ -25,7 +26,6 @@ use Illuminate\Support\Str;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /**
  * @property ?int $supply
@@ -349,25 +349,9 @@ class Collection extends Model
      */
     public function scopeWithSignedWallets(Builder $query): Builder
     {
-        $signedWallets = Wallet::query()
-            ->select('id')
-            ->whereNotNull('last_signed_at');
-
-        $distinctCollectionIds = DB::query()
-            ->selectRaw('DISTINCT distinct_collections.collection_id as id')
-            ->withExpression('signed_wallets', $signedWallets)
-            ->from('signed_wallets')
-            ->joinSubLateral(
-                Nft::query()
-                    ->selectRaw('DISTINCT nfts.collection_id')
-                    ->whereRaw('nfts.wallet_id = signed_wallets.id'),
-                'distinct_collections',
-                null // @phpstan-ignore-line
-            );
-
-        return $query
-            ->withExpression('distinct_collection_ids', $distinctCollectionIds)
-            ->join('distinct_collection_ids', 'distinct_collection_ids.id', 'collections.id');
+        return $query->whereHas('nfts', function ($query) {
+            return $query->whereHas('wallet', fn ($q) => $q->whereNotNull('last_signed_at'));
+        });
     }
 
     /**
