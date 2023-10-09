@@ -5,6 +5,7 @@ export interface AuthOverlayProperties extends Omit<OverlayProperties, "showOver
     closeOverlay: () => void;
     mustBeSigned?: boolean;
     showBackButton: boolean;
+    signed: boolean;
 }
 
 export interface ConnectWalletProperties {

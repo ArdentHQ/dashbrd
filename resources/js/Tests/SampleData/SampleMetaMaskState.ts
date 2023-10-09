@@ -21,7 +21,6 @@ export const getSampleMetaMaskState = (overrides: Partial<MetaMaskState> = {}): 
     askForSignature: vi.fn(),
     signWallet: vi.fn(),
     signing: false,
-    signed: false,
     isShowConnectOverlay: false,
     onDisconnected: vi.fn(),
     ...overrides,

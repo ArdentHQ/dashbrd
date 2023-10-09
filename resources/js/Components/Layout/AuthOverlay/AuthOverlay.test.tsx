@@ -25,6 +25,7 @@ describe("AuthOverlay", () => {
     it("should connect with wallet", async () => {
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -49,6 +50,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -68,6 +70,7 @@ describe("AuthOverlay", () => {
     it("should sign if must be signed prop", async () => {
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -88,6 +91,7 @@ describe("AuthOverlay", () => {
     it("should connect with wallet and show close button", async () => {
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={true}
                 showBackButton={false}
@@ -112,6 +116,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -136,6 +141,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={true}
                 showBackButton={false}
@@ -161,6 +167,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={true}
                 showBackButton={false}
@@ -188,6 +195,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -210,6 +218,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={true}
                 showBackButton={false}
@@ -229,6 +238,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -247,6 +257,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -265,6 +276,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -283,6 +295,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -302,6 +315,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -315,6 +329,7 @@ describe("AuthOverlay", () => {
     it("should render without auth overlay", () => {
         render(
             <AuthOverlay
+                signed={false}
                 show={false}
                 showCloseButton={false}
                 showBackButton={false}
@@ -328,6 +343,7 @@ describe("AuthOverlay", () => {
     it("should render without back button if showBackButton is false", () => {
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={false}
@@ -346,6 +362,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={true}
@@ -365,6 +382,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={true}
@@ -386,6 +404,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={true}
@@ -402,6 +421,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={true}
@@ -418,6 +438,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={true}
@@ -434,6 +455,7 @@ describe("AuthOverlay", () => {
 
         render(
             <AuthOverlay
+                signed={false}
                 show={true}
                 showCloseButton={false}
                 showBackButton={true}

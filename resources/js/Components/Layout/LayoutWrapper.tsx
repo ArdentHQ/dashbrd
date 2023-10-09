@@ -29,7 +29,7 @@ export const LayoutWrapper = ({
     mustBeSigned = false,
     showBackButton = false,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth({
+    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay, signed } = useAuth({
         mustBeSigned,
     });
 
@@ -58,6 +58,7 @@ export const LayoutWrapper = ({
                 mustBeSigned={mustBeSigned}
                 closeOverlay={closeOverlay}
                 showBackButton={showBackButton}
+                signed={signed}
             />
 
             {belowHeader}

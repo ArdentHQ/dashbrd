@@ -9,7 +9,6 @@ interface Properties {
 export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.AuthData & {
     showAuthOverlay: boolean;
     showCloseButton: boolean;
-    signed: boolean;
     closeOverlay: () => void;
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
@@ -24,10 +23,9 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
 
     const allowsGuests = props.allowsGuests;
 
-    const { wallet, authenticated, user } = auth;
+    const { wallet, authenticated, user, signed } = auth;
 
     const {
-        signed,
         connecting,
         switching,
         errorMessage: metamaskErrorMessage,
@@ -97,9 +95,9 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
 
     return {
         authenticated,
-        signed,
         user,
         wallet,
+        signed,
         showAuthOverlay: showAuthOverlay(),
         showCloseButton,
         closeOverlay,

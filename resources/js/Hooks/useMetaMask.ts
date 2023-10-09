@@ -96,7 +96,6 @@ export interface MetaMaskState {
     signWallet: () => Promise<void>;
     connecting: boolean;
     signing: boolean;
-    signed: boolean;
     initialized: boolean;
     needsMetaMask: boolean;
     supportsMetaMask: boolean;
@@ -134,15 +133,11 @@ const ErrorTypes = {
     [ErrorType.UserRejected]: "user_rejected",
 };
 
-interface Properties {
-    initialAuth: App.Data.AuthData;
-}
-
 /**
  * Note consider that the `initialAuth` property is not reactive, it contains
  * the initial auth state when page is loaded.
  */
-const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
+const useMetaMask = (): MetaMaskState => {
     const { t } = useTranslation();
 
     const [initialized, setInitialized] = useState<boolean>(false);
@@ -154,7 +149,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [requiresSignature, setRequiresSignature] = useState<boolean>(false);
     const [requiresSwitch, setRequiresSwitch] = useState<boolean>(false);
     const [signing, setSigning] = useState<boolean>(false);
-    const [signed, setSigned] = useState<boolean>(initialAuth.signed);
     const [waitingSignature, setWaitingSignature] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
@@ -208,8 +202,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             handleAxiosError(error);
         } finally {
             setSwitching(false);
-
-            setSigned(false);
         }
     };
 
@@ -227,7 +219,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             handleAxiosError(error);
         } finally {
             setSwitching(false);
-            setSigned(false);
         }
     };
 
@@ -461,8 +452,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
             setAuthData?.(response.data);
 
-            setSigned(true);
-
             hideConnectOverlay();
 
             router.reload();
@@ -647,8 +636,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         setAccount(undefined);
 
         setChainId(undefined);
-
-        setSigned(false);
     };
 
     return {
@@ -657,7 +644,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         connectWallet,
         connecting,
         signing,
-        signed,
         initialized,
         needsMetaMask,
         supportsMetaMask,
