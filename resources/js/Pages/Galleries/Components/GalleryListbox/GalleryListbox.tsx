@@ -27,7 +27,7 @@ export const GalleryListbox = ({
                         <Listbox.GradientButton>{selectedOption.label}</Listbox.GradientButton>
                     ) : (
                         <Listbox.Button isNavigation>
-                            <span className="text-theme-primary-600">{selectedOption.label}</span>
+                            <span className="text-theme-primary-600 dark:text-theme-primary-400">{selectedOption.label}</span>
                         </Listbox.Button>
                     )}
                 </>
