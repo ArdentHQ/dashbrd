@@ -428,4 +428,19 @@ describe("AuthOverlay", () => {
         expect(screen.getByTestId("AuthOverlay__DarkModeImage")).toBeInTheDocument()
         expect(screen.queryByTestId("AuthOverlay__LightModeImage")).not.toBeInTheDocument()
     });
+
+    it("should not set blur to layout if dark mode is active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay")).not.toHaveClass("blur")
+    });
 });
