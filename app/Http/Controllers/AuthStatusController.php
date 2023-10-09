@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Support\Facades\Signature;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthStatusController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): JsonResponse
     {
         /** @var User|null $user */
         $user = $request->user();
