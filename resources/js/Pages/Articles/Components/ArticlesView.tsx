@@ -8,7 +8,7 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { LatestArticles } from "@/Pages/Articles/Components/LatestArticles";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
-import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
+import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Components/Articles/ArticlesList";
 import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -128,7 +128,9 @@ export const ArticlesView = ({
 
                 {articlesLoaded && displayType === DisplayTypes.List && <ArticlesList articles={articlesToShow} />}
 
-                {isLoading && <ArticlesLoadingGrid />}
+                {isLoading && displayType === DisplayTypes.Grid && <ArticlesLoadingGrid />}
+
+                {isLoading && displayType === DisplayTypes.List && <ArticlesLoadingList />}
 
                 {!isLoading && articlesCount === 0 && query === "" && (
                     <EmptyBlock className="w-full">{t("pages.collections.articles.no_articles")}</EmptyBlock>
