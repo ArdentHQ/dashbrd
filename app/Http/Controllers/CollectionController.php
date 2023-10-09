@@ -111,8 +111,6 @@ class CollectionController extends Controller
                 user: $user
             )->get();
 
-            info(CollectionNftData::collection($nfts));
-
             return new JsonResponse([
                 'collections' => CollectionData::collection($collections),
                 'nfts' => CollectionNftData::collection($nfts),
