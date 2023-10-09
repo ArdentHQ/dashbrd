@@ -175,21 +175,21 @@ export const ListboxGradientButton = ({ children }: HTMLAttributes<HTMLDivElemen
     <HeadlessListbox.Button
         data-testid="ListboxGradientButton"
         className={cn(
-            "group relative block w-full rounded-xl border border-theme-secondary-400 px-5 py-2 text-left transition focus:outline-none enabled:focus:ring-2 enabled:focus:ring-theme-primary-300",
+            "group relative block w-full rounded-xl border border-theme-secondary-400 px-5 py-2 text-left transition focus:outline-none enabled:focus:ring-2 enabled:focus:ring-theme-primary-300 dark:border-theme-dark-500",
             "disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700",
         )}
     >
         {({ open }) => (
             <div className="flex items-center justify-between space-x-3">
-                <span className="flex-1 truncate text-xl font-bold leading-[1.875rem] text-theme-primary-600 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]">
+                <span className="flex-1 truncate text-xl font-bold leading-[1.875rem] text-theme-primary-600 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] dark:text-theme-primary-400">
                     {children}
                 </span>
 
-                <div className="pointer-events-none flex h-6 w-6 items-center justify-center rounded-full bg-theme-primary-600 text-white">
+                <div className="pointer-events-none flex h-6 w-6 items-center justify-center rounded-full bg-theme-primary-600 text-white dark:bg-theme-primary-400">
                     <Icon
                         data-testid="ListboxButtonIcon"
                         name="ChevronDownSmall"
-                        className={cn("h-3 w-4 transform text-white transition duration-100", {
+                        className={cn("h-3 w-4 transform text-white transition duration-100 dark:text-theme-dark-900", {
                             "-rotate-180 ": open,
                         })}
                         aria-hidden="true"
