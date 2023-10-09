@@ -109,7 +109,7 @@ class MyGalleryController extends Controller
     {
         $this->authorize('delete', $gallery);
 
-        $gallery->delete();
+        $gallery->forceDelete();
 
         return redirect()
             ->to(route('my-galleries'))
