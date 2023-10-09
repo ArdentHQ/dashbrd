@@ -79,13 +79,14 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
     {
 
         $nfts = Nft::whereNotNull('metadata_requested_at')
+            ->whereHas('collection', function ($query) use ($network) {
+                $query->where('network_id', $network->id);
+            })
             ->where(function ($query) {
                 $query->whereNull('metadata_fetched_at')->orWhereRaw('metadata_fetched_at < metadata_requested_at');
             })
-                ->whereHas('collection', function ($query) use ($network) {
-                    $query->where('network_id', $network->id);
-                })
             ->get();
+
 
         if (count($nfts) === 0) {
             Log::info('RefreshNftMetadata Job: No nfts found for metadata update. Aborting.');
@@ -103,7 +104,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 
             $result = $provider->getNftMetadata($nftsChunk, $network);
 
-            (new Web3NftHandler(null, $network))->store(
+            (new Web3NftHandler(null, $network, $nftsChunk->first()->collection))->store(
                 $result->nfts,
                 dispatchJobs: true,
             );
