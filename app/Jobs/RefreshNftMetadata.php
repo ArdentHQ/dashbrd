@@ -103,7 +103,7 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 
             $result = $provider->getNftMetadata($nftsChunk, $network);
 
-            (new Web3NftHandler())->store(
+            (new Web3NftHandler(null, $network))->store(
                 $result->nfts,
                 dispatchJobs: true,
             );
