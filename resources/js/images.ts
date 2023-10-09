@@ -10,6 +10,13 @@ import { ReactComponent as Error419 } from "@images/errors/419.svg";
 import { ReactComponent as Error429 } from "@images/errors/429.svg";
 import { ReactComponent as Error500 } from "@images/errors/500.svg";
 import { ReactComponent as Error503 } from "@images/errors/503.svg";
+import { ReactComponent as Error401Dark } from "@images/errors/401-dark.svg";
+import { ReactComponent as Error403Dark } from "@images/errors/403-dark.svg";
+import { ReactComponent as Error404Dark } from "@images/errors/404-dark.svg";
+import { ReactComponent as Error419Dark } from "@images/errors/419-dark.svg";
+import { ReactComponent as Error429Dark } from "@images/errors/429-dark.svg";
+import { ReactComponent as Error500Dark } from "@images/errors/500-dark.svg";
+import { ReactComponent as Error503Dark } from "@images/errors/503-dark.svg";
 import { ReactComponent as LeftGridSm } from "@images/grid-left-small.svg";
 import { ReactComponent as LeftGrid } from "@images/grid-left.svg";
 import { ReactComponent as RightMiddleGrid } from "@images/grid-right-middle.svg";
@@ -41,6 +48,13 @@ export {
     Error429,
     Error500,
     Error503,
+    Error401Dark,
+    Error403Dark,
+    Error404Dark,
+    Error419Dark,
+    Error429Dark,
+    Error500Dark,
+    Error503Dark,
     LeftGrid,
     LeftGridSm,
     RightGrid,
