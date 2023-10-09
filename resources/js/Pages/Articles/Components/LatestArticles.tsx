@@ -58,8 +58,8 @@ export const LatestArticles = ({
             <div
                 className={cn("mt-0", {
                     "-mx-6 -mt-6 space-y-2 border-b-4 border-theme-secondary-100 sm:-mx-8 lg:mx-0 lg:border-b-2 lg:border-theme-secondary-300":
-                        withFullBorder && hasEnoughArticles,
-                    "border-b-2 border-theme-secondary-300": !withFullBorder && hasEnoughArticles,
+                        withFullBorder && (hasEnoughArticles || isLoading),
+                    "border-b-2 border-theme-secondary-300": !withFullBorder && (hasEnoughArticles || isLoading),
                 })}
             ></div>
         </div>

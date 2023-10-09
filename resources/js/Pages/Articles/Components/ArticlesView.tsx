@@ -67,7 +67,9 @@ export const ArticlesView = ({
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles);
 
-    const showLatestArticlesCards = mode === "articles" && query === "" && Number(page ?? 1) === 1;
+    const currentPage = isTruthy(page) ? Number(page) : 1;
+    const showLatestArticlesCards =
+        mode === "articles" && query === "" && currentPage === 1 && (isLoading || articlesLoaded);
 
     return (
         <>
