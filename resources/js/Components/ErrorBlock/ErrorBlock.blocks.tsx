@@ -22,7 +22,7 @@ export const ErrorContent = ({
             data-testid="ErrorContent"
         >
             <Heading level={1}>{title}</Heading>
-            <p className="text-sm text-theme-secondary-700 md:text-lg">{description}</p>
+            <p className="text-sm text-theme-secondary-700 md:text-lg dark:text-theme-dark-200">{description}</p>
 
             {showActionButtons && (
                 <div className="mt-6 flex flex-col space-y-3 sm:flex-row sm:justify-center sm:space-x-3 sm:space-y-0">
