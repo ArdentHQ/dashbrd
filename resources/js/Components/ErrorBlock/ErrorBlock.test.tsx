@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorBlock, type ErrorBlockProperties } from "./ErrorBlock";
-import { render, screen } from "@/Tests/testing-library";
 import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import { render, screen } from "@/Tests/testing-library";
 
 describe("ErrorBlock", () => {
     beforeAll(() => {
@@ -48,7 +48,7 @@ describe("ErrorBlock", () => {
         expect(screen.getByText("Dashbrd is currently down for scheduled maintenance.")).toBeInTheDocument();
     });
 
-    it.each([401, 403, 404, 419, 429, 500, 503] as ErrorBlockProperties["statusCode"][])(
+    it.each([401, 403, 404, 419, 429, 500, 503] as Array<ErrorBlockProperties["statusCode"]>)(
         "should render light image for error %s if dark mode is disabled",
         (statusCode) => {
             render(
@@ -62,7 +62,7 @@ describe("ErrorBlock", () => {
         },
     );
 
-    it.each([401, 403, 404, 419, 429, 500, 503] as ErrorBlockProperties["statusCode"][])(
+    it.each([401, 403, 404, 419, 429, 500, 503] as Array<ErrorBlockProperties["statusCode"]>)(
         "should render alt image for error %s if dark mode is active",
         (statusCode) => {
             vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({
