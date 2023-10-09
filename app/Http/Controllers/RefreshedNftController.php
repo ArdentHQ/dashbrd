@@ -22,7 +22,7 @@ class RefreshedNftController extends Controller
         // It's supposed to be completely opaque to the user what the "refresh" is doing.
 
         if (SpamContract::isSpam($collection->address, $collection->network)) {
-            return;
+            return null;
         }
 
         $nft->touch('metadata_requested_at');
