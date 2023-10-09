@@ -73,7 +73,7 @@ export const AuthOverlay = ({
             {needsMetaMask && <AuthInstallWallet />}
             {!needsMetaMask && (
                 <>
-                    {isDark ? <AuthConnectWalletDark /> : <AuthConnectWallet />}
+                    {isDark ? <AuthConnectWalletDark data-testid="AuthOverlay__DarkModeImage" /> : <AuthConnectWallet data-testid="AuthOverlay__LightModeImage" />}
                     <div
                         className={cn("w-full flex-col items-center space-x-6 px-6", {
                             hidden: !waitingSignature && !showSignMessage && errorMessage === undefined,

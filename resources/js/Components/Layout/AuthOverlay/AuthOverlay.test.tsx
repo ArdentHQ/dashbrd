@@ -396,4 +396,36 @@ describe("AuthOverlay", () => {
         fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
         expect(backSpy).toHaveBeenCalled();
     });
+
+    it("should render default image if dark mode is not active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__LightModeImage")).toBeInTheDocument()
+        expect(screen.queryByTestId("AuthOverlay__DarkModeImage")).not.toBeInTheDocument()
+    });
+
+    it("should render with alt image if dark mode is active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__DarkModeImage")).toBeInTheDocument()
+        expect(screen.queryByTestId("AuthOverlay__LightModeImage")).not.toBeInTheDocument()
+    });
 });
