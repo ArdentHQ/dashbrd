@@ -127,8 +127,6 @@ enum ErrorType {
 const ErrorTypes = {
     [ErrorType.NoAccount]: "no_account",
     [ErrorType.Generic]: "generic",
-    // @TODO: Add something like "Please connect any of the following networks: XXXXX and try again", but we need a way
-    // dynamically retrieve the network names before.
     [ErrorType.InvalidNetwork]: "invalid_network",
     [ErrorType.ProviderMissing]: "provider_missing",
     [ErrorType.UserRejected]: "user_rejected",
