@@ -10,7 +10,7 @@ const Marketplace = ({ icon, href }: { icon: IconName; href: string }): JSX.Elem
     <a
         href={href}
         target="_blank"
-        className="transition-default flex h-15 w-15 items-center justify-center rounded-full border border-theme-secondary-300 hover:bg-theme-secondary-300"
+        className="transition-default flex h-15 w-15 items-center justify-center rounded-full border border-theme-secondary-300 hover:bg-theme-secondary-300 dark:border-theme-dark-700 dark:hover:bg-theme-dark-700"
         rel="noreferrer"
     >
         <Icon
@@ -32,7 +32,7 @@ export const NoNftsOverlay = ({ show }: { show: boolean }): JSX.Element => {
             showCloseButton={false}
             belowContent={
                 <div className="flex max-w-sm flex-col p-8">
-                    <div className="text-center font-medium text-theme-secondary-700">
+                    <div className="text-center font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                         {t("pages.galleries.create.can_purchase")}
                     </div>
 

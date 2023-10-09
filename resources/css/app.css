@@ -39,3 +39,7 @@
         0 207px 83px 0 rgba(33, 42, 131, 0.01),
         0 323px 90px 0 rgba(33, 42, 131, 0);
 }
+
+.dark .auth-overlay-shadow {
+    box-shadow: 0px 15px 35px 0px rgba(18, 18, 19, 0.4);
+}
