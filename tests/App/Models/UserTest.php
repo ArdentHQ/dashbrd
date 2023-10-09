@@ -195,6 +195,8 @@ it('should get the collections for a user', function () {
         'collection_id' => $userCollection2->id,
     ]);
 
+    expect($user->collections()->count())->toBe(2);
+
     expect($user->collections()->pluck('collections.id')->toArray())->toEqualCanonicalizing([
         $userCollection->id,
         $userCollection2->id,

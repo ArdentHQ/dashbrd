@@ -458,6 +458,7 @@ it('can sort collections using usd as default and considering the number of nfts
 it('can sort collections using other currency', function () {
     $user = User::factory()->create();
     $wallet = Wallet::factory()->create(['user_id' => $user->id]);
+
     $user2 = User::factory()->create();
     $wallet2 = Wallet::factory()->create(['user_id' => $user2->id]);
 
@@ -708,9 +709,7 @@ it('can sort collections by nfts received date', function () {
     $nft5 = Nft::factory()->recycle($wallet)->create();
 
     // Should return recent activities first...
-    $collections = $wallet->user
-        ->collections()
-        ->orderByReceivedDate($wallet, 'desc')->get();
+    $collections = $wallet->user->collections()->orderByReceivedDate($wallet, 'desc')->get();
 
     expect($collections->modelKeys())->toBe([
         $nft2->collection->id, $nft1->collection->id, $nft4->collection->id, $nft3->collection->id, $nft5->collection->id,
@@ -816,7 +815,10 @@ it('queries the collections for the collection data object', function () {
     // should not be included
     Nft::factory()->count(2)->create();
 
-    $result = Collection::forCollectionData()->oldest('collections.id')->get()->toArray();
+    $result = Collection::forCollectionData()->oldest('id')->get()->toArray();
+
+    // +2 because are created by the nft factory
+    expect($result)->toHaveCount(3 + 2);
 
     expect($result[0])->toEqual([
         'id' => $collection1->id,
@@ -858,8 +860,6 @@ it('queries the collections for the collection data object', function () {
 it('queries the nfts count for the user', function () {
     $user = User::factory()->create();
 
-    $wallet = Wallet::factory()->withUser($user)->create();
-
     // With random nfts
     $collection = Collection::factory()
         ->has(Nft::factory()->count(3))
@@ -871,12 +871,12 @@ it('queries the nfts count for the user', function () {
     // Should include only these ones
     Nft::factory()
         ->count(2)
-        ->for($wallet)
+        ->for(Wallet::factory()->withUser($user))
         ->create([
             'collection_id' => $collection->id,
         ]);
 
-    $result = $user->collections()->forCollectionData($user)->oldest('id')->get()->toArray();
+    $result = Collection::forCollectionData($user)->oldest('id')->get()->toArray();
 
     expect($result[0]['nfts_count'])->toBe(2);
 });
@@ -888,11 +888,9 @@ it('gets the floor price for the user currency', function () {
         ],
     ]);
 
-    $wallet = Wallet::factory()->withUser($user)->create();
-
     Collection::factory()
         ->has(
-            Nft::factory()->for($wallet)
+            Nft::factory()->for(Wallet::factory()->withUser($user))
         )
         ->create([
             'fiat_value' => [
@@ -904,7 +902,7 @@ it('gets the floor price for the user currency', function () {
     // No value but usd
     Collection::factory()
         ->has(
-            Nft::factory()->for($wallet)
+            Nft::factory()->for(Wallet::factory()->withUser($user))
         )
         ->create([
             'fiat_value' => [
@@ -915,7 +913,7 @@ it('gets the floor price for the user currency', function () {
     // Not included
     Collection::factory()->create();
 
-    $result = $user->collections()->forCollectionData($user)->oldest('id')->get()->toArray();
+    $result = Collection::forCollectionData($user)->oldest('id')->get()->toArray();
 
     expect($result)->toHaveCount(2);
 
