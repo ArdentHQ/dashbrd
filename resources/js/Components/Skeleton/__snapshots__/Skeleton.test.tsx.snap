@@ -9,7 +9,7 @@ exports[`Skeleton > should render 1`] = `
     data-testid="Skeleton"
   >
     <span
-      class="react-loading-skeleton z-0 rounded-lg"
+      class="react-loading-skeleton z-0 dark:bg-theme-dark-800 rounded-lg"
       style="--animation-duration: 1.3s;"
     >
       ‌
@@ -28,7 +28,7 @@ exports[`Skeleton > should render circle 1`] = `
     data-testid="Skeleton"
   >
     <span
-      class="react-loading-skeleton z-0"
+      class="react-loading-skeleton z-0 dark:bg-theme-dark-800"
       style="--animation-duration: 1.3s; border-radius: 50%;"
     >
       ‌

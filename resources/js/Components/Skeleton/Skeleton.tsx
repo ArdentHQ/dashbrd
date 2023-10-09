@@ -16,7 +16,7 @@ export const Skeleton = ({ isCircle, width, height, className, animated = true }
         containerTestId="Skeleton"
         circle={isCircle}
         style={{ width, height }}
-        className={cn("z-0", className, {
+        className={cn("z-0 dark:bg-theme-dark-800", className, {
             "rounded-lg": !isTruthy(isCircle),
         })}
         duration={1.3}
