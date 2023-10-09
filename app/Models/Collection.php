@@ -190,7 +190,7 @@ class Collection extends Model
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
         return $query->selectRaw(
-            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nfts.nfts_count)::float) as total_value', $currency->value)
+            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
         )
             ->leftJoin(DB::raw("(
                 SELECT
@@ -199,7 +199,7 @@ class Collection extends Model
                 FROM nfts
                 WHERE nfts.wallet_id = $wallet->id
                 GROUP BY collection_id
-            ) nfts"), 'collections.id', '=', 'nfts.collection_id')
+            ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
             ->orderByRaw("total_value {$direction} {$nullsPosition}")
             ->orderBy('collections.id', $direction);
@@ -228,7 +228,7 @@ class Collection extends Model
     {
         $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
-        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
+        return $query->orderByRaw("collections.name {$direction} {$nullsPosition}");
     }
 
     /**

@@ -93,9 +93,9 @@ class User extends Authenticatable implements FilamentUser, HasName
      */
     public function collections(): Builder
     {
-        return Collection::whereIn('collections.id', function ($query) {
-            return $query->select('collection_id')->from('nfts')->whereIn('nfts.id', $this->nfts()->select('nfts.id'));
-        });
+        return Collection::join('nfts', 'collections.id', '=', 'nfts.collection_id')
+            ->join('wallets', 'wallets.id', '=', 'nfts.wallet_id')
+            ->where('wallets.user_id', $this->id);
     }
 
     /**
