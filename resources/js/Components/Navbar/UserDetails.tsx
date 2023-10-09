@@ -153,16 +153,6 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                 </li>
                                             )}
 
-                                            {features.articles && (
-                                                <li data-testid="AccountNavigation__articles">
-                                                    <DropdownNavigationLink
-                                                        href={route("articles")}
-                                                        icon="Article"
-                                                        label={t("pages.articles.title")}
-                                                    />
-                                                </li>
-                                            )}
-
                                             <li>
                                                 <DropdownNavigationLink
                                                     data-testid="UserDetails__settings"

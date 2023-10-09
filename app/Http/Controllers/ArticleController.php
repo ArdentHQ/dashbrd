@@ -20,6 +20,8 @@ class ArticleController extends Controller
         $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 10, 96);
 
         $articles = Article::query()
+            ->search($request->get('search'))
+            ->when($request->get('sort') !== 'popularity', fn($q) => $q->latest())
             ->with(['collections' => function ($query) {
                 $query->select(['collections.name', 'collections.extra_attributes->image as image']);
             }])

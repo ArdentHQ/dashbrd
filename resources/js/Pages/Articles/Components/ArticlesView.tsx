@@ -90,7 +90,6 @@ export const ArticlesView = ({
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
-                        disabled={!articlesLoaded}
                         onChange={(query) => {
                             setQuery(query);
                         }}

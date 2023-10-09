@@ -46,6 +46,28 @@ class Article extends Model implements HasMedia, Viewable
         return $query->whereNotNull('articles.published_at');
     }
 
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeSearch(Builder $query, ?string $searchQuery): Builder
+    {
+        if ($searchQuery === null || $searchQuery === '') {
+            return $query;
+        }
+
+        return $query->where('articles.title', 'ilike', sprintf('%%%s%%', $searchQuery));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeLatest(Builder $query): Builder
+    {
+        return $query->orderBy('id', 'desc');
+    }
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
