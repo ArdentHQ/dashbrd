@@ -1,16 +1,24 @@
+import axios from "axios";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
 
 export const useAuthorizedAction = (): {
-    signedAction: (action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => void) => void;
-    authenticatedAction: (action: ({ authenticated }: { authenticated: boolean }) => void) => void;
-} => {
-    const { authenticated } = useAuth();
-    const { showConnectOverlay, signed, askForSignature } = useMetaMaskContext();
-
-    const signedAction = (
+    signedAction: (
         action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => void,
-    ): void => {
+    ) => Promise<void>;
+    authenticatedAction: (action: ({ authenticated }: { authenticated: boolean }) => void) => Promise<void>;
+} => {
+    const { showConnectOverlay, askForSignature } = useMetaMaskContext();
+
+    const signedAction = async (
+        action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => void,
+    ): Promise<void> => {
+        const {
+            data: { authenticated, signed },
+        } = await axios.get<{
+            authenticated: boolean;
+            signed: boolean;
+        }>(route("auth-status"));
+
         const onAction = (): void => {
             action({ authenticated, signed });
         };
@@ -34,7 +42,16 @@ export const useAuthorizedAction = (): {
         action({ authenticated, signed });
     };
 
-    const authenticatedAction = (action: ({ authenticated }: { authenticated: boolean }) => void): void => {
+    const authenticatedAction = async (
+        action: ({ authenticated }: { authenticated: boolean }) => void,
+    ): Promise<void> => {
+        const {
+            data: { authenticated },
+        } = await axios.get<{
+            authenticated: boolean;
+            signed: boolean;
+        }>(route("auth-status"));
+
         const onAction = (): void => {
             action({ authenticated });
         };

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\AuthStatusController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\DashboardController;
@@ -26,6 +27,8 @@ Route::get('/', [GalleryController::class, 'index'])->name('galleries');
 Route::get('/wallet', DashboardController::class)->name('dashboard');
 
 Route::get('csrf-token', RefreshCsrfTokenController::class)->name('refresh-csrf-token');
+
+Route::get('/auth-status', AuthStatusController::class)->name('auth-status');
 
 Route::middleware('auth')->group(function () {
     Route::get('/get-started', [OnboardingController::class, 'show'])->name('onboarding');
