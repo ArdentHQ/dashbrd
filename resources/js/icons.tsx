@@ -1,6 +1,7 @@
 import { ReactComponent as ArrowDownWithLine } from "@icons/arrow-down-with-line.svg";
 import { ReactComponent as ArrowRight } from "@icons/arrow-right.svg";
 import { ReactComponent as ArrowUpArrowDown } from "@icons/arrow-up-arrow-down.svg";
+import { ReactComponent as Article } from "@icons/article.svg";
 import { ReactComponent as Bars } from "@icons/bars.svg";
 import { ReactComponent as Bell } from "@icons/bell.svg";
 import { ReactComponent as BookmarkOutline } from "@icons/bookmark-outline.svg";
@@ -208,4 +209,5 @@ export const SvgCollection = {
     Moralis,
     Mnemonic,
     Menu,
+    Article,
 };

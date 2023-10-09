@@ -8,10 +8,12 @@ export const LatestArticles = ({
     articles,
     withFullBorder,
     isLoading,
+    hasEnoughArticles,
 }: {
     articles: App.Data.Articles.ArticleData[];
     withFullBorder: boolean;
     isLoading: boolean;
+    hasEnoughArticles: boolean;
 }): JSX.Element => {
     const slidesPerView = useArticlesCarousel();
 
@@ -20,7 +22,6 @@ export const LatestArticles = ({
         renderBullet: (_index: number, className: string) => `<span class="h-1.5 rounded-xl w-6 ${className}"></span>`,
     };
 
-    const hasEnoughArticles = articles.length === 3;
     const articlePlaceHolders = Array.from({ length: 3 - articles.length });
 
     return (

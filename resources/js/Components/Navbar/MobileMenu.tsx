@@ -137,6 +137,13 @@ const Nav = ({
             suffix: null,
             route: "galleries",
             icon: "Image",
+        },
+        {
+            isVisible: features.articles,
+            title: t("pages.articles.title"),
+            suffix: null,
+            route: "articles",
+            icon: "Article",
             className: isAuthenticated
                 ? "border-b border-theme-secondary-300 pb-6 mb-6 dark:border-theme-dark-700"
                 : "",

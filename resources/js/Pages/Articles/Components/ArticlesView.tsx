@@ -71,6 +71,10 @@ export const ArticlesView = ({
     const showLatestArticlesCards =
         mode === "articles" && query === "" && currentPage === 1 && (isLoading || articlesLoaded);
 
+    const articlesToShow = articlesLoaded
+        ? articles.paginated.data.slice(showLatestArticlesCards ? 3 : 0, articles.paginated.data.length)
+        : [];
+
     return (
         <>
             <div className="mb-3 mt-6 flex items-center justify-between gap-x-3 sm:mb-4">
@@ -114,19 +118,16 @@ export const ArticlesView = ({
             {showLatestArticlesCards && (
                 <LatestArticles
                     isLoading={isLoading}
+                    hasEnoughArticles={(articles?.paginated.data.length ?? 0) > 3}
                     articles={articles?.paginated.data.slice(0, 3) ?? []}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
 
             <div className="flex flex-col items-center space-y-6">
-                {articlesLoaded && displayType === DisplayTypes.Grid && (
-                    <ArticlesGrid articles={articles.paginated.data.slice(3, articles.paginated.data.length)} />
-                )}
+                {articlesLoaded && displayType === DisplayTypes.Grid && <ArticlesGrid articles={articlesToShow} />}
 
-                {articlesLoaded && displayType === DisplayTypes.List && (
-                    <ArticlesList articles={articles.paginated.data.slice(3, articles.paginated.data.length)} />
-                )}
+                {articlesLoaded && displayType === DisplayTypes.List && <ArticlesList articles={articlesToShow} />}
 
                 {isLoading && <ArticlesLoadingGrid />}
 

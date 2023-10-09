@@ -30,6 +30,7 @@ return [
     ],
 
     'articles' => [
+        'title'=> 'Articles',
         'featured_collections' => 'Featured Collections',
     ],
 
