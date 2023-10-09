@@ -409,8 +409,8 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        expect(screen.getByTestId("AuthOverlay__LightModeImage")).toBeInTheDocument()
-        expect(screen.queryByTestId("AuthOverlay__DarkModeImage")).not.toBeInTheDocument()
+        expect(screen.getByTestId("AuthOverlay__LightModeImage")).toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__DarkModeImage")).not.toBeInTheDocument();
     });
 
     it("should render with alt image if dark mode is active", () => {
@@ -425,8 +425,8 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        expect(screen.getByTestId("AuthOverlay__DarkModeImage")).toBeInTheDocument()
-        expect(screen.queryByTestId("AuthOverlay__LightModeImage")).not.toBeInTheDocument()
+        expect(screen.getByTestId("AuthOverlay__DarkModeImage")).toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__LightModeImage")).not.toBeInTheDocument();
     });
 
     it("should not set blur to layout if dark mode is active", () => {
@@ -441,6 +441,6 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        expect(screen.getByTestId("AuthOverlay")).not.toHaveClass("blur")
+        expect(screen.getByTestId("AuthOverlay")).not.toHaveClass("blur");
     });
 });
