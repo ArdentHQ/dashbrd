@@ -19,9 +19,15 @@ trait Reportable
         return $this->morphMany(Report::class, 'subject');
     }
 
-    public function wasReportedByUserRecently(User $user): bool
+    public function wasReportedByUserRecently(User $user, bool $useRelationship = false): bool
     {
         $hoursAgo = $this->reportingThrottleDuration();
+
+        if ($useRelationship) {
+            return $this->reports->contains(
+                fn ($report) => $report->user_id === $user->id && $report->created_at->gt(now()->subHours($hoursAgo))
+            );
+        }
 
         return $this->reports()
             ->where('user_id', $user->id)

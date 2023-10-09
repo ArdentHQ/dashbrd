@@ -22,7 +22,8 @@ export const listboxButtonClassnames = ({
         {
             "enabled:bg-theme-primary-600 enabled:text-white enabled:hover:bg-theme-primary-700": variant === "primary",
             "enabled:bg-theme-danger-400 enabled:text-white enabled:hover:bg-theme-danger-500": variant === "danger",
-            "enabled:bg-white enabled:text-theme-secondary-900": variant === undefined,
+            "enabled:bg-white enabled:text-theme-secondary-900 dark:enabled:bg-theme-dark-900 dark:enabled:text-dark-200":
+                variant === undefined,
         },
         "group relative block h-12 border w-full py-2 px-4 text-left transition focus:outline-none disabled:cursor-not-allowed",
         {
@@ -37,17 +38,18 @@ export const listboxButtonClassnames = ({
               ]
             : [
                   {
-                      "border-theme-secondary-400": !isTruthy(isNavigation),
+                      "border-theme-secondary-400 dark:border-theme-dark-500": !isTruthy(isNavigation),
                   },
                   {
                       "enabled:border-theme-primary-600": variant === "primary",
                       "enabled:border-theme-danger-400": variant === "danger",
                   },
-                  "enabled:focus:ring-2 enabled:focus:ring-theme-primary-300",
+                  "enabled:focus:ring-2 enabled:focus:ring-theme-primary-300 dark:enabled:focus:ring-theme-primary-400",
                   {
                       "border-theme-primary-600 ring-1 ring-theme-primary-600": isOpen,
-                      "enabled:hover:ring-2 enabled:hover:ring-theme-primary-100": !isOpen,
+                      "enabled:hover:ring-2 enabled:hover:ring-theme-primary-100 dark:enabled:hover:ring-theme-dark-700":
+                          !isOpen,
                   },
               ],
-        "disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700",
+        "disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700 dark:bg-theme-primary-600 dark:text-white",
     );

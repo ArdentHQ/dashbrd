@@ -1,12 +1,12 @@
 import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
-import { mockViewportVisibilitySensor } from "vitest.setup";
 import { CollectionsTable } from "./CollectionsTable";
 import * as useAuthMock from "@/Hooks/useAuth";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 

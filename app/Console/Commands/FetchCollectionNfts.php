@@ -40,7 +40,8 @@ class FetchCollectionNfts extends Command
                 if (! $collection->isBlacklisted()) {
                     FetchCollectionNftsJob::dispatch(
                         $collection,
-                        $this->option('start-token') ?? $collection->last_indexed_token_number
+                        $this->option('start-token') ?? $collection->last_indexed_token_number,
+                        skipIfPotentiallyFull: true,
                     );
                 }
             },

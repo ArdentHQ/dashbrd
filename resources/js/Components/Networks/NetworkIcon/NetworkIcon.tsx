@@ -71,7 +71,7 @@ export const NetworkIcon = ({
 
             {withoutTooltip && (
                 <div className={cn("flex items-center space-x-2", className)}>
-                    {isPolygon(networkId) && (
+                    {isPolygon(networkId) && !isTestnet(networkId) && (
                         <>
                             <Polygon
                                 data-testid="Polygon"
@@ -87,7 +87,23 @@ export const NetworkIcon = ({
                         </>
                     )}
 
-                    {isEthereum(networkId) && (
+                    {isPolygon(networkId) && isTestnet(networkId) && (
+                        <>
+                            <Polygon
+                                data-testid="Polygon"
+                                className={iconSizeClass}
+                            />
+
+                            <div
+                                data-testid="Mumbai__text"
+                                className={textClassName}
+                            >
+                                {t("common.mumbai")}
+                            </div>
+                        </>
+                    )}
+
+                    {isEthereum(networkId) && !isTestnet(networkId) && (
                         <>
                             <Ethereum
                                 data-testid="Ethereum"
@@ -99,6 +115,22 @@ export const NetworkIcon = ({
                                 className={textClassName}
                             >
                                 {t("common.ethereum")}
+                            </div>
+                        </>
+                    )}
+
+                    {isEthereum(networkId) && isTestnet(networkId) && (
+                        <>
+                            <Ethereum
+                                data-testid="Ethereum"
+                                className={iconSizeClass}
+                            />
+
+                            <div
+                                data-testid="Goerli__text"
+                                className={textClassName}
+                            >
+                                {t("common.goerli")}
                             </div>
                         </>
                     )}

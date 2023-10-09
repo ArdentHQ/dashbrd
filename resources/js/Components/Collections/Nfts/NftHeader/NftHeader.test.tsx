@@ -69,4 +69,62 @@ describe("NftHeader", () => {
 
         expect(screen.getByTestId("NftHeader__mobile")).toBeInTheDocument();
     });
+
+    it("should render marketplaces in mobile if openSeaSlug is not null", () => {
+        const collection = new NFTCollectionFactory().create({
+            openSeaSlug: "test-slug",
+        });
+
+        const nft = new NftFactory().withWallet().create({
+            collection,
+        });
+
+        render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.sm });
+
+        expect(screen.getByTestId("NftMarketplaces__Opensea")).toBeInTheDocument();
+        expect(screen.queryByTestId("NftHeader__mobile__marketplaces_point")).toHaveClass("sm:block");
+    });
+
+    it("should not render marketplaces and its point in mobile view if openSeaSlug is null", () => {
+        const collection = new NFTCollectionFactory().create({
+            openSeaSlug: null,
+        });
+
+        const nft = new NftFactory().withWallet().create({
+            collection,
+        });
+
+        render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.sm });
+
+        expect(screen.queryByTestId("NftMarketplaces__Opensea")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("NftHeader__mobile__marketplaces_point")).not.toHaveClass("sm:block");
+    });
+
+    it("should render marketplaces in desktop if openSeaSlug is not null", () => {
+        const collection = new NFTCollectionFactory().create({
+            openSeaSlug: "test-slug",
+        });
+
+        const nft = new NftFactory().withWallet().create({
+            collection,
+        });
+
+        render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.xl });
+
+        expect(screen.getByTestId("NftMarketplaces__Opensea")).toBeInTheDocument();
+    });
+
+    it("should not render marketplaces in desktop if openSeaSlug is null", () => {
+        const collection = new NFTCollectionFactory().create({
+            openSeaSlug: null,
+        });
+
+        const nft = new NftFactory().withWallet().create({
+            collection,
+        });
+
+        render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.xl });
+
+        expect(screen.queryByTestId("NftMarketplaces__Opensea")).not.toBeInTheDocument();
+    });
 });

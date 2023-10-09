@@ -18,7 +18,7 @@ export const SettingsListboxMenu = (): JSX.Element => {
             </div>
 
             <div
-                className="bg-theme-secondary-100 px-6 py-4 sm:px-8"
+                className="bg-theme-secondary-100 px-6 py-4 dark:bg-theme-dark-800 sm:px-8"
                 data-testid="SettingsListboxMenu"
             >
                 <Listbox

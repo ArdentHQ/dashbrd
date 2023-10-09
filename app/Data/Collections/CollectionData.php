@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
-use App\Data\Collections\Concerns\QueriesCollectionNfts;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
 use Spatie\LaravelData\Attributes\WithTransformer;
@@ -15,8 +14,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 class CollectionData extends Data
 {
-    use QueriesCollectionNfts;
-
     public function __construct(
         public int $id,
         public string $name,
@@ -31,6 +28,7 @@ class CollectionData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?string $banner,
+        public ?string $openSeaSlug,
         public string $website,
         public int $nftsCount,
     ) {
@@ -56,6 +54,7 @@ class CollectionData extends Data
          * floor_price_decimals: int | null,
          * image: string | null,
          * banner: string | null,
+         * opensea_slug: string | null,
          * website: string,
          * nfts_count: int,
          * } $collection
@@ -72,6 +71,7 @@ class CollectionData extends Data
             floorPriceDecimals: $collection->floor_price_decimals,
             image: $collection->image,
             banner: $collection->banner,
+            openSeaSlug: $collection->opensea_slug,
             website: $collection->website,
             nftsCount: $collection->nfts_count,
         );

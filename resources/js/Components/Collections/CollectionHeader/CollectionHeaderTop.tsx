@@ -7,14 +7,13 @@ import { CollectionDescription } from "@/Components/Collections/CollectionDescri
 import { Heading } from "@/Components/Heading";
 import { type IconName } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
-import { Link } from "@/Components/Link";
+import { Marketplaces } from "@/Components/Marketplaces";
 import { Point } from "@/Components/Point";
 import { Report } from "@/Components/Report";
 import { Tooltip } from "@/Components/Tooltip";
 import { useNetwork } from "@/Hooks/useNetwork";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
-import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
 interface CollectionHeaderTopProperties {
     collection: App.Data.Collections.CollectionDetailData;
@@ -73,15 +72,18 @@ export const CollectionHeaderTop = ({
 }: CollectionHeaderTopProperties): JSX.Element => {
     const { t } = useTranslation();
     const address = formatAddress(collection.address);
+    const { isPolygon, isTestnet } = useNetwork();
 
     const contractUrl = useMemo<string>(() => {
-        const { isPolygon } = useNetwork();
-
         if (isPolygon(collection.chainId)) {
-            return t("urls.explorers.polygonscan.addresses", { address });
+            return isTestnet(collection.chainId)
+                ? t("urls.explorers.mumbai.addresses", { address })
+                : t("urls.explorers.polygonscan.addresses", { address });
         }
 
-        return t("urls.explorers.etherscan.addresses", { address });
+        return isTestnet(collection.chainId)
+            ? t("urls.explorers.goerli.addresses", { address })
+            : t("urls.explorers.etherscan.addresses", { address });
     }, [collection]);
 
     return (
@@ -105,27 +107,25 @@ export const CollectionHeaderTop = ({
                     <div className="flex flex-col items-center space-y-0.5 md:space-y-2 lg:items-start">
                         <Heading level={2}>{collection.name}</Heading>
 
-                        <div className="flex items-center space-x-3 text-xs font-medium md:text-sm">
-                            <Link
-                                data-testid="CollectionHeaderTop__address"
-                                href={contractUrl}
-                                className="outline-offset-3 transition-default flex items-center space-x-2 whitespace-nowrap rounded-full text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300"
-                                external
-                            >
-                                <span>
-                                    <TruncateMiddle
-                                        length={12}
-                                        text={address}
-                                    />
-                                </span>
-                            </Link>
-
-                            <Point />
-
+                        <div className="flex items-center text-xs font-medium md:text-sm">
                             <CollectionDescription
                                 name={t("pages.collections.about_collection")}
                                 description={collection.description}
                             />
+
+                            {isTruthy(collection.openSeaSlug) && (
+                                <div className="flex items-center">
+                                    <div className="ml-3 mr-2">
+                                        <Point />
+                                    </div>
+
+                                    <Marketplaces
+                                        type="collection"
+                                        chainId={collection.chainId}
+                                        address={collection.address}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -136,6 +136,17 @@ export const CollectionHeaderTop = ({
                         href={collection.website}
                         icon="GlobeWithCursor"
                         tooltip={t("common.website")}
+                    />
+
+                    <SocialLink
+                        data-testid="CollectionHeaderTop__address"
+                        href={contractUrl}
+                        icon={isPolygon(collection.chainId) ? "Polygonscan" : "Etherscan"}
+                        tooltip={
+                            isPolygon(collection.chainId)
+                                ? t("common.view_more_on_polygonscan")
+                                : t("common.view_more_on_etherscan")
+                        }
                     />
 
                     <SocialLink

@@ -29,7 +29,8 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
      */
     public function __construct(
         public Collection $collection,
-        public ?string $startToken = null
+        public ?string $startToken = null,
+        public bool $skipIfPotentiallyFull = false,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -44,6 +45,10 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
             'collection' => $this->collection->address,
             'startToken' => $this->startToken,
         ]);
+
+        if ($this->skipIfPotentiallyFull && $this->collection->isPotentiallyFull()) {
+            return;
+        }
 
         $result = $this->getWeb3DataProvider()->getCollectionsNfts($this->collection, $this->startToken);
 

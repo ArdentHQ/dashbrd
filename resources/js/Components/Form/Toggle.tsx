@@ -32,13 +32,13 @@ export const Toggle = ({
             id={id}
             className={cn(
                 className,
-                "relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300",
+                "relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700",
                 disabled
-                    ? "bg-theme-secondary-200"
+                    ? "bg-theme-secondary-200 dark:bg-theme-dark-700"
                     : [
                           checked
-                              ? "bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800"
-                              : "bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400",
+                              ? "bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800 dark:bg-theme-primary-700 dark:hover:bg-theme-primary-600 dark:focus-visible:bg-theme-primary-400 dark:active:bg-theme-primary-400"
+                              : "bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-700 dark:focus-within:bg-theme-dark-700 dark:hover:bg-theme-dark-800 dark:active:bg-theme-dark-800",
                       ],
             )}
         >
@@ -47,7 +47,7 @@ export const Toggle = ({
             <span
                 className={cn(
                     "inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out",
-                    disabled ? "bg-theme-secondary-400" : "bg-white",
+                    disabled ? "bg-theme-secondary-400 dark:bg-theme-dark-200" : "bg-white",
                     checked ? "translate-x-[1.375rem]" : "translate-x-0.5",
                 )}
             />
