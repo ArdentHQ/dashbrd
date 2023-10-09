@@ -143,7 +143,7 @@ const Nav = ({
             title: t("pages.articles.title"),
             suffix: null,
             route: "articles",
-            icon: "Article",
+            icon: "Newspaper",
             className: isAuthenticated
                 ? "border-b border-theme-secondary-300 pb-6 mb-6 dark:border-theme-dark-700"
                 : "",
