@@ -13,7 +13,7 @@ export const ArticleCard = ({
     variant,
 }: {
     article: App.Data.Articles.ArticleData;
-    variant: ArticleCardVariant;
+    variant?: ArticleCardVariant;
 }): JSX.Element => {
     const { t } = useTranslation();
     const { user } = useActiveUser();

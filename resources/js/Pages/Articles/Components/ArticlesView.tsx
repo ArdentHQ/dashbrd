@@ -7,7 +7,7 @@ import { useDebounce } from "@/Hooks/useDebounce";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { LatestArticles } from "@/Pages/Articles/Components/LatestArticles";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
-import { ArticlesGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
+import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList } from "@/Pages/Collections/Components/Articles/ArticlesList";
 import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
@@ -33,7 +33,7 @@ export const ArticlesView = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { pageLimit: perPage, view, sort, search } = getQueryParameters();
+    const { pageLimit: perPage, view, sort, search, page } = getQueryParameters();
 
     const [query, setQuery] = useState<string>(isTruthy(search) ? search : "");
     const [debouncedQuery] = useDebounce(query, defaults.debounce);
@@ -64,11 +64,10 @@ export const ArticlesView = ({
         });
     }, [pageLimit, sortBy, debouncedQuery, displayType]);
 
-    if (isLoading || !isTruthy(articles)) {
-        return <>is loading</>;
-    }
+    const articlesCount = articles?.paginated.meta.total ?? 0;
+    const articlesLoaded = isTruthy(articles);
 
-    const articlesCount = articles.paginated.meta.total;
+    const showLatestArticlesCards = mode === "articles" && query === "" && Number(page ?? 1) === 1;
 
     return (
         <>
@@ -85,6 +84,7 @@ export const ArticlesView = ({
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
+                        disabled={!articlesLoaded}
                         onChange={(query) => {
                             setQuery(query);
                         }}
@@ -92,6 +92,7 @@ export const ArticlesView = ({
                 </div>
 
                 <ArticleSortDropdown
+                    disabled={!articlesLoaded}
                     activeSort={sortBy}
                     onSort={(sort) => {
                         setSortBy(sort);
@@ -108,37 +109,43 @@ export const ArticlesView = ({
                 />
             </div>
 
-            {mode === "articles" && (
+            {showLatestArticlesCards && (
                 <LatestArticles
-                    articles={articles.paginated.data.slice(0, 3)}
+                    isLoading={isLoading}
+                    articles={articles?.paginated.data.slice(0, 3) ?? []}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
 
             <div className="flex flex-col items-center space-y-6">
-                {articlesCount > 0 && displayType === DisplayTypes.Grid && (
-                    <ArticlesGrid articles={articles.paginated.data} />
+                {articlesLoaded && displayType === DisplayTypes.Grid && (
+                    <ArticlesGrid articles={articles.paginated.data.slice(3, articles.paginated.data.length)} />
                 )}
 
-                {articlesCount > 0 && displayType === DisplayTypes.List && (
-                    <ArticlesList articles={articles.paginated.data} />
+                {articlesLoaded && displayType === DisplayTypes.List && (
+                    <ArticlesList articles={articles.paginated.data.slice(3, articles.paginated.data.length)} />
                 )}
 
-                {articlesCount === 0 && query === "" && (
+                {isLoading && <ArticlesLoadingGrid />}
+
+                {!isLoading && articlesCount === 0 && query === "" && (
                     <EmptyBlock className="w-full">{t("pages.collections.articles.no_articles")}</EmptyBlock>
                 )}
-                {articlesCount === 0 && query !== "" && (
+
+                {!isLoading && articlesCount === 0 && query !== "" && (
                     <EmptyBlock className="w-full">
                         {t("pages.collections.articles.no_articles_with_filters")}
                     </EmptyBlock>
                 )}
 
-                <ArticlePagination
-                    pagination={articles.paginated}
-                    onPageLimitChange={(limit: number) => {
-                        setPageLimit(limit);
-                    }}
-                />
+                {articlesLoaded && (
+                    <ArticlePagination
+                        pagination={articles.paginated}
+                        onPageLimitChange={(limit: number) => {
+                            setPageLimit(limit);
+                        }}
+                    />
+                )}
             </div>
         </>
     );
