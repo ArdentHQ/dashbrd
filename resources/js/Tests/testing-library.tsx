@@ -37,6 +37,7 @@ export const TestProviders = ({
                 collections: true,
                 galleries: true,
                 portfolio: true,
+                articles: true,
             }}
         >
             <I18nextProvider i18n={i18n}>

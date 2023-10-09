@@ -14,6 +14,7 @@ const environmentDefault = {
         collections: true,
         galleries: true,
         portfolio: true,
+        articles: true,
     },
 };
 
@@ -101,6 +102,7 @@ describe("AppMenu", () => {
                 portfolio: false,
                 galleries: false,
                 collections: false,
+                articles: false,
             },
         });
 
