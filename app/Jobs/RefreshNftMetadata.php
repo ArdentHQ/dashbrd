@@ -87,7 +87,6 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
             })
             ->get();
 
-
         if (count($nfts) === 0) {
             Log::info('RefreshNftMetadata Job: No nfts found for metadata update. Aborting.');
 
