@@ -5,6 +5,7 @@ import { NftSelectionHook } from "@/Components/Galleries/Hooks/useNftSelectableC
 import { NftCollectionSlider } from "@/Components/Galleries/NftCollection/NftCollectionSlider";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { useSliderContext } from "@/Components/Slider";
+import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { SamplePageMeta } from "@/Tests/SampleData";
 import { render, screen, userEvent } from "@/Tests/testing-library";
@@ -32,6 +33,14 @@ vi.mock("@/Contexts/MetaMaskContext", () => ({
 }));
 
 describe("LayoutWrapper", () => {
+    beforeAll(() => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+    });
+
     it("should render", () => {
         render(
             <LayoutWrapper>

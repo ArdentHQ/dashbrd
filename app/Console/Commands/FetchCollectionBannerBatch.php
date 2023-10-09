@@ -58,7 +58,7 @@ class FetchCollectionBannerBatch extends Command
                     ]);
 
                     FetchCollectionBannerBatchJob::dispatch($addresses, $network);
-                });
+                }, 'collections.id', 'id');
         });
 
         return Command::SUCCESS;
