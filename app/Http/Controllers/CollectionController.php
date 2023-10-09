@@ -83,7 +83,6 @@ class CollectionController extends Controller
 
             /** @var LengthAwarePaginator<Collection> $collections */
             $collections = $user->collections()
-
                 ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
@@ -95,11 +94,8 @@ class CollectionController extends Controller
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
                 ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
                 ->search($user, $searchQuery)
-                ->with('reports');
-
-            info($collections->toRawSql());
-
-            $collections = $collections->paginate(25);
+                ->with('reports')
+                ->paginate(25);
 
             $reportByCollectionAvailableIn = $collections->mapWithKeys(function ($collection) use ($request) {
                 return [$collection->address => RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection)];
@@ -114,6 +110,8 @@ class CollectionController extends Controller
                 limitPerCollection: 4,
                 user: $user
             )->get();
+
+            info(CollectionNftData::collection($nfts));
 
             return new JsonResponse([
                 'collections' => CollectionData::collection($collections),

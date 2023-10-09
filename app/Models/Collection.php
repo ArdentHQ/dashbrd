@@ -418,7 +418,7 @@ class Collection extends Model
             DB::raw(sprintf($extraAttributeSelect, 'opensea_slug', 'opensea_slug').' as opensea_slug'),
             // gets the website url with the same logic used on the `website` method
             DB::raw(sprintf('COALESCE(%s, CONCAT(networks.explorer_url, \'%s\', collections.address)) as website', sprintf($extraAttributeSelect, 'website', 'website'), '/token/')),
-            DB::raw('COUNT(collection_nfts.id) as nfts_count'),
+            DB::raw('COUNT(nfts.id) as nfts_count'),
         ])->join(
             'networks',
             'networks.id',
@@ -430,12 +430,6 @@ class Collection extends Model
                 'tokens.id',
                 '=',
                 'collections.floor_price_token_id'
-            )
-            ->leftJoin(
-                'nfts as collection_nfts',
-                'collection_nfts.collection_id',
-                '=',
-                'collections.id'
             );
 
         if ($user !== null) {
@@ -443,7 +437,7 @@ class Collection extends Model
                 'wallets as nft_wallets',
                 'nft_wallets.id',
                 '=',
-                'collection_nfts.wallet_id'
+                'nfts.wallet_id'
             )
                 ->where('nft_wallets.user_id', $user->id);
         }
