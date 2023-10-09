@@ -1,7 +1,7 @@
 import React from "react";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
-import { render, screen } from "@/Tests/testing-library";
 import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import { render, screen } from "@/Tests/testing-library";
 
 describe("NoNftsOverlay", () => {
     beforeAll(() => {
