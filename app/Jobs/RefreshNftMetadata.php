@@ -70,6 +70,11 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
         return now()->addMinutes(10);
     }
 
+    /**
+     * Fetch nft metadata for a network.
+     *
+     * @return void
+     */
     private function refreshNftMetadataByNetwork(Network $network, AlchemyWeb3DataProvider $provider)
     {
 
