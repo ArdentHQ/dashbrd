@@ -8,6 +8,7 @@ import { useSliderContext } from "@/Components/Slider";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { SamplePageMeta } from "@/Tests/SampleData";
 import { render, screen, userEvent } from "@/Tests/testing-library";
+import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 
 vi.mock("@/Hooks/useAuth", () => ({
     useAuth: () => ({
@@ -32,6 +33,14 @@ vi.mock("@/Contexts/MetaMaskContext", () => ({
 }));
 
 describe("LayoutWrapper", () => {
+    beforeAll(() => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+    });
+
     it("should render", () => {
         render(
             <LayoutWrapper>
