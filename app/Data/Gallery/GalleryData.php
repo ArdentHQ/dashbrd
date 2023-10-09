@@ -9,6 +9,7 @@ use App\Models\Gallery;
 use App\Models\User;
 use App\Support\Cache\GalleryCache;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
@@ -63,7 +64,7 @@ class GalleryData extends Data
             value: $gallery->value($currency),
             coverImage: $gallery->cover_image,
             wallet: GalleryWalletData::fromModel($gallery->user->wallet),
-            nfts: new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit))),
+            nfts:  new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit, ['*'], 'page', 1))),
             isOwner: $isOwner,
             hasLiked: $hasLiked,
         );
