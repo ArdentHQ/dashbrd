@@ -8,8 +8,6 @@ use App\Models\User;
 use App\Policies\RolePolicy;
 
 beforeEach(function () {
-    setUpPermissions();
-
     $this->instance = new RolePolicy();
     $this->user = User::factory()->create();
     $this->admin = User::factory()->create();

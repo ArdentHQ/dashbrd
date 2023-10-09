@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         Cache::clear();
 
-        $this->call(PermissionSeeder::class);
         $this->call(AdminUserSeeder::class);
         $this->call(UserRoleSeeder::class);
         $this->call(NetworkSeeder::class);

@@ -10,8 +10,6 @@ use App\Policies\GalleryPolicy;
 use App\Support\PermissionRepository;
 
 beforeEach(function () {
-    setUpPermissions();
-
     $this->instance = new GalleryPolicy();
     $this->user = User::factory()->create();
     $this->admin = User::factory()->create();

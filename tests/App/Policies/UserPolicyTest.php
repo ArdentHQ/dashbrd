@@ -9,8 +9,6 @@ use App\Policies\UserPolicy;
 use App\Support\PermissionRepository;
 
 beforeEach(function () {
-    setUpPermissions();
-
     $this->instance = new UserPolicy();
     $this->user = User::factory()->create();
     $this->admin = User::factory()->create();

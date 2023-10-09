@@ -10,8 +10,6 @@ use App\Policies\WalletPolicy;
 use App\Support\PermissionRepository;
 
 beforeEach(function () {
-    setUpPermissions();
-
     $this->instance = new WalletPolicy();
     $this->user = User::factory()->create();
     $this->admin = User::factory()->create();

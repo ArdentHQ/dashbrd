@@ -302,8 +302,6 @@ it('can get filament access', function () {
 });
 
 it('filters managers', function () {
-    setUpPermissions();
-
     $user = User::factory()->create();
     $superadmin = User::factory()->create();
     $admin = User::factory()->create();
