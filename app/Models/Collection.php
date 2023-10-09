@@ -430,6 +430,12 @@ class Collection extends Model
                 'tokens.id',
                 '=',
                 'collections.floor_price_token_id'
+            )
+            ->leftJoin(
+                'nfts',
+                'nfts.collection_id',
+                '=',
+                'collections.id'
             );
 
         if ($user !== null) {
