@@ -62,7 +62,7 @@ export const GalleryControls = ({
                             icon="Heart"
                             className={cn(hasLiked && "button-like-selected")}
                             onClick={() => {
-                                signedAction(({ authenticated }) => {
+                                void signedAction(({ authenticated }) => {
                                     // If user wasnt authenticated, force a positive
                                     // like since we dont know if he liked it before
                                     const likeValue = !authenticated ? true : undefined;
@@ -122,7 +122,7 @@ export const GalleryControls = ({
                                 icon="Pencil"
                                 variant="icon-primary"
                                 onClick={() => {
-                                    signedAction(() => {
+                                    void signedAction(() => {
                                         router.get(route("my-galleries.edit", { slug: gallery.slug }));
                                     });
                                 }}

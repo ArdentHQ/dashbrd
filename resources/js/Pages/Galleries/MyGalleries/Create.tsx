@@ -93,7 +93,7 @@ const Create = ({
     );
 
     const publishHandler = (event: FormEvent<Element>): void => {
-        signedAction(() => {
+        void signedAction(() => {
             submit(event);
         });
     };

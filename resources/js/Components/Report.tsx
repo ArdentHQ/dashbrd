@@ -136,7 +136,7 @@ export const Report = ({
                         data-testid="Report_flag"
                         icon="Flag"
                         onClick={() => {
-                            signedAction(({ signed }) => {
+                            void signedAction(({ signed }) => {
                                 setShowReportModal(true);
 
                                 if (!signed) {

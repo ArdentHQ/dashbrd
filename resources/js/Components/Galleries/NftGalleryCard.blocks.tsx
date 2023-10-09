@@ -255,7 +255,7 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
         event.preventDefault();
         event.stopPropagation();
 
-        signedAction(({ authenticated }) => {
+        void signedAction(({ authenticated }) => {
             // If user wasnt authenticated, foce a positive
             // like since we dont know if he liked it before
             const likeValue = !authenticated ? true : undefined;
