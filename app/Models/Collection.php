@@ -228,7 +228,7 @@ class Collection extends Model
     {
         $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
-        return $query->orderByRaw("collections.name {$direction} {$nullsPosition}");
+        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
     }
 
     /**
