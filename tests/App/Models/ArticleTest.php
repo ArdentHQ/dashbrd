@@ -20,3 +20,12 @@ it('should have a collection', function () {
 
     expect($article->collections->first()->id)->toBe($collection->id);
 });
+
+it('should sort collections with ID', function () {
+    $createdArticles = Article::factory(2)->create();
+
+    $articles = Article::query()->sortById()->get();
+
+    expect($articles[0]->id)->toBe($createdArticles[1]->id)
+        ->and($articles[1]->id)->toBe($createdArticles[0]->id);
+});

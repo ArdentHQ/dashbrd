@@ -63,7 +63,7 @@ class Article extends Model implements HasMedia, Viewable
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeLatest(Builder $query): Builder
+    public function scopeSortById(Builder $query): Builder
     {
         return $query->orderBy('id', 'desc');
     }
