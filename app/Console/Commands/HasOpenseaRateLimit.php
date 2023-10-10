@@ -50,7 +50,7 @@ trait HasOpenseaRateLimit
         return $this->jobsDelayThreshold[$job] ?? 0;
     }
 
-    private function getLimit(): int
+    private function getLimitPerHour(): int
     {
         $maxRequests = config('services.opensea.rate.max_requests');
 
