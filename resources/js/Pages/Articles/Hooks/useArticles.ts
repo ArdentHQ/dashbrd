@@ -22,6 +22,7 @@ export const useArticles = (rawFilters: Record<string, string> = {}, enabled = t
         enabled,
         queryKey,
         refetchOnWindowFocus: false,
+        staleTime: Number.POSITIVE_INFINITY,
         select: ({ data }) => data,
         queryFn: async () =>
             await axios.get<{ articles: App.Data.Articles.ArticlesData }>(route("articles"), {

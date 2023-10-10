@@ -4,7 +4,6 @@ import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
-import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { LatestArticles } from "@/Pages/Articles/Components/LatestArticles";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
@@ -22,7 +21,7 @@ const defaults = {
 
 export const ArticlesView = ({
     articles,
-    isLoading,
+    isLoading: loadingArticles,
     setFilters,
     mode,
 }: {
@@ -42,34 +41,37 @@ export const ArticlesView = ({
 
     const [displayType, setDisplayType] = useState(view === "list" ? DisplayTypes.List : DisplayTypes.Grid);
 
+    const [isFilterDirty, setFilterIsDirty] = useState(false);
+
+    const isLoading = !loadingArticles && isFilterDirty ? true : loadingArticles;
+
     const [sortBy, setSortBy] = useState<ArticleSortBy>(
         (sort === "popularity" ? "popularity" : defaults.sortBy) as ArticleSortBy,
     );
 
-    const isFirstRender = useIsFirstRender();
-
-    const queryParameters: Record<string, string> = {
-        pageLimit: pageLimit.toString(),
-        sort: sortBy,
-        search: debouncedQuery,
-        view: displayType,
-    };
-
     useEffect(() => {
+        const queryParameters: Record<string, string> = {
+            pageLimit: pageLimit.toString(),
+            sort: sortBy,
+            search: debouncedQuery,
+            view: displayType,
+        };
+
         replaceUrlQuery(queryParameters);
 
         setFilters({
             ...queryParameters,
-            isFilterDirty: isFirstRender ? "no" : "yes",
+            isFilterDirty: isFilterDirty ? "yes" : "no",
         });
-    }, [pageLimit, sortBy, debouncedQuery, displayType]);
+
+        setFilterIsDirty(false);
+    }, [pageLimit, sortBy, debouncedQuery]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
-    const articlesLoaded = isTruthy(articles);
+    const articlesLoaded = isTruthy(articles) && !isLoading;
 
     const currentPage = isTruthy(page) ? Number(page) : 1;
-    const showLatestArticlesCards =
-        mode === "articles" && query === "" && currentPage === 1 && (isLoading || articlesLoaded);
+    const showLatestArticlesCards = mode === "articles" && query === "" && currentPage === 1;
 
     const articlesToShow = articlesLoaded
         ? articles.paginated.data.slice(showLatestArticlesCards ? 3 : 0, articles.paginated.data.length)
@@ -81,6 +83,7 @@ export const ArticlesView = ({
                 <DisplayType
                     displayType={displayType}
                     onSelectDisplayType={(type) => {
+                        replaceUrlQuery({ view: displayType });
                         setDisplayType(type);
                     }}
                 />
@@ -93,6 +96,7 @@ export const ArticlesView = ({
                         query={query}
                         onChange={(query) => {
                             setQuery(query);
+                            setFilterIsDirty(true);
                         }}
                     />
                 </div>
@@ -102,6 +106,7 @@ export const ArticlesView = ({
                     activeSort={sortBy}
                     onSort={(sort) => {
                         setSortBy(sort);
+                        setFilterIsDirty(true);
                     }}
                 />
             </div>
@@ -112,6 +117,7 @@ export const ArticlesView = ({
                     query={query}
                     onChange={(query) => {
                         setQuery(query);
+                        setFilterIsDirty(true);
                     }}
                 />
             </div>
