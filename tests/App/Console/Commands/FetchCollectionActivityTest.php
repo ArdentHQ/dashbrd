@@ -43,3 +43,19 @@ it('dispatches a job for a specific collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionActivity::class, 1);
 });
+
+it('does not run if activities are disabled', function () {
+    Bus::fake();
+
+    config([
+        'dashbrd.features.activities' => false,
+    ]);
+
+    Collection::factory()->create();
+
+    Bus::assertDispatchedTimes(FetchCollectionActivity::class, 0);
+
+    $this->artisan('collections:fetch-activity');
+
+    Bus::assertDispatchedTimes(FetchCollectionActivity::class, 0);
+});
