@@ -22,6 +22,8 @@ return new class extends Migration
             $table->dropColumn('nft_id');
 
             $table->unique(['tx_hash', 'log_index', 'collection_id', 'token_number', 'type']);
+
+            $table->index(['collection_id', 'timestamp']);
         });
     }
 };
