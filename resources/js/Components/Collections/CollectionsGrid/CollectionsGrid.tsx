@@ -47,11 +47,7 @@ export const CollectionsGrid = ({
             data-testid="CollectionsGrid"
             className="grid grid-cols-1 gap-3 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4"
         >
-            {sortByDesc(collections, (collection) =>
-                BigNumber.make(collection.floorPriceFiat ?? 0)
-                    .times(collection.nftsCount)
-                    .toNumber(),
-            ).map((collection, index) => (
+            {collections.map((collection, index) => (
                 <CollectionCard
                     isHidden={hiddenCollectionAddresses.includes(collection.address)}
                     collection={collection}
