@@ -42,7 +42,7 @@ describe("AppMenu", () => {
 
         render(<AppMenu />);
 
-        expect(screen.getAllByTestId("AppMenuItem")).toHaveLength(2);
+        expect(screen.getAllByTestId("AppMenuItem")).toHaveLength(3);
 
         environmentSpy.mockRestore();
     });
@@ -58,7 +58,7 @@ describe("AppMenu", () => {
 
         render(<AppMenu />);
 
-        expect(screen.getAllByTestId("AppMenuItem")).toHaveLength(1);
+        expect(screen.queryByText(/Galleries/i)).not.toBeInTheDocument();
 
         environmentSpy.mockRestore();
     });
@@ -74,7 +74,7 @@ describe("AppMenu", () => {
 
         render(<AppMenu />);
 
-        expect(screen.getAllByTestId("AppMenuItem")).toHaveLength(1);
+        expect(screen.queryByText(/Collections/i)).not.toBeInTheDocument();
 
         environmentSpy.mockRestore();
     });
@@ -90,7 +90,7 @@ describe("AppMenu", () => {
 
         render(<AppMenu />);
 
-        expect(screen.getAllByTestId("AppMenuItem")).toHaveLength(2);
+        expect(screen.queryByText(/Wallet/i)).not.toBeInTheDocument();
 
         environmentSpy.mockRestore();
     });
