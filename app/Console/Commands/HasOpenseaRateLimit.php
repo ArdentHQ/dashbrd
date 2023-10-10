@@ -10,16 +10,24 @@ use Illuminate\Support\Facades\Config;
 
 trait HasOpenseaRateLimit
 {
+    /**
+     * @var array<string>
+     */
     private array $jobsThatMayUseOpensea = [
         FetchCollectionFloorPrice::class,
     ];
 
+    /**
+     * @var array<string>
+     */
     private array $jobsThatUseOpensea = [
         FetchCollectionOpenseaSlug::class,
     ];
 
     /**
      * Used to delay jobs by a certain amount of seconds to prevent overlapping
+     *
+     * @var array<string, int>
      */
     private array $jobsDelayThreshold = [
         FetchCollectionFloorPrice::class => 0,

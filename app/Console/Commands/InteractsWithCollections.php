@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 trait InteractsWithCollections
 {
     /**
-     * @param  Closure(Collection):void  $callback
+     * @param  Closure(Collection, int):void  $callback
      * @param  Closure(Builder<Collection>):Builder<Collection>|null  $queryCallback
      */
     public function forEachCollection(Closure $callback, Closure $queryCallback = null, int $limit = null): void
