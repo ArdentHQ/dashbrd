@@ -58,11 +58,11 @@ it('dispatches a job for collections', function () {
 
     $network = Network::factory()->create();
 
-    Collection::factory(3)->create(['network_id' => $network->id]);
+    Collection::factory(120)->create(['network_id' => $network->id]);
 
     Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 0);
 
     $this->artisan('nfts:fetch-collection-banner-batch');
 
-    Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 1);
+    Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 2);
 });
