@@ -74,6 +74,11 @@ class Article extends Model implements HasMedia, Viewable
         return $this->meta_description ?? Str::limit(strip_tags($this->content), 157);
     }
 
+    public function isNotPublished(): bool
+    {
+        return $this->published_at === null || $this->published_at->isFuture();
+    }
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()

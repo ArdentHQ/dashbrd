@@ -56,3 +56,35 @@ it('truncates the content if used as meta description', function () {
 
     expect($article->metaDescription())->toHaveLength(160);
 });
+
+it('determines that article is published if published_at is in the past', function () {
+    $article = Article::factory()->create([
+        'published_at' => now()->subDay(),
+    ]);
+
+    expect($article->isNotPublished())->toBeFalse();
+});
+
+it('determines that article is published if published_at is now', function () {
+    $article = Article::factory()->create([
+        'published_at' => now(),
+    ]);
+
+    expect($article->isNotPublished())->toBeFalse();
+});
+
+it('determines that article is not published if published_at is in the future', function () {
+    $article = Article::factory()->create([
+        'published_at' => now()->addMinute(),
+    ]);
+
+    expect($article->isNotPublished())->toBeTrue();
+});
+
+it('determines that article is not published if published_at is null', function () {
+    $article = Article::factory()->create([
+        'published_at' => null,
+    ]);
+
+    expect($article->isNotPublished())->toBeTrue();
+});
