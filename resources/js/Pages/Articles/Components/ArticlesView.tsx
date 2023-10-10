@@ -87,7 +87,7 @@ export const ArticlesView = ({
 
                 <div className="flex-1">
                     <SearchInput
-                        disabled={articlesLoaded && articlesCount === 0}
+                        disabled={articlesLoaded && articlesCount === 0 && search === ""}
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
@@ -107,7 +107,7 @@ export const ArticlesView = ({
             </div>
             <div className="mb-4 sm:hidden">
                 <SearchInput
-                    disabled={articlesLoaded && articlesCount === 0}
+                    disabled={articlesLoaded && articlesCount === 0 && search === ""}
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
                     onChange={(query) => {

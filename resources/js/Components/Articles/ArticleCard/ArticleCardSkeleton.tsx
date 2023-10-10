@@ -27,7 +27,7 @@ export const ArticleCardSkeleton = ({ isLoading = true }: { isLoading?: boolean 
             <div className="flex flex-1 flex-col px-6 py-5">
                 <Skeleton
                     className="h-5 w-20 rounded"
-                    animated={false}
+                    animated={isLoading}
                 />
                 <Skeleton
                     className="my-1 h-5 w-full rounded"
