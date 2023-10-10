@@ -10,7 +10,7 @@ describe("ArticleCardSkeleton", () => {
     });
 
     it("should render with 'more soon' text", () => {
-        render(<ArticleCardSkeleton withImgPlaceholder={false} />);
+        render(<ArticleCardSkeleton isLoading={false} />);
 
         expect(screen.getByText(/More Soon/i)).toBeInTheDocument();
     });

@@ -33,6 +33,7 @@ return [
         'title' => 'Articles',
         'featured_collections' => 'Featured Collections',
         'placeholder_more_soon' => 'More Soon',
+        'no_articles' => 'No articles have been published yet. Please check back later!',
     ],
 
     'collections' => [

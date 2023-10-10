@@ -15,7 +15,7 @@ export const LatestArticles = ({
     isLoading: boolean;
     hasEnoughArticles: boolean;
 }): JSX.Element => {
-    const slidesPerView = useArticlesCarousel();
+    const slidesPerView = useArticlesSlidesPerPage();
 
     const pagination = {
         clickable: true,
@@ -50,7 +50,7 @@ export const LatestArticles = ({
                         <CarouselItem key={index}>
                             <ArticleCardSkeleton
                                 key={index}
-                                withImgPlaceholder={isLoading}
+                                isLoading={isLoading}
                             />
                         </CarouselItem>
                     ))}
@@ -67,7 +67,7 @@ export const LatestArticles = ({
     );
 };
 
-const useArticlesCarousel = (): number => {
+const useArticlesSlidesPerPage = (): number => {
     const { is2Xs, isXs, isSm, isMd, isMdLg } = useBreakpoint();
 
     if (isXs || is2Xs || isSm) return 1;

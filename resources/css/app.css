@@ -41,7 +41,5 @@
 }
 
 .latest-articles-carousel .swiper-pagination-bullets {
-    display: flex;
-    justify-content: center;
-    bottom: 0;
+    @apply flex justify-center bottom-0
 }

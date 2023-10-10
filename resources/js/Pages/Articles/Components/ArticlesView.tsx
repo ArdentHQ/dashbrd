@@ -87,6 +87,7 @@ export const ArticlesView = ({
 
                 <div className="flex-1">
                     <SearchInput
+                        disabled={articlesLoaded && articlesCount === 0}
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
@@ -97,7 +98,7 @@ export const ArticlesView = ({
                 </div>
 
                 <ArticleSortDropdown
-                    disabled={!articlesLoaded}
+                    disabled={articlesLoaded && articlesCount === 0}
                     activeSort={sortBy}
                     onSort={(sort) => {
                         setSortBy(sort);
@@ -106,6 +107,7 @@ export const ArticlesView = ({
             </div>
             <div className="mb-4 sm:hidden">
                 <SearchInput
+                    disabled={articlesLoaded && articlesCount === 0}
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
                     onChange={(query) => {
@@ -133,7 +135,11 @@ export const ArticlesView = ({
                 {isLoading && displayType === DisplayTypes.List && <ArticlesLoadingList />}
 
                 {!isLoading && articlesCount === 0 && query === "" && (
-                    <EmptyBlock className="w-full">{t("pages.collections.articles.no_articles")}</EmptyBlock>
+                    <EmptyBlock className="w-full">
+                        {mode === "articles"
+                            ? t("pages.articles.no_articles")
+                            : t("pages.collections.articles.no_articles")}
+                    </EmptyBlock>
                 )}
 
                 {!isLoading && articlesCount === 0 && query !== "" && (
