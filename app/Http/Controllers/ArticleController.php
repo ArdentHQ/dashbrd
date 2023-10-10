@@ -39,7 +39,7 @@ class ArticleController extends Controller
         return Inertia::render('Articles/Index', [
             'articles' => new ArticlesData($paginated),
         ])->withViewData([
-            'title' => 'title',
+            'title' => trans('metatags.articles.title'),
         ]);
     }
 }
