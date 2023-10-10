@@ -90,19 +90,19 @@ describe("CollectionsGrid", () => {
         const values = getAllByTestId("CollectionFloorPrice");
 
         const sorted: string[] = [
-            "0.7 ETH",
-            "0.4 ETH",
-            "700 USDC",
-            "0.3 ETH",
-            "400 USDC",
+            "0.1 ETH",
             "0.2 ETH",
-            "300 USDC",
-            "200 USDC",
-            "1 ETH",
-            "1 ETH",
-            "100 USDC",
-            "100 USDC",
+            "0.4 ETH",
+            "0.7 ETH",
+            "0.3 ETH",
+            "0.1 ETH",
             "0.05 ETH",
+            "100 USDC",
+            "200 USDC",
+            "400 USDC",
+            "700 USDC",
+            "300 USDC",
+            "100 USDC",
             "50 USDC",
         ];
 
