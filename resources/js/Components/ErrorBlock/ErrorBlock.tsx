@@ -1,22 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { ErrorContent } from "./ErrorBlock.blocks";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
-import {
-    Error401,
-    Error401Dark,
-    Error403,
-    Error403Dark,
-    Error404,
-    Error404Dark,
-    Error419,
-    Error419Dark,
-    Error429,
-    Error429Dark,
-    Error500,
-    Error500Dark,
-    Error503,
-    Error503Dark,
-} from "@/images";
+import { Error401, Error403, Error404, Error419, Error429, Error500, Error503 } from "@/images";
 
 export interface ErrorBlockProperties {
     contactEmail: string;

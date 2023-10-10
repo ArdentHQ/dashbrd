@@ -1,6 +1,5 @@
 import React from "react";
-import { ErrorBlock, type ErrorBlockProperties } from "./ErrorBlock";
-import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import { ErrorBlock } from "./ErrorBlock";
 import { render, screen } from "@/Tests/testing-library";
 
 describe("ErrorBlock", () => {
