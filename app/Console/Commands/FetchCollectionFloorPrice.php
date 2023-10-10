@@ -33,7 +33,7 @@ class FetchCollectionFloorPrice extends Command
     {
         $usesOpensea = $this->usesOpensea(FetchCollectionFloorPriceJob::class);
 
-        $limit = $usesOpensea ? $this->getLimit() : null;
+        $limit = $usesOpensea ? $this->getLimitPerHour() : null;
 
         $this->forEachCollection(
             callback: function ($collection, $index) use ($usesOpensea) {

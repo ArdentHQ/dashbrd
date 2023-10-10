@@ -31,7 +31,7 @@ class FetchCollectionOpenseaSlug extends Command
      */
     public function handle(): int
     {
-        $limit = $this->getLimit();
+        $limit = $this->getLimitPerHour();
 
         $this->forEachCollection(
             callback: function ($collection, $index) {
