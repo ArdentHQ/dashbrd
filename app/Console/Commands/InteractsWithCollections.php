@@ -25,7 +25,7 @@ trait InteractsWithCollections
                 ->withoutSpamContracts()
                 ->first();
 
-            $collection && $callback($collection);
+            $collection && $callback($collection, 0);
 
             return;
         }

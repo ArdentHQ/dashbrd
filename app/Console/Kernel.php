@@ -98,7 +98,6 @@ class Kernel extends ConsoleKernel
 
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
-
         $schedule
                 ->command(FetchCollectionFloorPrice::class)
                 ->withoutOverlapping()
