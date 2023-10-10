@@ -75,7 +75,7 @@ it('determines that article is published if published_at is now', function () {
 
 it('determines that article is not published if published_at is in the future', function () {
     $article = Article::factory()->create([
-        'published_at' => now()->addMinute(),
+        'published_at' => now()->addDay(),
     ]);
 
     expect($article->isNotPublished())->toBeTrue();
