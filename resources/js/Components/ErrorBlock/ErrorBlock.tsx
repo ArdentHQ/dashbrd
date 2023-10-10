@@ -25,25 +25,23 @@ export interface ErrorBlockProperties {
 
 export const ErrorBlock = ({ contactEmail, statusCode }: ErrorBlockProperties): JSX.Element => {
     const { t } = useTranslation();
-    const { isDark } = useDarkModeContext();
 
     const isMaintenance = statusCode === 503;
 
     const ErrorImage = {
-        404: isDark ? Error404Dark : Error404,
-        401: isDark ? Error401Dark : Error401,
-        403: isDark ? Error403Dark : Error403,
-        419: isDark ? Error419Dark : Error419,
-        429: isDark ? Error429Dark : Error429,
-        500: isDark ? Error500Dark : Error500,
-        503: isDark ? Error503Dark : Error503,
+        404: Error404,
+        401: Error401,
+        403: Error403,
+        419: Error419,
+        429: Error429,
+        500: Error500,
+        503: Error503,
     }[statusCode];
 
     return (
         <>
             <ErrorImage
                 className="w-full max-w-full"
-                data-testid={`Error__Image${statusCode}${isDark ? "Dark" : "Light"}`}
             />
 
             {isMaintenance && (
