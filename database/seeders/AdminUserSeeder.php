@@ -18,7 +18,7 @@ class AdminUserSeeder extends Seeder
         $users = array_keys(config('permission.user_role'));
 
         foreach ($users as $email) {
-            $password = Str::random(10);
+            $password = app()->isLocal() ? 'password' : Str::random(10);
 
             $this->command->info("Password for $email: $password");
 
