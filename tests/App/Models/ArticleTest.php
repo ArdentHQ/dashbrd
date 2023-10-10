@@ -29,3 +29,30 @@ it('should sort collections with ID', function () {
     expect($articles[0]->id)->toBe($createdArticles[1]->id)
         ->and($articles[1]->id)->toBe($createdArticles[0]->id);
 });
+
+it('gets meta description from attribute', function () {
+    $article = Article::factory()->create([
+        'meta_description' => 'This is a meta description',
+        'content' => 'This is the content',
+    ]);
+
+    expect($article->metaDescription())->toBe('This is a meta description');
+});
+
+it('gets meta description from content if meta description is not set', function () {
+    $article = Article::factory()->create([
+        'meta_description' => null,
+        'content' => 'This is the content',
+    ]);
+
+    expect($article->metaDescription())->toBe('This is the content');
+});
+
+it('truncates the content if used as meta description', function () {
+    $article = Article::factory()->create([
+        'meta_description' => null,
+        'content' => str_repeat('a', 300),
+    ]);
+
+    expect($article->metaDescription())->toHaveLength(160);
+});
