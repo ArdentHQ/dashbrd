@@ -84,14 +84,14 @@ export const CollectionsFilterPopover = ({
                                     handleSelectedChainIds={handleSelectedChainIds}
                                 />
 
-                                <div className="rounded-xl bg-white p-6 shadow-xl">
+                                <div className="rounded-xl bg-white p-6 shadow-xl dark:border dark:border-theme-dark-700 dark:bg-theme-dark-900">
                                     <label className="flex items-center justify-between">
                                         <span className="flex items-center space-x-2">
-                                            <span className="font-medium text-theme-secondary-900">
+                                            <span className="font-medium text-theme-secondary-900 dark:text-theme-dark-50">
                                                 {t("pages.collections.show_hidden")}
                                             </span>
 
-                                            <span className="flex items-center justify-center rounded-full bg-theme-secondary-200 px-2.5 py-0.5 text-sm font-medium leading-5.5 text-theme-secondary-700">
+                                            <span className="flex items-center justify-center rounded-full bg-theme-secondary-200 px-2.5 py-0.5 text-sm font-medium leading-5.5 text-theme-secondary-700 dark:bg-theme-dark-800 dark:text-theme-dark-200">
                                                 {hiddenCount}
                                             </span>
                                         </span>
