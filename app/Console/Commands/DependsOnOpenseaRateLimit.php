@@ -6,9 +6,11 @@ namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Jobs\FetchCollectionOpenseaSlug;
+use Carbon\Carbon;
+use Closure;
 use Illuminate\Support\Facades\Config;
 
-trait HasOpenseaRateLimit
+trait DependsOnOpenseaRateLimit
 {
     /**
      * @var array<string>
@@ -78,6 +80,25 @@ trait HasOpenseaRateLimit
 
     private function usesOpensea(string $job): bool
     {
-        return Config::get('dashbrd.web3_providers.'.$job) === 'opensea';
+        return Config::get('dashbrd.web3_providers.'.$job) === 'opensea' || in_array($job, $this->jobsThatUseOpensea);
+    }
+
+    private function dispatchDelayed(Closure $callback, int $index, string $job): void
+    {
+        if (! $this->usesOpensea($job)) {
+
+            $callback();
+
+            return;
+        }
+
+        $delayInSeconds = $this->getDelayInSeconds($job, $index);
+
+        $dispatchAt = Carbon::now()->addSeconds($delayInSeconds);
+
+        // Note: I cant use delay directly on the job because it throws
+        // the "too many attempts" error after some time so im delaying
+        // with a queued closure instead
+        dispatch($callback)->delay($dispatchAt);
     }
 }

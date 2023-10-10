@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionFloorPrice as FetchCollectionFloorPriceJob;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class FetchCollectionFloorPrice extends Command
 {
-    use HasOpenseaRateLimit, InteractsWithCollections;
+    use DependsOnOpenseaRateLimit, InteractsWithCollections;
 
     /**
      * The name and signature of the console command.
@@ -36,17 +35,15 @@ class FetchCollectionFloorPrice extends Command
         $limit = $usesOpensea ? $this->getLimitPerHour() : null;
 
         $this->forEachCollection(
-            callback: function ($collection, $index) use ($usesOpensea) {
-                $delay = $usesOpensea
-                    ? Carbon::now()->addSeconds(
-                        $this->getDelayInSeconds(FetchCollectionFloorPriceJob::class, $index)
-                    )
-                    : null;
-
-                FetchCollectionFloorPriceJob::dispatch(
-                    chainId: $collection->network->chain_id,
-                    address: $collection->address,
-                )->delay($delay);
+            callback: function ($collection, $index) {
+                $this->dispatchDelayed(
+                    callback: fn () => FetchCollectionFloorPriceJob::dispatch(
+                        chainId: $collection->network->chain_id,
+                        address: $collection->address,
+                    ),
+                    index: $index,
+                    job: FetchCollectionFloorPriceJob::class,
+                );
             },
             queryCallback: function ($query) use ($limit) {
                 return $query

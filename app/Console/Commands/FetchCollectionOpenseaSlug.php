@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionOpenseaSlug as FetchCollectionOpenseaSlugJob;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class FetchCollectionOpenseaSlug extends Command
 {
-    use HasOpenseaRateLimit, InteractsWithCollections;
+    use DependsOnOpenseaRateLimit, InteractsWithCollections;
 
     /**
      * The name and signature of the console command.
@@ -35,12 +34,11 @@ class FetchCollectionOpenseaSlug extends Command
 
         $this->forEachCollection(
             callback: function ($collection, $index) {
-                $delayInSeconds = $this->getDelayInSeconds(FetchCollectionOpenseaSlugJob::class, $index);
-
-                $delay = Carbon::now()->addSeconds($delayInSeconds);
-
-                FetchCollectionOpenseaSlugJob::dispatch($collection)
-                    ->delay($delay);
+                $this->dispatchDelayed(
+                    callback: fn () => FetchCollectionOpenseaSlugJob::dispatch($collection),
+                    index: $index,
+                    job: FetchCollectionOpenseaSlugJob::class,
+                );
             },
             queryCallback: fn ($query) => $query
                 ->orderByOpenseaSlugLastFetchedAt()
