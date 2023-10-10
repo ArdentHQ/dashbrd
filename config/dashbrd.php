@@ -201,6 +201,11 @@ return [
         '0x495f947276749ce646f68ac8c248420045cb7b5e', // OpenSea Shared Storefront
     ],
 
+    'activities_blacklist' => [
+        '0xba6666b118f8303f990f3519df07e160227cce87', // Planet IX - Assets
+        '0x22d5f9b75c524fec1d6619787e582644cd4d7422', // Sunflower Land Collectibles
+    ],
+
     'test_tokens' => [
         'TIC',
         'USDC',

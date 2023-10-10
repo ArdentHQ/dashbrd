@@ -18,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class FetchCollectionActivity implements ShouldQueue
@@ -41,7 +42,7 @@ class FetchCollectionActivity implements ShouldQueue
      */
     public function handle(MnemonicWeb3DataProvider $provider): void
     {
-        if (! config('dashbrd.features.activities')) {
+        if (! config('dashbrd.features.activities') || $this->shouldIgnoreCollection()) {
             return;
         }
 
@@ -122,6 +123,18 @@ class FetchCollectionActivity implements ShouldQueue
                     ->activities()
                     ->latest('timestamp')
                     ->value('timestamp');
+    }
+
+    private function shouldIgnoreCollection(): bool
+    {
+        /**
+         * @var string[]
+         */
+        $blacklisted = config('dashbrd.activity_blacklist', []);
+
+        return collect($blacklisted)
+                        ->map(fn ($collection) => Str::lower($collection))
+                        ->contains(Str::lower($this->collection->address));
     }
 
     public function onFailure(Throwable $exception): void

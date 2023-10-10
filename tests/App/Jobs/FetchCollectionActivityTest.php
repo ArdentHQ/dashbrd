@@ -47,6 +47,25 @@ it('does not run if collection is already fetching activity', function () {
     (new FetchCollectionActivity($collection))->handle($mock);
 });
 
+it('does not run if collection is blacklisted from indexing activity', function () {
+    $collection = Collection::factory()->create([
+        'is_fetching_activity' => false,
+    ]);
+
+    config([
+        'dashbrd.activity_blacklist' => [
+            $collection->address
+        ],
+    ]);
+
+    $mock = $this->mock(
+        MnemonicWeb3DataProvider::class,
+        fn ($mock) => $mock->shouldReceive('getCollectionActivity')->never()
+    );
+
+    (new FetchCollectionActivity($collection))->handle($mock);
+});
+
 it('does run in forced mode if collection is already fetching activity', function () {
     $collection = Collection::factory()->create([
         'is_fetching_activity' => true,
