@@ -14,6 +14,12 @@ use App\Services\Web3\Mnemonic\MnemonicWeb3DataProvider;
 use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Facades\Bus;
 
+beforeEach(function () {
+    config([
+        'dashbrd.features.activities' => true,
+    ]);
+});
+
 it('does not run if collection is marked as spam', function () {
     $collection = Collection::factory()->create([
         'is_fetching_activity' => true,
