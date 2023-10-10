@@ -225,7 +225,7 @@ const ContentWrapper = ({ children, withPortal }: { children: JSX.Element; withP
 const Content = ({
     align = "left",
     className = "",
-    contentClasses = "ring-1 ring-black ring-opacity-5 py-1 bg-white",
+    contentClasses = "ring-1 ring-black ring-opacity-5 py-1 bg-white dark:bg-theme-dark-900",
     children,
     ...properties
 }: ContentProperties): JSX.Element => {
