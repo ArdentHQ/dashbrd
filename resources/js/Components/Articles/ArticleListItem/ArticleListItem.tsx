@@ -12,7 +12,7 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
     return (
         <a
             data-testid="ArticleListItem"
-            href={`/articles/${article.slug}`}
+            href={route("articles.view", article.slug)}
             className="flex space-x-3 border-b-4  border-theme-secondary-100 bg-white p-6 lg:rounded-lg lg:border lg:border-theme-secondary-300"
         >
             <div className="aspect-video h-11 flex-shrink-0 overflow-hidden rounded bg-theme-secondary-300 sm:h-16">
