@@ -98,8 +98,8 @@ it('should sort articles', function () {
     ]))->json('articles');
 
     expect(count($response['paginated']['data']))->toEqual(2)
-        ->and($response['paginated']['data'][1]['title'])->toEqual('beautiful baku') // article2
-        ->and($response['paginated']['data'][0]['title'])->toEqual('nice bunny'); // article1
+        ->and($response['paginated']['data'][0]['title'])->toEqual('beautiful baku') // article2
+        ->and($response['paginated']['data'][1]['title'])->toEqual('nice bunny'); // article1
 });
 
 it('should get featured collections for an article', function () {

@@ -65,7 +65,7 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function scopeSortById(Builder $query): Builder
     {
-        return $query->orderBy('id', 'desc');
+        return $query->orderBy('articles.id', 'desc');
     }
 
     public function getSlugOptions(): SlugOptions
