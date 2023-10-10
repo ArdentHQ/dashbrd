@@ -54,7 +54,7 @@ it('does not run if collection is blacklisted from indexing activity', function 
 
     config([
         'dashbrd.activity_blacklist' => [
-            $collection->address
+            $collection->address,
         ],
     ]);
 
