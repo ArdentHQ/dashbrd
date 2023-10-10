@@ -22,7 +22,7 @@ export const CollectionsTable = ({
     isLoading = false,
     onChanged,
     activeSort = "",
-    sortDirection = "desc",
+    sortDirection = "asc",
     onSort,
     onReportCollection,
 }: CollectionTableProperties): JSX.Element => {
@@ -130,6 +130,7 @@ export const CollectionsTable = ({
             initialState={activeSort.length > 0 ? initialState : {}}
             activeSort={activeSort}
             sortDirection={sortDirection}
+            manualSortBy={true}
             onSort={
                 onSort != null
                     ? (column) => {
