@@ -40,9 +40,7 @@ export const ErrorBlock = ({ contactEmail, statusCode }: ErrorBlockProperties): 
 
     return (
         <>
-            <ErrorImage
-                className="w-full max-w-full"
-            />
+            <ErrorImage className="w-full max-w-full" />
 
             {isMaintenance && (
                 <ErrorContent
