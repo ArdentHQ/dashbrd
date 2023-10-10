@@ -6,6 +6,12 @@ use App\Jobs\FetchCollectionActivity;
 use App\Models\Collection;
 use Illuminate\Support\Facades\Bus;
 
+beforeEach(function () {
+    config([
+        'dashbrd.features.activities' => true,
+    ]);
+});
+
 it('dispatches a job only for collections that are not currently already retrieving their activity', function () {
     Bus::fake();
 
