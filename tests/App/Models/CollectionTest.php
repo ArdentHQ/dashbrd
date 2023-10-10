@@ -749,6 +749,40 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
+it('can sort collections by name', function () {
+    $first = Collection::factory()->create([
+        'name' => ' ',
+    ]);
+
+    $second = Collection::factory()->create([
+        'name' => 'A',
+    ]);
+
+    $third = Collection::factory()->create([
+        'name' => 'aB',
+    ]);
+
+    $fourth = Collection::factory()->create([
+        'name' => 'AZ',
+    ]);
+
+    $fitfh = Collection::factory()->create([
+        'name' => 'B',
+    ]);
+
+    $collections = Collection::orderByName('asc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $first->id, $second->id, $third->id, $fourth->id,   $fitfh->id,
+    ]);
+
+    $collections = Collection::orderByName('desc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $fitfh->id, $fourth->id, $third->id, $second->id, $first->id,
+    ]);
+});
+
 it('queries the collections for the collection data object', function () {
     $collection1 = Collection::factory()->create([
         'floor_price' => '123456789',
@@ -1031,17 +1065,27 @@ it('should mark collection as invalid - blacklisted', function () {
 it('should exclude spam contracts', function () {
     $network = Network::factory()->create();
 
-    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
-
-    SpamContract::query()->insert([
-        'address' => $collections->first()->address,
-        'network_id' => $collections->first()->network_id,
+    [$collection, $other] = Collection::factory(2)->create([
+        'network_id' => $network->id,
     ]);
 
-    $validCollections = Collection::query()->withoutSpamContracts()->get();
+    $spamContract = SpamContract::create([
+        'address' => $collection->address,
+        'network_id' => $collection->network_id,
+    ]);
 
-    expect($validCollections->count())->toBe(1)
-        ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
+    $otherSpamContract = SpamContract::create([
+        'address' => $other->address,
+        'network_id' => Network::factory()->create()->id,
+    ]);
+
+    expect($collection->spamContract->is($spamContract))->toBeTrue();
+    expect($other->spamContract)->toBeNull();
+
+    $collections = Collection::withoutSpamContracts()->get();
+
+    expect($collections->count())->toBe(1);
+    expect($collections->first()->slug)->toBe($other->slug);
 });
 
 it('should exclude collections with an invalid supply', function () {
