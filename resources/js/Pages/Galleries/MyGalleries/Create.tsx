@@ -14,6 +14,7 @@ import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext"
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
@@ -46,6 +47,7 @@ const Create = ({
     const { props } = usePage();
 
     const { signedAction } = useAuthorizedAction();
+    const { initialized } = useMetaMaskContext();
 
     const [isGalleryFormSliderOpen, setIsGalleryFormSliderOpen] = useState(false);
     const [gallerySliderActiveTab, setGallerySliderActiveTab] = useState<GalleryFormSliderTabs>();
@@ -103,6 +105,7 @@ const Create = ({
             withSlider
             toastMessage={props.toast}
             belowHeader={<NoNftsOverlay show={paginatedNfts.length === 0} />}
+            displayAuthOverlay={paginatedNfts.length > 0 && initialized}
         >
             <Head title={title} />
 
