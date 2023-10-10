@@ -9,8 +9,6 @@ use App\Models\User;
 use App\Policies\NftPolicy;
 
 beforeEach(function () {
-    setUpPermissions();
-
     $this->instance = new NftPolicy();
     $this->user = User::factory()->create();
     $this->admin = User::factory()->create();

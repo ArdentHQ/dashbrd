@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9862abe1cb4a2aa34751524c03bec511",
+    "content-hash": "b208b108b22203141459850558ab99fc",
     "packages": [
         {
             "name": "atymic/twitter",
@@ -1738,6 +1738,43 @@
                 "source": "https://github.com/filamentphp/filament"
             },
             "time": "2023-09-30T14:07:48+00:00"
+        },
+        {
+            "name": "filament/spatie-laravel-media-library-plugin",
+            "version": "v3.0.69",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/filamentphp/spatie-laravel-media-library-plugin.git",
+                "reference": "b827e5db03beebd68ff82e31e54f6263db66bc26"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/spatie-laravel-media-library-plugin/zipball/b827e5db03beebd68ff82e31e54f6263db66bc26",
+                "reference": "b827e5db03beebd68ff82e31e54f6263db66bc26",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0",
+                "php": "^8.1",
+                "spatie/laravel-medialibrary": "^10.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Filament\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Filament support for `spatie/laravel-medialibrary`.",
+            "homepage": "https://github.com/filamentphp/filament",
+            "support": {
+                "issues": "https://github.com/filamentphp/filament/issues",
+                "source": "https://github.com/filamentphp/filament"
+            },
+            "time": "2023-09-08T12:20:35+00:00"
         },
         {
             "name": "filament/support",
@@ -15618,5 +15655,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
