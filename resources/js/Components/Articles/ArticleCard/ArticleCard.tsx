@@ -49,7 +49,7 @@ export const ArticleCard = ({
                     })}
                 >
                     {formatTimestamp(
-                        article.publishedAt,
+                        article.publishedAt * 1000,
                         user?.attributes.date_format as DateFormat,
                         user?.attributes.timezone,
                     )}
