@@ -9,8 +9,6 @@ use App\Models\User;
 use App\Policies\ArticlePolicy;
 
 beforeEach(function () {
-    setUpPermissions();
-
     $this->instance = new ArticlePolicy();
 
     $this->user = User::factory()->create();

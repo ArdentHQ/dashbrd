@@ -25,13 +25,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Spatie\LaravelData\WithData;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
-class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements FilamentUser, HasMedia, HasName
 {
-    use BelongsToWallet, HasFactory, HasWallets, Notifiable, SoftDeletes, TwoFactorAuthenticatable, WithData;
+    use BelongsToWallet, HasFactory, HasWallets, InteractsWithMedia, Notifiable, SoftDeletes, TwoFactorAuthenticatable, WithData;
     use HasRoles {
         assignRole as baseAssignRole;
     }
@@ -64,6 +66,24 @@ class User extends Authenticatable implements FilamentUser, HasName
         'extra_attributes' => SchemalessAttributes::class,
         'collections_value' => 'json',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('avatar')
+            ->singleFile()
+            ->registerMediaConversions(function () {
+                $this
+                    ->addMediaConversion('thumb')
+                    ->width(54)
+                    ->height(54);
+
+                $this
+                    ->addMediaConversion('thumb@2x')
+                    ->width(54 * 2)
+                    ->height(54 * 2);
+            });
+    }
 
     public function currency(): CurrencyCode
     {
