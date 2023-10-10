@@ -6,6 +6,7 @@ import "../css/app.css";
 import { createInertiaApp } from "@inertiajs/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios, { type AxiosError } from "axios";
+import axiosCancel from "axios-cancel";
 import {
     ArcElement,
     CategoryScale,
@@ -33,39 +34,24 @@ import { i18n } from "@/I18n";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
 (window as any).CookieConsent = CookieConsent;
 
-const abortController = new AbortController();
-const { signal } = abortController;
-
-axios.interceptors.request.use((config) => {
-  config.signal = signal;
-  return config;
-});
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+axiosCancel(axios as any);
 
 axios.interceptors.response.use(
-  (response) => response,
-  async (error: AxiosError) => {
-    const status = error.response?.status;
+    (response) => response,
+    async (error: AxiosError) => {
+        const status = get(error, "response.status");
 
-    if (status === 419) {
-        abortController.abort();
+        if (status === 419) {
+            await axios.get(route("refresh-csrf-token"));
 
-      try {
-        await axios.get(route("refresh-csrf-token"), {
-          signal: abortController.signal,
-        });
-
-        if (error.response != null) {
-          return axios(error.response.config);
+            if (error.response != null) {
+                return await axios(error.response.config);
+            }
         }
-      } catch (abortError) {
-        if (abortError instanceof DOMException) {
-            console.error('Request canceled:', abortError.message);
-        }
-      }
-    }
 
-    return Promise.reject(error);
-  }
+        return await Promise.reject(error);
+    },
 );
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler, Title);
