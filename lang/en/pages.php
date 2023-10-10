@@ -32,7 +32,7 @@ return [
     'articles' => [
         'title' => 'Articles',
         'featured_collections' => 'Featured Collections',
-        'placeholder_more_soon' => 'More Soon'
+        'placeholder_more_soon' => 'More Soon',
     ],
 
     'collections' => [
