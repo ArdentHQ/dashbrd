@@ -63,7 +63,7 @@ class GalleryData extends Data
             value: $gallery->value($currency),
             coverImage: $gallery->cover_image,
             wallet: GalleryWalletData::fromModel($gallery->user->wallet),
-            nfts: new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit))),
+            nfts: new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit, ['*'], 'page', 1))),
             isOwner: $isOwner,
             hasLiked: $hasLiked,
         );
