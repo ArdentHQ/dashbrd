@@ -2,6 +2,7 @@ import cn from "classnames";
 import { useRef, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
 import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
+import { type ArticleCardVariant } from "@/Components/Articles/ArticleCard";
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
 
@@ -36,11 +37,19 @@ export const calculateCircleCount = (totalCount: number, availableWidth: number)
 
 // Note: This component uses width to detect number of collections to display, so the parent must have fix width
 // (or flex-1 to take the available with) otherwise you may experience infinite loop due to `setVisibleCount` call
-export const FeaturedCollections = ({ collections }: { collections: FeaturedCollectionData[] }): JSX.Element => {
+export const FeaturedCollections = ({
+    collections,
+    variant,
+}: {
+    collections: FeaturedCollectionData[];
+    variant?: ArticleCardVariant;
+}): JSX.Element => {
     const totalCount = collections.length;
 
     const [visibleCount, setVisibleCount] = useState(totalCount);
     const container = useRef<HTMLDivElement>(null);
+
+    const isLargeVariant = variant === "large";
 
     useResizeDetector<HTMLDivElement>({
         handleHeight: false,
@@ -67,7 +76,10 @@ export const FeaturedCollections = ({ collections }: { collections: FeaturedColl
                         <Img
                             src={collection.image}
                             isCircle
-                            className="h-6 w-6 rounded-full ring-2 ring-white"
+                            className={cn("h-6 w-6 rounded-full ring-2", {
+                                "ring-white": !isLargeVariant,
+                                "ring-theme-dark-900": isLargeVariant,
+                            })}
                             errorClassName="!p-0"
                         />
                     </div>
@@ -76,17 +88,34 @@ export const FeaturedCollections = ({ collections }: { collections: FeaturedColl
             <MoreCollectionsLabel
                 total={totalCount}
                 visible={visibleCount}
+                variant={variant}
             />
         </div>
     );
 };
 
-export const MoreCollectionsLabel = ({ total, visible }: { total: number; visible: number }): JSX.Element => {
+export const MoreCollectionsLabel = ({
+    total,
+    visible,
+    variant,
+}: {
+    total: number;
+    visible: number;
+    variant?: ArticleCardVariant;
+}): JSX.Element => {
+    const isLargeVariant = variant === "large";
+
     if (total - visible > 0) {
         return (
             <span
                 data-testid="MoreCollectionsLabel"
-                className="z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full bg-theme-hint-100 px-2 text-xs font-medium text-theme-hint-900 ring-2 ring-white"
+                className={cn(
+                    "z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full  px-2 text-xs font-medium ring-2 ",
+                    {
+                        "bg-theme-hint-100 text-theme-hint-900 ring-white": !isLargeVariant,
+                        "bg-theme-secondary-800 text-white ring-theme-dark-900": isLargeVariant,
+                    },
+                )}
             >
                 +{total - visible}
             </span>

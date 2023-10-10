@@ -32,7 +32,7 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                 <div className="flex items-center space-x-3">
                     <div className="text-xs font-medium text-theme-secondary-700 sm:text-sm">
                         {formatTimestamp(
-                            article.publishedAt,
+                            article.publishedAt * 1000,
                             user?.attributes.date_format as DateFormat,
                             user?.attributes.timezone,
                         )}

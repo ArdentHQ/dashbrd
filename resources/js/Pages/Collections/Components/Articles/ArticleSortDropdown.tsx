@@ -3,6 +3,7 @@ import { DropdownButton, SortDropdown } from "@/Components/SortDropdown";
 
 interface Properties {
     activeSort: ArticleSortBy;
+    disabled: boolean;
     onSort: (sortBy: ArticleSortBy) => void;
 }
 
@@ -11,11 +12,11 @@ export enum ArticleSortBy {
     popularity = "popularity",
 }
 
-export const ArticleSortDropdown = ({ activeSort, onSort }: Properties): JSX.Element => {
+export const ArticleSortDropdown = ({ activeSort, onSort, disabled }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <SortDropdown>
+        <SortDropdown disabled={disabled}>
             {({ setOpen }) => (
                 <>
                     <DropdownButton

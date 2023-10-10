@@ -2,7 +2,7 @@ import cn from "classnames";
 import React, { type ComponentProps } from "react";
 
 import { useTranslation } from "react-i18next";
-import { Grid, Navigation } from "swiper";
+import { Grid, Navigation, Pagination } from "swiper";
 import { Swiper } from "swiper/react";
 import { type GridOptions } from "swiper/types";
 import { IconButton } from "@/Components/Buttons";
@@ -108,7 +108,7 @@ export const Carousel = ({
         <Swiper
             style={{ paddingRight: (horizontalOffset ?? 0) * 2 }}
             className={cn(swiperClassName)}
-            modules={[Navigation, Grid]}
+            modules={[Navigation, Grid, Pagination]}
             slidesPerView={slidesPerView}
             spaceBetween={spaceBetween}
             slidesOffsetBefore={horizontalOffset}
