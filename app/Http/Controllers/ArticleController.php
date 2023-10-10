@@ -42,4 +42,19 @@ class ArticleController extends Controller
             'title' => trans('metatags.articles.title'),
         ]);
     }
+
+    public function show(Article $article): Response
+    {
+        if ($article->isNotPublished()) {
+            abort(404);
+        }
+
+        return Inertia::render('Articles/Show', [
+            'article' => ArticleData::fromModel($article),
+        ])->withViewData([
+            'title' => trans('metatags.articles.view.title', ['title' => $article->title]),
+            'description' => $article->metaDescription(),
+            'image' => $article->getMedia()->first()->getUrl(),
+        ]);
+    }
 }

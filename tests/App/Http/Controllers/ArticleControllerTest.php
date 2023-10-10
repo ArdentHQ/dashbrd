@@ -33,6 +33,22 @@ it('should render the page', function () {
         ->assertStatus(200);
 });
 
+it('should render a single published article', function () {
+    [, [$article]] = seedArticles(1);
+
+    $this->get(route('articles.view', ['article' => $article->slug]))
+        ->assertStatus(200);
+});
+
+it('should not render a single unpublished article', function () {
+    [, [$article]] = seedArticles(1);
+
+    $article->update(['published_at' => null]);
+
+    $this->get(route('articles.view', ['article' => $article->slug]))
+        ->assertStatus(404);
+});
+
 it('should return articles with the given pageLimit', function ($pageLimit, $resultCount) {
     seedArticles(35, 4);
 
