@@ -1,4 +1,3 @@
-import { BigNumber, sortByDesc } from "@ardenthq/sdk-helpers";
 import { CollectionCard } from "@/Components/Collections/CollectionCard";
 import { CollectionCardSkeleton } from "@/Components/Collections/CollectionCard/CollectionCardSkeleton";
 
