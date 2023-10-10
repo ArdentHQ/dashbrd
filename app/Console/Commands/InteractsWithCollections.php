@@ -41,7 +41,7 @@ trait InteractsWithCollections
             )
             ->when($limit == null, fn ($query) => $query->chunkById(
                 100,
-                fn ($collections) => $collections->each($callback),
+                fn ($collections, $index) => $collections->each($callback, $index),
                 'collections.id', 'id')
             );
     }

@@ -25,10 +25,8 @@ use App\Console\Commands\UpdateGalleriesScore;
 use App\Console\Commands\UpdateGalleriesValue;
 use App\Console\Commands\UpdateTwitterFollowers;
 use App\Enums\Features;
-use App\Jobs\FetchCollectionFloorPrice as FetchCollectionFloorPriceJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Config;
 use Laravel\Pennant\Feature;
 
 class Kernel extends ConsoleKernel
@@ -101,21 +99,10 @@ class Kernel extends ConsoleKernel
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
 
-        if (Config::get('dashbrd.web3_providers.'.FetchCollectionFloorPriceJob::class) === 'opensea') {
-            $schedule
-                ->command(FetchCollectionFloorPrice::class, [
-                    '--limit' => config('services.opensea.rate.max_requests'),
-                ])
-                ->withoutOverlapping()
-                // Opensea allows 4 requests per second, using 5 seconds to leave
-                // some room for other tasks or unexpected delays
-                ->everyFiveSeconds();
-        } else {
-            $schedule
+        $schedule
                 ->command(FetchCollectionFloorPrice::class)
                 ->withoutOverlapping()
                 ->hourlyAt(5);
-        }
 
         $schedule
             // Command only fetches collections that doesn't have a slug yet
