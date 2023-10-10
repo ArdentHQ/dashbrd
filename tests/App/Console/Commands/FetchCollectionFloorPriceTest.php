@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Console\Commands\FetchCollectionFloorPrice as FetchCollectionFloorPriceCommand;
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Models\Collection;
 use App\Models\SpamContract;
@@ -37,7 +36,12 @@ it('delays the jobs according to the opensea limits', function () {
 
     foreach ($collections as $index => $collection) {
         Bus::assertDispatched(FetchCollectionFloorPrice::class, function ($job) use ($collection, $index) {
-            $expectedDelay = floor($index / 4) * 1 * FetchCollectionFloorPriceCommand::REQUEST_LIMIT_FACTOR;
+            // @see app/Console/Commands/HasOpenseaRateLimit.php@getRateLimitFactor
+            $totalOpenseaJobs = 2;
+
+            $maxRequests = config('services.opensea.rate.max_requests');
+
+            $expectedDelay = floor($index / $maxRequests) * 1 * $totalOpenseaJobs;
 
             $delay = Carbon::now()->addSeconds($expectedDelay);
 

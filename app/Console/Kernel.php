@@ -104,21 +104,14 @@ class Kernel extends ConsoleKernel
                 ->hourlyAt(5);
 
         $schedule
-            // Command only fetches collections that doesn't have a slug yet
-            // so in most cases it will not run any request
-            ->command(FetchCollectionOpenseaSlug::class, [
-                '--limit' => config('services.opensea.rate.max_requests'),
-            ])
+            ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
-            // Using something far from the second time frame that opensea allows
-            // since is not that common that the command makes an actual request
-            // and to prevent overlapping with other tasks that use opensea api
-            ->everyFifteenSeconds();
+            ->hourlyAt(10);
 
         $schedule
             ->command(FetchWalletNfts::class)
             ->withoutOverlapping()
-            ->hourlyAt(10); // offset by 10 mins so it's not run the same time as FetchEnsDetails...
+            ->hourlyAt(15); // offset by 15 mins so it's not run the same time as FetchEnsDetails...
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void
