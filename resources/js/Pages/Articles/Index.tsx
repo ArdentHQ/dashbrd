@@ -19,7 +19,7 @@ const ArticlesIndex = ({ articles: initialArticles }: { articles: App.Data.Artic
             <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <Heading
                     level={1}
-                    className="text-center dark:text-theme-dark-50 xs:text-left"
+                    className="pb-2 text-center dark:text-theme-dark-50 sm:text-left"
                 >
                     {t("pages.articles.header_title", {
                         count: isLoading ? initialArticles.paginated.meta.total : articles?.paginated.meta.total ?? 0,
