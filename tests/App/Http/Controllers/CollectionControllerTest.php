@@ -1286,9 +1286,6 @@ it('should get collection articles sorted: latest', function () {
         ->and($returnedArticles[1]['id'])->toBe($article1->id);
 });
 
-
-
-
 function attachImageToArticles($articles)
 {
     $articles->map(fn ($article) => $article
