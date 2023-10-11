@@ -40,7 +40,7 @@ describe("CollectionsGrid", () => {
         expect(getByTestId("CollectionsGridSkeleton")).toBeInTheDocument();
     });
 
-    it("should display collections in the order provided", () => {
+    it("should display collections in the order they were provided", () => {
         mockViewportVisibilitySensor({
             inViewport: true,
         });
@@ -110,19 +110,20 @@ describe("CollectionsGrid", () => {
             expect(values[index]).toHaveTextContent(sorted[index]);
         }
 
+        defaultGrid.unmount();
+
         // Sort by value ascending, if null then first
         const collectionsSortedByFloorPrice = collections.sort((a, b) => {
-            if (a.floorPrice === null) {
+            if (a.floorPriceFiat === null) {
                 return -1;
             }
 
-            if (b.floorPrice === null) {
+            if (b.floorPriceFiat === null) {
                 return 1;
             }
 
-            return Number(a.floorPrice) - Number(b.floorPrice);
+            return a.floorPriceFiat - b.floorPriceFiat;
         });
-        console.log({collectionsSortedByFloorPrice})
 
         const sortedGrid = render(
             <CollectionsGrid
@@ -135,31 +136,29 @@ describe("CollectionsGrid", () => {
             />,
         );
 
-        expect(defaultGrid.getAllByTestId("CollectionCard")).toHaveLength(collectionsSortedByFloorPrice.length);
+        expect(sortedGrid.getAllByTestId("CollectionCard")).toHaveLength(collectionsSortedByFloorPrice.length);
 
         const sortedValues = sortedGrid.getAllByTestId("CollectionFloorPrice");
 
-        const expectedValues = [
-            "0.05 ETH",
-            "0.1 ETH",
-            "0.1 ETH",
-            "0.2 ETH",
-            "0.3 ETH",
-            "0.4 ETH",
-            "0.7 ETH",
+        const expectedSortedValues = [
             "50 USDC",
+            "0.05 ETH",
             "100 USDC",
             "100 USDC",
+            "0.1 ETH",
+            "0.1 ETH",
             "200 USDC",
             "300 USDC",
+            "0.2 ETH",
             "400 USDC",
+            "0.3 ETH",
             "700 USDC",
+            "0.4 ETH",
+            "0.7 ETH",
         ];
 
         for (let index = 0; index < sorted.length; index++) {
-            expect(sortedValues[index]).toHaveTextContent(expectedValues[index]);
+            expect(sortedValues[index]).toHaveTextContent(expectedSortedValues[index]);
         }
-
-
     });
 });
