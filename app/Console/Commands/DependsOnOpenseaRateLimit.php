@@ -36,7 +36,7 @@ trait DependsOnOpenseaRateLimit
         FetchCollectionOpenseaSlug::class => 1,
     ];
 
-    private function getDelayInSeconds(string $job, int $index): int
+    private function getDispatchAt(string $job, int $index): Carbon
     {
         $maxRequests = config('services.opensea.rate.max_requests');
 
@@ -44,7 +44,15 @@ trait DependsOnOpenseaRateLimit
 
         $delayInSeconds = (int) floor($index / $maxRequests) * $perSeconds * $this->getRateLimitFactor();
 
-        return $delayInSeconds + $this->getDelayTreshold($job);
+        return Carbon::now()
+            // Round to the next minute so the delay is always calculated from
+            // the beginning of the minute which prevents overlapping considering
+            // jobs may be dispatched at different times
+            // e.g. 12:00:34 -> 12:01:00, 12:00:59 -> 12:01:00
+            ->endOfMinute()->addSecond()
+            // Delay the job by the amount of seconds + the delay treshold
+            // e.g. 12:01:00 + 1 -> 12:01:01, 12:01:00 + 2 -> 12:01:02
+            ->addSeconds($delayInSeconds + $this->getDelayTreshold($job));
     }
 
     private function getDelayTreshold(string $job): int
@@ -92,13 +100,9 @@ trait DependsOnOpenseaRateLimit
             return;
         }
 
-        $delayInSeconds = $this->getDelayInSeconds($job, $index);
-
-        $dispatchAt = Carbon::now()->addSeconds($delayInSeconds);
-
         // Note: I cant use delay directly on the job because it throws
         // the "too many attempts" error after some time so im delaying
         // with a queued closure instead
-        dispatch($callback)->delay($dispatchAt);
+        dispatch($callback)->delay($this->getDispatchAt($job, $index));
     }
 }
