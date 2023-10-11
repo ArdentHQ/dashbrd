@@ -97,8 +97,12 @@ it('should generate a nonce', function () {
 });
 
 it('should set wallet as signed and not signed and set last_signed_at', function () {
-    $wallet = Wallet::factory()->create();
-    $otherWallet = Wallet::factory()->create();
+    $wallet = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
+    $otherWallet = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     Signature::setWalletIsSigned($wallet->id);
 
