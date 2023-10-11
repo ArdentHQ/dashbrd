@@ -22,9 +22,7 @@ class ArticleController extends Controller
         $articles = Article::query()
             ->search($request->get('search'))
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
-            ->with(['collections' => function ($query) {
-                $query->select(['collections.name', 'collections.extra_attributes->image as image']);
-            }])
+            ->withFeaturedCollections()
             ->paginate($pageLimit);
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
