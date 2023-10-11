@@ -749,6 +749,40 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
+it('can sort collections by name', function () {
+    $first = Collection::factory()->create([
+        'name' => ' ',
+    ]);
+
+    $second = Collection::factory()->create([
+        'name' => 'A',
+    ]);
+
+    $third = Collection::factory()->create([
+        'name' => 'aB',
+    ]);
+
+    $fourth = Collection::factory()->create([
+        'name' => 'AZ',
+    ]);
+
+    $fitfh = Collection::factory()->create([
+        'name' => 'B',
+    ]);
+
+    $collections = Collection::orderByName('asc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $first->id, $second->id, $third->id, $fourth->id,   $fitfh->id,
+    ]);
+
+    $collections = Collection::orderByName('desc')->get();
+
+    expect($collections->modelKeys())->toBe([
+        $fitfh->id, $fourth->id, $third->id, $second->id, $first->id,
+    ]);
+});
+
 it('queries the collections for the collection data object', function () {
     $collection1 = Collection::factory()->create([
         'floor_price' => '123456789',
@@ -1085,7 +1119,9 @@ it('filters collections that belongs to wallets that have been signed at least o
         'last_signed_at' => now(),
     ]);
 
-    $notSigned = Wallet::factory()->create();
+    $notSigned = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     $signed2 = Wallet::factory()->create([
         'last_signed_at' => now(),
@@ -1121,12 +1157,10 @@ it('filters collections that belongs to wallets that have been signed at least o
 
     $filtered = Collection::query()->withSignedWallets()->get();
 
-    expect($filtered->count())->toBe(2)
-        ->and($filtered->pluck('id')->sort()->toArray())->toEqual([
-            $collection1->id,
-            $collection4->id,
-        ]);
+    expect($filtered->count())->toBe(2);
 
+    expect($filtered->pluck('id')->contains($collection1->id))->toBeTrue();
+    expect($filtered->pluck('id')->contains($collection4->id))->toBeTrue();
 });
 
 it('should get openSeaSlug', function () {
