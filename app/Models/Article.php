@@ -88,10 +88,10 @@ class Article extends Model implements HasMedia, Viewable
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeWithFeaturedCollections(Builder $query, int|null $collectionId = null): Builder
+    public function scopeWithFeaturedCollections(Builder $query, int $collectionId = null): Builder
     {
         return $query->with(['collections' => function ($query) use ($collectionId) {
-            $query->when($collectionId, fn($q) => $q->where('collections.id', '!=', $this->id))
+            $query->when($collectionId, fn ($q) => $q->where('collections.id', '!=', $this->id))
                 ->select(['collections.name', 'collections.extra_attributes->image as image']);
         }]);
     }
@@ -120,7 +120,7 @@ class Article extends Model implements HasMedia, Viewable
             ->update([
                 'views_count' => DB::raw(
                     "(SELECT COUNT(*) FROM views as v WHERE v.viewable_type = 'App\Models\Article' AND articles.id = v.viewable_id)"
-                )
+                ),
             ]);
     }
 }
