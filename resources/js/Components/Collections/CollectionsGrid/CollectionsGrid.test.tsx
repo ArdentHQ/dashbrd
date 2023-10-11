@@ -110,6 +110,7 @@ describe("CollectionsGrid", () => {
             expect(values[index]).toHaveTextContent(sorted[index]);
         }
 
+        // Unmount previous grid
         defaultGrid.unmount();
 
         // Sort by value ascending, if null then first
