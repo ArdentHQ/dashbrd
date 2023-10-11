@@ -93,17 +93,12 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
-            'nfts_count' => $nfts->count(),
-            'network' => $network->id,
-        ]);
-
         // Chunk by 100 to comply with Alchemy's nfts batch limit.
         $nfts->chunk(100)->map(function ($nftsChunk) use ($provider, $network) {
 
             $result = $provider->getNftMetadata($nftsChunk, $network);
 
-            (new Web3NftHandler(null, $network, $nftsChunk->first()->collection))->store(
+            (new Web3NftHandler(null, $network))->store(
                 $result->nfts,
                 dispatchJobs: true,
             );
