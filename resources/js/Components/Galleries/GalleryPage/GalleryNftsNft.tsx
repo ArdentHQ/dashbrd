@@ -120,7 +120,9 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                     </Tooltip>
 
                     <div className="mx-auto mt-8 flex space-x-2 text-sm">
-                        <span className="truncate text-theme-secondary-700 dark:text-theme-dark-200">{t("pages.galleries.floor_price")}:</span>
+                        <span className="truncate text-theme-secondary-700 dark:text-theme-dark-200">
+                            {t("pages.galleries.floor_price")}:
+                        </span>
                         <span
                             data-testid="GalleryNftsNft__price"
                             className="whitespace-nowrap text-theme-secondary-900 dark:text-theme-dark-50"

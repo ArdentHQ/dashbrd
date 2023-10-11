@@ -95,7 +95,10 @@ export const ConnectingWallet = ({ signing }: { signing: boolean }): JSX.Element
     const { t } = useTranslation();
 
     return (
-        <OverlayButtonsWrapper data-testid="AuthOverlay__connecting-network" className="dark:border-theme-dark-600">
+        <OverlayButtonsWrapper
+            data-testid="AuthOverlay__connecting-network"
+            className="dark:border-theme-dark-600"
+        >
             <Icon
                 name="Spinner"
                 size="xl"

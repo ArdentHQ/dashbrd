@@ -65,7 +65,7 @@ export const GalleryHeading = ({
                 </Heading>
             )}
 
-            <div className="mt-2 text-sm font-medium leading-6 text-theme-secondary-900 md:text-base md:leading-7 lg:text-xl lg:leading-[1.875rem] dark:text-theme-dark-50">
+            <div className="mt-2 text-sm font-medium leading-6 text-theme-secondary-900 dark:text-theme-dark-50 md:text-base md:leading-7 lg:text-xl lg:leading-[1.875rem]">
                 <span
                     className="text-theme-primary-600 dark:text-theme-primary-400"
                     data-testid="NftsCount"
