@@ -1174,5 +1174,3 @@ it('sorts collections last time nft was fetched', function () {
         $collection4->id,
     ]);
 });
-
-
