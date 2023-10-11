@@ -3,7 +3,7 @@ import { CollectionsGrid } from "./CollectionsGrid";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
-import { fireEvent, render } from "@/Tests/testing-library";
+import { render } from "@/Tests/testing-library";
 
 let useAuthorizedActionSpy: SpyInstance;
 const signedActionMock = vi.fn();
