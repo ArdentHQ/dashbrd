@@ -65,9 +65,9 @@ export const GalleryHeading = ({
                 </Heading>
             )}
 
-            <div className="mt-2 text-sm font-medium leading-6 text-theme-secondary-900 md:text-base md:leading-7 lg:text-xl lg:leading-[1.875rem]">
+            <div className="mt-2 text-sm font-medium leading-6 text-theme-secondary-900 md:text-base md:leading-7 lg:text-xl lg:leading-[1.875rem] dark:text-theme-dark-50">
                 <span
-                    className="text-theme-primary-600"
+                    className="text-theme-primary-600 dark:text-theme-primary-400"
                     data-testid="NftsCount"
                 >
                     {headerData.nftsCount}{" "}
@@ -77,7 +77,7 @@ export const GalleryHeading = ({
                 <span className="lowercase"> {t("pages.galleries.from")} </span>
 
                 <span
-                    className="text-theme-primary-600"
+                    className="text-theme-primary-600 dark:text-theme-primary-400"
                     data-testid="CollectionsCount"
                 >
                     {headerData.collectionsCount}{" "}
@@ -89,7 +89,7 @@ export const GalleryHeading = ({
                         <span>, {t("pages.galleries.valued_at")}</span>
 
                         <span>
-                            <span className="text-theme-primary-600">
+                            <span className="text-theme-primary-600 dark:text-theme-primary-400">
                                 &nbsp;
                                 <FormatFiat
                                     value={value.toString()}
