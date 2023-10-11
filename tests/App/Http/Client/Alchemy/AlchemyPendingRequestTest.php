@@ -10,7 +10,6 @@ use App\Models\Nft;
 use App\Models\Wallet;
 use App\Support\Facades\Alchemy;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 it('should throw a connection exception on server errors', function () {
     Alchemy::fake([
