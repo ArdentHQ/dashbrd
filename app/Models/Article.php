@@ -33,7 +33,7 @@ class Article extends Model implements HasMedia, Viewable
 
     public function resolveRouteBinding($value, $field = null)
     {
-        return Article::query()->withFeaturedCollections()->where('slug', $value)->first();
+        return Article::query()->withFeaturedCollections()->where('articles.slug', $value)->first();
     }
 
     /**
