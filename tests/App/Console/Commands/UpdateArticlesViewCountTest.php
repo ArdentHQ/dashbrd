@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Models\Gallery;
 use Illuminate\Support\Facades\Queue;
 
 it('dispatches onto the queue', function () {
