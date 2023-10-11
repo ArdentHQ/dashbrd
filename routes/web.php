@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
 
 Route::group(['prefix' => 'articles', 'middleware' => 'features:articles'], function () {
     Route::get('', [ArticleController::class, 'index'])->name('articles');
+    Route::get('{article:slug}', [ArticleController::class, 'show'])->name('articles.view');
 });
 
 Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {

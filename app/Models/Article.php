@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -66,6 +67,16 @@ class Article extends Model implements HasMedia, Viewable
     public function scopeSortById(Builder $query): Builder
     {
         return $query->orderBy('articles.id', 'desc');
+    }
+
+    public function metaDescription(): string
+    {
+        return $this->meta_description ?? Str::limit(strip_tags($this->content), 157);
+    }
+
+    public function isNotPublished(): bool
+    {
+        return $this->published_at === null || $this->published_at->isFuture();
     }
 
     public function getSlugOptions(): SlugOptions
