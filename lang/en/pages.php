@@ -34,8 +34,8 @@ return [
         'featured_collections' => 'Featured Collections',
         'placeholder_more_soon' => 'More Soon',
         'no_articles' => 'No articles have been published yet. Please check back later!',
-        "header_title_one" => "Explore our collection of {{count}} published article",
-        "header_title_other" => "Explore our collection of {{count}} published articles",
+        'header_title_one' => 'Explore our collection of {{count}} published article',
+        'header_title_other' => 'Explore our collection of {{count}} published articles',
     ],
     'collections' => [
         'title' => 'Collections',
