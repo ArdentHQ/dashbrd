@@ -88,3 +88,21 @@ it('determines that article is not published if published_at is null', function 
 
     expect($article->isNotPublished())->toBeTrue();
 });
+
+it('should get article\'s collections', function () {
+    $collections = Collection::factory(2)->create();
+
+    $articles = Article::factory(2)->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $collections->map(function ($collection) use ($articles) {
+        $collection->articles()->attach($articles, ['order_index' => 1]);
+    });
+
+    $result = $articles->first()->withFeaturedCollections()->first();
+
+    expect($result->collections->count())->toBe(2)
+        ->and($result->collections->pluck('name'))->toContain($collections[0]->name)
+        ->and($result->collections->pluck('name'))->toContain($collections[1]->name);
+});
