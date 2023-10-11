@@ -10,7 +10,11 @@
 
     .button-secondary,
     .button-icon-secondary {
-        @apply transition-default transition-default inline-flex items-center rounded-3xl bg-theme-secondary-100 px-5 py-2 font-medium outline-none outline-3 outline-offset-0 hover:bg-theme-secondary-300 focus-visible:bg-theme-secondary-300 focus-visible:outline-theme-primary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-800 dark:text-theme-dark-200 dark:focus-within:bg-theme-dark-800 dark:focus-within:text-theme-dark-200 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-200 dark:active:bg-theme-dark-800 dark:active:text-theme-dark-100;
+        @apply transition-default inline-flex items-center rounded-3xl bg-theme-secondary-100 px-5 py-2 font-medium outline-none outline-3 outline-offset-0 hover:bg-theme-secondary-300 focus-visible:bg-theme-secondary-300 focus-visible:outline-theme-primary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-800 dark:text-theme-dark-200 dark:focus-within:bg-theme-dark-800 dark:focus-within:text-theme-dark-200 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-200 dark:active:bg-theme-dark-800 dark:active:text-theme-dark-100;
+    }
+
+    .button-light {
+        @apply dark:bg-theme-secondary-100 dark:text-theme-primary-900 dark:focus-within:bg-theme-secondary-300 dark:focus-within:text-theme-primary-900 dark:focus-within:ring-theme-primary-300 dark:hover:bg-theme-secondary-300 dark:hover:text-theme-primary-900 dark:focus-visible:bg-theme-secondary-300 dark:focus-visible:outline-theme-primary-300 dark:active:bg-theme-secondary-400 dark:active:text-theme-primary-900;
     }
 
     .button-danger,

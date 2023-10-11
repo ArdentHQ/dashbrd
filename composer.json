@@ -17,7 +17,7 @@
         "inertiajs/inertia-laravel": "^0.6",
         "jeffgreco13/filament-breezy": "^2.1",
         "kornrunner/keccak": "^1.1",
-        "laravel/framework": "^10.25",
+        "laravel/framework": "^10.26",
         "laravel/horizon": "^5.21",
         "laravel/pennant": "^1.5",
         "laravel/sanctum": "^3.3",
@@ -34,7 +34,7 @@
         "spatie/laravel-sluggable": "^3.5",
         "spatie/laravel-typescript-transformer": "^2.3",
         "staudenmeir/eloquent-eager-limit": "^1.0",
-        "tightenco/ziggy": "^1.6",
+        "tightenco/ziggy": "^1.8",
         "tpetry/laravel-postgresql-enhanced": "^0.31"
     },
     "require-dev": {
@@ -46,7 +46,7 @@
         "laravel/sail": "^1.25",
         "mockery/mockery": "^1.6",
         "nunomaduro/larastan": "^2.6",
-        "pestphp/pest": "^2.20",
+        "pestphp/pest": "^2.21",
         "rector/rector": "^0.18",
         "spatie/laravel-ignition": "^2.3"
     },
