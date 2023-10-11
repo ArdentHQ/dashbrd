@@ -106,3 +106,21 @@ it('should get article\'s collections', function () {
         ->and($result->collections->pluck('name'))->toContain($collections[0]->name)
         ->and($result->collections->pluck('name'))->toContain($collections[1]->name);
 });
+
+it('should update article view counts', function () {
+    $articles = Article::factory(3)->create();
+
+    views($articles[0])->record();
+
+    views($articles[1])->record();
+    views($articles[1])->record();
+    views($articles[1])->record();
+
+    Article::updateViewCounts();
+
+    $articles = Article::query()->orderBy('id', 'asc')->get();
+
+    expect($articles[0]->views_count)->toBe(1)
+        ->and($articles[1]->views_count)->toBe(3)
+        ->and($articles[2]->views_count)->toBe(0);
+});
