@@ -92,7 +92,11 @@ class Article extends Model implements HasMedia, Viewable
     {
         return $query->with(['collections' => function ($query) use ($collectionId) {
             $query->when($collectionId, fn($q) => $q->where('collections.id', '!=', $collectionId))
-                ->select(['collections.name', 'collections.extra_attributes->image as image']);
+                ->select([
+                    'collections.name',
+                    'collections.slug',
+                    'collections.extra_attributes->image as image'
+                ]);
         }]);
     }
 
