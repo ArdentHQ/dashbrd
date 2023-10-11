@@ -223,7 +223,7 @@ class AlchemyPendingRequest extends PendingRequest
      *
      * @param  Collection<int, Nft>  $nfts
      */
-    public function nftMetadata(Collection $nfts, Network $network): Web3NftsChunk
+    public function nftMetadataBatch(Collection $nfts, Network $network): Web3NftsChunk
     {
         $this->apiUrl = $this->getNftV2ApiUrl();
 
