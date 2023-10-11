@@ -22,6 +22,7 @@ class ArticleController extends Controller
         $articles = Article::query()
             ->search($request->get('search'))
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
+            ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
             ->withFeaturedCollections()
             ->paginate($pageLimit);
 
@@ -46,6 +47,8 @@ class ArticleController extends Controller
         if ($article->isNotPublished()) {
             abort(404);
         }
+
+        views($article)->record();
 
         return Inertia::render('Articles/Show', [
             'article' => ArticleData::fromModel($article),

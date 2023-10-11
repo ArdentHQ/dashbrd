@@ -264,6 +264,7 @@ class CollectionController extends Controller
             ->isPublished()
             ->search($request->get('search'))
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
+            ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
             ->orderByPivot('order_index', 'asc')
             ->withFeaturedCollections()
             ->paginate($pageLimit);

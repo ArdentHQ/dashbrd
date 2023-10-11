@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -29,6 +30,11 @@ class Article extends Model implements HasMedia, Viewable
         'category' => ArticleCategoryEnum::class,
         'published_at' => 'date',
     ];
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return Article::query()->withFeaturedCollections()->where('slug', $value)->first();
+    }
 
     /**
      * @return BelongsToMany<Collection>
@@ -73,6 +79,15 @@ class Article extends Model implements HasMedia, Viewable
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeSortByPopularity(Builder $query): Builder
+    {
+        return $query->orderBy('articles.views_count', 'desc');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeWithFeaturedCollections(Builder $query, int|null $collectionId = null): Builder
     {
         return $query->with(['collections' => function ($query) use ($collectionId) {
@@ -97,5 +112,15 @@ class Article extends Model implements HasMedia, Viewable
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug')
             ->doNotGenerateSlugsOnUpdate();
+    }
+
+    public static function updateViewCounts(): void
+    {
+        Article::query()
+            ->update([
+                'views_count' => DB::raw(
+                    "(SELECT COUNT(*) FROM views as v WHERE v.viewable_type = 'App\Models\Article' AND articles.id = v.viewable_id)"
+                )
+            ]);
     }
 }
