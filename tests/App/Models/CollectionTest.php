@@ -1131,7 +1131,9 @@ it('filters collections that belongs to wallets that have been signed at least o
         'last_signed_at' => now(),
     ]);
 
-    $notSigned = Wallet::factory()->create();
+    $notSigned = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     $signed2 = Wallet::factory()->create([
         'last_signed_at' => now(),
@@ -1167,12 +1169,10 @@ it('filters collections that belongs to wallets that have been signed at least o
 
     $filtered = Collection::query()->withSignedWallets()->get();
 
-    expect($filtered->count())->toBe(2)
-        ->and($filtered->pluck('id')->sort()->toArray())->toEqual([
-            $collection1->id,
-            $collection4->id,
-        ]);
+    expect($filtered->count())->toBe(2);
 
+    expect($filtered->pluck('id')->contains($collection1->id))->toBeTrue();
+    expect($filtered->pluck('id')->contains($collection4->id))->toBeTrue();
 });
 
 it('should get openSeaSlug', function () {
