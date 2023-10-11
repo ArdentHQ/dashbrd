@@ -6,7 +6,7 @@ namespace App\Jobs;
 
 use App\Jobs\Middleware\RecoverProviderErrors;
 use App\Jobs\Traits\RecoversFromProviderErrors;
-use App\Models\Collection;
+use App\Models\Network;
 use App\Models\Nft;
 use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Support\Web3NftHandler;
@@ -22,15 +22,17 @@ use Illuminate\Support\Facades\Log;
 
 class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use RecoversFromProviderErrors;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(
-        public Collection $collection,
-        public Nft $nft,
-    ) {
+    public function __construct()
+    {
         //
     }
 
@@ -39,39 +41,16 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
      */
     public function handle(AlchemyWeb3DataProvider $provider): void
     {
-        if ($this->collection->isSpam()) {
-            Log::info('RefreshNftMetadata Job: Ignored for spam contract', [
-                'address' => $this->collection->address,
-                'network' => $this->collection->network->id,
-                'token_number' => $this->nft->token_number,
-            ]);
+        $networks = Network::onlyMainnet()->get();
 
-            return;
+        foreach ($networks as $network) {
+            $this->refreshNftMetadataByNetwork($network, $provider);
         }
-
-        Log::info('RefreshNftMetadata Job: Processing', [
-            'address' => $this->collection->address,
-            'network' => $this->collection->network->id,
-            'token_number' => $this->nft->token_number,
-        ]);
-
-        $result = $provider->getCollectionsNfts($this->collection, $this->nft->token_number, 1);
-
-        (new Web3NftHandler(collection: $this->collection))->store(
-            $result->nfts, dispatchJobs: true
-        );
-
-        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
-            'nfts_count' => $result->nfts->count(),
-            'address' => $this->collection->address,
-            'network' => $this->collection->network->id,
-            'token_number' => $this->nft->token_number,
-        ]);
     }
 
     public function uniqueId(): string
     {
-        return self::class.':'.$this->nft->id;
+        return self::class;
     }
 
     /**
@@ -81,12 +60,52 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
     {
         return [
             new RateLimited('nft-refresh'),
-            new RecoverProviderErrors,
+            new RecoverProviderErrors(),
         ];
     }
 
     public function retryUntil(): DateTime
     {
         return now()->addMinutes(10);
+    }
+
+    /**
+     * Fetch nft metadata for a network.
+     *
+     * @return void
+     */
+    private function refreshNftMetadataByNetwork(Network $network, AlchemyWeb3DataProvider $provider)
+    {
+
+        $nfts = Nft::whereNotNull('metadata_requested_at')
+            ->whereHas('collection', function ($query) use ($network) {
+                $query->where('network_id', $network->id);
+            })
+            ->where(function ($query) {
+                $query->whereNull('metadata_fetched_at')->orWhereRaw('metadata_fetched_at < metadata_requested_at');
+            })
+            ->get();
+
+        if (count($nfts) === 0) {
+            Log::info('RefreshNftMetadata Job: No nfts found for metadata update. Aborting.');
+
+            return;
+        }
+
+        // Chunk by 100 to comply with Alchemy's nfts batch limit.
+        $nfts->chunk(100)->map(function ($nftsChunk) use ($provider, $network) {
+
+            $result = $provider->getNftMetadata($nftsChunk, $network);
+
+            (new Web3NftHandler(null, $network))->store(
+                $result->nfts,
+                dispatchJobs: true,
+            );
+        });
+
+        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
+            'nfts_count' => $nfts->count(),
+            'network' => $network->id,
+        ]);
     }
 }
