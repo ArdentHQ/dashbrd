@@ -13,7 +13,7 @@ export const FeaturedCollectionsBanner = ({
     return (
         <div
             data-testid="FeaturedCollectionsBanner"
-            className="flex flex-col items-center justify-between rounded-xl bg-theme-secondary-300 px-6 py-[1.625em] lg:flex-row"
+            className="flex flex-col items-center justify-between rounded-xl bg-theme-secondary-300 px-6 py-[1.625em] lg:flex-row dark:bg-theme-dark-800"
         >
             <div className="text-center lg:text-left">
                 <Heading
@@ -26,7 +26,7 @@ export const FeaturedCollectionsBanner = ({
                     <span> {t("common.collections")}</span>
                 </Heading>
 
-                <p className="mt-0.5 text-xs font-medium text-theme-secondary-700 sm:text-sm">
+                <p className="mt-0.5 text-xs font-medium text-theme-secondary-700 sm:text-sm dark:text-theme-dark-200">
                     {tp("pages.galleries.consists_of_collections", collections.length, {
                         count: collections.length,
                     })}
