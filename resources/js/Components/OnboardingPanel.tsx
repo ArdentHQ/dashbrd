@@ -18,7 +18,7 @@ export const OnboardingPanel = ({ className, heading, subheading, ...properties 
         <div className="relative">
             <Icon
                 name="SpinnerNarrow"
-                className="h-40 w-40 animate-spin text-theme-primary-600"
+                className="h-40 w-40 animate-spin text-theme-primary-600 dark:text-theme-primary-400"
             />
 
             <span className="absolute left-8 top-8 flex items-center justify-center">
@@ -33,6 +33,6 @@ export const OnboardingPanel = ({ className, heading, subheading, ...properties 
             {heading}
         </Heading>
 
-        <h3 className="mt-1 text-sm font-medium text-theme-secondary-700">{subheading}</h3>
+        <h3 className="mt-1 text-sm font-medium text-theme-secondary-700 dark:text-theme-dark-200">{subheading}</h3>
     </div>
 );
