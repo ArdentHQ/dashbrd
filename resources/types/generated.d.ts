@@ -116,6 +116,7 @@ declare namespace App.Data.Articles {
     };
     export type FeaturedCollectionData = {
         name: string;
+        slug: string;
         image: string | null;
     };
 }
