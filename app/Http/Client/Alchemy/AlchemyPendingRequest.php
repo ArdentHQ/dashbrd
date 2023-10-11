@@ -245,6 +245,8 @@ class AlchemyPendingRequest extends PendingRequest
         $nftItems = collect($response)
             ->filter(fn ($nft) => $this->filterNft($nft))
             ->map(function ($nft) use ($network) {
+                // With getNFTMetadataBatch, alchemy returns tokens numbers (`tokenId` field) as number instead of hex,
+                // thus the `convertTokenNumber flag to save it as is withouth attempting to convert from hex.
                 return $this->parseNft($nft, $network->id, convertTokenNumber: false);
             })
             ->values();
