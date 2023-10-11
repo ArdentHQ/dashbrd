@@ -90,7 +90,7 @@ it('should fetch nft metadata', function () {
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
     ]);
 
-    $fetchedNfts = Alchemy::nftMetadata($nfts, $network);
+    $fetchedNfts = Alchemy::nftMetadataBatch($nfts, $network);
 
     expect($fetchedNfts->nfts)->toHaveCount(1);
 });
