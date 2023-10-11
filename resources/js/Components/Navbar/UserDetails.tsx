@@ -128,7 +128,7 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                                         label={
                                                             <>
                                                                 {t("pages.galleries.my_galleries.title")}{" "}
-                                                                <span className="text-theme-secondary-50 dark:text-theme-dark-400">
+                                                                <span className="text-theme-secondary-500 dark:text-theme-dark-400">
                                                                     ({galleriesCount})
                                                                 </span>
                                                             </>
