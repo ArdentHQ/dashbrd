@@ -1085,7 +1085,9 @@ it('filters collections that belongs to wallets that have been signed at least o
         'last_signed_at' => now(),
     ]);
 
-    $notSigned = Wallet::factory()->create();
+    $notSigned = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     $signed2 = Wallet::factory()->create([
         'last_signed_at' => now(),
