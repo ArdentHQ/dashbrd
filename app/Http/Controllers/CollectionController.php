@@ -260,6 +260,8 @@ class CollectionController extends Controller
         $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 12, 96);
 
         $articles = $collection
+            ->search($request->get('search'))
+            ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
             ->articlesWithCollections()
             ->paginate($pageLimit);
 
