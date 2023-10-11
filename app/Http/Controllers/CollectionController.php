@@ -84,7 +84,7 @@ class CollectionController extends Controller
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
-                ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
+                ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
                 ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
                 ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))

@@ -191,7 +191,7 @@ class Collection extends Model
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
         return $query->selectRaw(
-            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nfts.nfts_count)::float) as total_value', $currency->value)
+            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
         )
             ->leftJoin(DB::raw("(
                 SELECT
@@ -200,7 +200,7 @@ class Collection extends Model
                 FROM nfts
                 WHERE nfts.wallet_id = $wallet->id
                 GROUP BY collection_id
-            ) nfts"), 'collections.id', '=', 'nfts.collection_id')
+            ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
             ->orderByRaw("total_value {$direction} {$nullsPosition}")
             ->orderBy('collections.id', $direction);
@@ -218,6 +218,18 @@ class Collection extends Model
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
         )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @param  'asc'|'desc'  $direction
+     * @return Builder<self>
+     */
+    public function scopeOrderByName(Builder $query, string $direction): Builder
+    {
+        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
     }
 
     /**
@@ -353,6 +365,8 @@ class Collection extends Model
     }
 
     /**
+     * Query only the collections that are used by signed wallets.
+     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
