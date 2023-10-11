@@ -190,7 +190,7 @@ class Collection extends Model
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
         return $query->selectRaw(
-            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nfts.nfts_count)::float) as total_value', $currency->value)
+            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
         )
             ->leftJoin(DB::raw("(
                 SELECT
@@ -199,7 +199,7 @@ class Collection extends Model
                 FROM nfts
                 WHERE nfts.wallet_id = $wallet->id
                 GROUP BY collection_id
-            ) nfts"), 'collections.id', '=', 'nfts.collection_id')
+            ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
             ->orderByRaw("total_value {$direction} {$nullsPosition}")
             ->orderBy('collections.id', $direction);
@@ -217,6 +217,18 @@ class Collection extends Model
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
         )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @param  'asc'|'desc'  $direction
+     * @return Builder<self>
+     */
+    public function scopeOrderByName(Builder $query, string $direction): Builder
+    {
+        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
     }
 
     /**
@@ -406,7 +418,7 @@ class Collection extends Model
             DB::raw(sprintf($extraAttributeSelect, 'opensea_slug', 'opensea_slug').' as opensea_slug'),
             // gets the website url with the same logic used on the `website` method
             DB::raw(sprintf('COALESCE(%s, CONCAT(networks.explorer_url, \'%s\', collections.address)) as website', sprintf($extraAttributeSelect, 'website', 'website'), '/token/')),
-            DB::raw('COUNT(collection_nfts.id) as nfts_count'),
+            DB::raw('COUNT(nfts.id) as nfts_count'),
         ])->join(
             'networks',
             'networks.id',
@@ -420,8 +432,8 @@ class Collection extends Model
                 'collections.floor_price_token_id'
             )
             ->leftJoin(
-                'nfts as collection_nfts',
-                'collection_nfts.collection_id',
+                'nfts',
+                'nfts.collection_id',
                 '=',
                 'collections.id'
             );
@@ -431,7 +443,7 @@ class Collection extends Model
                 'wallets as nft_wallets',
                 'nft_wallets.id',
                 '=',
-                'collection_nfts.wallet_id'
+                'nfts.wallet_id'
             )
                 ->where('nft_wallets.user_id', $user->id);
         }
