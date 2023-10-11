@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { ArticlesView } from "@/Pages/Articles/Components/ArticlesView";
+import { ArticlesView, getArticlesInitialState } from "@/Pages/Articles/Components/ArticlesView";
 import { useCollectionArticles } from "@/Pages/Collections/Hooks/useCollectionArticles";
 
 export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.CollectionDetailData }): JSX.Element => {
-    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [filters, setFilters] = useState<Record<string, string>>(() => getArticlesInitialState());
     const { articles, isLoading } = useCollectionArticles(collection.slug, filters);
 
     return (
@@ -11,6 +11,7 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
             articles={articles}
             isLoading={isLoading}
             setFilters={setFilters}
+            filters={filters}
             mode="collection"
         />
     );

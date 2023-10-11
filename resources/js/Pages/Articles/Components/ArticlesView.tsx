@@ -4,7 +4,7 @@ import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
-import { LatestArticles } from "@/Pages/Articles/Components/LatestArticles";
+import { HighlightedArticles } from "@/Pages/Articles/Components/HighlightedArticles";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Components/Articles/ArticlesList";
@@ -13,41 +13,42 @@ import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
-const defaults = {
+export const articlesViewDefaults = {
     sortBy: ArticleSortBy.latest,
     pageLimit: 24,
     debounce: 400,
+    highlightedArticlesCount: 3,
 };
 
 export const ArticlesView = ({
     articles,
     isLoading: loadingArticles,
     setFilters,
+    filters,
     mode,
 }: {
     isLoading: boolean;
     articles?: App.Data.Articles.ArticlesData;
     setFilters: (filters: Record<string, string>) => void;
+    filters: Record<string, string>;
     mode: "collection" | "articles";
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { pageLimit: perPage, view, sort, search, page } = getQueryParameters();
+    const { highlightedArticlesCount, debounce } = articlesViewDefaults;
 
-    const [query, setQuery] = useState<string>(isTruthy(search) ? search : "");
-    const [debouncedQuery] = useDebounce(query, defaults.debounce);
+    const [query, setQuery] = useState<string>(filters.search);
+    const [debouncedQuery] = useDebounce(query, debounce);
 
-    const [pageLimit, setPageLimit] = useState<number>(isTruthy(perPage) ? Number(perPage) : defaults.pageLimit);
+    const [pageLimit, setPageLimit] = useState<number>(Number(filters.pageLimit));
 
-    const [displayType, setDisplayType] = useState(view === "list" ? DisplayTypes.List : DisplayTypes.Grid);
+    const [displayType, setDisplayType] = useState(filters.view as DisplayTypes);
 
     const [isFilterDirty, setFilterIsDirty] = useState(false);
 
     const isLoading = !loadingArticles && isFilterDirty ? true : loadingArticles;
 
-    const [sortBy, setSortBy] = useState<ArticleSortBy>(
-        (sort === "popularity" ? "popularity" : defaults.sortBy) as ArticleSortBy,
-    );
+    const [sortBy, setSortBy] = useState(filters.sort as ArticleSortBy);
 
     useEffect(() => {
         const queryParameters: Record<string, string> = {
@@ -70,11 +71,11 @@ export const ArticlesView = ({
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles) && !isLoading;
 
-    const currentPage = isTruthy(page) ? Number(page) : 1;
-    const showLatestArticlesCards = mode === "articles" && query === "" && currentPage === 1;
+    const currentPage = articles?.paginated.meta.current_page ?? 1;
+    const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
 
     const articlesToShow = articlesLoaded
-        ? articles.paginated.data.slice(showLatestArticlesCards ? 3 : 0, articles.paginated.data.length)
+        ? articles.paginated.data.slice(showHighlighted ? highlightedArticlesCount : 0, articles.paginated.data.length)
         : [];
 
     return (
@@ -90,7 +91,7 @@ export const ArticlesView = ({
 
                 <div className="flex-1">
                     <SearchInput
-                        disabled={articlesLoaded && articlesCount === 0 && search === ""}
+                        disabled={articlesLoaded && articlesCount === 0 && query === ""}
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
@@ -112,7 +113,7 @@ export const ArticlesView = ({
             </div>
             <div className="mb-4 sm:hidden">
                 <SearchInput
-                    disabled={articlesLoaded && articlesCount === 0 && search === ""}
+                    disabled={articlesLoaded && articlesCount === 0 && query === ""}
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
                     onChange={(query) => {
@@ -122,11 +123,11 @@ export const ArticlesView = ({
                 />
             </div>
 
-            {showLatestArticlesCards && (
-                <LatestArticles
+            {showHighlighted && (
+                <HighlightedArticles
                     isLoading={isLoading}
-                    hasEnoughArticles={(articles?.paginated.data.length ?? 0) > 3}
-                    articles={articles?.paginated.data.slice(0, 3) ?? []}
+                    hasEnoughArticles={(articles?.paginated.data.length ?? 0) > highlightedArticlesCount}
+                    articles={articles?.paginated.data.slice(0, highlightedArticlesCount) ?? []}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
@@ -165,4 +166,16 @@ export const ArticlesView = ({
             </div>
         </>
     );
+};
+
+export const getArticlesInitialState = (): Record<string, string> => {
+    const { pageLimit: perPage, view, sort, search, page } = getQueryParameters();
+
+    return {
+        search: isTruthy(search) ? search : "",
+        pageLimit: isTruthy(perPage) ? perPage : articlesViewDefaults.pageLimit.toString(),
+        view: view === "list" ? DisplayTypes.List : DisplayTypes.Grid,
+        sort: sort === "popularity" ? "popularity" : articlesViewDefaults.sortBy,
+        page: isTruthy(page) ? page : "1",
+    };
 };

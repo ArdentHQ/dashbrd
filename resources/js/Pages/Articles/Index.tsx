@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { ArticlesView } from "@/Pages/Articles/Components/ArticlesView";
+import { ArticlesView, getArticlesInitialState } from "@/Pages/Articles/Components/ArticlesView";
 import { useArticles } from "@/Pages/Articles/Hooks/useArticles";
 
 const ArticlesIndex = ({ articles: initialArticles }: { articles: App.Data.Articles.ArticlesData }): JSX.Element => {
     const { t } = useTranslation();
 
-    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [filters, setFilters] = useState<Record<string, string>>(() => getArticlesInitialState());
 
     const isFilterDirty = filters.isFilterDirty === "yes";
 
@@ -28,6 +28,7 @@ const ArticlesIndex = ({ articles: initialArticles }: { articles: App.Data.Artic
                 <ArticlesView
                     articles={isFilterDirty ? articles : initialArticles}
                     isLoading={isFilterDirty ? isLoading : false}
+                    filters={filters}
                     setFilters={setFilters}
                     mode="articles"
                 />
