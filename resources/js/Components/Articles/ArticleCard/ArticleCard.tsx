@@ -23,7 +23,7 @@ export const ArticleCard = ({
     return (
         <a
             data-testid="ArticleCard"
-            href={`/articles/${article.slug}`}
+            href={route("articles.view", article.slug)}
             className={cn("group flex w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300", {
                 "bg-white": !isLargeVariant,
                 "bg-theme-dark-900": isLargeVariant,
