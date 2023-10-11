@@ -1031,17 +1031,27 @@ it('should mark collection as invalid - blacklisted', function () {
 it('should exclude spam contracts', function () {
     $network = Network::factory()->create();
 
-    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
-
-    SpamContract::query()->insert([
-        'address' => $collections->first()->address,
-        'network_id' => $collections->first()->network_id,
+    [$collection, $other] = Collection::factory(2)->create([
+        'network_id' => $network->id,
     ]);
 
-    $validCollections = Collection::query()->withoutSpamContracts()->get();
+    $spamContract = SpamContract::create([
+        'address' => $collection->address,
+        'network_id' => $collection->network_id,
+    ]);
 
-    expect($validCollections->count())->toBe(1)
-        ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
+    $otherSpamContract = SpamContract::create([
+        'address' => $other->address,
+        'network_id' => Network::factory()->create()->id,
+    ]);
+
+    expect($collection->spamContract->is($spamContract))->toBeTrue();
+    expect($other->spamContract)->toBeNull();
+
+    $collections = Collection::withoutSpamContracts()->get();
+
+    expect($collections->count())->toBe(1);
+    expect($collections->first()->slug)->toBe($other->slug);
 });
 
 it('should exclude collections with an invalid supply', function () {
