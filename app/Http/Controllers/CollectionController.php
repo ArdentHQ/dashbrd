@@ -95,7 +95,7 @@ class CollectionController extends Controller
                     'reports',
                     'network',
                     'floorPriceToken',
-                    'nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)->limit(4),
+                    'nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)->limit(5),
                 ])
                 ->withCount(['nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)])
                 ->paginate(25);
