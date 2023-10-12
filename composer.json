@@ -27,6 +27,7 @@
         "monolog/monolog": "^3.4",
         "sentry/sentry-laravel": "^3.8",
         "simplito/elliptic-php": "^1.0",
+        "spatie/browsershot": "^3.59",
         "spatie/laravel-data": "^3.9",
         "spatie/laravel-medialibrary": "^10.13",
         "spatie/laravel-permission": "^5.11",
