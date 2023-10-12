@@ -6,6 +6,7 @@ namespace App\Console;
 
 use App\Console\Commands\FetchCoingeckoTokens;
 use App\Console\Commands\FetchCollectionBannerBatch;
+use App\Console\Commands\FetchCollectionActivity;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
@@ -104,6 +105,11 @@ class Kernel extends ConsoleKernel
             ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
             ->hourly();
+
+        $schedule
+            ->command(FetchCollectionActivity::class)
+            ->withoutOverlapping()
+            ->weeklyOn(Schedule::MONDAY);
 
         $schedule
             ->command(FetchCollectionFloorPrice::class)

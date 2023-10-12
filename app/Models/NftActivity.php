@@ -44,6 +44,7 @@ class NftActivity extends Model
      */
     public function nft(): BelongsTo
     {
-        return $this->belongsTo(Nft::class);
+        return $this->belongsTo(Nft::class, 'token_number', 'token_number')
+                    ->where('collection_id', $this->collection_id);
     }
 }

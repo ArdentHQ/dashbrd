@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
@@ -57,6 +56,8 @@ class Collection extends Model
         'minted_block' => 'int',
         'minted_at' => 'datetime',
         'last_viewed_at' => 'datetime',
+        'is_fetching_activity' => 'bool',
+        'activity_updated_at' => 'datetime',
     ];
 
     /**
@@ -255,7 +256,7 @@ class Collection extends Model
         // Get the latest timestamp for each NFT
         $subselect = sprintf("SELECT timestamp
             FROM nft_activity
-            WHERE nft_activity.nft_id = nfts.id AND lower(recipient) = '%s'
+            WHERE nft_activity.collection_id = nfts.collection_id AND nft_activity.token_number = nfts.token_number AND lower(recipient) = '%s'
             -- Latest timestamp
             ORDER BY timestamp desc
             LIMIT 1", strtolower($wallet->address));
@@ -472,11 +473,11 @@ class Collection extends Model
     }
 
     /**
-     * @return HasManyThrough<NftActivity>
+     * @return HasMany<NftActivity>
      */
-    public function activities(): HasManyThrough
+    public function activities(): HasMany
     {
-        return $this->hasManyThrough(NftActivity::class, Nft::class);
+        return $this->hasMany(NftActivity::class);
     }
 
     public function recentlyViewed(): bool
@@ -562,5 +563,10 @@ class Collection extends Model
     public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
     {
         return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
+    }
+
+    public function isSpam(): bool
+    {
+        return SpamContract::isSpam($this->address, $this->network);
     }
 }
