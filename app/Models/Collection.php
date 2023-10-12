@@ -29,7 +29,7 @@ use Spatie\Sluggable\SlugOptions;
 /**
  * @property ?int $supply
  * @property ?string $floor_price
- * @property ?string $last_indexed_token_number.
+ * @property ?string $last_indexed_token_number
  */
 class Collection extends Model
 {
@@ -190,7 +190,7 @@ class Collection extends Model
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
         return $query->selectRaw(
-            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nfts.nfts_count)::float) as total_value', $currency->value)
+            sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
         )
             ->leftJoin(DB::raw("(
                 SELECT
@@ -199,7 +199,7 @@ class Collection extends Model
                 FROM nfts
                 WHERE nfts.wallet_id = $wallet->id
                 GROUP BY collection_id
-            ) nfts"), 'collections.id', '=', 'nfts.collection_id')
+            ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
             ->orderByRaw("total_value {$direction} {$nullsPosition}")
             ->orderBy('collections.id', $direction);
@@ -217,6 +217,18 @@ class Collection extends Model
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
         )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @param  'asc'|'desc'  $direction
+     * @return Builder<self>
+     */
+    public function scopeOrderByName(Builder $query, string $direction): Builder
+    {
+        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
     }
 
     /**
@@ -320,15 +332,24 @@ class Collection extends Model
     }
 
     /**
+     * @return HasOne<SpamContract>
+     */
+    public function spamContract(): HasOne
+    {
+        return $this->hasOne(SpamContract::class, 'address', 'address')->when(
+            $this->network_id !== null, fn ($query) => $query->where('network_id', $this->network_id)
+        );
+    }
+
+    /**
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
     public function scopeWithoutSpamContracts(Builder $query): Builder
     {
-        return $query->leftJoin('spam_contracts', function ($join) {
-            $join->on('collections.network_id', '=', 'spam_contracts.network_id')
-                ->on('collections.address', '=', 'spam_contracts.address');
-        })->whereNull('spam_contracts.address');
+        return $query->whereDoesntHave('spamContract', function ($query) {
+            $query->whereColumn('collections.network_id', 'spam_contracts.network_id');
+        });
     }
 
     /**
@@ -394,9 +415,10 @@ class Collection extends Model
             DB::raw('tokens.decimals as floor_price_decimals'),
             DB::raw(sprintf($extraAttributeSelect, 'image', 'image').' as image'),
             DB::raw(sprintf($extraAttributeSelect, 'banner', 'banner').' as banner'),
+            DB::raw(sprintf($extraAttributeSelect, 'opensea_slug', 'opensea_slug').' as opensea_slug'),
             // gets the website url with the same logic used on the `website` method
             DB::raw(sprintf('COALESCE(%s, CONCAT(networks.explorer_url, \'%s\', collections.address)) as website', sprintf($extraAttributeSelect, 'website', 'website'), '/token/')),
-            DB::raw('COUNT(collection_nfts.id) as nfts_count'),
+            DB::raw('COUNT(nfts.id) as nfts_count'),
         ])->join(
             'networks',
             'networks.id',
@@ -410,8 +432,8 @@ class Collection extends Model
                 'collections.floor_price_token_id'
             )
             ->leftJoin(
-                'nfts as collection_nfts',
-                'collection_nfts.collection_id',
+                'nfts',
+                'nfts.collection_id',
                 '=',
                 'collections.id'
             );
@@ -421,7 +443,7 @@ class Collection extends Model
                 'wallets as nft_wallets',
                 'nft_wallets.id',
                 '=',
-                'collection_nfts.wallet_id'
+                'nfts.wallet_id'
             )
                 ->where('nft_wallets.user_id', $user->id);
         }
@@ -464,6 +486,49 @@ class Collection extends Model
         }
 
         return $this->last_viewed_at->gte(now()->subDays(1));
+    }
+
+    /**
+     * Determine whether the collection is *potentially* full. We call it "potentially" because there is no way for
+     * us to be 100% sure that the collection is full and we make our best guess.
+     */
+    public function isPotentiallyFull(): bool
+    {
+        // If there is no supply or if the NFTs for the collection haven't been indexed, we know for sure it's not full...
+        if ($this->last_indexed_token_number === null || $this->supply === null) {
+            return false;
+        }
+
+        /** @var string|int $lastToken */
+        $lastToken = $this->last_indexed_token_number;
+
+        // We cast to string as `last_indexed_token_number` can be very, very large (non-integer)...
+        $supply = (string) $this->supply;
+        $lastIndexed = (string) $this->last_indexed_token_number;
+
+        // If supply matches the last indexed NFT, we can assume it's potentially full...
+        if ($supply === $lastIndexed) {
+            return true;
+        }
+
+        $count = $this->nfts()->count();
+
+        // Some collection NFT IDs start from 0 so we gotta take that into account...
+        if (
+            is_int($lastToken) &&
+            $this->supply === $lastToken + 1 &&
+            $this->supply === $count
+        ) {
+            return true;
+        }
+
+        // Handles case where token number is an arbitrary value, but much larger than the supply...
+        if (! is_int($lastToken) && $supply < $lastIndexed && $this->supply === $count) {
+            return true;
+        }
+
+        // Handles the burn scenario, causing the supply to decrease over time...
+        return $this->supply <= $count;
     }
 
     public function isInvalid(bool $withSpamCheck = true): bool

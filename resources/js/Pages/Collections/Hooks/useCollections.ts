@@ -5,6 +5,7 @@ import { type PaginationData } from "@/Components/Pagination/Pagination.contract
 import { useInertiaHeader } from "@/Hooks/useInertiaHeader";
 import { useLiveSearch } from "@/Hooks/useLiveSearch";
 import { type CollectionDisplayType } from "@/Pages/Collections/Components/CollectionsFilter";
+import { ExplorerChains } from "@/Utils/Explorer";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
@@ -16,6 +17,7 @@ interface QueryParameters {
     showHidden?: boolean;
     query?: string;
     sort?: string | null;
+    selectedChainIds?: number[];
 }
 
 interface CollectionsResponse {
@@ -25,22 +27,34 @@ interface CollectionsResponse {
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
     hiddenCollectionAddresses: string[];
+    availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
 }
 
 interface CollectionsState {
     loadMore: () => void;
-    reload: ({ showHidden, page }?: { showHidden?: boolean; page?: number }) => void;
+    reload: ({
+        showHidden,
+        page,
+        selectedChainIds,
+    }?: {
+        showHidden?: boolean;
+        page?: number;
+        selectedChainIds?: number[];
+    }) => void;
     collections: App.Data.Collections.CollectionData[];
     nfts: App.Data.Collections.CollectionNftData[];
     isLoading: boolean;
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
     hiddenCollectionAddresses: string[];
+    availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
     stats: App.Data.Collections.CollectionStatsData;
     search: (searchQuery: string) => void;
     query: string;
     isSearching: boolean;
     reportCollection: (address: string) => void;
+    selectedChainIds: number[];
+    setSelectedChainIds: (chainIds: number[]) => void;
 }
 
 export const useCollections = ({
@@ -72,7 +86,11 @@ export const useCollections = ({
     const [reportByCollectionAvailableIn, setSeportByCollectionAvailableIn] = useState<ReportByCollectionAvailableIn>(
         {},
     );
-
+    const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([
+        ExplorerChains.EthereumMainnet,
+        ExplorerChains.PolygonMainnet,
+    ]);
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
@@ -84,13 +102,17 @@ export const useCollections = ({
         setIsLoading(true);
         isLoadingMore.current = true;
 
-        const pageUrlWithSearch = replaceUrlQuery({
+        let pageUrlWithSearch = replaceUrlQuery({
             query,
             page: isNumber(page) && Number(page) !== 1 ? page.toString() : "",
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
             view,
         });
+
+        if (selectedChainIds.length > 0) {
+            pageUrlWithSearch += `&chain=${selectedChainIds.join(",")}`;
+        }
 
         const { data } = await axios.get<CollectionsResponse>(pageUrlWithSearch, {
             requestId: "collections-page",
@@ -110,6 +132,7 @@ export const useCollections = ({
         setStats(data.stats);
         setAlreadyReportedByCollection(data.alreadyReportedByCollection);
         setSeportByCollectionAvailableIn(data.reportByCollectionAvailableIn);
+        setAvailableNetworks(data.availableNetworks);
 
         if (showHidden && data.hiddenCollectionAddresses.length === 0) {
             replaceUrlQuery({ showHidden: "" });
@@ -131,7 +154,7 @@ export const useCollections = ({
         setQuery,
         loading: isSearching,
     } = useLiveSearch({
-        request: async (query: string) => await fetchCollections({ query, showHidden, sort: sortBy }),
+        request: async (query: string) => await fetchCollections({ query, showHidden, sort: sortBy, selectedChainIds }),
         onError: onSearchError,
     });
 
@@ -148,17 +171,19 @@ export const useCollections = ({
             page: pageMeta.currentPage + 1,
             query,
             showHidden,
+            selectedChainIds,
             sort: sortBy,
         });
     };
 
-    const reload = (options: { showHidden?: boolean; page?: number } = {}): void => {
+    const reload = (options: { showHidden?: boolean; page?: number; selectedChainIds?: number[] } = {}): void => {
         setCollections([]);
 
         void fetchCollections({
             page: pageMeta.currentPage,
             query,
             showHidden,
+            selectedChainIds,
             sort: sortBy,
             ...options,
         });
@@ -169,7 +194,7 @@ export const useCollections = ({
             setQuery(searchQuery);
 
             if (!isTruthy(searchQuery)) {
-                void fetchCollections({ sort: sortBy, showHidden });
+                void fetchCollections({ sort: sortBy, showHidden, selectedChainIds });
             }
         },
         [setQuery, setCollections, sortBy, showHidden],
@@ -184,6 +209,7 @@ export const useCollections = ({
         hiddenCollectionAddresses,
         alreadyReportedByCollection,
         reportByCollectionAvailableIn,
+        availableNetworks,
         search,
         query,
         stats,
@@ -192,5 +218,7 @@ export const useCollections = ({
             alreadyReportedByCollection[address] = true;
             setAlreadyReportedByCollection(alreadyReportedByCollection);
         },
+        selectedChainIds,
+        setSelectedChainIds,
     };
 };

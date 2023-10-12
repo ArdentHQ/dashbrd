@@ -34,6 +34,7 @@ export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProperties>(
             {
                 "button-with-icon": icon != null && children != null,
                 "opacity-25": processing,
+                "cursor-not-allowed": disabled,
             },
             className,
         );

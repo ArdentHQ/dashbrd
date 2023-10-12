@@ -10,7 +10,7 @@ export const SidebarHead = ({ title, subtitle, className }: SidebarHeadPropertie
 
     return (
         <div
-            className={cn("rounded-t-xl xl:bg-theme-secondary-50", className)}
+            className={cn("rounded-t-xl xl:bg-theme-secondary-50 dark:xl:bg-theme-dark-950", className)}
             data-testid="SidebarHead"
         >
             {isTruthy(title) && (
@@ -19,7 +19,9 @@ export const SidebarHead = ({ title, subtitle, className }: SidebarHeadPropertie
                 </div>
             )}
 
-            {isTruthy(subtitle) && <p className="mt-1 text-sm font-medium text-theme-secondary-700">{subtitle}</p>}
+            {isTruthy(subtitle) && (
+                <p className="mt-1 text-sm font-medium text-theme-secondary-700 dark:text-theme-dark-200">{subtitle}</p>
+            )}
         </div>
     );
 };

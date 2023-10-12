@@ -38,8 +38,9 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                 onClick={() => {
                     setMenuOpen(true);
                 }}
+                iconSize="md"
                 data-testid="MobileMenu__Trigger"
-                baseClassName="md-lg:hidden mr-3 border-white xs:border-theme-secondary-300 w-auto xs:w-10"
+                baseClassName="md-lg:hidden mr-3 border-white xs:border-theme-secondary-300 w-auto xs:w-10 dark:border-0 dark:xs:border hover:bg-transparent xs:hover:bg-theme-secondary-300 dark:hover:bg-transparent xs:dark:hover:bg-theme-dark-700"
             />
             <Slider
                 isOpen={isMenuOpen}
@@ -66,7 +67,7 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                             />
                         </section>
 
-                        <section className="fixed bottom-0 w-full border-t border-theme-secondary-300 bg-white py-4">
+                        <section className="fixed bottom-0 w-full border-t border-theme-secondary-300 bg-white py-4 dark:border-theme-dark-700 dark:bg-theme-dark-900">
                             {isAuthenticated && currency !== undefined && (
                                 <div
                                     className="px-6 sm:px-8"
@@ -137,7 +138,9 @@ const Nav = ({
             suffix: null,
             route: "galleries",
             icon: "Image",
-            className: isAuthenticated ? "border-b border-theme-secondary-300 pb-3.5 mb-3.5" : "",
+            className: isAuthenticated
+                ? "border-b border-theme-secondary-300 pb-6 mb-6 dark:border-theme-dark-700"
+                : "",
         },
         {
             isVisible: isAuthenticated,
@@ -173,7 +176,9 @@ const Nav = ({
                                     <>
                                         {item.title}{" "}
                                         {item.suffix !== null && (
-                                            <span className="text-theme-secondary-500">({item.suffix})</span>
+                                            <span className="text-theme-secondary-500 dark:text-theme-dark-400">
+                                                ({item.suffix})
+                                            </span>
                                         )}
                                     </>
                                 }
@@ -199,12 +204,23 @@ export const NavLink = ({
     <Link href={href}>
         <div
             data-testid="MobileMenu__NavLink"
-            className={cn("flex items-center space-x-3 rounded-full font-medium", {
-                "text-theme-secondary-900": active,
-                "text-theme-secondary-700": !active,
-            })}
+            className={cn(
+                "transition-default group flex items-center space-x-3 rounded-full font-medium dark:hover:text-theme-dark-50",
+                {
+                    "text-theme-secondary-900 dark:text-white": active,
+                    "text-theme-secondary-700 dark:text-theme-dark-200": !active,
+                },
+            )}
         >
-            <div className="rounded-full bg-theme-primary-50 p-2.5">
+            <div
+                className={cn(
+                    "transition-default rounded-full bg-theme-primary-50 p-2.5 dark:group-hover:bg-theme-dark-700 dark:group-hover:text-theme-dark-50",
+                    {
+                        "dark:bg-theme-dark-950 dark:text-white": active,
+                        "dark:bg-theme-dark-800 dark:text-theme-dark-300": !active,
+                    },
+                )}
+            >
                 <Icon
                     name={icon}
                     size="lg"
@@ -232,8 +248,10 @@ const TransactionActions = ({
     return (
         <div className="mb-4 flex items-end justify-between">
             <div>
-                <p className="text-sm font-medium leading-5.5 text-theme-secondary-500">{t("common.my_balance")}</p>
-                <p className="text-xl font-medium leading-8 text-theme-secondary-900">
+                <p className="text-sm font-medium leading-5.5 text-theme-secondary-500 dark:text-theme-dark-200">
+                    {t("common.my_balance")}
+                </p>
+                <p className="text-xl font-medium leading-8 text-theme-secondary-900 dark:text-theme-dark-50">
                     <FormatFiat
                         value={wallet.totalBalanceInCurrency}
                         currency={currency}
@@ -269,13 +287,14 @@ const PortfolioBreakdown = ({ wallet }: { wallet: App.Data.Wallet.WalletData }):
                 <PortfolioBreakdownLine assets={assets} />
 
                 <div className="mt-2 flex items-center justify-between">
-                    <p className="text-sm font-medium leading-5.5 text-theme-secondary-700">
-                        {t("common.tokens")}: <span className="text-theme-secondary-900">{tokenCount}</span>
+                    <p className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200">
+                        {t("common.tokens")}:{" "}
+                        <span className="text-theme-secondary-900 dark:text-theme-dark-50">{tokenCount}</span>
                     </p>
 
                     <Link
                         href={route("dashboard")}
-                        className="transition-default text-sm font-medium text-theme-primary-600 hover:text-theme-primary-700"
+                        className="transition-default text-sm font-medium text-theme-primary-600 hover:text-theme-primary-700 dark:text-theme-primary-400 dark:hover:text-theme-primary-500"
                     >
                         {t("common.my_wallet")}
                     </Link>
@@ -289,9 +308,9 @@ const Footer = ({ address }: { address: string }): JSX.Element => {
     address = formatAddress(address);
 
     return (
-        <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 font-medium text-theme-secondary-700">
-                <div className="mr-3 flex items-center border-r border-theme-secondary-300 pr-3">
+        <div className="flex items-center justify-between border-t border-theme-secondary-300 pt-4 dark:border-theme-dark-700">
+            <div className="flex items-center space-x-3 font-medium text-theme-secondary-700 dark:text-theme-dark-200">
+                <div className="mr-3 flex items-center border-r border-theme-secondary-300 pr-3 dark:border-theme-dark-700">
                     <Avatar address={address} />
                 </div>
                 <TruncateMiddle
@@ -310,7 +329,7 @@ const Footer = ({ address }: { address: string }): JSX.Element => {
             >
                 <Icon
                     name="DoorExit"
-                    className="h-5 w-5 text-theme-primary-600"
+                    className="h-5 w-5 text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500"
                 />
             </Link>
         </div>
