@@ -30,7 +30,7 @@ class ArticleController extends Controller
                 ->get();
         }
 
-        /** @var LengthAwarePaginator $articles */
+        /** @var LengthAwarePaginator<Article> $articles */
         $articles = Article::query()
             ->search($request->get('search'))
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
