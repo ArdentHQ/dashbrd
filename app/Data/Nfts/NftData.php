@@ -37,7 +37,7 @@ class NftData extends Data
             images: NftImagesData::from($nft->images()),
             wallet: $nft->wallet_id ? NftWalletData::fromModel($nft->wallet) : null,
             lastViewedAt: $nft->last_viewed_at,
-            lastActivityFetchedAt: $nft->last_activity_fetched_at,
+            lastActivityFetchedAt: $nft->collection->activity_updated_at,
         );
     }
 }
