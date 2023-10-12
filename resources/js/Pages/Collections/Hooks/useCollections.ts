@@ -65,12 +65,14 @@ export const useCollections = ({
         collections: 0,
         value: null,
     },
+    initialSelectedChainIds,
 }: {
     view: CollectionDisplayType;
     initialStats: App.Data.Collections.CollectionStatsData;
     showHidden: boolean;
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
+    initialSelectedChainIds?: string[];
 }): CollectionsState => {
     const [isLoading, setIsLoading] = useState(true);
     const isLoadingMore = useRef(false);
@@ -84,10 +86,11 @@ export const useCollections = ({
         {},
     );
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([
-        ExplorerChains.EthereumMainnet,
-        ExplorerChains.PolygonMainnet,
-    ]);
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(
+        isTruthy(initialSelectedChainIds) && initialSelectedChainIds.length > 0
+            ? initialSelectedChainIds.map((id) => Number(id))
+            : [ExplorerChains.EthereumMainnet, ExplorerChains.PolygonMainnet],
+    );
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
