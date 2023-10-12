@@ -42,7 +42,7 @@ class ArticleResource extends Resource
                     ])
                     ->default(ArticleCategoryEnum::News->value)
                     ->required(),
-                Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full'),
+                Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full')->maxLength(160)->helperText('Max 160 characters'),
                 Textarea::make('content')->required()->autosize()->columnSpan('full'),
                 Select::make('user_id')
                     ->relationship(
