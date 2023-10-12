@@ -100,11 +100,9 @@ class Kernel extends ConsoleKernel
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
         $schedule
-            // Command only fetches collections that doesn't have a slug yet
-            // so in most cases it will not run any request
-            ->command(FetchCollectionOpenseaSlug::class)
+            ->command(FetchCollectionFloorPrice::class)
             ->withoutOverlapping()
-            ->hourly();
+            ->hourlyAt(5);
 
         $schedule
             ->command(FetchCollectionActivity::class)
@@ -112,14 +110,14 @@ class Kernel extends ConsoleKernel
             ->weeklyOn(Schedule::MONDAY);
 
         $schedule
-            ->command(FetchCollectionFloorPrice::class)
+            ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
-            ->hourlyAt(5);
+            ->hourlyAt(10);
 
         $schedule
             ->command(FetchWalletNfts::class)
             ->withoutOverlapping()
-            ->hourlyAt(10); // offset by 10 mins so it's not run the same time as FetchEnsDetails...
+            ->hourlyAt(15); // offset by 15 mins so it's not run the same time as FetchEnsDetails...
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void

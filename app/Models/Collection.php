@@ -553,4 +553,22 @@ class Collection extends Model
     {
         return SpamContract::isSpam($this->address, $this->network);
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByFloorPriceLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'floor_price_last_fetched_at\' ASC NULLS FIRST');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByOpenseaSlugLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'opensea_slug_last_fetched_at\' ASC NULLS FIRST');
+    }
 }
