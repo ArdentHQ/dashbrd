@@ -30,6 +30,23 @@ class Article extends Model implements HasMedia, Viewable
         'published_at' => 'date',
     ];
 
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('cover')
+            ->singleFile()
+            ->registerMediaConversions(function () {
+                $this
+                    ->addMediaConversion('large')
+                    ->width(1000);
+                $this
+                    ->addMediaConversion('large@2x')
+                    ->width(1000 * 2);
+
+                // @TODO: Define the rest of conversions
+            });
+    }
+
     /**
      * @return BelongsToMany<Collection>
      */

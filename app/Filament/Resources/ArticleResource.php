@@ -13,6 +13,7 @@ use App\Models\Article;
 use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -42,6 +43,15 @@ class ArticleResource extends Resource
                     ])
                     ->default(ArticleCategoryEnum::News->value)
                     ->required(),
+
+                SpatieMediaLibraryFileUpload::make('cover')
+                    ->collection('cover')
+                    ->columnSpan('full')
+                    ->image()
+                    ->imageEditor()
+                    ->imageCropAspectRatio('16:9')
+                    ->rules(['max:5120']),
+
                 Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full'),
                 Textarea::make('content')->required()->autosize()->columnSpan('full'),
                 Select::make('user_id')
