@@ -22,7 +22,6 @@ interface QueryParameters {
 
 interface CollectionsResponse {
     collections: PaginationData<App.Data.Collections.CollectionData>;
-    nfts: App.Data.Collections.CollectionNftData[];
     stats: App.Data.Collections.CollectionStatsData;
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
@@ -42,7 +41,6 @@ interface CollectionsState {
         selectedChainIds?: number[];
     }) => void;
     collections: App.Data.Collections.CollectionData[];
-    nfts: App.Data.Collections.CollectionNftData[];
     isLoading: boolean;
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
@@ -77,7 +75,6 @@ export const useCollections = ({
     const [isLoading, setIsLoading] = useState(true);
     const isLoadingMore = useRef(false);
     const [collections, setCollections] = useState<App.Data.Collections.CollectionData[]>([]);
-    const [nfts, setNfts] = useState<App.Data.Collections.CollectionNftData[]>([]);
     const [pageMeta, setPageMeta] = useState({ currentPage: 1, lastPage: 1 });
 
     const [hiddenCollectionAddresses, setHiddenCollectionAddresses] = useState<string[]>([]);
@@ -123,10 +120,8 @@ export const useCollections = ({
 
         if (page !== 1) {
             setCollections([...existingCollections, ...data.collections.data]);
-            setNfts((existing) => [...existing, ...data.nfts]);
         } else {
             setCollections(data.collections.data);
-            setNfts(data.nfts);
         }
         setHiddenCollectionAddresses(data.hiddenCollectionAddresses);
         setStats(data.stats);
@@ -202,7 +197,6 @@ export const useCollections = ({
 
     return {
         collections,
-        nfts,
         isLoading: isLoading && collections.length === 0 && !isTruthy(query),
         loadMore,
         reload,
