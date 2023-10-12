@@ -41,13 +41,9 @@ class ArticleController extends Controller
 
         $currentPage = $request->get('page') ? (int) $request->get('page') : 1;
 
-        // include highlighted articles only in the first page
-        if ($currentPage === 1) {
-            $articles = $highlightedArticles->concat($articles->items());
-        }
-
+        // prepend highlighted articles only in the first page
         $articles = new LengthAwarePaginator(
-            items: $articles,
+            items: $currentPage === 1 ? $highlightedArticles->concat($articles->items()) : $articles->items(),
             total: $articles->total(),
             perPage: $articles->perPage(),
             currentPage: $articles->currentPage(),
