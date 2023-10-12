@@ -104,14 +104,15 @@ class Kernel extends ConsoleKernel
                 ->hourlyAt(5);
 
         $schedule
-            ->command(FetchCollectionOpenseaSlug::class)
-            ->withoutOverlapping()
-            ->hourlyAt(10);
-
-        $schedule
             ->command(FetchWalletNfts::class)
             ->withoutOverlapping()
-            ->hourlyAt(15); // offset by 15 mins so it's not run the same time as FetchEnsDetails...
+            ->hourlyAt(10); // offset by 10 mins so it's not run the same time as FetchEnsDetails...
+
+        $schedule
+            ->command(FetchCollectionOpenseaSlug::class)
+            ->withoutOverlapping()
+            ->hourlyAt(15);
+
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void
