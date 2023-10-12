@@ -22,7 +22,7 @@ class ArticleController extends Controller
 
         $highlightedArticles = collect();
 
-        if (!$request->get('search')) {
+        if (! $request->get('search')) {
             $highlightedArticles = Article::query()
                 ->sortByPublishedDate()
                 ->withFeaturedCollections()
@@ -38,7 +38,6 @@ class ArticleController extends Controller
             ->whereNotIn('articles.id', $highlightedArticles->pluck('id'))
             ->withFeaturedCollections()
             ->paginate($pageLimit);
-
 
         $articles = new LengthAwarePaginator(
             items: $highlightedArticles->concat($articles->items()),
