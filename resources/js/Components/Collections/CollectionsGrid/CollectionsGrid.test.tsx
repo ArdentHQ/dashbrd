@@ -128,7 +128,6 @@ describe("CollectionsGrid", () => {
             <CollectionsGrid
                 hiddenCollectionAddresses={[]}
                 collections={collectionsSortedByFloorPrice}
-                nfts={[]}
                 alreadyReportedByCollection={{}}
                 reportByCollectionAvailableIn={{}}
                 onChanged={vi.fn()}
