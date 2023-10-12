@@ -6,6 +6,7 @@ use App\Jobs\RefreshNftMetadata;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\Nft;
+use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
 
 it('can refresh metadata of nft', function () {
@@ -30,4 +31,33 @@ it('can refresh metadata of nft', function () {
         ->assertJson(['success' => true]);
 
     Bus::assertDispatchedTimes(RefreshNftMetadata::class, 1);
+});
+
+it('should not refresh if spam contract', function () {
+    Bus::fake();
+
+    $user = createUser();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $nft = Nft::factory()->create([
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection->id,
+    ]);
+
+    SpamContract::query()->create([
+        'address' => $collection->address,
+        'network_id' => $network->id,
+    ]);
+
+    $this->actingAs($user)
+        ->post(route('nft.refresh', [$collection->slug, $nft->token_number]))
+        ->assertStatus(200)
+        ->assertJson([]);
+
+    Bus::assertDispatchedTimes(RefreshNftMetadata::class, 0);
 });

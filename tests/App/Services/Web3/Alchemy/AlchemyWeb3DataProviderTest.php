@@ -11,6 +11,7 @@ use App\Enums\TraitDisplayType;
 use App\Exceptions\NotImplementedException;
 use App\Models\Collection as CollectionModel;
 use App\Models\Network;
+use App\Models\Nft;
 use App\Models\Wallet;
 use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Support\Facades\Alchemy;
@@ -157,6 +158,32 @@ it('should getWalletNfts', function () {
         ->and($tokens[2]->floorPrice->currency)->toEqual('eth');
 });
 
+it('should getNftMetadata', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+    ]);
+
+    $user = createUser();
+    $network = Network::polygon();
+    $collection = CollectionModel::factory()->create(['network_id' => $network->id]);
+
+    $nfts = collect();
+    $nft = Nft::factory()->create([
+        'wallet_id' => $user->wallet,
+        'collection_id' => $collection,
+    ]);
+
+    $nfts->push($nft);
+
+    $provider = new AlchemyWeb3DataProvider();
+    $tokens = $provider->getNftMetadata($nfts, $network)->nfts;
+
+    expect($tokens)->toBeInstanceOf(Collection::class)
+        ->and($tokens)->toHaveCount(1)
+        ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
+        ->and($tokens[0]->tokenAddress)->toBe('0x0e33fd2db4f140dca8f65671c40e36f8fd648fff');
+});
+
 it('should extract nft images', function () {
     Alchemy::fake([
         '*' => Http::response(fixtureData('alchemy.nfts_media'), 200),
@@ -206,7 +233,7 @@ it('should extract nft traits', function () {
 });
 
 it('should throw not implemented exception when trying to resolve ENS domain', function () {
-    (new AlchemyWeb3DataProvider)->getEnsDomain(
+    (new AlchemyWeb3DataProvider())->getEnsDomain(
         Wallet::factory()->create()
     );
 })->throws(NotImplementedException::class);
