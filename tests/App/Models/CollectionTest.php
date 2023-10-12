@@ -943,6 +943,69 @@ it('can determine whether collection was recently viewed', function () {
     expect($collection->recentlyViewed())->toBeFalse();
 });
 
+it('can determine whether the collection is potentially full', function () {
+    expect((new Collection([
+        'supply' => null,
+    ]))->isPotentiallyFull())->toBeFalse();
+
+    expect((new Collection([
+        'last_indexed_token_number' => null,
+    ]))->isPotentiallyFull())->toBeFalse();
+
+    expect((new Collection([
+        'supply' => 10,
+        'last_indexed_token_number' => 10,
+    ]))->isPotentiallyFull())->toBeTrue();
+
+    $collection = Collection::factory()->create([
+        'supply' => 10,
+        'last_indexed_token_number' => 5,
+    ]);
+
+    Nft::factory(5)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeFalse();
+
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 5,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // zero-based NFT token numbers
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 9,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // burning
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => 1,
+        'supply' => 10,
+    ]);
+
+    Nft::factory(20)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+
+    // arbitrary value
+    $collection = Collection::factory()->create([
+        'last_indexed_token_number' => '115790067969782405922571518180952299168544685841472255659504762311331546978981',
+        'supply' => 10,
+    ]);
+
+    Nft::factory(10)->recycle($collection)->create();
+
+    expect($collection->isPotentiallyFull())->toBeTrue();
+});
+
 it('should mark collection as invalid - unacceptable supply', function () {
     $collection = new Collection([
         'supply' => null,
@@ -1002,17 +1065,27 @@ it('should mark collection as invalid - blacklisted', function () {
 it('should exclude spam contracts', function () {
     $network = Network::factory()->create();
 
-    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
-
-    SpamContract::query()->insert([
-        'address' => $collections->first()->address,
-        'network_id' => $collections->first()->network_id,
+    [$collection, $other] = Collection::factory(2)->create([
+        'network_id' => $network->id,
     ]);
 
-    $validCollections = Collection::query()->withoutSpamContracts()->get();
+    $spamContract = SpamContract::create([
+        'address' => $collection->address,
+        'network_id' => $collection->network_id,
+    ]);
 
-    expect($validCollections->count())->toBe(1)
-        ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
+    $otherSpamContract = SpamContract::create([
+        'address' => $other->address,
+        'network_id' => Network::factory()->create()->id,
+    ]);
+
+    expect($collection->spamContract->is($spamContract))->toBeTrue();
+    expect($other->spamContract)->toBeNull();
+
+    $collections = Collection::withoutSpamContracts()->get();
+
+    expect($collections->count())->toBe(1);
+    expect($collections->first()->slug)->toBe($other->slug);
 });
 
 it('should exclude collections with an invalid supply', function () {
@@ -1046,7 +1119,9 @@ it('filters collections that belongs to wallets that have been signed at least o
         'last_signed_at' => now(),
     ]);
 
-    $notSigned = Wallet::factory()->create();
+    $notSigned = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     $signed2 = Wallet::factory()->create([
         'last_signed_at' => now(),
@@ -1082,12 +1157,10 @@ it('filters collections that belongs to wallets that have been signed at least o
 
     $filtered = Collection::query()->withSignedWallets()->get();
 
-    expect($filtered->count())->toBe(2)
-        ->and($filtered->pluck('id')->sort()->toArray())->toEqual([
-            $collection1->id,
-            $collection4->id,
-        ]);
+    expect($filtered->count())->toBe(2);
 
+    expect($filtered->pluck('id')->contains($collection1->id))->toBeTrue();
+    expect($filtered->pluck('id')->contains($collection4->id))->toBeTrue();
 });
 
 it('should get openSeaSlug', function () {
@@ -1126,6 +1199,76 @@ it('sorts collections last time nft was fetched', function () {
     ]);
 
     $ids = Collection::orderByOldestNftLastFetchedAt()->pluck('id')->toArray();
+
+    expect($ids)->toEqual([
+        $collection3->id,
+        $collection2->id,
+        $collection1->id,
+        $collection4->id,
+    ]);
+});
+
+it('sorts collections last time floor price was fetched', function () {
+    // fetched yesterday
+    $collection1 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => now()->subDays(1),
+        ],
+    ]);
+
+    // fetched one month ago
+    $collection2 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => now()->subMonth(),
+        ],
+    ]);
+
+    // never fetched
+    $collection3 = Collection::factory()->create();
+
+    // fetched now
+    $collection4 = Collection::factory()->create([
+        'extra_attributes' => [
+            'floor_price_last_fetched_at' => now(),
+        ],
+    ]);
+
+    $ids = Collection::orderByFloorPriceLastFetchedAt()->pluck('id')->toArray();
+
+    expect($ids)->toEqual([
+        $collection3->id,
+        $collection2->id,
+        $collection1->id,
+        $collection4->id,
+    ]);
+});
+
+it('sorts collections last time opesea slug was fetched', function () {
+    // fetched yesterday
+    $collection1 = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug_last_fetched_at' => now()->subDays(1),
+        ],
+    ]);
+
+    // fetched one month ago
+    $collection2 = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug_last_fetched_at' => now()->subMonth(),
+        ],
+    ]);
+
+    // never fetched
+    $collection3 = Collection::factory()->create();
+
+    // fetched now
+    $collection4 = Collection::factory()->create([
+        'extra_attributes' => [
+            'opensea_slug_last_fetched_at' => now(),
+        ],
+    ]);
+
+    $ids = Collection::orderByOpenseaSlugLastFetchedAt()->pluck('id')->toArray();
 
     expect($ids)->toEqual([
         $collection3->id,

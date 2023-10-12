@@ -1,8 +1,9 @@
 import React from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
+import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
 
 describe("AuthOverlay", () => {
     const connectWalletMock = vi.fn();
@@ -14,6 +15,7 @@ describe("AuthOverlay", () => {
 
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
     });
 
     afterAll(() => {
@@ -25,6 +27,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -48,6 +51,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -66,6 +70,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
                 mustBeSigned={true}
             />,
@@ -85,6 +90,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={true}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -108,6 +114,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -131,6 +138,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={true}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -155,6 +163,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={true}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -181,6 +190,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -202,6 +212,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={true}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -220,6 +231,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -237,6 +249,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -254,6 +267,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -271,6 +285,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -289,6 +304,7 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={true}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
@@ -301,10 +317,130 @@ describe("AuthOverlay", () => {
             <AuthOverlay
                 show={false}
                 showCloseButton={false}
+                showBackButton={false}
                 closeOverlay={vi.fn()}
             />,
         );
 
         expect(screen.queryByTestId("AuthOverlay")).not.toBeInTheDocument();
+    });
+
+    it("should render without back button if showBackButton is false", () => {
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.queryByTestId("AuthOverlay__back-button")).not.toBeInTheDocument();
+    });
+
+    it("should render back button if showBackButton is true", () => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            requiresSignature: true,
+        });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__back-button")).toBeInTheDocument();
+    });
+
+    it("should redirect to page if referrer is null", () => {
+        vi.spyOn(document, "referrer", "get").mockReturnValue("");
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            requiresSignature: true,
+        });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
+        expect(window.location.href).toContain("/");
+    });
+
+    it("should redirect to previous page if referrer is not null", () => {
+        vi.spyOn(document, "referrer", "get").mockReturnValue("http://localhost:3000/");
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            requiresSignature: true,
+        });
+        const backSpy = vi.spyOn(window.history, "back");
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
+        expect(backSpy).toHaveBeenCalled();
+    });
+
+    it("should render default image if dark mode is not active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__LightModeImage")).toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__DarkModeImage")).not.toBeInTheDocument();
+    });
+
+    it("should render with alt image if dark mode is active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay__DarkModeImage")).toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__LightModeImage")).not.toBeInTheDocument();
+    });
+
+    it("should not set blur to layout if dark mode is active", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={true}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByTestId("AuthOverlay")).not.toHaveClass("blur");
     });
 });

@@ -125,7 +125,6 @@ declare namespace App.Data.Collections {
         owners: number | null;
         nftsCount: number;
         mintedAt: number | null;
-        nfts: App.Data.Collections.CollectionNftsData;
     };
     export type CollectionNftData = {
         id: number;
@@ -134,9 +133,6 @@ declare namespace App.Data.Collections {
         tokenNumber: string;
         images: App.Data.Nfts.NftImagesData;
         traits: Array<App.Data.Collections.CollectionTraitData>;
-    };
-    export type CollectionNftsData = {
-        paginated: Array<App.Data.Collections.CollectionNftData>;
     };
     export type CollectionStatsData = {
         nfts: number;
@@ -256,6 +252,7 @@ declare namespace App.Data.Gallery {
         floorPriceDecimals: number | null;
         lastActivityFetchedAt: string | null;
         lastViewedAt: string | null;
+        ownedByCurrentUser: boolean;
     };
     export type GalleryNftsData = {
         paginated: {
@@ -285,6 +282,17 @@ declare namespace App.Data.Gallery {
         address: string;
         domain: string | null;
         avatar: App.Data.Wallet.WalletAvatarData;
+    };
+}
+declare namespace App.Data.Network {
+    export type NetworkWithCollectionsData = {
+        id: number;
+        name: string;
+        isMainnet: boolean;
+        chainId: App.Enums.Chains;
+        publicRpcProvider: string;
+        explorerUrl: string;
+        collectionsCount: number;
     };
 }
 declare namespace App.Data.Nfts {
@@ -415,16 +423,9 @@ declare namespace App.Data.Wallet {
         totalUsd: number;
         totalBalanceInCurrency: string;
         totalTokens: number;
-        nfts: WalletNftData[];
-        nftCount: number;
         collectionCount: number;
-        collectionsValue: number | null;
         galleryCount: number;
         timestamps: { tokens_fetched_at: number | null; native_balances_fetched_at: number | null };
-    };
-    export type WalletNftData = {
-        id: number;
-        images: App.Data.ImagesData;
     };
 }
 declare namespace App.Data.Web3 {
