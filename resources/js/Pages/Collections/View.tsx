@@ -36,9 +36,8 @@ interface Properties {
         traits: TraitsFilters;
         owned: boolean;
         tab: "activity" | "collection" | "articles";
-        pageLimit: number;
         query: string;
-        nftPageLimit: number;
+        pageLimit: number;
     };
     activities?: App.Data.Nfts.NftActivitiesData;
     sortByMintDate?: boolean;
@@ -68,11 +67,11 @@ const CollectionsView = ({
     const { props } = usePage();
 
     const [selectedTab, setSelectedTab] = useState<TabName>(appliedFilters.tab);
-    const [activityPageLimit, setActivityPageLimit] = useState<number>(appliedFilters.pageLimit);
+
+    const [pageLimit, setPageLimit] = useState<number>(appliedFilters.pageLimit);
 
     const [articlesFilters, setArticlesFilters] = useState<Record<string, string>>({});
 
-    const [nftPageLimit, setNftPageLimit] = useState<number>(appliedFilters.nftPageLimit);
     const [selectedTraits, setSelectedTraits] = useState<TraitsFilters>(appliedFilters.traits);
     const [showOnlyOwned, setShowOnlyOwned] = useState<boolean>(appliedFilters.owned);
     const [filterIsDirty, setFilterIsDirty] = useState(false);
@@ -100,7 +99,7 @@ const CollectionsView = ({
         if (selectedTab === "activity") {
             return {
                 tab: selectedTab,
-                activityPageLimit: activityPageLimit === 10 ? undefined : activityPageLimit,
+                pageLimit: pageLimit === 10 ? undefined : pageLimit,
             };
         }
 
@@ -110,18 +109,9 @@ const CollectionsView = ({
             tab: undefined,
             sort: sortByMintDate ? "minted" : undefined,
             query: isTruthy(query) ? query : undefined,
-            nftPageLimit: nftPageLimit === 10 ? undefined : nftPageLimit,
+            pageLimit: pageLimit === 10 ? undefined : pageLimit,
         };
-    }, [
-        selectedTraits,
-        showOnlyOwned,
-        selectedTab,
-        activityPageLimit,
-        nftPageLimit,
-        query,
-        hasSelectedTraits,
-        articlesFilters,
-    ]);
+    }, [selectedTraits, showOnlyOwned, selectedTab, pageLimit, query, hasSelectedTraits, articlesFilters]);
 
     useEffect(() => {
         if (!filterIsDirty) {
@@ -196,14 +186,8 @@ const CollectionsView = ({
         setFilterIsDirty(true);
     };
 
-    const activityPageLimitChangeHandler = (pageLimit: number): void => {
-        setActivityPageLimit(pageLimit);
-
-        setFilterIsDirty(true);
-    };
-
-    const nftsPageLimitChangeHandler = (pageLimit: number): void => {
-        setNftPageLimit(pageLimit);
+    const pageLimitChangeHandler = (pageLimit: number): void => {
+        setPageLimit(pageLimit);
 
         setFilterIsDirty(true);
     };
@@ -329,8 +313,8 @@ const CollectionsView = ({
                                     ) : (
                                         <CollectionNftsGrid
                                             nfts={nfts}
-                                            pageLimit={nftPageLimit}
-                                            onPageLimitChange={nftsPageLimitChangeHandler}
+                                            pageLimit={pageLimit}
+                                            onPageLimitChange={pageLimitChangeHandler}
                                         />
                                     )}
                                 </div>
@@ -358,8 +342,8 @@ const CollectionsView = ({
                                             collection={collection}
                                             activities={activities}
                                             showNameColumn
-                                            pageLimit={activityPageLimit}
-                                            onPageLimitChange={activityPageLimitChangeHandler}
+                                            pageLimit={pageLimit}
+                                            onPageLimitChange={pageLimitChangeHandler}
                                             nativeToken={nativeToken}
                                         />
                                     )}
