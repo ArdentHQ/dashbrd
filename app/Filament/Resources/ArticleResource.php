@@ -10,6 +10,7 @@ use App\Filament\Resources\ArticleResource\Pages\EditArticle;
 use App\Filament\Resources\ArticleResource\Pages\ListArticles;
 use App\Filament\Resources\ArticleResource\Pages\ViewArticle;
 use App\Models\Article;
+use App\Models\Collection;
 use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -33,9 +34,32 @@ class ArticleResource extends Resource
 
     public static function form(Form $form): Form
     {
+        /** @var Article|null */
+        $article = $form->getRecord();
+
         return $form
             ->schema([
                 TextInput::make('title')->required()->columnSpan('full'),
+
+                Select::make('collections')
+                    ->multiple()
+                    ->afterStateHydrated(static function (Select $component, $state) use ($article): void {
+                        if ($article === null) {
+                            return;
+                        }
+
+                        $component->state($article->collections()->pluck('id')->toArray());
+                    })
+                    ->searchable()
+                    ->getSearchResultsUsing(fn (string $search) => Collection::where('name', 'ilike', "%{$search}%")->limit(10)->pluck('name', 'id')->toArray())
+                    ->getOptionLabelsUsing(fn (Select $component, array $values) => Collection::whereIn('id', $values)
+                        ->orderByRaw('position(id::text in ?)', [implode(',', $values)])
+                        ->pluck('name', 'id')->toArray()
+                    )
+                    ->required()
+                    ->minItems(1)
+                    ->maxItems(8),
+
                 Select::make('category')
                     ->options([
                         ArticleCategoryEnum::News->value => Str::title(ArticleCategoryEnum::News->value),
