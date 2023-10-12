@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { HighlightedArticles } from "@/Pages/Articles/Components/HighlightedArticles";
+import { ArticlesViewActionTypes, articlesViewReducer } from "@/Pages/Articles/Hooks/useArticlesView";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Components/Articles/ArticlesList";
@@ -37,25 +38,25 @@ export const ArticlesView = ({
 
     const { highlightedArticlesCount, debounce } = articlesViewDefaults;
 
-    const [query, setQuery] = useState<string>(filters.search);
+    const [articlesState, dispatch] = useReducer(articlesViewReducer, {
+        query: filters.search,
+        pageLimit: Number(filters.pageLimit),
+        displayType: filters.view as DisplayTypes,
+        isFilterDirty: false,
+        sort: filters.sort as ArticleSortBy,
+        page: Number(filters.page),
+    });
+
+    const { query, page, isFilterDirty, pageLimit, sort, displayType } = articlesState;
+
     const [debouncedQuery] = useDebounce(query, debounce);
 
-    const [pageLimit, setPageLimit] = useState<number>(Number(filters.pageLimit));
-
-    const [displayType, setDisplayType] = useState(filters.view as DisplayTypes);
-
-    const [isFilterDirty, setFilterIsDirty] = useState(false);
-
     const isLoading = !loadingArticles && isFilterDirty ? true : loadingArticles;
-
-    const [sortBy, setSortBy] = useState(filters.sort as ArticleSortBy);
-
-    const [page, setPage] = useState<number>(Number(filters.page));
 
     useEffect(() => {
         const queryParameters: Record<string, string> = {
             pageLimit: pageLimit.toString(),
-            sort: sortBy,
+            sort,
             search: debouncedQuery,
             view: displayType,
             page: page.toString(),
@@ -68,8 +69,8 @@ export const ArticlesView = ({
             isFilterDirty: isFilterDirty ? "yes" : "no",
         });
 
-        setFilterIsDirty(false);
-    }, [pageLimit, sortBy, debouncedQuery, page]);
+        dispatch({ type: ArticlesViewActionTypes.SetFilterDirty, payload: false });
+    }, [pageLimit, sort, debouncedQuery, page]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles) && !isLoading;
@@ -86,8 +87,8 @@ export const ArticlesView = ({
                 <DisplayType
                     displayType={displayType}
                     onSelectDisplayType={(type) => {
-                        replaceUrlQuery({ view: displayType });
-                        setDisplayType(type);
+                        replaceUrlQuery({ view: type });
+                        dispatch({ type: ArticlesViewActionTypes.SetDisplayType, payload: type });
                     }}
                 />
 
@@ -98,18 +99,16 @@ export const ArticlesView = ({
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
                         onChange={(query) => {
-                            setQuery(query);
-                            setFilterIsDirty(true);
+                            dispatch({ type: ArticlesViewActionTypes.SetQuery, payload: query });
                         }}
                     />
                 </div>
 
                 <ArticleSortDropdown
                     disabled={articlesLoaded && articlesCount === 0}
-                    activeSort={sortBy}
+                    activeSort={sort}
                     onSort={(sort) => {
-                        setSortBy(sort);
-                        setFilterIsDirty(true);
+                        dispatch({ type: ArticlesViewActionTypes.SetSort, payload: sort });
                     }}
                 />
             </div>
@@ -119,8 +118,7 @@ export const ArticlesView = ({
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
                     onChange={(query) => {
-                        setQuery(query);
-                        setFilterIsDirty(true);
+                        dispatch({ type: ArticlesViewActionTypes.SetQuery, payload: query });
                     }}
                 />
             </div>
@@ -161,12 +159,10 @@ export const ArticlesView = ({
                     <ArticlePagination
                         pagination={articles.paginated}
                         onPageChange={(page: number) => {
-                            setPage(page);
-                            setFilterIsDirty(true);
+                            dispatch({ type: ArticlesViewActionTypes.SetPage, payload: page });
                         }}
                         onPageLimitChange={(limit: number) => {
-                            setPageLimit(limit);
-                            setFilterIsDirty(true);
+                            dispatch({ type: ArticlesViewActionTypes.SetPageLimit, payload: limit });
                         }}
                     />
                 )}
