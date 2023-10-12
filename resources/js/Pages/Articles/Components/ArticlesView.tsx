@@ -50,12 +50,15 @@ export const ArticlesView = ({
 
     const [sortBy, setSortBy] = useState(filters.sort as ArticleSortBy);
 
+    const [page, setPage] = useState<number>(Number(filters.page));
+
     useEffect(() => {
         const queryParameters: Record<string, string> = {
             pageLimit: pageLimit.toString(),
             sort: sortBy,
             search: debouncedQuery,
             view: displayType,
+            page: page.toString(),
         };
 
         replaceUrlQuery(queryParameters);
@@ -66,13 +69,12 @@ export const ArticlesView = ({
         });
 
         setFilterIsDirty(false);
-    }, [pageLimit, sortBy, debouncedQuery]);
+    }, [pageLimit, sortBy, debouncedQuery, page]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles) && !isLoading;
 
-    const currentPage = articles?.paginated.meta.current_page ?? 1;
-    const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
+    const showHighlighted = mode === "articles" && query === "" && page === 1;
 
     const articlesToShow = articlesLoaded
         ? articles.paginated.data.slice(showHighlighted ? highlightedArticlesCount : 0, articles.paginated.data.length)
@@ -158,8 +160,13 @@ export const ArticlesView = ({
                 {articlesLoaded && (
                     <ArticlePagination
                         pagination={articles.paginated}
+                        onPageChange={(page: number) => {
+                            setPage(page);
+                            setFilterIsDirty(true);
+                        }}
                         onPageLimitChange={(limit: number) => {
                             setPageLimit(limit);
+                            setFilterIsDirty(true);
                         }}
                     />
                 )}

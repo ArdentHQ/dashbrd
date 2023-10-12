@@ -10,7 +10,7 @@ interface Properties {
 export const useCollectionArticles = (collectionSlug: string, rawFilters: Record<string, string> = {}): Properties => {
     const filters: Record<string, string> = {};
 
-    for (const filter of ["pageLimit", "sort", "search"]) {
+    for (const filter of ["pageLimit", "sort", "search", "page"]) {
         if (filter in rawFilters && isTruthy(rawFilters[filter])) {
             filters[filter] = rawFilters[filter];
         }

@@ -10,7 +10,7 @@ import { PageLink } from "@/Components/Pagination/PageLink";
 import { type PaginationProperties } from "@/Components/Pagination/Pagination.contracts";
 import { PreviousPageLink } from "@/Components/Pagination/PreviousPageLink";
 
-export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>): JSX.Element => {
+export const Pagination = <T,>({ data, onPageChange, ...properties }: PaginationProperties<T>): JSX.Element => {
     const [showInput, setShowInput] = useState(false);
     const [page, setPage] = useState(data.meta.current_page.toString());
 
@@ -30,7 +30,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
         event.preventDefault();
 
         if (pageAsNumber <= totalPages) {
-            router.get(buildPageLink(page));
+            onPageChange !== undefined ? onPageChange(Number(page)) : router.get(buildPageLink(page));
         }
     };
 
@@ -103,6 +103,12 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                     <div className="mt-3 hidden items-center space-x-3 xs:flex xs:space-x-1 sm:w-fit  md:mt-0 ">
                         {data.meta.current_page > 1 && (
                             <ButtonLink
+                                onClick={(event) => {
+                                    if (onPageChange !== undefined) {
+                                        event.preventDefault();
+                                        onPageChange(1);
+                                    }
+                                }}
                                 href={data.meta.first_page_url}
                                 variant="icon"
                                 icon="DoubleChevronLeftSmall"
@@ -127,6 +133,12 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
 
                             {pages.map((page, index) => (
                                 <PageLink
+                                    onClick={(event) => {
+                                        if (onPageChange !== undefined) {
+                                            event.preventDefault();
+                                            onPageChange(page);
+                                        }
+                                    }}
                                     key={index}
                                     page={page}
                                     isActive={data.meta.current_page === page}
@@ -150,6 +162,12 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                         {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
                         {data.meta.current_page !== data.meta.last_page && (
                             <ButtonLink
+                                onClick={(event) => {
+                                    if (onPageChange !== undefined) {
+                                        event.preventDefault();
+                                        onPageChange(data.meta.last_page);
+                                    }
+                                }}
                                 href={data.meta.last_page_url}
                                 variant="icon"
                                 icon="DoubleChevronRightSmall"
@@ -163,6 +181,12 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                         <div className="flex w-full flex-col items-center gap-3">
                             <div className="flex w-full flex-row items-center justify-between">
                                 <ButtonLink
+                                    onClick={(event) => {
+                                        if (onPageChange !== undefined) {
+                                            event.preventDefault();
+                                            onPageChange(1);
+                                        }
+                                    }}
                                     href={data.meta.first_page_url}
                                     variant="icon"
                                     icon="DoubleChevronLeftSmall"
@@ -182,6 +206,12 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                 <NextPageLink href={data.meta.next_page_url} />
 
                                 <ButtonLink
+                                    onClick={(event) => {
+                                        if (onPageChange !== undefined) {
+                                            event.preventDefault();
+                                            onPageChange(data.meta.last_page);
+                                        }
+                                    }}
                                     href={data.meta.last_page_url}
                                     variant="icon"
                                     icon="DoubleChevronRightSmall"

@@ -1,4 +1,5 @@
 import { type FormEvent, type HTMLAttributes } from "react";
+import { type ButtonLinkOnClick } from "@/Components/Buttons/ButtonLink";
 
 export interface MobileButtonProperties extends HTMLAttributes<HTMLButtonElement> {
     page: number;
@@ -9,6 +10,7 @@ export interface PageLinkProperties {
     href: string;
     page: number;
     isActive?: boolean;
+    onClick: ButtonLinkOnClick;
 }
 
 export interface PageInputProperties {
@@ -42,4 +44,5 @@ export interface PaginationData<T> {
 
 export interface PaginationProperties<T> extends HTMLAttributes<HTMLDivElement> {
     data: PaginationData<T>;
+    onPageChange?: (page: number) => void;
 }
