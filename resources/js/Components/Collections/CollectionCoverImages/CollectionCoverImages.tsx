@@ -2,7 +2,7 @@ import cn from "classnames";
 import { Img } from "@/Components/Image";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.CollectionNftData[] }): JSX.Element => {
+export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.SimpleNftData[] }): JSX.Element => {
     const [cover, second, third, ...rest] = nfts;
 
     return (
