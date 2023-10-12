@@ -22,9 +22,7 @@ class ArticleController extends Controller
 
         $highlightedArticles = collect();
 
-        $currentPage = is_numeric($request->get('page')) ? (int) $request->get('page') : 1;
-
-        if (! $request->get('search') && $currentPage === 1) {
+        if (! $request->get('search')) {
             $highlightedArticles = Article::query()
                 ->sortByPublishedDate()
                 ->withFeaturedCollections()
@@ -41,8 +39,15 @@ class ArticleController extends Controller
             ->withFeaturedCollections()
             ->paginate($pageLimit);
 
+        $currentPage = $request->get('page') ? (int) $request->get('page') : 1;
+
+        // include highlighted articles only in the first page
+        if ($currentPage === 1) {
+            $articles = $highlightedArticles->concat($articles->items());
+        }
+
         $articles = new LengthAwarePaginator(
-            items: $highlightedArticles->concat($articles->items()),
+            items: $articles,
             total: $articles->total(),
             perPage: $articles->perPage(),
             currentPage: $articles->currentPage(),

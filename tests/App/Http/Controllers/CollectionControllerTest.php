@@ -1236,12 +1236,12 @@ it('should get collection articles sorted: popularity', function () {
 
     $article1 = Article::factory()->create([
         'published_at' => now()->format('Y-m-d'),
-        'views_count' => 1,
+        'views_count_7days' => 1,
     ]);
 
     $article2 = Article::factory()->create([
         'published_at' => now()->format('Y-m-d'),
-        'views_count' => 3,
+        'views_count_7days' => 3,
     ]);
 
     $collection->articles()->attach($article1, ['order_index' => 1]);
