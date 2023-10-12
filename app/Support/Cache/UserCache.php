@@ -91,7 +91,7 @@ class UserCache
     public function collectionsCount(): int
     {
         return (int) $this->fromCache(
-            fn () => $this->user->nfts()->distinct('collection_id')->count(),
+            fn () => $this->user->nfts->unique('collection_id')->count(),
             self::getCollectionsCountKey($this->user->id),
         );
     }
@@ -99,7 +99,7 @@ class UserCache
     public function hiddenCollectionsCount(): int
     {
         return (int) $this->fromCache(
-            fn () => $this->user->nfts()->distinct('collection_id')->whereIn('collection_id', $this->user->hiddenCollections->modelKeys())->count(),
+            fn () => $this->user->nfts->unique('collection_id')->whereIn('collection_id', $this->user->hiddenCollections->modelKeys())->count(),
             self::getHiddenCollectionsCountKey($this->user->id),
         );
     }
@@ -107,7 +107,7 @@ class UserCache
     public function shownCollectionsCount(): int
     {
         return (int) $this->fromCache(
-            fn () => $this->user->nfts()->distinct('collection_id')->whereNotIn('collection_id', $this->user->hiddenCollections->modelKeys())->count(),
+            fn () => $this->user->nfts->unique('collection_id')->whereNotIn('collection_id', $this->user->hiddenCollections->modelKeys())->count(),
             self::getShownCollectionsCountKey($this->user->id),
         );
     }

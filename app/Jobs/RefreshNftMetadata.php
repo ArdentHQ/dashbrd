@@ -8,6 +8,7 @@ use App\Jobs\Middleware\RecoverProviderErrors;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
 use App\Models\Nft;
+use App\Models\SpamContract;
 use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Support\Web3NftHandler;
 use DateTime;
@@ -39,7 +40,6 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
      */
     public function handle(AlchemyWeb3DataProvider $provider): void
     {
-
         if (SpamContract::isSpam($this->collection->address, $this->collection->network)) {
             Log::info('RefreshNftMetadata Job: Ignored for spam contract', [
                 'address' => $this->collection->address,

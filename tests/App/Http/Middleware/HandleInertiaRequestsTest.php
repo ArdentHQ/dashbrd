@@ -53,8 +53,10 @@ it('should get cached data for user', function () {
 
     $middlewareResponse = $middleware->share($request);
 
+    expect($middlewareResponse['auth']()->wallet->nftCount)->toBe(4);
     expect($middlewareResponse['auth']()->wallet->collectionCount)->toBe(1);
     expect($middlewareResponse['auth']()->wallet->galleryCount)->toBe(1);
+    expect(count($middlewareResponse['auth']()->wallet->nfts))->toBe(4);
 
     Nft::factory(4)->create([
         'wallet_id' => $wallet->id,
@@ -69,8 +71,10 @@ it('should get cached data for user', function () {
 
     $middlewareResponse = $middleware->share($request);
 
+    expect(($middlewareResponse['auth']())->wallet->nftCount)->toBe(4);
     expect($middlewareResponse['auth']()->wallet->collectionCount)->toBe(1);
     expect($middlewareResponse['auth']()->wallet->galleryCount)->toBe(1);
+    expect(count($middlewareResponse['auth']()->wallet->nfts))->toBe(4);
 
     $userCache->clearUserDetailNfts();
     $userCache->clearNftsCount();
@@ -79,6 +83,8 @@ it('should get cached data for user', function () {
 
     $middlewareResponse = $middleware->share($request);
 
+    expect($middlewareResponse['auth']()->wallet->nftCount)->toBe(8);
     expect($middlewareResponse['auth']()->wallet->collectionCount)->toBe(2);
     expect($middlewareResponse['auth']()->wallet->galleryCount)->toBe(2);
+    expect(count($middlewareResponse['auth']()->wallet->nfts))->toBe(4);
 });

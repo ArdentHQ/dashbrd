@@ -50,7 +50,10 @@ class TokenData extends Data
 
     public static function fromModel(Token $token): self
     {
-        $currency = Auth::user()?->currency() ?? CurrencyCode::USD;
+        $currency = CurrencyCode::USD;
+        if (Auth::hasUser()) {
+            $currency = Auth::user()->currency();
+        }
 
         return new self(
             address: $token->address,
