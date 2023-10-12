@@ -22,7 +22,7 @@ class MyGalleryCollectionController extends Controller
 
         $collections = $user
             ->collections()
-            ->where('name', 'ilike', sprintf('%%%s%%', $request->get('query')))
+            ->where('collections.name', 'ilike', sprintf('%%%s%%', $request->get('query')))
             ->withUserNftsCount($user)
             ->orderBy('id')
             ->paginate(config('dashbrd.gallery.pagination.collections_per_page'));
