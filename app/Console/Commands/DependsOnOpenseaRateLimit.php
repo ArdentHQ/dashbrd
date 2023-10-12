@@ -49,7 +49,7 @@ trait DependsOnOpenseaRateLimit
             // the beginning of the minute which prevents overlapping considering
             // jobs may be dispatched at different times
             // e.g. 12:00:34 -> 12:01:00, 12:00:59 -> 12:01:00
-            ->endOfMinute()->addSecond()
+            ->addMinute()->startOfMinute()
             // Delay the job by the amount of seconds + the delay treshold
             // e.g. 12:01:00 + 1 -> 12:01:01, 12:01:00 + 2 -> 12:01:02
             ->addSeconds($delayInSeconds + $this->getDelayTreshold($job));
