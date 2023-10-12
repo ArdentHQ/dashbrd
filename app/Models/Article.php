@@ -88,6 +88,15 @@ class Article extends Model implements HasMedia, Viewable
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeSortByPublishedDate(Builder $query): Builder
+    {
+        return $query->orderBy('articles.published_at', 'desc');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeWithFeaturedCollections(Builder $query, int $collectionId = null): Builder
     {
         return $query->with(['collections' => function ($query) use ($collectionId) {

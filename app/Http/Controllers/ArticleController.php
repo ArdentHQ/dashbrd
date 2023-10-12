@@ -9,6 +9,7 @@ use App\Data\Articles\ArticlesData;
 use App\Models\Article;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -19,12 +20,32 @@ class ArticleController extends Controller
     {
         $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 10, 96);
 
+        $highlightedArticles = collect();
+
+        if (!$request->get('search')) {
+            $highlightedArticles = Article::query()
+                ->sortByPublishedDate()
+                ->withFeaturedCollections()
+                ->limit(3)
+                ->get();
+        }
+
+        /** @var LengthAwarePaginator $articles */
         $articles = Article::query()
             ->search($request->get('search'))
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
             ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
+            ->whereNotIn('articles.id', $highlightedArticles->pluck('id'))
             ->withFeaturedCollections()
             ->paginate($pageLimit);
+
+
+        $articles = new LengthAwarePaginator(
+            items: $highlightedArticles->concat($articles->items()),
+            total: $articles->total(),
+            perPage: $articles->perPage(),
+            currentPage: $articles->currentPage(),
+        );
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
         $paginated = ArticleData::collection($articles);
