@@ -8,6 +8,7 @@
 @import "./_carousel.css";
 @import "./_collection.css";
 @import "./_gallery.css";
+@import "./_article.css";
 
 @tailwind base;
 @tailwind components;
