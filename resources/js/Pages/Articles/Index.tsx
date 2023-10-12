@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { ArticlesView, getArticlesInitialState } from "@/Pages/Articles/Components/ArticlesView";
 import { useArticles } from "@/Pages/Articles/Hooks/useArticles";
+import { articlesViewReducer } from "@/Pages/Articles/Hooks/useArticlesView";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 const ArticlesIndex = ({
     articles: initialArticles,
@@ -13,12 +15,26 @@ const ArticlesIndex = ({
     highlightedArticles: App.Data.Articles.ArticleData[];
 }): JSX.Element => {
     const { t } = useTranslation();
+    console.log("rendered");
 
-    const [filters, setFilters] = useState<Record<string, string>>(() => getArticlesInitialState());
+    const [articlesState, dispatch] = useReducer(articlesViewReducer, getArticlesInitialState());
 
-    const isFilterDirty = filters.isFilterDirty === "yes";
+    const { debouncedQuery, sort, pageLimit, isFilterDirty, displayType } = articlesState;
 
-    const { articles, highlightedArticles, isLoading } = useArticles(filters, isFilterDirty);
+    const queryParameters = {
+        search: debouncedQuery,
+        sort,
+        pageLimit: pageLimit.toString(),
+    };
+
+    useEffect(() => {
+        replaceUrlQuery({
+            ...queryParameters,
+            view: displayType,
+        });
+    }, [debouncedQuery, sort, pageLimit]);
+
+    const { articles, highlightedArticles, isLoading } = useArticles(queryParameters, isFilterDirty);
 
     const articlesToShow = isFilterDirty ? articles : initialArticles;
 
@@ -38,10 +54,10 @@ const ArticlesIndex = ({
 
                 <ArticlesView
                     articles={articlesToShow}
-                    highlightedArticles={initialHighlightedArticles}
+                    highlightedArticles={isFilterDirty ? highlightedArticles : initialHighlightedArticles}
                     isLoading={isFilterDirty ? isLoading : false}
-                    filters={filters}
-                    setFilters={setFilters}
+                    articlesState={articlesState}
+                    dispatch={dispatch}
                     mode="articles"
                 />
             </div>
