@@ -7,9 +7,9 @@ use App\Models\Collection;
 use Illuminate\Support\Facades\Bus;
 
 it('dispatches a job for collections without opensea slug or fetched date', function () {
-    Bus::fake();
+    Bus::fake([FetchCollectionOpenseaSlug::class]);
 
-    Collection::factory()->create()->id;
+    Collection::factory()->create();
 
     Collection::factory()->create([
         'extra_attributes' => [
@@ -29,7 +29,7 @@ it('dispatches a job for collections without opensea slug or fetched date', func
         ],
     ]);
 
-    Collection::factory()->create()->id;
+    Collection::factory()->create();
 
     Bus::assertDispatchedTimes(FetchCollectionOpenseaSlug::class, 0);
 
@@ -39,7 +39,7 @@ it('dispatches a job for collections without opensea slug or fetched date', func
 });
 
 it('dispatches a job for a specific collection', function () {
-    Bus::fake();
+    Bus::fake([FetchCollectionOpenseaSlug::class]);
 
     $collection = Collection::factory()->create();
 
