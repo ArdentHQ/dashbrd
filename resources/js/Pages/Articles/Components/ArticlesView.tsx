@@ -22,12 +22,14 @@ export const articlesViewDefaults = {
 
 export const ArticlesView = ({
     articles,
+    highlightedArticles,
     isLoading: loadingArticles,
     setFilters,
     filters,
     mode,
 }: {
     isLoading: boolean;
+    highlightedArticles?: App.Data.Articles.ArticleData[];
     articles?: App.Data.Articles.ArticlesData;
     setFilters: (filters: Record<string, string>) => void;
     filters: Record<string, string>;
@@ -35,7 +37,7 @@ export const ArticlesView = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { highlightedArticlesCount, debounce } = articlesViewDefaults;
+    const { debounce } = articlesViewDefaults;
 
     const [query, setQuery] = useState<string>(filters.search);
     const [debouncedQuery] = useDebounce(query, debounce);
@@ -74,9 +76,7 @@ export const ArticlesView = ({
     const currentPage = articles?.paginated.meta.current_page ?? 1;
     const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
 
-    const articlesToShow = articlesLoaded
-        ? articles.paginated.data.slice(showHighlighted ? highlightedArticlesCount : 0, articles.paginated.data.length)
-        : [];
+    const articlesToShow = articlesLoaded ? articles.paginated.data : [];
 
     return (
         <>
@@ -126,8 +126,7 @@ export const ArticlesView = ({
             {showHighlighted && (
                 <HighlightedArticles
                     isLoading={isLoading}
-                    hasEnoughArticles={(articles?.paginated.data.length ?? 0) > highlightedArticlesCount}
-                    articles={articles?.paginated.data.slice(0, highlightedArticlesCount) ?? []}
+                    articles={highlightedArticles ?? []}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}

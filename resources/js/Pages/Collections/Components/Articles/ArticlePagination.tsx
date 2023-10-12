@@ -11,7 +11,7 @@ interface Properties {
 export const ArticlePagination = ({ pagination, onPageLimitChange }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    if (pagination.meta.total < 12) {
+    if (pagination.meta.total < 1) {
         return <></>;
     }
 

@@ -39,28 +39,19 @@ class ArticleController extends Controller
             ->withFeaturedCollections()
             ->paginate($pageLimit);
 
-        $currentPage = $request->get('page') ? (int) $request->get('page') : 1;
-
-        // prepend highlighted articles only in the first page
-        $articles = new LengthAwarePaginator(
-            items: $currentPage === 1 ? $highlightedArticles->concat($articles->items()) : $articles->items(),
-            total: $articles->total(),
-            perPage: $articles->perPage(),
-            currentPage: $articles->currentPage(),
-        );
-
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
         $paginated = ArticleData::collection($articles);
 
+        $response = [
+            'articles' => new ArticlesData($paginated),
+            'highlightedArticles' => ArticleData::collection($highlightedArticles),
+        ];
+
         if ($request->wantsJson()) {
-            return response()->json([
-                'articles' => new ArticlesData($paginated),
-            ]);
+            return response()->json($response);
         }
 
-        return Inertia::render('Articles/Index', [
-            'articles' => new ArticlesData($paginated),
-        ])->withViewData([
+        return Inertia::render('Articles/Index', $response)->withViewData([
             'title' => trans('metatags.articles.title'),
         ]);
     }
