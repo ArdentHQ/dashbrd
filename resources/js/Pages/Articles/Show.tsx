@@ -4,7 +4,7 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => (
     <DefaultLayout>
-        <div className="overflow-hidden rounded-xl border border-theme-secondary-300 pb-6 pt-8 sm:px-24">
+        <div className="mx-8 -mt-6 pb-6 pt-8 sm:-mt-8 md:px-24 lg:mt-0 lg:overflow-hidden lg:rounded-xl lg:border lg:border-theme-secondary-300">
             <article>
                 <div className="border-b border-theme-secondary-400 pb-3">
                     <Heading level={1}>{article.title}</Heading>
