@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Enums\ArticleCategoryEnum;
 use App\Models\Traits\BelongsToUser;
-use Carbon\Carbon;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Illuminate\Database\Eloquent\Builder;
