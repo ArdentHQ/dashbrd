@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\ArticleCategoryEnum;
 use App\Models\Traits\BelongsToUser;
+use Carbon\Carbon;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Illuminate\Database\Eloquent\Builder;
@@ -129,10 +130,21 @@ class Article extends Model implements HasMedia, Viewable
 
     public static function updateViewCounts(): void
     {
+        $now = now();
+        $pastWeek = now()->subDays(7);
+
         Article::query()
             ->update([
                 'views_count' => DB::raw(
-                    "(SELECT COUNT(*) FROM views as v WHERE v.viewable_type = 'App\Models\Article' AND articles.id = v.viewable_id)"
+                    <<<SQL
+(
+    SELECT COUNT(*) FROM views AS v
+    WHERE v.viewable_type = 'App\Models\Article'
+    AND articles.id = v.viewable_id
+    AND viewed_at >= $pastWeek
+    AND viewed_at <= $now
+)
+SQL
                 ),
             ]);
     }
