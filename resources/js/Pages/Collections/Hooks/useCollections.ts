@@ -85,12 +85,14 @@ export const useCollections = ({
     const [reportByCollectionAvailableIn, setSeportByCollectionAvailableIn] = useState<ReportByCollectionAvailableIn>(
         {},
     );
+
+    const getSelectedChainIds = (initialArray?: string[]): number[] =>
+        isTruthy(initialArray) && initialArray.length > 0
+            ? initialArray.map((id) => Number(id))
+            : [ExplorerChains.EthereumMainnet, ExplorerChains.PolygonMainnet];
+
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(
-        isTruthy(initialSelectedChainIds) && initialSelectedChainIds.length > 0
-            ? initialSelectedChainIds.map((id) => Number(id))
-            : [ExplorerChains.EthereumMainnet, ExplorerChains.PolygonMainnet],
-    );
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(getSelectedChainIds(initialSelectedChainIds));
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
