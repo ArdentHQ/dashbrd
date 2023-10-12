@@ -129,6 +129,7 @@ export const CollectionsTable = ({
             initialState={activeSort.length > 0 ? initialState : {}}
             activeSort={activeSort}
             sortDirection={sortDirection}
+            manualSortBy={true}
             onSort={
                 onSort != null
                     ? (column) => {
