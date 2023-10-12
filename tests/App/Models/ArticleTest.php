@@ -120,7 +120,7 @@ it('should update article view counts', function () {
 
     $articles = Article::query()->orderBy('id', 'asc')->get();
 
-    expect($articles[0]->views_count)->toBe(1)
-        ->and($articles[1]->views_count)->toBe(3)
-        ->and($articles[2]->views_count)->toBe(0);
+    expect($articles[0]->views_count_7days)->toBe(1)
+        ->and($articles[1]->views_count_7days)->toBe(3)
+        ->and($articles[2]->views_count_7days)->toBe(0);
 });

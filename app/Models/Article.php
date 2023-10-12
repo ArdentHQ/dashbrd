@@ -81,7 +81,7 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function scopeSortByPopularity(Builder $query): Builder
     {
-        return $query->orderBy('articles.views_count', 'desc');
+        return $query->orderBy('articles.views_count_7days', 'desc');
     }
 
     /**
@@ -134,7 +134,7 @@ class Article extends Model implements HasMedia, Viewable
 
         Article::query()
             ->update([
-                'views_count' => DB::raw(
+                'views_count_7days' => DB::raw(
                     <<<SQL
 (
     SELECT COUNT(*) FROM views AS v
