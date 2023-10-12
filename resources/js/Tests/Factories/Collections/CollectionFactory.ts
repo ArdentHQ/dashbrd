@@ -18,6 +18,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             openSeaSlug: this.optional(faker.lorem.slug()),
             website: faker.internet.url(),
             nftsCount: 0,
+            nfts: [],
         };
     }
 
