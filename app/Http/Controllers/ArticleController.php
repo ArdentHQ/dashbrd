@@ -22,7 +22,9 @@ class ArticleController extends Controller
 
         $highlightedArticles = collect();
 
-        if (! $request->get('search')) {
+        $currentPage = (int)$request->get('page') ?? 1;
+
+        if (! $request->get('search') && $currentPage === 1) {
             $highlightedArticles = Article::query()
                 ->sortByPublishedDate()
                 ->withFeaturedCollections()

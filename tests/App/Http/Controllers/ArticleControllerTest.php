@@ -49,18 +49,19 @@ it('should not render a single unpublished article', function () {
         ->assertStatus(404);
 });
 
-it('should return articles with the given pageLimit', function ($pageLimit, $resultCount) {
+it('should return articles with the given pageLimit', function ($pageLimit, $resultCount, $page) {
     seedArticles(35, 4);
 
     $response = $this->getJson(route('articles', [
         'pageLimit' => $pageLimit,
+        'page' => $page,
     ]))->json('articles');
 
     expect(count($response['paginated']['data']))->toEqual($resultCount);
 })->with([
-    [123, 35],
-    [12, 12],
-    [24, 24],
+    [123, 35, 1],
+    [12, 12, 2],
+    [24, 27, 1],
 ]);
 
 it('should search in articles', function () {
@@ -91,16 +92,14 @@ it('should search in articles', function () {
 });
 
 it('should sort articles', function () {
-    $today = now()->format('Y-m-d');
-
     $article1 = Article::factory()->create([
         'title' => 'nice bunny',
-        'published_at' => $today,
+        'published_at' => now(),
     ]);
 
     $article2 = Article::factory()->create([
         'title' => 'beautiful baku',
-        'published_at' => $today,
+        'published_at' => now()->addMinutes(10),
     ]);
 
     collect([$article1, $article2])->map(fn ($article) => $article
