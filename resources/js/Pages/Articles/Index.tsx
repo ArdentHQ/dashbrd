@@ -15,7 +15,6 @@ const ArticlesIndex = ({
     highlightedArticles: App.Data.Articles.ArticleData[];
 }): JSX.Element => {
     const { t } = useTranslation();
-    console.log("rendered");
 
     const [articlesState, dispatch] = useReducer(articlesViewReducer, getArticlesInitialState());
 
