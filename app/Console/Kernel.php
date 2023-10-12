@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Console\Commands\FetchCoingeckoTokens;
-use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionActivity;
+use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
