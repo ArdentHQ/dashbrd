@@ -141,8 +141,8 @@ class Article extends Model implements HasMedia, Viewable
     SELECT COUNT(*) FROM views AS v
     WHERE v.viewable_type = 'App\Models\Article'
     AND articles.id = v.viewable_id
-    AND viewed_at >= $pastWeek
-    AND viewed_at <= $now
+    AND viewed_at >= {$pastWeek}
+    AND viewed_at <= {$now}
 )
 SQL
                 ),
