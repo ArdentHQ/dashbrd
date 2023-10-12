@@ -46,7 +46,7 @@ class ArticleData extends Data
             slug: $article->slug,
             category: $article->category,
             content: $article->content,
-            image: $article->getMedia()->first()->getUrl(),
+            image: $article->getFirstMediaUrl('cover', 'large'),
             publishedAt: (int) $article->published_at->timestamp,
             userId: $article->user_id,
             featuredCollections: FeaturedCollectionData::collection($article->collections),
