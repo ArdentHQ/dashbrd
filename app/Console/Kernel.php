@@ -111,7 +111,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
-            ->hourlyAt(15);
+            ->everyFiveMinutes();
 
     }
 
