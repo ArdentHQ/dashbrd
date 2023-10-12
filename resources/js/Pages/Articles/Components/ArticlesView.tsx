@@ -51,7 +51,7 @@ export const ArticlesView = ({
     const isFistRender = useIsFirstRender();
 
     useEffect(() => {
-        if (isFistRender) return;
+        if (isFistRender || debouncedValue === "") return;
 
         dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
     }, [debouncedValue]);
@@ -63,6 +63,14 @@ export const ArticlesView = ({
     const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
 
     const articlesToShow = articlesLoaded ? articles.paginated.data : [];
+
+    const handleQueryChange = (query: string): void => {
+        setQuery(query);
+
+        if (query === "") {
+            dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
+        }
+    };
 
     return (
         <>
@@ -80,7 +88,7 @@ export const ArticlesView = ({
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
-                        onChange={setQuery}
+                        onChange={handleQueryChange}
                     />
                 </div>
 
@@ -97,7 +105,7 @@ export const ArticlesView = ({
                     disabled={articlesLoaded && articlesCount === 0 && query === ""}
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
-                    onChange={setQuery}
+                    onChange={handleQueryChange}
                 />
             </div>
 
