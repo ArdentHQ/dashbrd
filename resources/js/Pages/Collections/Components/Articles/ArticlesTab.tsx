@@ -1,17 +1,16 @@
-import { useState } from "react";
 import { ArticlesView } from "@/Pages/Articles/Components/ArticlesView";
-import { useCollectionArticles } from "@/Pages/Collections/Hooks/useCollectionArticles";
 
-export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.CollectionDetailData }): JSX.Element => {
-    const [filters, setFilters] = useState<Record<string, string>>({});
-    const { articles, isLoading } = useCollectionArticles(collection.slug, filters);
+interface ArticlesTabProperties {
+    articles?: App.Data.Articles.ArticlesData;
+    filters: Record<string, string>;
+    setFilters: (filters: Record<string, string>) => void;
+}
 
-    return (
-        <ArticlesView
-            articles={articles}
-            isLoading={isLoading}
-            setFilters={setFilters}
-            mode="collection"
-        />
-    );
-};
+export const ArticlesTab = ({ articles, filters, setFilters }: ArticlesTabProperties): JSX.Element => (
+    <ArticlesView
+        articles={articles}
+        isLoading={articles === undefined}
+        setFilters={setFilters}
+        mode="collection"
+    />
+);

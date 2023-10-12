@@ -28,7 +28,7 @@ export const ArticlesView = ({
 }: {
     isLoading: boolean;
     articles?: App.Data.Articles.ArticlesData;
-    setFilters: (filters: Record<string, string>) => void;
+    setFilters: (filters: Record<string, string | undefined>) => void;
     mode: "collection" | "articles";
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -46,28 +46,21 @@ export const ArticlesView = ({
         (sort === "popularity" ? "popularity" : defaults.sortBy) as ArticleSortBy,
     );
 
-    const isFirstRender = useIsFirstRender();
-
-    const queryParameters: Record<string, string> = {
-        pageLimit: pageLimit.toString(),
-        sort: sortBy,
-        search: debouncedQuery,
-        view: displayType,
-    };
-
     useEffect(() => {
-        replaceUrlQuery(queryParameters);
-
         setFilters({
-            ...queryParameters,
-            isFilterDirty: isFirstRender ? "no" : "yes",
+            pageLimit: pageLimit.toString() === defaults.pageLimit.toString() ? undefined : pageLimit.toString(),
+            sort: sortBy === defaults.sortBy ? undefined : sortBy,
+            search: debouncedQuery === "" ? undefined : debouncedQuery,
+            view: displayType === DisplayTypes.Grid ? undefined : displayType,
         });
     }, [pageLimit, sortBy, debouncedQuery, displayType]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
+
     const articlesLoaded = isTruthy(articles);
 
     const currentPage = isTruthy(page) ? Number(page) : 1;
+
     const showLatestArticlesCards =
         mode === "articles" && query === "" && currentPage === 1 && (isLoading || articlesLoaded);
 

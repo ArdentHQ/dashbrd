@@ -152,8 +152,80 @@ class CollectionController extends Controller
 
         $sortByMintDate = $request->query('sort') === 'minted';
 
-        $reportAvailableIn = RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection);
+        // Allow any number but not more than 100
+        $activityPageLimit = min($request->has('activityPageLimit') ? (int) $request->get('activityPageLimit') : 10, 100);
+        // Allow any number but not more than 96
+        $nftPageLimit = min($request->has('nftPageLimit') ? (int) $request->get('nftPageLimit') : 24, 96);
 
+        $tab = in_array($request->get('tab'), ['collection', 'articles', 'activity']) ? $request->get('tab') : 'collection';
+
+        $filters = $this->parseFilters($request, $tab, $collection, $user);
+
+        return Inertia::render('Collections/View', [
+            'collection' => fn () => $this->loadCollection($collection, $user),
+            'isHidden' => fn () => $user && $user->hiddenCollections()->where('id', $collection->id)->exists(),
+            'previousUrl' => fn () => url()->previous() === url()->current()
+                ? null
+                : url()->previous(),
+            'alreadyReported' => fn () => $user && $collection->wasReportedByUserRecently($user),
+            'reportAvailableIn' => fn () => RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection),
+            'appliedFilters' => $this->appliedParameters(
+                activityPageLimit: $activityPageLimit,
+                nftPageLimit: $nftPageLimit,
+                tab: $tab,
+                filters: $filters,
+            ),
+            'sortByMintDate' => $sortByMintDate,
+            'nativeToken' => fn () => $this->getNativeToken($collection),
+            'allowsGuests' => true,
+            'title' => fn () => trans('metatags.collections.view.title', ['name' => $collection->name]),
+            'showReportModal' => fn () => $request->boolean('report'),
+
+            'collectionTraits' => $tab !== 'collection'
+                ? Inertia::lazy(fn () => CollectionTraitFilterData::fromCollection($collection))
+                : CollectionTraitFilterData::fromCollection($collection),
+
+            'nfts' => $tab !== 'collection'
+                ? Inertia::lazy(fn () => $this->getNfts(
+                    request: $request,
+                    collection: $collection,
+                    user: $user,
+                    sortByMintDate: $sortByMintDate,
+                    nftPageLimit: $nftPageLimit,
+                    nftFilters: $filters,
+                )) : $this->getNfts(
+                    request: $request,
+                    collection: $collection,
+                    user: $user,
+                    sortByMintDate: $sortByMintDate,
+                    nftPageLimit: $nftPageLimit,
+                    nftFilters: $filters,
+                ),
+
+            'activities' => $tab !== 'activity'
+                ? Inertia::lazy(fn () => $this->getActivites($collection, $request, $activityPageLimit))
+                : $this->getActivites($collection, $request, $activityPageLimit),
+
+            'articles' => $tab !== 'articles'
+                ? Inertia::lazy(fn () => $this->getArticles($collection, $request))
+                : $this->getArticles($collection, $request),
+
+        ])->withViewData([
+            'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
+            'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),
+            'image' => trans('metatags.collections.view.image'),
+        ]);
+    }
+
+    private function getNativeToken(Collection $collection): TokenData
+    {
+        $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
+
+        return TokenData::fromModel($nativeToken);
+    }
+
+    private function loadCollection(Collection $collection, ?User $user): CollectionDetailData
+    {
         if (! $collection->recentlyViewed()) {
             $bannerUpdatedAt = $collection->bannerUpdatedAt();
             $formattedBannerUpdatedAt = $bannerUpdatedAt ? Carbon::parse($bannerUpdatedAt) : null;
@@ -167,26 +239,21 @@ class CollectionController extends Controller
 
         $collection->touchQuietly('last_viewed_at');
 
-        $ownedNftsCount = $user
-            ? $collection
-                ->nfts()
-                ->select('nfts.*')
-                ->filter([
-                    'owned' => true,
-                    'traits' => $this->normalizeTraits($request->get('traits', [])),
-                ], $user)
-                ->count()
-            : 0;
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
 
-        $filters = $this->parseFilters($request, $ownedNftsCount);
+        return CollectionDetailData::fromModel($collection, $currency, $user);
+    }
 
-        // Allow any number but not more than 96
-        $nftPageLimit = min($request->has('nftPageLimit') ? (int) $request->get('nftPageLimit') : 24, 96);
+    private function getNfts(Request $request, Collection $collection, ?User $user, bool $sortByMintDate, int $nftPageLimit, array $nftFilters): GalleryNftsData
+    {
+        $ownedNftIds = $user
+            ? $collection->nfts()->ownedBy($user)->pluck('id')
+            : collect([]);
 
         $nfts = $collection
             ->nfts()
             ->select('nfts.*')
-            ->filter($filters, $user)
+            ->filter($nftFilters, $user)
             ->search($request->get('query'))
             ->when($user, fn ($q) => $q->orderByOwnership($user))
             ->when($sortByMintDate, fn ($q) => $q->orderByMintDate('desc'))
@@ -199,11 +266,18 @@ class CollectionController extends Controller
             })
             ->appends($request->all());
 
-        // Allow any number but not more than 100
-        $activityPageLimit = min($request->has('activityPageLimit') ? (int) $request->get('activityPageLimit') : 10, 100);
+        /** @var PaginatedDataCollection<int, GalleryNftData> */
+        $paginatedNfts = GalleryNftData::collection($nfts)->through(function (GalleryNftData $data) use ($ownedNftIds) {
+            $data->ownedByCurrentUser = $ownedNftIds->contains($data->id);
 
-        $tab = in_array($request->get('tab'), ['collection', 'articles', 'activity']) ? $request->get('tab') : 'collection';
+            return $data;
+        });
 
+        return new GalleryNftsData($paginatedNfts);
+    }
+
+    private function getActivites(Collection $collection, Request $request, int $activityPageLimit): NftActivitiesData
+    {
         $activities = $collection->activities()
                             ->latest('timestamp')
                             ->where('type', '!=', NftTransferType::Transfer)
@@ -216,48 +290,12 @@ class CollectionController extends Controller
         /** @var PaginatedDataCollection<int, NftActivityData> */
         $paginated = NftActivityData::collection($activities);
 
-        $ownedNftIds = $user
-                        ? $collection->nfts()->ownedBy($user)->pluck('id')
-                        : collect([]);
-
-        /** @var PaginatedDataCollection<int, GalleryNftData> */
-        $paginatedNfts = GalleryNftData::collection($nfts)->through(function (GalleryNftData $data) use ($ownedNftIds) {
-            $data->ownedByCurrentUser = $ownedNftIds->contains($data->id);
-
-            return $data;
-        });
-
-        $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
-
-        $currency = $user ? $user->currency() : CurrencyCode::USD;
-
-        return Inertia::render('Collections/View', [
-            'activities' => new NftActivitiesData($paginated),
-            'collection' => CollectionDetailData::fromModel($collection, $currency, $user),
-            'isHidden' => $user && $user->hiddenCollections()->where('id', $collection->id)->exists(),
-            'previousUrl' => url()->previous() === url()->current()
-                ? null
-                : url()->previous(),
-            'nfts' => new GalleryNftsData($paginatedNfts),
-            'collectionTraits' => CollectionTraitFilterData::fromCollection($collection),
-            'alreadyReported' => $user && $collection->wasReportedByUserRecently($user),
-            'reportAvailableIn' => $reportAvailableIn,
-            'appliedFilters' => $this->appliedParameters($request, $activityPageLimit, $nftPageLimit, $tab, $filters),
-            'sortByMintDate' => $sortByMintDate,
-            'nativeToken' => TokenData::fromModel($nativeToken),
-            'allowsGuests' => true,
-            'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
-            'showReportModal' => $request->boolean('report'),
-        ])->withViewData([
-            'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
-            'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),
-            'image' => trans('metatags.collections.view.image'),
-        ]);
+        return new NftActivitiesData($paginated);
     }
 
-    public function articles(Collection $collection, Request $request): JsonResponse
+    private function getArticles(Collection $collection, Request $request): ArticlesData
     {
-        $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 12, 96);
+        $pageLimit = min($request->has('articlesPageLimit') ? (int) $request->get('articlesPageLimit') : 12, 96);
 
         $articles = $collection
             ->articlesWithCollections()
@@ -266,9 +304,19 @@ class CollectionController extends Controller
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
         $paginated = ArticleData::collection($articles);
 
-        return response()->json([
-            'articles' => new ArticlesData($paginated),
-        ]);
+        return new ArticlesData($paginated);
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function parseFilters(Request $request, string $tab, Collection $collection, ?User $user): array
+    {
+        if ($tab === 'collection') {
+            return $this->parseNftFilters($request, $collection, $user);
+        }
+
+        return [];
     }
 
     /**
@@ -277,8 +325,19 @@ class CollectionController extends Controller
      *   traits: array<string, array<string, string[]>> | null,
      * }
      */
-    private function parseFilters(Request $request, int $ownedNftsCount): array
+    private function parseNftFilters(Request $request, Collection $collection, ?User $user): array
     {
+        $ownedNftsCount = $user
+            ? $collection
+                ->nfts()
+                ->select('nfts.*')
+                ->filter([
+                    'owned' => true,
+                    'traits' => $this->normalizeTraits($request->get('traits', [])),
+                ], $user)
+                ->count()
+            : 0;
+
         $traits = $request->get('traits', []);
 
         $owned = $request->get('owned') === null ? true : $request->boolean('owned');
@@ -330,10 +389,10 @@ class CollectionController extends Controller
      * } $filters
      * @return array{owned: bool, traits: array<string, array<string, string[]>> | null}
      */
-    private function appliedParameters(Request $request, int $activityPageLimit, int $nftPageLimit, string $tab, mixed $filters): array
+    private function appliedParameters(int $activityPageLimit, int $nftPageLimit, string $tab, mixed $filters): array
     {
         // transform sanitized traits back into the same format as frontend gave us
-        $traits = collect($filters['traits'] ?? [])
+        $traits = array_key_exists('traits', $filters) ? collect($filters['traits'] ?? [])
             ->map(
                 fn ($traits) => collect($traits)
                     ->flatMap(function ($valuePairs, string $displayType) {
@@ -349,11 +408,11 @@ class CollectionController extends Controller
                                     ->mapWithKeys(fn (string $value, int $index) => [$index => ['displayType' => $displayType, 'value' => $value]]);
                             });
                     })
-            );
+            ) : null;
 
         return [
-            'owned' => $filters['owned'],
-            'traits' => $traits->isEmpty() ? null : $traits->toArray(),
+            'owned' => array_key_exists('owned', $filters) ? $filters['owned'] : null,
+            'traits' => $traits === null || $traits->isEmpty() ? null : $traits->toArray(),
             'tab' => $tab,
             'activityPageLimit' => $activityPageLimit,
             'nftPageLimit' => $nftPageLimit,

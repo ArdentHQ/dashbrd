@@ -28,22 +28,23 @@ interface Properties {
     collection: App.Data.Collections.CollectionDetailData;
     isHidden: boolean;
     previousUrl: string;
-    nfts: App.Data.Gallery.GalleryNftsData;
+    nfts?: App.Data.Gallery.GalleryNftsData;
     alreadyReported?: boolean;
     reportAvailableIn?: string | null;
-    collectionTraits: App.Data.Collections.CollectionTraitFilterData[];
+    collectionTraits?: App.Data.Collections.CollectionTraitFilterData[];
     appliedFilters: {
         traits: TraitsFilters;
         owned: boolean;
-        tab: "activity" | "collection";
+        tab: "activity" | "collection" | "articles";
         pageLimit: number;
         query: string;
         nftPageLimit: number;
     };
-    activities: App.Data.Nfts.NftActivitiesData;
+    activities?: App.Data.Nfts.NftActivitiesData;
     sortByMintDate?: boolean;
     nativeToken: App.Data.Token.TokenData;
     showReportModal: boolean;
+    articles?: App.Data.Articles.ArticlesData;
 }
 
 const CollectionsView = ({
@@ -61,12 +62,16 @@ const CollectionsView = ({
     sortByMintDate = false,
     nativeToken,
     showReportModal,
+    articles,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { props } = usePage();
 
     const [selectedTab, setSelectedTab] = useState<TabName>(appliedFilters.tab);
     const [activityPageLimit, setActivityPageLimit] = useState<number>(appliedFilters.pageLimit);
+
+    const [articlesFilters, setArticlesFilters] = useState<Record<string, string>>({});
+
     const [nftPageLimit, setNftPageLimit] = useState<number>(appliedFilters.nftPageLimit);
     const [selectedTraits, setSelectedTraits] = useState<TraitsFilters>(appliedFilters.traits);
     const [showOnlyOwned, setShowOnlyOwned] = useState<boolean>(appliedFilters.owned);
@@ -86,7 +91,9 @@ const CollectionsView = ({
         if (selectedTab === "articles") {
             return {
                 tab: selectedTab,
-                activityPageLimit: activityPageLimit === 10 ? undefined : activityPageLimit,
+                ...articlesFilters,
+                pageLimit: undefined,
+                articlesPageLimit: articlesFilters.pageLimit === "12" ? undefined : articlesFilters.pageLimit,
             };
         }
 
@@ -105,7 +112,16 @@ const CollectionsView = ({
             query: isTruthy(query) ? query : undefined,
             nftPageLimit: nftPageLimit === 10 ? undefined : nftPageLimit,
         };
-    }, [selectedTraits, showOnlyOwned, selectedTab, activityPageLimit, nftPageLimit, query, hasSelectedTraits]);
+    }, [
+        selectedTraits,
+        showOnlyOwned,
+        selectedTab,
+        activityPageLimit,
+        nftPageLimit,
+        query,
+        hasSelectedTraits,
+        articlesFilters,
+    ]);
 
     useEffect(() => {
         if (!filterIsDirty) {
@@ -113,6 +129,12 @@ const CollectionsView = ({
         }
 
         setFilterIsDirty(false);
+
+        const only = {
+            articles: ["articles"],
+            activity: ["activities"],
+            collection: ["nfts", "collectionTraits"],
+        }[selectedTab];
 
         router.get(
             route("collections.view", {
@@ -124,9 +146,10 @@ const CollectionsView = ({
                 preserveState: true,
                 queryStringArrayFormat: "indices",
                 replace: true,
+                only,
             },
         );
-    }, [filterIsDirty, filters]);
+    }, [filterIsDirty, filters, selectedTab]);
 
     const selectedTraitsSetHandler = (
         previous: TraitsFilters,
@@ -170,7 +193,7 @@ const CollectionsView = ({
     const tabChangeHandler = (tab: TabName): void => {
         setSelectedTab(tab);
 
-        // setFilterIsDirty(true);
+        setFilterIsDirty(true);
     };
 
     const activityPageLimitChangeHandler = (pageLimit: number): void => {
@@ -297,7 +320,8 @@ const CollectionsView = ({
                                         </div>
                                     </div>
 
-                                    {nfts.paginated.data.length === 0 ? (
+                                    {/* @TODO: add skeleton */}
+                                    {nfts === undefined || nfts.paginated.data.length === 0 ? (
                                         renderNoResults({
                                             hasTraitsFiltered: hasSelectedTraits,
                                             hasQuery: query !== "",
@@ -314,24 +338,33 @@ const CollectionsView = ({
                         </Tab.Panel>
 
                         <Tab.Panel>
-                            <ArticlesTab collection={collection} />
+                            <ArticlesTab
+                                articles={articles}
+                                filters={articlesFilters}
+                                setFilters={setArticlesFilters}
+                            />
                         </Tab.Panel>
 
                         <Tab.Panel>
-                            <div className="mt-6">
-                                {activities.paginated.data.length === 0 ? (
-                                    <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
-                                ) : (
-                                    <CollectionActivityTable
-                                        collection={collection}
-                                        activities={activities}
-                                        showNameColumn
-                                        pageLimit={activityPageLimit}
-                                        onPageLimitChange={activityPageLimitChangeHandler}
-                                        nativeToken={nativeToken}
-                                    />
-                                )}
-                            </div>
+                            {/* Activities used to be loaded within page load
+                            but that was adjusted to require lazy load (see articles)
+                            once this is implemented again we need to add some loading skeleton */}
+                            {activities !== undefined && (
+                                <div className="mt-6">
+                                    {activities.paginated.data.length === 0 ? (
+                                        <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
+                                    ) : (
+                                        <CollectionActivityTable
+                                            collection={collection}
+                                            activities={activities}
+                                            showNameColumn
+                                            pageLimit={activityPageLimit}
+                                            onPageLimitChange={activityPageLimitChangeHandler}
+                                            nativeToken={nativeToken}
+                                        />
+                                    )}
+                                </div>
+                            )}
                         </Tab.Panel>
                     </CollectionNavigation>
                 </div>
