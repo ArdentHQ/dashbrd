@@ -143,6 +143,11 @@ export const ArticlesView = ({
                     <ArticlePagination
                         pagination={articles.paginated}
                         onPageChange={(page) => {
+                            window.scrollTo({
+                                top: 0,
+                                left: 0,
+                                behavior: "smooth",
+                            });
                             dispatch({ type: ArticlesViewActionTypes.SetPage, payload: page });
                         }}
                         onPageLimitChange={(limit: number) => {
