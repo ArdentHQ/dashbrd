@@ -59,9 +59,9 @@ it('should return articles with the given pageLimit', function ($pageLimit, $res
 
     expect(count($response['paginated']['data']))->toEqual($resultCount);
 })->with([
-    [123, 35, 1],
+    [123, 32, 1],
     [12, 12, 2],
-    [24, 27, 1],
+    [24, 24, 1],
 ]);
 
 it('should search in articles', function () {
@@ -92,17 +92,21 @@ it('should search in articles', function () {
 });
 
 it('should sort articles', function () {
+    $highlightedArticles = Article::factory(3)->create([
+        'published_at' => now(),
+    ]);
+
     $article1 = Article::factory()->create([
         'title' => 'nice bunny',
-        'published_at' => now(),
+        'published_at' => now()->subMinutes(10),
     ]);
 
     $article2 = Article::factory()->create([
         'title' => 'beautiful baku',
-        'published_at' => now()->addMinutes(10),
+        'published_at' => now()->subMinutes(5),
     ]);
 
-    collect([$article1, $article2])->map(fn ($article) => $article
+    collect($highlightedArticles->concat([$article1, $article2]))->map(fn ($article) => $article
         ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
         ->preservingOriginal()
         ->toMediaCollection()
@@ -118,7 +122,7 @@ it('should sort articles', function () {
 });
 
 it('should get featured collections for an article', function () {
-    seedArticles(2, 2);
+    seedArticles(5, 2);
 
     $response = $this->getJson(route('articles'))->json('articles');
 

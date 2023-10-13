@@ -51,7 +51,7 @@ export const ArticlesView = ({
     const isFistRender = useIsFirstRender();
 
     useEffect(() => {
-        if (isFistRender || debouncedValue === "") return;
+        if (isFistRender) return;
 
         dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
     }, [debouncedValue]);
