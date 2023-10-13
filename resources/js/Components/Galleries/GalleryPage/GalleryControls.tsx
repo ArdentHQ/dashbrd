@@ -122,7 +122,7 @@ export const GalleryControls = ({
                                 icon="Pencil"
                                 variant="icon-primary"
                                 onClick={() => {
-                                    signedAction(() => {
+                                    void signedAction(() => {
                                         router.get(route("my-galleries.edit", { slug: gallery.slug }));
                                     });
                                 }}

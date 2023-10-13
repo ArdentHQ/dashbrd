@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 
@@ -54,7 +55,13 @@ export const useAuthorizedAction = (): {
 
             await action({ authenticated, signed });
         } catch (error) {
-            await showConnectOverlay(onConnected);
+            if (axios.isAxiosError(error)) {
+                const { status } = error.response ?? {};
+
+                if ([403, 401].includes(status ?? 0)) {
+                    await showConnectOverlay(onConnected);
+                }
+            }
         }
     };
 
