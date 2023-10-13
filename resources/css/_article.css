@@ -1,0 +1,5 @@
+@layer components {
+    .article-wrapper {
+        @apply bg-[url(../images/articles/article-wrapper-bg.svg)] bg-cover bg-top bg-no-repeat dark:bg-[url(../images/articles/article-wrapper-bg-dark.svg)];
+    }
+}
