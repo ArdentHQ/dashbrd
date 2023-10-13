@@ -45,9 +45,7 @@ const ArticlesIndex = ({
                     className="pb-2 text-center dark:text-theme-dark-50 sm:text-left"
                 >
                     {t("pages.articles.header_title", {
-                        count:
-                            (articlesToShow?.paginated.meta.total ?? 0) +
-                            (isFilterDirty ? highlightedArticles?.length ?? 0 : initialHighlightedArticles.length),
+                        count: initialHighlightedArticles.length + initialArticles.paginated.meta.total,
                     })}
                 </Heading>
 
