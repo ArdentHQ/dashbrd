@@ -37,6 +37,7 @@ class ArticleController extends Controller
         }
 
         return Inertia::render('Articles/Index', [
+            'allowsGuests' => true,
             'articles' => new ArticlesData($paginated),
         ])->withViewData([
             'title' => trans('metatags.articles.title'),
@@ -50,6 +51,7 @@ class ArticleController extends Controller
         }
 
         return Inertia::render('Articles/Show', [
+            'allowsGuests' => true,
             'article' => ArticleData::fromModel($article),
         ])->withViewData([
             'title' => trans('metatags.articles.view.title', ['title' => $article->title]),

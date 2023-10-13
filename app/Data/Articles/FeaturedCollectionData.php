@@ -24,7 +24,7 @@ class FeaturedCollectionData extends Data
     {
         return new self(
             name: $collection->name,
-            image: $collection->image(),
+            image: $collection->image,
         );
     }
 }
