@@ -70,6 +70,8 @@ class ArticleResource extends Resource
                     ->default(ArticleCategoryEnum::News->value)
                     ->required(),
 
+                Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full')->maxLength(160)->helperText('Max 160 characters'),
+
                 SpatieMediaLibraryFileUpload::make('cover')
                     ->collection('cover')
                     ->columnSpan('full')
@@ -78,8 +80,8 @@ class ArticleResource extends Resource
                     ->imageCropAspectRatio('16:9')
                     ->rules(['max:5120']),
 
-                Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full'),
                 Textarea::make('content')->required()->autosize()->columnSpan('full'),
+
                 Select::make('user_id')
                     ->relationship(
                         name: 'user',
@@ -99,6 +101,7 @@ class ArticleResource extends Resource
                     ->label('Title')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('category')
                     ->label('Category')
                     ->sortable()
