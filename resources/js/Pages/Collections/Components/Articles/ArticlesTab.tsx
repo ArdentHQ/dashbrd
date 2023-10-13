@@ -21,6 +21,7 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
         replaceUrlQuery({
             ...queryParameters,
             view: displayType,
+            tab: "articlesTab",
         });
     }, [debouncedQuery, sort, pageLimit]);
 
