@@ -43,6 +43,7 @@ class ArticleController extends Controller
         $paginated = ArticleData::collection($articles);
 
         $response = [
+            'allowsGuests' => true,
             'articles' => new ArticlesData($paginated),
             'highlightedArticles' => ArticleData::collection($highlightedArticles),
         ];
@@ -65,6 +66,7 @@ class ArticleController extends Controller
         views($article)->record();
 
         return Inertia::render('Articles/Show', [
+            'allowsGuests' => true,
             'article' => ArticleData::fromModel($article),
         ])->withViewData([
             'title' => trans('metatags.articles.view.title', ['title' => $article->title]),
