@@ -106,7 +106,6 @@ class Article extends Model implements HasMedia, Viewable
         return $query->orderBy('articles.views_count_7days', 'desc');
     }
 
-
     /**
      * @param  Builder<self>  $query
      * @return Builder<self>
