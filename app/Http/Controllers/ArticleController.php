@@ -37,12 +37,14 @@ class ArticleController extends Controller
             ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
             ->whereNotIn('articles.id', $highlightedArticles->pluck('id'))
             ->withFeaturedCollections()
-            ->paginate($pageLimit);
+            ->paginate($pageLimit)
+            ->withQueryString();
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
         $paginated = ArticleData::collection($articles);
 
         $response = [
+            'allowsGuests' => true,
             'articles' => new ArticlesData($paginated),
             'highlightedArticles' => ArticleData::collection($highlightedArticles),
         ];
@@ -65,6 +67,7 @@ class ArticleController extends Controller
         views($article)->record();
 
         return Inertia::render('Articles/Show', [
+            'allowsGuests' => true,
             'article' => ArticleData::fromModel($article),
         ])->withViewData([
             'title' => trans('metatags.articles.view.title', ['title' => $article->title]),
