@@ -15,9 +15,10 @@
     <env name="CACHE_DRIVER" value="array"/>
     <env name="DB_CONNECTION" value="pgsql"/>
     <env name="DB_HOST" value="127.0.0.1"/>
-    <env name="DB_PORT" value="5432"/>
+    <env name="DB_PORT" value="5433"/>
     <env name="DB_DATABASE" value="test_db"/>
-    <env name="DB_USERNAME" value="test_db"/>
+    <env name="DB_USERNAME" value="postgres"/>
+    <env name="DB_PASSWORD" value="admin"/>
     <env name="MAIL_MAILER" value="array"/>
     <env name="QUEUE_CONNECTION" value="sync"/>
     <env name="FILESYSTEM_DISK" value="local"/>

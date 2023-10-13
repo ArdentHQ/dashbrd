@@ -39,7 +39,7 @@ it('should fetch nfts for wallet', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 39);
+    $this->assertDatabaseCount('collections', 42);
     $this->assertDatabaseCount('nfts', 90);
 
     expect(Collection::whereNotNull('last_indexed_token_number')->count())->toBe(0);
@@ -77,10 +77,10 @@ it('should fetch nfts for wallet and dispatch floor price job', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 39);
+    $this->assertDatabaseCount('collections', 42);
     $this->assertDatabaseCount('nfts', 90);
 
-    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 39);
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 42);
 });
 
 it('should fetch nfts for wallet and skip floor price job if already present', function () {
@@ -707,7 +707,7 @@ it('should clear gallery & user cache', function () {
     // Fetch same NFTs with a different wallet
     (new FetchWalletNfts($wallet1, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 39);
+    $this->assertDatabaseCount('collections', 42);
     $this->assertDatabaseCount('nfts', 90);
     $this->assertDatabaseCount('galleries_dirty', 0);
 
@@ -1224,7 +1224,7 @@ it('should fetch nfts for wallet and keep previous collections last indexed toke
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 39);
+    $this->assertDatabaseCount('collections', 42);
     $this->assertDatabaseCount('nfts', 90);
 
     expect(Collection::whereNotNull('last_indexed_token_number')->count())->toBe(1);

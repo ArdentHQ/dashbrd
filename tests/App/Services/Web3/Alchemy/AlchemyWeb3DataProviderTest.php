@@ -42,7 +42,7 @@ it('should getWalletTokens', function () {
     $tokens = $provider->getWalletTokens($wallet, $network);
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(5)
+        ->and($tokens)->toHaveCount(6)
         ->and($tokens[0])->toBeInstanceOf(Web3Erc20TokenData::class)
         ->and($tokens[0]->tokenAddress)->toBe('0x01e849040c418c3b7f130351a6e4630c08a7d98e');
 });
@@ -149,7 +149,7 @@ it('should getWalletNfts', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(90)
+        ->and($tokens)->toHaveCount(94)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
         ->and($tokens[0]->tokenAddress)->toBe('0x0b7600ca77fc257fe7eb432f87825cccc4590037')
         ->and($tokens[2]->floorPrice)
@@ -463,7 +463,7 @@ it('should filter out nfts', function () {
     $provider = new AlchemyWeb3DataProvider();
     $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
 
-    expect($nfts)->toHaveCount(5)
+    expect($nfts)->toHaveCount(6)
         ->and($nfts->first()->name)->toBeNull()
         ->and($nfts->last()->name)->toEqual('OK OpenSea fallback');
 });
