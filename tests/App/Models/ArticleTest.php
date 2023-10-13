@@ -121,7 +121,7 @@ it('should update article view counts', function () {
         'viewable_id' => $articles[0]->id,
         'viewable_type' => 'App\Models\Article',
         'visitor' => 'abcdef',
-        'viewed_at' => now()->subDays(8)
+        'viewed_at' => now()->subDays(8),
     ]);
 
     Article::updateViewCounts();
