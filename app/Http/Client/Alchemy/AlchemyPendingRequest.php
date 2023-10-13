@@ -33,6 +33,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use stdClass;
 use Throwable;
@@ -208,7 +209,7 @@ class AlchemyPendingRequest extends PendingRequest
         $ownedNfts = Arr::get($data, 'ownedNfts', []);
 
         $nfts = collect($ownedNfts)
-            ->filter(fn ($nft) => $this->filterNft($nft))
+            ->filter(fn ($nft) => $this->filterNft($nft, false))
             ->map(fn ($nft) => $this->parseNft($nft, $network->id))
             ->values();
 
@@ -364,7 +365,7 @@ class AlchemyPendingRequest extends PendingRequest
     public function parseNft(array $nft, int $networkId, bool $convertTokenNumber = true): Web3NftData
     {
         $extractedFloorPrice = $this->tryExtractFloorPrice($nft);
-        $collectionName = $this->collectionName($nft);
+        $collectionName = $this->collectionName($nft) ?? Arr::get($nft, 'contractMetadata.symbol');
         $description = $nft['description'] ?? null;
         $supply = Arr::get($nft, 'contractMetadata.totalSupply');
         if (is_numeric($supply)) {
@@ -395,11 +396,20 @@ class AlchemyPendingRequest extends PendingRequest
 
         $tokenNumber = $convertTokenNumber === true ? CryptoUtils::hexToBigIntStr($nft['id']['tokenId']) : $nft['id']['tokenId'];
 
+        $error = Arr::get($nft, 'error');
+        if(! empty($error)) {
+            Log::info('AlchemyPendingRequest: Filter NFT', [
+                'error' => $error,
+                'collection' => $collectionName,
+                'nft_id' => $tokenNumber,
+            ]);
+        }
+
         return new Web3NftData(
             tokenAddress: $nft['contract']['address'],
             tokenNumber: $tokenNumber,
             networkId: $networkId,
-            collectionName: $collectionName ?? Arr::get($nft, 'contractMetadata.symbol'),
+            collectionName: $collectionName,
             collectionSymbol: Arr::get($nft, 'contractMetadata.symbol') ?? $collectionName,
             collectionImage: Arr::get($nft, 'contractMetadata.openSea.imageUrl') ?? Arr::get($nft, 'media.0.thumbnail') ?? Arr::get($nft, 'media.0.gateway'),
             collectionWebsite: Arr::get($nft, 'contractMetadata.openSea.externalUrl') ?? Arr::get($nft, 'metadata.external_url'),
@@ -421,6 +431,7 @@ class AlchemyPendingRequest extends PendingRequest
             traits: $this->extractTraits($nft),
             mintedBlock: $nft['contractMetadata']['deployedBlockNumber'],
             mintedAt: $mintTimestamp !== null ? Carbon::createFromTimestampMs($mintTimestamp) : null,
+            hasError: ! empty($error),
         );
     }
 
@@ -681,13 +692,13 @@ class AlchemyPendingRequest extends PendingRequest
         return 'https://'.self::$apiUrlPlaceholder.'.g.alchemy.com/nft/v2/';
     }
 
-    private function filterNft(mixed $nft): bool
+    private function filterNft(mixed $nft, bool $filterError = true): bool
     {
         if (Arr::get($nft, 'spamInfo.isSpam', false)) {
             return false;
         }
 
-        if (Arr::has($nft, 'error')) {
+        if (Arr::has($nft, 'error') && $filterError) {
             return false;
         }
 
