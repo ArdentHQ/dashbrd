@@ -53,6 +53,7 @@ it('updates the collection date based on previously indexed dates', function () 
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
     );
 
     $job = new DetermineCollectionMintingDate($nft);
@@ -103,6 +104,7 @@ it('retrieves the minted date from the web3 provider if not previously retrieved
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
     );
 
     $job = new DetermineCollectionMintingDate($nft);
@@ -136,6 +138,7 @@ it('has a middleware', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
     );
 
     $job = new DetermineCollectionMintingDate($nft);
@@ -167,6 +170,7 @@ it('has a retry until', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
     );
 
     $job = new DetermineCollectionMintingDate($nft);
