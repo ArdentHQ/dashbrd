@@ -19,6 +19,7 @@ use App\Console\Commands\MarketData\FetchPriceHistory;
 use App\Console\Commands\MarketData\UpdateTokenDetails;
 use App\Console\Commands\MarketData\VerifySupportedCurrencies;
 use App\Console\Commands\SyncSpamContracts;
+use App\Console\Commands\UpdateArticlesViewCount;
 use App\Console\Commands\UpdateCollectionsFiatValue;
 use App\Console\Commands\UpdateDiscordMembers;
 use App\Console\Commands\UpdateGalleriesScore;
@@ -94,26 +95,31 @@ class Kernel extends ConsoleKernel
             ->command(FetchCoingeckoTokens::class)
             ->withoutOverlapping()
             ->twiceMonthly(1, 16);
+
+        if (Feature::active(Features::Articles->value)) {
+            $schedule
+                ->command(UpdateArticlesViewCount::class)
+                ->withoutOverlapping()
+                ->hourlyAt(2);
+        }
     }
 
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
         $schedule
-            // Command only fetches collections that doesn't have a slug yet
-            // so in most cases it will not run any request
-            ->command(FetchCollectionOpenseaSlug::class)
-            ->withoutOverlapping()
-            ->hourly();
+                ->command(FetchCollectionFloorPrice::class)
+                ->withoutOverlapping()
+                ->hourlyAt(5);
 
         $schedule
-            ->command(FetchCollectionFloorPrice::class)
+            ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
-            ->hourlyAt(5);
+            ->hourlyAt(10);
 
         $schedule
             ->command(FetchWalletNfts::class)
             ->withoutOverlapping()
-            ->hourlyAt(10); // offset by 10 mins so it's not run the same time as FetchEnsDetails...
+            ->hourlyAt(15); // offset by 15 mins so it's not run the same time as FetchEnsDetails...
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void

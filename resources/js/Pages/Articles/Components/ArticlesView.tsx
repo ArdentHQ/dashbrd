@@ -1,79 +1,75 @@
-import { useEffect, useState } from "react";
+import { type Dispatch, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
-import { LatestArticles } from "@/Pages/Articles/Components/LatestArticles";
+import { HighlightedArticles } from "@/Pages/Articles/Components/HighlightedArticles";
+import {
+    type ArticlesViewActions,
+    ArticlesViewActionTypes,
+    type ArticlesViewState,
+} from "@/Pages/Articles/Hooks/useArticlesView";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Components/Articles/ArticlesList";
 import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
-import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
-const defaults = {
-    sortBy: ArticleSortBy.latest,
+export const articlesViewDefaults = {
     pageLimit: 24,
     debounce: 400,
+    highlightedArticlesCount: 3,
 };
 
 export const ArticlesView = ({
     articles,
+    highlightedArticles,
     isLoading,
-    setFilters,
+    articlesState,
+    dispatch,
     mode,
 }: {
     isLoading: boolean;
+    highlightedArticles?: App.Data.Articles.ArticleData[];
     articles?: App.Data.Articles.ArticlesData;
-    setFilters: (filters: Record<string, string>) => void;
+    articlesState: ArticlesViewState;
+    dispatch: Dispatch<ArticlesViewActions>;
     mode: "collection" | "articles";
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { pageLimit: perPage, view, sort, search, page } = getQueryParameters();
+    const { displayType, sort, debouncedQuery } = articlesState;
 
-    const [query, setQuery] = useState<string>(isTruthy(search) ? search : "");
-    const [debouncedQuery] = useDebounce(query, defaults.debounce);
+    const [query, setQuery] = useState(debouncedQuery);
 
-    const [pageLimit, setPageLimit] = useState<number>(isTruthy(perPage) ? Number(perPage) : defaults.pageLimit);
+    const [debouncedValue] = useDebounce(query, articlesViewDefaults.debounce);
 
-    const [displayType, setDisplayType] = useState(view === "list" ? DisplayTypes.List : DisplayTypes.Grid);
-
-    const [sortBy, setSortBy] = useState<ArticleSortBy>(
-        (sort === "popularity" ? "popularity" : defaults.sortBy) as ArticleSortBy,
-    );
-
-    const isFirstRender = useIsFirstRender();
-
-    const queryParameters: Record<string, string> = {
-        pageLimit: pageLimit.toString(),
-        sort: sortBy,
-        search: debouncedQuery,
-        view: displayType,
-    };
+    const isFistRender = useIsFirstRender();
 
     useEffect(() => {
-        replaceUrlQuery(queryParameters);
+        if (isFistRender) return;
 
-        setFilters({
-            ...queryParameters,
-            isFilterDirty: isFirstRender ? "no" : "yes",
-        });
-    }, [pageLimit, sortBy, debouncedQuery, displayType]);
+        dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
+    }, [debouncedValue]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
-    const articlesLoaded = isTruthy(articles);
+    const articlesLoaded = isTruthy(articles) && !isLoading;
 
-    const currentPage = isTruthy(page) ? Number(page) : 1;
-    const showLatestArticlesCards =
-        mode === "articles" && query === "" && currentPage === 1 && (isLoading || articlesLoaded);
+    const currentPage = articles?.paginated.meta.current_page ?? 1;
+    const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
 
-    const articlesToShow = articlesLoaded
-        ? articles.paginated.data.slice(showLatestArticlesCards ? 3 : 0, articles.paginated.data.length)
-        : [];
+    const articlesToShow = articlesLoaded ? articles.paginated.data : [];
+
+    const handleQueryChange = (query: string): void => {
+        setQuery(query);
+
+        if (query === "") {
+            dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
+        }
+    };
 
     return (
         <>
@@ -81,46 +77,41 @@ export const ArticlesView = ({
                 <DisplayType
                     displayType={displayType}
                     onSelectDisplayType={(type) => {
-                        setDisplayType(type);
+                        dispatch({ type: ArticlesViewActionTypes.SetDisplayType, payload: type });
                     }}
                 />
 
                 <div className="flex-1">
                     <SearchInput
-                        disabled={articlesLoaded && articlesCount === 0 && search === ""}
+                        disabled={articlesLoaded && articlesCount === 0 && query === ""}
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
-                        onChange={(query) => {
-                            setQuery(query);
-                        }}
+                        onChange={handleQueryChange}
                     />
                 </div>
 
                 <ArticleSortDropdown
                     disabled={articlesLoaded && articlesCount === 0}
-                    activeSort={sortBy}
+                    activeSort={sort}
                     onSort={(sort) => {
-                        setSortBy(sort);
+                        dispatch({ type: ArticlesViewActionTypes.SetSort, payload: sort });
                     }}
                 />
             </div>
             <div className="mb-4 sm:hidden">
                 <SearchInput
-                    disabled={articlesLoaded && articlesCount === 0 && search === ""}
+                    disabled={articlesLoaded && articlesCount === 0 && query === ""}
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
-                    onChange={(query) => {
-                        setQuery(query);
-                    }}
+                    onChange={handleQueryChange}
                 />
             </div>
 
-            {showLatestArticlesCards && (
-                <LatestArticles
+            {showHighlighted && (
+                <HighlightedArticles
                     isLoading={isLoading}
-                    hasEnoughArticles={(articles?.paginated.data.length ?? 0) > 3}
-                    articles={articles?.paginated.data.slice(0, 3) ?? []}
+                    articles={highlightedArticles ?? []}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
@@ -152,11 +143,24 @@ export const ArticlesView = ({
                     <ArticlePagination
                         pagination={articles.paginated}
                         onPageLimitChange={(limit: number) => {
-                            setPageLimit(limit);
+                            dispatch({ type: ArticlesViewActionTypes.SetPageLimit, payload: limit });
                         }}
                     />
                 )}
             </div>
         </>
     );
+};
+
+export const getArticlesInitialState = (): ArticlesViewState => {
+    const { pageLimit: perPage, view, sort, search, page } = getQueryParameters();
+
+    return {
+        debouncedQuery: isTruthy(search) ? search : "",
+        pageLimit: isTruthy(perPage) ? Number(perPage) : articlesViewDefaults.pageLimit,
+        displayType: view === "list" ? DisplayTypes.List : DisplayTypes.Grid,
+        sort: sort === "popularity" ? ArticleSortBy.popularity : ArticleSortBy.latest,
+        page: isTruthy(page) ? Number(page) : 1,
+        isFilterDirty: false,
+    };
 };

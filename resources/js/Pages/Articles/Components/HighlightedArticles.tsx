@@ -3,17 +3,16 @@ import { ArticleCard } from "@/Components/Articles/ArticleCard";
 import { ArticleCardSkeleton } from "@/Components/Articles/ArticleCard/ArticleCardSkeleton";
 import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { articlesViewDefaults } from "@/Pages/Articles/Components/ArticlesView";
 
-export const LatestArticles = ({
+export const HighlightedArticles = ({
     articles,
     withFullBorder,
     isLoading,
-    hasEnoughArticles,
 }: {
     articles: App.Data.Articles.ArticleData[];
     withFullBorder: boolean;
     isLoading: boolean;
-    hasEnoughArticles: boolean;
 }): JSX.Element => {
     const slidesPerView = useArticlesSlidesPerPage();
 
@@ -22,13 +21,19 @@ export const LatestArticles = ({
         renderBullet: (_index: number, className: string) => `<span class="h-1.5 rounded-xl w-6 ${className}"></span>`,
     };
 
-    const articlePlaceHolders = Array.from({ length: 3 - articles.length });
+    const { highlightedArticlesCount } = articlesViewDefaults;
+
+    const articlePlaceHolders = Array.from({
+        length: highlightedArticlesCount - articles.length,
+    });
+
+    const hasEnoughArticles = articles.length === highlightedArticlesCount;
 
     return (
         <div className={cn("w-full pt-2 ", { "mb-6": !withFullBorder, "lg:mb-6": withFullBorder })}>
             <div
                 className={cn("latest-articles-carousel w-full", {
-                    "pb-6": slidesPerView < 3,
+                    "pb-6": slidesPerView < highlightedArticlesCount,
                 })}
             >
                 <Carousel

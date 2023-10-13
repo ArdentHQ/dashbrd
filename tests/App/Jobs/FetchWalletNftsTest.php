@@ -22,6 +22,7 @@ use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 
@@ -176,7 +177,7 @@ it('should detach no longer owned nfts', function () {
     );
 });
 
-it('should delete gallery when all nfts have been removed', function () {
+it('should soft delete gallery when all nfts have been soft deleted', function () {
     Bus::fake();
 
     Alchemy::fake([
@@ -228,11 +229,16 @@ it('should delete gallery when all nfts have been removed', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('nft_gallery', 1);
-    $this->assertDatabaseCount('galleries', 1);
+    // Same amout
+    $this->assertDatabaseCount('nft_gallery', 3);
+    $this->assertDatabaseCount('galleries', 2);
 
-    expect(Nft::where('wallet_id', $wallet->id)->get())->toHaveCount(1)
+    // Only one gallery is not deleted
+    expect(DB::select('select count(*) as count from nft_gallery where deleted_at is null')[0]->count)->toBe(1);
+
+    expect($wallet->nfts()->count())->toBe(1)
         ->and(Gallery::where('name', 'BRDY')->first())->toBeNull()
+        ->and(Gallery::withTrashed()->where('name', 'BRDY')->first())->not->toBeNull()
         ->and(Gallery::where('name', 'BRDY2')->first())->not()->toBeNull();
 
     // Fetch once more, now all galleries are deleted due to the wallet no longner owning any NFTs
@@ -242,8 +248,243 @@ it('should delete gallery when all nfts have been removed', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    expect(Nft::where('wallet_id', $wallet->id)->get())->toHaveCount(0);
+    expect($wallet->nfts()->count())->toBe(0);
+
+    // Still two in the database since both were soft deleted
+    $this->assertDatabaseCount('galleries', 2);
+});
+
+it('should not soft delete gallery if not all nfts were deleted', function () {
+    Bus::fake();
+
+    Alchemy::fake([
+        '*' => Http::sequence()
+            ->push(getTestNfts(2))
+            ->push(getTestNfts(1)),
+    ]);
+
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
+
+    $this->assertDatabaseCount('collections', 0);
+    $this->assertDatabaseCount('nfts', 0);
     $this->assertDatabaseCount('galleries', 0);
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect(Nft::count())->toBe(2);
+
+    // Create galleries with NFTs
+    $gallery = Gallery::factory()->create([
+        'user_id' => $wallet->user->id,
+        'name' => 'BRDY',
+        'cover_image' => 'BRDY',
+
+    ]);
+
+    $nfts = Nft::where('wallet_id', $wallet->id)->orderBy('collection_id')->orderBy('id')->get();
+
+    $gallery->nfts()->attach($nfts[0], ['order_index' => 0]);
+    $gallery->nfts()->attach($nfts[1], ['order_index' => 0]);
+
+    // Fetch again, now the first gallery is deleted due to the NFTs being removed from the wallet
+    Carbon::setTestNow(now()->addSecond());
+
+    Cache::flush();
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($gallery->nfts()->count())->toBe(1);
+
+    expect($gallery->fresh()->trashed())->toBeFalse();
+});
+
+it('should delete gallery when all nfts have been assigned to another wallet', function () {
+    Bus::fake();
+
+    Alchemy::fake([
+        '*' => Http::sequence()
+            ->push(getTestNfts(3))
+            ->push(getTestNfts(3)),
+    ]);
+
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
+    $wallet2 = Wallet::factory()->create();
+
+    $this->assertDatabaseCount('collections', 0);
+    $this->assertDatabaseCount('nfts', 0);
+    $this->assertDatabaseCount('galleries', 0);
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect(Nft::count())->toBe(3);
+
+    $this->assertDatabaseCount('galleries', 0);
+
+    // Create 2 galleries with NFTs
+    $galleries = Gallery::factory()->createMany([
+        [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY',
+            'cover_image' => 'BRDY',
+        ], [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY2',
+            'cover_image' => 'BRDY2',
+        ],
+    ]);
+
+    $nfts = Nft::where('wallet_id', $wallet->id)->orderBy('collection_id')->orderBy('id')->get();
+
+    $galleries[0]->nfts()->attach($nfts[0], ['order_index' => 0]);
+    $galleries[0]->nfts()->attach($nfts[1], ['order_index' => 0]);
+    $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
+
+    $this->assertDatabaseCount('nft_gallery', 3);
+    $this->assertDatabaseCount('galleries', 2);
+
+    // Fetch again, now the first gallery is deleted due to the NFTs being removed from the wallet
+    Carbon::setTestNow(now()->addSecond());
+
+    Cache::flush();
+
+    // assigning nfts to wallet 2
+    (new FetchWalletNfts($wallet2, $network))->handle();
+
+    // Nft gallery relationship and galleries should be completely deleted
+
+    $this->assertDatabaseCount('nft_gallery', 0);
+
+    $this->assertDatabaseCount('galleries', 0);
+});
+
+it('should keep gallery if only one nft is assigned to another wallet', function () {
+    Bus::fake();
+
+    Alchemy::fake([
+        '*' => Http::sequence()
+            ->push(getTestNfts(3))
+            ->push(getTestNfts(1)),
+    ]);
+
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
+    $wallet2 = Wallet::factory()->create();
+
+    $this->assertDatabaseCount('collections', 0);
+    $this->assertDatabaseCount('nfts', 0);
+    $this->assertDatabaseCount('galleries', 0);
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect(Nft::count())->toBe(3);
+
+    $this->assertDatabaseCount('galleries', 0);
+
+    // Create 2 galleries with NFTs
+    $galleries = Gallery::factory()->createMany([
+        [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY',
+            'cover_image' => 'BRDY',
+        ], [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY2',
+            'cover_image' => 'BRDY2',
+        ],
+    ]);
+
+    $nfts = Nft::where('wallet_id', $wallet->id)->orderBy('collection_id')->orderBy('id')->get();
+
+    $galleries[0]->nfts()->attach($nfts[0], ['order_index' => 0]);
+    $galleries[0]->nfts()->attach($nfts[1], ['order_index' => 0]);
+    $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
+
+    $this->assertDatabaseCount('nft_gallery', 3);
+    $this->assertDatabaseCount('galleries', 2);
+
+    // Fetch again, now the first gallery is deleted due to the NFTs being removed from the wallet
+    Carbon::setTestNow(now()->addSecond());
+
+    Cache::flush();
+
+    // assigning nfts to wallet 2
+    (new FetchWalletNfts($wallet2, $network))->handle();
+
+    // Nft gallery relationship and galleries should be completely deleted
+
+    $this->assertDatabaseCount('nft_gallery', 2);
+
+    $this->assertDatabaseCount('galleries', 2);
+});
+
+it('should recover a soft deleted gallery if a nft is added again', function () {
+    Bus::fake();
+
+    Alchemy::fake([
+        '*' => Http::sequence()
+            ->push(getTestNfts(3))
+            ->push(['ownedNfts' => []])
+            ->push(getTestNfts(3)),
+    ]);
+
+    $network = Network::polygon();
+    $wallet = Wallet::factory()->create();
+
+    $this->assertDatabaseCount('collections', 0);
+    $this->assertDatabaseCount('nfts', 0);
+    $this->assertDatabaseCount('galleries', 0);
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect(Nft::count())->toBe(3);
+
+    $this->assertDatabaseCount('galleries', 0);
+
+    // Create 2 galleries with NFTs
+    $galleries = Gallery::factory()->createMany([
+        [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY',
+            'cover_image' => 'BRDY',
+        ], [
+            'user_id' => $wallet->user->id,
+            'name' => 'BRDY2',
+            'cover_image' => 'BRDY2',
+        ],
+    ]);
+
+    $nfts = Nft::where('wallet_id', $wallet->id)->orderBy('collection_id')->orderBy('id')->get();
+
+    $galleries[0]->nfts()->attach($nfts[0], ['order_index' => 0]);
+    $galleries[0]->nfts()->attach($nfts[1], ['order_index' => 0]);
+    $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
+
+    expect($wallet->nfts()->count())->toBe(3);
+    expect($galleries[0]->nfts()->count())->toBe(2);
+    expect($galleries[1]->nfts()->count())->toBe(1);
+    expect(Gallery::count())->toBe(2);
+
+    // Fetch, should soft delete the galleries and nfts
+    Carbon::setTestNow(now()->addSecond());
+    Cache::flush();
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($wallet->nfts()->count())->toBe(0);
+    expect($galleries[0]->nfts()->count())->toBe(0);
+    expect($galleries[1]->nfts()->count())->toBe(0);
+    expect(Gallery::count())->toBe(0);
+
+    // Fetch again, should recover the galleries and nfts
+    Carbon::setTestNow(now()->addSecond());
+    Cache::flush();
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($wallet->fresh()->nfts()->count())->toBe(3);
+    expect($galleries[0]->nfts()->count())->toBe(2);
+    expect($galleries[1]->nfts()->count())->toBe(1);
+    expect(Gallery::count())->toBe(2);
 });
 
 it('should handle NFT owner changes', function () {
@@ -355,11 +596,15 @@ it('should delete gallery of previous owner if it becomes empty', function () {
     Cache::flush();
     (new FetchWalletNfts($wallet2, $network))->handle();
 
-    $this->assertDatabaseCount('galleries', 1);
-    expect(Nft::where('wallet_id', $wallet1->id)->get())->toHaveCount(2)
-        ->and(Nft::where('wallet_id', $wallet2->id)->get())->toHaveCount(1)
+    expect(Gallery::count())->toBe(1);
+    expect(Gallery::withTrashed()->count())->toBe(1);
+
+    expect($wallet1->nfts()->count())->toBe(2)
+        ->and($wallet2->nfts()->count())->toBe(1)
         ->and(Gallery::where('name', 'BRDY')->first())->not()->toBeNull()
-        ->and(Gallery::where('name', 'BRDY2')->first())->toBeNull();
+        ->and(Gallery::where('name', 'BRDY2')->first())->toBeNull()
+        ->and(Gallery::where('name', 'BRDY2')->withTrashed()->first())->toBeNull();
+
 });
 
 it('should not delete gallery/nfts of local testing wallet', function () {
@@ -402,7 +647,7 @@ it('should not delete gallery/nfts of local testing wallet', function () {
     $galleries[0]->nfts()->attach($nfts[1], ['order_index' => 0]);
     $galleries[1]->nfts()->attach($nfts[2], ['order_index' => 0]);
 
-    $this->assertDatabaseCount('galleries', 2);
+    expect(Gallery::count())->toBe(2);
 
     // Fetch wallet2, which now owns the NFT from wallet1's second gallery thus deleting the second gallery.
     Carbon::setTestNow(now()->addSecond());
@@ -411,7 +656,7 @@ it('should not delete gallery/nfts of local testing wallet', function () {
 
     (new FetchWalletNfts($wallet1, $network))->handle();
 
-    $this->assertDatabaseCount('galleries', 2);
+    expect(Gallery::count())->toBe(2);
     expect(Nft::where('wallet_id', $wallet1->id)->get())->toHaveCount(3)
         ->and(Gallery::where('name', 'BRDY')->first())->not()->toBeNull()
         ->and(Gallery::where('name', 'BRDY2')->first())->not()->toBeNull();
@@ -425,7 +670,8 @@ it('should not delete gallery/nfts of local testing wallet', function () {
 
     (new FetchWalletNfts($wallet1, $network))->handle();
 
-    $this->assertDatabaseCount('galleries', 0);
+    expect(Gallery::count())->toBe(0);
+
     expect(Nft::where('wallet_id', $wallet1->id)->get())->toHaveCount(0);
 });
 

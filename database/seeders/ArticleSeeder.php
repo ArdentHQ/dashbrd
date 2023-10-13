@@ -25,7 +25,7 @@ class ArticleSeeder extends Seeder
 
         $articlesData = collect(json_decode(file_get_contents(database_path('seeders/fixtures/articles/articles.json')), true));
 
-        $articlesData->shuffle()->take(10)->each(function ($articleData) {
+        $articlesData->shuffle()->each(function ($articleData) {
             $article = Article::factory()->create([
                 'title' => $articleData['name'],
                 'category' => 'news',
@@ -35,7 +35,7 @@ class ArticleSeeder extends Seeder
 
             $imagePath = database_path('seeders/fixtures/articles/images/'.$articleData['slug'].'.png');
 
-            $article->addMedia($imagePath)->preservingOriginal()->toMediaCollection();
+            $article->addMedia($imagePath)->preservingOriginal()->toMediaCollection('cover');
 
             $collections = Collection::all()->random(8);
 

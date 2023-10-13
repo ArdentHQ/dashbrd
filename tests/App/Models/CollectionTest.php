@@ -760,146 +760,6 @@ it('can sort collections by nfts mint date', function () {
     ]);
 });
 
-it('queries the collections for the collection data object', function () {
-    $collection1 = Collection::factory()->create([
-        'floor_price' => '123456789',
-        'extra_attributes' => [
-            'image' => 'https://example.com/image.png',
-            'banner' => 'https://example.com/banner.png',
-            'website' => 'https://example.com',
-            'opensea_slug' => 'test-collection',
-        ],
-    ]);
-
-    // Null attributes
-    $collection2 = Collection::factory()->create([
-        'floor_price' => '123456789',
-        'extra_attributes' => [
-            'website' => 'https://example2.com',
-        ],
-    ]);
-
-    // With nfts
-    Collection::factory()
-        ->has(Nft::factory()->count(3))
-        ->create([
-            'floor_price' => '123456789',
-            'extra_attributes' => [
-                'website' => 'https://example2.com',
-            ],
-        ]);
-
-    // should not be included
-    Nft::factory()->count(2)->create();
-
-    $result = Collection::forCollectionData()->oldest('id')->get()->toArray();
-
-    // +2 because are created by the nft factory
-    expect($result)->toHaveCount(3 + 2);
-
-    expect($result[0])->toEqual([
-        'id' => $collection1->id,
-        'name' => $collection1->name,
-        'slug' => $collection1->slug,
-        'address' => $collection1->address,
-        'chain_id' => $collection1->network->chain_id,
-        'floor_price' => strval($collection1->floor_price),
-        'floor_price_fiat' => null,
-        'floor_price_currency' => strtolower($collection1->floorPriceToken->symbol),
-        'floor_price_decimals' => $collection1->floorPriceToken->decimals,
-        'image' => 'https://example.com/image.png',
-        'banner' => 'https://example.com/banner.png',
-        'opensea_slug' => 'test-collection',
-        'website' => 'https://example.com',
-        'nfts_count' => 0,
-    ]);
-
-    expect($result[1])->toEqual([
-        'id' => $collection2->id,
-        'name' => $collection2->name,
-        'slug' => $collection2->slug,
-        'address' => $collection2->address,
-        'chain_id' => $collection2->network->chain_id,
-        'floor_price' => strval($collection2->floor_price),
-        'floor_price_fiat' => null,
-        'floor_price_currency' => strtolower($collection2->floorPriceToken->symbol),
-        'floor_price_decimals' => $collection2->floorPriceToken->decimals,
-        'image' => null,
-        'banner' => null,
-        'opensea_slug' => null,
-        'website' => 'https://example2.com',
-        'nfts_count' => 0,
-    ]);
-
-    expect($result[2]['nfts_count'])->toBe(3);
-});
-
-it('queries the nfts count for the user', function () {
-    $user = User::factory()->create();
-
-    // With random nfts
-    $collection = Collection::factory()
-        ->has(Nft::factory()->count(3))
-        ->create([
-            'floor_price' => '123456789',
-            'extra_attributes' => [],
-        ]);
-
-    // Should include only these ones
-    Nft::factory()
-        ->count(2)
-        ->for(Wallet::factory()->withUser($user))
-        ->create([
-            'collection_id' => $collection->id,
-        ]);
-
-    $result = Collection::forCollectionData($user)->oldest('id')->get()->toArray();
-
-    expect($result[0]['nfts_count'])->toBe(2);
-});
-
-it('gets the floor price for the user currency', function () {
-    $user = User::factory()->create([
-        'extra_attributes' => [
-            'currency' => 'MXN',
-        ],
-    ]);
-
-    Collection::factory()
-        ->has(
-            Nft::factory()->for(Wallet::factory()->withUser($user))
-        )
-        ->create([
-            'fiat_value' => [
-                'MXN' => 1000,
-                'USD' => 50,
-            ],
-        ]);
-
-    // No value but usd
-    Collection::factory()
-        ->has(
-            Nft::factory()->for(Wallet::factory()->withUser($user))
-        )
-        ->create([
-            'fiat_value' => [
-                'USD' => 50,
-            ],
-        ]);
-
-    // Not included
-    Collection::factory()->create();
-
-    $result = Collection::forCollectionData($user)->oldest('id')->get()->toArray();
-
-    expect($result)->toHaveCount(2);
-
-    expect($result[0]['floor_price_fiat'])->toBe('1000');
-
-    // No mxn price
-    expect($result[1]['floor_price_fiat'])->toBeNull();
-});
-
 it('can determine whether collection was recently viewed', function () {
     $collection = new Collection([
         'last_viewed_at' => null,
@@ -1042,17 +902,27 @@ it('should mark collection as invalid - blacklisted', function () {
 it('should exclude spam contracts', function () {
     $network = Network::factory()->create();
 
-    $collections = Collection::factory(2)->create(['network_id' => $network->id]);
-
-    SpamContract::query()->insert([
-        'address' => $collections->first()->address,
-        'network_id' => $collections->first()->network_id,
+    [$collection, $other] = Collection::factory(2)->create([
+        'network_id' => $network->id,
     ]);
 
-    $validCollections = Collection::query()->withoutSpamContracts()->get();
+    $spamContract = SpamContract::create([
+        'address' => $collection->address,
+        'network_id' => $collection->network_id,
+    ]);
 
-    expect($validCollections->count())->toBe(1)
-        ->and($validCollections->first()->slug)->toBe($collections[1]->slug);
+    $otherSpamContract = SpamContract::create([
+        'address' => $other->address,
+        'network_id' => Network::factory()->create()->id,
+    ]);
+
+    expect($collection->spamContract->is($spamContract))->toBeTrue();
+    expect($other->spamContract)->toBeNull();
+
+    $collections = Collection::withoutSpamContracts()->get();
+
+    expect($collections->count())->toBe(1);
+    expect($collections->first()->slug)->toBe($other->slug);
 });
 
 it('should exclude collections with an invalid supply', function () {
@@ -1086,7 +956,9 @@ it('filters collections that belongs to wallets that have been signed at least o
         'last_signed_at' => now(),
     ]);
 
-    $notSigned = Wallet::factory()->create();
+    $notSigned = Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     $signed2 = Wallet::factory()->create([
         'last_signed_at' => now(),
@@ -1122,12 +994,10 @@ it('filters collections that belongs to wallets that have been signed at least o
 
     $filtered = Collection::query()->withSignedWallets()->get();
 
-    expect($filtered->count())->toBe(2)
-        ->and($filtered->pluck('id')->sort()->toArray())->toEqual([
-            $collection1->id,
-            $collection4->id,
-        ]);
+    expect($filtered->count())->toBe(2);
 
+    expect($filtered->pluck('id')->contains($collection1->id))->toBeTrue();
+    expect($filtered->pluck('id')->contains($collection4->id))->toBeTrue();
 });
 
 it('should get openSeaSlug', function () {
@@ -1173,60 +1043,4 @@ it('sorts collections last time nft was fetched', function () {
         $collection1->id,
         $collection4->id,
     ]);
-});
-
-it('should get published collection articles', function () {
-    $collections = Collection::factory(2)->create();
-
-    $articles = Article::factory(3)->create([
-        'published_at' => now()->format('Y-m-d'),
-    ]);
-
-    Article::factory(1)->create([
-        'published_at' => null,
-    ]);
-
-    $collections->map(function ($collection) use ($articles) {
-        $collection->articles()->attach($articles, ['order_index' => 1]);
-    });
-
-    $result = $collections->first()->articlesWithCollections()->get();
-
-    expect($result->count())->toBe(3);
-});
-
-it('should get collection articles sorted', function () {
-    $collection = Collection::factory()->create();
-
-    $articles = Article::factory(3)->create([
-        'published_at' => now()->format('Y-m-d'),
-    ]);
-
-    $collection->articles()->attach($articles[1], ['order_index' => 1]);
-    $collection->articles()->attach($articles[0], ['order_index' => 2]);
-    $collection->articles()->attach($articles[2], ['order_index' => 3]);
-
-    $result = $collection->articlesWithCollections()->get();
-
-    expect($result[0]->id)->toBe($articles[1]->id)
-        ->and($result[1]->id)->toBe($articles[0]->id)
-        ->and($result[2]->id)->toBe($articles[2]->id);
-});
-
-it('should get collection article\'s collections', function () {
-    $collections = Collection::factory(3)->create();
-
-    $articles = Article::factory(3)->create([
-        'published_at' => now()->format('Y-m-d'),
-    ]);
-
-    $collections->map(function ($collection) use ($articles) {
-        $collection->articles()->attach($articles, ['order_index' => 1]);
-    });
-
-    $result = $collections->first()->articlesWithCollections()->first();
-
-    expect($result->collections->count())->toBe(2)
-        ->and($result->collections->pluck('name'))->toContain($collections[1]->name)
-        ->and($result->collections->pluck('name'))->toContain($collections[2]->name);
 });
