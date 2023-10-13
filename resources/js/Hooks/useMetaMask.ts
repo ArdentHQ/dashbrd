@@ -110,9 +110,9 @@ export interface MetaMaskState {
     getTransactionReceipt: (hash: string) => Promise<ProviderResponse<ethers.providers.TransactionReceipt>>;
     getBlock: (blockHash: string) => Promise<ProviderResponse<ethers.providers.Block>>;
     hideConnectOverlay: () => void;
-    showConnectOverlay: (onConnected?: () => void) => void;
+    showConnectOverlay: (onConnected?: () => Promise<void>) => Promise<void>;
     isShowConnectOverlay: boolean;
-    askForSignature: (onSigned?: () => void) => void;
+    askForSignature: (onSigned?: () => Promise<void>) => Promise<void>;
     onDisconnected: () => void;
 }
 
@@ -162,7 +162,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
 
     const [onConnected, setOnConnected] = useState<() => void>();
-    const [onSigned, setOnSigned] = useState<() => void>();
+    const [onSigned, setOnSigned] = useState<() => Promise<void>>();
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
@@ -385,16 +385,38 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         [ethereumProvider],
     );
 
-    const showConnectOverlay = (onConnected?: () => void): void => {
+    const showConnectOverlay = async (onConnected?: () => Promise<void>): Promise<void> => {
         setShowConnectOverlay(true);
 
-        setOnConnected(() => onConnected);
+        await new Promise<void>((resolve, reject) => {
+            // eslint-disable-next-line unicorn/consistent-function-scoping
+            setOnConnected(() => async (): Promise<void> => {
+                try {
+                    await onConnected?.();
+
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
     };
 
-    const askForSignature = (onSigned?: () => void): void => {
+    const askForSignature = async (onSigned?: () => Promise<void>): Promise<void> => {
         setRequiresSignature(true);
 
-        setOnSigned(() => onSigned);
+        await new Promise<void>((resolve, reject) => {
+            // eslint-disable-next-line unicorn/consistent-function-scoping
+            setOnSigned(() => async (): Promise<void> => {
+                try {
+                    await onSigned?.();
+
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
     };
 
     const hideConnectOverlay = (): void => {
@@ -468,7 +490,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             router.reload();
 
             if (onSigned !== undefined) {
-                onSigned();
+                await onSigned();
             }
         } catch (error) {
             handleAxiosError(error);

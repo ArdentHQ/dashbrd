@@ -2,50 +2,58 @@ import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuth } from "@/Hooks/useAuth";
 
 export const useAuthorizedAction = (): {
-    signedAction: (action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => void) => void;
-    authenticatedAction: (action: ({ authenticated }: { authenticated: boolean }) => void) => void;
+    signedAction: (
+        action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => Promise<void>,
+    ) => Promise<void>;
+    authenticatedAction: (action: ({ authenticated }: { authenticated: boolean }) => Promise<void>) => Promise<void>;
 } => {
     const { authenticated } = useAuth();
     const { showConnectOverlay, signed, askForSignature } = useMetaMaskContext();
 
-    const signedAction = (
-        action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => void,
-    ): void => {
-        const onAction = (): void => {
-            action({ authenticated, signed });
+    const authenticatedAction = async (
+        action: ({ authenticated }: { authenticated: boolean }) => Promise<void>,
+    ): Promise<void> => {
+        const onAction = async (): Promise<void> => {
+            await action({ authenticated });
         };
 
         if (!authenticated) {
-            const onConnected = (): void => {
-                askForSignature(onAction);
-            };
-
-            showConnectOverlay(onConnected);
+            await showConnectOverlay(onAction);
 
             return;
         }
 
-        if (!signed) {
-            askForSignature(onAction);
-
-            return;
-        }
-
-        action({ authenticated, signed });
+        await action({ authenticated });
     };
 
-    const authenticatedAction = (action: ({ authenticated }: { authenticated: boolean }) => void): void => {
-        const onAction = (): void => {
-            action({ authenticated });
+    const signedAction = async (
+        action: ({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => Promise<void>,
+    ): Promise<void> => {
+        const onAction = async (): Promise<void> => {
+            await action({ authenticated, signed });
         };
 
-        if (!authenticated) {
-            showConnectOverlay(onAction);
+        const onConnected = async (): Promise<void> => {
+            await askForSignature(onAction);
+        };
 
-            return;
+        try {
+            if (!authenticated) {
+                await showConnectOverlay(onConnected);
+
+                return;
+            }
+
+            if (!signed) {
+                await askForSignature(onAction);
+
+                return;
+            }
+
+            await action({ authenticated, signed });
+        } catch (error) {
+            await showConnectOverlay(onConnected);
         }
-
-        action({ authenticated });
     };
 
     return { signedAction, authenticatedAction };
