@@ -14,18 +14,22 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::withoutEvents(fn () => User::factory()->create([
-            'username' => 'john.doe',
-        ]));
+        $wallet = Wallet::where('address', env('LOCAL_TESTING_ADDRESS'))->first();
 
-        $wallet = Wallet::withoutEvents(fn () => Wallet::factory()->create([
-            'user_id' => $user->id,
-            'address' => env('LOCAL_TESTING_ADDRESS'),
-        ]));
+        if ($wallet === null) {
+            $user = User::withoutEvents(fn () => User::factory()->create([
+                'username' => 'john.doe',
+            ]));
 
-        $user->update([
-            'wallet_id' => $wallet->id,
-        ]);
+            $wallet = Wallet::withoutEvents(fn () => Wallet::factory()->create([
+                'user_id' => $user->id,
+                'address' => env('LOCAL_TESTING_ADDRESS'),
+            ]));
+
+            $user->update([
+                'wallet_id' => $wallet->id,
+            ]);
+        }
     }
 
     /**
