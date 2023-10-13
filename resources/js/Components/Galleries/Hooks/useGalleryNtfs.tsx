@@ -1,10 +1,10 @@
 import { groupBy } from "@ardenthq/sdk-helpers";
 import axios from "axios";
 import { useMemo, useState } from "react";
+import useAbortController from "react-use-cancel-token";
 import GalleryNftData = App.Data.Gallery.GalleryNftData;
 import { type CollectionsPageMeta, type GalleryNftsState } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
 import { isTruthy } from "@/Utils/is-truthy";
-import useAbortController from "react-use-cancel-token";
 
 type NftData = App.Data.Gallery.GalleryNftData;
 
@@ -48,7 +48,7 @@ export const useGalleryNtfs = ({
 }: GalleryNftsProperties): GalleryNftsState => {
     const [loadingCollections, setLoadingCollections] = useState(false);
     const [isSearchingCollections, setIsSearchingCollections] = useState(false);
-    const { newAbortSignal, cancelPreviousRequest, isCancel } = useAbortController();
+    const { newAbortSignal, cancelPreviousRequest } = useAbortController();
 
     const [nfts, setNfts] = useState<GalleryNftData[]>(loadedNfts);
 
@@ -166,8 +166,6 @@ export const useGalleryNtfs = ({
         const { data } = await axios.get<CollectionsResponse>(decodeURIComponent(url.toString()), {
             signal: newAbortSignal(),
         });
-
-        cancelPreviousRequest();
 
         setPageMeta(data.collections.paginated.meta);
 
