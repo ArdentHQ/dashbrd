@@ -39,6 +39,8 @@ class ArticleController extends Controller
             ->withFeaturedCollections()
             ->paginate($pageLimit);
 
+        $articles->withQueryString()->links();
+
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
         $paginated = ArticleData::collection($articles);
 
