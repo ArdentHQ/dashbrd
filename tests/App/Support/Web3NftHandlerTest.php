@@ -605,7 +605,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
     $handler->store(collect([$dataWithError]));
     $collection->refresh();
 
-    # Expect all fields to be the same as before
+    // Expect all fields to be the same as before
     expect(Collection::count())->toBe(1);
     expect($collection->name)->toBe($originalData->collectionName);
     expect($collection->slug)->toBe(Str::slug($originalData->collectionName));
