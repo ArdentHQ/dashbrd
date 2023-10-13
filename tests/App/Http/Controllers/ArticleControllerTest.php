@@ -16,7 +16,7 @@ function seedArticles(int $articlesCount = 4, int $collectionsCount = 2): array
     $articles->map(fn ($article) => $article
         ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
         ->preservingOriginal()
-        ->toMediaCollection()
+        ->toMediaCollection('cover')
     );
 
     $collections->map(function ($collection) use ($articles) {
