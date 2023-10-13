@@ -128,3 +128,38 @@ it('should get featured collections for an article', function () {
 
     expect(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(2);
 });
+
+it('should keep highlighted articles regardless of the sorting', function () {
+    $highlightedArticles = Article::factory(3)->create([
+        'published_at' => now(),
+    ]);
+
+    $article1 = Article::factory()->create([
+        'title' => 'nice bunny',
+        'published_at' => now()->subMinutes(10),
+    ]);
+
+    collect($highlightedArticles->concat([$article1]))->map(fn ($article) => $article
+        ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
+        ->preservingOriginal()
+        ->toMediaCollection()
+    );
+
+    $response = $this->getJson(route('articles', [
+        'sort' => 'latest',
+    ]));
+
+    expect(count($response['articles']['paginated']['data']))->toEqual(1)
+        ->and(count($response['highlightedArticles']))->toEqual(3)
+        ->and(array_column($response['highlightedArticles'],
+            'id'))->toEqualCanonicalizing($highlightedArticles->pluck('id')->toArray());
+
+    $response = $this->getJson(route('articles', [
+        'sort' => 'popularity',
+    ]));
+
+    expect(count($response['articles']['paginated']['data']))->toEqual(1)
+        ->and(count($response['highlightedArticles']))->toEqual(3)
+        ->and(array_column($response['highlightedArticles'],
+            'id'))->toEqualCanonicalizing($highlightedArticles->pluck('id')->toArray());
+});
