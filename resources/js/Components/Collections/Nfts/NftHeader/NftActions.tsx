@@ -98,8 +98,8 @@ export const NftActions = ({
         if (authenticated) {
             void handleRefresh();
         } else {
-            showConnectOverlay(() => {
-                void handleRefresh();
+            void showConnectOverlay(async () => {
+                await handleRefresh();
             });
         }
     };

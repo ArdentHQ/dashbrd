@@ -121,7 +121,8 @@ export const CollectionActions = ({
                                         title={t("common.report")}
                                         onClick={() => {
                                             setOpen(false);
-                                            signedAction(({ signed }) => {
+
+                                            void signedAction(({ signed }) => {
                                                 setShowReportModal(true);
 
                                                 if (!signed) {
@@ -145,7 +146,8 @@ export const CollectionActions = ({
                                 data-testid="CollectionActions__hide"
                                 onClick={() => {
                                     setOpen(false);
-                                    signedAction(({ signed }) => {
+
+                                    void signedAction(({ signed }) => {
                                         if (!signed) {
                                             router.reload({
                                                 data: {
