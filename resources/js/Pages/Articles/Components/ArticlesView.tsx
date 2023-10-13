@@ -19,7 +19,6 @@ import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const articlesViewDefaults = {
-    sortBy: ArticleSortBy.latest,
     pageLimit: 24,
     debounce: 400,
     highlightedArticlesCount: 3,
@@ -46,7 +45,7 @@ export const ArticlesView = ({
 
     const [query, setQuery] = useState(debouncedQuery);
 
-    const [debouncedValue] = useDebounce(query, 400);
+    const [debouncedValue] = useDebounce(query, articlesViewDefaults.debounce);
 
     const isFistRender = useIsFirstRender();
 
