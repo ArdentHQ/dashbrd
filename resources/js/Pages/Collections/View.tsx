@@ -39,7 +39,7 @@ interface Properties {
         query: string;
         nftPageLimit: number;
     };
-    activities: App.Data.Nfts.NftActivitiesData;
+    activities: App.Data.Nfts.NftActivitiesData | null;
     sortByMintDate?: boolean;
     nativeToken: App.Data.Token.TokenData;
     showReportModal: boolean;
@@ -308,7 +308,7 @@ const CollectionsView = ({
 
                         <Tab.Panel>
                             <div className="mt-6">
-                                {activities.paginated.data.length === 0 ? (
+                                {!isTruthy(activities) || activities.paginated.data.length === 0 ? (
                                     <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
                                 ) : (
                                     <CollectionActivityTable

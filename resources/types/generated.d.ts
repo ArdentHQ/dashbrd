@@ -435,6 +435,19 @@ declare namespace App.Data.Wallet {
     };
 }
 declare namespace App.Data.Web3 {
+    export type CollectionActivity = {
+        contractAddress: string;
+        tokenId: string;
+        sender: string;
+        recipient: string;
+        txHash: string;
+        logIndex: string;
+        type: App.Enums.NftTransferType | null;
+        timestamp: string;
+        totalNative: number | null;
+        totalUsd: number | null;
+        extraAttributes: Array<any>;
+    };
     export type Web3ContractMetadata = {
         contractAddress: string;
         collectionName: string | null;
@@ -492,18 +505,6 @@ declare namespace App.Data.Web3 {
         traits: Array<any>;
         mintedBlock: number;
         mintedAt: string | null;
-    };
-    export type Web3NftTransfer = {
-        contractAddress: string;
-        tokenId: string;
-        sender: string;
-        recipient: string;
-        txHash: string;
-        type: App.Enums.NftTransferType;
-        timestamp: string;
-        totalNative: number | null;
-        totalUsd: number | null;
-        extraAttributes: Array<any>;
     };
     export type Web3NftsChunk = {
         nfts: any;

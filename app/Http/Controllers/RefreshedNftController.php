@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Jobs\FetchNftActivity;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\RefreshNftMetadata;
 use App\Models\Collection;
 use App\Models\Nft;
@@ -21,7 +21,7 @@ class RefreshedNftController extends Controller
         // It's supposed to be completely opaque to the user what the "refresh" is doing.
         RefreshNftMetadata::dispatch($collection, $nft)->onQueue(Queues::NFTS);
 
-        FetchNftActivity::dispatch($nft);
+        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
 
         return response()->json([
             'success' => true,

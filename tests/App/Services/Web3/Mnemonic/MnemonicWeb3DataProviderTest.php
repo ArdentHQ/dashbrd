@@ -111,3 +111,22 @@ it('should throw an exception trying to fetch the block creation date', function
 
     expect(fn () => $provider->getBlockTimestamp($network, blockNumber: 10000))->toThrow(NotImplementedException::class);
 });
+
+it('can get collection activity', function () {
+    Mnemonic::fake([
+        '*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
+    ]);
+
+    Token::factory()->withGuid()->create([
+        'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $collection = Collection::factory()->create();
+
+    $activity = (new MnemonicWeb3DataProvider)->getCollectionActivity(Chains::Polygon, $collection->address, limit: 10);
+
+    expect($activity)->toHaveCount(18);
+});
