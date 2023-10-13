@@ -34,12 +34,12 @@ describe("useAuthorizedAction signedAction", () => {
             useMetaMaskContextSpy.mockRestore();
         });
 
-        it("should show connect overlay if not authenticated", () => {
+        it("should show connect overlay if not authenticated", async () => {
             const { signedAction } = renderHook(() => useAuthorizedAction()).result.current;
 
             const action = vi.fn();
 
-            signedAction(() => {
+            await signedAction(() => {
                 action();
             });
 
@@ -48,7 +48,7 @@ describe("useAuthorizedAction signedAction", () => {
             expect(askForSignature).not.toHaveBeenCalled();
         });
 
-        it("should ask for signature  after connecting", () => {
+        it("should ask for signature  after connecting", async () => {
             showConnectOverlay.mockImplementation((onConnected) => {
                 onConnected();
             });
@@ -57,7 +57,7 @@ describe("useAuthorizedAction signedAction", () => {
 
             const action = vi.fn();
 
-            signedAction(() => {
+            await signedAction(() => {
                 action();
             });
 
@@ -66,7 +66,7 @@ describe("useAuthorizedAction signedAction", () => {
             expect(action).not.toHaveBeenCalled();
         });
 
-        it("should run the action after signed", () => {
+        it("should run the action after signed", async () => {
             showConnectOverlay.mockImplementation((onConnected) => {
                 onConnected();
             });
@@ -78,7 +78,7 @@ describe("useAuthorizedAction signedAction", () => {
 
             const action = vi.fn();
 
-            signedAction(() => {
+            await signedAction(() => {
                 action();
             });
 
@@ -110,12 +110,12 @@ describe("useAuthorizedAction signedAction", () => {
             useMetaMaskContextSpy.mockRestore();
         });
 
-        it("should ask for signature", () => {
+        it("should ask for signature", async () => {
             const { signedAction } = renderHook(() => useAuthorizedAction()).result.current;
 
             const action = vi.fn();
 
-            signedAction(() => {
+            await signedAction(() => {
                 action();
             });
 
@@ -124,7 +124,7 @@ describe("useAuthorizedAction signedAction", () => {
             expect(action).not.toHaveBeenCalled();
         });
 
-        it("should run the action after signed", () => {
+        it("should run the action after signed", async () => {
             askForSignature.mockImplementation((onSigned) => {
                 onSigned();
             });
@@ -133,7 +133,7 @@ describe("useAuthorizedAction signedAction", () => {
 
             const action = vi.fn();
 
-            signedAction(() => {
+            await signedAction(() => {
                 action();
             });
 
@@ -165,12 +165,12 @@ describe("useAuthorizedAction signedAction", () => {
             useMetaMaskContextSpy.mockRestore();
         });
 
-        it("should run the action", () => {
+        it("should run the action", async () => {
             const { signedAction } = renderHook(() => useAuthorizedAction()).result.current;
 
             const action = vi.fn();
 
-            signedAction(() => {
+            await signedAction(() => {
                 action();
             });
 
@@ -201,12 +201,12 @@ describe("useAuthorizedAction authenticatedAction", () => {
             useMetaMaskContextSpy.mockRestore();
         });
 
-        it("should show connect overlay if not authenticated", () => {
+        it("should show connect overlay if not authenticated", async () => {
             const { authenticatedAction } = renderHook(() => useAuthorizedAction()).result.current;
 
             const action = vi.fn();
 
-            authenticatedAction(() => {
+            await authenticatedAction(() => {
                 action();
             });
 
@@ -214,7 +214,7 @@ describe("useAuthorizedAction authenticatedAction", () => {
             expect(action).not.toHaveBeenCalled();
         });
 
-        it("should run the action after connected", () => {
+        it("should run the action after connected", async () => {
             showConnectOverlay.mockImplementation((onConnected) => {
                 onConnected();
             });
@@ -223,7 +223,7 @@ describe("useAuthorizedAction authenticatedAction", () => {
 
             const action = vi.fn();
 
-            authenticatedAction(() => {
+            await authenticatedAction(() => {
                 action();
             });
 
@@ -250,12 +250,12 @@ describe("useAuthorizedAction authenticatedAction", () => {
             useMetaMaskContextSpy.mockRestore();
         });
 
-        it("should run the action", () => {
+        it("should run the action", async () => {
             const { authenticatedAction } = renderHook(() => useAuthorizedAction()).result.current;
 
             const action = vi.fn();
 
-            authenticatedAction(() => {
+            await authenticatedAction(() => {
                 action();
             });
 
