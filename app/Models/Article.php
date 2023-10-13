@@ -31,6 +31,27 @@ class Article extends Model implements HasMedia, Viewable
         'published_at' => 'date',
     ];
 
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return Article::query()->withFeaturedCollections()->where('articles.slug', $value)->first();
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWithFeaturedCollections(Builder $query, int $collectionId = null): Builder
+    {
+        return $query->with(['collections' => function ($query) use ($collectionId) {
+            $query->when($collectionId, fn ($q) => $q->where('collections.id', '!=', $collectionId))
+                ->select([
+                    'collections.name',
+                    'collections.slug',
+                    'collections.extra_attributes->image as image',
+                ]);
+        }]);
+    }
+
     public function registerMediaCollections(): void
     {
         $this
