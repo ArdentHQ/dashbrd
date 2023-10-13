@@ -94,3 +94,29 @@ it('should fetch nft metadata', function () {
 
     expect($fetchedNfts->nfts)->toHaveCount(1);
 });
+
+it('should add a flag in case of responses with errors', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
+            ->push(fixtureData('alchemy.nfts_array_with_error'), 200),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon();
+
+    $collection = Alchemy::getWalletNfts($wallet, $network);
+    expect($collection->nfts[0]->hasError)->toBetrue();
+});
+
+it('should not add a flag in case of valid responses', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
+            ->push(fixtureData('alchemy.nfts_array_valid'), 200),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon();
+
+    $collection = Alchemy::getWalletNfts($wallet, $network);
+    expect($collection->nfts[0]->hasError)->not->toBeTrue();
+});
