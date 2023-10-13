@@ -101,6 +101,16 @@ class Article extends Model implements HasMedia, Viewable
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeSortByPopularity(Builder $query): Builder
+    {
+        return $query->orderBy('articles.views_count_7days', 'desc');
+    }
+
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeSortByPublishedDate(Builder $query): Builder
     {
         return $query->orderBy('articles.published_at', 'desc');
