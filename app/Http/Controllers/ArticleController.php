@@ -69,7 +69,7 @@ class ArticleController extends Controller
         ])->withViewData([
             'title' => trans('metatags.articles.view.title', ['title' => $article->title]),
             'description' => $article->metaDescription(),
-            'image' => $article->getMedia()->first()->getUrl(),
+            'image' => $article->getFirstMediaUrl('cover', 'meta'),
         ]);
     }
 }

@@ -11,8 +11,9 @@ import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
 import { Overlay } from "@/Components/Layout/Overlay/Overlay";
 import { Toast } from "@/Components/Toast";
+import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { AuthConnectWallet, AuthInstallWallet } from "@/images";
+import { AuthConnectWallet, AuthConnectWalletDark, AuthInstallWallet } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const AuthOverlay = ({
@@ -24,6 +25,7 @@ export const AuthOverlay = ({
     ...properties
 }: AuthOverlayProperties): JSX.Element => {
     const { t } = useTranslation();
+    const { isDark } = useDarkModeContext();
 
     const {
         needsMetaMask,
@@ -51,7 +53,7 @@ export const AuthOverlay = ({
             showCloseButton={showCloseButton}
         >
             <div className="text-center">
-                <div className="mb-1 text-theme-secondary-900">
+                <div className="mb-1 text-theme-secondary-900 dark:text-theme-dark-50">
                     <Heading
                         level={3}
                         weight="medium"
@@ -60,7 +62,7 @@ export const AuthOverlay = ({
                     </Heading>
                 </div>
 
-                <p className="font-medium text-theme-secondary-700">
+                <p className="font-medium text-theme-secondary-700 dark:text-theme-dark-300">
                     {requiresSignature
                         ? t("auth.wallet.sign_subtitle")
                         : needsMetaMask
@@ -71,7 +73,11 @@ export const AuthOverlay = ({
             {needsMetaMask && <AuthInstallWallet />}
             {!needsMetaMask && (
                 <>
-                    <AuthConnectWallet />
+                    {isDark ? (
+                        <AuthConnectWalletDark data-testid="AuthOverlay__DarkModeImage" />
+                    ) : (
+                        <AuthConnectWallet data-testid="AuthOverlay__LightModeImage" />
+                    )}
                     <div
                         className={cn("w-full flex-col items-center space-x-6 px-6", {
                             hidden: !waitingSignature && !showSignMessage && errorMessage === undefined,

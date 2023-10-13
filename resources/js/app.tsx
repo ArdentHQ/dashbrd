@@ -6,7 +6,6 @@ import "../css/app.css";
 import { createInertiaApp } from "@inertiajs/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios, { type AxiosError } from "axios";
-import axiosCancel from "axios-cancel";
 import {
     ArcElement,
     CategoryScale,
@@ -20,7 +19,6 @@ import {
     Tooltip,
 } from "chart.js";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-import get from "lodash/get";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import DarkModeContextProvider from "./Contexts/DarkModeContex";
@@ -34,16 +32,24 @@ import { i18n } from "@/I18n";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
 (window as any).CookieConsent = CookieConsent;
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-axiosCancel(axios as any);
+const abortController = new AbortController();
+const { signal } = abortController;
+
+axios.interceptors.request.use((config) => {
+    config.signal = signal;
+    return config;
+});
 
 axios.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
-        const status = get(error, "response.status");
+        const { status } = error.response ?? {};
 
         if (status === 419) {
-            await axios.get(route("refresh-csrf-token"));
+            abortController.abort();
+            await axios.get(route("refresh-csrf-token"), {
+                signal,
+            });
 
             if (error.response != null) {
                 return await axios(error.response.config);

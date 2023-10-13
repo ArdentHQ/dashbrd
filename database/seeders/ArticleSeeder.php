@@ -35,7 +35,7 @@ class ArticleSeeder extends Seeder
 
             $imagePath = database_path('seeders/fixtures/articles/images/'.$articleData['slug'].'.png');
 
-            $article->addMedia($imagePath)->preservingOriginal()->toMediaCollection();
+            $article->addMedia($imagePath)->preservingOriginal()->toMediaCollection('cover');
 
             $collections = Collection::all()->random(8);
 

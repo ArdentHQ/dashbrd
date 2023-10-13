@@ -36,6 +36,27 @@ class Article extends Model implements HasMedia, Viewable
         return Article::query()->withFeaturedCollections()->where('articles.slug', $value)->first();
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('cover')
+            ->singleFile()
+            ->registerMediaConversions(function () {
+                $this
+                    ->addMediaConversion('large')
+                    ->width(1000);
+                $this
+                    ->addMediaConversion('large@2x')
+                    ->width(1000 * 2);
+
+                $this
+                    ->addMediaConversion('meta')
+                    ->crop(Manipulations::CROP_CENTER, 1200, 630);
+
+                // @TODO: Define the rest of conversions
+            });
+    }
+
     /**
      * @return BelongsToMany<Collection>
      */
@@ -75,40 +96,6 @@ class Article extends Model implements HasMedia, Viewable
         return $query->orderBy('articles.id', 'desc');
     }
 
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeSortByPopularity(Builder $query): Builder
-    {
-        return $query->orderBy('articles.views_count_7days', 'desc');
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeSortByPublishedDate(Builder $query): Builder
-    {
-        return $query->orderBy('articles.published_at', 'desc');
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeWithFeaturedCollections(Builder $query, int $collectionId = null): Builder
-    {
-        return $query->with(['collections' => function ($query) use ($collectionId) {
-            $query->when($collectionId, fn ($q) => $q->where('collections.id', '!=', $collectionId))
-                ->select([
-                    'collections.name',
-                    'collections.slug',
-                    'collections.extra_attributes->image as image',
-                ]);
-        }]);
-    }
-
     public function metaDescription(): string
     {
         return $this->meta_description ?? Str::limit(strip_tags($this->content), 157);
@@ -125,26 +112,5 @@ class Article extends Model implements HasMedia, Viewable
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug')
             ->doNotGenerateSlugsOnUpdate();
-    }
-
-    public static function updateViewCounts(): void
-    {
-        $now = now();
-        $pastWeek = now()->subDays(7);
-
-        Article::query()
-            ->update([
-                'views_count_7days' => DB::raw(
-                    <<<SQL
-(
-    SELECT COUNT(*) FROM views AS v
-    WHERE v.viewable_type = 'App\Models\Article'
-    AND articles.id = v.viewable_id
-    AND viewed_at >= '{$pastWeek}'
-    AND viewed_at <= '{$now}'
-)
-SQL
-                ),
-            ]);
     }
 }

@@ -8,7 +8,6 @@ use App\Data\Articles\ArticleData;
 use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
-use App\Data\Collections\CollectionNftData;
 use App\Data\Collections\CollectionStatsData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Gallery\GalleryNftData;
@@ -24,7 +23,6 @@ use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Network;
-use App\Models\Nft;
 use App\Models\User;
 use App\Support\Cache\UserCache;
 use App\Support\RateLimiterHelpers;
@@ -85,18 +83,23 @@ class CollectionController extends Controller
 
             /** @var LengthAwarePaginator<Collection> $collections */
             $collections = $user->collections()
-                ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
-                ->when($sortBy === 'name', fn ($q) => $q->orderBy('name', $sortDirection))
+                ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
                 ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
                 ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
                 ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
                 ->search($user, $searchQuery)
-                ->with('reports')
+                ->with([
+                    'reports',
+                    'network',
+                    'floorPriceToken',
+                    'nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)->limit(4),
+                ])
+                ->withCount(['nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)])
                 ->paginate(25);
 
             $reportByCollectionAvailableIn = $collections->mapWithKeys(function ($collection) use ($request) {
@@ -107,15 +110,10 @@ class CollectionController extends Controller
                 return [$collection->address => $collection->wasReportedByUserRecently($user, useRelationship: true)];
             });
 
-            $nfts = Nft::forCollections(
-                collections: $collections,
-                limitPerCollection: 4,
-                user: $user
-            )->get();
-
             return new JsonResponse([
-                'collections' => CollectionData::collection($collections),
-                'nfts' => CollectionNftData::collection($nfts),
+                'collections' => CollectionData::collection(
+                    $collections->through(fn ($collection) => CollectionData::fromModel($collection, $user->currency()))
+                ),
                 'reportByCollectionAvailableIn' => $reportByCollectionAvailableIn,
                 'alreadyReportedByCollection' => $alreadyReportedByCollection,
                 'hiddenCollectionAddresses' => $hiddenCollections,

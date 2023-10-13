@@ -43,3 +43,7 @@
 .latest-articles-carousel .swiper-pagination-bullets {
     @apply bottom-0 flex justify-center;
 }
+
+.dark .auth-overlay-shadow {
+    box-shadow: 0px 15px 35px 0px rgba(18, 18, 19, 0.4);
+}

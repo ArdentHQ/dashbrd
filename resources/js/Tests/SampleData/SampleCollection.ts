@@ -13,4 +13,5 @@ export const SampleCollection: App.Data.Collections.CollectionData = {
     website: "https://www.proof.xyz/moonbirds",
     nftsCount: 1,
     openSeaSlug: "proof-moonbirds",
+    nfts: [],
 };

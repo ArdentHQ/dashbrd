@@ -16,7 +16,7 @@ export const Skeleton = ({ isCircle, width, height, className, animated = true }
         containerTestId="Skeleton"
         circle={isCircle}
         style={{ width, height }}
-        className={twMerge("z-0", !isTruthy(isCircle) ? "rounded-lg" : "", className)}
+        className={twMerge("z-0 dark:bg-theme-dark-800", !isTruthy(isCircle) ? "rounded-lg" : "", className)}
         duration={1.3}
         containerClassName="flex w-auto max-w-full items-center leading-none"
     />

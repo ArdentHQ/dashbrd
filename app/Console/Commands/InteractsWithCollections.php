@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 trait InteractsWithCollections
 {
     /**
-     * @param  Closure(Collection):void  $callback
+     * @param  Closure(Collection, int):void  $callback
      * @param  Closure(Builder<Collection>):Builder<Collection>|null  $queryCallback
      */
     public function forEachCollection(Closure $callback, Closure $queryCallback = null, int $limit = null): void
@@ -25,7 +25,7 @@ trait InteractsWithCollections
                 ->withoutSpamContracts()
                 ->first();
 
-            $collection && $callback($collection);
+            $collection && $callback($collection, 0);
 
             return;
         }
@@ -41,7 +41,7 @@ trait InteractsWithCollections
             )
             ->when($limit == null, fn ($query) => $query->chunkById(
                 100,
-                fn ($collections) => $collections->each($callback),
+                fn ($collections, $index) => $collections->each($callback, $index),
                 'collections.id', 'id')
             );
     }
