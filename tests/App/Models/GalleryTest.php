@@ -9,6 +9,7 @@ use App\Models\Nft;
 use App\Models\Report;
 use App\Models\Token;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
@@ -27,6 +28,17 @@ it('can retrieve the nfts that belong to the gallery', function () {
     $gallery->nfts()->attach($nft->id, ['order_index' => 1]);
 
     expect($gallery->nfts()->count())->toBe(1);
+});
+
+it('doest not retrieve soft deleted nfts', function () {
+    $nft = Nft::factory()->create();
+    $gallery = Gallery::factory()->create();
+
+    expect($gallery->nfts()->count())->toBe(0);
+
+    $gallery->nfts()->attach($nft->id, ['order_index' => 1, 'deleted_at' => Carbon::now()]);
+
+    expect($gallery->nfts()->count())->toBe(0);
 });
 
 it('should add a like to a gallery', function () {

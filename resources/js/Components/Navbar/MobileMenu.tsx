@@ -38,6 +38,7 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                 onClick={() => {
                     setMenuOpen(true);
                 }}
+                iconSize="md"
                 data-testid="MobileMenu__Trigger"
                 baseClassName="md-lg:hidden mr-3 border-white xs:border-theme-secondary-300 w-auto xs:w-10 dark:border-0 dark:xs:border hover:bg-transparent xs:hover:bg-theme-secondary-300 dark:hover:bg-transparent xs:dark:hover:bg-theme-dark-700"
             />

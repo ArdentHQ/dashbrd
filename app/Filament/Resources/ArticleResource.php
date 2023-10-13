@@ -10,9 +10,11 @@ use App\Filament\Resources\ArticleResource\Pages\EditArticle;
 use App\Filament\Resources\ArticleResource\Pages\ListArticles;
 use App\Filament\Resources\ArticleResource\Pages\ViewArticle;
 use App\Models\Article;
+use App\Models\Collection;
 use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -33,17 +35,53 @@ class ArticleResource extends Resource
 
     public static function form(Form $form): Form
     {
+        /** @var Article|null */
+        $article = $form->getRecord();
+
         return $form
             ->schema([
-                TextInput::make('title')->required()->columnSpan('full'),
+                TextInput::make('title')->required()->columnSpan('full')
+                    ->rules(['max:100'])
+                    ->maxLength(100),
+
+                Select::make('collections')
+                    ->multiple()
+                    ->afterStateHydrated(static function (Select $component, $state) use ($article): void {
+                        if ($article === null) {
+                            return;
+                        }
+
+                        $component->state($article->collections()->pluck('id')->toArray());
+                    })
+                    ->searchable()
+                    ->getSearchResultsUsing(fn (string $search) => Collection::where('name', 'ilike', "%{$search}%")->limit(10)->pluck('name', 'id')->toArray())
+                    ->getOptionLabelsUsing(fn (Select $component, array $values) => Collection::whereIn('id', $values)
+                        ->orderByRaw('position(id::text in ?)', [implode(',', $values)])
+                        ->pluck('name', 'id')->toArray()
+                    )
+                    ->required()
+                    ->minItems(1)
+                    ->maxItems(8),
+
                 Select::make('category')
                     ->options([
                         ArticleCategoryEnum::News->value => Str::title(ArticleCategoryEnum::News->value),
                     ])
                     ->default(ArticleCategoryEnum::News->value)
                     ->required(),
-                Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full'),
+
+                Textarea::make('meta_description')->nullable()->autosize()->columnSpan('full')->maxLength(160)->helperText('Max 160 characters'),
+
+                SpatieMediaLibraryFileUpload::make('cover')
+                    ->collection('cover')
+                    ->columnSpan('full')
+                    ->image()
+                    ->imageEditor()
+                    ->imageCropAspectRatio('16:9')
+                    ->rules(['max:5120']),
+
                 Textarea::make('content')->required()->autosize()->columnSpan('full'),
+
                 Select::make('user_id')
                     ->relationship(
                         name: 'user',
@@ -63,6 +101,7 @@ class ArticleResource extends Resource
                     ->label('Title')
                     ->sortable()
                     ->searchable(),
+
                 TextColumn::make('category')
                     ->label('Category')
                     ->sortable()

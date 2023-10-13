@@ -9,12 +9,10 @@ export const HighlightedArticles = ({
     articles,
     withFullBorder,
     isLoading,
-    hasEnoughArticles,
 }: {
     articles: App.Data.Articles.ArticleData[];
     withFullBorder: boolean;
     isLoading: boolean;
-    hasEnoughArticles: boolean;
 }): JSX.Element => {
     const slidesPerView = useArticlesSlidesPerPage();
 
@@ -28,6 +26,8 @@ export const HighlightedArticles = ({
     const articlePlaceHolders = Array.from({
         length: highlightedArticlesCount - articles.length,
     });
+
+    const hasEnoughArticles = articles.length === highlightedArticlesCount;
 
     return (
         <div className={cn("w-full pt-2 ", { "mb-6": !withFullBorder, "lg:mb-6": withFullBorder })}>

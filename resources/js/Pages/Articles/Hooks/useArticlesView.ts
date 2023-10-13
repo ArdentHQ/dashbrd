@@ -2,7 +2,7 @@ import { type DisplayTypes } from "@/Components/DisplayType";
 import { type ArticleSortBy } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 
 export enum ArticlesViewActionTypes {
-    SetQuery = "SetQuery",
+    SetDebouncedQuery = "SetDebouncedQuery ",
     SetPageLimit = "SetPageLimit",
     SetDisplayType = "SetDisplayType",
     SetFilterDirty = "SetFilterDirty",
@@ -10,16 +10,16 @@ export enum ArticlesViewActionTypes {
     SetPage = "SetPage",
 }
 
-type ArticlesViewActions =
-    | { type: ArticlesViewActionTypes.SetQuery; payload: string }
+export type ArticlesViewActions =
+    | { type: ArticlesViewActionTypes.SetDebouncedQuery; payload: string }
     | { type: ArticlesViewActionTypes.SetPageLimit; payload: number }
     | { type: ArticlesViewActionTypes.SetDisplayType; payload: DisplayTypes }
     | { type: ArticlesViewActionTypes.SetFilterDirty; payload: boolean }
     | { type: ArticlesViewActionTypes.SetSort; payload: ArticleSortBy }
     | { type: ArticlesViewActionTypes.SetPage; payload: number };
 
-interface ArticlesViewState {
-    query: string;
+export interface ArticlesViewState {
+    debouncedQuery: string;
     pageLimit: number;
     displayType: DisplayTypes;
     isFilterDirty: boolean;
@@ -29,8 +29,8 @@ interface ArticlesViewState {
 
 export const articlesViewReducer = (state: ArticlesViewState, action: ArticlesViewActions): ArticlesViewState => {
     switch (action.type) {
-        case ArticlesViewActionTypes.SetQuery:
-            return { ...state, query: action.payload, page: 1, isFilterDirty: true };
+        case ArticlesViewActionTypes.SetDebouncedQuery:
+            return { ...state, debouncedQuery: action.payload, page: 1, isFilterDirty: true };
         case ArticlesViewActionTypes.SetPageLimit:
             return { ...state, pageLimit: action.payload, page: 1, isFilterDirty: true };
         case ArticlesViewActionTypes.SetDisplayType:

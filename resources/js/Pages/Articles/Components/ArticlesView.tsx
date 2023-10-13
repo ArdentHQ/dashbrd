@@ -1,11 +1,10 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { HighlightedArticles } from "@/Pages/Articles/Components/HighlightedArticles";
-import { ArticlesViewActionTypes, articlesViewReducer } from "@/Pages/Articles/Hooks/useArticlesView";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Components/Articles/ArticlesList";
@@ -23,63 +22,50 @@ export const articlesViewDefaults = {
 
 export const ArticlesView = ({
     articles,
-    isLoading: loadingArticles,
-    setFilters,
-    filters,
+    highlightedArticles,
+    isLoading,
+    articlesState,
+    dispatch,
     mode,
 }: {
     isLoading: boolean;
+    highlightedArticles?: App.Data.Articles.ArticleData[];
     articles?: App.Data.Articles.ArticlesData;
-    setFilters: (filters: Record<string, string>) => void;
-    filters: Record<string, string>;
+    articlesState: ArticlesViewState;
+    dispatch: Dispatch<ArticlesViewActions>;
     mode: "collection" | "articles";
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { highlightedArticlesCount, debounce } = articlesViewDefaults;
+    const { displayType, sort, debouncedQuery } = articlesState;
 
-    const [articlesState, dispatch] = useReducer(articlesViewReducer, {
-        query: filters.search,
-        pageLimit: Number(filters.pageLimit),
-        displayType: filters.view as DisplayTypes,
-        isFilterDirty: false,
-        sort: filters.sort as ArticleSortBy,
-        page: Number(filters.page),
-    });
+    const [query, setQuery] = useState(debouncedQuery);
 
-    const { query, page, isFilterDirty, pageLimit, sort, displayType } = articlesState;
+    const [debouncedValue] = useDebounce(query, articlesViewDefaults.debounce);
 
-    const [debouncedQuery] = useDebounce(query, debounce);
-
-    const isLoading = !loadingArticles && isFilterDirty ? true : loadingArticles;
+    const isFistRender = useIsFirstRender();
 
     useEffect(() => {
-        const queryParameters: Record<string, string> = {
-            pageLimit: pageLimit.toString(),
-            sort,
-            search: debouncedQuery,
-            view: displayType,
-            page: page.toString(),
-        };
+        if (isFistRender) return;
 
-        replaceUrlQuery(queryParameters);
-
-        setFilters({
-            ...queryParameters,
-            isFilterDirty: isFilterDirty ? "yes" : "no",
-        });
-
-        dispatch({ type: ArticlesViewActionTypes.SetFilterDirty, payload: false });
-    }, [pageLimit, sort, debouncedQuery, page]);
+        dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
+    }, [debouncedValue]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles) && !isLoading;
 
-    const showHighlighted = mode === "articles" && query === "" && page === 1;
+    const currentPage = articles?.paginated.meta.current_page ?? 1;
+    const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
 
-    const articlesToShow = articlesLoaded
-        ? articles.paginated.data.slice(showHighlighted ? highlightedArticlesCount : 0, articles.paginated.data.length)
-        : [];
+    const articlesToShow = articlesLoaded ? articles.paginated.data : [];
+
+    const handleQueryChange = (query: string): void => {
+        setQuery(query);
+
+        if (query === "") {
+            dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
+        }
+    };
 
     return (
         <>
@@ -87,7 +73,6 @@ export const ArticlesView = ({
                 <DisplayType
                     displayType={displayType}
                     onSelectDisplayType={(type) => {
-                        replaceUrlQuery({ view: type });
                         dispatch({ type: ArticlesViewActionTypes.SetDisplayType, payload: type });
                     }}
                 />
@@ -98,9 +83,7 @@ export const ArticlesView = ({
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
-                        onChange={(query) => {
-                            dispatch({ type: ArticlesViewActionTypes.SetQuery, payload: query });
-                        }}
+                        onChange={handleQueryChange}
                     />
                 </div>
 
@@ -117,17 +100,14 @@ export const ArticlesView = ({
                     disabled={articlesLoaded && articlesCount === 0 && query === ""}
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
-                    onChange={(query) => {
-                        dispatch({ type: ArticlesViewActionTypes.SetQuery, payload: query });
-                    }}
+                    onChange={handleQueryChange}
                 />
             </div>
 
             {showHighlighted && (
                 <HighlightedArticles
                     isLoading={isLoading}
-                    hasEnoughArticles={(articles?.paginated.data.length ?? 0) > highlightedArticlesCount}
-                    articles={articles?.paginated.data.slice(0, highlightedArticlesCount) ?? []}
+                    articles={highlightedArticles ?? []}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
@@ -158,9 +138,6 @@ export const ArticlesView = ({
                 {articlesLoaded && (
                     <ArticlePagination
                         pagination={articles.paginated}
-                        onPageChange={(page: number) => {
-                            dispatch({ type: ArticlesViewActionTypes.SetPage, payload: page });
-                        }}
                         onPageLimitChange={(limit: number) => {
                             dispatch({ type: ArticlesViewActionTypes.SetPageLimit, payload: limit });
                         }}
@@ -171,14 +148,15 @@ export const ArticlesView = ({
     );
 };
 
-export const getArticlesInitialState = (): Record<string, string> => {
+export const getArticlesInitialState = (): ArticlesViewState => {
     const { pageLimit: perPage, view, sort, search, page } = getQueryParameters();
 
     return {
-        search: isTruthy(search) ? search : "",
-        pageLimit: isTruthy(perPage) ? perPage : articlesViewDefaults.pageLimit.toString(),
-        view: view === "list" ? DisplayTypes.List : DisplayTypes.Grid,
-        sort: sort === "popularity" ? "popularity" : articlesViewDefaults.sortBy,
-        page: isTruthy(page) ? page : "1",
+        debouncedQuery: isTruthy(search) ? search : "",
+        pageLimit: isTruthy(perPage) ? Number(perPage) : articlesViewDefaults.pageLimit,
+        displayType: view === "list" ? DisplayTypes.List : DisplayTypes.Grid,
+        sort: sort === "popularity" ? ArticleSortBy.popularity : ArticleSortBy.latest,
+        page: isTruthy(page) ? Number(page) : 1,
+        isFilterDirty: false,
     };
 };

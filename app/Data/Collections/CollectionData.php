@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
+use Illuminate\Support\Str;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\DataCollection;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 class CollectionData extends Data
 {
+    /**
+     * @param  DataCollection<int, SimpleNftData>  $nfts
+     */
     public function __construct(
         public int $id,
         public string $name,
@@ -31,49 +38,29 @@ class CollectionData extends Data
         public ?string $openSeaSlug,
         public string $website,
         public int $nftsCount,
+        #[DataCollectionOf(SimpleNftData::class)]
+        public DataCollection $nfts,
     ) {
     }
 
-    /**
-     * Note: the collection model does not have all those attributes, this
-     * method is mean to be used within the `Collection@scopeForCollectionData`
-     * scope.
-     */
-    public static function fromModel(Collection $collection): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency): self
     {
-        /**
-         * @var  object{
-         * id: int,
-         * name: string,
-         * slug: string,
-         * address: string,
-         * chain_id: int,
-         * floor_price: string | null,
-         * floor_price_fiat: string | null,
-         * floor_price_currency: string | null,
-         * floor_price_decimals: int | null,
-         * image: string | null,
-         * banner: string | null,
-         * opensea_slug: string | null,
-         * website: string,
-         * nfts_count: int,
-         * } $collection
-         */
         return new self(
             id: $collection->id,
             name: $collection->name,
             slug: $collection->slug,
             address: $collection->address,
-            chainId: $collection->chain_id,
+            chainId: $collection->network->chain_id,
             floorPrice: $collection->floor_price,
-            floorPriceFiat: floatval($collection->floor_price_fiat),
-            floorPriceCurrency: $collection->floor_price_currency,
-            floorPriceDecimals: $collection->floor_price_decimals,
-            image: $collection->image,
-            banner: $collection->banner,
-            openSeaSlug: $collection->opensea_slug,
-            website: $collection->website,
+            floorPriceFiat: (float) $collection->fiatValue($currency),
+            floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
+            floorPriceDecimals: $collection->floorPriceToken?->decimals,
+            image: $collection->extra_attributes->get('image'),
+            banner: $collection->extra_attributes->get('banner'),
+            openSeaSlug: $collection->extra_attributes->get('opensea_slug'),
+            website: $collection->website(),
             nftsCount: $collection->nfts_count,
+            nfts: SimpleNftData::collection($collection->nfts),
         );
     }
 }

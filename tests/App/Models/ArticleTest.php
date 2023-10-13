@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Article;
 use App\Models\Collection;
+use Illuminate\Support\Facades\DB;
 
 it('should create an article', function () {
     $article = Article::factory()->create();
@@ -116,11 +117,18 @@ it('should update article view counts', function () {
     views($articles[1])->record();
     views($articles[1])->record();
 
+    DB::table('views')->insert([
+        'viewable_id' => $articles[0]->id,
+        'viewable_type' => 'App\Models\Article',
+        'visitor' => 'abcdef',
+        'viewed_at' => now()->subDays(8)
+    ]);
+
     Article::updateViewCounts();
 
     $articles = Article::query()->orderBy('id', 'asc')->get();
 
-    expect($articles[0]->views_count)->toBe(1)
-        ->and($articles[1]->views_count)->toBe(3)
-        ->and($articles[2]->views_count)->toBe(0);
+    expect($articles[0]->views_count_7days)->toBe(1)
+        ->and($articles[1]->views_count_7days)->toBe(3)
+        ->and($articles[2]->views_count_7days)->toBe(0);
 });
