@@ -1049,7 +1049,7 @@ it('should return collection articles', function () {
     $response = $this->getJson(route('collections.articles', $collection))->json('articles');
 
     expect(count($response['paginated']['data']))->toEqual(2)
-        ->and(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(7);
+        ->and(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(8);
 });
 
 it('should return collection articles with the given pageLimit', function ($pageLimit, $resultCount) {
@@ -1080,3 +1080,89 @@ it('should return collection articles with the given pageLimit', function ($page
     [12, 12],
     [24, 24],
 ]);
+it('should return published collection articles', function () {
+    $collection = Collection::factory()->create();
+
+    $articles = Article::factory(3)->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $unpublishedArticle = Article::factory()->create([
+        'published_at' => null,
+    ]);
+
+    $articles->push($unpublishedArticle);
+
+    attachImageToArticles($articles);
+
+    $collection->articles()->attach($articles, ['order_index' => 1]);
+
+    $response = $this->getJson(route('collections.articles', $collection))->json('articles');
+
+    expect(count($response['paginated']['data']))->toEqual(3)
+        ->and(array_column($response['paginated']['data'], 'id'))->not()->toContain($unpublishedArticle->id);
+});
+
+it('should get collection articles sorted: popularity', function () {
+    $collection = Collection::factory()->create();
+
+    $article1 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+        'views_count_7days' => 1,
+    ]);
+
+    $article2 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+        'views_count_7days' => 3,
+    ]);
+
+    $collection->articles()->attach($article1, ['order_index' => 1]);
+    $collection->articles()->attach($article2, ['order_index' => 1]);
+
+    attachImageToArticles(collect([$article2, $article1]));
+
+    $response = $this->getJson(
+        route('collections.articles', [
+            'collection' => $collection,
+            'sort' => 'popularity',
+        ])
+    )->json('articles');
+
+    $returnedArticles = $response['paginated']['data'];
+
+    expect($returnedArticles[0]['id'])->toBe($article2->id)
+        ->and($returnedArticles[1]['id'])->toBe($article1->id);
+});
+
+it('should get collection articles sorted: latest', function () {
+    $collection = Collection::factory()->create();
+
+    $article1 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $article2 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $collection->articles()->attach($article1, ['order_index' => 1]);
+    $collection->articles()->attach($article2, ['order_index' => 1]);
+
+    attachImageToArticles(collect([$article2, $article1]));
+
+    $response = $this->getJson(route('collections.articles', $collection))->json('articles');
+
+    $returnedArticles = $response['paginated']['data'];
+
+    expect($returnedArticles[0]['id'])->toBe($article2->id)
+        ->and($returnedArticles[1]['id'])->toBe($article1->id);
+});
+
+function attachImageToArticles($articles)
+{
+    $articles->map(fn ($article) => $article
+        ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
+        ->preservingOriginal()
+        ->toMediaCollection()
+    );
+}

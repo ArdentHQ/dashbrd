@@ -16,6 +16,7 @@ describe("ArticleCardBlocks", () => {
                 collections={[
                     {
                         name: "Collection 1",
+                        slug: "collection-1",
                         image: "image",
                     },
                 ]}

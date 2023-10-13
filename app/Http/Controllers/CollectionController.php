@@ -258,7 +258,13 @@ class CollectionController extends Controller
         $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 12, 96);
 
         $articles = $collection
-            ->articlesWithCollections()
+            ->articles()
+            ->isPublished()
+            ->search($request->get('search'))
+            ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
+            ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
+            ->orderByPivot('order_index', 'asc')
+            ->withFeaturedCollections()
             ->paginate($pageLimit);
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */

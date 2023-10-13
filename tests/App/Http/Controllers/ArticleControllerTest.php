@@ -49,18 +49,19 @@ it('should not render a single unpublished article', function () {
         ->assertStatus(404);
 });
 
-it('should return articles with the given pageLimit', function ($pageLimit, $resultCount) {
+it('should return articles with the given pageLimit', function ($pageLimit, $resultCount, $page) {
     seedArticles(35, 4);
 
     $response = $this->getJson(route('articles', [
         'pageLimit' => $pageLimit,
+        'page' => $page,
     ]))->json('articles');
 
     expect(count($response['paginated']['data']))->toEqual($resultCount);
 })->with([
-    [123, 35],
-    [12, 12],
-    [24, 24],
+    [123, 32, 1],
+    [12, 12, 2],
+    [24, 24, 1],
 ]);
 
 it('should search in articles', function () {
@@ -91,19 +92,21 @@ it('should search in articles', function () {
 });
 
 it('should sort articles', function () {
-    $today = now()->format('Y-m-d');
+    $highlightedArticles = Article::factory(3)->create([
+        'published_at' => now(),
+    ]);
 
     $article1 = Article::factory()->create([
         'title' => 'nice bunny',
-        'published_at' => $today,
+        'published_at' => now()->subMinutes(10),
     ]);
 
     $article2 = Article::factory()->create([
         'title' => 'beautiful baku',
-        'published_at' => $today,
+        'published_at' => now()->subMinutes(5),
     ]);
 
-    collect([$article1, $article2])->map(fn ($article) => $article
+    collect($highlightedArticles->concat([$article1, $article2]))->map(fn ($article) => $article
         ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
         ->preservingOriginal()
         ->toMediaCollection()
@@ -119,9 +122,44 @@ it('should sort articles', function () {
 });
 
 it('should get featured collections for an article', function () {
-    seedArticles(2, 2);
+    seedArticles(5, 2);
 
     $response = $this->getJson(route('articles'))->json('articles');
 
     expect(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(2);
+});
+
+it('should keep highlighted articles regardless of the sorting', function () {
+    $highlightedArticles = Article::factory(3)->create([
+        'published_at' => now(),
+    ]);
+
+    $article1 = Article::factory()->create([
+        'title' => 'nice bunny',
+        'published_at' => now()->subMinutes(10),
+    ]);
+
+    collect($highlightedArticles->concat([$article1]))->map(fn ($article) => $article
+        ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
+        ->preservingOriginal()
+        ->toMediaCollection()
+    );
+
+    $response = $this->getJson(route('articles', [
+        'sort' => 'latest',
+    ]));
+
+    expect(count($response['articles']['paginated']['data']))->toEqual(1)
+        ->and(count($response['highlightedArticles']))->toEqual(3)
+        ->and(array_column($response['highlightedArticles'],
+            'id'))->toEqualCanonicalizing($highlightedArticles->pluck('id')->toArray());
+
+    $response = $this->getJson(route('articles', [
+        'sort' => 'popularity',
+    ]));
+
+    expect(count($response['articles']['paginated']['data']))->toEqual(1)
+        ->and(count($response['highlightedArticles']))->toEqual(3)
+        ->and(array_column($response['highlightedArticles'],
+            'id'))->toEqualCanonicalizing($highlightedArticles->pluck('id')->toArray());
 });

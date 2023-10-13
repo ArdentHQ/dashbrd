@@ -16,6 +16,7 @@ class FeaturedCollectionData extends Data
 {
     public function __construct(
         public string $name,
+        public string $slug,
         public ?string $image,
     ) {
     }
@@ -24,6 +25,7 @@ class FeaturedCollectionData extends Data
     {
         return new self(
             name: $collection->name,
+            slug: $collection->slug,
             image: $collection->image,
         );
     }
