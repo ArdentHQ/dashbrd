@@ -1,17 +1,22 @@
-import { useEffect, useState } from "react";
+import { type Dispatch, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
+import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { HighlightedArticles } from "@/Pages/Articles/Components/HighlightedArticles";
+import {
+    type ArticlesViewActions,
+    ArticlesViewActionTypes,
+    type ArticlesViewState,
+} from "@/Pages/Articles/Hooks/useArticlesView";
 import { ArticlePagination } from "@/Pages/Collections/Components/Articles/ArticlePagination";
 import { ArticlesGrid, ArticlesLoadingGrid } from "@/Pages/Collections/Components/Articles/ArticlesGrid";
 import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Components/Articles/ArticlesList";
 import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
-import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 export const articlesViewDefaults = {
     sortBy: ArticleSortBy.latest,
@@ -138,6 +143,9 @@ export const ArticlesView = ({
                 {articlesLoaded && (
                     <ArticlePagination
                         pagination={articles.paginated}
+                        onPageChange={(page) => {
+                            dispatch({ type: ArticlesViewActionTypes.SetPage, payload: page });
+                        }}
                         onPageLimitChange={(limit: number) => {
                             dispatch({ type: ArticlesViewActionTypes.SetPageLimit, payload: limit });
                         }}
