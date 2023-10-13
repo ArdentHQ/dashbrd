@@ -6,7 +6,7 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
     <DefaultLayout>
         <article className="article-wrapper -mt-6 pb-6 sm:-mt-8  lg:mx-8 lg:mt-0 lg:overflow-hidden lg:rounded-xl lg:border lg:border-theme-secondary-300">
             <div className="bg-white/20 px-8 pt-8 md:px-24">
-                <div className="border-b border-theme-secondary-400  pb-3">
+                <div className="border-b-2 border-theme-secondary-400  pb-3">
                     <Heading level={1}>{article.title}</Heading>
                 </div>
             </div>
