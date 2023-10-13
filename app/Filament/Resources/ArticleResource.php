@@ -39,7 +39,9 @@ class ArticleResource extends Resource
 
         return $form
             ->schema([
-                TextInput::make('title')->required()->columnSpan('full'),
+                TextInput::make('title')->required()->columnSpan('full')
+                    ->rules(['max:100'])
+                    ->maxLength(100),
 
                 Select::make('collections')
                     ->multiple()
