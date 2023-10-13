@@ -37,9 +37,8 @@ class ArticleController extends Controller
             ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
             ->whereNotIn('articles.id', $highlightedArticles->pluck('id'))
             ->withFeaturedCollections()
-            ->paginate($pageLimit);
-
-        $articles->withQueryString()->links();
+            ->paginate($pageLimit)
+            ->withQueryString();
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */
         $paginated = ArticleData::collection($articles);
