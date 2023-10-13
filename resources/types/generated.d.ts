@@ -491,6 +491,7 @@ declare namespace App.Data.Web3 {
         traits: Array<any>;
         mintedBlock: number;
         mintedAt: string | null;
+        hasError: boolean | null;
     };
     export type Web3NftTransfer = {
         contractAddress: string;
