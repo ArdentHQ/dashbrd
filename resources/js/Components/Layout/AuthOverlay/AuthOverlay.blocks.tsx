@@ -95,13 +95,16 @@ export const ConnectingWallet = ({ signing }: { signing: boolean }): JSX.Element
     const { t } = useTranslation();
 
     return (
-        <OverlayButtonsWrapper data-testid="AuthOverlay__connecting-network">
+        <OverlayButtonsWrapper
+            data-testid="AuthOverlay__connecting-network"
+            className="dark:border-theme-dark-600"
+        >
             <Icon
                 name="Spinner"
                 size="xl"
-                className="animate-spin text-theme-primary-600"
+                className="animate-spin text-theme-primary-600 dark:text-theme-primary-400"
             />
-            <span className="font-medium text-theme-secondary-900">
+            <span className="font-medium text-theme-secondary-900 dark:text-theme-dark-50">
                 {signing ? t("auth.wallet.waiting_for_signature") : t("auth.wallet.connecting")}
             </span>
         </OverlayButtonsWrapper>
@@ -140,11 +143,11 @@ export const ConnectWallet = ({
                 </Button>
             )}
 
-            {isTruthy(showBackButton) && (
+            {isTruthy(showBackButton) && !showCloseButton && (
                 <Button
                     variant="secondary"
                     onClick={handleBackClick}
-                    className="px-8"
+                    className="w-full justify-center xs:w-fit xs:px-8"
                     data-testid="AuthOverlay__back-button"
                 >
                     {t("common.back")}

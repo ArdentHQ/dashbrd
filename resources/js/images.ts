@@ -1,4 +1,6 @@
+import { ReactComponent as AuthConnectWalletDark } from "@images/auth-connect-wallet-dark.svg";
 import { ReactComponent as AuthConnectWallet } from "@images/auth-connect-wallet.svg";
+import { ReactComponent as AuthInstallWalletDark } from "@images/auth-install-wallet-dark.svg";
 import { ReactComponent as AuthInstallWallet } from "@images/auth-install-wallet.svg";
 import { ReactComponent as DeleteModal } from "@images/delete-modal.svg";
 import { ReactComponent as Error401 } from "@images/errors/401.svg";
@@ -23,7 +25,9 @@ import { ReactComponent as WarningExclamation } from "@images/warning-exclamatio
 
 export {
     AuthConnectWallet,
+    AuthConnectWalletDark,
     AuthInstallWallet,
+    AuthInstallWalletDark,
     WarningExclamation,
     ImageLoadError,
     DeleteModal,

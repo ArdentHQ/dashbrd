@@ -5,7 +5,7 @@ export const CollectionImages = ({
     nftsCount,
     maxItems = 4,
 }: {
-    nfts: App.Data.Collections.CollectionNftData[];
+    nfts: App.Data.Collections.SimpleNftData[];
     nftsCount: number;
     maxItems?: number;
 }): JSX.Element => (

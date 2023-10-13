@@ -150,7 +150,7 @@ it('should use the collection address and network id as a unique job identifier'
     expect((new FetchCollectionFloorPrice($network->chain_id, $collection->address))->uniqueId())->toBe('fetch-nft-collection-floor-price:'.$network->chain_id.'-0x12345');
 });
 
-it('has a retry limit', function () {
+it('has a default retry limit', function () {
     $collection = Collection::factory()->create();
 
     expect((new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address))->retryUntil())->toBeInstanceOf(DateTime::class);
