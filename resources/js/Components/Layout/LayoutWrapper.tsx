@@ -31,7 +31,7 @@ export const LayoutWrapper = ({
     displayAuthOverlay = true,
     showBackButton = false,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth({
+    const { authenticated, signed, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth({
         mustBeSigned,
     });
 
@@ -61,6 +61,9 @@ export const LayoutWrapper = ({
                     mustBeSigned={mustBeSigned}
                     closeOverlay={closeOverlay}
                     showBackButton={showBackButton}
+                    // If we show the auth overlay even if the state says we are signed,
+                    // means that the session has expired
+                    sessionMayExpired={authenticated && signed}
                 />
             )}
 
