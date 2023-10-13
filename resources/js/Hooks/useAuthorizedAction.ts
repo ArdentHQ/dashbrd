@@ -58,7 +58,7 @@ export const useAuthorizedAction = (): {
             if (axios.isAxiosError(error)) {
                 const { status } = error.response ?? {};
 
-                if ([403, 401].includes(status ?? 0)) {
+                if ([403, 401, 419].includes(status ?? 0)) {
                     await showConnectOverlay(onConnected);
                 }
             }

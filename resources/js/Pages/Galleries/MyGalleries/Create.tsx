@@ -95,7 +95,7 @@ const Create = ({
     );
 
     const publishHandler = (event: FormEvent<Element>): void => {
-        signedAction(() => {
+        void signedAction(() => {
             submit(event);
         });
     };
@@ -106,6 +106,7 @@ const Create = ({
             toastMessage={props.toast}
             belowHeader={<NoNftsOverlay show={paginatedNfts.length === 0} />}
             displayAuthOverlay={paginatedNfts.length > 0 && initialized}
+            mustBeSigned={gallery !== undefined}
         >
             <Head title={title} />
 
