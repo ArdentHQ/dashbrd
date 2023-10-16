@@ -48,7 +48,7 @@ export const useGalleryNtfs = ({
 }: GalleryNftsProperties): GalleryNftsState => {
     const [loadingCollections, setLoadingCollections] = useState(false);
     const [isSearchingCollections, setIsSearchingCollections] = useState(false);
-    const { newAbortSignal, cancelPreviousRequest } = useAbortController();
+    const { newAbortSignal, cancelPreviousRequest, isCancel } = useAbortController();
 
     const [nfts, setNfts] = useState<GalleryNftData[]>(loadedNfts);
 
@@ -151,7 +151,7 @@ export const useGalleryNtfs = ({
         }
     };
 
-    const fetchCollections = async (nextPageUrl: string, query?: string): Promise<CollectionsResponse> => {
+    const fetchCollections = async (nextPageUrl: string, query?: string): Promise<void> => {
         cancelPreviousRequest();
 
         setLoadingCollections(true);
@@ -163,9 +163,21 @@ export const useGalleryNtfs = ({
             url.searchParams.append("query", query);
         }
 
-        const { data } = await axios.get<CollectionsResponse>(decodeURIComponent(url.toString()), {
-            signal: newAbortSignal(),
-        });
+        let data: CollectionsResponse;
+
+        try {
+            const response = await axios.get<CollectionsResponse>(decodeURIComponent(url.toString()), {
+                signal: newAbortSignal(),
+            });
+
+            data = response.data;
+        } catch (error) {
+            if (isCancel(error)) {
+                return;
+            }
+
+            throw error;
+        }
 
         setPageMeta(data.collections.paginated.meta);
 
@@ -183,8 +195,6 @@ export const useGalleryNtfs = ({
         setNfts([...existingNfts, ...data.nfts]);
 
         setLoadingCollections(false);
-
-        return data;
     };
 
     const searchNfts = async (query?: string): Promise<void> => {
