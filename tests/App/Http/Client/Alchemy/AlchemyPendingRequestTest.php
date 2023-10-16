@@ -120,3 +120,40 @@ it('should not add a flag in case of valid responses', function () {
     $collection = Alchemy::getWalletNfts($wallet, $network);
     expect($collection->nfts[0]->hasError)->not->toBeTrue();
 });
+
+it('should not filter nfts with errors if the flag is set as true', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
+            ->push(fixtureData('alchemy.nfts_array_with_error'), 200),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon();
+
+    $collection = Alchemy::getWalletNfts($wallet, $network);
+    expect($collection->nfts)->toHaveCount(1);
+});
+
+
+it('should filter nfts with errors by default', function() {
+    $user = createUser();
+
+    $network = Network::polygon();
+    $collection = Collection::factory()->create(['network_id' => $network->id]);
+
+    $nfts = collect();
+    $nft = Nft::factory()->create([
+        'wallet_id' => $user->wallet,
+        'collection_id' => $collection,
+    ]);
+
+    $nfts->push($nft);
+
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_with_error'), 200),
+    ]);
+
+    $fetchedNfts = Alchemy::nftMetadataBatch($nfts, $network);
+
+    expect($fetchedNfts->nfts)->toHaveCount(0);
+});
