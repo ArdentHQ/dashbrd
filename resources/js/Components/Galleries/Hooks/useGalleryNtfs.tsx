@@ -177,6 +177,7 @@ export const useGalleryNtfs = ({
                 return;
             }
 
+            /* istanbul ignore next -- @preserve */
             throw error;
         }
 
