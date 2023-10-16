@@ -8,7 +8,7 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
-import { useAuth } from "@/Hooks/useAuth";
+import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
@@ -292,7 +292,7 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
 };
 
 export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
-    const { user } = useAuth();
+    const { user } = useActiveUser();
     const { t } = useTranslation();
 
     return (

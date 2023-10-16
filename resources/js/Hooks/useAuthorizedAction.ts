@@ -1,6 +1,6 @@
 import axios from "axios";
+import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
 
 type SignedActionAction =
     | (({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => Promise<void>)
@@ -14,7 +14,7 @@ export const useAuthorizedAction = (): {
     signedAction: (action: SignedActionAction) => Promise<void>;
     authenticatedAction: (action: AuthenticatedActionAction) => Promise<void>;
 } => {
-    const { authenticated, signed, setSigned, setAuthenticated } = useAuth();
+    const { authenticated, signed } = useActiveUser();
 
     const { showConnectOverlay, askForSignature } = useMetaMaskContext();
 
@@ -25,8 +25,6 @@ export const useAuthorizedAction = (): {
 
         if (!authenticated) {
             await showConnectOverlay(onAction);
-
-            setAuthenticated(true);
 
             return;
         }
@@ -47,15 +45,11 @@ export const useAuthorizedAction = (): {
             if (!authenticated) {
                 await showConnectOverlay(onConnected);
 
-                setAuthenticated(true);
-
                 return;
             }
 
             if (!signed) {
                 await askForSignature(onAction);
-
-                setSigned(true);
 
                 return;
             }

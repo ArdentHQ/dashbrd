@@ -1,42 +1,48 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, type SetStateAction, useContext, useState } from "react";
 
-interface ContextProperties {
-    user?: App.Data.UserData | null;
-    wallet?: App.Data.Wallet.WalletData | null;
-    authenticated?: boolean;
-    setAuthData?: (data?: App.Data.AuthData) => void;
-}
+type ContextProperties = App.Data.AuthData & {
+    setAuthData: (data: SetStateAction<App.Data.AuthData>) => void;
+    clearAuthData: () => void;
+};
 
-interface ProviderProperties extends ContextProperties {
+interface ProviderProperties {
     children: React.ReactNode;
-    initialAuth?: App.Data.AuthData;
+    initialAuth: App.Data.AuthData;
 }
 
-const ActiveUserContext = createContext<ContextProperties>({});
+const ActiveUserContext = createContext<ContextProperties | undefined>(undefined);
 
 export const ActiveUserContextProvider = ({ children, initialAuth }: ProviderProperties): JSX.Element => {
-    const [auth, setAuthData] = useState<App.Data.AuthData | undefined>(initialAuth);
+    const [auth, setAuthData] = useState<App.Data.AuthData>(initialAuth);
+
+    const clearAuthData = (): void => {
+        setAuthData({
+            user: null,
+            wallet: null,
+            authenticated: false,
+            signed: false,
+        });
+    };
 
     return (
         <ActiveUserContext.Provider
             value={{
-                user: auth?.user,
-                wallet: auth?.wallet,
-                authenticated: auth?.authenticated,
+                ...auth,
                 setAuthData,
+                clearAuthData,
             }}
         >
             {children}
         </ActiveUserContext.Provider>
     );
 };
-export const useActiveUser = (): ContextProperties => {
-    const { user, wallet, authenticated, setAuthData } = useContext(ActiveUserContext);
 
-    return {
-        authenticated,
-        user,
-        wallet,
-        setAuthData,
-    };
+export const useActiveUser = (): ContextProperties => {
+    const context = useContext(ActiveUserContext);
+
+    if (context === undefined) {
+        throw new Error("useActiveUser must be used within a ActiveUserContextProvider");
+    }
+
+    return context;
 };

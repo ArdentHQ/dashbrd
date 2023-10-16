@@ -6,7 +6,7 @@ import { IconButton } from "@/Components/Buttons";
 import { CollectionReportModal } from "@/Components/Collections/CollectionReportModal";
 import { NftReportModal } from "@/Components/Collections/Nfts/NftReportModal";
 import { Tooltip } from "@/Components/Tooltip";
-import { useAuth } from "@/Hooks/useAuth";
+import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 interface Properties {
@@ -77,7 +77,7 @@ export const Report = ({
     const { t } = useTranslation();
     const [showReportModal, setShowReportModal] = useState(false);
 
-    const { authenticated } = useAuth();
+    const { authenticated } = useActiveUser();
 
     const disableReport = useMemo<boolean>((): boolean => {
         if (!allowReport) {

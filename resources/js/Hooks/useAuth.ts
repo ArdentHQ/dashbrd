@@ -1,5 +1,6 @@
 import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
+import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
 interface Properties {
@@ -16,21 +17,14 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
 
+    const { wallet, user, authenticated, signed } = useActiveUser();
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { props } = usePage();
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const auth = props.auth;
 
     const error = props.error;
 
     const allowsGuests = props.allowsGuests;
-
-    const { wallet, authenticated: pageAuthenticated, user, signed: pageSigned } = auth;
-
-    const [signed, setSigned] = useState<boolean>(pageSigned);
-
-    const [authenticated, setAuthenticated] = useState<boolean>(pageAuthenticated);
 
     const {
         connecting,
@@ -108,7 +102,5 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
         showAuthOverlay: showAuthOverlay(),
         showCloseButton,
         closeOverlay,
-        setSigned,
-        setAuthenticated,
     };
 };
