@@ -19,7 +19,7 @@ export const NameLengthIndicator = ({
     return (
         <div className={cn("mt-1 flex items-center justify-center sm:mt-0", className)}>
             <div
-                className={cn("mr-3 flex items-center space-x-1 text-sm font-medium", {
+                className={cn("mr-3 flex items-center space-x-1 text-sm font-medium dark:text-theme-dark-300", {
                     "text-theme-danger-400": isTruthy(error),
                     "text-theme-secondary-500": !isTruthy(error),
                 })}
