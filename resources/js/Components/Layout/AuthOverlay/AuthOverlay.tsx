@@ -13,6 +13,7 @@ import { Overlay } from "@/Components/Layout/Overlay/Overlay";
 import { Toast } from "@/Components/Toast";
 import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
+import { useAuth } from "@/Hooks/useAuth";
 import { AuthConnectWallet, AuthConnectWalletDark, AuthInstallWallet } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -28,6 +29,8 @@ export const AuthOverlay = ({
     const { t } = useTranslation();
     const { isDark } = useDarkModeContext();
 
+    const { signed } = useAuth();
+
     const {
         needsMetaMask,
         connectWallet,
@@ -39,7 +42,6 @@ export const AuthOverlay = ({
         errorMessage,
         waitingSignature,
         requiresSignature: metaMaskRequiresSignature,
-        signed,
     } = useMetaMaskContext();
 
     const requiresSignature = (mustBeSigned && !signed) || metaMaskRequiresSignature;

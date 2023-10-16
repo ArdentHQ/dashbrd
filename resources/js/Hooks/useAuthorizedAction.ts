@@ -14,8 +14,9 @@ export const useAuthorizedAction = (): {
     signedAction: (action: SignedActionAction) => Promise<void>;
     authenticatedAction: (action: AuthenticatedActionAction) => Promise<void>;
 } => {
-    const { authenticated } = useAuth();
-    const { showConnectOverlay, signed, askForSignature } = useMetaMaskContext();
+    const { authenticated, signed, setSigned, setAuthenticated } = useAuth();
+
+    const { showConnectOverlay, askForSignature } = useMetaMaskContext();
 
     const authenticatedAction = async (action: AuthenticatedActionAction): Promise<void> => {
         const onAction = async (): Promise<void> => {
@@ -24,6 +25,8 @@ export const useAuthorizedAction = (): {
 
         if (!authenticated) {
             await showConnectOverlay(onAction);
+
+            setAuthenticated(true);
 
             return;
         }
@@ -44,11 +47,15 @@ export const useAuthorizedAction = (): {
             if (!authenticated) {
                 await showConnectOverlay(onConnected);
 
+                setAuthenticated(true);
+
                 return;
             }
 
             if (!signed) {
                 await askForSignature(onAction);
+
+                setSigned(true);
 
                 return;
             }

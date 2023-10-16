@@ -11,6 +11,8 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
     showCloseButton: boolean;
     signed: boolean;
     closeOverlay: () => void;
+    setSigned: (signed: boolean) => void;
+    setAuthenticated: (authenticated: boolean) => void;
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
 
@@ -24,10 +26,13 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
 
     const allowsGuests = props.allowsGuests;
 
-    const { wallet, authenticated, user } = auth;
+    const { wallet, authenticated: pageAuthenticated, user, signed: pageSigned } = auth;
+
+    const [signed, setSigned] = useState<boolean>(pageSigned);
+
+    const [authenticated, setAuthenticated] = useState<boolean>(pageAuthenticated);
 
     const {
-        signed,
         connecting,
         switching,
         errorMessage: metamaskErrorMessage,
@@ -103,5 +108,7 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
         showAuthOverlay: showAuthOverlay(),
         showCloseButton,
         closeOverlay,
+        setSigned,
+        setAuthenticated,
     };
 };
