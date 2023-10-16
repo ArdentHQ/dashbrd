@@ -253,21 +253,13 @@ class Collection extends Model
      */
     public function scopeOrderByReceivedDate(Builder $query, Wallet $wallet, string $direction): Builder
     {
-        // Get the latest timestamp for each NFT
-        $subselect = sprintf("SELECT timestamp
+        $select = sprintf("SELECT timestamp
             FROM nft_activity
-            WHERE nft_activity.collection_id = nfts.collection_id AND nft_activity.token_number = nfts.token_number AND lower(recipient) = '%s'
-            -- Latest timestamp
-            ORDER BY timestamp desc
-            LIMIT 1", strtolower($wallet->address));
-
-        $select = sprintf('SELECT (%s) as timestamp
-            FROM nfts
-            WHERE nfts.collection_id = collections.id
-            -- Return the latest timestamp for each NFT
+            WHERE nft_activity.collection_id = collections.id
+            AND recipient = '%s'
             ORDER BY timestamp desc
             LIMIT 1
-        ', $subselect);
+        ", $wallet->address);
 
         if ($direction === 'asc') {
             return $query->orderByRaw(sprintf('(%s) ASC NULLS FIRST', $select));
