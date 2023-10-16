@@ -25,11 +25,14 @@ return new class extends Migration
             $table->addColumn('numeric', 'token_number', ['numeric_type' => 'numeric'])->after('collection_id')->nullable();
             $table->addColumn('numeric', 'log_index', ['numeric_type' => 'numeric'])->after('tx_hash')->nullable();
 
+            $table->caseInsensitiveText('recipient')->change();
+
             $table->dropColumn('nft_id');
 
             $table->unique(['tx_hash', 'log_index', 'collection_id', 'token_number', 'type']);
 
             $table->index(['collection_id', 'timestamp']);
+            $table->index(['collection_id', 'recipient', 'timestamp']);
         });
     }
 };
