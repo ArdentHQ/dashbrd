@@ -397,10 +397,13 @@ class AlchemyPendingRequest extends PendingRequest
         $tokenNumber = $convertTokenNumber === true ? CryptoUtils::hexToBigIntStr($nft['id']['tokenId']) : $nft['id']['tokenId'];
 
         $error = Arr::get($nft, 'error');
+        $collectionAddress = Arr::get($nft, 'contract.address');
+
         if (! empty($error)) {
             Log::info('AlchemyPendingRequest: Filter NFT', [
                 'error' => $error,
-                'collection' => $collectionName,
+                'collection_name' => $collectionName,
+                'collection_address' => $collectionAddress,
                 'nft_id' => $tokenNumber,
             ]);
         }
