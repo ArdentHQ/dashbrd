@@ -110,6 +110,7 @@ export const useCollections = ({
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
             view,
+            chain: selectedChainIds.join(","),
         });
 
         if (selectedChainIds.length > 0) {
