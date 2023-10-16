@@ -43,10 +43,20 @@ class FetchCollectionActivity implements ShouldQueue
     public function handle(MnemonicWeb3DataProvider $provider): void
     {
         if (! config('dashbrd.features.activities') || $this->shouldIgnoreCollection()) {
+            $this->collection->update([
+                'is_fetching_activity' => false,
+                'activity_updated_at' => now(),
+            ]);
+
             return;
         }
 
         if ($this->collection->isInvalid()) {
+            $this->collection->update([
+                'is_fetching_activity' => false,
+                'activity_updated_at' => now(),
+            ]);
+
             return;
         }
 
@@ -147,6 +157,6 @@ class FetchCollectionActivity implements ShouldQueue
 
     public function retryUntil(): DateTime
     {
-        return now()->addMinutes(10); // This is retry PER JOB (i.e. per request)...
+        return now()->addHours(2); // This is retry PER JOB (i.e. per request)...
     }
 }
