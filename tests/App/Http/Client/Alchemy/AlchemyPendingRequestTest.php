@@ -134,8 +134,7 @@ it('should not filter nfts with errors if the flag is set as true', function () 
     expect($collection->nfts)->toHaveCount(1);
 });
 
-
-it('should filter nfts with errors by default', function() {
+it('should filter nfts with errors by default', function () {
     $user = createUser();
 
     $network = Network::polygon();
