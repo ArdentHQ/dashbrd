@@ -24,7 +24,7 @@ export const useAssets = ({ initialAssets, onSearchError }: UseAssetsProperties)
 
     const searchTokens = async (query: string): Promise<void> => {
         cancelPreviousRequest();
-        // The `useAbortController@isCancel` handling is donde on the `useLiveSearch` hook.
+        // The `useAbortController@isCancel` exception handling is done on the `useLiveSearch` hook.
         const { data } = await axios.get<App.Data.TokenListItemData[]>(route("tokens.search", { query }), {
             signal: newAbortSignal(),
         });
