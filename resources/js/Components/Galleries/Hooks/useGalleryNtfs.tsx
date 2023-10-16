@@ -172,11 +172,11 @@ export const useGalleryNtfs = ({
 
             data = response.data;
         } catch (error) {
+            /* istanbul ignore next -- @preserve */
             if (isCancel(error)) {
                 return;
             }
 
-            /* istanbul ignore next -- @preserve */
             throw error;
         }
 
