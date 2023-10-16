@@ -28,7 +28,7 @@ export const GalleryPage = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { newAbortSignal, cancelPreviousRequest } = useAbortController();
+    const { newAbortSignal, cancelPreviousRequest, isCancel } = useAbortController();
     const [loading, setLoading] = useState(true);
 
     const searchParameters = new URLSearchParams(window.location.search);
@@ -53,12 +53,26 @@ export const GalleryPage = ({
 
         setLoading(true);
 
-        const { data } = await axios.get<{
+        let data: {
             paginated: PaginationData<App.Data.Gallery.GalleryData>;
-        }>(pageUrlWithSearch, {
-            headers,
-            signal: newAbortSignal(),
-        });
+        };
+
+        try {
+            const reponse = await axios.get<{
+                paginated: PaginationData<App.Data.Gallery.GalleryData>;
+            }>(pageUrlWithSearch, {
+                headers,
+                signal: newAbortSignal(),
+            });
+
+            data = reponse.data;
+        } catch (error) {
+            if (isCancel(error)) {
+                return;
+            }
+
+            throw error;
+        }
 
         // If the user is on a page that doesn't exist anymore, redirect them to the last page
         if (data.paginated.meta.current_page > data.paginated.meta.last_page) {
@@ -69,6 +83,7 @@ export const GalleryPage = ({
         }
 
         setGalleries(data.paginated);
+
         setLoading(false);
     };
 
