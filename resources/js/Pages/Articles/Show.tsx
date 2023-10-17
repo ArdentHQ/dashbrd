@@ -34,14 +34,31 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                         <div>
                             {/* Content here */}
                             {Array.from({ length: 100 }).map((_, index) => (
-                                <p key={index}>Test scroll, replace with real content {index}</p>
+                                <p key={index}>Test scroll, replace with real conten {index}</p>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                <div className="-mx-6 flex border-b border-t border-theme-secondary-300 px-6 py-4 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
-                    Meta Info
+                <div className="-mx-6 flex flex-col  border-b border-t border-theme-secondary-300 px-6 py-4 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
+                    <div className="flex justify-between">
+                        <div className="flex">
+                            <div>Author (TBD)</div>
+                            <div>Date (TBD)</div>
+                        </div>
+
+                        <div className="hidden md:block">Copy (TBD)</div>
+                    </div>
+                    <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 md:hidden">
+                        <div>
+                            <ArticleShare
+                                article={article}
+                                className="flex space-x-2"
+                            />
+                        </div>
+
+                        <div>Copy Mobile (TBD)</div>
+                    </div>
                 </div>
             </div>
         </article>
