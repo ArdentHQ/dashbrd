@@ -45,7 +45,7 @@ class FetchCollectionActivity extends Command
         };
 
         $this->forEachCollection(function ($collection) {
-            Job::dispatch($collection);
+            Job::dispatch($collection, forced: true);
         }, $queryCallback);
 
         return Command::SUCCESS;
