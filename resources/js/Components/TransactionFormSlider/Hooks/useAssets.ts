@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useCallback, useState } from "react";
+import useAbortController from "react-use-cancel-token";
 import TokenListItemData = App.Data.TokenListItemData;
 import { useLiveSearch } from "@/Hooks/useLiveSearch";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -19,9 +20,13 @@ interface UseAssetsProperties {
 export const useAssets = ({ initialAssets, onSearchError }: UseAssetsProperties): UseAssetsState => {
     const [assets, setAssets] = useState<TokenListItemData[]>(initialAssets);
 
+    const { newAbortSignal, cancelPreviousRequest } = useAbortController();
+
     const searchTokens = async (query: string): Promise<void> => {
+        cancelPreviousRequest();
+        // The `useAbortController@isCancel` exception handling is done on the `useLiveSearch` hook.
         const { data } = await axios.get<App.Data.TokenListItemData[]>(route("tokens.search", { query }), {
-            requestId: "search-tokens",
+            signal: newAbortSignal(),
         });
         setAssets(data);
     };

@@ -1,6 +1,7 @@
 import { isNumber } from "@ardenthq/sdk-helpers";
 import axios from "axios";
 import { useCallback, useRef, useState } from "react";
+import useAbortController from "react-use-cancel-token";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useInertiaHeader } from "@/Hooks/useInertiaHeader";
 import { useLiveSearch } from "@/Hooks/useLiveSearch";
@@ -72,6 +73,8 @@ export const useCollections = ({
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
 }): CollectionsState => {
+    const { newAbortSignal, cancelPreviousRequest } = useAbortController();
+
     const [isLoading, setIsLoading] = useState(true);
     const isLoadingMore = useRef(false);
     const [collections, setCollections] = useState<App.Data.Collections.CollectionData[]>([]);
@@ -96,6 +99,7 @@ export const useCollections = ({
         showHidden = false,
         sort = null,
     }: QueryParameters = {}): Promise<CollectionsResponse> => {
+        cancelPreviousRequest();
         setIsLoading(true);
         isLoadingMore.current = true;
 
@@ -111,8 +115,9 @@ export const useCollections = ({
             pageUrlWithSearch += `&chain=${selectedChainIds.join(",")}`;
         }
 
+        // The `useAbortController@isCancel` exception handling is done on the `useLiveSearch` hook.
         const { data } = await axios.get<CollectionsResponse>(pageUrlWithSearch, {
-            requestId: "collections-page",
+            signal: newAbortSignal(),
             headers,
         });
 

@@ -2,11 +2,6 @@ import ziggyRoute from "ziggy-js";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Ethereum } from "@/hooks/useMetaMask.contracts";
 
-declare module "axios" {
-    export interface AxiosRequestConfig {
-        requestId?: string;
-    }
-}
 declare global {
     const route: typeof ziggyRoute;
 
