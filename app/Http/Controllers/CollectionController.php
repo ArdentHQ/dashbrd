@@ -89,10 +89,10 @@ class CollectionController extends Controller
                 ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
                 ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
                 ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
-                ->when($sortBy === 'value' || $sortBy === null, fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
+                ->when($sortBy === 'value', fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
                 ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
-                ->when($sortBy === 'received', fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
+                ->when($sortBy === 'received' || $sortBy === null, fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
                 ->search($user, $searchQuery)
                 ->with('reports')
                 ->paginate(25);
