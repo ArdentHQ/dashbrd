@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { GridHeader } from "@/Components/GridHeader";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useActiveUser } from "@/Contexts/AuthContext";
 import { FormatCrypto, FormatNumber } from "@/Utils/Currency";
 import { toMonthYear } from "@/Utils/dates";
 import { isTruthy } from "@/Utils/is-truthy";

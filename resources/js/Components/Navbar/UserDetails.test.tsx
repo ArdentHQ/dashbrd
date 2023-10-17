@@ -42,6 +42,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -70,6 +71,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -97,6 +99,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -116,6 +119,7 @@ describe("UserDetails", () => {
                 collectionCount={0}
                 currency="USD"
                 wallet={wallet}
+                onLogout={vi.fn()}
             />,
         );
 
@@ -135,6 +139,7 @@ describe("UserDetails", () => {
                 collectionCount={0}
                 currency="USD"
                 wallet={wallet}
+                onLogout={vi.fn()}
             />,
         );
 
@@ -155,6 +160,7 @@ describe("UserDetails", () => {
                 collectionCount={0}
                 currency="USD"
                 wallet={wallet}
+                onLogout={vi.fn()}
             />,
         );
 
@@ -170,6 +176,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -197,6 +204,7 @@ describe("UserDetails", () => {
                     galleriesCount={0}
                     collectionCount={0}
                     currency="USD"
+                    onLogout={vi.fn()}
                 />
             </>,
         );
@@ -229,6 +237,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 

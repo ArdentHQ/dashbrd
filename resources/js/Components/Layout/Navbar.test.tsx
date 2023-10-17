@@ -1,10 +1,9 @@
 import React from "react";
 import { Navbar } from "@/Components/Layout/Navbar";
-import * as useAuth from "@/Hooks/useAuthOverlay";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockActiveUserContext, render, screen, userEvent } from "@/Tests/testing-library";
 const user = new UserDataFactory().create();
 
 const wallet = new WalletFactory().create();
@@ -13,15 +12,7 @@ describe("Navbar", () => {
     useTransactionSliderContextSpy();
 
     it("should render", () => {
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user,
-            wallet,
-            signed: false,
-            authenticated: true,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
-        });
+        const resetMock = mockActiveUserContext({ user, wallet });
 
         render(
             <Navbar
@@ -31,10 +22,13 @@ describe("Navbar", () => {
                 user={user}
                 wallet={wallet}
                 connectWallet={vi.fn()}
+                onLogout={vi.fn()}
             />,
         );
 
         expect(screen.getByTestId("Navbar")).toBeInTheDocument();
+
+        resetMock();
     });
 
     it("should render as unauthenticated", async () => {
@@ -47,6 +41,7 @@ describe("Navbar", () => {
                 initialized
                 wallet={null}
                 connectWallet={connectMock}
+                onLogout={vi.fn()}
             />,
         );
 
