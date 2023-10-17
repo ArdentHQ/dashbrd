@@ -49,6 +49,7 @@ it('trims collection names', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $handler->store(collect([$data]));
@@ -90,6 +91,7 @@ it('should throw an exception if no wallet or collection passed', function () {
             mintedBlock: 1000,
             mintedAt: null,
             hasError: false,
+            error: null,
         );
 
         $handler->store(nfts: collect([$data]), dispatchJobs: true);
@@ -138,6 +140,7 @@ it('should not insert traits with long values', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $collection = Collection::query()->create([
@@ -207,6 +210,7 @@ it('should handle null values for opensea slug', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $collection = Collection::query()->create([
@@ -274,6 +278,7 @@ it('should handle opensea slugs', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $collection = Collection::query()->create([
@@ -339,6 +344,7 @@ it('should not overwrite existing extra_attributes opensea data', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $collection = Collection::query()->create([
@@ -416,6 +422,7 @@ it('should handle empty extra_attribute objects', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $collection = Collection::query()->create([
@@ -479,6 +486,7 @@ it('should handle null value for extra_attribute', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $collection = Collection::query()->create([
@@ -555,6 +563,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
+        error: null,
     );
 
     $collection = Collection::query()->create([
@@ -600,6 +609,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedBlock: 1000,
         mintedAt: null,
         hasError: true,
+        error: null,
     );
 
     $handler->store(collect([$dataWithError]));
