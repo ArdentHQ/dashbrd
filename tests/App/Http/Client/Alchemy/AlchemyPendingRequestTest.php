@@ -156,3 +156,18 @@ it('should filter nfts with errors by default', function () {
 
     expect($fetchedNfts->nfts)->toHaveCount(0);
 });
+
+it('should return error field with METADATA_OUTATED if metadata object is empty', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
+            ->push(fixtureData('alchemy.nfts_array_with_error_and_empty_metadata_object'), 200),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon();
+
+    $collection = Alchemy::getWalletNfts($wallet, $network);
+    print_r($collection);
+    expect($collection->nfts[0]->hasError)->toBetrue();
+    expect($collection->nfts[0]->error)->toBe('METADATA_OUTDATED');
+});
