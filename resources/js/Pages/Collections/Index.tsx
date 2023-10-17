@@ -55,7 +55,6 @@ const CollectionsIndex = ({
 
     const {
         collections,
-        nfts,
         isLoading,
         loadMore,
         reload,
@@ -173,7 +172,6 @@ const CollectionsIndex = ({
                             onSort={sort}
                             isLoading={isLoading}
                             collections={collections}
-                            nfts={nfts}
                             hiddenCollectionAddresses={hiddenCollectionAddresses}
                             user={auth.user}
                             reportByCollectionAvailableIn={reportByCollectionAvailableIn}
@@ -191,7 +189,6 @@ const CollectionsIndex = ({
                         <CollectionsGrid
                             isLoading={isLoading}
                             collections={collections}
-                            nfts={nfts}
                             hiddenCollectionAddresses={hiddenCollectionAddresses}
                             reportByCollectionAvailableIn={reportByCollectionAvailableIn}
                             alreadyReportedByCollection={alreadyReportedByCollection}

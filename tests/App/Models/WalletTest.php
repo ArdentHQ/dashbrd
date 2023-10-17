@@ -285,7 +285,9 @@ it('filters wallets that have been signed at least one time', function () {
         'last_signed_at' => now(),
     ]);
 
-    Wallet::factory()->create();
+    Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     $filtered = Wallet::hasBeenSigned()->get();
 

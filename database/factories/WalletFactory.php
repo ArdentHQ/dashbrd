@@ -25,6 +25,7 @@ class WalletFactory extends Factory
             'total_usd' => fake()->randomFloat(2, 200, 500000),
             'onboarded_at' => now(),
             'is_refreshing_collections' => false,
+            'last_signed_at' => random_int(0, 1) ? now() : null,
         ];
     }
 

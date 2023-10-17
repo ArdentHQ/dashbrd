@@ -6,7 +6,6 @@ use App\Enums\TraitDisplayType;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
-use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Nft;
 use App\Models\Token;
@@ -40,11 +39,10 @@ it('should render collections overview page with collections and NFTs', function
     $response = $this->actingAs($user)
         ->getJson(route('collections'))
         ->assertStatus(200)
-        ->assertJsonCount(8)
+        ->assertJsonCount(7)
         ->json();
 
     expect(count($response['collections']['data']))->toEqual(1);
-    expect(count($response['nfts']))->toEqual(2);
 });
 
 it('can render the collections view page', function () {
@@ -238,55 +236,6 @@ it('does not dispatch the job to sync collection if it has been recently viewed'
 
     Bus::assertNotDispatched(SyncCollection::class);
 });
-
-it('should render user owned NFTs first ', function ($owned) {
-    $user = createUser();
-
-    $secondaryUser = createUser();
-
-    $network = Network::polygon();
-
-    $userCollection = Collection::factory()->create([
-        'network_id' => $network->id,
-    ]);
-
-    Token::factory()->create([
-        'network_id' => $network->id,
-        'symbol' => 'ETH',
-        'is_native_token' => 1,
-        'is_default_token' => 1,
-    ]);
-
-    $nfts = collect([
-        $secondaryUser->wallet_id,
-        $user->wallet_id,
-        $user->wallet_id,
-    ])->map(function ($walletId) use ($userCollection) {
-        return Nft::factory()->create([
-            'wallet_id' => $walletId,
-            'collection_id' => $userCollection->id,
-        ]);
-    });
-
-    $this->actingAs($user)
-        ->get(route('collections.view', [
-            'collection' => $userCollection,
-            'owned' => $owned,
-        ]))
-        ->assertStatus(200)
-        ->assertInertia(
-            fn (Assert $page) => $page
-                ->component('Collections/View')
-                ->has(
-                    'nfts.paginated.data.2',
-                    fn (Assert $page) => $page
-                        ->where('id', $nfts[0]->id)
-                        ->etc()
-                )
-        );
-})->with([
-    false,
-]);
 
 it('can render the collections view page with owned filter', function ($owned) {
     $user = createUser();
@@ -742,7 +691,7 @@ it('filters the collections by a search query on json requests', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['query' => 'Test']))
         ->assertStatus(200)
-        ->assertJsonCount(8);
+        ->assertJsonCount(7);
 });
 
 it('removes the showIndex parameter if user has no hidden collections', function () {
@@ -788,83 +737,7 @@ it('filters hidden collections by a search query on json requests', function () 
             'showHidden' => 'true',
         ]))
         ->assertStatus(200)
-        ->assertJsonCount(8);
-});
-
-it('returns nfts with traits', function () {
-    $user = createUser();
-
-    $userCollection = Collection::factory()->create([
-        'name' => 'Test Collection',
-    ]);
-
-    $nft = Nft::factory()->create([
-        'wallet_id' => $user->wallet_id,
-        'collection_id' => $userCollection->id,
-    ]);
-
-    [$stringTrait, $numericTrait, $dateTrait] = CollectionTrait::factory()->createMany([
-        [
-            'collection_id' => $userCollection->id,
-            'display_type' => TraitDisplayType::Property->value,
-            'name' => 'Some String',
-            'value_min' => null,
-            'value_max' => null,
-        ],
-        [
-            'collection_id' => $userCollection->id,
-            'display_type' => TraitDisplayType::Stat->value,
-            'name' => 'Some Stat',
-            'value_min' => 1,
-            'value_max' => 16,
-        ],
-        [
-            'collection_id' => $userCollection->id,
-            'display_type' => TraitDisplayType::Date->value,
-            'name' => 'Some Date',
-            'value_min' => null,
-            'value_max' => null,
-        ],
-    ]);
-    $nft->traits()->attach($stringTrait, ['value_string' => 'hello']);
-    $nft->traits()->attach($numericTrait, ['value_numeric' => '15']);
-    $nft->traits()->attach($dateTrait, ['value_date' => '2022-12-01']);
-
-    $response = $this->actingAs($user)
-        ->getJson(route('collections'))
-        ->assertStatus(200)
-        ->assertJsonCount(8)
-        ->json();
-
-    expect($response['nfts'][0]['traits'])->toEqual([
-        [
-            'displayType' => TraitDisplayType::Property->value,
-            'value' => 'hello',
-            'name' => 'Some String',
-            'valueMin' => null,
-            'valueMax' => null,
-            'nftsCount' => $stringTrait['nfts_count'],
-            'nftsPercentage' => $stringTrait['nfts_percentage'],
-        ],
-        [
-            'displayType' => $numericTrait['display_type'],
-            'value' => '15',
-            'name' => 'Some Stat',
-            'valueMin' => '1',
-            'valueMax' => '16',
-            'nftsCount' => $numericTrait['nfts_count'],
-            'nftsPercentage' => $numericTrait['nfts_percentage'],
-        ],
-        [
-            'displayType' => $dateTrait['display_type'],
-            'value' => '2022-12-01 00:00:00',
-            'name' => 'Some Date',
-            'valueMin' => null,
-            'valueMax' => null,
-            'nftsCount' => $dateTrait['nfts_count'],
-            'nftsPercentage' => $dateTrait['nfts_percentage'],
-        ],
-    ]);
+        ->assertJsonCount(7);
 });
 
 it('can sort by oldest collection', function () {
@@ -900,7 +773,7 @@ it('can sort by oldest collection', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'oldest']))
         ->assertStatus(200)
-        ->assertJsonCount(8);
+        ->assertJsonCount(7);
 });
 
 it('can sort by recently received', function () {
@@ -936,7 +809,7 @@ it('can sort by recently received', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'received']))
         ->assertStatus(200)
-        ->assertJsonCount(8);
+        ->assertJsonCount(7);
 });
 
 it('can sort by collection name', function () {
@@ -972,7 +845,7 @@ it('can sort by collection name', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'name', 'direction' => 'desc']))
         ->assertStatus(200)
-        ->assertJsonCount(8);
+        ->assertJsonCount(7);
 });
 
 it('can sort by floor price', function () {
@@ -1008,7 +881,7 @@ it('can sort by floor price', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'floor-price']))
         ->assertStatus(200)
-        ->assertJsonCount(8);
+        ->assertJsonCount(7);
 });
 
 it('can sort by chain ID', function () {
@@ -1044,7 +917,7 @@ it('can sort by chain ID', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'chain']))
         ->assertStatus(200)
-        ->assertJsonCount(8);
+        ->assertJsonCount(7);
 });
 
 it('can sort by value', function () {
@@ -1080,7 +953,7 @@ it('can sort by value', function () {
     $this->actingAs($user)
         ->getJson(route('collections', ['sort' => 'value']))
         ->assertStatus(200)
-        ->assertJsonCount(8);
+        ->assertJsonCount(7);
 });
 
 it('should remove selected chains where its network has no collections in its count', function () {
@@ -1106,11 +979,10 @@ it('should remove selected chains where its network has no collections in its co
             'chain' => '137',
         ]))
         ->assertStatus(200)
-        ->assertJsonCount(8)
+        ->assertJsonCount(7)
         ->json();
 
     expect(count($response['selectedChainIds']))->toEqual(0);
-    expect(count($response['nfts']))->toEqual(2);
 });
 
 it('can get stats', function () {

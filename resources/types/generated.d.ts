@@ -102,6 +102,7 @@ declare namespace App.Data.Collections {
         openSeaSlug: string | null;
         website: string;
         nftsCount: number;
+        nfts: Array<App.Data.Collections.SimpleNftData>;
     };
     export type CollectionDetailData = {
         name: string;
@@ -153,6 +154,11 @@ declare namespace App.Data.Collections {
         value: string;
         displayType: string;
         nftsCount: number;
+    };
+    export type SimpleNftData = {
+        id: number;
+        tokenNumber: string;
+        images: App.Data.Nfts.NftImagesData;
     };
 }
 declare namespace App.Data.Gallery {
@@ -422,18 +428,11 @@ declare namespace App.Data.Wallet {
         totalUsd: number;
         totalBalanceInCurrency: string;
         totalTokens: number;
-        nfts: WalletNftData[];
-        nftCount: number;
         collectionCount: number;
-        collectionsValue: number | null;
         galleryCount: number;
         timestamps: { tokens_fetched_at: number | null; native_balances_fetched_at: number | null };
         isRefreshingCollections: boolean;
         canRefreshCollections: boolean;
-    };
-    export type WalletNftData = {
-        id: number;
-        images: App.Data.ImagesData;
     };
 }
 declare namespace App.Data.Web3 {

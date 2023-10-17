@@ -24,7 +24,7 @@ it('should fetch opensea slug', function () {
         'collection_id' => $collection->id,
     ]);
 
-    (new FetchCollectionOpenseaSlug($collection))->handle();
+    (new FetchCollectionOpenseaSlug($collection, now()->addMinute()))->handle();
 
     expect($collection->fresh()->extra_attributes->get('opensea_slug'))->toBe('y00ts');
     expect($collection->fresh()->extra_attributes->get('opensea_slug_last_fetched_at'))->not->toBeNull();
@@ -46,7 +46,7 @@ it('should handle nft is not found', function () {
         'collection_id' => $collection->id,
     ]);
 
-    (new FetchCollectionOpenseaSlug($collection))->handle();
+    (new FetchCollectionOpenseaSlug($collection, now()->addMinute()))->handle();
 
     expect($collection->fresh()->extra_attributes->get('opensea_slug'))->toBeNull();
     expect($collection->fresh()->extra_attributes->get('opensea_slug_last_fetched_at'))->not->toBeNull();

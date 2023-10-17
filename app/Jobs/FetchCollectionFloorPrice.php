@@ -46,14 +46,17 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
             'address' => $this->address,
         ]);
 
+        $collection = Collection::where('address', $this->address)
+            ->whereHas('network', fn ($query) => $query->where('chain_id', $this->chainId))
+            ->first();
+
+        $collection->extra_attributes->set('floor_price_last_fetched_at', Carbon::now());
+        $collection->save();
+
         $web3DataProvider = $this->getWeb3DataProvider();
         $floorPrice = $web3DataProvider->getNftCollectionFloorPrice(
             Chains::from($this->chainId), $this->address
         );
-
-        $collection = Collection::where('address', $this->address)
-            ->whereHas('network', fn ($query) => $query->where('chain_id', $this->chainId))
-            ->first();
 
         if ($floorPrice === null) {
             $collection->update([
@@ -95,10 +98,5 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return 'fetch-nft-collection-floor-price:'.$this->chainId.'-'.$this->address;
-    }
-
-    public function retryUntil(): DateTime
-    {
-        return now()->addMinutes(30);
     }
 }

@@ -87,7 +87,7 @@ const GalleryCardOverlay = ({ children }: { children: React.ReactNode }): JSX.El
         <div
             data-testid="GalleryCard__overlay"
             className={cn(
-                "transition-default absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-primary-50/75 px-8 text-center ",
+                "transition-default absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden rounded-xl bg-theme-primary-50/75 px-8 text-center dark:bg-theme-dark-900/75",
                 {
                     "group-hover:pointer-events-auto group-hover:opacity-100 group-hover:backdrop-blur-md":
                         !fixedOnMobile,

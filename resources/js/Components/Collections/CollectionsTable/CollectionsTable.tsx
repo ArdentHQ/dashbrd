@@ -12,7 +12,6 @@ const skeletonsCount = 10;
 
 export const CollectionsTable = ({
     collections,
-    nfts,
     user,
     hiddenCollectionAddresses,
     reportByCollectionAvailableIn,
@@ -130,6 +129,7 @@ export const CollectionsTable = ({
             initialState={activeSort.length > 0 ? initialState : {}}
             activeSort={activeSort}
             sortDirection={sortDirection}
+            manualSortBy={true}
             onSort={
                 onSort != null
                     ? (column) => {
@@ -144,7 +144,6 @@ export const CollectionsTable = ({
             row={(collection: App.Data.Collections.CollectionData, index: number) => (
                 <CollectionsTableItem
                     collection={collection}
-                    nfts={nfts}
                     uniqueKey={`${collection.address}-${collection.chainId}`}
                     key={`${collection.address}-${collection.chainId}`}
                     user={user}
