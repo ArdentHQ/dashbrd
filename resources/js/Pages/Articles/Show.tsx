@@ -4,8 +4,8 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => (
     <DefaultLayout>
-        <article className="article-wrapper w-full px-8 md:px-24 lg:px-8 2xl:px-0">
-            <div className=" -mt-6 pb-6 sm:-mt-8 lg:mt-0 lg:overflow-hidden lg:rounded-xl lg:border lg:border-theme-secondary-300">
+        <article className=" w-full lg:px-8 2xl:px-0">
+            <div className="article-wrapper -mt-6 px-8 pb-6 sm:-mt-8 md:px-24 lg:mt-0 lg:overflow-hidden lg:rounded-xl lg:border lg:border-theme-secondary-300 lg:px-0">
                 <div className="mx-auto bg-white/20 pt-8 md:max-w-[768px] xl:max-w-[1000px]">
                     <div className="border-b-2 border-theme-secondary-400 pb-3">
                         <Heading level={1}>{article.title}</Heading>
