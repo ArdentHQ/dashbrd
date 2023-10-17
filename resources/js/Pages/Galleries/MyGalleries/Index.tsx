@@ -32,7 +32,7 @@ const Index = ({
             <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <div className="mb-6 flex w-full items-center justify-between">
                     <Heading level={1}>
-                        <span className="leading-tight text-theme-secondary-800">
+                        <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
                             {t("pages.galleries.my_galleries.title")}
                         </span>
                     </Heading>
