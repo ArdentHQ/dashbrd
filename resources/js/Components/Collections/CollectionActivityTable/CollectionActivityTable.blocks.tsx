@@ -384,7 +384,7 @@ export const CollectionActivityTableItemSkeleton = ({
 
     if (isCompact) {
         return (
-            <div className="flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-3 last:border-none last:pb-0">
+            <div className="flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-4 last:border-none last:pb-0 md:pb-3">
                 {showNameColumn && (
                     <div className="flex items-center justify-between">
                         <Skeleton
@@ -654,7 +654,7 @@ export const CollectionActivityTableItem = ({
 
     if (isCompact) {
         return (
-            <div className="flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-3 last:border-none last:pb-0">
+            <div className="flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-4 last:border-none last:pb-0 md:pb-3">
                 {showNameColumn && (
                     <div className="flex items-center justify-between">
                         <Label>{t("common.name")}</Label>

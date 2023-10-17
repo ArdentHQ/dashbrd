@@ -178,7 +178,7 @@ export const CollectionActivityTable = ({
                         : (children: React.ReactNode) => (
                               <div
                                   data-testid="CollectionActivityTable__Mobile"
-                                  className="flex flex-col"
+                                  className="flex flex-col space-y-4"
                               >
                                   {children}
 
