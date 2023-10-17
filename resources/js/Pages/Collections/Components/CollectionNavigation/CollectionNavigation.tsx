@@ -94,10 +94,7 @@ export const CollectionNavigation = ({
                                 {t("pages.collections.menu.collection")}
                             </CollectionNavigationTab>
 
-                            <CollectionNavigationTab
-                                icon="HeartbeatInCircle"
-                                disabled
-                            >
+                            <CollectionNavigationTab icon="HeartbeatInCircle">
                                 {t("pages.collections.menu.activity")}
                             </CollectionNavigationTab>
                         </Tabs>

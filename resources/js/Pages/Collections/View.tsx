@@ -39,7 +39,7 @@ interface Properties {
         query: string;
         nftPageLimit: number;
     };
-    activities: App.Data.Nfts.NftActivitiesData | null;
+    initialActivities: App.Data.Nfts.NftActivitiesData | null;
     sortByMintDate?: boolean;
     nativeToken: App.Data.Token.TokenData;
     showReportModal: boolean;
@@ -52,7 +52,7 @@ const CollectionsView = ({
     isHidden,
     previousUrl,
     nfts,
-    activities,
+    initialActivities,
     alreadyReported = false,
     reportAvailableIn,
     collectionTraits,
@@ -71,6 +71,9 @@ const CollectionsView = ({
     const [showOnlyOwned, setShowOnlyOwned] = useState<boolean>(appliedFilters.owned);
     const [filterIsDirty, setFilterIsDirty] = useState(false);
     const [query, setQuery] = useState("");
+    const [activities, setActivities] = useState(initialActivities);
+
+    const [loading, setLoading] = useState(false);
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
 
@@ -116,6 +119,14 @@ const CollectionsView = ({
                 preserveState: true,
                 queryStringArrayFormat: "indices",
                 replace: true,
+                onBefore: () => {
+                    setLoading(true);
+                },
+                onSuccess: (event) => {
+                    setActivities(event.props.initialActivities as App.Data.Nfts.NftActivitiesData | null);
+
+                    setLoading(false);
+                },
             },
         );
     }, [filterIsDirty, filters]);
@@ -308,12 +319,13 @@ const CollectionsView = ({
 
                         <Tab.Panel>
                             <div className="mt-6">
-                                {!isTruthy(activities) || activities.paginated.data.length === 0 ? (
+                                {!loading && (!isTruthy(activities) || activities.paginated.data.length === 0) ? (
                                     <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
                                 ) : (
                                     <CollectionActivityTable
                                         collection={collection}
                                         activities={activities}
+                                        isLoading={loading}
                                         showNameColumn
                                         pageLimit={activityPageLimit}
                                         onPageLimitChange={activityPageLimitChangeHandler}
