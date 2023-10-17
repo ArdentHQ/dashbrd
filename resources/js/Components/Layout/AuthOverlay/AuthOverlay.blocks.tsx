@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./AuthOverlay.contracts";
@@ -5,6 +7,7 @@ import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Icon } from "@/Components/Icon";
 import { OverlayButtonsWrapper } from "@/Components/Layout/Overlay/Overlay.blocks";
+import { isTruthy } from "@/Utils/is-truthy";
 const metamaskDownloadUrl = "https://metamask.io/download/";
 
 export const InstallMetamask = ({
@@ -92,17 +95,28 @@ export const ConnectingWallet = ({ signing }: { signing: boolean }): JSX.Element
     const { t } = useTranslation();
 
     return (
-        <OverlayButtonsWrapper data-testid="AuthOverlay__connecting-network">
+        <OverlayButtonsWrapper
+            data-testid="AuthOverlay__connecting-network"
+            className="dark:border-theme-dark-600"
+        >
             <Icon
                 name="Spinner"
                 size="xl"
-                className="animate-spin text-theme-primary-600"
+                className="animate-spin text-theme-primary-600 dark:text-theme-primary-400"
             />
-            <span className="font-medium text-theme-secondary-900">
+            <span className="font-medium text-theme-secondary-900 dark:text-theme-dark-50">
                 {signing ? t("auth.wallet.waiting_for_signature") : t("auth.wallet.connecting")}
             </span>
         </OverlayButtonsWrapper>
     );
+};
+
+const handleBackClick = (): void => {
+    if (isTruthy(document.referrer) && document.referrer.startsWith(window.location.origin)) {
+        window.history.back();
+    } else {
+        window.location.href = "/";
+    }
 };
 
 export const ConnectWallet = ({
@@ -111,6 +125,7 @@ export const ConnectWallet = ({
     onConnect,
     onSign,
     showCloseButton,
+    showBackButton,
     closeOverlay,
 }: ConnectWalletProperties): JSX.Element => {
     const { t } = useTranslation();
@@ -125,6 +140,17 @@ export const ConnectWallet = ({
                     className="w-full justify-center whitespace-nowrap"
                 >
                     {t("common.close")}
+                </Button>
+            )}
+
+            {isTruthy(showBackButton) && !showCloseButton && (
+                <Button
+                    variant="secondary"
+                    onClick={handleBackClick}
+                    className="w-full justify-center xs:w-fit xs:px-8"
+                    data-testid="AuthOverlay__back-button"
+                >
+                    {t("common.back")}
                 </Button>
             )}
 

@@ -25,7 +25,7 @@ const InputError = ({ message }: { message: string }): JSX.Element => (
 const InputHint = ({ message, position }: { message: Hint; position?: HintPosition }): JSX.Element => {
     if (Array.isArray(message)) {
         return (
-            <span className="flex w-full justify-between rounded-b-xl bg-theme-secondary-100 px-4 py-2 text-xs font-medium text-theme-secondary-700">
+            <span className="flex w-full justify-between rounded-b-xl bg-theme-secondary-100 px-4 py-2 text-xs font-medium text-theme-secondary-700 dark:bg-theme-dark-950 dark:text-theme-dark-200">
                 <span>{message[0]}</span>
                 <span>{message[1]}</span>
             </span>
@@ -79,7 +79,7 @@ export const InputGroup = forwardRef<HTMLDivElement, Properties>(
                     ref={reference}
                     onClick={inputGroupClickHandler}
                     className={cn("rounded-xl", className, {
-                        "bg-theme-secondary-100": hasHint && !hasError,
+                        "bg-theme-secondary-100 dark:bg-theme-dark-950": hasHint && !hasError,
                         "bg-theme-danger-100": hasError,
                         "mt-1": hasLabel,
                     })}

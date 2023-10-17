@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Data\Wallet;
+namespace App\Data\Collections;
 
-use App\Data\ImagesData;
+use App\Data\Nfts\NftImagesData;
 use App\Models\Nft;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
@@ -13,11 +13,12 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 #[MapInputName(SnakeCaseMapper::class)]
-class WalletNftData extends Data
+class SimpleNftData extends Data
 {
     public function __construct(
         public int $id,
-        public ImagesData $images,
+        public string $tokenNumber,
+        public NftImagesData $images,
     ) {
     }
 
@@ -25,7 +26,8 @@ class WalletNftData extends Data
     {
         return new self(
             id: $nft->id,
-            images: ImagesData::from($nft->images()),
+            tokenNumber: $nft->token_number,
+            images: NftImagesData::from($nft->images()),
         );
     }
 }

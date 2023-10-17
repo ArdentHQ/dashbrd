@@ -29,7 +29,7 @@ export const GalleryNameInput = ({
                     "transition-default relative flex items-center justify-center rounded-xl border px-4 py-3",
                     {
                         "border-theme-danger-400 ring-1 ring-theme-danger-400": hasError || hasLimitError,
-                        "border-theme-secondary-400 focus-within:border-theme-primary-600 focus-within:ring-1 focus-within:ring-theme-primary-600":
+                        "transition-default border-theme-secondary-400 focus-within:border-theme-primary-600 focus-within:ring-1 focus-within:ring-theme-primary-600 dark:border-theme-dark-500 dark:focus-within:border-theme-primary-400 dark:focus-within:ring-theme-primary-400":
                             !hasError && !hasLimitError,
                     },
                 )}
@@ -51,7 +51,7 @@ export const GalleryNameInput = ({
                         onChange={(event) => {
                             onChange?.(event.target.value);
                         }}
-                        className="w-full appearance-none border-0 py-0 text-center text-xl font-medium leading-[1.875rem] placeholder:font-normal placeholder:text-theme-secondary-500 focus:outline-none focus:ring-0 focus:placeholder:text-transparent md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]"
+                        className="w-full appearance-none border-0 py-0 text-center text-xl font-medium leading-[1.875rem] placeholder:font-normal placeholder:text-theme-secondary-500 focus:outline-none focus:ring-0 focus:placeholder:text-transparent dark:bg-theme-dark-900 dark:text-theme-dark-50 dark:placeholder:text-theme-dark-400 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]"
                         placeholder={t("pages.galleries.create.input_placeholder")}
                     />
                 </div>

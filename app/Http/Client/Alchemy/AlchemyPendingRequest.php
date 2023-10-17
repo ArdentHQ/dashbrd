@@ -19,6 +19,7 @@ use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection as CollectionModel;
 use App\Models\Network;
+use App\Models\Nft;
 use App\Models\Token;
 use App\Models\Wallet;
 use App\Support\CryptoUtils;
@@ -218,6 +219,43 @@ class AlchemyPendingRequest extends PendingRequest
     }
 
     /**
+     * @see https://docs.alchemy.com/reference/getnftmetadatabatch
+     *
+     * @param  Collection<int, Nft>  $nfts
+     */
+    public function nftMetadataBatch(Collection $nfts, Network $network): Web3NftsChunk
+    {
+        $this->apiUrl = $this->getNftV2ApiUrl();
+
+        // All the requests need to have chain id defined.
+        $this->chain = AlchemyChain::fromChainId($network->chain_id);
+
+        $tokens = $nfts->map(function ($nft) {
+            return [
+                'contractAddress' => $nft->collection->address,
+                'tokenId' => $nft->token_number,
+            ];
+        });
+
+        $response = self::post('getNFTMetadataBatch', [
+            'tokens' => $tokens,
+        ])->json();
+
+        /** @var Collection<int, Nft>  $response */
+        $nftItems = collect($response)
+            ->filter(fn ($nft) => $this->filterNft($nft))
+            ->map(function ($nft) use ($network) {
+                // With getNFTMetadataBatch, alchemy returns tokens numbers (`tokenId` field) as number instead of hex,
+                // thus the `convertTokenNumber flag to save it as is withouth attempting to convert from hex.
+                // See https://docs.alchemy.com/reference/sdk-getnftmetadatabatch#response-1
+                return $this->parseNft($nft, $network->id, convertTokenNumber: false);
+            })
+            ->values();
+
+        return new Web3NftsChunk(nfts: $nftItems, nextToken: null);
+    }
+
+    /**
      * @see https://docs.alchemy.com/reference/getnftsforcollection
      */
     public function collectionNfts(
@@ -323,7 +361,7 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @param  array<mixed>  $nft
      */
-    public function parseNft(array $nft, int $networkId): Web3NftData
+    public function parseNft(array $nft, int $networkId, bool $convertTokenNumber = true): Web3NftData
     {
         $extractedFloorPrice = $this->tryExtractFloorPrice($nft);
         $collectionName = $this->collectionName($nft);
@@ -355,9 +393,11 @@ class AlchemyPendingRequest extends PendingRequest
             $bannerImageUrl = null;
         }
 
+        $tokenNumber = $convertTokenNumber === true ? CryptoUtils::hexToBigIntStr($nft['id']['tokenId']) : $nft['id']['tokenId'];
+
         return new Web3NftData(
             tokenAddress: $nft['contract']['address'],
-            tokenNumber: CryptoUtils::hexToBigIntStr($nft['id']['tokenId']),
+            tokenNumber: $tokenNumber,
             networkId: $networkId,
             collectionName: $collectionName ?? Arr::get($nft, 'contractMetadata.symbol'),
             collectionSymbol: Arr::get($nft, 'contractMetadata.symbol') ?? $collectionName,
@@ -366,6 +406,7 @@ class AlchemyPendingRequest extends PendingRequest
             collectionDescription: Arr::get($nft, 'contractMetadata.openSea.description'),
             collectionBannerImageUrl: $bannerImageUrl,
             collectionBannerUpdatedAt: Arr::get($nft, 'contractMetadata.openSea.bannerImageUrl') ? Carbon::now() : null,
+            collectionOpenSeaSlug: Arr::get($nft, 'contractMetadata.openSea.collectionSlug'),
             collectionSocials: $socials,
             collectionSupply: $supply,
             name: $this->getNftName($nft),

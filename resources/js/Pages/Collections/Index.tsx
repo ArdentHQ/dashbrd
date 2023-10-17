@@ -55,18 +55,20 @@ const CollectionsIndex = ({
 
     const {
         collections,
-        nfts,
         isLoading,
         loadMore,
         reload,
         hiddenCollectionAddresses,
         alreadyReportedByCollection,
         reportByCollectionAvailableIn,
+        availableNetworks,
         query,
         stats,
         search,
         isSearching,
         reportCollection,
+        selectedChainIds,
+        setSelectedChainIds,
     } = useCollections({
         showHidden,
         sortBy,
@@ -96,10 +98,21 @@ const CollectionsIndex = ({
         });
     };
 
+    const handleSelectedChainIds = (chainId: number): void => {
+        const chainIds = selectedChainIds.includes(chainId)
+            ? selectedChainIds.filter((id) => id !== chainId)
+            : [...selectedChainIds, chainId];
+
+        setSelectedChainIds(chainIds);
+    };
+
+    useEffect(() => {
+        reload({ selectedChainIds });
+    }, [selectedChainIds]);
+
     return (
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
-
             <div>
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     <CollectionsHeading
@@ -119,8 +132,12 @@ const CollectionsIndex = ({
                         activeSort={sortBy}
                         onSort={sort}
                         onChangeVisibilityStatus={(isHidden) => {
-                            reload({ showHidden: isHidden, page: 1 });
+                            reload({ showHidden: isHidden, selectedChainIds, page: 1 });
                         }}
+                        availableNetworks={availableNetworks}
+                        handleSelectedChainIds={handleSelectedChainIds}
+                        selectedChainIds={selectedChainIds}
+                        collectionsCount={collections.length}
                     />
                 </div>
 
@@ -154,7 +171,6 @@ const CollectionsIndex = ({
                             onSort={sort}
                             isLoading={isLoading}
                             collections={collections}
-                            nfts={nfts}
                             hiddenCollectionAddresses={hiddenCollectionAddresses}
                             user={auth.user}
                             reportByCollectionAvailableIn={reportByCollectionAvailableIn}
@@ -172,7 +188,6 @@ const CollectionsIndex = ({
                         <CollectionsGrid
                             isLoading={isLoading}
                             collections={collections}
-                            nfts={nfts}
                             hiddenCollectionAddresses={hiddenCollectionAddresses}
                             reportByCollectionAvailableIn={reportByCollectionAvailableIn}
                             alreadyReportedByCollection={alreadyReportedByCollection}

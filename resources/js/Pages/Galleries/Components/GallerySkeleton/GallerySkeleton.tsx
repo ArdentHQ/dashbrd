@@ -13,7 +13,7 @@ export const GallerySkeletonItem = ({ className }: { className?: string }): JSX.
             <div
                 className={cn(
                     "box-content flex flex-col rounded-xl border border-theme-secondary-300",
-                    "outline outline-3 outline-transparent",
+                    "outline outline-3 outline-transparent dark:border-theme-dark-700",
                 )}
             >
                 <div className="px-6 pb-3 pt-6">
@@ -37,30 +37,30 @@ export const GallerySkeletonItem = ({ className }: { className?: string }): JSX.
                     </div>
                 </div>
 
-                <div className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium">
+                <div className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium dark:bg-theme-dark-800">
                     <div className="flex justify-between pt-3">
                         <div className="flex flex-col">
-                            <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                            <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                                 {t("pages.galleries.value")}
                             </span>
                             <Skeleton className="h-6 w-20 rounded-xl" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                            <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                                 {t("pages.galleries.nfts")}
                             </span>
                             <Skeleton className="h-6 w-10 rounded-xl" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                            <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                                 {t("pages.galleries.collections")}
                             </span>
                             <Skeleton className="h-6 w-10 rounded-xl" />
                         </div>
                     </div>
-                    <hr className="my-3 text-theme-secondary-300" />
+                    <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
                     <div className="flex items-center justify-between text-theme-secondary-700">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 dark:text-theme-dark-200">
                             <div>
                                 <Icon
                                     name="Heart"
@@ -71,7 +71,7 @@ export const GallerySkeletonItem = ({ className }: { className?: string }): JSX.
                                 <Skeleton className="h-5 w-10 rounded-xl" />
                             </span>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 dark:text-theme-dark-200">
                             <Icon
                                 name="Eye"
                                 size="lg"

@@ -1,8 +1,8 @@
 import { type SpyInstance } from "vitest";
-import { mockViewportVisibilitySensor } from "vitest.setup";
 import { CollectionsGrid } from "./CollectionsGrid";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { render } from "@/Tests/testing-library";
 
 let useAuthorizedActionSpy: SpyInstance;
@@ -30,7 +30,6 @@ describe("CollectionsGrid", () => {
                 isLoading
                 hiddenCollectionAddresses={[]}
                 collections={[]}
-                nfts={[]}
                 alreadyReportedByCollection={{}}
                 reportByCollectionAvailableIn={{}}
                 onChanged={vi.fn()}
@@ -40,7 +39,7 @@ describe("CollectionsGrid", () => {
         expect(getByTestId("CollectionsGridSkeleton")).toBeInTheDocument();
     });
 
-    it("sorts using value descending by default", () => {
+    it("should display collections in the order they were provided", () => {
         mockViewportVisibilitySensor({
             inViewport: true,
         });
@@ -71,43 +70,93 @@ describe("CollectionsGrid", () => {
             ),
         ];
 
-        const { getByTestId, getAllByTestId } = render(
+        const defaultGrid = render(
             <CollectionsGrid
                 hiddenCollectionAddresses={[]}
                 collections={collections}
-                nfts={[]}
                 alreadyReportedByCollection={{}}
                 reportByCollectionAvailableIn={{}}
                 onChanged={vi.fn()}
             />,
         );
 
-        expect(getByTestId("CollectionsGrid")).toBeInTheDocument();
+        expect(defaultGrid.getByTestId("CollectionsGrid")).toBeInTheDocument();
 
-        expect(getAllByTestId("CollectionCard")).toHaveLength(collections.length);
-        expect(getAllByTestId("CollectionFloorPrice")).toHaveLength(collections.length - 4); // offset by 4 because of nulls...
+        expect(defaultGrid.getAllByTestId("CollectionCard")).toHaveLength(collections.length);
+        expect(defaultGrid.getAllByTestId("CollectionFloorPrice")).toHaveLength(collections.length - 4); // offset by 4 because of nulls...
 
-        const values = getAllByTestId("CollectionFloorPrice");
+        const values = defaultGrid.getAllByTestId("CollectionFloorPrice");
 
         const sorted: string[] = [
-            "0.7 ETH",
-            "0.4 ETH",
-            "700 USDC",
-            "0.3 ETH",
-            "400 USDC",
+            "0.1 ETH",
             "0.2 ETH",
-            "300 USDC",
-            "200 USDC",
-            "1 ETH",
-            "1 ETH",
-            "100 USDC",
-            "100 USDC",
+            "0.4 ETH",
+            "0.7 ETH",
+            "0.3 ETH",
+            "0.1 ETH",
             "0.05 ETH",
+            "100 USDC",
+            "200 USDC",
+            "400 USDC",
+            "700 USDC",
+            "300 USDC",
+            "100 USDC",
             "50 USDC",
         ];
 
         for (let index = 0; index < sorted.length; index++) {
             expect(values[index]).toHaveTextContent(sorted[index]);
+        }
+
+        // Unmount previous grid
+        defaultGrid.unmount();
+
+        // Sort by value ascending, if null then first
+        const collectionsSortedByFloorPrice = collections.sort((a, b) => {
+            if (a.floorPriceFiat === null) {
+                return -1;
+            }
+
+            if (b.floorPriceFiat === null) {
+                return 1;
+            }
+
+            return a.floorPriceFiat - b.floorPriceFiat;
+        });
+
+        const sortedGrid = render(
+            <CollectionsGrid
+                hiddenCollectionAddresses={[]}
+                collections={collectionsSortedByFloorPrice}
+                alreadyReportedByCollection={{}}
+                reportByCollectionAvailableIn={{}}
+                onChanged={vi.fn()}
+            />,
+        );
+
+        expect(sortedGrid.getAllByTestId("CollectionCard")).toHaveLength(collectionsSortedByFloorPrice.length);
+
+        const sortedValues = sortedGrid.getAllByTestId("CollectionFloorPrice");
+
+        const expectedSortedValues = [
+            "50 USDC",
+            "0.05 ETH",
+            "100 USDC",
+            "100 USDC",
+            "0.1 ETH",
+            "0.1 ETH",
+            "200 USDC",
+            "300 USDC",
+            "0.2 ETH",
+            "400 USDC",
+            "0.3 ETH",
+            "700 USDC",
+            "0.4 ETH",
+            "0.7 ETH",
+        ];
+
+        for (let index = 0; index < sorted.length; index++) {
+            expect(sortedValues[index]).toHaveTextContent(expectedSortedValues[index]);
         }
     });
 });

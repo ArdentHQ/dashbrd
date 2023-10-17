@@ -54,7 +54,10 @@ const NftImage = ({
         className="group"
     >
         <Img
-            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover", className)}
+            className={cn(
+                "aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover dark:bg-theme-primary-400",
+                className,
+            )}
             src={nft.images.small ?? undefined}
             data-testid={`NftImageGrid__image--${nft.tokenNumber}`}
         />
@@ -63,19 +66,19 @@ const NftImage = ({
             <div
                 data-testid={`NftImageGrid__selected--${nft.tokenNumber}`}
                 className={cn("transition-default pointer-events-none absolute inset-0 rounded-xl", {
-                    "border-2 border-theme-primary-600": isSelected,
+                    "border-2 border-theme-primary-600 dark:border-theme-primary-400": isSelected,
                     "border-theme-primary-100 group-hover:border-3": !isSelected,
                 })}
             >
                 <div
                     className={cn(
-                        "absolute inset-0 m-auto flex h-9 w-9 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md",
+                        "absolute inset-0 m-auto flex h-9 w-9 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md dark:bg-theme-dark-900/30 dark:backdrop-blur-md",
                         {
                             "opacity-0": !isSelected,
                         },
                     )}
                 >
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-primary-600 text-white">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-primary-600 text-white dark:bg-theme-primary-400">
                         <Icon name="CheckSmall" />
                     </div>
                 </div>
@@ -173,7 +176,7 @@ export const NftImageGrid = ({
                 .map((_, index) => (
                     <div
                         key={index}
-                        className="aspect-square w-full rounded-xl bg-theme-secondary-100"
+                        className="aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
                         data-testid={`NftImageGrid__placeholder--${index}`}
                     />
                 ))}
@@ -211,7 +214,7 @@ export const GalleryHeading = ({
                 </div>
 
                 <span
-                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 sm:text-sm"
+                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-sm"
                     data-testid="GalleryHeading__address"
                 >
                     {wallet.domain !== null ? (
@@ -235,7 +238,7 @@ export const GalleryHeading = ({
                 delay={[500, 0]}
             >
                 <Heading
-                    className="transition-default truncate pt-0.5 group-hover:text-theme-primary-700"
+                    className="transition-default truncate pt-0.5 group-hover:text-theme-primary-700 dark:group-hover:text-theme-primary-400"
                     level={4}
                     ref={truncateReference}
                 >
@@ -272,9 +275,9 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
                 data-testid="GalleryStats__like-button"
             >
                 <Icon
-                    className={cn("transition-all", {
-                        "fill-theme-danger-100 text-theme-danger-400": hasLiked,
-                        "hover:fill-theme-danger-100 hover:text-theme-danger-400": !hasLiked,
+                    className={cn("transition-default", {
+                        "fill-theme-danger-100 text-theme-danger-400 dark:fill-theme-dark-800": hasLiked,
+                        "hover:fill-theme-danger-100 hover:text-theme-danger-400 dark:fill-theme-dark-800": !hasLiked,
                     })}
                     name="Heart"
                     size="lg"
@@ -297,17 +300,17 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
 
     return (
         <div
-            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium"
+            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium dark:bg-theme-dark-800"
             data-testid="GalleryStats"
         >
             <div className="flex justify-between pt-3">
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.value")}
                     </span>
                     <span
                         data-testid="GalleryStats__value"
-                        className="text-sm sm:text-base"
+                        className="text-sm dark:text-theme-dark-50 sm:text-base"
                     >
                         {gallery.value !== null ? (
                             <DynamicBalance
@@ -320,20 +323,20 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                     </span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.nfts")}
                     </span>
-                    <span className="text-sm sm:text-base">{gallery.nftsCount}</span>
+                    <span className="text-sm dark:text-theme-dark-50 sm:text-base">{gallery.nftsCount}</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.collections")}
                     </span>
-                    <span className="text-sm sm:text-base">{gallery.collectionsCount}</span>
+                    <span className="text-sm dark:text-theme-dark-50 sm:text-base">{gallery.collectionsCount}</span>
                 </div>
             </div>
-            <hr className="my-3 text-theme-secondary-300" />
-            <div className="flex items-center justify-between text-theme-secondary-700">
+            <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
+            <div className="flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200">
                 <GalleryStatsLikeButton gallery={gallery} />
 
                 <div className="flex items-center space-x-2">
@@ -358,32 +361,39 @@ export const GalleryStatsPlaceholder = (): JSX.Element => {
 
     return (
         <div
-            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium text-theme-secondary-500"
+            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium text-theme-secondary-500 dark:bg-theme-dark-800/50 dark:text-theme-dark-400"
             data-testid="GalleryStatsPlaceholder"
         >
             <div className="flex space-x-8 pt-3">
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5">{t("pages.galleries.value")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-400">
+                        {t("pages.galleries.value")}
+                    </span>
                     <span className="text-sm sm:text-base">$X.XX</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5">{t("pages.galleries.nfts")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-400">
+                        {t("pages.galleries.nfts")}
+                    </span>
                     <span className="text-sm sm:text-base">XX</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5">{t("pages.galleries.collections")}</span>
+                    <span className="pb-0.5 text-sm leading-5.5 dark:text-theme-dark-400">
+                        {t("pages.galleries.collections")}
+                    </span>
                     <span className="text-sm sm:text-base">X</span>
                 </div>
             </div>
-            <hr className="my-3 text-theme-secondary-300" />
-            <div className="flex items-center justify-between">
+            <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
+            <div className="flex items-center justify-between dark:text-theme-dark-200">
                 <div className="flex items-center space-x-2">
                     <Icon
                         name="Heart"
                         size="lg"
+                        className="dark:text-theme-dark-400"
                     />
                     <span
-                        className="text-sm"
+                        className="text-sm dark:text-theme-dark-400"
                         data-testid="GalleryStats__likes"
                     >
                         100
@@ -393,9 +403,10 @@ export const GalleryStatsPlaceholder = (): JSX.Element => {
                     <Icon
                         name="Eye"
                         size="lg"
+                        className="dark:text-theme-dark-400"
                     />
                     <span
-                        className="text-sm"
+                        className="text-sm dark:text-theme-dark-400"
                         data-testid="GalleryStats__views"
                     >
                         100
@@ -411,13 +422,13 @@ export const GalleryHeadingPlaceholder = (): JSX.Element => {
 
     return (
         <div data-testid="GalleryHeadingPlaceholder">
-            <div className="flex text-sm font-medium text-theme-secondary-500">
+            <div className="flex text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-400">
                 <div className="flex items-center pr-2">
-                    <div className="h-4 w-4 rounded-full bg-theme-secondary-300"></div>
+                    <div className="h-4 w-4 rounded-full bg-theme-secondary-300 dark:bg-theme-dark-800"></div>
                 </div>
 
                 <span
-                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-500 sm:text-sm"
+                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400 sm:text-sm"
                     data-testid="GalleryHeading__address"
                 >
                     <TruncateMiddle
@@ -428,7 +439,9 @@ export const GalleryHeadingPlaceholder = (): JSX.Element => {
             </div>
             <span className="line-clamp-1 pt-0.5">
                 <Heading level={4}>
-                    <span className="text-theme-secondary-500">{t("common.gallery_name")}</span>
+                    <span className="text-theme-secondary-500 dark:text-theme-dark-400">
+                        {t("common.gallery_name")}
+                    </span>
                 </Heading>
             </span>
         </div>

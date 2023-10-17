@@ -77,7 +77,7 @@ class Web3NftHandler
                 fn ($nft) => $this->shouldKeepNft($collections[Str::lower($nft->tokenAddress)])
             );
 
-            $valuesToUpdateIfExists = ['name', 'extra_attributes', 'deleted_at'];
+            $valuesToUpdateIfExists = ['name', 'extra_attributes', 'deleted_at', 'metadata_fetched_at'];
 
             if ($this->wallet !== null) {
                 $valuesToUpdateIfExists[] = 'wallet_id';
@@ -90,6 +90,7 @@ class Web3NftHandler
                 'name' => $nft->name,
                 'extra_attributes' => json_encode($nft->extraAttributes),
                 'deleted_at' => null,
+                'metadata_fetched_at' => $now,
             ])->toArray(), uniqueBy: ['collection_id', 'token_number'], update: $valuesToUpdateIfExists);
 
             // Traits only need if collections are enabled
@@ -117,14 +118,32 @@ class Web3NftHandler
         });
 
         if (Feature::active(Features::Collections->value)) {
-            CollectionModel::updateFiatValue($collections->modelKeys());
+            // Passing an empty array means we update all collections which is undesired here.
+            if (! $collections->isEmpty()) {
+                CollectionModel::updateFiatValue($collections->modelKeys());
+            } else {
+                Log::info('Web3NftHandler: skipping updateFiatValue because no ids given', [
+                    'wallet' => $this->wallet?->address,
+                    'collectionId' => $this->collection?->id,
+                    'chainId' => $this->getChainId(),
+                ]);
+            }
 
             // Users that own NFTs from the collections that were updated
             $affectedUsersIds = User::whereHas('wallets', function (Builder $query) use ($collections) {
                 $query->whereHas('nfts', fn ($q) => $q->whereIn('collection_id', $collections->modelKeys()));
             })->pluck('users.id')->toArray();
 
-            User::updateCollectionsValue($affectedUsersIds);
+            // Passing an empty array means we update all users which is undesired here.
+            if (! empty($affectedUsersIds)) {
+                User::updateCollectionsValue($affectedUsersIds);
+            } else {
+                Log::info('Web3NftHandler: skipping updateCollectionsValue because no user affected', [
+                    'wallet' => $this->wallet?->address,
+                    'collectionId' => $this->collection?->id,
+                    'chainId' => $this->getChainId(),
+                ]);
+            }
         }
     }
 
@@ -140,6 +159,22 @@ class Web3NftHandler
             fn ($nft) => Str::lower($nft->tokenAddress)
         );
 
+        $getAttributes = function (Web3NftData $nft) {
+            $attributes = [
+                'image' => $nft->collectionImage,
+                'website' => $nft->collectionWebsite,
+                'socials' => $nft->collectionSocials,
+                'banner' => $nft->collectionBannerImageUrl,
+                'banner_updated_at' => $nft->collectionBannerImageUrl ? $now : null,
+            ];
+
+            if ($nft->collectionOpenSeaSlug !== null) {
+                $attributes['opensea_slug'] = $nft->collectionOpenSeaSlug;
+            }
+
+            return $attributes;
+        };
+
         // @phpstan-ignore-next-line
         return $nftsInCollection->map->first()->map(fn (Web3NftData $nft) => [
             'address' => $nft->tokenAddress,
@@ -149,13 +184,7 @@ class Web3NftHandler
             'symbol' => $nft->collectionSymbol,
             'description' => $nft->collectionDescription !== null ? strip_tags($nft->collectionDescription) : null,
             'supply' => $nft->collectionSupply,
-            'extra_attributes' => json_encode([
-                'image' => $nft->collectionImage,
-                'website' => $nft->collectionWebsite,
-                'socials' => $nft->collectionSocials,
-                'banner' => $nft->collectionBannerImageUrl,
-                'banner_updated_at' => $nft->collectionBannerImageUrl ? now() : null,
-            ]),
+            'extra_attributes' => json_encode($getAttributes($nft)),
             'minted_block' => $nft->mintedBlock,
             'minted_at' => $nft->mintedAt?->toDateTimeString(),
             'last_indexed_token_number' => $this->lastRetrievedTokenNumber($nftsInCollection->get(Str::lower($nft->tokenAddress))),

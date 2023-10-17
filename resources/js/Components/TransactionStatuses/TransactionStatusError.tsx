@@ -3,7 +3,7 @@ import { Link } from "@/Components/Link";
 import { Toast } from "@/Components/Toast";
 import { ExplorerChains } from "@/Utils/Explorer";
 
-export const TransactionStatusError = ({ chainId, hash }: { chainId: number; hash: string }): JSX.Element => {
+export const TransactionStatusError = ({ chainId, hash }: { chainId: ExplorerChains; hash: string }): JSX.Element => {
     const { t } = useTranslation();
 
     const transactionHashUrl =

@@ -9,6 +9,7 @@ use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
+use App\Console\Commands\FetchCollectionOpenseaSlug;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
 use App\Console\Commands\FetchTokens;
@@ -98,14 +99,20 @@ class Kernel extends ConsoleKernel
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
         $schedule
-            ->command(FetchCollectionFloorPrice::class)
-            ->withoutOverlapping()
-            ->hourlyAt(5);
+                ->command(FetchCollectionFloorPrice::class)
+                ->withoutOverlapping()
+                ->hourlyAt(5);
 
         $schedule
             ->command(FetchWalletNfts::class)
             ->withoutOverlapping()
             ->hourlyAt(10); // offset by 10 mins so it's not run the same time as FetchEnsDetails...
+
+        $schedule
+            ->command(FetchCollectionOpenseaSlug::class)
+            ->withoutOverlapping()
+            ->everyFiveMinutes();
+
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void

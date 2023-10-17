@@ -19,9 +19,12 @@ export const useClipboard = (options?: ClipboardOptions): UseClipboardReturnType
 
     useEffect(() => {
         if (isCopied && isTruthy(options?.resetAfter)) {
-            const handler = setTimeout(() => {
-                setHasCopied(false);
-            }, options?.resetAfter);
+            const handler = setTimeout(
+                () => {
+                    setHasCopied(false);
+                },
+                options?.resetAfter,
+            );
 
             return () => {
                 clearTimeout(handler);

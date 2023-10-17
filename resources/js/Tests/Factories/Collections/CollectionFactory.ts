@@ -15,8 +15,10 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             floorPriceDecimals: this.optional(18),
             image: this.optional(faker.image.avatar(), 0.9),
             banner: this.optional(faker.image.avatar()),
+            openSeaSlug: this.optional(faker.lorem.slug()),
             website: faker.internet.url(),
             nftsCount: 0,
+            nfts: [],
         };
     }
 
@@ -29,6 +31,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             image: faker.image.avatar(),
             banner: faker.image.avatar(),
             bannerUpdatedAt: faker.date.recent().toISOString(),
+            openSeaSlug: faker.lorem.slug(),
             website: faker.internet.url(),
         }));
     }

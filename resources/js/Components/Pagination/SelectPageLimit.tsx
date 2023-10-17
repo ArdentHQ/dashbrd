@@ -34,11 +34,11 @@ export const SelectPageLimit = ({
             button={
                 <Listbox.Button data-testid="Listbox__trigger">
                     <div className="absolute inset-0 flex h-full items-center">
-                        <div className="flex h-full items-center rounded-l-xl border-r border-theme-secondary-400 bg-theme-secondary-50 px-4 text-theme-secondary-700">
+                        <div className="flex h-full items-center rounded-l-xl border-r border-theme-secondary-400 bg-theme-secondary-50 px-4 text-theme-secondary-700 dark:border-theme-dark-500 dark:bg-theme-dark-800 dark:text-theme-dark-200">
                             {t("common.show")}
                         </div>
 
-                        <div className="px-4 text-theme-secondary-700">
+                        <div className="px-4 text-theme-secondary-700 dark:text-theme-dark-200">
                             {value}
                             <span> {suffix}</span>
                         </div>

@@ -1,12 +1,11 @@
 import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
-import { mockViewportVisibilitySensor } from "vitest.setup";
 import { CollectionsTable } from "./CollectionsTable";
 import * as useAuthMock from "@/Hooks/useAuth";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
-import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
@@ -30,12 +29,6 @@ describe("CollectionsTable", () => {
     });
 
     const collections = new CollectionFactory().withPrices().createMany(3);
-
-    const nfts = collections.flatMap((collection) =>
-        new CollectionNftDataFactory().createMany(3, {
-            collectionId: collection.id,
-        }),
-    );
 
     const collection = new CollectionFactory().withoutPrices().create();
 
@@ -66,7 +59,6 @@ describe("CollectionsTable", () => {
     it.each(allBreakpoints)("should render loading state in %s screen", (breakpoint) => {
         render(
             <CollectionsTable
-                nfts={nfts}
                 isLoading
                 hiddenCollectionAddresses={[]}
                 collections={collections}
@@ -91,7 +83,6 @@ describe("CollectionsTable", () => {
 
         render(
             <CollectionsTable
-                nfts={nfts}
                 isLoading
                 hiddenCollectionAddresses={[]}
                 collections={collections}
@@ -111,7 +102,6 @@ describe("CollectionsTable", () => {
     it.each(allBreakpoints)("renders without crashing on %s screen", (breakpoint) => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -130,7 +120,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -149,7 +138,6 @@ describe("CollectionsTable", () => {
     it("should not render if there are no collections", () => {
         render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={[]}
                 user={user}
@@ -171,7 +159,6 @@ describe("CollectionsTable", () => {
 
         render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={[...collections, ...collections, ...collections, ...collections]}
                 user={user}
@@ -192,7 +179,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId, getAllByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -214,7 +200,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -243,7 +228,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -272,7 +256,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -299,7 +282,6 @@ describe("CollectionsTable", () => {
     it.each(allBreakpoints)("renders without crashing on %s screen if no floor price data", (breakpoint) => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collectionsWithNoFloorPriceCurrencyData}
                 user={user}
@@ -316,7 +298,6 @@ describe("CollectionsTable", () => {
     it("should render when floor price fiat is null", () => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collectionsWithNullFloorPriceFiatData}
                 user={user}
@@ -332,7 +313,6 @@ describe("CollectionsTable", () => {
     it("should render when floor price is null", () => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collectionsWithNullFloorPriceData}
                 user={user}
@@ -350,7 +330,6 @@ describe("CollectionsTable", () => {
     it("defaults fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={[
                     {

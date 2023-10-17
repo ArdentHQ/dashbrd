@@ -1,6 +1,6 @@
 import { BigNumber } from "@ardenthq/sdk-helpers";
 import { router } from "@inertiajs/react";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useInViewport } from "react-in-viewport";
 import { CollectionActions } from "@/Components/Collections/CollectionActions";
@@ -14,7 +14,6 @@ import { useIsTruncated } from "@/Hooks/useIsTruncated";
 
 interface CollectionCardProperties {
     collection: App.Data.Collections.CollectionData;
-    nfts: App.Data.Collections.CollectionNftData[];
     isHidden?: boolean;
     reportAvailableIn?: string | null;
     alreadyReported?: boolean | null;
@@ -26,7 +25,6 @@ interface CollectionCardProperties {
 
 export const CollectionCard = ({
     collection,
-    nfts,
     reportAvailableIn,
     isHidden = false,
     alreadyReported = false,
@@ -47,8 +45,6 @@ export const CollectionCard = ({
     const isTruncated = useIsTruncated({ reference: collectionNameReference });
 
     const reference = useRef(null);
-
-    const collectionNfts = useMemo(() => nfts.filter((nft) => nft.collectionId === collection.id), [nfts]);
 
     useInViewport(reference, {}, undefined, {
         onEnterViewport: onVisible,
@@ -81,7 +77,7 @@ export const CollectionCard = ({
             </div>
 
             <div className="aspect-[3/2] w-full rounded-lg">
-                <CollectionCoverImages nfts={collectionNfts} />
+                <CollectionCoverImages nfts={collection.nfts} />
             </div>
 
             <div className="relative mx-auto -mt-11 flex items-center justify-center">
