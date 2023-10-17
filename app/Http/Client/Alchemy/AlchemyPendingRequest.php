@@ -410,7 +410,7 @@ class AlchemyPendingRequest extends PendingRequest
             ]);
 
             // if metadata stuff is empty, is empty object or empty array
-            if (empty($nft['metadata']) || empty($nft['metadata']['metadata']) || is_object($nft['metadata']['metadata']) && count((array)$nft['metadata']['metadata'])) {
+            if (empty($nft['metadata']) || empty($nft['metadata']['metadata']) || is_object($nft['metadata']['metadata']) && count((array) $nft['metadata']['metadata'])) {
                 $nftError = NftErrors::MetadataOutdated->value;
             }
         }
