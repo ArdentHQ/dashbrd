@@ -100,6 +100,7 @@ class MoralisPendingRequest extends PendingRequest
          *  thumbnail: string|null,
          *  decimals: int,
          *  balance: string,
+         *  possible_spam: boolean,
          * }> $data
          **/
         $data = self::get($wallet->address.'/erc20', [
@@ -107,19 +108,21 @@ class MoralisPendingRequest extends PendingRequest
             ...$query,
         ])->json();
 
-        return collect($data)->map(function ($token) use ($wallet, $network) {
-            return new Web3Erc20TokenData(
-                $token['token_address'],
-                $network->id,
-                $wallet->address,
-                $token['name'],
-                $token['symbol'],
-                $token['decimals'],
-                $token['logo'],
-                $token['thumbnail'],
-                $token['balance'],
-            );
-        });
+        return collect($data)
+            ->filter(fn ($token) => ! $token['possible_spam'])
+            ->map(function ($token) use ($wallet, $network) {
+                return new Web3Erc20TokenData(
+                    $token['token_address'],
+                    $network->id,
+                    $wallet->address,
+                    $token['name'],
+                    $token['symbol'],
+                    $token['decimals'],
+                    $token['logo'],
+                    $token['thumbnail'],
+                    $token['balance'],
+                );
+            });
     }
 
     /**
