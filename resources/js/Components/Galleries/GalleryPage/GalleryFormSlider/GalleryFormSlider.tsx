@@ -58,7 +58,10 @@ export const GalleryFormSlider = ({
                             {activeTab === GalleryFormSliderTabs.Cover && (
                                 <div className="text-lg font-medium">
                                     {t("pages.galleries.create.gallery_cover")}
-                                    <span className="text-theme-secondary-500"> {t("common.optional")}</span>
+                                    <span className="text-theme-secondary-500 dark:text-theme-dark-400">
+                                        {" "}
+                                        {t("common.optional")}
+                                    </span>
                                 </div>
                             )}
                         </div>
