@@ -8,7 +8,7 @@ import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { act, fireEvent, mockActiveUserContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { act, fireEvent, mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 import { ExplorerChains } from "@/Utils/Explorer";
 
 describe("Nftactions", () => {
@@ -69,7 +69,7 @@ describe("Nftactions", () => {
 
         const wallet = new WalletFactory().create();
 
-        const resetMock = mockActiveUserContext({
+        const resetMock = mockAuthContext({
             user,
             wallet,
         });
@@ -96,7 +96,7 @@ describe("Nftactions", () => {
     it("should display connect overlay if there is no user", () => {
         server.use(requestMock(`${BASE_URL}/nft/refresh`, { success: true }, { method: "post" }));
 
-        const resetMock = mockActiveUserContext({
+        const resetMock = mockAuthContext({
             user: null,
             wallet: null,
         });

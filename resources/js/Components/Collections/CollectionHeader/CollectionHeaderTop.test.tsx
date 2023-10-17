@@ -6,7 +6,7 @@ import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { mockActiveUserContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 
 const collection = new CollectionDetailDataFactory().create({
     description: "This is a test collection",
@@ -19,7 +19,7 @@ describe("CollectionHeaderTop", () => {
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
 
-        mockActiveUserContext({});
+        mockAuthContext({});
     });
 
     afterAll(() => {

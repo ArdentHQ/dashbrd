@@ -5,7 +5,7 @@ import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
-import { mockActiveUserContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 let useAuthorizedActionSpy: SpyInstance;
@@ -73,7 +73,7 @@ describe("CollectionsTable", () => {
     });
 
     it.each(allBreakpoints)("should render loading state if no user", (breakpoint) => {
-        const resetMock = mockActiveUserContext({});
+        const resetMock = mockAuthContext({});
 
         render(
             <CollectionsTable

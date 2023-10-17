@@ -4,7 +4,7 @@ import { AppMenu } from "./AppMenu";
 import * as environmentContextMock from "@/Contexts/EnvironmentContext";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { mockActiveUserContext, render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
 const environmentDefault = {
     environment: "local",
@@ -16,18 +16,18 @@ const environmentDefault = {
     },
 };
 
-let activeUserSpyReset: () => void;
+let resetAuthContextMock: () => void;
 
 describe("AppMenu", () => {
     beforeAll(() => {
-        activeUserSpyReset = mockActiveUserContext({
+        resetAuthContextMock = mockAuthContext({
             user: new UserDataFactory().create(),
             wallet: new WalletFactory().create(),
         });
     });
 
     afterAll(() => {
-        activeUserSpyReset();
+        resetAuthContextMock();
     });
 
     it("should render with 3 enabled items", () => {

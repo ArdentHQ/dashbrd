@@ -5,15 +5,15 @@ import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { mockActiveUserContext, render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
 const user = new UserDataFactory().create();
-let resetMock: () => void;
+let resetAuthContextMock: () => void;
 let useMetaMaskContextSpy: SpyInstance;
 
 describe("NftGalleryCard", () => {
     beforeEach(() => {
-        resetMock = mockActiveUserContext({ user });
+        resetAuthContextMock = mockAuthContext({ user });
 
         useMetaMaskContextSpy = vi
             .spyOn(useMetaMaskContext, "useMetaMaskContext")
@@ -21,7 +21,7 @@ describe("NftGalleryCard", () => {
     });
 
     afterEach(() => {
-        resetMock();
+        resetAuthContextMock();
 
         useMetaMaskContextSpy.mockRestore();
     });

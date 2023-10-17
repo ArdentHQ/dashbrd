@@ -11,7 +11,6 @@ import {
     Timestamp,
     Type,
 } from "@/Components/Collections/CollectionActivityTable/CollectionActivityTable.blocks";
-import { ActiveUserContextProvider } from "@/Contexts/AuthContext";
 import * as authContextMock from "@/Contexts/AuthContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
@@ -22,10 +21,11 @@ import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 import { Breakpoint } from "@/Tests/utils";
 
 const connectWalletMock = vi.fn();
+
 const defaultMetamaskConfig = getSampleMetaMaskState({
     connectWallet: connectWalletMock,
 });
@@ -329,45 +329,48 @@ describe("CollectionActivityTableItem", () => {
         type: "LABEL_TRANSFER",
         nft: new CollectionNftDataFactory().withoutImages().create(),
     });
+    let resetAuthContext: () => void;
 
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+
+        resetAuthContext = mockAuthContext({ user, wallet });
+    });
+
+    afterAll(() => {
+        resetAuthContext();
     });
 
     it("should render collection activity table items with/without bottom border", () => {
         const { rerender } = render(
-            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: true, signed: false }}>
-                <table>
-                    <tbody>
-                        <CollectionActivityTableItem
-                            activity={activity}
-                            collection={collection}
-                            isCompact={false}
-                            showNameColumn={false}
-                            nativeToken={token}
-                            hasBorderBottom={true}
-                        />
-                    </tbody>
-                </table>
-            </ActiveUserContextProvider>,
+            <table>
+                <tbody>
+                    <CollectionActivityTableItem
+                        activity={activity}
+                        collection={collection}
+                        isCompact={false}
+                        showNameColumn={false}
+                        nativeToken={token}
+                        hasBorderBottom={true}
+                    />
+                </tbody>
+            </table>,
         );
 
         expect(screen.getByTestId("ActivityTable__Row")).toHaveClass("last:border-solid");
 
         rerender(
-            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: true, signed: false }}>
-                <table>
-                    <tbody>
-                        <CollectionActivityTableItem
-                            activity={activity}
-                            collection={collection}
-                            isCompact={false}
-                            showNameColumn={false}
-                            nativeToken={token}
-                        />
-                    </tbody>
-                </table>
-            </ActiveUserContextProvider>,
+            <table>
+                <tbody>
+                    <CollectionActivityTableItem
+                        activity={activity}
+                        collection={collection}
+                        isCompact={false}
+                        showNameColumn={false}
+                        nativeToken={token}
+                    />
+                </tbody>
+            </table>,
         );
 
         expect(screen.getByTestId("ActivityTable__Row")).not.toHaveClass("last:border-solid");

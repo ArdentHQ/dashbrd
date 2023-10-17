@@ -5,7 +5,7 @@ import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { act, mockActiveUserContext, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
+import { act, mockAuthContext, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
 
 vi.mock("file-saver", () => ({
     saveAs: vi.fn(),
@@ -25,7 +25,7 @@ describe("NftImage", () => {
             showConnectOverlay: showConnectOverlayMock,
         });
 
-        mockActiveUserContext({});
+        mockAuthContext({});
     });
 
     afterAll(() => {
