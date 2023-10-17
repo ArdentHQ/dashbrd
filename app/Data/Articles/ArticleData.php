@@ -32,6 +32,7 @@ class ArticleData extends Data
         public int $publishedAt,
         public int $userId,
         public string $authorName,
+        /** @var array{ thumb: string | null, thumb2x: string | null } */
         #[LiteralTypeScriptType('{ thumb: string | null, thumb2x: string | null }')]
         public array $authorAvatar,
         #[DataCollectionOf(FeaturedCollectionData::class)]
