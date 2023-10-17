@@ -25,7 +25,7 @@ export const NftCollectionSlider = (): JSX.Element => {
             <Slider.Content className="relative pb-28">
                 <NftCollectionSearch />
 
-                <div className="fixed inset-x-0 bottom-0 flex w-full items-center justify-end space-x-3 border-t border-theme-secondary-300 bg-white px-8 py-4">
+                <div className="fixed inset-x-0 bottom-0 flex w-full items-center justify-end space-x-3 border-t border-theme-secondary-300 bg-white px-8 py-4 dark:border-theme-dark-700 dark:bg-theme-dark-900">
                     <Button
                         data-testid="NftCollectionSlider__cancel"
                         className="inline-flex flex-1 justify-center sm:flex-none"

@@ -69,11 +69,13 @@ export const GalleryUploadCover = ({
     return (
         <div data-testid="GalleryUploadCover">
             <div className="space-y-6 overflow-auto">
-                <p className="text-theme-secondary-700">{t("pages.galleries.create.gallery_cover_description")}</p>
+                <p className="text-theme-secondary-700 dark:text-theme-dark-200">
+                    {t("pages.galleries.create.gallery_cover_description")}
+                </p>
 
                 <div className="mb-12 overflow-auto">
                     <div className="sm:mx-[55px]">
-                        <div className="transition-default m-1 box-content flex flex-col rounded-xl border border-theme-secondary-300">
+                        <div className="transition-default m-1 box-content flex flex-col rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700">
                             <div className="rounded-xl px-6 pb-3 pt-6">
                                 <div className="relative mb-3 aspect-[3/2]">
                                     {!isTruthy(imageDataURI) && (
