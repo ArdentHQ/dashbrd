@@ -202,21 +202,19 @@ class CollectionController extends Controller
 
         $tab = $request->get('tab') === 'activity' ? 'activity' : 'collection';
 
-        // TODO: enable when we enable the "Activity" tab (https://app.clickup.com/t/862kftp7w)...
-        // $activities = $collection->activities()
-        //                     ->latest('timestamp')
-        //                     ->with(['nft' => fn ($q) => $q->where('collection_id', $collection->id)])
-        //                     ->whereHas('nft', fn ($q) => $q->where('collection_id', $collection->id))
-        //                     ->where('type', '!=', NftTransferType::Transfer)
-        //                     ->paginate($activityPageLimit)
-        //                     ->appends([
-        //                         'tab' => 'activity',
-        //                         'activityPageLimit' => $activityPageLimit,
-        //                     ]);
+        $activities = $tab === 'activity' ? $collection->activities()
+                            ->latest('timestamp')
+                            ->with(['nft' => fn ($q) => $q->where('collection_id', $collection->id)])
+                            ->whereHas('nft', fn ($q) => $q->where('collection_id', $collection->id))
+                            ->where('type', '!=', NftTransferType::Transfer)
+                            ->paginate($activityPageLimit)
+                            ->appends([
+                                'tab' => 'activity',
+                                'activityPageLimit' => $activityPageLimit,
+                            ]) : null;
 
-        // TODO: enable when we enable the "Activity" tab (https://app.clickup.com/t/862kftp7w)...
-        // /** @var PaginatedDataCollection<int, NftActivityData> */
-        // $paginated = NftActivityData::collection($activities);
+        /** @var PaginatedDataCollection<int, NftActivityData>|null */
+        $paginated = $activities !== null ? NftActivityData::collection($activities) : null;
 
         $ownedNftIds = $user
                         ? $collection->nfts()->ownedBy($user)->pluck('id')
@@ -234,9 +232,7 @@ class CollectionController extends Controller
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
         return Inertia::render('Collections/View', [
-            // TODO: enable when we enable the "Activity" tab (https://app.clickup.com/t/862kftp7w)...
-            // 'activities' => new NftActivitiesData($paginated),
-            'activities' => null,
+            'initialActivities' => $paginated !== null ? new NftActivitiesData($paginated) : null,
             'collection' => CollectionDetailData::fromModel($collection, $currency, $user),
             'isHidden' => $user && $user->hiddenCollections()->where('id', $collection->id)->exists(),
             'previousUrl' => url()->previous() === url()->current()
