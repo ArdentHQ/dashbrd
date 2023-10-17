@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 return [
+    'author' => 'Author',
     'add' => 'Add',
     'amount' => 'Amount',
     'balance' => 'Balance',

@@ -1,3 +1,4 @@
+import { ArticleAuthor } from "./Components/ArticleAuthor";
 import { ArticleShare } from "./Components/ArticleShare";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
@@ -43,7 +44,7 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                 <div className="-mx-6 flex flex-col border-b border-t border-theme-secondary-300 px-6 py-4 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
                     <div className="flex justify-between">
                         <div className="flex">
-                            <div>Author (TBD)</div>
+                            <ArticleAuthor article={article} />
                             <div>Date (TBD)</div>
                         </div>
 

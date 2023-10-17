@@ -31,6 +31,9 @@ class ArticleData extends Data
         public string $image,
         public int $publishedAt,
         public int $userId,
+        public string $authorName,
+        #[LiteralTypeScriptType('{ thumb: string | null, thumb2x: string | null }')]
+        public array $authorAvatar,
         #[DataCollectionOf(FeaturedCollectionData::class)]
         public DataCollection $featuredCollections,
 
@@ -40,6 +43,8 @@ class ArticleData extends Data
 
     public static function fromModel(Article $article): self
     {
+        $user = $article->user;
+
         return new self(
             id: $article->id,
             title: $article->title,
@@ -49,6 +54,11 @@ class ArticleData extends Data
             image: $article->getFirstMediaUrl('cover', 'large'),
             publishedAt: (int) $article->published_at->timestamp,
             userId: $article->user_id,
+            authorName: $user->username ?? 'Unknown',
+            authorAvatar: [
+                'thumb' => $user->hasMedia('avatar') ? $user->getFirstMediaUrl('avatar', 'thumb') : null,
+                'thumb2x' => $user->hasMedia('avatar') ? $user->getFirstMediaUrl('avatar', 'thumb2x') : null,
+            ],
             featuredCollections: FeaturedCollectionData::collection($article->collections),
             metaDescription: $article->meta_description,
         );
