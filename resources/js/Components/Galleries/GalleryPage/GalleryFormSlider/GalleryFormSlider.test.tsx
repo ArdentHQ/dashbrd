@@ -1,10 +1,19 @@
 import React from "react";
 import { GalleryFormSlider } from "./GalleryFormSlider";
 import { GalleryFormSliderTabs } from "./GalleryFormSlider.contracts";
+import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 import { render, screen } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 describe("GalleryFormSlider", () => {
+    beforeAll(() => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+    });
+
     it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {
         render(
             <GalleryFormSlider
