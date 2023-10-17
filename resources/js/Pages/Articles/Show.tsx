@@ -1,4 +1,5 @@
 import { ArticleAuthor } from "./Components/ArticleAuthor";
+import { ArticleDate } from "./Components/ArticleDate";
 import { ArticleShare } from "./Components/ArticleShare";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
@@ -45,7 +46,10 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                     <div className="flex justify-between">
                         <div className="flex">
                             <ArticleAuthor article={article} />
-                            <div>Date (TBD)</div>
+
+                            <div className="mx-6 border-r border-theme-secondary-300"></div>
+
+                            <ArticleDate article={article} />
                         </div>
 
                         <div className="hidden md:block">Copy (TBD)</div>

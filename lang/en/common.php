@@ -32,6 +32,7 @@ return [
     'wallet' => 'Wallet',
     'pending' => 'Pending',
     'publish' => 'Publish',
+    'published' => 'Published',
     'empty' => 'Empty',
     'your_address' => 'Your Address',
     'warning' => 'Warning',
