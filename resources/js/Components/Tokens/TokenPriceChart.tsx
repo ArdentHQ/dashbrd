@@ -16,7 +16,7 @@ import {
     determineIfTimestampGroupChanged,
 } from "@/Components/Tokens/TokenPriceChart.helpers";
 import { type Period } from "@/Components/Tokens/Tokens.contracts";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { getPriceHistory } from "@/Utils/api";
 import { assertUser } from "@/Utils/assertions";
@@ -35,7 +35,7 @@ type ChartReference = Chart<"line", number[], number>;
 export const TokenPriceChart = ({ token, period, ...properties }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    const { user } = useActiveUser();
+    const { user } = useAuth();
 
     assertUser(user);
 

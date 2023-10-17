@@ -12,9 +12,9 @@ interface ProviderProperties {
     initialAuth: App.Data.AuthData;
 }
 
-const ActiveUserContext = createContext<ContextProperties | undefined>(undefined);
+const AuthContext = createContext<ContextProperties | undefined>(undefined);
 
-export const ActiveUserContextProvider = ({ children, initialAuth }: ProviderProperties): JSX.Element => {
+export const AuthContextProvider = ({ children, initialAuth }: ProviderProperties): JSX.Element => {
     const [auth, setAuthData] = useState<App.Data.AuthData>(initialAuth);
 
     router.on("navigate", (event) => {
@@ -36,7 +36,7 @@ export const ActiveUserContextProvider = ({ children, initialAuth }: ProviderPro
     };
 
     return (
-        <ActiveUserContext.Provider
+        <AuthContext.Provider
             value={{
                 ...auth,
                 setAuthData,
@@ -44,15 +44,15 @@ export const ActiveUserContextProvider = ({ children, initialAuth }: ProviderPro
             }}
         >
             {children}
-        </ActiveUserContext.Provider>
+        </AuthContext.Provider>
     );
 };
 
-export const useActiveUser = (): ContextProperties => {
-    const context = useContext(ActiveUserContext);
+export const useAuth = (): ContextProperties => {
+    const context = useContext(AuthContext);
 
     if (context === undefined) {
-        throw new Error("useActiveUser must be used within a ActiveUserContextProvider");
+        throw new Error("useAuth must be used within a AuthContextProvider");
     }
 
     return context;

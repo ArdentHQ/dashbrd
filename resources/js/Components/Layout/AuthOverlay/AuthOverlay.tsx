@@ -11,7 +11,7 @@ import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
 import { Overlay } from "@/Components/Layout/Overlay/Overlay";
 import { Toast } from "@/Components/Toast";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { AuthConnectWallet, AuthConnectWalletDark, AuthInstallWallet } from "@/images";
@@ -29,7 +29,7 @@ export const AuthOverlay = ({
     const { t } = useTranslation();
     const { isDark } = useDarkModeContext();
 
-    const { signed } = useActiveUser();
+    const { signed } = useAuth();
 
     const {
         needsMetaMask,

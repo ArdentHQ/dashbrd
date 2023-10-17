@@ -10,7 +10,7 @@ import { Skeleton } from "@/Components/Skeleton";
 import { TableCell, TableRow } from "@/Components/Table";
 import { TimeAgo } from "@/Components/TimeAgo";
 import { Tooltip } from "@/Components/Tooltip";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { useNetwork } from "@/Hooks/useNetwork";
 import { FormatFiat, FormatFiatShort, FormatNumber } from "@/Utils/Currency";
@@ -297,7 +297,7 @@ export const Type = ({
 };
 
 export const Timestamp = ({ value }: { value: number }): JSX.Element => {
-    const { user } = useActiveUser();
+    const { user } = useAuth();
 
     const attributes =
         user != null

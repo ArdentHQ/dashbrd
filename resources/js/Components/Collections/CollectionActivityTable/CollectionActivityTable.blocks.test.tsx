@@ -11,8 +11,8 @@ import {
     Timestamp,
     Type,
 } from "@/Components/Collections/CollectionActivityTable/CollectionActivityTable.blocks";
-import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
-import * as activeUserContextMock from "@/Contexts/ActiveUserContext";
+import { ActiveUserContextProvider } from "@/Contexts/AuthContext";
+import * as authContextMock from "@/Contexts/AuthContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
@@ -303,7 +303,7 @@ describe("TimeStamp", () => {
     });
 
     it("should render timestamp for guests", () => {
-        const activeUserSpy = vi.spyOn(activeUserContextMock, "useActiveUser").mockReturnValue({
+        const activeUserSpy = vi.spyOn(authContextMock, "useAuth").mockReturnValue({
             user: null,
             wallet: null,
             authenticated: false,

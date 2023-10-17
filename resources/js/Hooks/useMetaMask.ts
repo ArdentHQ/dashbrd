@@ -12,7 +12,7 @@ import {
     type SendTransactionResponse,
 } from "./useMetaMask.contracts";
 import Chains = App.Enums.Chains;
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { browserLocale } from "@/Utils/browser-locale";
 
 const networkConfigs: Record<number, object> = {
@@ -159,7 +159,7 @@ const useMetaMask = (): MetaMaskState => {
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
-    const { setAuthData, logout, authenticated } = useActiveUser();
+    const { setAuthData, logout, authenticated } = useAuth();
 
     const onError = useCallback((error: ErrorType, errorMessage?: string) => {
         setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());

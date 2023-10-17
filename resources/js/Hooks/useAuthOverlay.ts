@@ -1,6 +1,6 @@
 import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
 interface Properties {
@@ -14,7 +14,7 @@ export const useAuthOverlay = ({ mustBeSigned = false }: Properties = {}): {
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
 
-    const { authenticated, signed } = useActiveUser();
+    const { authenticated, signed } = useAuth();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { props } = usePage();

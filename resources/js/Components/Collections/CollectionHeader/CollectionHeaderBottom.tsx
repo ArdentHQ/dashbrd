@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { GridHeader } from "@/Components/GridHeader";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
-import { useActiveUser } from "@/Contexts/AuthContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { FormatCrypto, FormatNumber } from "@/Utils/Currency";
 import { toMonthYear } from "@/Utils/dates";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -13,7 +13,7 @@ interface CollectionHeaderBottomProperties {
 export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const { user } = useActiveUser();
+    const { user } = useAuth();
 
     const token: Pick<App.Data.Token.TokenData, "symbol" | "name" | "decimals"> = {
         name: "",

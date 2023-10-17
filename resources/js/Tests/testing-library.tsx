@@ -10,8 +10,8 @@ import { I18nextProvider } from "react-i18next";
 import { Context as ResponsiveContext } from "react-responsive";
 import { type SpyInstance } from "vitest";
 import { type Breakpoint, breakpointWidth } from "./utils";
-import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
-import * as ActiveUserContextMock from "@/Contexts/ActiveUserContext";
+import { ActiveUserContextProvider } from "@/Contexts/AuthContext";
+import * as ActiveUserContextMock from "@/Contexts/AuthContext";
 import EnvironmentContextProvider from "@/Contexts/EnvironmentContext";
 import { i18n } from "@/I18n";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
@@ -65,7 +65,7 @@ export const mockInertiaUseForm = (properties: InertiaUseFormProperties): SpyIns
     vi.spyOn(inertia, "useForm").mockReturnValue(properties as InertiaFormProps<Record<string, unknown>>);
 
 export const mockActiveUserContext = (properties: Partial<App.Data.AuthData>): (() => void) => {
-    const useActiveUserSpy = vi.spyOn(ActiveUserContextMock, "useActiveUser").mockReturnValue({
+    const useAuthSpy = vi.spyOn(ActiveUserContextMock, "useAuth").mockReturnValue({
         user: null,
         wallet: null,
         authenticated: properties.user != null && properties.wallet != null,
@@ -76,6 +76,6 @@ export const mockActiveUserContext = (properties: Partial<App.Data.AuthData>): (
     });
 
     return () => {
-        useActiveUserSpy.mockRestore();
+        useAuthSpy.mockRestore();
     };
 };

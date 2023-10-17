@@ -5,7 +5,7 @@ import { Footer } from "@/Components/Layout/Footer";
 import { Navbar } from "@/Components/Layout/Navbar";
 import { SliderContext } from "@/Components/Slider";
 import { ToastContainer, type ToastMessage } from "@/Components/Toast";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthOverlay } from "@/Hooks/useAuthOverlay";
 
@@ -32,7 +32,7 @@ export const LayoutWrapper = ({
     displayAuthOverlay = true,
     showBackButton = false,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, signed, wallet, user, logout } = useActiveUser();
+    const { authenticated, signed, wallet, user, logout } = useAuth();
 
     const { showAuthOverlay, showCloseButton, closeOverlay } = useAuthOverlay({
         mustBeSigned,
