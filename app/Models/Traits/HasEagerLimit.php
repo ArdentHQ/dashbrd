@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Traits;
 
+use Illuminate\Database\Query\Grammars\Grammar;
 use App\Support\Builder;
 use App\Support\PostgresGrammar;
 use Illuminate\Database\Connection;
@@ -35,8 +36,8 @@ trait HasEagerLimit
     /**
      * Get the query grammar.
      *
-     * @param \Illuminate\Database\Connection $connection
-     * @return \Illuminate\Database\Query\Grammars\Grammar
+     * @param Connection $connection
+     * @return Grammar
      */
     protected function getQueryGrammar(Connection $connection)
     {
