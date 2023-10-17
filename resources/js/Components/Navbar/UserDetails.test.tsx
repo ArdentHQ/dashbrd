@@ -54,6 +54,32 @@ describe("UserDetails", () => {
         expect(screen.getByTestId("AccountNavigation__collections")).toBeInTheDocument();
     });
 
+    it("should logout", async () => {
+        const wallet = new WalletFactory().withoutAvatar().create();
+
+        const onLogout = vi.fn();
+
+        render(
+            <UserDetails
+                wallet={wallet}
+                galleriesCount={0}
+                collectionCount={0}
+                currency="USD"
+                onLogout={onLogout}
+            />,
+        );
+
+        expect(screen.getByTestId("UserDetails__trigger")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("UserDetails__trigger"));
+
+        expect(screen.getByTestId("UserDetails__disconnect")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("UserDetails__disconnect"));
+
+        expect(onLogout).toHaveBeenCalled();
+    });
+
     it("should render without galleries", async () => {
         const wallet = new WalletFactory().withoutAvatar().create();
 

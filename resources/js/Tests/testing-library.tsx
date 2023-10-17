@@ -8,7 +8,7 @@ import testUserEvent from "@testing-library/user-event";
 import React from "react";
 import { I18nextProvider } from "react-i18next";
 import { Context as ResponsiveContext } from "react-responsive";
-import { type SpyInstance } from "vitest";
+import { type Mock, type SpyInstance } from "vitest";
 import { type Breakpoint, breakpointWidth } from "./utils";
 import { AuthContextProvider } from "@/Contexts/AuthContext";
 import * as AuthContextMock from "@/Contexts/AuthContext";
@@ -64,7 +64,14 @@ export const mockInertiaUseForm = (properties: InertiaUseFormProperties): SpyIns
     // @ts-ignore
     vi.spyOn(inertia, "useForm").mockReturnValue(properties as InertiaFormProps<Record<string, unknown>>);
 
-export const mockAuthContext = (properties: Partial<App.Data.AuthData>): (() => void) => {
+export const mockAuthContext = (
+    properties: Partial<
+        App.Data.AuthData & {
+            logout: Mock;
+            setAuthData: Mock;
+        }
+    >,
+): (() => void) => {
     const useAuthSpy = vi.spyOn(AuthContextMock, "useAuth").mockReturnValue({
         user: null,
         wallet: null,

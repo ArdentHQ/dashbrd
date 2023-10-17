@@ -173,6 +173,7 @@ export const UserDetails = ({
 
                                             <li>
                                                 <DropdownNavigationLink
+                                                    data-testid="UserDetails__disconnect"
                                                     as="button"
                                                     href=""
                                                     method="post"
