@@ -21,10 +21,18 @@ interface Properties {
     collectionCount: number;
     galleriesCount: number;
     currency: string;
+    onLogout: () => void;
 }
 
-export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency }: Properties): JSX.Element => {
+export const UserDetails = ({
+    wallet,
+    collectionCount,
+    galleriesCount,
+    currency,
+    onLogout,
+}: Properties): JSX.Element => {
     const { t } = useTranslation();
+
     const address = formatAddress(wallet.address);
 
     const { features } = useEnvironmentContext();
@@ -166,8 +174,13 @@ export const UserDetails = ({ wallet, collectionCount, galleriesCount, currency 
                                             <li>
                                                 <DropdownNavigationLink
                                                     as="button"
+                                                    href=""
                                                     method="post"
-                                                    href="/logout"
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+
+                                                        onLogout();
+                                                    }}
                                                     icon="DoorExit"
                                                     label={t("auth.wallet.disconnect")}
                                                 />

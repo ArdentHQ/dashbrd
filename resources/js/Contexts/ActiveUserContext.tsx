@@ -1,8 +1,10 @@
+import { router } from "@inertiajs/react";
+import axios from "axios";
 import { createContext, type SetStateAction, useContext, useState } from "react";
 
 type ContextProperties = App.Data.AuthData & {
     setAuthData: (data: SetStateAction<App.Data.AuthData>) => void;
-    clearAuthData: () => void;
+    logout: () => Promise<void>;
 };
 
 interface ProviderProperties {
@@ -15,13 +17,22 @@ const ActiveUserContext = createContext<ContextProperties | undefined>(undefined
 export const ActiveUserContextProvider = ({ children, initialAuth }: ProviderProperties): JSX.Element => {
     const [auth, setAuthData] = useState<App.Data.AuthData>(initialAuth);
 
-    const clearAuthData = (): void => {
+    router.on("navigate", (event) => {
+        setAuthData(event.detail.page.props.auth);
+    });
+
+    const logout = async (): Promise<void> => {
+        const response = await axios.post<{ redirectTo: string | null }>(route("logout"));
+
         setAuthData({
             user: null,
             wallet: null,
             authenticated: false,
             signed: false,
         });
+
+        const redirectTo = response.data.redirectTo;
+        redirectTo === null ? router.reload() : router.get(route(redirectTo));
     };
 
     return (
@@ -29,7 +40,7 @@ export const ActiveUserContextProvider = ({ children, initialAuth }: ProviderPro
             value={{
                 ...auth,
                 setAuthData,
-                clearAuthData,
+                logout,
             }}
         >
             {children}

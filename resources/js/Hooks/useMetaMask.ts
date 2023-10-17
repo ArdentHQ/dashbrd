@@ -112,7 +112,6 @@ export interface MetaMaskState {
     showConnectOverlay: (onConnected?: () => Promise<void>) => Promise<void>;
     isShowConnectOverlay: boolean;
     askForSignature: (onSigned?: () => Promise<void>) => Promise<void>;
-    onDisconnected: () => void;
 }
 
 enum ErrorType {
@@ -132,10 +131,6 @@ const ErrorTypes = {
     [ErrorType.ProviderMissing]: "provider_missing",
     [ErrorType.UserRejected]: "user_rejected",
 };
-
-interface Properties {
-    initialAuth: App.Data.AuthData;
-}
 
 /**
  * Note consider that the `initialAuth` property is not reactive, it contains
@@ -164,7 +159,7 @@ const useMetaMask = (): MetaMaskState => {
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
-    const { setAuthData, clearAuthData } = useActiveUser();
+    const { setAuthData, logout, authenticated } = useActiveUser();
 
     const onError = useCallback((error: ErrorType, errorMessage?: string) => {
         setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());
@@ -202,23 +197,6 @@ const useMetaMask = (): MetaMaskState => {
             setAuthData(response.data);
 
             router.reload();
-        } catch (error) {
-            handleAxiosError(error);
-        } finally {
-            setSwitching(false);
-        }
-    };
-
-    const logout = async (): Promise<void> => {
-        setSwitching(true);
-
-        try {
-            const response = await axios.post<{ redirectTo: string | null }>(route("logout"));
-
-            clearAuthData();
-
-            const redirectTo = response.data.redirectTo;
-            redirectTo === null ? router.reload() : router.get(route(redirectTo));
         } catch (error) {
             handleAxiosError(error);
         } finally {
@@ -514,7 +492,6 @@ const useMetaMask = (): MetaMaskState => {
                 locale: browserLocale(),
             });
 
-            console.log(response.data);
             setAuthData(response.data);
 
             hideConnectOverlay();
@@ -659,13 +636,13 @@ const useMetaMask = (): MetaMaskState => {
         }
     };
 
-    const onDisconnected = (): void => {
-        setAccount(undefined);
+    useEffect(() => {
+        if (!authenticated) {
+            setAccount(undefined);
 
-        setChainId(undefined);
-
-        clearAuthData();
-    };
+            setChainId(undefined);
+        }
+    }, [authenticated]);
 
     return {
         account,
@@ -682,7 +659,6 @@ const useMetaMask = (): MetaMaskState => {
         requiresSignature,
         ethereumProvider,
         sendTransaction,
-        onDisconnected,
         switchToNetwork,
         getTransactionReceipt,
         getBlock,

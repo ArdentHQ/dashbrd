@@ -32,7 +32,7 @@ export const LayoutWrapper = ({
     displayAuthOverlay = true,
     showBackButton = false,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, signed, wallet, user } = useActiveUser();
+    const { authenticated, signed, wallet, user, logout } = useActiveUser();
 
     const { showAuthOverlay, showCloseButton, closeOverlay } = useAuth({
         mustBeSigned,
@@ -54,6 +54,9 @@ export const LayoutWrapper = ({
                     wallet={wallet}
                     user={user ?? undefined}
                     isMaintenanceModeActive={isMaintenanceModeActive}
+                    onLogout={() => {
+                        void logout();
+                    }}
                 />
             </header>
 
