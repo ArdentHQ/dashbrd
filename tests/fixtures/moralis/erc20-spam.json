@@ -6,6 +6,8 @@
         "logo": null,
         "thumbnail": null,
         "decimals": 2,
-        "balance": null
+        "balance": null,
+        "possible_spam": false,
+        "verified_collection": false
     }
 ]
