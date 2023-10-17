@@ -168,9 +168,14 @@ class Web3NftHandler
         });
 
         if (Feature::active(Features::Collections->value)) {
-            CollectionModel::where('is_fetching_activity', false)->whereIn('id', $ids)->chunkById(100, function ($collections) {
-                $collections->each(fn ($collection) => FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS));
-            });
+            // Index activity only for newly created collections...
+            CollectionModel::query()
+                        ->where('is_fetching_activity', false)
+                        ->whereNull('activity_updated_at')
+                        ->whereIn('id', $ids)
+                        ->chunkById(100, function ($collections) {
+                            $collections->each(fn ($collection) => FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS));
+                        });
 
             $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
                 DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
