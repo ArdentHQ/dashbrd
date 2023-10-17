@@ -34,7 +34,7 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                         <div>
                             {/* Content here */}
                             {Array.from({ length: 100 }).map((_, index) => (
-                                <p key={index}>Test scroll, replace with real conten {index}</p>
+                                <p key={index}>Test scroll, replace with real content {index}</p>
                             ))}
                         </div>
                     </div>
