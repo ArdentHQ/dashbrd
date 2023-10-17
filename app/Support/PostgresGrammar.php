@@ -15,9 +15,6 @@ class PostgresGrammar extends Grammar
 
     /**
      * Compile a select query into SQL.
-     *
-     * @param Builder $query
-     * @return string
      */
     public function compileSelect(Builder $query): string
     {

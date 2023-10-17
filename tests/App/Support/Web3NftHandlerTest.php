@@ -11,7 +11,6 @@ use App\Models\Token;
 use App\Models\Wallet;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 

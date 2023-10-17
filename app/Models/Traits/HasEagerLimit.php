@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Traits;
 
-use Illuminate\Database\Query\Grammars\Grammar;
 use App\Support\Builder;
 use App\Support\PostgresGrammar;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Grammars\Grammar;
 use RuntimeException;
 use Staudenmeir\EloquentEagerLimit\Traits\HasEagerLimitRelationships;
 
@@ -36,7 +36,6 @@ trait HasEagerLimit
     /**
      * Get the query grammar.
      *
-     * @param Connection $connection
      * @return Grammar
      */
     protected function getQueryGrammar(Connection $connection)
