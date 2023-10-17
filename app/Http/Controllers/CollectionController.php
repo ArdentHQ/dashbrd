@@ -201,8 +201,9 @@ class CollectionController extends Controller
         $activityPageLimit = min($request->has('activityPageLimit') ? (int) $request->get('activityPageLimit') : 10, 100);
 
         $tab = $request->get('tab') === 'activity' ? 'activity' : 'collection';
+        $hasActivity = $collection->indexesActivities();
 
-        $activities = $tab === 'activity' ? $collection->activities()
+        $activities = ($tab === 'activity' && $hasActivity) ? $collection->activities()
                             ->latest('timestamp')
                             ->with(['nft' => fn ($q) => $q->where('collection_id', $collection->id)])
                             ->whereHas('nft', fn ($q) => $q->where('collection_id', $collection->id))
@@ -233,6 +234,7 @@ class CollectionController extends Controller
 
         return Inertia::render('Collections/View', [
             'initialActivities' => $paginated !== null ? new NftActivitiesData($paginated) : null,
+            'hasActivities' => $hasActivity,
             'collection' => CollectionDetailData::fromModel($collection, $currency, $user),
             'isHidden' => $user && $user->hiddenCollections()->where('id', $collection->id)->exists(),
             'previousUrl' => url()->previous() === url()->current()
