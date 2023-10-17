@@ -543,6 +543,20 @@ class Collection extends Model
         return false;
     }
 
+    public function indexesActivities(): bool
+    {
+        /**
+         * @var string[]
+         */
+        $blacklisted = config('dashbrd.activity_blacklist', []);
+
+        if (collect($blacklisted)->map(fn ($collection) => Str::lower($collection))->contains(Str::lower($this->address))) {
+            return false;
+        }
+
+        return ! $this->isInvalid();
+    }
+
     public function isBlacklisted(): bool
     {
         return BlacklistedCollections::includes($this->address);

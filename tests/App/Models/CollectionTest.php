@@ -1219,3 +1219,29 @@ it('sorts collections last time nft was fetched', function () {
         $collection4->id,
     ]);
 });
+
+it('can determine whether collection has its activities indexed', function () {
+    config([
+        'dashbrd.activity_blacklist' => [
+            '0x123',
+        ],
+    ]);
+
+    expect(Collection::factory()->create([
+        'address' => '0x123',
+    ])->indexesActivities())->toBeFalse();
+
+    expect(Collection::factory()->create([
+        'address' => '0x1234',
+    ])->indexesActivities())->toBeTrue();
+
+    expect(Collection::factory()->create([
+        'address' => '0x12345',
+        'supply' => null,
+    ])->indexesActivities())->toBeFalse();
+
+    expect(Collection::factory()->create([
+        'address' => '0x123456',
+        'supply' => 100000,
+    ])->indexesActivities())->toBeFalse();
+});

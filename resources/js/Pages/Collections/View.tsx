@@ -40,6 +40,7 @@ interface Properties {
         nftPageLimit: number;
     };
     initialActivities: App.Data.Nfts.NftActivitiesData | null;
+    hasActivities: boolean;
     sortByMintDate?: boolean;
     nativeToken: App.Data.Token.TokenData;
     showReportModal: boolean;
@@ -57,6 +58,7 @@ const CollectionsView = ({
     reportAvailableIn,
     collectionTraits,
     appliedFilters,
+    hasActivities,
     sortByMintDate = false,
     nativeToken,
     showReportModal,
@@ -228,6 +230,28 @@ const CollectionsView = ({
         return <EmptyBlock>{t("pages.collections.search.no_results_ownership")}</EmptyBlock>;
     };
 
+    const renderActivities = (): JSX.Element => {
+        if (!hasActivities) {
+            return <EmptyBlock>{t("pages.collections.activities.ignores_activities")}</EmptyBlock>;
+        }
+
+        if (!loading && (activities === null || activities.paginated.data.length === 0)) {
+            return <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>;
+        }
+
+        return (
+            <CollectionActivityTable
+                collection={collection}
+                activities={activities}
+                isLoading={loading}
+                showNameColumn
+                pageLimit={activityPageLimit}
+                onPageLimitChange={activityPageLimitChangeHandler}
+                nativeToken={nativeToken}
+            />
+        );
+    };
+
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
             <DefaultLayout toastMessage={props.toast}>
@@ -318,21 +342,7 @@ const CollectionsView = ({
                         </Tab.Panel>
 
                         <Tab.Panel>
-                            <div className="mt-6">
-                                {!loading && (!isTruthy(activities) || activities.paginated.data.length === 0) ? (
-                                    <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
-                                ) : (
-                                    <CollectionActivityTable
-                                        collection={collection}
-                                        activities={activities}
-                                        isLoading={loading}
-                                        showNameColumn
-                                        pageLimit={activityPageLimit}
-                                        onPageLimitChange={activityPageLimitChangeHandler}
-                                        nativeToken={nativeToken}
-                                    />
-                                )}
-                            </div>
+                            <div className="mt-6">{renderActivities()}</div>
                         </Tab.Panel>
                     </CollectionNavigation>
                 </div>
