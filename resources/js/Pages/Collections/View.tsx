@@ -235,7 +235,7 @@ const CollectionsView = ({
             return <EmptyBlock>{t("pages.collections.activities.ignores_activities")}</EmptyBlock>;
         }
 
-        if (! loading && (activities === null || activities.paginated.data.length === 0)) {
+        if (!loading && (activities === null || activities.paginated.data.length === 0)) {
             return <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>;
         }
 
