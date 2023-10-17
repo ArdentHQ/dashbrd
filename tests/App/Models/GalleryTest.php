@@ -382,6 +382,8 @@ it('can sort by most valuable', function ($currency, $value) {
 ]);
 
 it('determines if a gallery was reported recently by the user', function ($hoursAgo, $expected) {
+    $reportTimestamp = now()->subHours($hoursAgo);
+
     $user = User::factory()->create();
 
     $gallery = Gallery::factory()->create();
@@ -390,7 +392,7 @@ it('determines if a gallery was reported recently by the user', function ($hours
         'user_id' => $user->id,
         'subject_type' => Gallery::class,
         'subject_id' => $gallery->id,
-        'created_at' => now()->subHours($hoursAgo),
+        'created_at' => $reportTimestamp,
     ]);
 
     expect($gallery->wasReportedByUserRecently($user))->toBe($expected);
