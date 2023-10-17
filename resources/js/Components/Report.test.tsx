@@ -8,8 +8,10 @@ import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import * as useAuthOverlay from "@/Hooks/useAuthOverlay";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 
 let routerSpy: SpyInstance;
 let useAuthorizedActionSpy: SpyInstance;
@@ -44,6 +46,11 @@ describe("Report", () => {
             showAuthOverlay: false,
             showCloseButton: false,
             closeOverlay: vi.fn(),
+        });
+
+        mockAuthContext({
+            user: new UserDataFactory().create(),
+            wallet: new WalletFactory().create(),
         });
     });
 
@@ -154,15 +161,7 @@ describe("Report", () => {
     it("should show auth overlay if guest clicks on it", async () => {
         const collection = new CollectionDetailDataFactory().create();
 
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            signed: false,
-            closeOverlay: vi.fn(),
-        });
+        mockAuthContext({});
 
         render(
             <Report

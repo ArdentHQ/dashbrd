@@ -3,14 +3,15 @@ import React from "react";
 
 import { expect } from "vitest";
 import { TokenTransactionDetailsSlider } from "./TokenTransactionDetailsSlider";
-import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { setNativeTokenHandler } from "@/Tests/Mocks/Handlers/nativeToken";
-import { render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 import { ExplorerChains } from "@/Utils/Explorer";
 
 const user = new UserDataFactory().withUSDCurrency().create();
+const wallet = new WalletFactory().create();
 const asset = new TokenListItemDataFactory().create();
 
 const transaction: App.Data.TransactionData = {
@@ -28,17 +29,18 @@ const transaction: App.Data.TransactionData = {
     nonce: "1",
 };
 
+let resetAuthContext: () => void;
+
 describe("TokenTransactionDetailsSlider", () => {
     beforeAll(() => {
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+        resetAuthContext = mockAuthContext({
             user,
-            wallet: null,
-            authenticated: true,
-            signed: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
+            wallet,
         });
+    });
+
+    afterAll(() => {
+        resetAuthContext();
     });
 
     beforeEach(() => {

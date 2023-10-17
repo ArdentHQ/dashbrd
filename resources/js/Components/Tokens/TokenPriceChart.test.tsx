@@ -1,13 +1,14 @@
 import React from "react";
 import { TokenPriceChart } from "./TokenPriceChart";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
-import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";
-import { render, screen, waitFor } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, waitFor } from "@/Tests/testing-library";
 
 const user = new UserDataFactory().create();
+const wallet = new WalletFactory().create();
 
 const testToken = new TokenListItemDataFactory().create();
 
@@ -22,17 +23,18 @@ const priceHistoryDataMock: App.Data.PriceHistoryData[] = [
     },
 ];
 
+let resetAuthContext: () => void;
+
 describe("TokenPriceChart", () => {
-    beforeAll(() => {
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+    beforeEach(() => {
+        resetAuthContext = mockAuthContext({
             user,
-            wallet: null,
-            authenticated: true,
-            signed: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
+            wallet,
         });
+    });
+
+    afterEach(() => {
+        resetAuthContext();
     });
 
     it("should render the chart", async () => {

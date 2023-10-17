@@ -3,17 +3,18 @@ import { expect } from "vitest";
 import { type TransactionIntent, TransactionState } from "@/Components/TransactionFormSlider";
 import { ResultStep } from "@/Components/TransactionFormSlider/Steps/ResultStep";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuthOverlay";
 
 import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { render } from "@/Tests/testing-library";
+import { mockAuthContext, render } from "@/Tests/testing-library";
 import { toHuman } from "@/Utils/dates";
 
 describe("ResultStep", () => {
     const user = new UserDataFactory().withUSDCurrency().create();
+    const wallet = new WalletFactory().create();
 
     const asset = new TokenListItemDataFactory().create({
         name: "BRDY TOKEN",
@@ -112,17 +113,19 @@ describe("ResultStep", () => {
         }),
     });
 
+    let resetAuthContext: () => void;
+
     beforeEach(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+
+        resetAuthContext = mockAuthContext({
             user,
-            wallet: null,
-            authenticated: false,
-            signed: false,
-            showAuthOverlay: true,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
+            wallet,
         });
+    });
+
+    afterEach(() => {
+        resetAuthContext();
     });
 
     it("should show a skeleton while fetching receipt & block data", async () => {

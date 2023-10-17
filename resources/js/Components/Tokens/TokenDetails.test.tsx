@@ -1,18 +1,16 @@
 import React from "react";
-import { type SpyInstance } from "vitest";
 import { TokenDetails } from "./TokenDetails";
-import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 const user = new UserDataFactory().create();
 
 const wallet = new WalletFactory().create();
 
-let useAuthSpy: SpyInstance;
+let resetAuthMock: () => void;
 
 const defaultProperties: Partial<App.Data.TokenListItemData> = {
     total_market_cap: "5000",
@@ -25,19 +23,14 @@ const defaultProperties: Partial<App.Data.TokenListItemData> = {
 
 describe("TokenDetails", () => {
     beforeEach(() => {
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+        resetAuthMock = mockAuthContext({
             user,
             wallet,
-            authenticated: true,
-            signed: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
         });
     });
 
     afterEach(() => {
-        useAuthSpy.mockRestore();
+        resetAuthMock();
     });
 
     it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {

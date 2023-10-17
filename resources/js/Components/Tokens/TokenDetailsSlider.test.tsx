@@ -1,7 +1,6 @@
 import React from "react";
 import { TokenDetailsSlider } from "@/Components/Tokens/TokenDetailsSlider";
 import * as MetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
@@ -9,7 +8,7 @@ import TokenTransactionsFixture from "@/Tests/Fixtures/token_transactions.json";
 import { setNativeTokenHandler } from "@/Tests/Mocks/Handlers/nativeToken";
 import { requestMock, server } from "@/Tests/Mocks/server";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
-import { render, screen, userEvent, waitFor, within } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent, waitFor, within } from "@/Tests/testing-library";
 
 const user = new UserDataFactory().create();
 const asset = new TokenListItemDataFactory().create({
@@ -45,22 +44,16 @@ const mockMetaMask = (overrides = {}): void => {
     }));
 };
 
+let resetAuthContext: () => void;
 describe("TokenDetailsSlider", () => {
     useTransactionSliderContextSpy();
 
-    beforeAll(() => {
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user,
-            wallet: null,
-            authenticated: true,
-            signed: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
-        });
-    });
-
     beforeEach(() => {
+        resetAuthContext = mockAuthContext({
+            user,
+            wallet,
+        });
+
         server.use(
             requestMock("https://api.polygonscan.com/api", TokenTransactionsFixture, {
                 method: "get",
@@ -68,6 +61,10 @@ describe("TokenDetailsSlider", () => {
         );
 
         setNativeTokenHandler();
+    });
+
+    afterEach(() => {
+        resetAuthContext();
     });
 
     it("does not render if asset does not exist", () => {
