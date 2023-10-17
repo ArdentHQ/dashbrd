@@ -3,7 +3,7 @@ import React from "react";
 
 import { expect } from "vitest";
 import { TokenTransactionDetailsSlider } from "./TokenTransactionDetailsSlider";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { setNativeTokenHandler } from "@/Tests/Mocks/Handlers/nativeToken";

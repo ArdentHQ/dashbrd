@@ -3,7 +3,7 @@ import { expect } from "vitest";
 import { type TransactionIntent, TransactionState } from "@/Components/TransactionFormSlider";
 import { ResultStep } from "@/Components/TransactionFormSlider/Steps/ResultStep";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 
 import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";

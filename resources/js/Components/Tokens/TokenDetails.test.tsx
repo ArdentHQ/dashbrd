@@ -1,7 +1,7 @@
 import React from "react";
 import { type SpyInstance } from "vitest";
 import { TokenDetails } from "./TokenDetails";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";

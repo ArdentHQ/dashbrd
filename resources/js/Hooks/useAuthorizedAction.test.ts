@@ -3,7 +3,7 @@
 import { type Mock, type SpyInstance } from "vitest";
 import { useAuthorizedAction } from "./useAuthorizedAction";
 import * as metamaskContextMock from "@/Contexts/MetaMaskContext";
-import * as useAuthMock from "@/Hooks/useAuth";
+import * as useAuthMock from "@/Hooks/useAuthOverlay";
 import { renderHook } from "@/Tests/testing-library";
 
 let useAuthSpy: SpyInstance;

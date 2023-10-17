@@ -1,7 +1,7 @@
 import React from "react";
 import { TokenPriceChart } from "./TokenPriceChart";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";

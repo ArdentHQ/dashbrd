@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar } from "@/Components/Layout/Navbar";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";

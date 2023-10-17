@@ -1,7 +1,7 @@
 import React from "react";
 import { type SpyInstance } from "vitest";
 import { CollectionHeaderBottom } from "./CollectionHeaderBottom";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, within } from "@/Tests/testing-library";

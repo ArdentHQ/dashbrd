@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { NftActions } from "./NftActions";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";

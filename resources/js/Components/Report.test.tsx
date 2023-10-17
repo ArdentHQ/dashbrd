@@ -4,8 +4,8 @@ import React from "react";
 import { expect, type SpyInstance } from "vitest";
 import { Report } from "./Report";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
+import * as useAuthOverlay from "@/Hooks/useAuthOverlay";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
@@ -40,13 +40,9 @@ describe("Report", () => {
             showConnectOverlay: showConnectOverlayMock,
         });
 
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: true,
+        vi.spyOn(useAuthOverlay, "useAuthOverlay").mockReturnValue({
             showAuthOverlay: false,
             showCloseButton: false,
-            signed: true,
             closeOverlay: vi.fn(),
         });
     });

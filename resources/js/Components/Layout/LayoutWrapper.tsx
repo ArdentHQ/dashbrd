@@ -7,7 +7,7 @@ import { SliderContext } from "@/Components/Slider";
 import { ToastContainer, type ToastMessage } from "@/Components/Toast";
 import { useActiveUser } from "@/Contexts/ActiveUserContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuthOverlay } from "@/Hooks/useAuthOverlay";
 
 interface LayoutWrapperProperties extends HTMLAttributes<HTMLDivElement> {
     useVerticalOffset?: boolean;
@@ -34,7 +34,7 @@ export const LayoutWrapper = ({
 }: LayoutWrapperProperties): JSX.Element => {
     const { authenticated, signed, wallet, user, logout } = useActiveUser();
 
-    const { showAuthOverlay, showCloseButton, closeOverlay } = useAuth({
+    const { showAuthOverlay, showCloseButton, closeOverlay } = useAuthOverlay({
         mustBeSigned,
     });
 

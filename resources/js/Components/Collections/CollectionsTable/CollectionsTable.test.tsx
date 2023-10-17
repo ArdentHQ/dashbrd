@@ -1,7 +1,7 @@
 import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
 import { CollectionsTable } from "./CollectionsTable";
-import * as useAuthMock from "@/Hooks/useAuth";
+import * as useAuthMock from "@/Hooks/useAuthOverlay";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";

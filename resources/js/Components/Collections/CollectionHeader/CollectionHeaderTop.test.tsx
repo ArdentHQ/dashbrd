@@ -3,7 +3,7 @@ import React from "react";
 import { CollectionHeaderTop } from "./CollectionHeaderTop";
 import { MarkdownImage } from "@/Components/Collections/CollectionDescription";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";

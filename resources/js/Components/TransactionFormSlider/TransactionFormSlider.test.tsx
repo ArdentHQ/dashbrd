@@ -11,7 +11,7 @@ import {
 import { TransactionFormSlider, transactionIntentReducer } from "@/Components/TransactionFormSlider";
 import { TransactionSendForm } from "@/Components/TransactionFormSlider/TransactionFormSlider.blocks";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";

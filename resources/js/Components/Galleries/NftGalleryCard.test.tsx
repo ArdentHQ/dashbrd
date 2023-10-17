@@ -1,7 +1,7 @@
 import React from "react";
 import { NftGalleryCard } from "./NftGalleryCard";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";

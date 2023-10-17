@@ -7,17 +7,14 @@ interface Properties {
     mustBeSigned?: boolean;
 }
 
-export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.AuthData & {
+export const useAuthOverlay = ({ mustBeSigned = false }: Properties = {}): {
     showAuthOverlay: boolean;
     showCloseButton: boolean;
-    signed: boolean;
     closeOverlay: () => void;
-    setSigned: (signed: boolean) => void;
-    setAuthenticated: (authenticated: boolean) => void;
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
 
-    const { wallet, user, authenticated, signed } = useActiveUser();
+    const { authenticated, signed } = useActiveUser();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { props } = usePage();
@@ -88,10 +85,6 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
     const showCloseButton = allowsGuests || requiresSignature;
 
     return {
-        authenticated,
-        signed,
-        user,
-        wallet,
         showAuthOverlay: showAuthOverlay(),
         showCloseButton,
         closeOverlay,

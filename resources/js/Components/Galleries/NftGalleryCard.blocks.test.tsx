@@ -7,7 +7,7 @@ import {
     GalleryStatsPlaceholder,
     NftImageGrid,
 } from "./NftGalleryCard.blocks";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useAuth from "@/Hooks/useAuthOverlay";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import * as useLikes from "@/Hooks/useLikes";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
