@@ -60,13 +60,13 @@ trait DependsOnOpenseaRateLimit
         return $this->jobsDelayThreshold[$job] ?? 0;
     }
 
-    private function getLimitPerHour(): int
+    private function getLimitPerMinutes(int $minutes): int
     {
         $maxRequests = config('services.opensea.rate.max_requests');
 
         $perSeconds = config('services.opensea.rate.per_seconds');
 
-        $requestsPerHour = $maxRequests * 60 * 60 / $perSeconds;
+        $requestsPerHour = $maxRequests * $minutes * 60 / $perSeconds;
 
         // limit to the requests per hour to leave some room for other tasks
         return (int) floor($requestsPerHour / $this->getRateLimitFactor());
