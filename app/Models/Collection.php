@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
+use App\Models\Traits\HasEagerLimit;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
@@ -25,7 +26,6 @@ use Illuminate\Support\Str;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /**
  * @property ?int $supply

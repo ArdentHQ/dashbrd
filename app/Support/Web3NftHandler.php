@@ -61,7 +61,9 @@ class Web3NftHandler
         // We take all the columns (except the ones we unique on which are network_id and address)
         // and generate `column = coalesce(excluded.column, collections.column)` for UPSERT...
         $update = collect($columns)->mapWithKeys(fn ($column) => [
-            $column => DB::raw(sprintf('coalesce(excluded.%s, collections.%s)', $column, $column)),
+            $column => $column === 'extra_attributes'
+                        ? DB::raw("coalesce(collections.extra_attributes::jsonb, '{}') || excluded.extra_attributes::jsonb")
+                        : DB::raw(sprintf('coalesce(excluded.%s, collections.%s)', $column, $column)),
         ])->all();
 
         $collections = DB::transaction(function () use ($nfts, $collectionsData, $update, $now) {
@@ -165,7 +167,7 @@ class Web3NftHandler
                 'website' => $nft->collectionWebsite,
                 'socials' => $nft->collectionSocials,
                 'banner' => $nft->collectionBannerImageUrl,
-                'banner_updated_at' => $nft->collectionBannerImageUrl ? $now : null,
+                'banner_updated_at' => $nft->collectionBannerImageUrl ? now() : null,
             ];
 
             if ($nft->collectionOpenSeaSlug !== null) {

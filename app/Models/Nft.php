@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
 use App\Models\Traits\BelongsToWallet;
+use App\Models\Traits\HasEagerLimit;
 use App\Models\Traits\Reportable;
 use App\Notifications\NftReport;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +22,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
-use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /** @property string $token_number */
 class Nft extends Model
