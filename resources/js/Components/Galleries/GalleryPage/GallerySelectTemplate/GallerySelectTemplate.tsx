@@ -16,8 +16,11 @@ export const GallerySelectTemplate = ({
     const { isDark } = useDarkModeContext();
 
     return (
-        <div>
-            <div className={className}>
+        <div data-testid="GallerySelectTemplate">
+            <div
+                className={className}
+                data-testid="GallerySelectTemplate__wrapper"
+            >
                 <button
                     type="button"
                     className="w-full overflow-hidden rounded-xl text-left outline outline-1 outline-theme-primary-600 dark:outline-theme-primary-400"
@@ -39,6 +42,7 @@ export const GallerySelectTemplate = ({
                             src={isDark ? basicDark : basic}
                             alt={t("common.preview")}
                             className="w-full"
+                            data-testid={`GallerySelectTemplate__basic_${isDark ? "dark" : "light"}`}
                         />
                     </div>
                 </button>
