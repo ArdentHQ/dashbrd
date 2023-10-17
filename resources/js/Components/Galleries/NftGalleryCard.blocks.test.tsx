@@ -7,13 +7,12 @@ import {
     GalleryStatsPlaceholder,
     NftImageGrid,
 } from "./NftGalleryCard.blocks";
-import * as useAuth from "@/Hooks/useAuthOverlay";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import * as useLikes from "@/Hooks/useLikes";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockActiveUserContext, render, screen, userEvent } from "@/Tests/testing-library";
 const collectionInfo: Pick<
     App.Data.Gallery.GalleryNftData,
     | "chainId"
@@ -324,23 +323,15 @@ describe("GalleryStats", () => {
 
     const user = new UserDataFactory().withUSDCurrency().create();
 
-    let useAuthSpy: SpyInstance;
-
-    const useAuthState = {
-        user,
-        wallet: null,
-        authenticated: true,
-        signed: false,
-        showAuthOverlay: false,
-        showCloseButton: false,
-        closeOverlay: vi.fn(),
-    };
+    let resetAuthSpy: () => void;
 
     let useAuthorizedActionSpy: SpyInstance;
     const signedActionMock = vi.fn();
 
     beforeEach(() => {
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
+        resetAuthSpy = mockActiveUserContext({
+            user,
+        });
 
         signedActionMock.mockImplementation((action) => {
             action({ authenticated: true, signed: true });
@@ -353,7 +344,7 @@ describe("GalleryStats", () => {
     });
 
     afterEach(() => {
-        useAuthSpy.mockRestore();
+        resetAuthSpy();
 
         useAuthorizedActionSpy.mockRestore();
     });
@@ -370,14 +361,8 @@ describe("GalleryStats", () => {
     });
 
     it("should display gallery stats if no authenticated", () => {
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+        resetAuthSpy = mockActiveUserContext({
             user: null,
-            wallet: null,
-            authenticated: false,
-            signed: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
         });
 
         const { container } = render(

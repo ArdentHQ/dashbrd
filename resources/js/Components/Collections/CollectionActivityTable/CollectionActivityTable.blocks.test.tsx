@@ -307,6 +307,9 @@ describe("TimeStamp", () => {
             user: null,
             wallet: null,
             authenticated: false,
+            signed: false,
+            logout: vi.fn(),
+            setAuthData: vi.fn(),
         });
 
         render(<Timestamp value={activity.timestamp} />);

@@ -1,9 +1,8 @@
 import React from "react";
 import { type SpyInstance } from "vitest";
 import { CollectionHeaderBottom } from "./CollectionHeaderBottom";
-import * as useAuth from "@/Hooks/useAuthOverlay";
+import * as useAuthOverlay from "@/Hooks/useAuthOverlay";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
-import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, within } from "@/Tests/testing-library";
 const collection = new CollectionDetailDataFactory().withCryptoCurrency("DARK").create({
     floorPrice: (1 * 1e18).toString(),
@@ -19,13 +18,7 @@ let useAuthSpy: SpyInstance;
 
 describe("CollectionHeaderBottom", () => {
     beforeEach(() => {
-        const user = new UserDataFactory().create();
-
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user,
-            wallet: null,
-            authenticated: false,
-            signed: false,
+        useAuthSpy = vi.spyOn(useAuthOverlay, "useAuthOverlay").mockReturnValue({
             showAuthOverlay: true,
             showCloseButton: false,
             closeOverlay: vi.fn(),

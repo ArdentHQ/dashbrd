@@ -11,11 +11,11 @@ import { Context as ResponsiveContext } from "react-responsive";
 import { type SpyInstance } from "vitest";
 import { type Breakpoint, breakpointWidth } from "./utils";
 import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
+import * as ActiveUserContextMock from "@/Contexts/ActiveUserContext";
 import EnvironmentContextProvider from "@/Contexts/EnvironmentContext";
 import { i18n } from "@/I18n";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-
 export * from "@testing-library/react";
 
 const wallet = new WalletFactory().create();
@@ -63,3 +63,19 @@ export const mockInertiaUseForm = (properties: InertiaUseFormProperties): SpyIns
     // TODO(@goga-m)[2023-10-31]: Remove ts-ignore and construct an object that matches the return type.
     // @ts-ignore
     vi.spyOn(inertia, "useForm").mockReturnValue(properties as InertiaFormProps<Record<string, unknown>>);
+
+export const mockActiveUserContext = (properties: Partial<App.Data.AuthData>): (() => void) => {
+    const useActiveUserSpy = vi.spyOn(ActiveUserContextMock, "useActiveUser").mockReturnValue({
+        user: null,
+        wallet: null,
+        authenticated: properties.user != null && properties.wallet != null,
+        signed: false,
+        logout: vi.fn(),
+        setAuthData: vi.fn(),
+        ...properties,
+    });
+
+    return () => {
+        useActiveUserSpy.mockRestore();
+    };
+};
