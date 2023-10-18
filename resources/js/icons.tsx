@@ -8,6 +8,7 @@ import { ReactComponent as Bookmark } from "@icons/bookmark.svg";
 import { ReactComponent as Alchemy } from "@icons/brands/alchemy.svg";
 import { ReactComponent as Blur } from "@icons/brands/blur.svg";
 import { ReactComponent as Coingecko } from "@icons/brands/coingecko.svg";
+import { ReactComponent as Dashbrd } from "@icons/brands/dashbrd.svg";
 import { ReactComponent as DiscordLg } from "@icons/brands/discord-lg.svg";
 import { ReactComponent as Discord } from "@icons/brands/discord.svg";
 import { ReactComponent as Etherscan } from "@icons/brands/etherscan.svg";
@@ -36,7 +37,6 @@ import { ReactComponent as CirclesInSquare } from "@icons/circles-in-square.svg"
 import { ReactComponent as Clock } from "@icons/clock.svg";
 import { ReactComponent as Cog } from "@icons/cog.svg";
 import { ReactComponent as Copy } from "@icons/copy.svg";
-import { ReactComponent as Dashbrd } from "@icons/brands/dashbrd.svg";
 import { ReactComponent as Diamond } from "@icons/diamond.svg";
 import { ReactComponent as DoorExit } from "@icons/door-exit.svg";
 import { ReactComponent as DoubleCheck } from "@icons/double-check.svg";
