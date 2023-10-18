@@ -30,7 +30,8 @@ class SyncActivityPrices extends Command
      *
      * 1. For each record in 'nft_activity':
      *   - Extract the 'totalNative' value from the 'extra_attributes' JSON column and set it as 'total_native'.
-     *   - Calculate 'total_usd' by multiplying 'total_native' with the current 'ethereum' token price from 'token_price_history'.
+     *   - Calculate 'total_usd' by multiplying 'total_native' with the 'ethereum' token price from 'token_price_history'
+     *     for the time that activity happened.
      *
      * 2. Update is limited to records in 'nft_activity' associated with collections having a 'network_id' of 1 (Polygon in our app).
      *
@@ -38,7 +39,7 @@ class SyncActivityPrices extends Command
      *
      * Caution: Before running this command, make sure to run `tokens:live-dump-price-history`.
     */
-    public function handle()
+    public function handle(): int
     {
         try {
             DB::beginTransaction();
@@ -71,9 +72,11 @@ class SyncActivityPrices extends Command
             DB::commit();
 
             $this->info('NFT activity table updated successfully.');
+            return Command::SUCCESS;
         } catch (\Exception $e) {
             DB::rollBack();
             $this->error('An error occurred while updating the NFT activity table: ' . $e->getMessage());
+            return Command::FAILURE;
         }
     }
 }
