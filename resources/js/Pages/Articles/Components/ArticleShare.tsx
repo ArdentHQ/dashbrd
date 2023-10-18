@@ -18,6 +18,7 @@ export const ArticleShare = ({ article, ...properties }: Properties): JSX.Elemen
                     variant="icon"
                     href={`https://twitter.com/intent/tweet?${titleUrlQuery}`}
                     icon="Twitter"
+                    target="_blank"
                 />
             </li>
             <li>
@@ -25,6 +26,7 @@ export const ArticleShare = ({ article, ...properties }: Properties): JSX.Elemen
                     variant="icon"
                     href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
                     icon="Facebook"
+                    target="_blank"
                 />
             </li>
             <li>
@@ -32,6 +34,7 @@ export const ArticleShare = ({ article, ...properties }: Properties): JSX.Elemen
                     variant="icon"
                     href={`https://www.reddit.com/submit?${urlQuery}`}
                     icon="Reddit"
+                    target="_blank"
                 />
             </li>
         </ul>
