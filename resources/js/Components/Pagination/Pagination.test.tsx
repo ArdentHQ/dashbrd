@@ -483,13 +483,19 @@ describe("Pagination", () => {
         expect(button.textContent).toBe("Page 1 of 3");
     });
 
-    it("should trigger page change when prev link is clicked", async () => {
+    it.each([
+        [{ first_page_url: "example.com", current_page: 2 }, "Pagination__firstPageLink", 1],
+        [{ first_page_url: "example.com", current_page: 2 }, "Pagination__firstPageLink_mobile", 1],
+        [{ prev_page_url: "example.com", current_page: 2 }, "Pagination__PreviousPageLink__link", 1],
+        [{ next_page_url: "example.com", current_page: 1 }, "Pagination__NextPageLink__link", 2],
+        [{ last_page_url: "example.com", current_page: 2 }, "Pagination__lastPageLink", 3],
+        [{ last_page_url: "example.com", current_page: 2 }, "Pagination__lastPageLink_mobile", 3],
+    ])("should trigger page change", (meta, testId, page) => {
         const data = {
             ...paginationData,
             meta: {
                 ...paginationData.meta,
-                prev_page_url: "example.com",
-                current_page: 2,
+                ...meta,
             },
         };
 
@@ -502,12 +508,13 @@ describe("Pagination", () => {
             />,
         );
 
-        const elements = screen.getAllByTestId("Pagination__PreviousPageLink__link");
+        const elements = screen.getAllByTestId(testId);
 
         for (const element of elements) {
             fireEvent.click(element);
         }
 
         expect(onPageChangeMock).toBeCalledTimes(elements.length);
+        expect(onPageChangeMock).toBeCalledWith(page);
     });
 });
