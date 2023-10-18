@@ -17,6 +17,7 @@ import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Component
 import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
+import { scrollToTop } from "@/Utils/scroll-to-top";
 
 export const articlesViewDefaults = {
     pageLimit: 24,
@@ -162,14 +163,6 @@ export const ArticlesView = ({
             </div>
         </>
     );
-};
-
-const scrollToTop = (): void => {
-    window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-    });
 };
 
 export const getArticlesInitialState = (): ArticlesViewState => {
