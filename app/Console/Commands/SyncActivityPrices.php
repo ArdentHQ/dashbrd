@@ -40,7 +40,7 @@ class SyncActivityPrices extends Command
      * 3. The command uses a SQL transaction to ensure data consistency. It commits the changes after successful execution.
      *
      * Caution: Before running this command, make sure to run `tokens:live-dump-price-history`.
-    */
+     */
     public function handle(): int
     {
         try {
@@ -74,10 +74,12 @@ class SyncActivityPrices extends Command
             DB::commit();
 
             $this->info('NFT activity table updated successfully.');
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
             DB::rollBack();
             $this->error('An error occurred while updating the NFT activity table: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
