@@ -17,6 +17,7 @@ import { ArticlesList, ArticlesLoadingList } from "@/Pages/Collections/Component
 import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Components/Articles/ArticleSortDropdown";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
+import { scrollToTop } from "@/Utils/scroll-to-top";
 
 export const articlesViewDefaults = {
     pageLimit: 24,
@@ -41,11 +42,12 @@ export const ArticlesView = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { displayType, sort, debouncedQuery } = articlesState;
+    const { displayType, sort, debouncedQuery, page } = articlesState;
 
     const [query, setQuery] = useState(debouncedQuery);
 
     const [debouncedValue] = useDebounce(query, articlesViewDefaults.debounce);
+    const [forceShowHighlighted, setForceShowHighlighted] = useState(false);
 
     const isFistRender = useIsFirstRender();
 
@@ -53,17 +55,23 @@ export const ArticlesView = ({
         if (isFistRender) return;
 
         dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
+        setForceShowHighlighted(false);
     }, [debouncedValue]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles) && !isLoading;
 
-    const currentPage = articles?.paginated.meta.current_page ?? 1;
-    const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
+    const showHighlighted = forceShowHighlighted || (mode === "articles" && query === "" && page === 1);
 
     const articlesToShow = articlesLoaded ? articles.paginated.data : [];
 
     const handleQueryChange = (query: string): void => {
+        // if highlighted articles are visible keep it visible when
+        // search query changes, otherwise the page will jump
+        if (showHighlighted) {
+            setForceShowHighlighted(true);
+        }
+
         setQuery(query);
 
         if (query === "") {
@@ -142,7 +150,12 @@ export const ArticlesView = ({
                 {articlesLoaded && (
                     <ArticlePagination
                         pagination={articles.paginated}
+                        onPageChange={(page) => {
+                            scrollToTop();
+                            dispatch({ type: ArticlesViewActionTypes.SetPage, payload: page });
+                        }}
                         onPageLimitChange={(limit: number) => {
+                            scrollToTop();
                             dispatch({ type: ArticlesViewActionTypes.SetPageLimit, payload: limit });
                         }}
                     />

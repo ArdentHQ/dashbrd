@@ -1,5 +1,6 @@
 import { router } from "@inertiajs/react";
 import React from "react";
+import { expect } from "vitest";
 import { Pagination } from "@/Components/Pagination";
 import { fireEvent, render, screen, waitFor } from "@/Tests/testing-library";
 
@@ -480,5 +481,79 @@ describe("Pagination", () => {
             },
         });
         expect(button.textContent).toBe("Page 1 of 3");
+    });
+
+    it.each([
+        [{ first_page_url: "example.com", current_page: 2 }, "Pagination__firstPageLink", 1],
+        [{ first_page_url: "example.com", current_page: 2 }, "Pagination__firstPageLink_mobile", 1],
+        [{ prev_page_url: "example.com", current_page: 2 }, "Pagination__PreviousPageLink__link", 1],
+        [{ next_page_url: "example.com", current_page: 1 }, "Pagination__NextPageLink__link", 2],
+        [{ last_page_url: "example.com", current_page: 2 }, "Pagination__lastPageLink", 3],
+        [{ last_page_url: "example.com", current_page: 2 }, "Pagination__lastPageLink_mobile", 3],
+        [{ path: "example.com", current_page: 2 }, "Pagination__PageLink__link", null],
+    ])("should trigger page change", (meta, testId, page) => {
+        const data = {
+            ...paginationData,
+            meta: {
+                ...paginationData.meta,
+                ...meta,
+            },
+        };
+
+        const onPageChangeMock = vi.fn();
+
+        render(
+            <Pagination
+                data={data}
+                onPageChange={onPageChangeMock}
+            />,
+        );
+
+        const elements = screen.getAllByTestId(testId);
+
+        for (const element of elements) {
+            fireEvent.click(element);
+        }
+
+        expect(onPageChangeMock).toBeCalledTimes(elements.length);
+
+        if (page !== null) {
+            expect(onPageChangeMock).toBeCalledWith(page);
+        }
+    });
+
+    it("should set given page from a mobile input", async () => {
+        const onPageChangeMock = vi.fn();
+
+        render(
+            <Pagination
+                data={paginationData}
+                onPageChange={onPageChangeMock}
+            />,
+        );
+
+        const button = screen.getByTestId("Pagination__MobileButton");
+
+        expect(screen.queryByTestId("Pagination__PageInput__input")).not.toBeInTheDocument();
+
+        fireEvent.click(button);
+
+        await waitFor(() => {
+            expect(screen.getByTestId("Pagination__PageInput__input")).toBeInTheDocument();
+
+            const input = screen.getByTestId("Pagination__PageInput__input");
+
+            fireEvent.change(input, {
+                target: {
+                    value: "2",
+                },
+            });
+
+            const form = screen.getByTestId("Pagination__PageInput__form");
+
+            fireEvent.submit(form);
+
+            expect(onPageChangeMock).toBeCalledTimes(1);
+        });
     });
 });
