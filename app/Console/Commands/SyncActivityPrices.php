@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -75,7 +77,7 @@ class SyncActivityPrices extends Command
             return Command::SUCCESS;
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->error('An error occurred while updating the NFT activity table: ' . $e->getMessage());
+            $this->error('An error occurred while updating the NFT activity table: '.$e->getMessage());
             return Command::FAILURE;
         }
     }
