@@ -137,7 +137,7 @@ class Web3NftHandler
                     'wallet_id' => $this->wallet?->id,
                     'collection_id' => $collection->id,
                     'token_number' => $nft->tokenNumber,
-                    'description' => $nft->description
+                    'description' => $nft->description,
                     'name' => $nft->name,
                     'extra_attributes' => json_encode($nft->extraAttributes),
                     'deleted_at' => null,
