@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -37,7 +39,7 @@ class SyncActivityPrices extends Command
      * 3. The command uses a SQL transaction to ensure data consistency. It commits the changes after successful execution.
      *
      * Caution: Before running this command, make sure to run `tokens:live-dump-price-history`.
-    */
+     */
     public function handle()
     {
         try {
@@ -73,7 +75,7 @@ class SyncActivityPrices extends Command
             $this->info('NFT activity table updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->error('An error occurred while updating the NFT activity table: ' . $e->getMessage());
+            $this->error('An error occurred while updating the NFT activity table: '.$e->getMessage());
         }
     }
 }
