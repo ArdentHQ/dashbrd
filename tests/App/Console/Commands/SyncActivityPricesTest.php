@@ -7,6 +7,7 @@ use App\Models\Network;
 use App\Models\NftActivity;
 use App\Models\TokenPriceHistory;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 it('dispatches a job for nft activities', function () {
     Carbon::setTestNow(Carbon::now()->startOfYear());
@@ -83,4 +84,12 @@ it('dispatches a job for nft activities', function () {
     });
 
     Carbon::setTestNow(null);
+});
+
+it('handles an exception and rolls back the transaction', function () {
+    DB::shouldReceive('beginTransaction')->once();
+    DB::shouldReceive('statement')->once()->andThrow(new \Exception('An error occurred while updating the NFT activity table'));
+    DB::shouldReceive('rollBack')->once();
+
+    $this->artisan('activities:sync-prices')->expectsOutput('An error occurred while updating the NFT activity table: An error occurred while updating the NFT activity table')->assertExitCode(1);
 });
