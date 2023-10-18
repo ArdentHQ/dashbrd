@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
@@ -56,19 +57,26 @@ export const ArticlesGridScrollable = ({ articles }: { articles: App.Data.Articl
                     <span className="text-theme-primary-600">{t("common.most_popular")}</span> {t("common.articles")}
                 </Heading>
 
-                <div className="hidden space-x-3 md:flex xl:hidden">
-                    <IconButton
-                        disabled={activeArticleIndex === 0}
-                        icon="ChevronLeftSmall"
-                        onClick={previousHandler}
-                    />
+                {articles.length >= 3 && (
+                    <div
+                        className={classNames("hidden space-x-3", {
+                            "md:flex lg:hidden": articles.length === 3,
+                            "md:flex xl:hidden": articles.length > 3,
+                        })}
+                    >
+                        <IconButton
+                            disabled={activeArticleIndex === 0}
+                            icon="ChevronLeftSmall"
+                            onClick={previousHandler}
+                        />
 
-                    <IconButton
-                        disabled={nextButtonIsDisabled}
-                        icon="ChevronRightSmall"
-                        onClick={nextHandler}
-                    />
-                </div>
+                        <IconButton
+                            disabled={nextButtonIsDisabled}
+                            icon="ChevronRightSmall"
+                            onClick={nextHandler}
+                        />
+                    </div>
+                )}
             </div>
 
             <div className="mt-4 xl:-mx-1.5 xl:px-8 2xl:px-0">

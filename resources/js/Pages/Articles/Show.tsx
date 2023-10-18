@@ -80,7 +80,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
             </article>
         </div>
 
-        <ArticlesGridScrollable articles={popularArticles} />
+        {popularArticles.length > 0 && <ArticlesGridScrollable articles={popularArticles} />}
     </DefaultLayout>
 );
 
