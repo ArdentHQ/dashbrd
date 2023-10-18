@@ -17,10 +17,10 @@ export const ArticleAuthor = ({ article }: Properties): JSX.Element => {
 
     return (
         <div className="flex items-center space-x-3 overflow-auto">
-            <div className="flex h-[54px] w-[54px] flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-200">
+            <div className="flex h-[3.375rem] w-[3.375rem] flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-200">
                 {article.authorAvatar.thumb === null ? (
                     <Icon
-                        name="D"
+                        name="Dashbrd"
                         className="text-theme-secondary-500"
                     />
                 ) : (
