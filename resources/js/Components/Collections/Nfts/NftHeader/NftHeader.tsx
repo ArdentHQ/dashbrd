@@ -44,7 +44,7 @@ export const NftHeader = ({
                         <div className="flex flex-row items-center gap-2">
                             <CollectionDescription
                                 name={t("pages.nfts.about_nft")}
-                                description={nft.collection.description}
+                                description={nft.description}
                                 linkClassName="font-medium text-sm"
                             />
 
@@ -89,7 +89,7 @@ export const NftHeader = ({
 
                     <CollectionDescription
                         name={t("pages.nfts.about_nft")}
-                        description={nft.collection.description}
+                        description={nft.description}
                         linkClassName="font-medium text-sm"
                     />
 
