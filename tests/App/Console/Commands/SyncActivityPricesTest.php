@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Collection;
 use App\Models\NftActivity;
 use App\Models\TokenPriceHistory;
 use Carbon\Carbon;
 
-it('dispatches a job for nft activities', function() {
+it('dispatches a job for nft activities', function () {
     Carbon::setTestNow(Carbon::now()->startOfYear());
 
     $collection = Collection::factory()->create([
