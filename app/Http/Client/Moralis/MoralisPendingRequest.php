@@ -109,7 +109,7 @@ class MoralisPendingRequest extends PendingRequest
         ])->json();
 
         return collect($data)
-            ->filter(fn ($token) => ! $token['possible_spam'])
+            ->reject(fn ($token) => Arr::get($token, 'possible_spam', false))
             ->map(function ($token) use ($wallet, $network) {
                 return new Web3Erc20TokenData(
                     $token['token_address'],
