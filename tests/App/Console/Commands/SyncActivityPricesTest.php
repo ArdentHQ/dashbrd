@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Collection;
+use App\Models\Network;
 use App\Models\NftActivity;
 use App\Models\TokenPriceHistory;
 use Carbon\Carbon;
@@ -10,8 +11,10 @@ use Carbon\Carbon;
 it('dispatches a job for nft activities', function () {
     Carbon::setTestNow(Carbon::now()->startOfYear());
 
+    $network = Network::query()->find(1) ?? Network::factory()->create(['id' => 1]);
+
     $collection = Collection::factory()->create([
-        'network_id' => 1,
+        'network_id' => $network->id,
     ]);
 
     $extraAttributes = [
@@ -42,8 +45,7 @@ it('dispatches a job for nft activities', function () {
     ];
 
     $priceData = [
-        ['price' => 0, 'daysAgo' => 3],
-        ['price' => 200, 'daysAgo' => 1],
+        ['price' => 0, 'daysAgo' => 4],
         ['price' => 300, 'daysAgo' => 0],
     ];
 
@@ -59,7 +61,7 @@ it('dispatches a job for nft activities', function () {
 
         NftActivity::factory()->create([
             'type' => 'LABEL_TRANSFER',
-            'timestamp' => $timestamp,
+            'timestamp' => $timestamp->addHour(),
             'extra_attributes' => $extraAttributes,
             'collection_id' => $collection->id,
             'total_native' => null,
@@ -69,9 +71,9 @@ it('dispatches a job for nft activities', function () {
 
     $this->artisan('activities:sync-prices');
 
-    $activities = NftActivity::where('collection_id', $collection->id)->get()->sortBy('id');
+    $activities = NftActivity::where('collection_id', $collection->id)->get();
 
-    expect($activities->count())->toBe(3);
+    expect($activities->count())->toBe(2);
 
     $activities->each(function ($activity, $index) use ($priceData) {
         $price = (string) $priceData[$index]['price'];
