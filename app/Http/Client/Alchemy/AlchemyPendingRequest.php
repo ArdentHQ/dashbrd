@@ -625,7 +625,7 @@ class AlchemyPendingRequest extends PendingRequest
                 ->filter(function ($item) {
                     return ! empty(Arr::get($item, 'trait_type')) && ! empty(Arr::get($item, 'value')) && ! is_array(Arr::get($item, 'value'));
                 })
-                ->map(function ($item) use ($nft) {
+                ->map(function ($item) {
                     $value = strval($item['value']);
                     $displayType = TraitDisplayType::fromAlchemyDisplayType(Arr::get($item, 'display_type'), $value);
 
