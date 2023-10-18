@@ -18,12 +18,13 @@ const ArticlesIndex = ({
 
     const [articlesState, dispatch] = useReducer(articlesViewReducer, getArticlesInitialState());
 
-    const { debouncedQuery, sort, pageLimit, isFilterDirty, displayType } = articlesState;
+    const { debouncedQuery, sort, pageLimit, isFilterDirty, displayType, page } = articlesState;
 
     const queryParameters = {
         search: debouncedQuery,
         sort,
         pageLimit: pageLimit.toString(),
+        page: page.toString(),
     };
 
     useEffect(() => {
@@ -31,7 +32,7 @@ const ArticlesIndex = ({
             ...queryParameters,
             view: displayType,
         });
-    }, [debouncedQuery, sort, pageLimit]);
+    }, [debouncedQuery, sort, pageLimit, displayType, page]);
 
     const { articles, highlightedArticles, isLoading } = useArticles(queryParameters, isFilterDirty);
 

@@ -6,9 +6,10 @@ import { SelectPageLimit } from "@/Components/Pagination/SelectPageLimit";
 interface Properties {
     pagination: PaginationData<App.Data.Articles.ArticleData>;
     onPageLimitChange: (limit: number) => void;
+    onPageChange: (page: number) => void;
 }
 
-export const ArticlePagination = ({ pagination, onPageLimitChange }: Properties): JSX.Element => {
+export const ArticlePagination = ({ pagination, onPageLimitChange, onPageChange }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     if (pagination.meta.total < 12) {
@@ -25,7 +26,12 @@ export const ArticlePagination = ({ pagination, onPageLimitChange }: Properties)
                     onPageLimitChange(Number(value));
                 }}
             />
-            {pagination.meta.last_page > 1 && <Pagination data={pagination} />}
+            {pagination.meta.last_page > 1 && (
+                <Pagination
+                    data={pagination}
+                    onPageChange={onPageChange}
+                />
+            )}
         </div>
     );
 };

@@ -7,12 +7,13 @@ import { replaceUrlQuery } from "@/Utils/replace-url-query";
 export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.CollectionDetailData }): JSX.Element => {
     const [articlesState, dispatch] = useReducer(articlesViewReducer, getArticlesInitialState());
 
-    const { debouncedQuery, sort, pageLimit, displayType } = articlesState;
+    const { debouncedQuery, sort, pageLimit, displayType, page } = articlesState;
 
     const queryParameters = {
         search: debouncedQuery,
         sort,
         pageLimit: pageLimit.toString(),
+        page: page.toString(),
     };
 
     const { articles, isLoading } = useCollectionArticles(collection.slug, queryParameters);
@@ -21,9 +22,8 @@ export const ArticlesTab = ({ collection }: { collection: App.Data.Collections.C
         replaceUrlQuery({
             ...queryParameters,
             view: displayType,
-            tab: "articlesTab",
         });
-    }, [debouncedQuery, sort, pageLimit]);
+    }, [debouncedQuery, sort, pageLimit, page]);
 
     return (
         <ArticlesView
