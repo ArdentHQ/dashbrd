@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3NftData;
-use App\Enums\NftErrors;
+use App\Enums\NftInfo;
 use App\Enums\TraitDisplayType;
 use App\Models\Collection;
 use App\Models\Network;
@@ -50,7 +50,7 @@ it('trims collection names', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $handler->store(collect([$data]));
@@ -92,7 +92,7 @@ it('should throw an exception if no wallet or collection passed', function () {
             mintedBlock: 1000,
             mintedAt: null,
             hasError: false,
-            error: null,
+            info: null,
         );
 
         $handler->store(nfts: collect([$data]), dispatchJobs: true);
@@ -141,7 +141,7 @@ it('should not insert traits with long values', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -211,7 +211,7 @@ it('should handle null values for opensea slug', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -279,7 +279,7 @@ it('should handle opensea slugs', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -345,7 +345,7 @@ it('should not overwrite existing extra_attributes opensea data', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -423,7 +423,7 @@ it('should handle empty extra_attribute objects', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -487,7 +487,7 @@ it('should handle null value for extra_attribute', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -564,7 +564,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedBlock: 1000,
         mintedAt: null,
         hasError: false,
-        error: null,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -610,7 +610,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedBlock: 1000,
         mintedAt: null,
         hasError: true,
-        error: null,
+        info: null,
     );
 
     $handler->store(collect([$dataWithError]));
@@ -668,7 +668,7 @@ it('should set save the error for the nft if set', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: true,
-        error: NftErrors::MetadataOutdated->value,
+        info: NftInfo::MetadataOutdated->value,
     );
 
     $collection = Collection::query()->create([
@@ -683,7 +683,7 @@ it('should set save the error for the nft if set', function () {
 
     $handler->store(collect([$data]));
 
-    expect($collection->nfts->first()->error)->toBe(NftErrors::MetadataOutdated->value);
+    expect($collection->nfts->first()->info)->toBe(NftInfo::MetadataOutdated->value);
 });
 
 it('should update the error field for nft', function () {
@@ -739,7 +739,7 @@ it('should update the error field for nft', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: true,
-        error: NftErrors::MetadataOutdated->value,
+        info: NftInfo::MetadataOutdated->value,
     );
 
     $collection = Collection::query()->create([
@@ -756,7 +756,7 @@ it('should update the error field for nft', function () {
     $collection->refresh();
 
     expect(Collection::count())->toBe(1);
-    expect($collection->nfts->first()->error)->toBe(NftErrors::MetadataOutdated->value);
+    expect($collection->nfts->first()->info)->toBe(NftInfo::MetadataOutdated->value);
 
     $dataWithNoError = new Web3NftData(
         tokenAddress: '0x1234',
@@ -786,12 +786,12 @@ it('should update the error field for nft', function () {
         mintedBlock: 1000,
         mintedAt: null,
         hasError: true,
-        error: null,
+        info: null,
     );
 
     $handler->store(collect([$dataWithNoError]));
     $collection->refresh();
 
     expect(Collection::count())->toBe(1);
-    expect($collection->nfts->first()->error)->toBe(null);
+    expect($collection->nfts->first()->info)->toBe(null);
 });
