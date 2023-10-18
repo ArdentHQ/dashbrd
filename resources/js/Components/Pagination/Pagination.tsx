@@ -73,6 +73,16 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
         setPage(data.meta.current_page.toString());
     };
 
+    const handlePageChange = (
+        event: React.MouseEvent<HTMLAnchorElement> | React.KeyboardEvent<HTMLAnchorElement>,
+        page: number,
+    ): void => {
+        if (onPageChange !== undefined) {
+            event.preventDefault();
+            onPageChange(page);
+        }
+    };
+
     return (
         <nav
             aria-label="Pagination"
@@ -104,10 +114,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                         {data.meta.current_page > 1 && (
                             <ButtonLink
                                 onClick={(event) => {
-                                    if (onPageChange !== undefined) {
-                                        event.preventDefault();
-                                        onPageChange(1);
-                                    }
+                                    handlePageChange(event, 1);
                                 }}
                                 href={data.meta.first_page_url}
                                 variant="icon"
@@ -119,10 +126,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                         {data.meta.prev_page_url !== null && (
                             <PreviousPageLink
                                 onClick={(event) => {
-                                    if (onPageChange !== undefined) {
-                                        event.preventDefault();
-                                        onPageChange(data.meta.current_page - 1);
-                                    }
+                                    handlePageChange(event, data.meta.current_page - 1);
                                 }}
                                 href={data.meta.prev_page_url}
                             />
@@ -144,10 +148,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                             {pages.map((page, index) => (
                                 <PageLink
                                     onClick={(event) => {
-                                        if (onPageChange !== undefined) {
-                                            event.preventDefault();
-                                            onPageChange(page);
-                                        }
+                                        handlePageChange(event, page);
                                     }}
                                     key={index}
                                     page={page}
@@ -172,10 +173,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                         {data.meta.next_page_url !== null && (
                             <NextPageLink
                                 onClick={(event) => {
-                                    if (onPageChange !== undefined) {
-                                        event.preventDefault();
-                                        onPageChange(data.meta.current_page + 1);
-                                    }
+                                    handlePageChange(event, data.meta.current_page + 1);
                                 }}
                                 href={data.meta.next_page_url}
                             />
@@ -183,10 +181,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                         {data.meta.current_page !== data.meta.last_page && (
                             <ButtonLink
                                 onClick={(event) => {
-                                    if (onPageChange !== undefined) {
-                                        event.preventDefault();
-                                        onPageChange(data.meta.last_page);
-                                    }
+                                    handlePageChange(event, data.meta.last_page);
                                 }}
                                 href={data.meta.last_page_url}
                                 variant="icon"
@@ -202,10 +197,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                             <div className="flex w-full flex-row items-center justify-between">
                                 <ButtonLink
                                     onClick={(event) => {
-                                        if (onPageChange !== undefined) {
-                                            event.preventDefault();
-                                            onPageChange(1);
-                                        }
+                                        handlePageChange(event, 1);
                                     }}
                                     href={data.meta.first_page_url}
                                     variant="icon"
@@ -217,10 +209,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
 
                                 <PreviousPageLink
                                     onClick={(event) => {
-                                        if (onPageChange !== undefined) {
-                                            event.preventDefault();
-                                            onPageChange(data.meta.current_page - 1);
-                                        }
+                                        handlePageChange(event, data.meta.current_page - 1);
                                     }}
                                     href={data.meta.prev_page_url}
                                 />
@@ -233,20 +222,14 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
 
                                 <NextPageLink
                                     onClick={(event) => {
-                                        if (onPageChange !== undefined) {
-                                            event.preventDefault();
-                                            onPageChange(data.meta.current_page + 1);
-                                        }
+                                        handlePageChange(event, data.meta.current_page + 1);
                                     }}
                                     href={data.meta.next_page_url}
                                 />
 
                                 <ButtonLink
                                     onClick={(event) => {
-                                        if (onPageChange !== undefined) {
-                                            event.preventDefault();
-                                            onPageChange(data.meta.last_page);
-                                        }
+                                        handlePageChange(event, data.meta.last_page);
                                     }}
                                     href={data.meta.last_page_url}
                                     variant="icon"

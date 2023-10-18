@@ -16,7 +16,7 @@ export const useCollectionArticles = (collectionSlug: string, rawFilters: Record
         }
     }
 
-    const queryKey: QueryKey = ["collection-articles-" + collectionSlug + "-" + JSON.stringify(filters)];
+    const queryKey: QueryKey = ["collection-articles-" + collectionSlug, filters];
 
     const { data, isLoading } = useQuery({
         queryKey,

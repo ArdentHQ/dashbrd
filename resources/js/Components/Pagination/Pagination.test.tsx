@@ -1,5 +1,7 @@
 import { router } from "@inertiajs/react";
+import { createEvent } from "@testing-library/dom";
 import React from "react";
+import { expect } from "vitest";
 import { Pagination } from "@/Components/Pagination";
 import { fireEvent, render, screen, waitFor } from "@/Tests/testing-library";
 
@@ -480,5 +482,37 @@ describe("Pagination", () => {
             },
         });
         expect(button.textContent).toBe("Page 1 of 3");
+    });
+
+    it("should trigger page change when prev link is clicked", async () => {
+        const data = {
+            ...paginationData,
+            meta: {
+                ...paginationData.meta,
+                prev_page_url: "https://example.com",
+                current_page: 2,
+            },
+        };
+
+        const onPageChangeMock = vi.fn();
+
+        render(
+            <Pagination
+                data={data}
+                onPageChange={onPageChangeMock}
+            />,
+        );
+
+        const elements = screen.getAllByTestId("Pagination__PreviousPageLink__link");
+
+        for (const element of elements) {
+            const event = createEvent.click(element);
+
+            fireEvent.click(element, event);
+
+            expect(event.defaultPrevented).toBe(true);
+        }
+
+        expect(onPageChangeMock).toBeCalledTimes(elements.length);
     });
 });

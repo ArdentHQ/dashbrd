@@ -19,6 +19,7 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { ArticlesTab } from "@/Pages/Collections/Components/Articles/ArticlesTab";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
@@ -169,8 +170,9 @@ const CollectionsView = ({
 
     const tabChangeHandler = (tab: TabName): void => {
         setSelectedTab(tab);
-
-        // setFilterIsDirty(true);
+        replaceUrlQuery({
+            tab,
+        });
     };
 
     const activityPageLimitChangeHandler = (pageLimit: number): void => {
