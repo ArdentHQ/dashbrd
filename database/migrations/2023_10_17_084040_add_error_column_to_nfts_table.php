@@ -17,14 +17,4 @@ return new class extends Migration
             $table->string('error')->nullable();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('nfts', function (Blueprint $table) {
-            $table->dropColumn('error');
-        });
-    }
 };
