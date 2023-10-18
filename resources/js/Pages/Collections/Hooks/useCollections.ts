@@ -66,12 +66,14 @@ export const useCollections = ({
         collections: 0,
         value: null,
     },
+    initialSelectedChainIds,
 }: {
     view: CollectionDisplayType;
     initialStats: App.Data.Collections.CollectionStatsData;
     showHidden: boolean;
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
+    initialSelectedChainIds?: string[];
 }): CollectionsState => {
     const { newAbortSignal, cancelPreviousRequest } = useAbortController();
 
@@ -86,11 +88,14 @@ export const useCollections = ({
     const [reportByCollectionAvailableIn, setSeportByCollectionAvailableIn] = useState<ReportByCollectionAvailableIn>(
         {},
     );
+
+    const getSelectedChainIds = (initialArray?: string[]): number[] =>
+        isTruthy(initialArray) && initialArray.length > 0
+            ? initialArray.map((id) => Number(id))
+            : [ExplorerChains.EthereumMainnet, ExplorerChains.PolygonMainnet];
+
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([
-        ExplorerChains.EthereumMainnet,
-        ExplorerChains.PolygonMainnet,
-    ]);
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(getSelectedChainIds(initialSelectedChainIds));
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
@@ -109,6 +114,7 @@ export const useCollections = ({
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
             view,
+            chain: selectedChainIds.join(","),
         });
 
         if (selectedChainIds.length > 0) {
