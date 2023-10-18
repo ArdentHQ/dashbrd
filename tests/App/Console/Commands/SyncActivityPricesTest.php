@@ -73,8 +73,6 @@ it('dispatches a job for nft activities', function() {
 
     $activities->each(function ($activity, $index) use ($priceData) {
         $price = (string) $priceData[$index]['price'];
-        print_r($index);
-        print_r($price);
 
         expect($activity->total_native)->toBe('1');
         expect($activity->total_usd)->toBe($price);
