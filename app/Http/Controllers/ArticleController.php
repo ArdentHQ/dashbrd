@@ -66,9 +66,18 @@ class ArticleController extends Controller
 
         views($article)->record();
 
+        $popularArticles = ArticleData::collection(
+            Article::sortByPopularity()
+                ->withFeaturedCollections()
+                ->where('id', '!=', $article->id)
+                ->limit(4)
+                ->get()
+        );
+
         return Inertia::render('Articles/Show', [
             'allowsGuests' => true,
             'article' => ArticleData::fromModel($article),
+            'popularArticles' => $popularArticles,
         ])->withViewData([
             'title' => trans('metatags.articles.view.title', ['title' => $article->title]),
             'description' => $article->metaDescription(),
