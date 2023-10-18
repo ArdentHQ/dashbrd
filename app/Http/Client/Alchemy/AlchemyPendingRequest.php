@@ -13,7 +13,7 @@ use App\Enums\AlchemyChain;
 use App\Enums\Chains;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\ImageSize;
-use App\Enums\NftErrors;
+use App\Enums\NftInfo;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\ConnectionException;
@@ -398,7 +398,7 @@ class AlchemyPendingRequest extends PendingRequest
         $tokenNumber = $convertTokenNumber === true ? CryptoUtils::hexToBigIntStr($nft['id']['tokenId']) : $nft['id']['tokenId'];
 
         $error = Arr::get($nft, 'error');
-        $nftError = null;
+        $nftInfo = null;
         $collectionAddress = Arr::get($nft, 'contract.address');
 
         if (! empty($error)) {
@@ -411,7 +411,7 @@ class AlchemyPendingRequest extends PendingRequest
 
             // if metadata stuff is empty, is empty object or empty array
             if (empty($nft['metadata']) || empty($nft['metadata']['metadata']) || is_object($nft['metadata']['metadata']) && count((array) $nft['metadata']['metadata'])) {
-                $nftError = NftErrors::MetadataOutdated->value;
+                $nftInfo = NftInfo::MetadataOutdated->value;
             }
         }
 
@@ -442,7 +442,7 @@ class AlchemyPendingRequest extends PendingRequest
             mintedBlock: $nft['contractMetadata']['deployedBlockNumber'],
             mintedAt: $mintTimestamp !== null ? Carbon::createFromTimestampMs($mintTimestamp) : null,
             hasError: ! empty($error),
-            error: $nftError,
+            info: $nftInfo,
         );
     }
 
