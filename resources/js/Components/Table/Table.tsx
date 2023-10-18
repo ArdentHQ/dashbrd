@@ -58,7 +58,7 @@ export const Table = <RowDataType extends Record<never, unknown>>({
 
     const createRow = (tableRow: Row<RowDataType>, index: number): JSX.Element => {
         prepareRow(tableRow);
-        return { ...row(tableRow.original, index), ...tableRow.getRowProps() };
+        return { ...tableRow.getRowProps(), ...row(tableRow.original, index), key: String(index) };
     };
 
     if (customWrapper !== undefined) {

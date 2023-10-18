@@ -60,6 +60,6 @@ interface InertiaUseFormProperties extends Partial<Omit<InertiaFormProps<Record<
 }
 
 export const mockInertiaUseForm = (properties: InertiaUseFormProperties): SpyInstance =>
-    // TODO(@goga-m)[2023-10-31]: Remove ts-ignore and construct an object that matches the return type.
+    // TODO(@goga-m)[2023-11-01]: Remove ts-ignore and construct an object that matches the return type.
     // @ts-ignore
     vi.spyOn(inertia, "useForm").mockReturnValue(properties as InertiaFormProps<Record<string, unknown>>);
