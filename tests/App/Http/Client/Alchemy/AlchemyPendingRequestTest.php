@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\NftErrors;
+use App\Enums\NftInfo;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection;
@@ -170,5 +170,5 @@ it('should return error field with METADATA_OUTATED if metadata object is empty'
     $collection = Alchemy::getWalletNfts($wallet, $network);
     print_r($collection);
     expect($collection->nfts[0]->hasError)->toBetrue();
-    expect($collection->nfts[0]->error)->toBe(NftErrors::MetadataOutdated->value);
+    expect($collection->nfts[0]->info)->toBe(NftInfo::MetadataOutdated->value);
 });
