@@ -3,7 +3,7 @@ interface Properties {
 }
 
 export const ArticleContent = ({ article }: Properties): JSX.Element => (
-    <div>
+    <div className="prose max-w-none">
         <p>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse voluptas neque cum fugit asperiores quo,
             numquam repellendus labore, sequi quae nihil provident vero consequatur iusto veritatis? Nostrum assumenda
