@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
 import { IconButton } from "@/Components/Buttons";
@@ -5,6 +6,48 @@ import { Heading } from "@/Components/Heading";
 
 export const ArticlesGridScrollable = ({ articles }: { articles: App.Data.Articles.ArticleData[] }): JSX.Element => {
     const { t } = useTranslation();
+
+    const scroller = useRef<HTMLDivElement>(null);
+    const [activeArticleIndex, setActiveArticleIndex] = useState(0);
+    const [nextButtonIsDisabled, setNextButtonIsDisabled] = useState(false);
+
+    const getArticleWidth = (): number => scroller.current?.children[0].clientWidth ?? 0;
+
+    const previousHandler = (): void => {
+        const articleWidth = getArticleWidth();
+
+        const nextArticleIndex = activeArticleIndex - 1;
+
+        scroller.current?.scrollTo({
+            left: nextArticleIndex * articleWidth,
+            behavior: "smooth",
+        });
+    };
+
+    const nextHandler = (): void => {
+        const articleWidth = getArticleWidth();
+
+        const nextArticleIndex = activeArticleIndex + 1;
+
+        scroller.current?.scrollTo({
+            left: nextArticleIndex * articleWidth,
+            behavior: "smooth",
+        });
+    };
+
+    const scrollHandler = (event: React.UIEvent<HTMLDivElement>): void => {
+        const div = event.target as HTMLDivElement;
+
+        const scrollPosition = div.scrollLeft;
+
+        const articleWidth = getArticleWidth();
+
+        const articleIndex = Math.round(scrollPosition / articleWidth);
+
+        setActiveArticleIndex(articleIndex);
+
+        setNextButtonIsDisabled(!(div.scrollWidth > Math.ceil(div.clientWidth + div.scrollLeft)));
+    };
 
     return (
         <div className="mt-8">
@@ -14,17 +57,26 @@ export const ArticlesGridScrollable = ({ articles }: { articles: App.Data.Articl
                 </Heading>
 
                 <div className="hidden space-x-3 md:flex xl:hidden">
-                    <IconButton icon="ChevronLeftSmall" />
+                    <IconButton
+                        disabled={activeArticleIndex === 0}
+                        icon="ChevronLeftSmall"
+                        onClick={previousHandler}
+                    />
 
                     <IconButton
-                        disabled
+                        disabled={nextButtonIsDisabled}
                         icon="ChevronRightSmall"
+                        onClick={nextHandler}
                     />
                 </div>
             </div>
 
             <div className="mt-4 xl:-mx-1.5 xl:px-8 2xl:px-0">
-                <div className=" flex max-w-full snap-x scroll-px-[18px] overflow-x-auto px-[18px] sm:scroll-px-[26px] sm:px-[26px] xl:px-0">
+                <div
+                    ref={scroller}
+                    className="hide-scrollbar flex max-w-full snap-x scroll-px-[18px] overflow-x-auto px-[18px] sm:scroll-px-[26px] sm:px-[26px] xl:px-0"
+                    onScroll={scrollHandler}
+                >
                     {articles.map((article) => (
                         <div
                             key={article.id}
