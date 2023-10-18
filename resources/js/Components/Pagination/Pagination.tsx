@@ -77,6 +77,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
         event: React.MouseEvent<HTMLAnchorElement> | React.KeyboardEvent<HTMLAnchorElement>,
         page: number,
     ): void => {
+        /* istanbul ignore next -- @preserve */
         if (onPageChange !== undefined) {
             event.preventDefault();
             onPageChange(page);

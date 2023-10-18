@@ -490,6 +490,7 @@ describe("Pagination", () => {
         [{ next_page_url: "example.com", current_page: 1 }, "Pagination__NextPageLink__link", 2],
         [{ last_page_url: "example.com", current_page: 2 }, "Pagination__lastPageLink", 3],
         [{ last_page_url: "example.com", current_page: 2 }, "Pagination__lastPageLink_mobile", 3],
+        [{ path: "example.com", current_page: 2 }, "Pagination__PageLink__link", null],
     ])("should trigger page change", (meta, testId, page) => {
         const data = {
             ...paginationData,
@@ -515,6 +516,44 @@ describe("Pagination", () => {
         }
 
         expect(onPageChangeMock).toBeCalledTimes(elements.length);
-        expect(onPageChangeMock).toBeCalledWith(page);
+
+        if (page !== null) {
+            expect(onPageChangeMock).toBeCalledWith(page);
+        }
+    });
+
+    it("should set given page from a mobile input", async () => {
+        const onPageChangeMock = vi.fn();
+
+        render(
+            <Pagination
+                data={paginationData}
+                onPageChange={onPageChangeMock}
+            />,
+        );
+
+        const button = screen.getByTestId("Pagination__MobileButton");
+
+        expect(screen.queryByTestId("Pagination__PageInput__input")).not.toBeInTheDocument();
+
+        fireEvent.click(button);
+
+        await waitFor(() => {
+            expect(screen.getByTestId("Pagination__PageInput__input")).toBeInTheDocument();
+
+            const input = screen.getByTestId("Pagination__PageInput__input");
+
+            fireEvent.change(input, {
+                target: {
+                    value: "2",
+                },
+            });
+
+            const form = screen.getByTestId("Pagination__PageInput__form");
+
+            fireEvent.submit(form);
+
+            expect(onPageChangeMock).toBeCalledTimes(1);
+        });
     });
 });
