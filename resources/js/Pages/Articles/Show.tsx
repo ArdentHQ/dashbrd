@@ -1,4 +1,5 @@
 import { ArticleAuthor } from "./Components/ArticleAuthor";
+import { ArticleContent } from "./Components/ArticleContent";
 import { ArticleCopy } from "./Components/ArticleCopy";
 import { ArticleDate } from "./Components/ArticleDate";
 import { ArticleShare } from "./Components/ArticleShare";
@@ -34,12 +35,7 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                             />
                         </div>
 
-                        <div>
-                            {/* Content here */}
-                            {Array.from({ length: 100 }).map((_, index) => (
-                                <p key={index}>Test scroll, replace with real content {index}</p>
-                            ))}
-                        </div>
+                        <ArticleContent article={article} />
                     </div>
                 </div>
 
