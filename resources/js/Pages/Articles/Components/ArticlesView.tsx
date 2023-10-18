@@ -46,6 +46,7 @@ export const ArticlesView = ({
     const [query, setQuery] = useState(debouncedQuery);
 
     const [debouncedValue] = useDebounce(query, articlesViewDefaults.debounce);
+    const [forceShowHighlighted, setForceShowHighlighted] = useState(false);
 
     const isFistRender = useIsFirstRender();
 
@@ -53,16 +54,23 @@ export const ArticlesView = ({
         if (isFistRender) return;
 
         dispatch({ type: ArticlesViewActionTypes.SetDebouncedQuery, payload: query });
+        setForceShowHighlighted(false);
     }, [debouncedValue]);
 
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles) && !isLoading;
 
-    const showHighlighted = mode === "articles" && query === "" && page === 1;
+    const showHighlighted = forceShowHighlighted || (mode === "articles" && query === "" && page === 1);
 
     const articlesToShow = articlesLoaded ? articles.paginated.data : [];
 
     const handleQueryChange = (query: string): void => {
+        // if highlighted articles are visible keep it visible when
+        // search query changes, otherwise the page will jump
+        if (showHighlighted) {
+            setForceShowHighlighted(true);
+        }
+
         setQuery(query);
 
         if (query === "") {

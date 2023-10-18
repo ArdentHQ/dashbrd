@@ -10,7 +10,7 @@ export interface PageLinkProperties {
     href: string;
     page: number;
     isActive?: boolean;
-    onClick: ButtonLinkOnClick;
+    onClick?: ButtonLinkOnClick;
 }
 
 export interface PageInputProperties {
