@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 return [
+    'author' => 'Author',
     'add' => 'Add',
     'amount' => 'Amount',
     'balance' => 'Balance',
@@ -31,6 +32,7 @@ return [
     'wallet' => 'Wallet',
     'pending' => 'Pending',
     'publish' => 'Publish',
+    'published' => 'Published',
     'empty' => 'Empty',
     'your_address' => 'Your Address',
     'warning' => 'Warning',
