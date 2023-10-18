@@ -32,24 +32,13 @@ import { i18n } from "@/I18n";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
 (window as any).CookieConsent = CookieConsent;
 
-const abortController = new AbortController();
-const { signal } = abortController;
-
-axios.interceptors.request.use((config) => {
-    config.signal = signal;
-    return config;
-});
-
 axios.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
         const { status } = error.response ?? {};
 
         if (status === 419) {
-            abortController.abort();
-            await axios.get(route("refresh-csrf-token"), {
-                signal,
-            });
+            await axios.get(route("refresh-csrf-token"));
 
             if (error.response != null) {
                 return await axios(error.response.config);

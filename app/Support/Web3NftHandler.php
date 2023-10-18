@@ -137,6 +137,7 @@ class Web3NftHandler
                     'wallet_id' => $this->wallet?->id,
                     'collection_id' => $collection->id,
                     'token_number' => $nft->tokenNumber,
+                    'description' => $nft->description
                     'name' => $nft->name,
                     'extra_attributes' => json_encode($nft->extraAttributes),
                     'deleted_at' => null,
@@ -150,7 +151,7 @@ class Web3NftHandler
             $uniqueBy = ['collection_id', 'token_number'];
 
             $valuesToUpdateIfExists = ['deleted_at', 'info'];
-            $valuesToCheck = ['name', 'extra_attributes', 'metadata_fetched_at', 'wallet_id'];
+            $valuesToCheck = ['name', 'description', 'extra_attributes', 'metadata_fetched_at', 'wallet_id'];
 
             foreach ($valuesToCheck as $value) {
                 if (array_filter($valuesToUpsert, fn ($v) => $v[$value] !== null)) {
