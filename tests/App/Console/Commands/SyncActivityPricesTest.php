@@ -72,7 +72,7 @@ it('dispatches a job for nft activities', function () {
 
     $this->artisan('activities:sync-prices');
 
-    $activities = NftActivity::where('collection_id', $collection->id)->get();
+    $activities = NftActivity::where('collection_id', $collection->id)->get()->sortBy('timestamp');
 
     expect($activities->count())->toBe(2);
 
