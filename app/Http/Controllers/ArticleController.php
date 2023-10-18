@@ -18,7 +18,7 @@ class ArticleController extends Controller
 {
     public function index(Request $request): Response|JsonResponse
     {
-        $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 10, 96);
+        $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 24, 96);
 
         $highlightedArticles = collect();
 

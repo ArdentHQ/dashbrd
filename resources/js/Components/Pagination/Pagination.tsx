@@ -116,7 +116,17 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                                 iconSize="xs"
                             />
                         )}
-                        {data.meta.prev_page_url !== null && <PreviousPageLink href={data.meta.prev_page_url} />}
+                        {data.meta.prev_page_url !== null && (
+                            <PreviousPageLink
+                                onClick={(event) => {
+                                    if (onPageChange !== undefined) {
+                                        event.preventDefault();
+                                        onPageChange(data.meta.current_page - 1);
+                                    }
+                                }}
+                                href={data.meta.prev_page_url}
+                            />
+                        )}
                         <div className="flex items-center space-x-0.5">
                             {showBeforeEllipsis && (
                                 <button
@@ -159,7 +169,17 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                                 </button>
                             )}
                         </div>
-                        {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
+                        {data.meta.next_page_url !== null && (
+                            <NextPageLink
+                                onClick={(event) => {
+                                    if (onPageChange !== undefined) {
+                                        event.preventDefault();
+                                        onPageChange(data.meta.current_page + 1);
+                                    }
+                                }}
+                                href={data.meta.next_page_url}
+                            />
+                        )}
                         {data.meta.current_page !== data.meta.last_page && (
                             <ButtonLink
                                 onClick={(event) => {
@@ -195,7 +215,15 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                                     iconSize="xs"
                                 />
 
-                                <PreviousPageLink href={data.meta.prev_page_url} />
+                                <PreviousPageLink
+                                    onClick={(event) => {
+                                        if (onPageChange !== undefined) {
+                                            event.preventDefault();
+                                            onPageChange(data.meta.current_page - 1);
+                                        }
+                                    }}
+                                    href={data.meta.prev_page_url}
+                                />
 
                                 <IconButton
                                     icon="MagnifyingGlass"
@@ -203,7 +231,15 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                                     onClick={handleClick}
                                 />
 
-                                <NextPageLink href={data.meta.next_page_url} />
+                                <NextPageLink
+                                    onClick={(event) => {
+                                        if (onPageChange !== undefined) {
+                                            event.preventDefault();
+                                            onPageChange(data.meta.current_page + 1);
+                                        }
+                                    }}
+                                    href={data.meta.next_page_url}
+                                />
 
                                 <ButtonLink
                                     onClick={(event) => {

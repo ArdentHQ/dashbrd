@@ -32,7 +32,7 @@ const ArticlesIndex = ({
             ...queryParameters,
             view: displayType,
         });
-    }, [debouncedQuery, sort, pageLimit, displayType]);
+    }, [debouncedQuery, sort, pageLimit, displayType, page]);
 
     const { articles, highlightedArticles, isLoading } = useArticles(queryParameters, isFilterDirty);
 

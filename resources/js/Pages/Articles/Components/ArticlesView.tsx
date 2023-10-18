@@ -41,7 +41,7 @@ export const ArticlesView = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { displayType, sort, debouncedQuery } = articlesState;
+    const { displayType, sort, debouncedQuery, page } = articlesState;
 
     const [query, setQuery] = useState(debouncedQuery);
 
@@ -58,8 +58,7 @@ export const ArticlesView = ({
     const articlesCount = articles?.paginated.meta.total ?? 0;
     const articlesLoaded = isTruthy(articles) && !isLoading;
 
-    const currentPage = articles?.paginated.meta.current_page ?? 1;
-    const showHighlighted = mode === "articles" && query === "" && currentPage === 1;
+    const showHighlighted = mode === "articles" && query === "" && page === 1;
 
     const articlesToShow = articlesLoaded ? articles.paginated.data : [];
 
@@ -143,14 +142,11 @@ export const ArticlesView = ({
                     <ArticlePagination
                         pagination={articles.paginated}
                         onPageChange={(page) => {
-                            window.scrollTo({
-                                top: 0,
-                                left: 0,
-                                behavior: "smooth",
-                            });
+                            scrollToTop();
                             dispatch({ type: ArticlesViewActionTypes.SetPage, payload: page });
                         }}
                         onPageLimitChange={(limit: number) => {
+                            scrollToTop();
                             dispatch({ type: ArticlesViewActionTypes.SetPageLimit, payload: limit });
                         }}
                     />
@@ -158,6 +154,14 @@ export const ArticlesView = ({
             </div>
         </>
     );
+};
+
+const scrollToTop = (): void => {
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+    });
 };
 
 export const getArticlesInitialState = (): ArticlesViewState => {
