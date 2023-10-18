@@ -1,3 +1,6 @@
+import { ArticleAuthor } from "./Components/ArticleAuthor";
+import { ArticleCopy } from "./Components/ArticleCopy";
+import { ArticleDate } from "./Components/ArticleDate";
 import { ArticleShare } from "./Components/ArticleShare";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
@@ -41,13 +44,18 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                 </div>
 
                 <div className="-mx-6 flex flex-col border-b border-t border-theme-secondary-300 px-6 py-4 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
-                    <div className="flex justify-between">
-                        <div className="flex">
-                            <div>Author (TBD)</div>
-                            <div>Date (TBD)</div>
+                    <div className="flex items-center justify-between">
+                        <div className="flex overflow-auto">
+                            <ArticleAuthor article={article} />
+
+                            <div className="mx-6 border-r border-theme-secondary-300"></div>
+
+                            <ArticleDate article={article} />
                         </div>
 
-                        <div className="hidden md:block">Copy (TBD)</div>
+                        <div className="hidden md:block">
+                            <ArticleCopy article={article} />
+                        </div>
                     </div>
                     <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 md:hidden">
                         <div>
@@ -57,7 +65,9 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                             />
                         </div>
 
-                        <div>Copy Mobile (TBD)</div>
+                        <div>
+                            <ArticleCopy article={article} />
+                        </div>
                     </div>
                 </div>
             </div>

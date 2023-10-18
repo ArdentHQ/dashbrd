@@ -1,24 +1,10 @@
 import React from "react";
 import { ArticleListItem } from "./ArticleListItem";
-import FeaturedCollectionData = App.Data.Articles.FeaturedCollectionData;
-import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
+import ArticleDataFactory from "@/Tests/Factories/Articles/ArticleDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 
 describe("ArticleListItem", () => {
-    const collections = new NFTCollectionFactory().withImage().createMany(3) as FeaturedCollectionData[];
-
-    const article = {
-        id: 1,
-        slug: "title",
-        title: "title",
-        image: "image",
-        userId: 1,
-        content: "content",
-        category: "news",
-        publishedAt: 1696334540,
-        metaDescription: "meta",
-        featuredCollections: collections,
-    };
+    const article = new ArticleDataFactory().create();
 
     it("should render ", () => {
         render(<ArticleListItem article={article} />);

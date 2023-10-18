@@ -8,6 +8,7 @@ import { ReactComponent as Bookmark } from "@icons/bookmark.svg";
 import { ReactComponent as Alchemy } from "@icons/brands/alchemy.svg";
 import { ReactComponent as Blur } from "@icons/brands/blur.svg";
 import { ReactComponent as Coingecko } from "@icons/brands/coingecko.svg";
+import { ReactComponent as Dashbrd } from "@icons/brands/dashbrd.svg";
 import { ReactComponent as DiscordLg } from "@icons/brands/discord-lg.svg";
 import { ReactComponent as Discord } from "@icons/brands/discord.svg";
 import { ReactComponent as Etherscan } from "@icons/brands/etherscan.svg";
@@ -106,6 +107,7 @@ import { ReactComponent as XInCircle } from "@icons/x-in-circle.svg";
 import { ReactComponent as X } from "@icons/x.svg";
 
 export const SvgCollection = {
+    Dashbrd,
     RaribleColor,
     BlurColor,
     LooksRareColor,
