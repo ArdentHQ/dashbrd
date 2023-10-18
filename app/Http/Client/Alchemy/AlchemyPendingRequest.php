@@ -32,7 +32,6 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use stdClass;
 use Throwable;
@@ -620,33 +619,21 @@ class AlchemyPendingRequest extends PendingRequest
         /** @var array<array{trait_type: string | null, value: string | null, display_type: string | null}> $props */
         $props = Arr::get($nft, 'metadata.attributes', Arr::get($nft, 'metadata.properties', []));
 
-        try {
-            return collect($props)
-                ->filter(function ($item) {
-                    return ! empty(Arr::get($item, 'trait_type')) && ! empty(Arr::get($item, 'value')) && ! is_array(Arr::get($item, 'value'));
-                })
-                ->map(function ($item) {
-                    $value = strval($item['value']);
-                    $displayType = TraitDisplayType::fromAlchemyDisplayType(Arr::get($item, 'display_type'), $value);
+        return collect($props)
+            ->filter(function ($item) {
+                return ! empty(Arr::get($item, 'trait_type')) && ! empty(Arr::get($item, 'value')) && ! is_array(Arr::get($item, 'value'));
+            })
+            ->map(function ($item) {
+                $value = strval($item['value']);
+                $displayType = TraitDisplayType::fromAlchemyDisplayType(Arr::get($item, 'display_type'), $value);
 
-                    return [
-                        'name' => $item['trait_type'],
-                        'value' => $value,
-                        'displayType' => $displayType,
-                    ];
-                })
-                ->toArray();
-        } catch (Throwable $e) {
-            // To avoid issues in traits causing collections to be ignored, we catch it and log any errors
-            Log::info($e->getMessage());
-            Log::info('Failed to extract traits for NFT', [
-                'collection' => Arr::get($nft, 'contract.address'),
-                'name' => Arr::get($nft, 'contractMetadata.name'),
-                'tokenId' => Arr::get($nft, 'id.tokenId'),
-            ]);
-
-            return [];
-        }
+                return [
+                    'name' => $item['trait_type'],
+                    'value' => $value,
+                    'displayType' => $displayType,
+                ];
+            })
+            ->toArray();
     }
 
     private function getNftV2ApiUrl(): string
