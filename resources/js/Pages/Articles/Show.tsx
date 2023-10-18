@@ -2,10 +2,10 @@ import { ArticleAuthor } from "./Components/ArticleAuthor";
 import { ArticleCopy } from "./Components/ArticleCopy";
 import { ArticleDate } from "./Components/ArticleDate";
 import { ArticleShare } from "./Components/ArticleShare";
-import { ArticlesGridScrollable } from "../Collections/Components/Articles/ArticlesGridScrollable";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { ArticlesGridScrollable } from "@/Pages/Collections/Components/Articles/ArticlesGridScrollable";
 
 interface Properties {
     article: App.Data.Articles.ArticleData;
