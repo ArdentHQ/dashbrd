@@ -69,3 +69,31 @@ it('should increment default size for banner image if it is not null in parseNft
 
     expect($collection->nfts[0]->collectionBannerImageUrl)->toContain('w=1378');
 });
+
+it('should ignore arrays in trait values', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
+            ->push(fixtureData('alchemy.nfts_array_collection_array_traits'), 200),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon();
+
+    $collection = Alchemy::getWalletNfts($wallet, $network);
+
+    expect($collection->nfts[0]->traits[1])->toContain('Tails');
+});
+
+it('should handle unexpected trait values', function () {
+    Alchemy::fake([
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
+            ->push(fixtureData('alchemy.nfts_array_unexpected_traits'), 200),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon();
+
+    $collection = Alchemy::getWalletNfts($wallet, $network);
+
+    expect(count($collection->nfts[0]->traits))->toBe(1);
+});
