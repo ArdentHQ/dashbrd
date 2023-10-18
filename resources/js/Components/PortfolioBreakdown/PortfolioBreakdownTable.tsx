@@ -38,7 +38,10 @@ const PortfolioBreakdownTableItem = ({
                             <FormatPercentage value={Number(asset.percentage)} />
                         </span>
                     </span>
-                    <span className="max-w-[8rem] truncate text-sm font-medium text-theme-secondary-500">
+                    <span
+                        className="max-w-[8rem] truncate text-sm font-medium text-theme-secondary-500"
+                        data-testid="PortfolioBreakdownItemAsset"
+                    >
                         {asset.name}
                     </span>
                 </div>
