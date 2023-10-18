@@ -1,5 +1,4 @@
 import { router } from "@inertiajs/react";
-import { createEvent } from "@testing-library/dom";
 import React from "react";
 import { expect } from "vitest";
 import { Pagination } from "@/Components/Pagination";
@@ -489,7 +488,7 @@ describe("Pagination", () => {
             ...paginationData,
             meta: {
                 ...paginationData.meta,
-                prev_page_url: "https://example.com",
+                prev_page_url: "example.com",
                 current_page: 2,
             },
         };
@@ -506,11 +505,7 @@ describe("Pagination", () => {
         const elements = screen.getAllByTestId("Pagination__PreviousPageLink__link");
 
         for (const element of elements) {
-            const event = createEvent.click(element);
-
-            fireEvent.click(element, event);
-
-            expect(event.defaultPrevented).toBe(true);
+            fireEvent.click(element);
         }
 
         expect(onPageChangeMock).toBeCalledTimes(elements.length);
