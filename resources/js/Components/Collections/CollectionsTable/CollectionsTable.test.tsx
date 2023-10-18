@@ -214,7 +214,7 @@ describe("CollectionsTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith("name", "asc");
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
     });
 
     it("can sort the table when sortable heading is clicked but reverse the direction", async () => {
@@ -242,7 +242,7 @@ describe("CollectionsTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith("name", "desc");
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "desc", selectedChainIds: undefined, sortBy: "name" });
     });
 
     it("can sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
@@ -270,7 +270,7 @@ describe("CollectionsTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith("name", "asc");
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
     });
 
     it.each(allBreakpoints)("renders without crashing on %s screen if no floor price data", (breakpoint) => {

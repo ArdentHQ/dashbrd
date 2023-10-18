@@ -23,6 +23,15 @@ export interface CollectionTableProperties {
     onChanged: () => void;
     activeSort?: string;
     sortDirection?: "asc" | "desc";
-    onSort?: (column: string, direction: string) => void;
+    onSort?: ({
+        sortBy,
+        direction,
+        selectedChainIds,
+    }: {
+        sortBy: string;
+        direction?: string;
+        selectedChainIds?: number[];
+    }) => void;
     onReportCollection?: (address: string) => void;
+    selectedChainIds?: number[];
 }
