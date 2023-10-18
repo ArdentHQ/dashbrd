@@ -11,6 +11,7 @@ import { ReactComponent as Coingecko } from "@icons/brands/coingecko.svg";
 import { ReactComponent as DiscordLg } from "@icons/brands/discord-lg.svg";
 import { ReactComponent as Discord } from "@icons/brands/discord.svg";
 import { ReactComponent as Etherscan } from "@icons/brands/etherscan.svg";
+import { ReactComponent as Facebook } from "@icons/brands/facebook.svg";
 import { ReactComponent as GitHubOutline } from "@icons/brands/github-outline.svg";
 import { ReactComponent as GitHub } from "@icons/brands/github.svg";
 import { ReactComponent as Mnemonic } from "@icons/brands/mnemonic.svg";
@@ -18,6 +19,7 @@ import { ReactComponent as Moralis } from "@icons/brands/moralis.svg";
 import { ReactComponent as OpenseaCircle } from "@icons/brands/opensea-circle.svg";
 import { ReactComponent as Opensea } from "@icons/brands/opensea.svg";
 import { ReactComponent as Polygonscan } from "@icons/brands/polygonscan.svg";
+import { ReactComponent as Reddit } from "@icons/brands/reddit.svg";
 import { ReactComponent as TwitterLg } from "@icons/brands/twitter-lg.svg";
 import { ReactComponent as Twitter } from "@icons/brands/twitter.svg";
 import { ReactComponent as Uniswap } from "@icons/brands/uniswap.svg";
@@ -120,6 +122,8 @@ export const SvgCollection = {
     Trash,
     Twitter,
     TwitterLg,
+    Reddit,
+    Facebook,
     Uniswap,
     Opensea,
     OpenseaCircle,
