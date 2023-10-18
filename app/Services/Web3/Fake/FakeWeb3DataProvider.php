@@ -87,7 +87,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
                 mintedBlock: random_int(1, 10000),
                 mintedAt: now(),
                 hasError: false,
-                error: null,
+                info: null,
             );
         });
 

@@ -171,7 +171,7 @@ class MoralisPendingRequest extends PendingRequest
                 mintedBlock: (int) $nft['block_number_minted'],
                 mintedAt: null,
                 hasError: false,
-                error: null,
+                info: null,
             );
         })->values();
 

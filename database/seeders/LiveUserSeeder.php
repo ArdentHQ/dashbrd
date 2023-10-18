@@ -174,7 +174,7 @@ class LiveUserSeeder extends UserSeeder
             mintedAt: Carbon::parse($nft['mintedAt']),
             mintedBlock: $nft['mintedBlock'],
             hasError: false,
-            error: null,
+            info: null,
         ));
     }
 
