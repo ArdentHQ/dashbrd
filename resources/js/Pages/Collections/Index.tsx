@@ -82,14 +82,6 @@ const CollectionsIndex = ({
         },
     });
 
-    useEffect(() => {
-        if (!auth.authenticated) {
-            return;
-        }
-
-        reload();
-    }, [auth.authenticated]);
-
     const selectDisplayTypeHandler = (displayType: CollectionDisplayType): void => {
         setDisplayType(displayType);
 
@@ -107,8 +99,12 @@ const CollectionsIndex = ({
     };
 
     useEffect(() => {
+        if (!auth.authenticated) {
+            return;
+        }
+
         reload({ selectedChainIds });
-    }, [selectedChainIds]);
+    }, [selectedChainIds, auth.authenticated]);
 
     return (
         <DefaultLayout toastMessage={props.toast}>

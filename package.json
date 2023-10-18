@@ -141,6 +141,7 @@
         "react-resize-detector": "^8.1.0",
         "react-sortablejs": "^6.1.4",
         "react-table": "^7.8.0",
+        "react-use-cancel-token": "^1.0.3",
         "sortablejs": "^1.15.0",
         "string-hash": "^1.1.3",
         "tailwind-merge": "^1.14.0",
