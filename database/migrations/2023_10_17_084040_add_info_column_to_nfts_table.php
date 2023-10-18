@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('nfts', function (Blueprint $table) {
-            $table->string('error')->nullable();
+            $table->string('info')->nullable();
         });
     }
 };
