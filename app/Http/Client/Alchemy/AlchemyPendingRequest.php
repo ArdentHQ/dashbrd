@@ -371,6 +371,10 @@ class AlchemyPendingRequest extends PendingRequest
             $supply = intval($supply);
         }
 
+        if ($description === null) {
+            $description = $nft['metadata']['description'] ?? null;
+        }
+
         if (is_array($description)) {
             $description = Arr::get($nft, 'description.0');
         }

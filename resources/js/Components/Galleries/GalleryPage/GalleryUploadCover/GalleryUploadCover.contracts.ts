@@ -1,5 +1,5 @@
 export interface GalleryUploadCoverProperties {
-    onSave?: ({ blob, imageDataURI }: { blob?: Blob; imageDataURI?: string }) => void;
+    onSave?: ({ blob, imageDataURI }: { blob?: File; imageDataURI?: string }) => void;
     onRemove?: () => void;
     onCancel?: () => void;
     coverUrl?: string;

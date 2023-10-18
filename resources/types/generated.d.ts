@@ -345,6 +345,7 @@ declare namespace App.Data.Nfts {
     export type NftData = {
         id: number;
         name: string | null;
+        description: string | null;
         tokenNumber: string;
         collection: App.Data.Nfts.NftCollectionData;
         images: App.Data.Nfts.NftImagesData;

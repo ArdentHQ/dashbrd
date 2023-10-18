@@ -22,7 +22,7 @@ export const GalleryUploadCover = ({
 }: GalleryUploadCoverProperties): JSX.Element => {
     const { t } = useTranslation();
     const [imageDataURI, setImageDataURI] = useState<string | undefined>(coverUrl);
-    const [blob, setBlob] = useState<Blob>();
+    const [blob, setBlob] = useState<File>();
     const { showToast } = useToasts();
 
     const handleFileOpen = async (): Promise<void> => {

@@ -8,10 +8,24 @@ import { Tooltip } from "@/Components/Tooltip";
 interface Properties {
     disabled?: boolean;
     activeSort: string | null;
-    onSort: (sortBy: string) => void;
+    onSort: ({
+        sortBy,
+        direction,
+        selectedChainIds,
+    }: {
+        sortBy: string;
+        direction?: string;
+        selectedChainIds?: number[];
+    }) => void;
+    selectedChainIds?: number[];
 }
 
-export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Properties): JSX.Element => {
+export const CollectionsSorting = ({
+    disabled = false,
+    activeSort,
+    onSort,
+    selectedChainIds,
+}: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     if (disabled) {
@@ -46,7 +60,7 @@ export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Pro
                 <DropdownButton
                     isActive={activeSort === "received"}
                     onClick={() => {
-                        onSort("received");
+                        onSort({ sortBy: "received", selectedChainIds });
                     }}
                 >
                     {t("pages.collections.sorting.recently_received")}
@@ -55,7 +69,7 @@ export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Pro
                 <DropdownButton
                     isActive={activeSort === "oldest"}
                     onClick={() => {
-                        onSort("oldest");
+                        onSort({ sortBy: "oldest", selectedChainIds });
                     }}
                 >
                     {t("pages.collections.sorting.oldest_collection")}

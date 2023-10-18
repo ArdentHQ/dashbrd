@@ -18,6 +18,7 @@ class NftData extends Data
     public function __construct(
         public int $id,
         public ?string $name,
+        public ?string $description,
         public string $tokenNumber,
         public NftCollectionData $collection,
         public NftImagesData $images,
@@ -32,6 +33,7 @@ class NftData extends Data
         return new self(
             id: $nft->id,
             name: $nft->name,
+            description: $nft->description ?? $nft->collection->description,
             tokenNumber: $nft->token_number,
             collection: NftCollectionData::fromModel($nft->collection),
             images: NftImagesData::from($nft->images()),
