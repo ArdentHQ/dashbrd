@@ -10,8 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 it('dispatches a job for nft activities', function () {
-    Carbon::setTestNow(Carbon::now()->startOfYear());
-
     $network = Network::firstWhere('chain_id', 137) ?? Network::factory()->create([
         'chain_id' => 137,
     ]);
@@ -59,12 +57,12 @@ it('dispatches a job for nft activities', function () {
             'token_guid' => 'ethereum',
             'currency' => 'usd',
             'price' => $data['price'],
-            'timestamp' => $timestamp,
+            'timestamp' => $timestamp->subHour(),
         ]);
 
         NftActivity::factory()->create([
             'type' => 'LABEL_TRANSFER',
-            'timestamp' => $timestamp->addHour(),
+            'timestamp' => $timestamp,
             'extra_attributes' => $extraAttributes,
             'collection_id' => $collection->id,
             'total_native' => null,
@@ -74,7 +72,7 @@ it('dispatches a job for nft activities', function () {
 
     $this->artisan('activities:sync-prices');
 
-    $activities = NftActivity::where('collection_id', $collection->id)->get()->sortBy('timestamp');
+    $activities = NftActivity::where('collection_id', $collection->id)->orderBy('id')->get();
 
     expect($activities->count())->toBe(2);
 
@@ -84,8 +82,6 @@ it('dispatches a job for nft activities', function () {
         expect($activity->total_native)->toBe('1');
         expect($activity->total_usd)->toBe($price);
     });
-
-    Carbon::setTestNow(null);
 });
 
 it('handles an exception and rolls back the transaction', function () {
