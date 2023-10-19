@@ -2,12 +2,12 @@ import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
 import { Carousel, CarouselItem } from "@/Components/Carousel";
-import { useGalleryCarousel } from "@/Pages/Galleries/hooks/use-gallery-carousel";
+import { useCarousel } from "@/Hooks/useCarousel";
 
 export const ArticlesScroll = ({ articles }: { articles: App.Data.Articles.ArticleData[] }): JSX.Element => {
     const { t } = useTranslation();
 
-    const { slidesPerView, horizontalOffset } = useGalleryCarousel();
+    const { slidesPerView, horizontalOffset } = useCarousel();
 
     return (
         <div className="mt-8">
