@@ -68,11 +68,11 @@ class SyncActivityPrices extends Command
                                 LIMIT 1
                               )
                 WHERE
-                  collection_id IN (
-                    SELECT collection_id
-                    FROM collections
-                    WHERE network_id = '$network->id'
-                  );
+                    nft_activity.collection_id IN (
+                        SELECT collections.id
+                        FROM collections
+                        WHERE collections.network_id = '$network->id'
+                    );
             ";
 
             DB::statement($updateSql);
