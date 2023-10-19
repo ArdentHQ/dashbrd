@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Enums\Chains;
-use App\Enums\Platforms;
+use App\Enums\TokenGuid;
 use App\Models\Network;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -51,30 +51,54 @@ class SyncActivityPrices extends Command
             $this->info('Updating NFT activity table...');
 
             $network = Network::firstWhere('chain_id', Chains::Polygon);
-            $ethereumGuid = Platforms::Ethereum->value;
+            $ethereumGuid = TokenGuid::Ethereum->value;
+            $polygonGuid = TokenGuid::Polygon->value;
 
             $updateSql = "
                 UPDATE nft_activity
                 SET
-                  total_native = (extra_attributes->'recipientPaid'->>'totalNative')::numeric,
-                  total_usd = (extra_attributes->'recipientPaid'->>'totalNative')::numeric *
-                              (
+                    total_usd = (extra_attributes->'recipientPaid'->>'totalNative')::numeric *
+                    (
+                        SELECT price
+                        FROM token_price_history
+                        WHERE
+                            token_guid = '{$polygonGuid}'
+                            AND currency = 'usd'
+                            AND timestamp <= nft_activity.timestamp
+                        ORDER BY timestamp DESC
+                        LIMIT 1
+                    ),
+                    total_native = (
+                        SELECT (
+                            (extra_attributes->'recipientPaid'->>'totalNative')::numeric *
+                            (
                                 SELECT price
                                 FROM token_price_history
                                 WHERE
-                                  token_guid = '{$ethereumGuid}'
-                                  AND currency = 'usd'
-                                  AND timestamp <= nft_activity.timestamp
+                                    token_guid = '{$polygonGuid}'
+                                    AND currency = 'usd'
+                                    AND timestamp <= nft_activity.timestamp
                                 ORDER BY timestamp DESC
                                 LIMIT 1
-                              )
+                            )
+                        ) / (
+                            SELECT price
+                            FROM token_price_history
+                            WHERE
+                                token_guid = '{$ethereumGuid}'
+                                AND timestamp <= nft_activity.timestamp
+                                AND currency = 'usd'
+                            ORDER BY timestamp DESC
+                            LIMIT 1
+                        )
+                    )
                 WHERE
                     nft_activity.collection_id IN (
                         SELECT collections.id
                         FROM collections
                         WHERE collections.network_id = '$network->id'
                     )
-                AND nft_activity.type = 'LABEL_SALE';
+                    AND nft_activity.type = 'LABEL_SALE';
             ";
 
             DB::statement($updateSql);
