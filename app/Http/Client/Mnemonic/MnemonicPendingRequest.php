@@ -363,7 +363,6 @@ class MnemonicPendingRequest extends PendingRequest
             // Oldest first
             'sortDirection' => 'SORT_DIRECTION_ASC',
             'contractAddress' => $contractAddress,
-            'tokenId' => $tokenId,
         ];
 
         // I cant pass the `labelsAny` filter directly to the query array because

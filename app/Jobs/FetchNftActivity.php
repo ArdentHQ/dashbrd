@@ -22,7 +22,11 @@ use Illuminate\Support\Facades\Log;
 
 class FetchNftActivity implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use RecoversFromProviderErrors;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -78,10 +82,14 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
             from: $latestActivityDate
         );
 
+        $nfts = Nft::where("collection_id", $collection->id)->get();
+
         $upsertedCount = NftActivity::upsert(
-            $nftActivity->map(function (Web3NftTransfer $activity) {
+            $nftActivity->map(function (Web3NftTransfer $activity) use ($nfts) {
+                $nft = $nfts->firstWhere("token_number", $activity->tokenId);
+
                 return [
-                    'nft_id' => $this->nft->id,
+                    'nft_id' => $nft->id,
                     'type' => $activity->type->value,
                     'sender' => $activity->sender,
                     'recipient' => $activity->recipient,
