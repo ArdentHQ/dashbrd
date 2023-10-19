@@ -61,7 +61,7 @@ it('dispatches a job for nft activities', function () {
         ]);
 
         NftActivity::factory()->create([
-            'type' => 'LABEL_TRANSFER',
+            'type' => 'LABEL_SALE',
             'timestamp' => $timestamp,
             'extra_attributes' => $extraAttributes,
             'collection_id' => $collection->id,
