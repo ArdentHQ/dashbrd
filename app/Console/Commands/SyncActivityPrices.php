@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Enums\Chains;
+use App\Enums\Platforms;
 use App\Models\Network;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +51,7 @@ class SyncActivityPrices extends Command
             $this->info('Updating NFT activity table...');
 
             $network = Network::firstWhere('chain_id', Chains::Polygon);
+            $ethereumGuid = Platforms::Ethereum->value;
 
             $updateSql = "
                 UPDATE nft_activity
@@ -60,7 +62,7 @@ class SyncActivityPrices extends Command
                                 SELECT price
                                 FROM token_price_history
                                 WHERE
-                                  token_guid = 'ethereum'
+                                  token_guid = '$ethereumGuid'
                                   AND timestamp <= nft_activity.timestamp
                                 ORDER BY timestamp DESC
                                 LIMIT 1
