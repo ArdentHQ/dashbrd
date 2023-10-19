@@ -6,7 +6,9 @@
         "logo": null,
         "thumbnail": null,
         "decimals": 2,
-        "balance": "44000"
+        "balance": "44000",
+        "possible_spam": false,
+        "verified_collection": false
     },
     {
         "token_address": "0x6b175474e89094c44da98b954eedeac495271d0f",
@@ -15,7 +17,9 @@
         "logo": "https://example.com/dai-logo.png",
         "thumbnail": "https://example.com/dai-thumbnail.png",
         "decimals": 18,
-        "balance": "20000"
+        "balance": "20000",
+        "possible_spam": false,
+        "verified_collection": false
     },
     {
         "token_address": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
@@ -24,6 +28,8 @@
         "logo": "https://example.com/aave-logo.png",
         "thumbnail": "https://example.com/aave-thumbnail.png",
         "decimals": 18,
-        "balance": "500"
+        "balance": "500",
+        "possible_spam": false,
+        "verified_collection": false
     }
 ]
