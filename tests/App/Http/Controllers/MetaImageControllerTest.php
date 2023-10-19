@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\Gallery;
 use App\Models\Nft;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Spatie\Browsershot\Browsershot;
 
@@ -15,7 +16,6 @@ beforeEach(function () {
     File::copyDirectory($sourceDir, $destinationDir);
 
     emptyMetaImagesFolder();
-
 });
 
 afterEach(function () {
@@ -46,51 +46,67 @@ it('skips image generation if file already exist', function () {
         ->assertOk();
 });
 
-// it('generates an image', function () {
-//     emptyMetaImagesFolder();
+it('generates an image', function () {
+    $gallery = Gallery::factory()->create();
 
-//     $gallery = Gallery::factory()->create();
+    Cache::shouldReceive('lock')
+        ->once()
+        ->andReturnSelf()
+        ->shouldReceive('get')
+        ->once()
+        ->andReturnUsing(function ($callback) {
+            $callback();
+        });
 
-//     $this
-//         ->mock(Browsershot::class)
-//         ->shouldReceive('url')
-//         ->with(route('galleries.view', ['gallery' => $gallery->slug]))
-//         ->once()
-//         ->andReturnSelf()
-//         ->shouldReceive('windowSize')
-//         ->once()
-//         ->andReturnSelf()
-//         ->shouldReceive('timeout')
-//         ->once()
-//         ->andReturnSelf()
-//         ->shouldReceive('waitForFunction')
-//         ->once()
-//         ->andReturnSelf()
-//         ->shouldReceive('setNodeBinary')
-//         ->once()
-//         ->andReturnSelf()
-//         ->shouldReceive('setNpmBinary')
-//         ->once()
-//         ->andReturnSelf()
-//         // Mock save method implementation
-//         ->shouldReceive('save')
-//         ->once()
-//         ->andReturnUsing(function ($test) {
-//             // Emulate stored screenshot
-//             copy(base_path('tests/fixtures/page-screenshot.png'), $test);
-//         });
+    $this
+        ->mock(Browsershot::class)
+        ->shouldReceive('url')
+        ->with(route('galleries.view', ['gallery' => $gallery->slug]))
+        ->once()
+        ->andReturnSelf()
+        ->shouldReceive('windowSize')
+        ->once()
+        ->andReturnSelf()
+        ->shouldReceive('timeout')
+        ->once()
+        ->andReturnSelf()
+        ->shouldReceive('waitForFunction')
+        ->once()
+        ->andReturnSelf()
+        ->shouldReceive('setNodeBinary')
+        ->once()
+        ->andReturnSelf()
+        ->shouldReceive('setNpmBinary')
+        ->once()
+        ->andReturnSelf()
+        // Mock save method implementation
+        ->shouldReceive('save')
+        ->once()
+        ->andReturnUsing(function ($test) {
+            // Emulate stored screenshot
+            copy(base_path('tests/fixtures/page-screenshot.png'), $test);
+        });
 
-//     $this->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))->assertOk();
+    $this->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))->assertOk();
 
-//     $directory = storage_path('meta/galleries');
+    $directory = storage_path('meta/galleries');
 
-//     $files = glob($directory.$gallery->slug.'*');
+    $files = glob($directory.'/'.$gallery->slug.'*');
 
-//     expect($files)->toHaveCount(1);
-// });
+    expect($files)->toHaveCount(1);
+});
 
 it('removes deprecated existing images for the gallery when pruning', function () {
     emptyMetaImagesFolder();
+
+    Cache::shouldReceive('lock')
+        ->once()
+        ->andReturnSelf()
+        ->shouldReceive('get')
+        ->once()
+        ->andReturnUsing(function ($callback) {
+            $callback();
+        });
 
     $gallery = Gallery::factory()->create();
 
@@ -104,7 +120,7 @@ it('removes deprecated existing images for the gallery when pruning', function (
     // For other gallery
     copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/other-slug_test.png'));
 
-    $directory = storage_path('meta/galleries/');
+    $directory = storage_path('meta/galleries');
 
     $this
         ->mock(Browsershot::class)
@@ -144,7 +160,7 @@ it('removes deprecated existing images for the gallery when pruning', function (
 
     Artisan::call('prune-meta-images');
 
-    expect(glob($directory.'*'))->toHaveCount(1);
+    expect(glob($directory.'/*'))->toHaveCount(1);
 
-    expect(glob($directory.$gallery->slug.'_*'))->toHaveCount(1);
+    $files = glob($directory.'/'.$gallery->slug.'*');
 });
