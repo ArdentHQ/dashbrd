@@ -32,6 +32,21 @@ it('should throw a custom exception when rate limited', function () {
     Moralis::getWalletTokens($wallet, $network);
 })->throws(RateLimitException::class);
 
+it('should filter tokens that are possible spam', function () {
+    $data = fixtureData('moralis.erc20');
+
+    $data[1]['possible_spam'] = true;
+
+    Moralis::fake([
+        'https://deep-index.moralis.io/api/v2/*' => Http::response($data),
+    ]);
+
+    $wallet = Wallet::factory()->create();
+    $network = Network::polygon();
+
+    expect(Moralis::getWalletTokens($wallet, $network))->toHaveCount(2);
+});
+
 it('should not retry request on 400', function () {
     Moralis::fake([
         'https://deep-index.moralis.io/api/v2/*' => Http::sequence()
