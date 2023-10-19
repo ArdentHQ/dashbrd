@@ -46,18 +46,25 @@ it('dispatches a job for nft activities', function () {
     ];
 
     $priceData = [
-        ['price' => 0, 'daysAgo' => 4],
-        ['price' => 300, 'daysAgo' => 0],
+        ['price' => 0, 'daysAgo' => 4, 'expected_native' => 0],
+        ['price' => 300, 'daysAgo' => 0, 'expected_native' => 150],
     ];
 
     foreach ($priceData as $data) {
         $timestamp = Carbon::now()->subDays($data['daysAgo']);
 
         TokenPriceHistory::factory()->create([
-            'token_guid' => 'ethereum',
+            'token_guid' => 'matic-network',
             'currency' => 'usd',
             'price' => $data['price'],
             'timestamp' => $timestamp->subHour(),
+        ]);
+
+        TokenPriceHistory::factory()->create([
+            'token_guid' => 'ethereum',
+            'currency' => 'usd',
+            'price' => '2',
+            'timestamp' => $timestamp,
         ]);
 
         NftActivity::factory()->create([
@@ -77,10 +84,11 @@ it('dispatches a job for nft activities', function () {
     expect($activities->count())->toBe(2);
 
     $activities->each(function ($activity, $index) use ($priceData) {
-        $price = (string) $priceData[$index]['price'];
+        $price = (int) $priceData[$index]['price'];
+        $expectedNative = (int) $priceData[$index]['expected_native'];
 
-        expect($activity->total_native)->toBe('1');
-        expect($activity->total_usd)->toBe($price);
+        expect((int) $activity->total_native)->toBe($expectedNative);
+        expect((int) $activity->total_usd)->toBe($price);
     });
 });
 
