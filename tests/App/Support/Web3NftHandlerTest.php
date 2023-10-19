@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3NftData;
+use App\Enums\NftInfo;
 use App\Enums\TraitDisplayType;
 use App\Models\Collection;
 use App\Models\Network;
@@ -48,6 +49,8 @@ it('trims collection names', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
+        info: null,
     );
 
     $handler->store(collect([$data]));
@@ -88,6 +91,8 @@ it('should throw an exception if no wallet or collection passed', function () {
             traits: [],
             mintedBlock: 1000,
             mintedAt: null,
+            hasError: false,
+            info: null,
         );
 
         $handler->store(nfts: collect([$data]), dispatchJobs: true);
@@ -135,6 +140,8 @@ it('should not insert traits with long values', function () {
         ],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -203,6 +210,8 @@ it('should handle null values for opensea slug', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -269,6 +278,8 @@ it('should handle opensea slugs', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -333,6 +344,8 @@ it('should not overwrite existing extra_attributes opensea data', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -409,6 +422,8 @@ it('should handle empty extra_attribute objects', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -471,6 +486,8 @@ it('should handle null value for extra_attribute', function () {
         traits: [],
         mintedBlock: 1000,
         mintedAt: null,
+        hasError: false,
+        info: null,
     );
 
     $collection = Collection::query()->create([
@@ -492,4 +509,289 @@ it('should handle null value for extra_attribute', function () {
 
     expect(Collection::count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test456');
+});
+
+it('should not update any already filled fields in DB with empty values if hasError is true', function () {
+    Bus::fake();
+
+    $handler = new Web3NftHandler();
+
+    $network = Network::firstWhere('chain_id', 1);
+
+    $token = Token::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $wallet = Wallet::factory()->create();
+
+    $handler = new Web3NftHandler(
+        network: $network,
+        wallet: $wallet,
+    );
+
+    // originalData is the data that is already in the DB
+    $now = Carbon::now();
+    $originalData = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: 'test_image',
+        collectionWebsite: 'www.test_website.com',
+        collectionDescription: 'Collection Description',
+        collectionSocials: [
+            [
+                'name' => 'twitter',
+                'url' => 'https://twitter.com/test',
+            ],
+        ],
+        collectionSupply: 3000,
+        collectionBannerImageUrl: 'test_banner',
+        collectionBannerUpdatedAt: $now,
+        collectionOpenSeaSlug: 'test456',
+        name: 'NFT Name',
+        description: 'NFT Description',
+        extraAttributes: [
+            'image' => 'test_image',
+            'website' => 'www.test_website.com',
+            'banner' => 'test_banner',
+            'banner_updated_at' => $now,
+            'opensea_slug' => 'test456',
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: false,
+        info: null,
+    );
+
+    $collection = Collection::query()->create([
+        'address' => '0x1234',
+        'network_id' => $network->id,
+        'name' => $originalData->collectionName,
+        'slug' => Str::slug($originalData->collectionName),
+        'symbol' => $originalData->collectionSymbol,
+        'minted_block' => $originalData->mintedBlock,
+        'extra_attributes' => null,
+    ]);
+
+    $handler->store(collect([$originalData]));
+    $collection->refresh();
+
+    expect(Collection::count())->toBe(1);
+
+    $dataWithError = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: 3000,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: $now,
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => $now,
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+    );
+
+    $handler->store(collect([$dataWithError]));
+    $collection->refresh();
+
+    // Expect all fields to be the same as before
+    expect(Collection::count())->toBe(1);
+    expect($collection->name)->toBe($originalData->collectionName);
+    expect($collection->slug)->toBe(Str::slug($originalData->collectionName));
+    expect($collection->symbol)->toBe($originalData->collectionSymbol);
+    expect($collection->extra_attributes[0]['image'])->toBe($originalData->collectionImage);
+    expect($collection->extra_attributes[0]['website'])->toBe($originalData->collectionWebsite);
+    expect($collection->extra_attributes[0]['banner'])->toBe($originalData->collectionBannerImageUrl);
+    expect($collection->extra_attributes[0]['opensea_slug'])->toBe($originalData->collectionOpenSeaSlug);
+    expect($collection->nfts->first()->name)->toBe($originalData->name);
+});
+
+it('should set save the error for the nft if set', function () {
+    Bus::fake();
+
+    $handler = new Web3NftHandler();
+
+    $network = Network::firstWhere('chain_id', 1);
+
+    $token = Token::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $wallet = Wallet::factory()->create();
+
+    $handler = new Web3NftHandler(
+        network: $network,
+        wallet: $wallet,
+    );
+
+    $data = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: null,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: null,
+        collectionOpenSeaSlug: 'test456',
+        name: null,
+        description: null,
+        extraAttributes: [],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: NftInfo::MetadataOutdated->value,
+    );
+
+    $collection = Collection::query()->create([
+        'address' => '0x1234',
+        'network_id' => $network->id,
+        'name' => $data->collectionName,
+        'slug' => Str::slug($data->collectionName),
+        'symbol' => $data->collectionSymbol,
+        'minted_block' => $data->mintedBlock,
+        'extra_attributes' => null,
+    ]);
+
+    $handler->store(collect([$data]));
+
+    expect($collection->nfts->first()->info)->toBe(NftInfo::MetadataOutdated->value);
+});
+
+it('should update the error field for nft', function () {
+    Bus::fake();
+
+    $handler = new Web3NftHandler();
+
+    $network = Network::firstWhere('chain_id', 1);
+
+    $token = Token::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $wallet = Wallet::factory()->create();
+
+    $handler = new Web3NftHandler(
+        network: $network,
+        wallet: $wallet,
+    );
+
+    // originalData is the data that is already in the DB
+    $now = Carbon::now();
+    $dataWithError = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: 'test_image',
+        collectionWebsite: 'www.test_website.com',
+        collectionDescription: 'Collection Description',
+        collectionSocials: [
+            [
+                'name' => 'twitter',
+                'url' => 'https://twitter.com/test',
+            ],
+        ],
+        collectionSupply: 3000,
+        collectionBannerImageUrl: 'test_banner',
+        collectionBannerUpdatedAt: $now,
+        collectionOpenSeaSlug: 'test456',
+        name: 'NFT Name',
+        description: 'NFT Description',
+        extraAttributes: [
+            'image' => 'test_image',
+            'website' => 'www.test_website.com',
+            'banner' => 'test_banner',
+            'banner_updated_at' => $now,
+            'opensea_slug' => 'test456',
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: NftInfo::MetadataOutdated->value,
+    );
+
+    $collection = Collection::query()->create([
+        'address' => '0x1234',
+        'network_id' => $network->id,
+        'name' => $dataWithError->collectionName,
+        'slug' => Str::slug($dataWithError->collectionName),
+        'symbol' => $dataWithError->collectionSymbol,
+        'minted_block' => $dataWithError->mintedBlock,
+        'extra_attributes' => null,
+    ]);
+
+    $handler->store(collect([$dataWithError]));
+    $collection->refresh();
+
+    expect(Collection::count())->toBe(1);
+    expect($collection->nfts->first()->info)->toBe(NftInfo::MetadataOutdated->value);
+
+    $dataWithNoError = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: 3000,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: $now,
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => $now,
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+    );
+
+    $handler->store(collect([$dataWithNoError]));
+    $collection->refresh();
+
+    expect(Collection::count())->toBe(1);
+    expect($collection->nfts->first()->info)->toBe(null);
 });
