@@ -8,5 +8,5 @@ export interface GalleryFormSliderProperties {
     isOpen: boolean;
     onClose: () => void;
     galleryCoverUrl?: string;
-    onSaveCoverUrl?: ({ blob, imageDataURI }: { blob?: Blob; imageDataURI?: string }) => void;
+    onSaveCoverUrl?: ({ blob, imageDataURI }: { blob?: File; imageDataURI?: string }) => void;
 }
