@@ -132,6 +132,7 @@ return [
     'empty_transactions' => "You don't have any transactions yet. Once transactions have been made, they will show up here.",
     'error' => 'Error',
     'refresh_metadata' => 'Refresh Metadata',
+    'refresh' => 'Refresh',
     'refreshing_metadata' => 'Refreshing Metadata... Please check back later.',
     'pending_confirmation' => 'Pending Confirmation',
     'confirmed_transaction' => 'Confirmed Transaction',

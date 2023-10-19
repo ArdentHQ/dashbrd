@@ -94,17 +94,37 @@ export const CollectionNavigation = ({
                                 {t("pages.collections.menu.collection")}
                             </CollectionNavigationTab>
 
-                            <CollectionNavigationTab
-                                icon="HeartbeatInCircle"
-                                disabled
-                            >
+                            <CollectionNavigationTab icon="HeartbeatInCircle">
                                 {t("pages.collections.menu.activity")}
                             </CollectionNavigationTab>
                         </Tabs>
                     </div>
+
+                    {selectedTab === "activity" && (
+                        <div className="py-1">
+                            <Button
+                                icon="Refresh"
+                                variant="secondary"
+                                className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
+                            >
+                                {t("common.refresh")}
+                            </Button>
+                        </div>
+                    )}
                 </Tab.List>
             </div>
 
+            {selectedTab === "activity" && (
+                <div className="mt-6">
+                    <Button
+                        icon="Refresh"
+                        variant="secondary"
+                        className=" block w-full bg-theme-secondary-100 text-theme-primary-900 sm:hidden"
+                    >
+                        {t("common.refresh")}
+                    </Button>
+                </div>
+            )}
             <Tab.Panels>{children}</Tab.Panels>
         </Tab.Group>
     );
