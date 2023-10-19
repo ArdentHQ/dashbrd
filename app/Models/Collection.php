@@ -248,19 +248,23 @@ class Collection extends Model
     }
 
     /**
-     * Caller of this method should ensure that rows are grouped by `collections.id`
-     *
      * @param  Builder<self>  $query
      * @param  'asc'|'desc'  $direction
      * @return Builder<self>
      */
     public function scopeOrderByReceivedDate(Builder $query, Wallet $wallet, string $direction): Builder
     {
+        // this is to ensure that `addSelect` doesn't override the `select collections.*`
+        if (is_null($query->getQuery()->columns)) {
+            $query->select($this->qualifyColumn('*'));
+        }
+
         $query->leftJoin('nft_activity', function (JoinClause $join) use ($wallet) {
             $join->on('nft_activity.collection_id', '=', 'collections.id')
                 ->where('nft_activity.recipient', '=', $wallet->address);
         })
-            ->addSelect(DB::raw('MAX(nft_activity.timestamp) as received_at'));
+            ->addSelect(DB::raw('MAX(nft_activity.timestamp) as received_at'))
+            ->groupBy('collections.id');
 
         if ($direction === 'asc') {
             return $query->orderByRaw('received_at ASC NULLS FIRST');
