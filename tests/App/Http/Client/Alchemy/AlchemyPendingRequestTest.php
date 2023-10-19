@@ -158,7 +158,7 @@ it('should filter nfts with errors by default', function () {
     expect($fetchedNfts->nfts)->toHaveCount(0);
 });
 
-it('should return error field with METADATA_OUTATED if metadata object is empty', function () {
+it('should return error field with METADATA_OUTDATED if metadata object is empty', function () {
     Alchemy::fake([
         'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::sequence()
             ->push(fixtureData('alchemy.nfts_array_with_error_and_empty_metadata_object'), 200),
