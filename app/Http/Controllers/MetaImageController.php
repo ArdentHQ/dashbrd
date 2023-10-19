@@ -30,8 +30,6 @@ class MetaImageController extends Controller
             if ($this->shouldGenerateMetaImage($imagePath)) {
                 $screenshotPath = $this->takeScreenshot($gallery);
 
-                $this->removeExistingImages($gallery);
-
                 $this->storeMetaImage($imagePath, $screenshotPath);
             }
         });
@@ -51,11 +49,9 @@ class MetaImageController extends Controller
     {
         $parts[] = $gallery->nfts()->orderByPivot('order_index', 'asc')->limit(4)->pluck('id')->join('.');
 
-        $parts[] = $gallery->nfts()->count();
-
         $parts[] = $gallery->name;
 
-        return $gallery->slug.'_meta_'.md5(implode('_', $parts));
+        return $gallery->slug.'_'.md5(implode('_', $parts));
     }
 
     private function takeScreenshot(Gallery $gallery): string
@@ -82,20 +78,6 @@ class MetaImageController extends Controller
         $image->width(1006)->crop(Manipulations::CROP_TOP, 1006, 373);
 
         $image->save($screenshotPath);
-    }
-
-    private function removeExistingImages(Gallery $gallery): void
-    {
-        $directory = storage_path(sprintf('meta/galleries/'));
-
-        /**
-         * @var string[] $files
-         */
-        $files = glob($directory.$gallery->slug.'_meta_*');
-
-        foreach ($files as $file) {
-            unlink($file);
-        }
     }
 
     private function storeMetaImage(string $imagePath, string $screenshotPath): string
