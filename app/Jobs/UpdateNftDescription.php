@@ -9,6 +9,7 @@ use App\Models\Network;
 use App\Models\Nft;
 use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Support\Web3NftHandler;
+use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -62,7 +63,7 @@ class UpdateNftDescription implements ShouldBeUnique, ShouldQueue
 
         $result = $provider->getNftMetadata($nfts, $this->network);
 
-        (new Web3NftHandler(network: $this->network))->store($result->nfts);
+        (new Web3NftHandler(network: $this->network))->store($result->nfts, dispatchJobs: false);
 
         $lastId = $nfts->sortByDesc('id')->first()->id;
 
@@ -72,5 +73,10 @@ class UpdateNftDescription implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return static::class.':'.$this->startId.':'.$this->network->id;
+    }
+
+    public function retryUntil(): DateTime
+    {
+        return now()->addMinutes(20);
     }
 }

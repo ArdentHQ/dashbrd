@@ -169,9 +169,11 @@ class Web3NftHandler
         });
 
         if (Feature::active(Features::Collections->value)) {
-            $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
-                DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
-            });
+            if ($dispatchJobs) {
+                $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
+                    DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
+                });
+            }
 
             // Passing an empty array means we update all collections which is undesired here.
             if (! $ids->isEmpty()) {
