@@ -29,7 +29,17 @@ export const useAuthorizedAction = (): {
             return;
         }
 
-        await action({ authenticated });
+        try {
+            await action({ authenticated });
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                const { status } = error.response ?? {};
+
+                if ([403, 401, 419].includes(status ?? 0)) {
+                    await showConnectOverlay(onAction);
+                }
+            }
+        }
     };
 
     const signedAction = async (action: SignedActionAction): Promise<void> => {

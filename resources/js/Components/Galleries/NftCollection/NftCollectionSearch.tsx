@@ -7,6 +7,7 @@ import { useGalleryNftsContext } from "@/Components/Galleries/Hooks/useGalleryNf
 import { useNftSelectableContext } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { NftCollections } from "@/Components/Galleries/NftCollection/NftCollections";
 import { LoadingBlock } from "@/Components/LoadingBlock/LoadingBlock";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useDebounce } from "@/Hooks/useDebounce";
 
 const debounceTimeout = 400;
@@ -15,6 +16,8 @@ export const NftCollectionSearch = (): JSX.Element => {
     const { t } = useTranslation();
     const { clearSelection } = useNftSelectableContext();
     const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const { authenticatedAction } = useAuthorizedAction();
 
     const {
         remainingCollectionCount,
@@ -40,7 +43,10 @@ export const NftCollectionSearch = (): JSX.Element => {
     const remainingCollections = remainingCollectionCount();
 
     useEffect(() => {
-        void searchNfts(debouncedQuery);
+        void authenticatedAction(async () => {
+            console.log("D");
+            await searchNfts(debouncedQuery);
+        });
     }, [debouncedQuery]);
 
     return (
