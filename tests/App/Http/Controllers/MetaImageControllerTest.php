@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Models\Gallery;
+use App\Models\Nft;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Spatie\Browsershot\Browsershot;
 
@@ -39,7 +41,7 @@ it('skips image generation if file already exist', function () {
     ]);
 
     // md5 hash hardcoded here, comes from gallery name and amount and order of nfts (zero in this case)
-    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/test-gallery_meta_322d55e3faec28077221c1c01b69a30f.png'));
+    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/test-gallery_322d55e3faec28077221c1c01b69a30f.png'));
 
     $this
         ->mock(Browsershot::class)
@@ -94,16 +96,20 @@ it('generates an image', function () {
     expect($files)->toHaveCount(1);
 });
 
-it('removes any existing image for the same gallery', function () {
+it('removes deprecated existing images for the gallery when pruning', function () {
     emptyMetaImagesFolder();
 
     $gallery = Gallery::factory()->create();
 
+    $nft = Nft::factory()->create();
+
+    $gallery->nfts()->attach($nft, ['order_index' => 0]);
+
     // Pre-existing image
-    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/'.$gallery->slug.'_meta_test.png'));
+    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/'.$gallery->slug.'_test.png'));
 
     // For other gallery
-    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/other-slug_meta_test.png'));
+    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/other-slug_test.png'));
 
     $directory = storage_path('meta/galleries/');
 
@@ -141,61 +147,11 @@ it('removes any existing image for the same gallery', function () {
 
     $directory = storage_path('meta/galleries/');
 
-    expect(glob($directory.$gallery->slug.'_meta_*'))->toHaveCount(1);
+    expect(glob($directory.'*'))->toHaveCount(3);
 
-    expect(glob($directory.'other-slug_meta_test.png'))->toHaveCount(1);
-});
+    Artisan::call('prune-meta-images');
 
-it('does not remove existing image for the other gallery with similar slug', function () {
-    emptyMetaImagesFolder();
+    expect(glob($directory.'*'))->toHaveCount(1);
 
-    $gallery = Gallery::factory()->create();
-
-    // Pre-existing image
-    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/'.$gallery->slug.'_meta_test.png'));
-
-    // For other gallery
-    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/'.$gallery->slug.'-similar_meta_test.png'));
-
-    $directory = storage_path('meta/galleries/');
-
-    $this
-        ->mock(Browsershot::class)
-        ->shouldReceive('url')
-        ->with(route('galleries.view', ['gallery' => $gallery->slug]))
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('windowSize')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('timeout')
-        ->with(60)
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('waitForFunction')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('setNodeBinary')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('setNpmBinary')
-        ->once()
-        ->andReturnSelf()
-        // Mock save method implementation
-        ->shouldReceive('save')
-        ->once()
-        ->andReturnUsing(function ($test) {
-            // Emulate stored screenshot
-            copy(base_path('tests/fixtures/page-screenshot.png'), $test);
-        });
-
-    $this->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))->assertOk();
-
-    $directory = storage_path('meta/galleries/');
-
-    expect(glob($directory.$gallery->slug.'*'))->toHaveCount(2);
-
-    expect(glob($directory.$gallery->slug.'_meta_test.png'))->toHaveCount(0);
-
-    expect(glob($directory.$gallery->slug.'-similar*'))->toHaveCount(1);
+    expect(glob($directory.$gallery->slug.'_*'))->toHaveCount(1);
 });

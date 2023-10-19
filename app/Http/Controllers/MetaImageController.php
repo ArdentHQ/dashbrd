@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MetaImageController extends Controller
 {
-    const BROWSER_SHOT_TIMEOUT = 60;
-
     public function __invoke(Gallery $gallery): BinaryFileResponse
     {
         $imagePath = $this->getImagePath($gallery);
