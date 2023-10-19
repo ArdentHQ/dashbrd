@@ -366,7 +366,7 @@ class AlchemyPendingRequest extends PendingRequest
     public function parseNft(array $nft, int $networkId, bool $convertTokenNumber = true): Web3NftData
     {
         $extractedFloorPrice = $this->tryExtractFloorPrice($nft);
-        $collectionName = $this->collectionName($nft) ?? Arr::get($nft, 'contractMetadata.symbol');
+        $collectionName = $this->collectionName($nft);
         $description = $nft['description'] ?? null;
         $supply = Arr::get($nft, 'contractMetadata.totalSupply');
         if (is_numeric($supply)) {
