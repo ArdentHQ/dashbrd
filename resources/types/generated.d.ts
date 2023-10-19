@@ -515,4 +515,5 @@ declare namespace App.Enums {
     export type Chains = 1 | 5 | 137 | 80001;
     export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER";
     export type Platforms = "ethereum" | "polygon-pos";
+    export type TokenGuid = "ethereum" | "matic-network";
 }
