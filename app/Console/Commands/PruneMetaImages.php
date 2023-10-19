@@ -30,8 +30,6 @@ class PruneMetaImages extends Command
     {
         $validImages = array_map(fn ($item) => $item->image_name, DB::select(get_query('gallery.get_meta_images')));
 
-        info($validImages);
-
         $directory = storage_path(sprintf('meta/galleries/'));
 
         if (is_dir($directory)) {
