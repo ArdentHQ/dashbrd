@@ -5,7 +5,7 @@ import { ArticleShare } from "./Components/ArticleShare";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { ArticlesGridScrollable } from "@/Pages/Collections/Components/Articles/ArticlesGridScrollable";
+import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
 
 interface Properties {
     article: App.Data.Articles.ArticleData;
@@ -80,7 +80,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
             </article>
         </div>
 
-        {popularArticles.length > 0 && <ArticlesGridScrollable articles={popularArticles} />}
+        {popularArticles.length > 0 && <ArticlesScroll articles={popularArticles} />}
     </DefaultLayout>
 );
 
