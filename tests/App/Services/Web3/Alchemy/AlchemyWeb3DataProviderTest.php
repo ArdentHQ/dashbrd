@@ -149,9 +149,9 @@ it('should getWalletNfts', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(90)
+        ->and($tokens)->toHaveCount(94)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
-        ->and($tokens[0]->tokenAddress)->toBe('0x0b7600ca77fc257fe7eb432f87825cccc4590037')
+        ->and($tokens[0]->tokenAddress)->toBe('0x0631cc561618ee4fa142e502c5f5ab9fcc2aa90c')
         ->and($tokens[2]->floorPrice)
         ->toBeInstanceOf(Web3NftCollectionFloorPrice::class)
         ->and($tokens[2]->floorPrice->price)->toEqual('3000000000000000')
@@ -463,8 +463,8 @@ it('should filter out nfts', function () {
     $provider = new AlchemyWeb3DataProvider();
     $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
 
-    expect($nfts)->toHaveCount(5)
-        ->and($nfts->first()->name)->toBeNull()
+    expect($nfts)->toHaveCount(6)
+        ->and($nfts->first()->name)->not->toBeNull()
         ->and($nfts->last()->name)->toEqual('OK OpenSea fallback');
 });
 
