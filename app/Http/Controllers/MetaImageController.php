@@ -24,7 +24,7 @@ class MetaImageController extends Controller
 
     private function generateMetaImage(Gallery $gallery, string $imagePath): void
     {
-        Cache::lock($gallery->slug.'_meta_image', config('dashbrd.browsershot.timeout') + 15)->get(function () use ($gallery, $imagePath) {
+        Cache::lock($gallery->slug.'_meta_image', ((int) config('dashbrd.browsershot.timeout')) + 15)->get(function () use ($gallery, $imagePath) {
             if ($this->shouldGenerateMetaImage($imagePath)) {
                 $screenshotPath = $this->takeScreenshot($gallery);
 
@@ -61,7 +61,7 @@ class MetaImageController extends Controller
 
         app(Browsershot::class)->url(route('galleries.view', ['gallery' => $gallery->slug]))
             ->windowSize(1480, 768)
-            ->timeout(config('dashbrd.browsershot.timeout'))
+            ->timeout((int) config('dashbrd.browsershot.timeout'))
             ->waitForFunction("document.querySelectorAll('[data-testid=GalleryNfts__nft]').length > 0 && Array.from(document.querySelectorAll('[data-testid=GalleryNfts__nft]')).slice(0, 4).every(el => ! el.querySelector('[data-testid=Skeleton]'))")
             ->setNodeBinary(config('dashbrd.browsershot.node_binary'))
             ->setNpmBinary(config('dashbrd.browsershot.npm_binary'))
