@@ -43,6 +43,9 @@ class MetaImageController extends Controller
         return storage_path(sprintf('meta/galleries/%s.png', $this->getImageName($gallery)));
     }
 
+    /**
+     * IMPORTANT: Ensure this method is in sync with the query in `queries/gallery.get_meta_images.sql`
+     */
     private function getImageName(Gallery $gallery): string
     {
         $parts[] = $gallery->nfts()->orderByPivot('order_index', 'asc')->limit(4)->pluck('id')->join('.');

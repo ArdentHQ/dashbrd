@@ -41,7 +41,7 @@ it('skips image generation if file already exist', function () {
     ]);
 
     // md5 hash hardcoded here, comes from gallery name and amount and order of nfts (zero in this case)
-    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/test-gallery_322d55e3faec28077221c1c01b69a30f.png'));
+    copy(base_path('tests/fixtures/page-screenshot.png'), storage_path('meta/galleries/test-gallery_2d84f6a1884d56f30d33675aeeaa2aab.png'));
 
     $this
         ->mock(Browsershot::class)
