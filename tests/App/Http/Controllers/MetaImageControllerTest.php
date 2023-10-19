@@ -13,6 +13,8 @@ beforeEach(function () {
     $destinationDir = storage_path('tmp/galleries');
 
     File::copyDirectory($sourceDir, $destinationDir);
+
+    emptyMetaImagesFolder();
 });
 
 afterEach(function () {
@@ -24,18 +26,7 @@ afterEach(function () {
     File::deleteDirectory($sourceDir);
 });
 
-function emptyMetaImagesFolder(): void
-{
-    $metaImagesDir = storage_path('meta/galleries');
-
-    File::deleteDirectory($metaImagesDir);
-
-    File::makeDirectory($metaImagesDir);
-}
-
 it('skips image generation if file already exist', function () {
-    emptyMetaImagesFolder();
-
     $gallery = Gallery::factory()->create([
         'name' => 'Test Gallery',
     ]);
@@ -53,8 +44,6 @@ it('skips image generation if file already exist', function () {
 });
 
 it('generates an image', function () {
-    emptyMetaImagesFolder();
-
     $gallery = Gallery::factory()->create();
 
     $this
@@ -97,8 +86,6 @@ it('generates an image', function () {
 });
 
 it('removes deprecated existing images for the gallery when pruning', function () {
-    emptyMetaImagesFolder();
-
     $gallery = Gallery::factory()->create();
 
     $nft = Nft::factory()->create();
