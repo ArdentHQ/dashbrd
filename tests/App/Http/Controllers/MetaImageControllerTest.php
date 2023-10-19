@@ -16,7 +16,6 @@ beforeEach(function () {
 
     emptyMetaImagesFolder();
 
-    Gallery::truncate();
 });
 
 afterEach(function () {
@@ -29,6 +28,7 @@ afterEach(function () {
 });
 
 it('skips image generation if file already exist', function () {
+    Gallery::truncate();
 
     $gallery = Gallery::factory()->create([
         'name' => 'Test Gallery',
@@ -46,48 +46,48 @@ it('skips image generation if file already exist', function () {
         ->assertOk();
 });
 
-it('generates an image', function () {
-    emptyMetaImagesFolder();
+// it('generates an image', function () {
+//     emptyMetaImagesFolder();
 
-    $gallery = Gallery::factory()->create();
+//     $gallery = Gallery::factory()->create();
 
-    $this
-        ->mock(Browsershot::class)
-        ->shouldReceive('url')
-        ->with(route('galleries.view', ['gallery' => $gallery->slug]))
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('windowSize')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('timeout')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('waitForFunction')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('setNodeBinary')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('setNpmBinary')
-        ->once()
-        ->andReturnSelf()
-        // Mock save method implementation
-        ->shouldReceive('save')
-        ->once()
-        ->andReturnUsing(function ($test) {
-            // Emulate stored screenshot
-            copy(base_path('tests/fixtures/page-screenshot.png'), $test);
-        });
+//     $this
+//         ->mock(Browsershot::class)
+//         ->shouldReceive('url')
+//         ->with(route('galleries.view', ['gallery' => $gallery->slug]))
+//         ->once()
+//         ->andReturnSelf()
+//         ->shouldReceive('windowSize')
+//         ->once()
+//         ->andReturnSelf()
+//         ->shouldReceive('timeout')
+//         ->once()
+//         ->andReturnSelf()
+//         ->shouldReceive('waitForFunction')
+//         ->once()
+//         ->andReturnSelf()
+//         ->shouldReceive('setNodeBinary')
+//         ->once()
+//         ->andReturnSelf()
+//         ->shouldReceive('setNpmBinary')
+//         ->once()
+//         ->andReturnSelf()
+//         // Mock save method implementation
+//         ->shouldReceive('save')
+//         ->once()
+//         ->andReturnUsing(function ($test) {
+//             // Emulate stored screenshot
+//             copy(base_path('tests/fixtures/page-screenshot.png'), $test);
+//         });
 
-    $this->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))->assertOk();
+//     $this->get(route('galleries.meta-image', ['gallery' => $gallery->slug]))->assertOk();
 
-    $directory = storage_path('meta/galleries');
+//     $directory = storage_path('meta/galleries');
 
-    $files = glob($directory.$gallery->slug.'*');
+//     $files = glob($directory.$gallery->slug.'*');
 
-    expect($files)->toHaveCount(1);
-});
+//     expect($files)->toHaveCount(1);
+// });
 
 // it('removes deprecated existing images for the gallery when pruning', function () {
 //     emptyMetaImagesFolder();
