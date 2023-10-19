@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -253,19 +254,17 @@ class Collection extends Model
      */
     public function scopeOrderByReceivedDate(Builder $query, Wallet $wallet, string $direction): Builder
     {
-        $select = sprintf("SELECT timestamp
-            FROM nft_activity
-            WHERE nft_activity.collection_id = collections.id
-            AND recipient = '%s'
-            ORDER BY timestamp desc
-            LIMIT 1
-        ", $wallet->address);
+        $query->leftJoin('nft_activity',  function (JoinClause $join) use ($wallet) {
+            $join->on('nft_activity.collection_id', '=', 'collections.id')
+                ->where('nft_activity.recipient', '=', $wallet->address);
+            })
+            ->addSelect(DB::raw('MAX(nft_activity.timestamp) as received_at'));
 
         if ($direction === 'asc') {
-            return $query->orderByRaw(sprintf('(%s) ASC NULLS FIRST', $select));
+            return $query->orderByRaw('received_at ASC NULLS FIRST');
         }
 
-        return $query->orderByRaw(sprintf('(%s) DESC NULLS LAST', $select));
+        return $query->orderByRaw('received_at DESC NULLS LAST');
     }
 
     /**
