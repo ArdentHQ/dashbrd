@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Gallery;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Image\Image;
 use Spatie\Image\Manipulations;
@@ -12,19 +13,33 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MetaImageController extends Controller
 {
+    const BROWSER_SHOT_TIMEOUT = 60;
+
     public function __invoke(Gallery $gallery): BinaryFileResponse
     {
         $imagePath = $this->getImagePath($gallery);
 
-        if (! file_exists($imagePath)) {
-            $screenshotPath = $this->takeScreenshot($gallery);
-
-            $this->removeExistingImages($gallery);
-
-            $this->storeMetaImage($imagePath, $screenshotPath);
-        }
+        $this->generateMetaImage($gallery, $imagePath);
 
         return response()->file($imagePath);
+    }
+
+    private function generateMetaImage(Gallery $gallery, string $imagePath): void
+    {
+        Cache::lock($gallery->slug.'_meta_image', config('dashbrd.browsershot.timeout') + 15)->get(function () use ($gallery, $imagePath) {
+            if ($this->shouldGenerateMetaImage($imagePath)) {
+                $screenshotPath = $this->takeScreenshot($gallery);
+
+                $this->removeExistingImages($gallery);
+
+                $this->storeMetaImage($imagePath, $screenshotPath);
+            }
+        });
+    }
+
+    private function shouldGenerateMetaImage(string $imagePath): bool
+    {
+        return ! file_exists($imagePath);
     }
 
     private function getImagePath(Gallery $gallery): string
@@ -49,6 +64,7 @@ class MetaImageController extends Controller
 
         app(Browsershot::class)->url(route('galleries.view', ['gallery' => $gallery->slug]))
             ->windowSize(1480, 768)
+            ->timeout(config('dashbrd.browsershot.timeout'))
             ->waitForFunction("document.querySelectorAll('[data-testid=GalleryNfts__nft]').length > 0 && Array.from(document.querySelectorAll('[data-testid=GalleryNfts__nft]')).slice(0, 4).every(el => ! el.querySelector('[data-testid=Skeleton]'))")
             ->setNodeBinary(config('dashbrd.browsershot.node_binary'))
             ->setNpmBinary(config('dashbrd.browsershot.npm_binary'))
