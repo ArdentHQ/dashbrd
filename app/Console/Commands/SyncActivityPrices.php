@@ -62,7 +62,7 @@ class SyncActivityPrices extends Command
                                 SELECT price
                                 FROM token_price_history
                                 WHERE
-                                  token_guid = '$ethereumGuid'
+                                  token_guid = '{$ethereumGuid}'
                                   AND timestamp <= nft_activity.timestamp
                                 ORDER BY timestamp DESC
                                 LIMIT 1
