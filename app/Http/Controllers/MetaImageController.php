@@ -40,7 +40,7 @@ class MetaImageController extends Controller
 
         $parts[] = $gallery->name;
 
-        return $gallery->slug.'_'.md5(implode('_', $parts));
+        return $gallery->slug.'_meta_'.md5(implode('_', $parts));
     }
 
     private function takeScreenshot(Gallery $gallery): string
@@ -75,7 +75,7 @@ class MetaImageController extends Controller
         /**
          * @var string[] $files
          */
-        $files = glob($directory.$gallery->slug.'*');
+        $files = glob($directory.$gallery->slug.'_meta_*');
 
         foreach ($files as $file) {
             unlink($file);
