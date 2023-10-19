@@ -255,7 +255,7 @@ class Collection extends Model
     public function scopeOrderByReceivedDate(Builder $query, Wallet $wallet, string $direction): Builder
     {
         // this is to ensure that `addSelect` doesn't override the `select collections.*`
-        if (is_null($query->getQuery()->columns)) {
+        if (empty($query->getQuery()->columns)) {
             $query->select($this->qualifyColumn('*'));
         }
 
@@ -416,7 +416,7 @@ class Collection extends Model
             DB::raw(sprintf($extraAttributeSelect, 'opensea_slug', 'opensea_slug').' as opensea_slug'),
             // gets the website url with the same logic used on the `website` method
             DB::raw(sprintf('COALESCE(%s, CONCAT(networks.explorer_url, \'%s\', collections.address)) as website', sprintf($extraAttributeSelect, 'website', 'website'), '/token/')),
-            DB::raw('COUNT(nfts.id) as nfts_count'),
+            DB::raw('COUNT(DISTINCT nfts.id) as nfts_count'),
         ])->join(
             'networks',
             'networks.id',
