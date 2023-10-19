@@ -248,6 +248,8 @@ class Collection extends Model
     }
 
     /**
+     * Caller of this method should ensure that rows are grouped by `collections.id`
+     *
      * @param  Builder<self>  $query
      * @param  'asc'|'desc'  $direction
      * @return Builder<self>
