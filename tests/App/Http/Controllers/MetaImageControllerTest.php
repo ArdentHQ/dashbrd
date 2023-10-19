@@ -27,6 +27,8 @@ afterEach(function () {
 });
 
 it('skips image generation if file already exist', function () {
+    Gallery::truncate();
+
     $gallery = Gallery::factory()->create([
         'name' => 'Test Gallery',
     ]);

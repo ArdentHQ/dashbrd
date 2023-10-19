@@ -13,6 +13,7 @@ beforeEach(function () {
     File::copyDirectory($sourceDir, $destinationDir);
 
     emptyMetaImagesFolder();
+
 });
 
 afterEach(function () {
@@ -26,6 +27,10 @@ afterEach(function () {
 
 it('removes the images that doesnt not belong to any gallery', function () {
     $directory = storage_path(sprintf('meta/galleries/'));
+
+    Gallery::truncate();
+
+    Nft::truncate();
 
     $gallery = Gallery::factory()->create([
         'name' => 'my gallery',
