@@ -43,10 +43,7 @@ export const NftCollectionSearch = (): JSX.Element => {
     const remainingCollections = remainingCollectionCount();
 
     useEffect(() => {
-        void authenticatedAction(async () => {
-            console.log("D");
-            await searchNfts(debouncedQuery);
-        });
+        void searchNfts(debouncedQuery);
     }, [debouncedQuery]);
 
     return (
