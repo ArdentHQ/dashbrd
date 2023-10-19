@@ -2,6 +2,7 @@ import { ArticleAuthor } from "./Components/ArticleAuthor";
 import { ArticleCopy } from "./Components/ArticleCopy";
 import { ArticleDate } from "./Components/ArticleDate";
 import { ArticleShare } from "./Components/ArticleShare";
+import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
@@ -72,6 +73,12 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                 </div>
             </div>
         </article>
+        <div className="px-6 pt-6 sm:px-8 md:px-24 md:pt-3 lg:px-8 2xl:px-0">
+            <FeaturedCollectionsBanner
+                collections={article.featuredCollections}
+                subTitleKey="pages.articles.consists_of_collections"
+            />
+        </div>
     </DefaultLayout>
 );
 

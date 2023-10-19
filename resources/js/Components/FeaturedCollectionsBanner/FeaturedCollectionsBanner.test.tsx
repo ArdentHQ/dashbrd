@@ -27,6 +27,19 @@ describe("FeaturedCollectionsBanner", () => {
         expect(screen.queryByTestId("CollectionCarousel__entry--1")).not.toBeInTheDocument();
     });
 
+    it("should render with the given subtitle", () => {
+        const collections = new NFTCollectionFactory().withImage().createMany(1);
+
+        render(
+            <FeaturedCollectionsBanner
+                collections={collections}
+                subTitleKey="pages.articles.consists_of_collections"
+            />,
+        );
+
+        expect(screen.getByText("This article consists of 1 collection")).toBeInTheDocument();
+    });
+
     it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {
         render(<FeaturedCollectionsBanner collections={[]} />, { breakpoint });
 
