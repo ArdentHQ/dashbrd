@@ -5,12 +5,12 @@ declare(strict_types=1);
 use App\Models\Gallery;
 use App\Models\Nft;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Spatie\Browsershot\Browsershot;
 
 beforeEach(function () {
     $sourceDir = storage_path('meta/galleries');
+
     $destinationDir = storage_path('tmp/galleries');
 
     File::copyDirectory($sourceDir, $destinationDir);
@@ -20,6 +20,7 @@ beforeEach(function () {
 
 afterEach(function () {
     $sourceDir = storage_path('tmp/galleries');
+
     $destinationDir = storage_path('meta/galleries');
 
     File::copyDirectory($sourceDir, $destinationDir);
@@ -48,15 +49,6 @@ it('skips image generation if file already exist', function () {
 
 it('generates an image', function () {
     $gallery = Gallery::factory()->create();
-
-    Cache::shouldReceive('lock')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('get')
-        ->once()
-        ->andReturnUsing(function ($callback) {
-            $callback();
-        });
 
     $this
         ->mock(Browsershot::class)
@@ -97,17 +89,6 @@ it('generates an image', function () {
 });
 
 it('removes deprecated existing images for the gallery when pruning', function () {
-    emptyMetaImagesFolder();
-
-    Cache::shouldReceive('lock')
-        ->once()
-        ->andReturnSelf()
-        ->shouldReceive('get')
-        ->once()
-        ->andReturnUsing(function ($callback) {
-            $callback();
-        });
-
     $gallery = Gallery::factory()->create();
 
     $nft = Nft::factory()->create();
@@ -161,6 +142,4 @@ it('removes deprecated existing images for the gallery when pruning', function (
     Artisan::call('prune-meta-images');
 
     expect(glob($directory.'/*'))->toHaveCount(1);
-
-    $files = glob($directory.'/'.$gallery->slug.'*');
 });
