@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 it('dispatches a job for nft activities', function () {
     Carbon::setTestNow(Carbon::now()->startOfYear());
 
-    $network = Network::query()->find(1) ?? Network::factory()->create(['id' => 1, 'chain_id' => 137]);
+    $network = Network::query()->find(1) ?? Network::factory()->create(['chain_id' => 137]);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
