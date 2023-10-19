@@ -43,6 +43,7 @@ class PruneMetaImages extends Command
                         unlink($directory.$file);
                     }
                 }
+
                 // Close directory handle
                 closedir($handle);
             }
