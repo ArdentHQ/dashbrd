@@ -63,6 +63,7 @@ class SyncActivityPrices extends Command
                                 FROM token_price_history
                                 WHERE
                                   token_guid = '{$ethereumGuid}'
+                                  AND currency = 'usd'
                                   AND timestamp <= nft_activity.timestamp
                                 ORDER BY timestamp DESC
                                 LIMIT 1
@@ -72,7 +73,8 @@ class SyncActivityPrices extends Command
                         SELECT collections.id
                         FROM collections
                         WHERE collections.network_id = '$network->id'
-                    );
+                    )
+                AND nft_activity.type = 'LABEL_SALE';
             ";
 
             DB::statement($updateSql);
