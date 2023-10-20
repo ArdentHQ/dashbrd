@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const useGalleryCarousel = (): { slidesPerView: number; horizontalOffset: number } => {
+export const useCarousel = (): { slidesPerView: number; horizontalOffset: number } => {
     const { is2Xs, isXs, isSm, isMd, isMdLg, isLg, isLgAndAbove } = useBreakpoint();
 
     const slidesPerView = useMemo(() => {
