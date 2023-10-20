@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 import { GalleriesHeading } from "./Components/GalleriesHeading";
 import GalleryGuestBanner from "./Components/GalleryGuestBanner";
 import { GallerySkeleton } from "./Components/GallerySkeleton/GallerySkeleton";
-import { useGalleryCarousel } from "./hooks/use-gallery-carousel";
 import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useCarousel } from "@/Hooks/useCarousel";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface Properties {
@@ -31,7 +31,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const { initialized, connecting } = useMetaMaskContext();
 
     const { props } = usePage();
-    const { slidesPerView, horizontalOffset } = useGalleryCarousel();
+    const { slidesPerView, horizontalOffset } = useCarousel();
 
     const [galleries, setGalleries] = useState<Galleries>();
 

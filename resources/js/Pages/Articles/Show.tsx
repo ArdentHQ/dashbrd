@@ -8,8 +8,14 @@ import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { tp } from "@/Utils/TranslatePlural";
 import { useTranslation } from "react-i18next";
+import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
 
-const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
+interface Properties {
+    article: App.Data.Articles.ArticleData;
+    popularArticles: App.Data.Articles.ArticleData[];
+}
+
+const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -86,6 +92,8 @@ const ArticlesShow = ({ article }: { article: App.Data.Articles.ArticleData }): 
                     })}
                 />
             </div>
+
+            {popularArticles.length > 0 && <ArticlesScroll articles={popularArticles} />}
         </DefaultLayout>
     );
 };

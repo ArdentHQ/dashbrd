@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { Context as ResponsiveContext } from "react-responsive";
-import { useGalleryCarousel } from "./use-gallery-carousel";
+import { useCarousel } from "./useCarousel";
 
-describe("use-gallery-carousel", () => {
+describe("useCarousel", () => {
     it.each([
         [
             375,
@@ -48,7 +48,7 @@ describe("use-gallery-carousel", () => {
         ],
     ])("should render for breakpoint %d", (width, expectations) => {
         const Component = (): JSX.Element => {
-            const { slidesPerView, horizontalOffset } = useGalleryCarousel();
+            const { slidesPerView, horizontalOffset } = useCarousel();
 
             return (
                 <div>

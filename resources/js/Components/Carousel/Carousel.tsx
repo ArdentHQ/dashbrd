@@ -13,8 +13,8 @@ import { Link } from "@/Components/Link";
 
 export { SwiperSlide as CarouselItem } from "swiper/react";
 
-interface CarouselProperties extends ComponentProps<typeof Swiper> {
-    title?: string;
+interface CarouselProperties extends Omit<ComponentProps<typeof Swiper>, "title"> {
+    title?: string | React.ReactNode;
     carouselKey?: string;
     grid?: GridOptions;
     slidesPerView?: number | "auto";
@@ -24,14 +24,16 @@ interface CarouselProperties extends ComponentProps<typeof Swiper> {
     viewAllPath?: string;
     shouldShowHeader?: boolean;
     disabled?: boolean;
+    navigationClass?: string;
 }
 
 export const CarouselControls = ({
     className,
     carouselKey,
-    viewAllPath = "",
+    viewAllPath,
     title,
     disabled = false,
+    navigationClass = "hidden space-x-3 lg:flex",
 }: CarouselProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -40,26 +42,28 @@ export const CarouselControls = ({
             data-testid="CarouselControls"
             className={cn("flex space-x-3", className)}
         >
-            <div className="flex items-center">
-                <Link
-                    className="ml-2 text-theme-primary-600 sm:hidden"
-                    href={viewAllPath}
-                >
-                    <Icon name="ArrowRight" />
-                </Link>
+            {viewAllPath !== undefined && (
+                <div className="flex items-center">
+                    <Link
+                        className="ml-2 text-theme-primary-600 sm:hidden"
+                        href={viewAllPath}
+                    >
+                        <Icon name="ArrowRight" />
+                    </Link>
 
-                <ButtonLink
-                    className="hidden sm:inline"
-                    data-testid="CarouselControls__view-all"
-                    variant="secondary"
-                    href={viewAllPath}
-                    title={title}
-                >
-                    {t("common.view_all")}
-                </ButtonLink>
-            </div>
+                    <ButtonLink
+                        className="hidden sm:inline"
+                        data-testid="CarouselControls__view-all"
+                        variant="secondary"
+                        href={viewAllPath}
+                        title={String(title)}
+                    >
+                        {t("common.view_all")}
+                    </ButtonLink>
+                </div>
+            )}
 
-            <div className="hidden space-x-3 lg:flex">
+            <div className={navigationClass}>
                 <CarouselPreviousButton
                     carouselKey={carouselKey}
                     disabled={disabled}
@@ -85,6 +89,7 @@ export const Carousel = ({
     viewAllPath,
     shouldShowHeader = true,
     spaceBetween = 12,
+    navigationClass,
     ...properties
 }: CarouselProperties): JSX.Element => (
     <div className={className}>
@@ -101,6 +106,7 @@ export const Carousel = ({
                     title={title}
                     carouselKey={carouselKey}
                     viewAllPath={viewAllPath}
+                    navigationClass={navigationClass}
                 />
             </div>
         )}

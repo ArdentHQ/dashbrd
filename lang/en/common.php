@@ -58,6 +58,8 @@ return [
     'close_toast' => 'Close toast',
     'loading' => 'Loading',
     'price' => 'Price',
+    'articles' => 'Articles',
+    'most_popular' => 'Most Popular',
     'market_cap' => 'Market Cap',
     'volume' => 'Volume :frequency',
     'value' => 'Value',
