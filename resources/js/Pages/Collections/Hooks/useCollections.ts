@@ -1,6 +1,7 @@
 import { isNumber } from "@ardenthq/sdk-helpers";
 import axios from "axios";
 import { useCallback, useRef, useState } from "react";
+import useAbortController from "react-use-cancel-token";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useInertiaHeader } from "@/Hooks/useInertiaHeader";
 import { useLiveSearch } from "@/Hooks/useLiveSearch";
@@ -65,13 +66,17 @@ export const useCollections = ({
         collections: 0,
         value: null,
     },
+    initialSelectedChainIds,
 }: {
     view: CollectionDisplayType;
     initialStats: App.Data.Collections.CollectionStatsData;
     showHidden: boolean;
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
+    initialSelectedChainIds?: string[];
 }): CollectionsState => {
+    const { newAbortSignal, cancelPreviousRequest } = useAbortController();
+
     const [isLoading, setIsLoading] = useState(true);
     const isLoadingMore = useRef(false);
     const [collections, setCollections] = useState<App.Data.Collections.CollectionData[]>([]);
@@ -83,11 +88,14 @@ export const useCollections = ({
     const [reportByCollectionAvailableIn, setSeportByCollectionAvailableIn] = useState<ReportByCollectionAvailableIn>(
         {},
     );
+
+    const getSelectedChainIds = (initialArray?: string[]): number[] =>
+        isTruthy(initialArray) && initialArray.length > 0
+            ? initialArray.map((id) => Number(id))
+            : [ExplorerChains.EthereumMainnet, ExplorerChains.PolygonMainnet];
+
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([
-        ExplorerChains.EthereumMainnet,
-        ExplorerChains.PolygonMainnet,
-    ]);
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(getSelectedChainIds(initialSelectedChainIds));
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
@@ -96,6 +104,7 @@ export const useCollections = ({
         showHidden = false,
         sort = null,
     }: QueryParameters = {}): Promise<CollectionsResponse> => {
+        cancelPreviousRequest();
         setIsLoading(true);
         isLoadingMore.current = true;
 
@@ -105,14 +114,16 @@ export const useCollections = ({
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
             view,
+            chain: selectedChainIds.join(","),
         });
 
         if (selectedChainIds.length > 0) {
             pageUrlWithSearch += `&chain=${selectedChainIds.join(",")}`;
         }
 
+        // The `useAbortController@isCancel` exception handling is done on the `useLiveSearch` hook.
         const { data } = await axios.get<CollectionsResponse>(pageUrlWithSearch, {
-            requestId: "collections-page",
+            signal: newAbortSignal(),
             headers,
         });
 

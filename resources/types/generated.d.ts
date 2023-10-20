@@ -345,6 +345,7 @@ declare namespace App.Data.Nfts {
     export type NftData = {
         id: number;
         name: string | null;
+        description: string | null;
         tokenNumber: string;
         collection: App.Data.Nfts.NftCollectionData;
         images: App.Data.Nfts.NftImagesData;
@@ -493,6 +494,8 @@ declare namespace App.Data.Web3 {
         traits: Array<any>;
         mintedBlock: number;
         mintedAt: string | null;
+        hasError: boolean | null;
+        info: string | null;
     };
     export type Web3NftTransfer = {
         contractAddress: string;

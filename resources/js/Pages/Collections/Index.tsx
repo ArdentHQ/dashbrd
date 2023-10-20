@@ -11,15 +11,25 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionDisplayType, CollectionsFilter } from "@/Pages/Collections/Components/CollectionsFilter";
 import { CollectionsHeading } from "@/Pages/Collections/Components/CollectionsHeading";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
+import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
-const sort = (sortBy: string, direction?: string): void => {
+const sort = ({
+    sortBy,
+    direction,
+    selectedChainIds,
+}: {
+    sortBy: string;
+    direction?: string;
+    selectedChainIds?: number[];
+}): void => {
     router.get(
         route("collections"),
         {
             ...getQueryParameters(),
             sort: sortBy,
             direction,
+            chain: isTruthy(selectedChainIds) && selectedChainIds.length > 0 ? selectedChainIds.join(",") : undefined,
         },
         {
             preserveState: false,
@@ -33,12 +43,14 @@ const CollectionsIndex = ({
     title,
     sortBy,
     sortDirection,
+    selectedChainIds: initialSelectedChainIds,
 }: {
     title: string;
     auth: PageProps["auth"];
     initialStats: App.Data.Collections.CollectionStatsData;
     sortBy: string | null;
     sortDirection: "asc" | "desc";
+    selectedChainIds?: string[];
 }): JSX.Element => {
     const { props } = usePage();
 
@@ -80,15 +92,8 @@ const CollectionsIndex = ({
                 type: "error",
             });
         },
+        initialSelectedChainIds,
     });
-
-    useEffect(() => {
-        if (!auth.authenticated) {
-            return;
-        }
-
-        reload();
-    }, [auth.authenticated]);
 
     const selectDisplayTypeHandler = (displayType: CollectionDisplayType): void => {
         setDisplayType(displayType);
@@ -107,8 +112,12 @@ const CollectionsIndex = ({
     };
 
     useEffect(() => {
+        if (!auth.authenticated) {
+            return;
+        }
+
         reload({ selectedChainIds });
-    }, [selectedChainIds]);
+    }, [selectedChainIds, auth.authenticated]);
 
     return (
         <DefaultLayout toastMessage={props.toast}>
@@ -182,6 +191,7 @@ const CollectionsIndex = ({
                                 reload({ page: 1 });
                             }}
                             onReportCollection={reportCollection}
+                            selectedChainIds={selectedChainIds}
                         />
                     )}
 
