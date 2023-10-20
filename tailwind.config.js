@@ -271,6 +271,7 @@ module.exports = {
                             background: "rgb(var(--theme-color-secondary-50))",
                             padding: "5px",
                             margin: "-5px 0",
+                            fontWeight: "400",
                         },
                         figcaption: {
                             marginTop: "8px",
