@@ -119,6 +119,16 @@ class Article extends Model implements HasMedia, Viewable
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->whereNotNull('articles.published_at')
+            ->where('articles.published_at', '<=', now());
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeWithFeaturedCollections(Builder $query): Builder
     {
         return $query->with(['collections' => function ($query) {
