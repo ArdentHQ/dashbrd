@@ -24,6 +24,7 @@ class ArticleController extends Controller
 
         if (! $request->get('search')) {
             $highlightedArticles = Article::query()
+                ->published()
                 ->sortByPublishedDate()
                 ->withFeaturedCollections()
                 ->limit(3)
@@ -32,6 +33,7 @@ class ArticleController extends Controller
 
         /** @var LengthAwarePaginator<Article> $articles */
         $articles = Article::query()
+            ->published()
             ->search($request->get('search'))
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
             ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
