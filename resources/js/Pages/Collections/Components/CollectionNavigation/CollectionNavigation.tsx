@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { forwardRef, Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
+import { Listbox } from "@/Components/Form/Listbox";
 import { type IconName } from "@/Components/Icon";
 import { Tabs } from "@/Components/Tabs";
 import { Tooltip } from "@/Components/Tooltip";
@@ -80,33 +81,83 @@ export const CollectionNavigation = ({
             selectedIndex={selectedIndex}
             onChange={tabChangeHandler}
         >
-            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 py-3 sm:-mx-8  lg:mx-0 lg:rounded-xl ">
-                <Tab.List className="flex justify-between">
-                    <div className="w-full sm:w-auto">
-                        <Tabs
-                            className="space-x-1 bg-transparent"
-                            wrapperClassName="px-6 lg:px-5 sm:px-8"
-                        >
-                            <CollectionNavigationTab icon="DiamondOpacity">
-                                {t("pages.collections.menu.collection")}
-                            </CollectionNavigationTab>
-
-                            <CollectionNavigationTab icon="Newspaper">
-                                {t("pages.collections.menu.articles")}
-                            </CollectionNavigationTab>
-
-                            <CollectionNavigationTab
-                                icon="HeartbeatInCircle"
-                                disabled
+            <div className="backdrop-blur-7 -mx-6 mt-6 bg-theme-secondary-100 py-3 sm:-mx-8  lg:mx-0 lg:rounded-xl">
+                <div className="hidden sm:block">
+                    <Tab.List className="flex justify-between">
+                        <div className="w-full sm:w-auto">
+                            <Tabs
+                                className="space-x-1 bg-transparent"
+                                wrapperClassName="px-6 lg:px-5 sm:px-8"
                             >
-                                {t("pages.collections.menu.activity")}
-                            </CollectionNavigationTab>
-                        </Tabs>
-                    </div>
-                </Tab.List>
+                                <CollectionNavigationTab icon="DiamondOpacity">
+                                    {t("pages.collections.menu.collection")}
+                                </CollectionNavigationTab>
+
+                                <CollectionNavigationTab icon="Newspaper">
+                                    {t("pages.collections.menu.articles")}
+                                </CollectionNavigationTab>
+
+                                <CollectionNavigationTab
+                                    icon="HeartbeatInCircle"
+                                    disabled
+                                >
+                                    {t("pages.collections.menu.activity")}
+                                </CollectionNavigationTab>
+                            </Tabs>
+                        </div>
+                    </Tab.List>
+                </div>
+                <div className="mx-6 sm:mx-8 sm:hidden">
+                    <CollectionNavigationListBox
+                        selectedIndex={selectedIndex}
+                        setSelectedIndex={tabChangeHandler}
+                    />
+                </div>
             </div>
 
             <Tab.Panels>{children}</Tab.Panels>
         </Tab.Group>
+    );
+};
+
+export const CollectionNavigationListBox = ({
+    selectedIndex,
+    setSelectedIndex,
+}: {
+    selectedIndex: number;
+    setSelectedIndex: (index: number) => void;
+}): JSX.Element => {
+    const { t } = useTranslation();
+
+    const options = [
+        t("pages.collections.menu.collection"),
+        t("pages.collections.menu.articles"),
+        t("pages.collections.menu.activity"),
+    ];
+
+    const selectedLabel = options[selectedIndex];
+
+    return (
+        <Listbox
+            value={selectedIndex}
+            label={selectedLabel}
+            button={
+                <Listbox.Button isNavigation>
+                    <span>{selectedLabel}</span>
+                </Listbox.Button>
+            }
+            onChange={setSelectedIndex}
+        >
+            {options.map((option, index) => (
+                <Listbox.Option
+                    key={index}
+                    value={index}
+                    hasGradient
+                    isDisabled={index === 2} // TODO(@itsanametoo)[2023-10-25]: remove once rc-0.8.0 is merged into this branch
+                >
+                    {option}
+                </Listbox.Option>
+            ))}
+        </Listbox>
     );
 };
