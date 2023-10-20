@@ -33,11 +33,11 @@ describe("FeaturedCollectionsBanner", () => {
         render(
             <FeaturedCollectionsBanner
                 collections={collections}
-                subTitleKey="pages.articles.consists_of_collections"
+                subtitle="Test title for article"
             />,
         );
 
-        expect(screen.getByText("This article consists of 1 collection")).toBeInTheDocument();
+        expect(screen.getByText("Test title for article")).toBeInTheDocument();
     });
 
     it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {
