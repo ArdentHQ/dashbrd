@@ -16,9 +16,9 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
             Through this partnership, FaZe Clan and The Sandbox will work together to develop “FaZe World,” a 12x12 area
             within the game that embodies FaZe culture (which hopefully consists of drinking Mountain Dew and hitting
             360 no-scope trick shots). They’ll also be collaborating on events, games, digital products and other
-            content for their fan base and The Sandbox community. This deal gives FaZe an opportunity to create new
-            streams of income by gamifying their world and providing fans with more ways to interact with talent and
-            members.
+            content for their fan base and <a href="">The Sandbox community</a>. This deal gives FaZe an opportunity to
+            create new streams of income by gamifying their world and providing fans with more ways to interact with
+            talent and members.
         </p>
 
         <h3>Heading 3: Lorem ipsum dolor sit amet, consectetur adipiscing elit</h3>
@@ -123,6 +123,20 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
             July of this year, FaZe Clan made history as they became the first esports team listed on Nasdaq . This
             listing caused their value to instantly spike from 400 million US dollars to 725 million US dollars, making
             them one of the most valuable esports teams in the world.
+        </p>
+
+        <pre>
+            <code>
+                {`function greet() {
+    console.log("Hello, world!");
+}`}
+            </code>
+        </pre>
+
+        <p>
+            Lorem ipsum dolor sit amet <code>{`const inline = ['code', 'script']`}</code> consectetur adipisicing elit.
+            Veritatis repellat, pariatur optio voluptates eligendi sint molestias. Expedita illum quisquam vel est nisi
+            tempora, odio porro neque eos. Modi, tempore alias.
         </p>
 
         <figure>
