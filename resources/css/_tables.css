@@ -53,12 +53,12 @@
 
 .table-list thead tr th:first-child::before {
     content: "";
-    @apply pointer-events-none absolute left-0 top-0 z-10 -ml-3 block h-full w-3 rounded-l-xl bg-theme-secondary-50;
+    @apply pointer-events-none absolute left-0 top-0 z-10 -ml-3 block h-full w-3 rounded-l-xl bg-theme-secondary-50 dark:dark:bg-theme-dark-950;
 }
 
 .table-list thead tr th:last-child::after {
     content: "";
-    @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl bg-theme-secondary-50;
+    @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl bg-theme-secondary-50 dark:dark:bg-theme-dark-950;
 }
 
 .table-list tbody tr {
@@ -67,7 +67,7 @@
 
 .table-list tbody tr::after {
     content: "";
-    @apply transition-default pointer-events-none absolute inset-0 -mx-3 rounded-xl outline outline-3 outline-transparent;
+    @apply transition-default pointer-events-none absolute inset-0 -mx-3 rounded-xl outline outline-3 outline-transparent dark:hover:outline-theme-dark-500;
 }
 
 .table-list tbody tr:hover::after {
@@ -77,12 +77,12 @@
 
 .table-list tbody tr td:first-child::before {
     content: "";
-    @apply pointer-events-none absolute left-0 top-0 z-10 -ml-3 block h-full w-3 rounded-l-xl border-y border-l border-theme-secondary-300;
+    @apply pointer-events-none absolute left-0 top-0 z-10 -ml-3 block h-full w-3 rounded-l-xl border-y border-l border-theme-secondary-300 dark:border-theme-dark-700;
 }
 
 .table-list tbody tr td:last-child::before {
     content: "";
-    @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl border-y border-r border-theme-secondary-300;
+    @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl border-y border-r border-theme-secondary-300 dark:border-theme-dark-700;
 }
 
 .table-list tbody > tr,
@@ -92,5 +92,5 @@
 
 .table-list tbody tr td.custom-table-cell:after {
     content: "";
-    @apply pointer-events-none absolute top-0 z-10 block h-full w-full border-y border-theme-secondary-300;
+    @apply pointer-events-none absolute top-0 z-10 block h-full w-full border-y border-theme-secondary-300 dark:border-theme-dark-700;
 }
