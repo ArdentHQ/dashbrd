@@ -16,8 +16,6 @@ interface Properties {
 }
 
 const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => {
-    const { t } = useTranslation();
-
     return (
         <DefaultLayout>
             <article className="w-full lg:px-8 2xl:px-0">
