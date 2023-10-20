@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\Nft;
 use App\Models\Gallery;
-use Illuminate\Support\Facades\DB;
+use App\Models\Nft;
 use Illuminate\Support\Facades\File;
 
 beforeEach(function () {

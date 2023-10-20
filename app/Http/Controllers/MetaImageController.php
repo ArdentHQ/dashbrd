@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Gallery;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Browsershot\Browsershot;
 use Spatie\Image\Image;
 use Spatie\Image\Manipulations;
-use Illuminate\Support\Facades\DB;
-use Spatie\Browsershot\Browsershot;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MetaImageController extends Controller
