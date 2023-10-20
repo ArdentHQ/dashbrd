@@ -5,8 +5,10 @@ import { tp } from "@/Utils/TranslatePlural";
 
 export const FeaturedCollectionsBanner = ({
     collections = [],
+    subtitle,
 }: {
     collections?: Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>;
+    subtitle?: string;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -27,9 +29,10 @@ export const FeaturedCollectionsBanner = ({
                 </Heading>
 
                 <p className="mt-0.5 text-xs font-medium text-theme-secondary-700 dark:text-theme-dark-200 sm:text-sm">
-                    {tp("pages.galleries.consists_of_collections", collections.length, {
-                        count: collections.length,
-                    })}
+                    {subtitle ??
+                        tp("pages.galleries.consists_of_collections", collections.length, {
+                            count: collections.length,
+                        })}
                 </p>
             </div>
 
