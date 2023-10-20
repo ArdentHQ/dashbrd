@@ -34,11 +34,11 @@ class UpdateDescriptions extends Command
         if (! $network) {
             $this->warn('Network does not exist.');
 
-            return 0;
+            return Command::SUCCESS;
         }
 
-        UpdateNftDescription::dispatch((int) $this->option('start'), $network);
+        UpdateNftDescription::dispatch((int) ($this->option('start') ?? 1), $network);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
