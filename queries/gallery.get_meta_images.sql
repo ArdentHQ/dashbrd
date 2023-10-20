@@ -2,7 +2,16 @@
 * IMPORTANT: Ensure this query is in sync with the method in `app/Http/Controllers/MetaImageController.php@getImageName`
 */
 SELECT
-	CONCAT("galleries".slug, '_', MD5(CONCAT(string_agg(CAST(sub.nft_id AS VARCHAR), '.'), '_', "galleries".name)), '.png') AS image_name
+	CONCAT(
+		"galleries".slug,
+		'_',
+		MD5(CONCAT(
+			string_agg(CAST(sub.nft_id AS VARCHAR), '.'),
+			'_',
+			count(sub.nft_id),
+			'_',
+			"galleries".name
+		)), '.png') AS image_name
 FROM
 	"galleries"
 	INNER JOIN (
