@@ -107,6 +107,36 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
                 projects and it can be hard for projects to gauge what times are good for their followers. They are a
                 great tool but need better organization and planning functions.
             </li>
+            <li>
+                Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
+                projects and it can be hard for projects to gauge what times are good for their followers. They are a
+                great tool but need better organization and planning functions.
+            </li>
+            <li>
+                Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
+                projects and it can be hard for projects to gauge what times are good for their followers. They are a
+                great tool but need better organization and planning functions.
+            </li>
+            <li>
+                Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
+                projects and it can be hard for projects to gauge what times are good for their followers. They are a
+                great tool but need better organization and planning functions.
+            </li>
+            <li>
+                Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
+                projects and it can be hard for projects to gauge what times are good for their followers. They are a
+                great tool but need better organization and planning functions.
+            </li>
+            <li>
+                Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
+                projects and it can be hard for projects to gauge what times are good for their followers. They are a
+                great tool but need better organization and planning functions.
+            </li>
+            <li>
+                Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
+                projects and it can be hard for projects to gauge what times are good for their followers. They are a
+                great tool but need better organization and planning functions.
+            </li>
         </ol>
 
         <p>
@@ -123,6 +153,28 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
             July of this year, FaZe Clan made history as they became the first esports team listed on Nasdaq . This
             listing caused their value to instantly spike from 400 million US dollars to 725 million US dollars, making
             them one of the most valuable esports teams in the world.
+        </p>
+
+        <hr />
+
+        <p>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deleniti fugit esse, ipsa, aliquid quis veniam ab
+            aspernatur minima dignissimos non libero numquam molestiae vitae obcaecati! Beatae dolores maiores aliquam
+            quos!
+        </p>
+
+        <figure>
+            <img
+                src="https://images.unsplash.com/photo-1508138221679-760a23a2285b?auto=format&fit=crop&q=80&w=100&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="my alt text"
+            />
+            <figcaption>Small image.</figcaption>
+        </figure>
+
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, quaerat, libero dignissimos iste provident
+            itaque laboriosam magnam reiciendis atque, et molestias ex vitae ipsam commodi eligendi vero amet molestiae
+            rem.
         </p>
 
         <pre>

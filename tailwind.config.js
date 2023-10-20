@@ -127,9 +127,73 @@ module.exports = {
                         },
                         ul: {
                             marginBottom: "16px",
+                            ol: {
+                                margin: "8px 0",
+                            },
+                            ul: {
+                                margin: "8px 0",
+                                li: {
+                                    listStyle: "none",
+                                    "&:before": {
+                                        width: "7px",
+                                        height: "7px",
+                                        border: "2px solid rgb(var(--theme-color-secondary-700))",
+                                        backgroundColor: "transparent",
+                                    },
+                                },
+                            },
+                            li: {
+                                listStyle: "none",
+                                "&:before": {
+                                    content: "''",
+                                    width: "6px",
+                                    height: "6px",
+                                    display: "inline-block",
+                                    borderRadius: "100%",
+                                    backgroundColor: "rgb(var(--theme-color-secondary-700))",
+                                    margin: "10px 0 0 -18px",
+                                    position: "absolute",
+                                },
+                            },
                         },
                         ol: {
                             marginBottom: "16px",
+                            ol: {
+                                margin: "8px 0",
+                                li: {
+                                    counterIncrement: "subitem",
+                                    "&:before": {
+                                        content: 'counter(subitem) ". "',
+                                    },
+                                },
+                            },
+                            ul: {
+                                margin: "8px 0",
+                            },
+                            li: {
+                                listStyle: "none",
+                                counterIncrement: "item",
+                                "&:before": {
+                                    content: 'counter(item) ". "',
+                                    marginRight: "12px",
+                                    fontWeight: "500",
+                                    color: "rgb(var(--theme-color-secondary-900))",
+                                    marginLeft: "-48px",
+                                    width: "36px",
+                                    position: "absolute",
+                                    textAlign: "right",
+                                },
+                            },
+                        },
+                        img: {
+                            margin: "16px auto",
+                            borderRadius: "8px",
+                        },
+                        figure: {
+                            margin: "16px auto",
+                        },
+                        hr: {
+                            margin: "16px auto",
                         },
                         h2: {
                             fontSize: "24px",
@@ -199,6 +263,7 @@ module.exports = {
                             border: "1px solid rgb(var(--theme-color-secondary-300))",
                             borderRadius: "8px",
                             marginBottom: "16px",
+                            marginTop: "16px",
                         },
                         code: {
                             border: "1px solid rgb(var(--theme-color-secondary-300))",
@@ -243,7 +308,7 @@ module.exports = {
                         // "--tw-prose-bold": theme("colors.pink[900]"),
                         // "--tw-prose-counters": theme("colors.pink[600]"),
                         // "--tw-prose-bullets": theme("colors.pink[400]"),
-                        // "--tw-prose-hr": theme("colors.pink[300]"),
+                        "--tw-prose-hr": "rgb(var(--theme-color-secondary-300))",
                         // "--tw-prose-quotes": theme("colors.pink[900]"),
                         // "--tw-prose-quote-borders": theme("colors.pink[300]"),
                         "--tw-prose-captions": "rgb(var(--theme-color-secondary-700))",
