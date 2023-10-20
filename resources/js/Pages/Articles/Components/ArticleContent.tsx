@@ -2,6 +2,7 @@ interface Properties {
     article: App.Data.Articles.ArticleData;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ArticleContent = ({ article }: Properties): JSX.Element => (
     <div className="prose max-w-none">
         <p>
@@ -68,13 +69,13 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
 
         <ul>
             <li>
-                Twitter is great for posting thoughts, insights, and nuggets of info, but isn't good at organizing long
-                form conversations or getting valuable feedback from a community. It's difficult to follow a
+                Twitter is great for posting thoughts, insights, and nuggets of info, but isn&apos;t good at organizing
+                long form conversations or getting valuable feedback from a community. It&apos;s difficult to follow a
                 conversation, the discussion becomes littered with noise, and there is no way to stop random people from
                 jumping in with bad insight or trolling.
                 <ul>
-                    <li>Comment systems are limited in scope and don't allow.</li>
-                    <li>Comment systems are limited in scope and don't allow.</li>
+                    <li>Comment systems are limited in scope and don&apos;t allow.</li>
+                    <li>Comment systems are limited in scope and don&apos;t allow.</li>
                 </ul>
             </li>
             <li>
@@ -93,13 +94,13 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
 
         <ol>
             <li>
-                Twitter is great for posting thoughts, insights, and nuggets of info, but isn't good at organizing long
-                form conversations or getting valuable feedback from a community. It's difficolt to follow a
+                Twitter is great for posting thoughts, insights, and nuggets of info, but isn&apos;t good at organizing
+                long form conversations or getting valuable feedback from a community. It&apos;s difficolt to follow a
                 conversation, the discussion becomes littered with noise, and there is no way to stop random people from
                 jumping in with bad insight or trolling.
                 <ol>
-                    <li>Comment systems are limited in scope and don't allow.</li>
-                    <li>Comment systems are limited in scope and don't allow.</li>
+                    <li>Comment systems are limited in scope and don&apos;t allow.</li>
+                    <li>Comment systems are limited in scope and don&apos;t allow.</li>
                 </ol>
             </li>
             <li>
