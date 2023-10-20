@@ -153,7 +153,7 @@ export const CollectionNavigationListBox = ({
                     key={index}
                     value={index}
                     hasGradient
-                    isDisabled={index === 2}
+                    isDisabled={index === 2} // TODO(@itsanametoo)[2023-10-25]: remove once rc-0.8.0 is merged into this branch
                 >
                     {option}
                 </Listbox.Option>
