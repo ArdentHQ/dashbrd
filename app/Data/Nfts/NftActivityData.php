@@ -35,11 +35,12 @@ class NftActivityData extends Data
     ) {
     }
 
-    private static function formatNative(string $totalNative, string $totalUsd, NftTransferType $label, Carbon $timestamp, int $collectionId): string {
+    private static function formatNative(string $totalNative, string $totalUsd, NftTransferType $label, Carbon $timestamp, int $collectionId): string
+    {
         $polygonNetwork = Network::polygon();
         $collection = Collection::where('id', $collectionId)->first();
 
-        if($label === NftTransferType::Sale && $collection->network_id === $polygonNetwork->id) {
+        if ($label === NftTransferType::Sale && $collection->network_id === $polygonNetwork->id) {
             $polygonGuid = TokenGuid::Polygon->value;
 
             $totalNative = bcdiv($totalUsd, TokenPriceHistory::query()->where('currency', 'usd')->where('token_guid', $polygonGuid)->where('timestamp', '<=', $timestamp)->orderBy('timestamp', 'desc')->first()->price, 18);
