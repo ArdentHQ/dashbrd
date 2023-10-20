@@ -20,7 +20,8 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                     className="h-full w-full overflow-hidden rounded object-cover"
                     wrapperClassName="h-full [&>span]:h-full"
                     alt={article.title}
-                    src={article.image}
+                    srcSet={`${article.image.small} 1x, ${article.image.small2x} 2x`}
+                    src={article.image.small}
                 />
             </div>
 
