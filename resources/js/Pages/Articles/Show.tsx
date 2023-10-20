@@ -42,11 +42,8 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                             />
                         </div>
 
-                        <div>
-                            {/* Content here */}
-                            {Array.from({ length: 100 }).map((_, index) => (
-                                <p key={index}>Test scroll, replace with real content {index}</p>
-                            ))}
+                        <div className="min-h-[136px]">
+                            <p>Content goes here</p>
                         </div>
                     </div>
                 </div>
