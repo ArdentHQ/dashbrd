@@ -29,6 +29,8 @@ class PruneMetaImages extends Command
     public function handle(): int
     {
         $validImages = array_map(fn ($item) => $item->image_name, DB::select(get_query('gallery.get_meta_images')));
+        // Convert to associative array so we can use `isset`
+        $validImages = array_combine($validImages, $validImages);
 
         $directory = storage_path(sprintf('meta/galleries/'));
 
@@ -38,7 +40,7 @@ class PruneMetaImages extends Command
                 // Loop through each file in the directory
                 while (false !== ($file = readdir($handle))) {
                     // Check if file is a PNG and not in validImages
-                    if (pathinfo($file, PATHINFO_EXTENSION) === 'png' && ! in_array($file, $validImages)) {
+                    if (pathinfo($file, PATHINFO_EXTENSION) === 'png' && ! isset($validImages[$file])) {
                         // Delete the file
                         unlink($directory.$file);
                     }
