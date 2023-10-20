@@ -2,10 +2,12 @@ import { ArticleAuthor } from "./Components/ArticleAuthor";
 import { ArticleCopy } from "./Components/ArticleCopy";
 import { ArticleDate } from "./Components/ArticleDate";
 import { ArticleShare } from "./Components/ArticleShare";
+import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
+import { tp } from "@/Utils/TranslatePlural";
 
 interface Properties {
     article: App.Data.Articles.ArticleData;
@@ -14,8 +16,8 @@ interface Properties {
 
 const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => (
     <DefaultLayout>
-        <div className="w-full lg:px-8 2xl:px-0">
-            <article className="article-wrapper -mt-6 px-6 sm:-mt-8 sm:px-8 md:px-24 lg:mt-0 lg:rounded-xl lg:border lg:border-theme-secondary-300 lg:px-0">
+        <article className="w-full lg:px-8 2xl:px-0">
+            <div className="article-wrapper -mt-6 px-6 sm:-mt-8 sm:px-8 md:px-24 lg:mt-0 lg:rounded-xl lg:border lg:border-theme-secondary-300 lg:px-0">
                 <div className="mx-auto bg-white/20 pt-8 md:max-w-[768px] xl:max-w-[1000px]">
                     <div className="border-b-2 border-theme-secondary-400 pb-3">
                         <Heading level={1}>{article.title}</Heading>
@@ -63,7 +65,6 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                             <ArticleCopy article={article} />
                         </div>
                     </div>
-
                     <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 md:hidden">
                         <div>
                             <ArticleShare
@@ -77,7 +78,15 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
+        </article>
+        <div className="px-6 pt-6 sm:px-8 md:px-24 md:pt-3 lg:px-8 2xl:px-0">
+            <FeaturedCollectionsBanner
+                collections={article.featuredCollections}
+                subtitle={tp("pages.articles.consists_of_collections", article.featuredCollections.length, {
+                    count: article.featuredCollections.length,
+                })}
+            />
         </div>
 
         {popularArticles.length > 0 && <ArticlesScroll articles={popularArticles} />}
