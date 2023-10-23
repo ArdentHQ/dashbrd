@@ -131,6 +131,7 @@ return [
     'no_traits_found' => 'No traits found.',
     'empty_transactions' => "You don't have any transactions yet. Once transactions have been made, they will show up here.",
     'error' => 'Error',
+    'refresh' => 'Refresh',
     'refresh_metadata' => 'Refresh Metadata',
     'refreshing_metadata' => 'Refreshing Metadata... Please check back later.',
     'pending_confirmation' => 'Pending Confirmation',
