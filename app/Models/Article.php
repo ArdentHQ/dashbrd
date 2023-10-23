@@ -51,10 +51,22 @@ class Article extends Model implements HasMedia, Viewable
                     ->width(1000 * 2);
 
                 $this
+                    ->addMediaConversion('medium')
+                    ->width(573);
+                $this
+                    ->addMediaConversion('medium@2x')
+                    ->width(573 * 2);
+
+                $this
+                    ->addMediaConversion('small')
+                    ->width(114);
+                $this
+                    ->addMediaConversion('small@2x')
+                    ->width(114 * 2);
+
+                $this
                     ->addMediaConversion('meta')
                     ->crop(Manipulations::CROP_CENTER, 1200, 630);
-
-                // @TODO: Define the rest of conversions
             });
     }
 
