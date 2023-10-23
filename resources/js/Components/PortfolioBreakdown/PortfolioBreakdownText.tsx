@@ -25,8 +25,8 @@ const PortfolioBreakdownTextItem = ({
         >
             <span className={cn("h-3 w-1", color)} />
 
-            <span className="text-theme-secondary-700">{asset.symbol}</span>
-            <span className="text-theme-secondary-500">
+            <span className="text-theme-secondary-700 dark:text-theme-dark-200">{asset.symbol}</span>
+            <span className="text-theme-secondary-500 dark:text-theme-dark-100">
                 <FormatPercentage value={Number(asset.percentage)} />
             </span>
         </span>

@@ -98,7 +98,7 @@ export const TableHeader = <RowDataType extends Record<never, unknown>>({
         <thead>
             {headerGroups.map((headerGroup, index) => (
                 <tr
-                    className="border-b border-theme-secondary-300"
+                    className="border-b border-theme-secondary-300 dark:border-theme-dark-700"
                     {...headerGroup.getHeaderGroupProps()}
                     key={index}
                 >
