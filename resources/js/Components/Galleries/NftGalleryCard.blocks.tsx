@@ -117,10 +117,10 @@ const NftImageContainer = ({
         );
     }
 
-    if (Boolean(validateImage) && nft.images.large === null) {
+    if (Boolean(validateImage) && !isTruthy(nft.images.large)) {
         return (
             <div
-                data-testid={`NftImageGrid__container--${nft.tokenNumber}--image_error`}
+                data-testid={`NftImageGrid__container--${nft.tokenNumber}--invalid_image`}
                 className="relative overflow-hidden rounded-xl"
             >
                 <Tooltip content={t("pages.galleries.create.nft_missing_image")}>

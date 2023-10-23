@@ -275,6 +275,18 @@ describe("NftImageGrid", () => {
         );
         expect(container.getElementsByClassName("NFT_Skeleton").length).toBe(0);
     });
+
+    it("should show an error placeholder if NFT does not have a large image", () => {
+        render(
+            <NftImageGrid
+                nfts={nfts}
+                validateImage={true}
+            />,
+        );
+
+        expect(screen.getByTestId(`NftImageGrid__container--1--invalid_image`)).toBeInTheDocument();
+        expect(screen.getByTestId(`NftImageGrid__container--4--invalid_image`)).toBeInTheDocument();
+    });
 });
 
 describe("GalleryHeading", () => {
