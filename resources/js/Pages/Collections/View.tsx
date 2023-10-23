@@ -77,7 +77,7 @@ const CollectionsView = ({
     const [activities, setActivities] = useState(initialActivities);
 
     const [loading, setLoading] = useState(false);
-    const [isLoadingActivity, setIsLoadingActivity] = useState(false);
+    const [isLoadingActivity, setIsLoadingActivity] = useState(collection.isFetchingActivity);
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
 
@@ -235,6 +235,10 @@ const CollectionsView = ({
     const renderActivities = (): JSX.Element => {
         if (!hasActivities) {
             return <EmptyBlock>{t("pages.collections.activities.ignores_activities")}</EmptyBlock>;
+        }
+
+        if (isLoadingActivity) {
+            return <EmptyBlock>{t("pages.collections.activities.loading_activities_collection")}</EmptyBlock>;
         }
 
         if (!loading && (activities === null || activities.paginated.data.length === 0)) {
