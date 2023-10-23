@@ -84,7 +84,8 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function scopeIsPublished(Builder $query): Builder
     {
-        return $query->whereNotNull('articles.published_at');
+        return $query->whereNotNull('articles.published_at')
+            ->where('articles.published_at', '<=', now());
     }
 
     /**
@@ -125,16 +126,6 @@ class Article extends Model implements HasMedia, Viewable
     public function scopeSortByPublishedDate(Builder $query): Builder
     {
         return $query->orderBy('articles.published_at', 'desc');
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopePublished(Builder $query): Builder
-    {
-        return $query->whereNotNull('articles.published_at')
-            ->where('articles.published_at', '<=', now());
     }
 
     /**

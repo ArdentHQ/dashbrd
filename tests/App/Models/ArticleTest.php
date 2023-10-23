@@ -79,7 +79,7 @@ it('filters published articles', function () {
         'published_at' => null,
     ]);
 
-    expect(Article::published()->pluck('id')->toArray())->toEqualCanonicalizing($published);
+    expect(Article::isPublished()->pluck('id')->toArray())->toEqualCanonicalizing($published);
 });
 
 it('determines that article is published if published_at is in the past', function () {
