@@ -1178,7 +1178,7 @@ it('can refresh collection activity', function () {
 
     $this->actingAs($user)
          ->post(route('collection.refresh-activity', [
-             'collection' => $collection->slug
+             'collection' => $collection->slug,
          ]))
         ->assertStatus(200);
 
