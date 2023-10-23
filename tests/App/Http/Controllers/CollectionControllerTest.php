@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
@@ -320,7 +321,6 @@ it('can render the collections view page with owned filter', function ($owned) {
                         ->where('tab', 'collection')
                         ->where('activityPageLimit', 10)
                         ->where('nftPageLimit', 24)
-
                 )
         );
 })->with([
@@ -1152,4 +1152,37 @@ it('can get stats', function () {
     ]));
 
     expect($response['stats']['nfts'] === 1 && $response['stats']['collections'] === 1)->toBeTrue();
+});
+
+it('can refresh collection activity', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => null,
+        'supply' => null,
+        'activity_updated_at' => null,
+        'is_fetching_activity' => false,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+         ->post(route('collection.refresh-activity', [
+             'collection' => $collection->slug
+         ]))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionActivity::class);
+
+    expect($collection->fresh()->is_fetching_activity)->toBeTrue();
 });
