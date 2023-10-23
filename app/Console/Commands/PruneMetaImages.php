@@ -21,7 +21,7 @@ class PruneMetaImages extends Command
      *
      * @var string
      */
-    protected $description = 'Removes unusued meta images';
+    protected $description = 'Removes unused meta images';
 
     /**
      * Execute the console command.
