@@ -14,6 +14,9 @@ dependencies:
   '@metamask/providers':
     specifier: ^10.2.1
     version: 10.2.1
+  '@microflash/remark-figure-caption':
+    specifier: ^2.0.2
+    version: 2.0.2
   '@popperjs/core':
     specifier: ^2.11.8
     version: 2.11.8
@@ -2869,6 +2872,17 @@ packages:
   /@metamask/safe-event-emitter@3.0.0:
     resolution: {integrity: sha512-j6Z47VOmVyGMlnKXZmL0fyvWfEYtKWCA9yGZkU3FCsGZUT5lHGmvaV9JA5F2Y+010y7+ROtR3WMXIkvl/nVzqQ==}
     engines: {node: '>=12.0.0'}
+    dev: false
+
+  /@microflash/remark-figure-caption@2.0.2:
+    resolution: {integrity: sha512-idUhZ1HE7eS5no11uEwTAHvWCzbG+2uQHE6NtONjq3zgZU+x/NYbDFnJNScXJA0RD3HbCu8QJ9Pf3CTUBztAmg==}
+    dependencies:
+      hast-util-whitespace: 3.0.0
+      mdast-util-from-markdown: 2.0.0
+      unist-util-remove: 4.0.0
+      unist-util-visit: 5.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /@mswjs/cookies@0.2.2:
@@ -12726,6 +12740,14 @@ packages:
     resolution: {integrity: sha512-fucsC7HjXvkB5R3kTCO7kUjRdrS0BJt3M/FPxmHMBOm8JQi2BsHAHFsy27E0EolP8rp0NzXsJ+jNPyDWvOJZPA==}
     dependencies:
       '@types/unist': 3.0.1
+    dev: false
+
+  /unist-util-remove@4.0.0:
+    resolution: {integrity: sha512-b4gokeGId57UVRX/eVKej5gXqGlc9+trkORhFJpu9raqZkZhU0zm8Doi05+HaiBsMEIJowL+2WtQ5ItjsngPXg==}
+    dependencies:
+      '@types/unist': 3.0.1
+      unist-util-is: 6.0.0
+      unist-util-visit-parents: 6.0.1
     dev: false
 
   /unist-util-stringify-position@4.0.0:

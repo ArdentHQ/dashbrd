@@ -118,6 +118,7 @@
         "@ardenthq/sdk-helpers": "^1.2.7",
         "@ardenthq/sdk-intl": "^1.2.7",
         "@metamask/providers": "^10.2.1",
+        "@microflash/remark-figure-caption": "^2.0.2",
         "@popperjs/core": "^2.11.8",
         "@storybook/addon-docs": "^7.4.4",
         "@tanstack/react-query": "^4.35.3",
