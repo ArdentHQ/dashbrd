@@ -18,6 +18,7 @@ use App\Data\Token\TokenData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
@@ -25,6 +26,7 @@ use App\Models\Network;
 use App\Models\Nft;
 use App\Models\User;
 use App\Support\Cache\UserCache;
+use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -344,5 +346,14 @@ class CollectionController extends Controller
             'activityPageLimit' => $activityPageLimit,
             'nftPageLimit' => $nftPageLimit,
         ];
+    }
+
+    public function refreshActivity(Request $request, Collection $collection): JsonResponse
+    {
+        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

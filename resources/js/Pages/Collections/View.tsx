@@ -18,6 +18,7 @@ import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
+import axios from "axios";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
@@ -76,6 +77,7 @@ const CollectionsView = ({
     const [activities, setActivities] = useState(initialActivities);
 
     const [loading, setLoading] = useState(false);
+    const [isLoadingActivity, setIsLoadingActivity] = useState(false);
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
 
@@ -252,6 +254,16 @@ const CollectionsView = ({
         );
     };
 
+    const handleRefreshActivity = async () => {
+        setIsLoadingActivity(true);
+
+        await axios.post<{ success: boolean }>(
+            route("collection.refresh-activity", {
+                collection: collection.slug,
+            }),
+        );
+    };
+
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
             <DefaultLayout toastMessage={props.toast}>
@@ -276,6 +288,8 @@ const CollectionsView = ({
                     <CollectionNavigation
                         selectedTab={selectedTab}
                         onTabChange={tabChangeHandler}
+                        onRefreshActivity={handleRefreshActivity}
+                        isLoadingActivity={isLoadingActivity}
                     >
                         <Tab.Panel>
                             <div className="mt-6 flex lg:space-x-6">

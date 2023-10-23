@@ -44,6 +44,10 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('nft.refresh')
             ->middleware('throttle:nft:refresh');
 
+    Route::post('/collections/{collection:slug}/refresh', [Controllers\CollectionController::class, 'refreshActivity'])
+            ->name('collection.refresh-activity')
+            ->middleware('throttle:nft:refresh');
+
     Route::get('/networks/{chainId}', Controllers\NetworkController::class)
             ->name('network-by-chain');
 });
