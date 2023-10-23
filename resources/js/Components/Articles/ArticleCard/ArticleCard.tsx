@@ -37,7 +37,8 @@ export const ArticleCard = ({
                         "bg-theme-dark-900": isLargeVariant,
                     })}
                     alt={article.title}
-                    src={article.image}
+                    srcSet={`${article.image.medium} 1x, ${article.image.medium2x} 2x`}
+                    src={article.image.medium}
                 />
             </div>
 

@@ -31,7 +31,8 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                             className="h-full w-full rounded-lg object-cover"
                             wrapperClassName="h-full [&>span]:h-full bg-white"
                             alt={article.title}
-                            src={article.image}
+                            srcSet={`${article.image.large} 1x, ${article.image.large2x} 2x`}
+                            src={article.image.large}
                         />
                     </div>
 

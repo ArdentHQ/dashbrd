@@ -13,6 +13,7 @@ use App\Models\Article;
 use App\Models\Collection;
 use App\Models\User;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
@@ -80,7 +81,12 @@ class ArticleResource extends Resource
                     ->imageCropAspectRatio('16:9')
                     ->rules(['max:5120']),
 
-                Textarea::make('content')->required()->autosize()->columnSpan('full'),
+                MarkdownEditor::make('content')
+                    ->columnSpan('full')
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsDirectory('attachments')
+                    ->fileAttachmentsVisibility('public')
+                    ->required(),
 
                 Select::make('user_id')
                     ->relationship(
