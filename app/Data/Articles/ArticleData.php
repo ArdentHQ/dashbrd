@@ -28,7 +28,9 @@ class ArticleData extends Data
         #[LiteralTypeScriptType('App.Enums.ArticleCategoryEnum')]
         public ArticleCategoryEnum $category,
         public string $content,
-        public string $image,
+        /** @var array{ small: string, small2x: string, medium: string, medium2x: string, large: string, large2x: string } */
+        #[LiteralTypeScriptType('{ small: string, small2x: string, medium: string, medium2x: string, large: string, large2x: string }')]
+        public array $image,
         public int $publishedAt,
         public int $userId,
         public string $authorName,
@@ -52,7 +54,14 @@ class ArticleData extends Data
             slug: $article->slug,
             category: $article->category,
             content: $article->content,
-            image: $article->getFirstMediaUrl('cover', 'large'),
+            image: [
+                'small' => $article->getFirstMediaUrl('cover', 'small'),
+                'small2x' => $article->getFirstMediaUrl('cover', 'small@2x'),
+                'medium' => $article->getFirstMediaUrl('cover', 'medium'),
+                'medium2x' => $article->getFirstMediaUrl('cover', 'medium@2x'),
+                'large' => $article->getFirstMediaUrl('cover', 'large'),
+                'large2x' => $article->getFirstMediaUrl('cover', 'large@2x'),
+            ],
             publishedAt: (int) $article->published_at->timestamp,
             userId: $article->user_id,
             authorName: $user->username ?? 'Unknown',
