@@ -35,15 +35,15 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                         />
                     </div>
 
-                    <div className="relative mt-6 pb-6">
-                        <div className="top-8 hidden md:sticky md:block">
+                    <div className="relative mt-6 flex items-start pb-6">
+                        <div className="bottom-8 top-8 hidden min-h-[136px] md:sticky  md:block">
                             <ArticleShare
                                 article={article}
                                 className="absolute -ml-[68px] flex flex-col space-y-2"
                             />
                         </div>
 
-                        <div className="min-h-[136px]">
+                        <div>
                             <p>Content goes here</p>
                         </div>
                     </div>
