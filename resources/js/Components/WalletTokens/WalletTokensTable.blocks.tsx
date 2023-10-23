@@ -27,13 +27,13 @@ export const Action = ({ asset, onClick }: Omit<Properties, "currency">): JSX.El
         <>
             <Button
                 data-testid="WalletTokensTable__action_details"
-                className="hidden overflow-hidden group-hover:bg-theme-secondary-200 md:inline"
+                className="hidden overflow-hidden group-hover:bg-theme-secondary-200 dark:bg-theme-dark-800 dark:group-hover:bg-theme-dark-700 md:inline"
                 onClick={() => {
                     onClick(asset);
                 }}
                 variant="secondary"
             >
-                <div className="transition-default -mx-5 -my-2 px-5 py-2 hover:bg-theme-secondary-300">
+                <div className="transition-default -mx-5 -my-2 px-5 py-2 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-700 ">
                     {t("common.details")}
                 </div>
             </Button>
@@ -93,13 +93,13 @@ export const Token = memo(
                 <div className="flex flex-col items-start space-y-0.5 whitespace-nowrap font-medium">
                     <span
                         data-testid="WalletTokensTable__token_symbol"
-                        className="text-sm leading-5.5 text-theme-secondary-900 group-hover/token:text-theme-primary-700 sm:text-base sm:leading-6"
+                        className="text-sm leading-5.5 text-theme-secondary-900 group-hover/token:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400 sm:text-base sm:leading-6"
                     >
                         {asset.symbol}
                     </span>
                     <span
                         data-testid="WalletTokensTable__token_name"
-                        className="text-xs leading-4.5 text-theme-secondary-500 sm:text-sm sm:leading-5.5"
+                        className="text-xs leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 sm:text-sm sm:leading-5.5"
                     >
                         {asset.name}
                     </span>
@@ -144,7 +144,7 @@ export const Balance = ({ asset, currency }: Omit<Properties, "onClick">): JSX.E
                         <div
                             ref={fiatReference}
                             data-testid="WalletTokensTable__balance_fiat"
-                            className="truncate text-right text-sm leading-5.5 text-theme-secondary-900 sm:text-base sm:leading-6"
+                            className="truncate text-right text-sm leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50 sm:text-base sm:leading-6"
                         >
                             <FormatFiat
                                 value={asset.fiat_balance ?? "0"}
@@ -172,7 +172,7 @@ export const Balance = ({ asset, currency }: Omit<Properties, "onClick">): JSX.E
                         >
                             <div
                                 ref={reference}
-                                className="truncate text-xs leading-4.5 text-theme-secondary-500 sm:text-sm sm:leading-5.5"
+                                className="truncate text-xs leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 sm:text-sm sm:leading-5.5"
                             >
                                 <FormatCrypto
                                     token={token}
@@ -199,7 +199,7 @@ export const Price = ({ asset, currency }: Omit<Properties, "onClick">): JSX.Ele
     >
         <span
             data-testid="WalletTokensTable__price_fiat"
-            className="text-base leading-6 text-theme-secondary-700"
+            className="text-base leading-6 text-theme-secondary-700 dark:text-theme-dark-200"
         >
             <FormatFiat
                 value={asset.token_price?.toString() ?? "0"}
@@ -223,7 +223,7 @@ export const Price = ({ asset, currency }: Omit<Properties, "onClick">): JSX.Ele
 export const MarketCap = ({ asset, currency }: Omit<Properties, "onClick">): JSX.Element => (
     <span
         data-testid="WalletTokensTable__market-cap"
-        className="font-medium text-theme-secondary-700"
+        className="font-medium text-theme-secondary-700 dark:text-theme-dark-200"
     >
         <FormatFiatShort
             value={asset.total_market_cap?.toString() ?? "0"}
@@ -235,7 +235,7 @@ export const MarketCap = ({ asset, currency }: Omit<Properties, "onClick">): JSX
 export const Volume = ({ asset, currency }: Omit<Properties, "onClick">): JSX.Element => (
     <span
         data-testid="WalletTokensTable__volume"
-        className="font-medium text-theme-secondary-700"
+        className="font-medium text-theme-secondary-700 dark:text-theme-dark-200"
     >
         <FormatFiatShort
             value={asset.total_volume?.toString() ?? "0"}

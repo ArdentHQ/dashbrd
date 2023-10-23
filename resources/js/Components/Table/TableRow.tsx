@@ -6,7 +6,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProperties>(
     (
         {
             className,
-            borderClass = "group border-b last:border-b-0 border-theme-secondary-300 border-dashed",
+            borderClass = "group border-b last:border-b-0 border-theme-secondary-300 border-dashed dark:border-theme-dark-700",
             onClick,
             ...properties
         }: TableRowProperties,
