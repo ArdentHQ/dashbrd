@@ -31,15 +31,15 @@ const PortfolioBreakdownTableItem = ({
             >
                 <div className={`h-8 w-1 ${color}`} />
                 <div className="flex flex-col">
-                    <span className="font-medium">
+                    <span className="font-medium dark:text-theme-dark-50">
                         {asset.symbol}{" "}
-                        <span className="text-theme-secondary-500 sm:hidden">
+                        <span className="text-theme-secondary-500 dark:text-theme-dark-200 sm:hidden">
                             &nbsp;
                             <FormatPercentage value={Number(asset.percentage)} />
                         </span>
                     </span>
                     <span
-                        className="max-w-[8rem] truncate text-sm font-medium text-theme-secondary-500"
+                        className="max-w-[8rem] truncate text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
                         data-testid="PortfolioBreakdownItemAsset"
                     >
                         {asset.name}
@@ -49,7 +49,7 @@ const PortfolioBreakdownTableItem = ({
 
             <TableCell innerClassName="py-2.5 justify-end">
                 <div className="flex flex-col items-end">
-                    <span className="font-medium">
+                    <span className="font-medium dark:text-theme-dark-50">
                         <FormatFiat
                             value={asset.fiat_balance}
                             currency={currency}
@@ -57,7 +57,7 @@ const PortfolioBreakdownTableItem = ({
                     </span>
 
                     {!isOtherGroup(asset) && (
-                        <span className="whitespace-nowrap text-sm font-medium text-theme-secondary-500">
+                        <span className="whitespace-nowrap text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300">
                             <FormatCrypto
                                 token={{
                                     name: asset.name,
@@ -76,7 +76,7 @@ const PortfolioBreakdownTableItem = ({
                 className="hidden sm:table-cell"
                 innerClassName="justify-end"
             >
-                <span className="font-medium text-theme-secondary-700">
+                <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                     <FormatPercentage value={Number(asset.percentage)} />
                 </span>
             </TableCell>

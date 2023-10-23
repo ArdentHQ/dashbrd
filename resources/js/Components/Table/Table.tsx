@@ -68,7 +68,7 @@ export const Table = <RowDataType extends Record<never, unknown>>({
     return (
         <div
             className={cn({
-                "rounded-xl border border-theme-secondary-300": variant === "default",
+                "rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700": variant === "default",
                 "border-none": variant === "borderless",
             })}
         >

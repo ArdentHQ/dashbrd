@@ -713,7 +713,7 @@ export const CollectionActivityTableItem = ({
         <TableRow
             data-testid="ActivityTable__Row"
             borderClass={cn(
-                "group border-b border-theme-secondary-300 border-dashed",
+                "group border-b border-theme-secondary-300 border-dashed dark:border-theme-dark-700",
                 hasBorderBottom ? "last:border-b-[5px] last:border-solid" : "last:border-b-0",
             )}
         >
