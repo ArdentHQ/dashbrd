@@ -78,5 +78,10 @@ class AppServiceProvider extends ServiceProvider
 
             return Limit::none();
         });
+
+        RateLimiter::for('collections-refresh', fn () => [
+            Limit::perMinute(50), // Global limit...
+            Limit::perMinutes(15, maxAttempts: 1), // Limit per collection...
+        ]);
     }
 }
