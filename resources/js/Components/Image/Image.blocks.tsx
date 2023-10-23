@@ -2,7 +2,7 @@ import cn from "classnames";
 import { ImageLoadError } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const ImageErrorPlaceholer = ({
+export const ImageErrorPlaceholder = ({
     className,
     errorMessage,
 }: {

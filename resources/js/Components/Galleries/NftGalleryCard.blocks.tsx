@@ -29,6 +29,7 @@ interface NftImageContainerProperties {
     allowSelection?: boolean;
     isSelected?: boolean;
     isAdded?: boolean;
+    validateImage?: boolean;
 }
 
 interface NftImageGridProperties {
@@ -41,6 +42,7 @@ interface NftImageGridProperties {
     onDeselectNft?: (nft: App.Data.Gallery.GalleryNftData) => void;
     selectedNfts?: App.Data.Gallery.GalleryNftData[];
     addedNfts?: App.Data.Gallery.GalleryNftData[];
+    validateImage?: boolean;
 }
 
 const NftImage = ({
@@ -93,6 +95,7 @@ const NftImageContainer = ({
     allowSelection,
     isSelected,
     isAdded,
+    validateImage,
 }: NftImageContainerProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -108,6 +111,21 @@ const NftImageContainer = ({
                             nft={nft}
                             className="blur-sm grayscale"
                         />
+                    </div>
+                </Tooltip>
+            </div>
+        );
+    }
+
+    if (Boolean(validateImage) && nft.images.large === null) {
+        return (
+            <div
+                data-testid={`NftImageGrid__container--${nft.tokenNumber}--image_error`}
+                className="relative overflow-hidden rounded-xl"
+            >
+                <Tooltip content={t("pages.galleries.create.nft_missing_image")}>
+                    <div>
+                        <NftImage nft={nft} />
                     </div>
                 </Tooltip>
             </div>
@@ -141,6 +159,7 @@ export const NftImageGrid = ({
     addedNfts,
     onSelectNft,
     onDeselectNft,
+    validateImage,
 }: NftImageGridProperties): JSX.Element => {
     const nftData = "paginated" in nfts ? nfts.paginated.data : nfts;
 
@@ -167,6 +186,7 @@ export const NftImageGrid = ({
                         }}
                         isSelected={isSelected}
                         isAdded={isAdded}
+                        validateImage={validateImage}
                     />
                 );
             })}
