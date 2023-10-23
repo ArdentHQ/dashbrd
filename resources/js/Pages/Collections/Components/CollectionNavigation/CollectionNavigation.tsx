@@ -6,6 +6,7 @@ import { Button } from "@/Components/Buttons";
 import { type IconName } from "@/Components/Icon";
 import { Tabs } from "@/Components/Tabs";
 import { Tooltip } from "@/Components/Tooltip";
+import { isTruthy } from "@/Utils/is-truthy";
 
 const CollectionNavigationTab = forwardRef<
     HTMLButtonElement,
@@ -110,7 +111,7 @@ export const CollectionNavigation = ({
                                 icon="Refresh"
                                 variant="secondary"
                                 className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
-                                disabled={isLoadingActivity}
+                                disabled={isTruthy(isLoadingActivity)}
                                 onClick={onRefreshActivity}
                             >
                                 {t("common.refresh")}
@@ -127,7 +128,7 @@ export const CollectionNavigation = ({
                         variant="secondary"
                         className=" block w-full bg-theme-secondary-100 text-theme-primary-900 sm:hidden"
                         onClick={onRefreshActivity}
-                        disabled={isLoadingActivity}
+                        disabled={isTruthy(isLoadingActivity)}
                     >
                         {t("common.refresh")}
                     </Button>
