@@ -13,12 +13,14 @@ export const CollectionsHeading = ({
     const { t } = useTranslation();
 
     return (
-        <Heading
-            level={1}
-            className="text-left"
-        >
+        <div className="text-left">
             <div className="flex w-full flex-row items-center justify-between gap-3 md:justify-start">
-                <h1 className="dark:text-theme-dark-50">{t("common.my_collection")}</h1>
+                <Heading
+                    level={1}
+                    className="dark:text-theme-dark-50"
+                >
+                    {t("common.my_collection")}
+                </Heading>
             </div>
             <span className="mt-1 block text-sm font-medium leading-5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-base">
                 <Trans
@@ -42,6 +44,6 @@ export const CollectionsHeading = ({
                     ]}
                 />
             </span>
-        </Heading>
+        </div>
     );
 };
