@@ -4,7 +4,7 @@ interface Properties {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ArticleContent = ({ article }: Properties): JSX.Element => (
-    <div className="prose max-w-none">
+    <div className="article-content">
         <p>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse voluptas neque cum fugit asperiores quo,
             numquam repellendus labore, sequi quae nihil provident vero consequatur iusto veritatis? Nostrum assumenda
@@ -83,6 +83,13 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
                 projects and it can be hard for projects to gauge what times are good for their followers. They are a
                 great tool but need better organization and planning functions.
             </li>
+            <li>
+                Spaces are great but it can be hard to keep track of upcoming events.
+                <ol>
+                    <li>Ordered list inside unordered list</li>
+                    <li>Ordered list inside unordered list</li>
+                </ol>
+            </li>
         </ul>
 
         <p>
@@ -112,6 +119,10 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => (
                 Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
                 projects and it can be hard for projects to gauge what times are good for their followers. They are a
                 great tool but need better organization and planning functions.
+                <ul>
+                    <li>Unordered list inside ordered list</li>
+                    <li>Unordered list inside ordered list</li>
+                </ul>
             </li>
             <li>
                 Spaces are great but it can be hard to keep track of upcoming events when you are following dozens of
