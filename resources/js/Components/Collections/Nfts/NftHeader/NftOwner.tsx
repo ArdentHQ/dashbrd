@@ -25,7 +25,7 @@ export const NftOwner = ({ nft }: Properties): JSX.Element => {
     }, [nft, t]);
 
     return (
-        <div className="flex text-sm font-medium text-theme-secondary-700">
+        <div className="flex text-sm font-medium text-theme-secondary-700 dark:text-theme-dark-200">
             {t("pages.nfts.owned_by") + " "}
 
             {nft.wallet !== null && ownerUrl !== null && address !== null ? (
@@ -36,7 +36,7 @@ export const NftOwner = ({ nft }: Properties): JSX.Element => {
                     showExternalIcon={true}
                     className="ml-1 flex flex-row items-center"
                 >
-                    <span className="text-theme-primary-600">
+                    <span className="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500">
                         <TruncateMiddle
                             length={8}
                             text={address}
