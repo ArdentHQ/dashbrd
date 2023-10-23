@@ -92,9 +92,13 @@ it('updates the description and dispatches the next job', function () {
 });
 
 it('runs the job for the next network if no more nfts left in the current network', function () {
-    $network = Network::factory()->create();
+    $network = Network::factory()->create([
+        'is_mainnet' => true,
+    ]);
 
-    $newNetwork = Network::factory()->create();
+    $newNetwork = Network::factory()->create([
+        'is_mainnet' => true,
+    ]);
 
     $nft = Nft::factory()->recycle($network)->create([
         'description' => 'original-1',
