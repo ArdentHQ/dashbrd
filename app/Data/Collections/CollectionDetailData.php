@@ -8,6 +8,7 @@ use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Models\User;
 use App\Transformers\IpfsGatewayUrlTransformer;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
@@ -41,7 +42,7 @@ class CollectionDetailData extends Data
         public ?int $owners,
         public int $nftsCount,
         public ?int $mintedAt,
-        public ?int $activityUpdatedAt,
+        public ?Carbon $activityUpdatedAt,
         public ?bool $isFetchingActivity,
     ) {
     }

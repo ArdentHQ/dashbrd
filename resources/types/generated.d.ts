@@ -125,7 +125,7 @@ declare namespace App.Data.Collections {
         owners: number | null;
         nftsCount: number;
         mintedAt: number | null;
-        activityUpdatedAt: number | null;
+        activityUpdatedAt: string | null;
         isFetchingActivity: boolean | null;
     };
     export type CollectionNftData = {
