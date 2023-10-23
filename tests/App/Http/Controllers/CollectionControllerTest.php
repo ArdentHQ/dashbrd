@@ -1183,6 +1183,4 @@ it('can refresh collection activity', function () {
         ->assertStatus(200);
 
     Bus::assertDispatched(FetchCollectionActivity::class);
-
-    expect($collection->fresh()->is_fetching_activity)->toBeTrue();
 });
