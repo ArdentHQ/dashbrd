@@ -137,6 +137,7 @@
         "react-i18next": "^12.3.1",
         "react-in-viewport": "1.0.0-alpha.30",
         "react-loading-skeleton": "^3.3.1",
+        "react-markdown": "^9.0.0",
         "react-popper": "^2.3.0",
         "react-resize-detector": "^8.1.0",
         "react-sortablejs": "^6.1.4",
