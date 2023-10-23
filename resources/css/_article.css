@@ -13,6 +13,10 @@
     @apply mb-0;
 }
 
+.article-content > :first-child {
+    @apply mt-0;
+}
+
 .article-content > p,
 .article-content > ul,
 .article-content > ol,
