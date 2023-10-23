@@ -387,7 +387,7 @@ class MnemonicPendingRequest extends PendingRequest
             // `LABEL_BURN` transfers, so I am filtering them out here.
             // In the future we may want to add support for them.
             ->filter(fn ($transfer) => $this->extractNftTransferType($transfer['labels']) !== null)
-            ->map(function ($transfer) use ($chain, $contractAddress, $tokenId, $ethToken) {
+            ->map(function ($transfer) use ($chain, $contractAddress, $ethToken) {
                 $currency = CurrencyCode::USD;
 
                 $blockchainTimestamp = Carbon::parse($transfer['blockchainEvent']['blockTimestamp']);
@@ -395,7 +395,7 @@ class MnemonicPendingRequest extends PendingRequest
 
                 return new Web3NftTransfer(
                     contractAddress: $contractAddress,
-                    tokenId: $tokenId,
+                    tokenId: $transfer["tokenId"],
                     sender: $transfer['sender']['address'],
                     recipient: $transfer['recipient']['address'],
                     txHash: $transfer['blockchainEvent']['txHash'],
