@@ -1,6 +1,7 @@
 import { Tab } from "@headlessui/react";
 import { type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
+import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionHeading } from "./Components/CollectionHeading";
@@ -18,7 +19,6 @@ import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
-import axios from "axios";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
@@ -237,7 +237,7 @@ const CollectionsView = ({
             return <EmptyBlock>{t("pages.collections.activities.ignores_activities")}</EmptyBlock>;
         }
 
-        if (isLoadingActivity) {
+        if (isTruthy(isLoadingActivity)) {
             return <EmptyBlock>{t("pages.collections.activities.loading_activities_collection")}</EmptyBlock>;
         }
 
@@ -258,10 +258,10 @@ const CollectionsView = ({
         );
     };
 
-    const handleRefreshActivity = async () => {
+    const handleRefreshActivity = (): void => {
         setIsLoadingActivity(true);
 
-        await axios.post<{ success: boolean }>(
+        void axios.post<{ success: boolean }>(
             route("collection.refresh-activity", {
                 collection: collection.slug,
             }),

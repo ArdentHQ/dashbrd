@@ -65,7 +65,7 @@ export const CollectionNavigation = ({
     selectedTab: "collection" | "activity";
     onTabChange: (tab: "collection" | "activity") => void;
     onRefreshActivity: () => void;
-    isLoadingActivity?: boolean;
+    isLoadingActivity?: boolean | null;
 }): JSX.Element => {
     const { t } = useTranslation();
 
