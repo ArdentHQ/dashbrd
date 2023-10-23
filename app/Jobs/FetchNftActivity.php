@@ -82,14 +82,9 @@ class FetchNftActivity implements ShouldBeUnique, ShouldQueue
             from: $latestActivityDate
         );
 
-        $nfts = Nft::where("collection_id", $collection->id)->get();
-
         $upsertedCount = NftActivity::upsert(
-            $nftActivity->map(function (Web3NftTransfer $activity) use ($nfts) {
-                $nft = $nfts->firstWhere("token_number", $activity->tokenId);
-
+            $nftActivity->map(function (Web3NftTransfer $activity) {
                 return [
-                    'nft_id' => $nft->id,
                     'type' => $activity->type->value,
                     'sender' => $activity->sender,
                     'recipient' => $activity->recipient,
