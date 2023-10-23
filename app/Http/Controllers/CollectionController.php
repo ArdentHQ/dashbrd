@@ -350,7 +350,10 @@ class CollectionController extends Controller
 
     public function refreshActivity(Request $request, Collection $collection): JsonResponse
     {
-        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+
+        if(!$collection->is_fetching_activity) {
+            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+        }
 
         return response()->json([
             'success' => true,
