@@ -41,6 +41,8 @@ class CollectionDetailData extends Data
         public ?int $owners,
         public int $nftsCount,
         public ?int $mintedAt,
+        public ?int $activityUpdatedAt,
+        public ?bool $isFetchingActivity,
     ) {
     }
 
@@ -70,6 +72,8 @@ class CollectionDetailData extends Data
             owners: $collection->owners,
             nftsCount: $collection->nfts()->when($user !== null, fn ($q) => $q->ownedBy($user))->count(),
             mintedAt: $collection->minted_at?->getTimestampMs(),
+            activityUpdatedAt: $collection->activity_updated_at,
+            isFetchingActivity: $collection->is_fetching_activity
         );
     }
 }
