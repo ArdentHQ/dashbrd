@@ -29,7 +29,8 @@ export const TableHeader = <RowDataType extends Record<never, unknown>>({
         const thElementClassName = cn(
             "group relative text-sm text-left select-none border-theme-secondary-300 m-0 font-medium",
             {
-                "bg-theme-secondary-50 text-theme-secondary-700": variant === "default" || variant === "list",
+                "bg-theme-secondary-50 text-theme-secondary-700 dark:bg-theme-dark-950 dark:text-theme-dark-200":
+                    variant === "default" || variant === "list",
                 "text-theme-secondary-500": variant === "borderless",
             },
             column.headerClassName,
@@ -97,7 +98,7 @@ export const TableHeader = <RowDataType extends Record<never, unknown>>({
         <thead>
             {headerGroups.map((headerGroup, index) => (
                 <tr
-                    className="border-b border-theme-secondary-300"
+                    className="border-b border-theme-secondary-300 dark:border-theme-dark-700"
                     {...headerGroup.getHeaderGroupProps()}
                     key={index}
                 >
