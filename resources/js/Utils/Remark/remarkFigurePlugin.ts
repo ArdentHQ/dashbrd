@@ -27,11 +27,13 @@ const transformTree = (tree: NodeWithChildren): void => {
         const node: NodeWithChildren = tree.children[index];
 
         if (node.type === "blockquote") {
-            const previous: NodeWithChildren | undefined =
-                tree.children.length > 1 ? tree.children[index - 1] : undefined;
+            if (tree.children.length <= 1) {
+                continue;
+            }
+
+            const previous: NodeWithChildren = tree.children[index - 1];
 
             if (
-                previous !== undefined &&
                 previous.type === "paragraph" &&
                 "children" in previous &&
                 Array.isArray(previous.children) &&

@@ -66,7 +66,7 @@ describe("remarkFigurePlugin", () => {
             ],
         };
 
-        const originalTree = JSON.parse(JSON.stringify(tree));
+        const originalTree: string = JSON.parse(JSON.stringify(tree)) as string;
 
         remarkFigurePlugin()(tree);
 
