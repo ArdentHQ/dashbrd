@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Web3\Mnemonic;
 
+use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chains;
@@ -19,7 +20,7 @@ use App\Support\Facades\Mnemonic;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-final class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
+class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
 {
     use LoadsFromCache;
 
@@ -54,6 +55,14 @@ final class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
             static fn () => Mnemonic::getNftCollectionFloorPrice($chain, $contractAddress),
             [$chain->name, $contractAddress]
         );
+    }
+
+    /**
+     * @return Collection<int, CollectionActivity>
+     */
+    public function getCollectionActivity(Chains $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    {
+        return Mnemonic::getCollectionActivity($chain, $contractAddress, $limit, $from);
     }
 
     public function getBlockTimestamp(Network $network, int $blockNumber): Carbon

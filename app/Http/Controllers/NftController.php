@@ -10,7 +10,6 @@ use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Nfts\NftData;
 use App\Data\Token\TokenData;
-use App\Jobs\FetchNftActivity;
 use App\Models\Collection;
 use App\Models\Nft;
 use App\Models\User;
@@ -27,11 +26,6 @@ class NftController extends Controller
         $user = $request->user();
 
         $nativeToken = $collection->network->tokens()->nativeToken()->defaultToken()->first();
-
-        // Dispatch every 3 days...
-        if (! $nft->last_activity_fetched_at || ! $nft->last_viewed_at || now() > $nft->last_viewed_at->addDays(3)) {
-            FetchNftActivity::dispatch($nft);
-        }
 
         $nft->touch('last_viewed_at');
 

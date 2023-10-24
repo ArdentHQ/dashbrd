@@ -41,7 +41,7 @@ const CollectionsIndex = ({
     auth,
     initialStats,
     title,
-    sortBy,
+    sortBy = "received",
     sortDirection,
     selectedChainIds: initialSelectedChainIds,
 }: {
@@ -139,7 +139,7 @@ const CollectionsIndex = ({
                         hiddenCount={hiddenCollectionAddresses.length}
                         searchQuery={query}
                         setSearchQuery={search}
-                        activeSort={sortBy}
+                        activeSort={sortBy ?? "received"}
                         onSort={sort}
                         onChangeVisibilityStatus={(isHidden) => {
                             reload({ showHidden: isHidden, selectedChainIds, page: 1 });

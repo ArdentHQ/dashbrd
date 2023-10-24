@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Console\Commands\FetchCoingeckoTokens;
+use App\Console\Commands\FetchCollectionActivity;
 use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
@@ -100,9 +101,21 @@ class Kernel extends ConsoleKernel
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
         $schedule
-                ->command(FetchCollectionFloorPrice::class)
-                ->withoutOverlapping()
-                ->hourlyAt(5);
+            // Command only fetches collections that doesn't have a slug yet
+            // so in most cases it will not run any request
+            ->command(FetchCollectionOpenseaSlug::class)
+            ->withoutOverlapping()
+            ->hourly();
+
+        $schedule
+            ->command(FetchCollectionActivity::class)
+            ->withoutOverlapping()
+            ->weeklyOn(Schedule::MONDAY);
+
+        $schedule
+            ->command(FetchCollectionFloorPrice::class)
+            ->withoutOverlapping()
+            ->hourlyAt(5);
 
         $schedule
             ->command(FetchWalletNfts::class)

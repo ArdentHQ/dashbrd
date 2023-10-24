@@ -687,7 +687,7 @@ class AlchemyPendingRequest extends PendingRequest
 
         return collect($props)
             ->filter(function ($item) {
-                return ! empty(Arr::get($item, 'trait_type')) && ! empty(Arr::get($item, 'value'));
+                return ! empty(Arr::get($item, 'trait_type')) && ! empty(Arr::get($item, 'value')) && ! is_array(Arr::get($item, 'value'));
             })
             ->map(function ($item) {
                 $value = strval($item['value']);
