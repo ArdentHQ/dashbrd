@@ -41,6 +41,6 @@ class ConvertArticleToSpeech implements ShouldQueue
         CheckArticleSpeechConversion::dispatch(
             $this->article,
             $provider->convert($this->article)
-        )->delay((int) config('app.dashbrd.text_to_speech.audio_conversion_check_delay_seconds'));
+        )->delay((int) config('dashbrd.text_to_speech.audio_conversion_check_delay_seconds'));
     }
 }

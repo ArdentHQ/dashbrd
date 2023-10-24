@@ -45,7 +45,7 @@ class CheckArticleSpeechConversion implements ShouldQueue
             throw new Exception('Failed to convert article [ID: '.$this->article->id.'] to speech.');
         }
 
-        $this->release((int) config('app.dashbrd.text_to_speech.audio_conversion_check_delay_seconds'));
+        $this->release((int) config('dashbrd.text_to_speech.audio_conversion_check_delay_seconds'));
     }
 
     public function retryUntil() : DateTime
