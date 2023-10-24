@@ -7,6 +7,7 @@ namespace App\Support;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
 use App\Jobs\DetermineCollectionMintingDate;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
@@ -167,6 +168,15 @@ class Web3NftHandler
         });
 
         if (Feature::active(Features::Collections->value)) {
+            // Index activity only for newly created collections...
+            CollectionModel::query()
+                        ->where('is_fetching_activity', false)
+                        ->whereNull('activity_updated_at')
+                        ->whereIn('id', $ids)
+                        ->chunkById(100, function ($collections) {
+                            $collections->each(fn ($collection) => FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS));
+                        });
+
             $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
                 DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
             });
