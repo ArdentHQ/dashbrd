@@ -49,6 +49,40 @@ describe("remarkFigurePlugin", () => {
             type: "root",
             children: [
                 {
+                    type: "paragraph",
+                    value: "paragraph_text",
+                    children: [],
+                },
+                {
+                    type: "blockquote",
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "caption_text",
+                                    children: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        };
+
+        const originalTree: string = JSON.parse(JSON.stringify(tree)) as string;
+
+        remarkFigurePlugin()(tree);
+
+        expect(tree).toEqual(originalTree);
+    });
+
+    it("should not transform if no previous node", () => {
+        const tree: NodeWithChildren = {
+            type: "root",
+            children: [
+                {
                     type: "blockquote",
                     children: [
                         {
