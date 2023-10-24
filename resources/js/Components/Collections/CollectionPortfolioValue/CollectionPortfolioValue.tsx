@@ -28,7 +28,7 @@ export const CollectionPortfolioValue = ({
             })}
         >
             <div
-                className="text-sm leading-5.5 text-theme-secondary-900 md:text-base md:leading-6"
+                className="text-sm leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50 md:text-base md:leading-6"
                 data-testid="CollectionPortfolioValue__crypto"
             >
                 <FormatCrypto
@@ -39,7 +39,7 @@ export const CollectionPortfolioValue = ({
 
             {variant === "list" && (
                 <div
-                    className="text-xs leading-4.5 text-theme-secondary-500 md:text-sm md:leading-5.5"
+                    className="text-xs leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 md:text-sm md:leading-5.5"
                     data-testid="CollectionPortfolioValue__fiat"
                 >
                     {isTruthy(convertedValue) && (

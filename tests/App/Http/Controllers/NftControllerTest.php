@@ -61,7 +61,8 @@ it('should render the collections NTFs view page with custom pageLimit', functio
     ]);
 
     NftActivity::factory()->count(12)->create([
-        'nft_id' => $nft->id,
+        'collection_id' => $collection->id,
+        'token_number' => $nft->token_number,
     ]);
 
     $this->actingAs($user)

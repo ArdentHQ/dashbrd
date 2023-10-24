@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Console\Commands\FetchCoingeckoTokens;
+use App\Console\Commands\FetchCollectionActivity;
 use App\Console\Commands\FetchCollectionBannerBatch;
 use App\Console\Commands\FetchCollectionFloorPrice;
 use App\Console\Commands\FetchCollectionMetadata;
@@ -18,6 +19,7 @@ use App\Console\Commands\MaintainGalleries;
 use App\Console\Commands\MarketData\FetchPriceHistory;
 use App\Console\Commands\MarketData\UpdateTokenDetails;
 use App\Console\Commands\MarketData\VerifySupportedCurrencies;
+use App\Console\Commands\PruneMetaImages;
 use App\Console\Commands\SyncSpamContracts;
 use App\Console\Commands\UpdateArticlesViewCount;
 use App\Console\Commands\UpdateCollectionsFiatValue;
@@ -107,19 +109,32 @@ class Kernel extends ConsoleKernel
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
         $schedule
-                ->command(FetchCollectionFloorPrice::class)
-                ->withoutOverlapping()
-                ->hourlyAt(5);
-
-        $schedule
+            // Command only fetches collections that doesn't have a slug yet
+            // so in most cases it will not run any request
             ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
-            ->hourlyAt(10);
+            ->hourly();
+
+        $schedule
+            ->command(FetchCollectionActivity::class)
+            ->withoutOverlapping()
+            ->weeklyOn(Schedule::MONDAY);
+
+        $schedule
+            ->command(FetchCollectionFloorPrice::class)
+            ->withoutOverlapping()
+            ->hourlyAt(5);
 
         $schedule
             ->command(FetchWalletNfts::class)
             ->withoutOverlapping()
-            ->hourlyAt(15); // offset by 15 mins so it's not run the same time as FetchEnsDetails...
+            ->hourlyAt(10); // offset by 10 mins so it's not run the same time as FetchEnsDetails...
+
+        $schedule
+            ->command(FetchCollectionOpenseaSlug::class)
+            ->withoutOverlapping()
+            ->everyFiveMinutes();
+
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void
@@ -128,6 +143,10 @@ class Kernel extends ConsoleKernel
             ->command(UpdateGalleriesScore::class)
             ->withoutOverlapping()
             ->hourlyAt(2);
+
+        $schedule
+            ->command(PruneMetaImages::class)
+            ->daily();
 
         $schedule
             ->command(UpdateGalleriesValue::class)

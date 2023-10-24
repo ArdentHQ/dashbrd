@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Jobs\FetchNftActivity;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\RefreshNftMetadata;
 use App\Models\Collection;
 use App\Models\Nft;
@@ -28,7 +28,7 @@ class RefreshedNftController extends Controller
         $nft->touch('metadata_requested_at');
         RefreshNftMetadata::dispatch()->onQueue(Queues::NFTS);
 
-        FetchNftActivity::dispatch($nft);
+        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
 
         return response()->json([
             'success' => true,

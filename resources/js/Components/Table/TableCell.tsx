@@ -22,7 +22,7 @@ const variantClass = (variant: TableCellVariant): string | undefined => {
 
 export const TableCell = ({
     innerClassName = "py-2.5",
-    hoverClassName = "group-hover:bg-theme-secondary-50",
+    hoverClassName = "group-hover:bg-theme-secondary-50 dark:group-hover:bg-theme-dark-800",
     className,
     paddingClassName = "px-5",
     variant = "middle",

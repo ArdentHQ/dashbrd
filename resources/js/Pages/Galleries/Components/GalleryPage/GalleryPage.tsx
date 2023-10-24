@@ -2,6 +2,7 @@ import { Head, router } from "@inertiajs/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import useAbortController from "react-use-cancel-token";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { Heading } from "@/Components/Heading";
@@ -27,6 +28,7 @@ export const GalleryPage = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
+    const { newAbortSignal, cancelPreviousRequest, isCancel } = useAbortController();
     const [loading, setLoading] = useState(true);
 
     const searchParameters = new URLSearchParams(window.location.search);
@@ -43,6 +45,8 @@ export const GalleryPage = ({
     const { headers } = useInertiaHeader();
 
     const fetchGalleries = async (): Promise<void> => {
+        cancelPreviousRequest();
+
         const pageUrlWithSearch = replaceUrlQuery({
             query: debouncedQuery,
             page: (debouncedQuery !== initialQuery ? 1 : currentPage).toString(),
@@ -50,12 +54,26 @@ export const GalleryPage = ({
 
         setLoading(true);
 
-        const { data } = await axios.get<{
+        let data: {
             paginated: PaginationData<App.Data.Gallery.GalleryData>;
-        }>(pageUrlWithSearch, {
-            requestId: "gallery-page",
-            headers,
-        });
+        };
+
+        try {
+            const reponse = await axios.get<{
+                paginated: PaginationData<App.Data.Gallery.GalleryData>;
+            }>(pageUrlWithSearch, {
+                headers,
+                signal: newAbortSignal(),
+            });
+
+            data = reponse.data;
+        } catch (error) {
+            if (isCancel(error)) {
+                return;
+            }
+
+            throw error;
+        }
 
         // If the user is on a page that doesn't exist anymore, redirect them to the last page
         if (data.paginated.meta.current_page > data.paginated.meta.last_page) {
@@ -66,6 +84,7 @@ export const GalleryPage = ({
         }
 
         setGalleries(data.paginated);
+
         setLoading(false);
     };
 
