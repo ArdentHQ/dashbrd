@@ -15,12 +15,12 @@ it('can convert the article to audio version', function () {
 
     $this->mock(PollyClient::class, function ($mock) use ($article) {
         $mock->shouldReceive('startSpeechSynthesisTask')->with([
-            'Engine'             => 'neural',
-            'OutputFormat'       => 'mp3',
+            'Engine' => 'neural',
+            'OutputFormat' => 'mp3',
             'OutputS3BucketName' => config('services.polly.bucket'),
-            'OutputS3KeyPrefix'  => $article->id.'/en',
-            'Text'               => 'Hello World'.PHP_EOL,
-            'VoiceId'            => 'Matthew',
+            'OutputS3KeyPrefix' => $article->id.'/en',
+            'Text' => 'Hello World'.PHP_EOL,
+            'VoiceId' => 'Matthew',
         ])->andReturn([
             'SynthesisTask' => [
                 'TaskId' => 'conversion-id',
@@ -102,9 +102,9 @@ it('can ensure the audio file is publicly available', function () {
         $mock->shouldReceive('putObjectAcl')
             ->once()
             ->with([
-                'ACL'    => 'public-read',
+                'ACL' => 'public-read',
                 'Bucket' => config('services.polly.bucket'),
-                'Key'    => sprintf('%s/en.some-conversion-id.mp3', $article->id),
+                'Key' => sprintf('%s/en.some-conversion-id.mp3', $article->id),
             ]);
     });
 
