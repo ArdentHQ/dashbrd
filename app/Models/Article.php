@@ -84,7 +84,8 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function scopeIsPublished(Builder $query): Builder
     {
-        return $query->whereNotNull('articles.published_at');
+        return $query->whereNotNull('articles.published_at')
+            ->where('articles.published_at', '<=', now());
     }
 
     /**
