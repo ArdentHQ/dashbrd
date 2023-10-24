@@ -8,6 +8,7 @@ import { Tabs } from "@/Components/Tabs";
 import { Tooltip } from "@/Components/Tooltip";
 import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { isTruthy } from "@/Utils/is-truthy";
+import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 
 const CollectionNavigationTab = forwardRef<
     HTMLButtonElement,
@@ -117,6 +118,18 @@ export const CollectionNavigation = ({
         return true;
     };
 
+    const updateDisabledReason = (collection: App.Data.Collections.CollectionDetailData): string | undefined => {
+        if (!isTruthy(hasActivities)) {
+            return t("pages.collections.activities.ignores_activities");
+        }
+
+        if (isTruthy(isLoadingActivity)) {
+            return t("pages.collections.activities.loading_activities_collection");
+        }
+
+        return undefined;
+    };
+
     return (
         <Tab.Group
             selectedIndex={selectedIndex}
@@ -137,33 +150,44 @@ export const CollectionNavigation = ({
                     </div>
 
                     {selectedTab === "activity" && (
-                        <div className="py-1">
-                            <Button
-                                icon="Refresh"
-                                variant="secondary"
-                                className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
-                                disabled={!canUpdate(collection)}
-                                onClick={onRefreshActivity}
-                            >
-                                {t("common.refresh")}
-                            </Button>
-                        </div>
+                        <Tooltip
+                            content={updateDisabledReason(collection)}
+                            visible={!!updateDisabledReason(collection)}
+                        >
+                            <div className="py-1">
+                                <Button
+                                    icon="Refresh"
+                                    variant="secondary"
+                                    className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
+                                    disabled={!canUpdate(collection)}
+                                    onClick={onRefreshActivity}
+                                >
+                                    {t("common.refresh")}
+                                </Button>
+                            </div>
+                        </Tooltip>
                     )}
                 </Tab.List>
             </div>
 
             {selectedTab === "activity" && (
-                <div className="mt-6">
-                    <Button
-                        icon="Refresh"
-                        variant="secondary"
-                        className=" block w-full bg-theme-secondary-100 text-theme-primary-900 sm:hidden"
-                        onClick={onRefreshActivity}
-                        disabled={!canUpdate(collection)}
-                    >
-                        {t("common.refresh")}
-                    </Button>
-                </div>
+                <Tooltip
+                    content={updateDisabledReason(collection)}
+                    visible={!!updateDisabledReason(collection)}
+                    touch
+                >
+                    <div className="mt-6">
+                        <Button
+                            icon="Refresh"
+                            variant="secondary"
+                            className=" block w-full bg-theme-secondary-100 text-theme-primary-900 sm:hidden"
+                            onClick={onRefreshActivity}
+                            disabled={!canUpdate(collection)}
+                        >
+                            {t("common.refresh")}
+                        </Button>
+                    </div>
+                </Tooltip>
             )}
             <Tab.Panels>{children}</Tab.Panels>
         </Tab.Group>
