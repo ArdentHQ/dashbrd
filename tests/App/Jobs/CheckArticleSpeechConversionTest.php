@@ -54,3 +54,13 @@ it('stores the audio file url when conversion is completed', function () {
 
     expect($article->fresh()->audio_file_url)->toBe('some-dummy-url');
 });
+
+it('should have a retryUntil value', function () {
+    $article = Article::factory()->create([
+        'audio_file_url' => null,
+    ]);
+
+    $job = new CheckArticleSpeechConversion($article, 'dummy-conversion-id');
+
+    expect($job->retryUntil())->toBeInstanceOf(DateTime::class);
+});
