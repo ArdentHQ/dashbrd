@@ -6,6 +6,7 @@ import { Button } from "@/Components/Buttons";
 import { type IconName } from "@/Components/Icon";
 import { Tabs } from "@/Components/Tabs";
 import { Tooltip } from "@/Components/Tooltip";
+import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { isTruthy } from "@/Utils/is-truthy";
 
 const CollectionNavigationTab = forwardRef<
@@ -73,6 +74,7 @@ export const CollectionNavigation = ({
     collection: App.Data.Collections.CollectionDetailData;
 }): JSX.Element => {
     const { t } = useTranslation();
+    const { hasReachedMaxRequests } = useWalletActivity();
 
     const selectedIndex = useMemo(() => {
         if (selectedTab === "activity") {
@@ -99,8 +101,12 @@ export const CollectionNavigation = ({
             return false;
         }
 
+        if (hasReachedMaxRequests()) {
+            return false;
+        }
+
         if (isTruthy(collection.activityUpdatedAt)) {
-            const diffInMs = new Date(collection.activityUpdatedAt).getTime() - new Date().getTime();
+            const diffInMs = new Date().getTime() - new Date(collection.activityUpdatedAt).getTime();
             const diffInHours = diffInMs / (1000 * 60 * 60);
 
             if (diffInHours <= 6) {

@@ -16,6 +16,7 @@ import { CollectionHiddenModal } from "@/Components/Collections/CollectionHidden
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
+import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -80,6 +81,7 @@ const CollectionsView = ({
     const [isLoadingActivity, setIsLoadingActivity] = useState(collection.isFetchingActivity);
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
+    const { requestActivityUpdate } = useWalletActivity();
 
     const hasSelectedTraits = useMemo(
         () =>
@@ -260,6 +262,7 @@ const CollectionsView = ({
 
     const handleRefreshActivity = (): void => {
         setIsLoadingActivity(true);
+        requestActivityUpdate(collection.address);
 
         void axios.post<{ success: boolean }>(
             route("collection.refresh-activity", {
