@@ -5,6 +5,11 @@ declare(strict_types=1);
 use App\Enums\Period;
 
 return [
+    'browsershot' => [
+        'timeout' => (int) env('BROWSERSHOT_TIMEOUT', 60),
+        'node_binary' => env('BROWSERSHOT_NODE_BINARY', '/usr/local/bin/node'),
+        'npm_binary' => env('BROWSERSHOT_NPM_BINARY', '/usr/local/bin/npm'),
+    ],
     'contact_email' => env('CONTACT_EMAIL', 'support@ardenthq.com'),
 
     'features' => [

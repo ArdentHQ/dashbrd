@@ -85,7 +85,7 @@ class GalleryController extends Controller
         ])->withViewData([
             'title' => trans('metatags.galleries.view.title', ['name' => $gallery->name]),
             'description' => trans('metatags.galleries.view.description', ['name' => $gallery->name]),
-            'image' => trans('metatags.galleries.view.image'),
+            'image' => route('galleries.meta-image', ['gallery' => $gallery->slug]),
         ]);
     }
 
