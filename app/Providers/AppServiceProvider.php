@@ -9,7 +9,7 @@ use App\Contracts\TextToSpeechProvider;
 use App\Contracts\Web3DataProvider;
 use App\Jobs\RefreshNftMetadata;
 use App\Services\MarketData\Providers\CoingeckoProvider;
-use App\Services\Polly;
+use App\Services\TextToSpeech\Polly;
 use App\Services\Web3\Web3ProviderFactory;
 use Aws\Polly\PollyClient;
 use Aws\S3\S3Client;

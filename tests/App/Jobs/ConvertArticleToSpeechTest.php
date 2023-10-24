@@ -5,8 +5,8 @@ declare(strict_types=1);
 use App\Jobs\CheckArticleSpeechConversion;
 use App\Jobs\ConvertArticleToSpeech;
 use App\Models\Article;
+use App\Services\TextToSpeech\FakeTextToSpeechProvider;
 use Illuminate\Support\Facades\Bus;
-use Tests\App\Services\FakeTextToSpeechProvider;
 
 it('dispatches another conversion job', function () {
     $article = Article::factory()->create();

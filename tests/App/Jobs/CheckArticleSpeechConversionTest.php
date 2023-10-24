@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Enums\TextToSpeechConversionStatus;
 use App\Jobs\CheckArticleSpeechConversion;
 use App\Models\Article;
-use Tests\App\Services\FakeTextToSpeechProvider;
+use App\Services\TextToSpeech\FakeTextToSpeechProvider;
 
 it('reports an exception if conversion has failed', function () {
     $article = Article::factory()->create();

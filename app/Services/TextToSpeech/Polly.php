@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\TextToSpeech;
 
 use App\Contracts\TextToSpeechProvider;
 use App\Enums\TextToSpeechConversionStatus;
@@ -10,7 +10,6 @@ use App\Models\Article;
 use Aws\Polly\PollyClient;
 use Aws\S3\S3Client;
 
-// Ignored because we need to mock this class from a test, and it cannot be mocked if it's final...
 readonly class Polly implements TextToSpeechProvider
 {
     public function __construct(
