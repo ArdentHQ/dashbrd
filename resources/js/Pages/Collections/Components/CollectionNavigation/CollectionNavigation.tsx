@@ -90,7 +90,7 @@ export const CollectionNavigation = ({
         }
     };
 
-    const canUpdate = (collection: App.Data.Collections.CollectionDetailData) => {
+    const canUpdate = (collection: App.Data.Collections.CollectionDetailData): boolean => {
         if (isTruthy(isLoadingActivity)) {
             return false;
         }
