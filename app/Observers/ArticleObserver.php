@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Observers;
 
 use App\Jobs\ConvertArticleToSpeech;
@@ -19,7 +21,7 @@ class ArticleObserver
 
     private function prepareArticleSpeech(Article $article): void
     {
-        if (!config('web.text_to_speech.enabled')) {
+        if (! config('web.text_to_speech.enabled')) {
             return;
         }
 
