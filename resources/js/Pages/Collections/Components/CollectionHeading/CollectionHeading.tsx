@@ -15,7 +15,7 @@ export const CollectionHeading = ({
     reportReasons,
     showReportModal,
 }: Properties): JSX.Element => (
-    <div className="-mx-6 -mt-6 flex flex-col overflow-hidden border-theme-secondary-300 sm:-mx-8 sm:-mt-8 lg:mx-0 lg:mt-0 lg:rounded-xl lg:border">
+    <div className="-mx-6 -mt-6 flex flex-col overflow-hidden border-theme-secondary-300 dark:border-theme-dark-700 sm:-mx-8 sm:-mt-8 lg:mx-0 lg:mt-0 lg:rounded-xl lg:border">
         <div className="collection-banner flex h-21 items-center bg-theme-secondary-50 bg-cover bg-center sm:h-30 md:h-50">
             {collection.banner !== null && (
                 <img

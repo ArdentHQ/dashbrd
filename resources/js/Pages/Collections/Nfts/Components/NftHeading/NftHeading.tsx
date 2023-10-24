@@ -117,11 +117,11 @@ export const NftHeading = ({
 
     return (
         <div className="mx-auto -mt-6 flex w-full max-w-content flex-1 flex-col sm:-mt-8 lg:-mt-0 lg:px-8 2xl:px-0">
-            <div className="flex min-w-0 items-start justify-center gap-6 border border-theme-secondary-300 bg-theme-primary-50 md:p-6 lg:mb-6 lg:rounded-xl">
+            <div className="flex min-w-0 items-start justify-center gap-6 border border-theme-secondary-300 bg-theme-primary-50 dark:border-theme-dark-700 dark:bg-theme-dark-800 md:p-6 lg:mb-6 lg:rounded-xl">
                 <NftImage nft={nft} />
 
                 <div className="hidden min-w-0 flex-1 lg:block">
-                    <div className="border-b border-dashed border-theme-secondary-400 pb-6 pt-5">
+                    <div className="border-b border-dashed border-theme-secondary-400 pb-6 pt-5 dark:border-theme-dark-700">
                         <NftHeader
                             nft={nft}
                             alreadyReported={alreadyReported}
