@@ -62,6 +62,7 @@ export const CollectionNavigation = ({
     onRefreshActivity,
     isLoadingActivity,
     hasActivities,
+    collection,
 }: {
     children: JSX.Element[];
     selectedTab: "collection" | "activity";
@@ -69,6 +70,7 @@ export const CollectionNavigation = ({
     onRefreshActivity: () => void;
     isLoadingActivity?: boolean | null;
     hasActivities?: boolean;
+    collection: App.Data.Collections.CollectionDetailData;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -86,6 +88,27 @@ export const CollectionNavigation = ({
         } else {
             onTabChange("collection");
         }
+    };
+
+    const canUpdate = (collection: App.Data.Collections.CollectionDetailData) => {
+        if (isTruthy(isLoadingActivity)) {
+            return false;
+        }
+
+        if (!isTruthy(hasActivities)) {
+            return false;
+        }
+
+        if (isTruthy(collection.activityUpdatedAt)) {
+            const diffInMs = new Date(collection.activityUpdatedAt).getTime() - new Date().getTime();
+            const diffInHours = diffInMs / (1000 * 60 * 60);
+
+            if (diffInHours <= 6) {
+                return false;
+            }
+        }
+
+        return true;
     };
 
     return (
@@ -113,7 +136,7 @@ export const CollectionNavigation = ({
                                 icon="Refresh"
                                 variant="secondary"
                                 className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
-                                disabled={!isTruthy(hasActivities) || isTruthy(isLoadingActivity)}
+                                disabled={!canUpdate(collection)}
                                 onClick={onRefreshActivity}
                             >
                                 {t("common.refresh")}
@@ -130,7 +153,7 @@ export const CollectionNavigation = ({
                         variant="secondary"
                         className=" block w-full bg-theme-secondary-100 text-theme-primary-900 sm:hidden"
                         onClick={onRefreshActivity}
-                        disabled={!isTruthy(hasActivities) || isTruthy(isLoadingActivity)}
+                        disabled={!canUpdate(collection)}
                     >
                         {t("common.refresh")}
                     </Button>
