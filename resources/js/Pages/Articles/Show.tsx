@@ -1,4 +1,5 @@
 import { ArticleAuthor } from "./Components/ArticleAuthor";
+import { ArticleContent } from "./Components/ArticleContent";
 import { ArticleCopy } from "./Components/ArticleCopy";
 import { ArticleDate } from "./Components/ArticleDate";
 import { ArticleShare } from "./Components/ArticleShare";
@@ -43,9 +44,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                             />
                         </div>
 
-                        <div>
-                            <p>Content goes here</p>
-                        </div>
+                        <ArticleContent article={article} />
                     </div>
                 </div>
 

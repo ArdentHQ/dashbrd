@@ -4,3 +4,157 @@
         background-size: 1376px 500px;
     }
 }
+
+.article-content {
+    @apply text-theme-secondary-700;
+}
+
+.article-content > :last-child {
+    @apply mb-0;
+}
+
+.article-content > :first-child {
+    @apply mt-0;
+}
+
+.article-content > p,
+.article-content > ul,
+.article-content > ol,
+.article-content > img,
+.article-content > figure,
+.article-content > h3,
+.article-content > h1,
+.article-content > h2,
+.article-content > h3,
+.article-content > h4,
+.article-content > h5,
+.article-content > h6,
+.article-content > blockquote,
+.article-content > pre,
+.article-content > code {
+    @apply my-4;
+}
+
+.article-content img {
+    @apply mx-auto rounded-lg;
+}
+
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+    @apply font-medium text-theme-secondary-900;
+}
+
+.article-content h5,
+.article-content h6 {
+    @apply font-normal text-theme-secondary-700;
+}
+
+.article-content h2 {
+    @apply border-b border-theme-secondary-400 pb-2 text-2xl;
+}
+
+.article-content h3 {
+    @apply text-xl leading-[30px];
+}
+
+.article-content h4 {
+    @apply text-lg;
+}
+
+.article-content h5 {
+    @apply text-base;
+}
+
+.article-content h6 {
+    @apply text-sm leading-[22px];
+}
+
+.article-content a {
+    @apply text-theme-hint-600 hover:text-theme-primary-800 hover:underline;
+}
+.article-content hr {
+    @apply border-theme-secondary-300;
+}
+
+.article-content figcaption {
+    @apply relative mt-2 pb-2 text-center text-sm font-medium italic leading-6;
+}
+
+.article-content figcaption:after {
+    @apply absolute bottom-0 left-0 right-0 mx-auto h-px w-full max-w-[400px] bg-theme-secondary-300;
+    content: "";
+}
+
+.article-content pre {
+    @apply rounded-lg border border-theme-secondary-300 bg-theme-secondary-50 px-6 py-4;
+}
+
+.article-content pre code {
+    @apply m-0 block border-0 bg-transparent p-0;
+}
+
+.article-content code {
+    @apply my-[-5px] inline-block rounded-[4px] border border-theme-secondary-300 bg-theme-secondary-50 px-[5px] py-px font-normal text-theme-secondary-900;
+}
+
+.article-content blockquote {
+    @apply rounded-xl border-none bg-theme-hint-50 p-8 text-xl font-medium not-italic leading-[30px] text-theme-secondary-900;
+    background-position: 32px 32px;
+}
+
+.article-content blockquote::before {
+    content: url("/images/quote.svg");
+    @apply block bg-no-repeat text-theme-primary-600;
+}
+
+.article-content ul ol,
+.article-content ul ul,
+.article-content ol ul,
+.article-content ol ol {
+    @apply my-0;
+}
+.article-content li {
+    @apply my-2;
+}
+
+.article-content ol {
+    @apply list-decimal pl-10;
+}
+.article-content ul {
+    @apply list-disc pl-10;
+}
+.article-content ol > li {
+    @apply list-none;
+    counter-increment: item;
+}
+.article-content ol > li:before {
+    @apply absolute -ml-12 mr-3 w-9 text-right font-medium text-theme-secondary-900;
+    content: counter(item) ". ";
+}
+.article-content ol ol li,
+.article-content ul ol li {
+    counter-increment: subitem;
+}
+.article-content ol li ol li:before,
+.article-content ul li ol li:before {
+    content: counter(subitem) ". ";
+}
+
+.article-content ul > li {
+    @apply relative list-none;
+}
+.article-content ul > li:before {
+    content: "";
+    @apply absolute ml-[-18px] mt-2 inline-block h-1.5 w-1.5 rounded-full bg-theme-secondary-700;
+}
+
+.article-content ul ul li,
+.article-content ol ul li {
+    @apply list-none;
+}
+.article-content ul li ul li:before,
+.article-content ol li ul li:before {
+    @apply h-[7px] w-[7px] border-2 border-theme-secondary-700 bg-transparent;
+    content: "";
+}
