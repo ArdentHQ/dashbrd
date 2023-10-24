@@ -3,10 +3,11 @@ import remark2rehype from "remark-rehype";
 import { unified } from "unified";
 import { type Node } from "unist";
 
-interface NodeWithChildren extends Node {
+export interface NodeWithChildren extends Node {
     children: NodeWithChildren[];
     alt?: string;
     url?: string;
+    value?: string;
 }
 
 interface NodeOptionalChildren extends Omit<Node, "children"> {
@@ -26,9 +27,10 @@ const transformTree = (tree: NodeWithChildren): void => {
         const node: NodeWithChildren = tree.children[index];
 
         if (node.type === "blockquote") {
-            const previous: NodeWithChildren = tree.children[index - 1];
+            const previous: NodeWithChildren | undefined = tree.children[index - 1];
 
             if (
+                previous !== undefined &&
                 previous.type === "paragraph" &&
                 "children" in previous &&
                 Array.isArray(previous.children) &&
