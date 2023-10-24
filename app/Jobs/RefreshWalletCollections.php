@@ -69,7 +69,7 @@ class RefreshWalletCollections implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return self::class;
+        return self::class.':'.$this->wallet->id;
     }
 
     /**
