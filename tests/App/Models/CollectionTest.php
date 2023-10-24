@@ -642,7 +642,9 @@ it('can sort collections by nfts received date', function () {
         NftTransferType::Transfer->value => 3, // timestamp = 3
         NftTransferType::Sale->value => 5, // timestamp = 5
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft1)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft1->collection_id,
+            'token_number' => $nft1->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
             'recipient' => $wallet->address,
@@ -650,7 +652,9 @@ it('can sort collections by nfts received date', function () {
     }
 
     // Create activity for some other wallet...
-    NftActivity::factory()->for($nft1)->create([
+    NftActivity::factory()->create([
+        'collection_id' => $nft1->collection_id,
+        'token_number' => $nft1->token_number,
         'type' => NftTransferType::Sale,
         'timestamp' => 10,
         'recipient' => $otherWallet->address,
@@ -663,7 +667,9 @@ it('can sort collections by nfts received date', function () {
         NftTransferType::Mint->value => 4, // timestamp = 4
         NftTransferType::Sale->value => 6, // timestamp = 6
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft2)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft2->collection_id,
+            'token_number' => $nft2->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
             'recipient' => $wallet->address,
@@ -671,7 +677,9 @@ it('can sort collections by nfts received date', function () {
     }
 
     // Create activity for some other wallet...
-    NftActivity::factory()->for($nft2)->create([
+    NftActivity::factory()->create([
+        'collection_id' => $nft2->collection_id,
+        'token_number' => $nft2->token_number,
         'type' => NftTransferType::Sale,
         'timestamp' => 15,
         'recipient' => $otherWallet->address,
@@ -684,7 +692,9 @@ it('can sort collections by nfts received date', function () {
         NftTransferType::Mint->value => 3, // timestamp = 3
         NftTransferType::Sale->value => 1, // timestamp = 1
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft3)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft3->collection_id,
+            'token_number' => $nft3->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
             'recipient' => $wallet->address,
@@ -698,7 +708,9 @@ it('can sort collections by nfts received date', function () {
         NftTransferType::Sale->value => 4, // timestamp = 4
         NftTransferType::Mint->value => 1, // timestamp = 1
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft4)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft4->collection_id,
+            'token_number' => $nft4->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
             'recipient' => $wallet->address,
@@ -1102,4 +1114,30 @@ it('sorts collections last time opesea slug was fetched', function () {
         $collection1->id,
         $collection4->id,
     ]);
+});
+
+it('can determine whether collection has its activities indexed', function () {
+    config([
+        'dashbrd.activity_blacklist' => [
+            '0x123',
+        ],
+    ]);
+
+    expect(Collection::factory()->create([
+        'address' => '0x123',
+    ])->indexesActivities())->toBeFalse();
+
+    expect(Collection::factory()->create([
+        'address' => '0x1234',
+    ])->indexesActivities())->toBeTrue();
+
+    expect(Collection::factory()->create([
+        'address' => '0x12345',
+        'supply' => null,
+    ])->indexesActivities())->toBeFalse();
+
+    expect(Collection::factory()->create([
+        'address' => '0x123456',
+        'supply' => 100000,
+    ])->indexesActivities())->toBeFalse();
 });

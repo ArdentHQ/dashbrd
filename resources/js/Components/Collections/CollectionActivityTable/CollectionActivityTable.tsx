@@ -10,7 +10,7 @@ import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 interface Properties {
-    activities: App.Data.Nfts.NftActivitiesData;
+    activities: App.Data.Nfts.NftActivitiesData | null;
     collection: App.Data.Collections.CollectionBasicDetailsData;
     isLoading?: boolean;
     showNameColumn?: boolean;
@@ -130,16 +130,22 @@ export const CollectionActivityTable = ({
                     isCompact={!isSmAndAbove}
                     showNameColumn={showNameColumn}
                     nativeToken={nativeToken}
-                    hasBorderBottom={activities.paginated.meta.total <= 10}
+                    hasBorderBottom={activities !== null && activities.paginated.meta.total <= 10}
                 />
             );
         },
         [collection, isLoading, isXsAndAbove, isSmAndAbove, showNameColumn],
     );
 
-    const tableData = isLoading
-        ? (Array.from({ length: 5 }).fill({}) as App.Data.Nfts.NftActivityData[])
-        : activities.paginated.data;
+    const tableData = useMemo(
+        () =>
+            isLoading
+                ? (Array.from({ length: 5 }).fill({}) as App.Data.Nfts.NftActivityData[])
+                : activities !== null
+                ? activities.paginated.data
+                : [],
+        [isLoading, activities],
+    );
 
     return (
         <>
@@ -150,6 +156,7 @@ export const CollectionActivityTable = ({
                 data={tableData}
                 row={renderTableRow}
                 footer={
+                    activities !== null &&
                     activities.paginated.meta.total > 10 && (
                         <div className="flex items-center justify-between space-x-3 rounded-b border-t border-theme-secondary-300 p-4">
                             <SelectPageLimit
@@ -171,11 +178,11 @@ export const CollectionActivityTable = ({
                         : (children: React.ReactNode) => (
                               <div
                                   data-testid="CollectionActivityTable__Mobile"
-                                  className="flex flex-col"
+                                  className="flex flex-col space-y-4"
                               >
                                   {children}
 
-                                  {activities.paginated.meta.total > 10 && (
+                                  {activities !== null && activities.paginated.meta.total > 10 && (
                                       <div className="mt-3 flex flex-col items-center justify-center">
                                           <SelectPageLimit
                                               value={pageLimit}
