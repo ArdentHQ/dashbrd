@@ -4,10 +4,8 @@ interface Properties {
     article: App.Data.Articles.ArticleData;
 }
 
-export const ArticleContent = ({ article }: Properties): JSX.Element => {
-    return (
-        <div className="article-content">
-            <Markdown remarkPlugins={[remarkFigureCaption]}>{article.content}</Markdown>
-        </div>
-    );
-};
+export const ArticleContent = ({ article }: Properties): JSX.Element => (
+    <div className="article-content">
+        <Markdown remarkPlugins={[remarkFigureCaption]}>{article.content}</Markdown>
+    </div>
+);
