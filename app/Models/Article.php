@@ -131,7 +131,7 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function scopeSortByPublishedDate(Builder $query): Builder
     {
-        return $query->orderBy('articles.published_at', 'desc');
+        return $query->orderByRaw("articles.published_at DESC NULLS LAST");
     }
 
     /**
