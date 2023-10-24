@@ -54,6 +54,19 @@ When you run `composer db:dev` command, you'll notice there are several users se
 
 You can always create a new admin user by running `php artisan make:admin` CLI command.
 
+## Dynamic Meta Images
+
+Dashbrd utilizes [`spatie/browsershot`](https://spatie.be/docs/browsershot/v2) to generate dynamic meta images for the galleries section. For this package to function properly, Node 7.6.0 or higher, along with the Puppeteer Node library, are required.
+
+You need to adjust the following .env variables according to your server configuration:
+
+```plaintext
+BROWSERSHOT_NODE_BINARY="/usr/local/bin/node"
+BROWSERSHOT_NPM_BINARY="/usr/local/bin/npm"
+```
+
+For details on driver requirements and installation, [visit here](https://spatie.be/docs/browsershot/v2/requirements).
+
 ## Reports
 
 When a model gets reported (Gallery, Collection, NFT), this creates an entry in the Admin panel to review. Depending on your needs, you may want to be notified as well to quickly respond to new reports. For this reason, it's possible to add a webhook to get reports pushed to Slack as well. You can adjust the `.env` as follows to achieve this:

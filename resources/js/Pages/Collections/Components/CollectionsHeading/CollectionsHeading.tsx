@@ -16,12 +16,14 @@ export const CollectionsHeading = ({
     const { t } = useTranslation();
 
     return (
-        <Heading
-            level={1}
-            className="text-left"
-        >
+        <div className="text-left">
             <div className="flex w-full flex-row items-center justify-between gap-3 md:justify-start">
-                <h1 className="dark:text-theme-dark-50">{t("common.my_collection")}</h1>
+                <Heading
+                    level={1}
+                    className="dark:text-theme-dark-50"
+                >
+                    {t("common.my_collection")}
+                </Heading>
 
                 <RefreshButton wallet={wallet} />
             </div>
@@ -48,6 +50,6 @@ export const CollectionsHeading = ({
                     ]}
                 />
             </span>
-        </Heading>
+        </div>
     );
 };

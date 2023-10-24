@@ -29,7 +29,7 @@ export const NftBasicInfo = ({ nft }: Properties): JSX.Element => {
                 <LinkButton
                     data-testid="NftHeader__collectionName"
                     variant="link"
-                    textColor="text-theme-primary-600"
+                    textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500"
                     fontSize="text-sm"
                     onClick={() => {
                         router.visit(

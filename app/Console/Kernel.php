@@ -18,6 +18,7 @@ use App\Console\Commands\MaintainGalleries;
 use App\Console\Commands\MarketData\FetchPriceHistory;
 use App\Console\Commands\MarketData\UpdateTokenDetails;
 use App\Console\Commands\MarketData\VerifySupportedCurrencies;
+use App\Console\Commands\PruneMetaImages;
 use App\Console\Commands\SyncSpamContracts;
 use App\Console\Commands\UpdateCollectionsFiatValue;
 use App\Console\Commands\UpdateDiscordMembers;
@@ -121,6 +122,10 @@ class Kernel extends ConsoleKernel
             ->command(UpdateGalleriesScore::class)
             ->withoutOverlapping()
             ->hourlyAt(2);
+
+        $schedule
+            ->command(PruneMetaImages::class)
+            ->daily();
 
         $schedule
             ->command(UpdateGalleriesValue::class)
