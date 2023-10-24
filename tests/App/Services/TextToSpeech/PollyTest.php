@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use App\Enums\TextToSpeechConversionStatus;
 use App\Models\Article;
-use App\Services\Polly;
+use App\Services\TextToSpeech\Polly;
 use Aws\Polly\PollyClient;
 use Aws\S3\S3Client;
 
 it('can convert the article to audio version', function () {
     $article = Article::factory()->create([
-        'body' => '**_Hello World_**',
+        'content' => '**_Hello World_**',
     ]);
 
     $this->mock(PollyClient::class, function ($mock) use ($article) {
@@ -108,7 +108,7 @@ it('can ensure the audio file is publicly available', function () {
             ]);
     });
 
-    app(Polly::class)->ensureFilePublic($article, 'some-conversion-id');
+    app(Polly::class)->ensureFileIsPublic($article, 'some-conversion-id');
 
     $this->addToAssertionCount(1);
 });

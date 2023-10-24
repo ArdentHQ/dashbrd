@@ -46,7 +46,7 @@ it('stores the audio file url when conversion is completed', function () {
 
     $mock = $this->mock(FakeTextToSpeechProvider::class, function ($mock) {
         $mock->shouldReceive('status')->andReturn(TextToSpeechConversionStatus::Completed);
-        $mock->shouldReceive('ensureFilePublic');
+        $mock->shouldReceive('ensureFileIsPublic');
         $mock->shouldReceive('url')->andReturn('some-dummy-url');
     });
 
