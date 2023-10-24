@@ -74,7 +74,7 @@ export const CollectionNavigation = ({
     collection: App.Data.Collections.CollectionDetailData;
 }): JSX.Element => {
     const { t } = useTranslation();
-    const { hasReachedMaxRequests } = useWalletActivity();
+    const { hasReachedMaxUpdateRequests } = useWalletActivity();
 
     const selectedIndex = useMemo(() => {
         if (selectedTab === "activity") {
@@ -101,7 +101,7 @@ export const CollectionNavigation = ({
             return false;
         }
 
-        if (hasReachedMaxRequests()) {
+        if (hasReachedMaxUpdateRequests()) {
             return false;
         }
 
