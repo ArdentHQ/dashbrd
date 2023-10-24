@@ -10,22 +10,22 @@ use App\Models\Article;
 
 class FakeTextToSpeechProvider implements TextToSpeechProvider
 {
-    public function convert(Article $article) : string
+    public function convert(Article $article): string
     {
         return 'dummy-conversion-id';
     }
 
-    public function status(string $conversionId) : TextToSpeechConversionStatus
+    public function status(string $conversionId): TextToSpeechConversionStatus
     {
         return TextToSpeechConversionStatus::Running;
     }
 
-    public function url(string $conversionId) : string
+    public function url(string $conversionId): string
     {
         return '';
     }
 
-    public function ensureFileIsPublic(Article $article, string $conversionId) : void
+    public function ensureFileIsPublic(Article $article, string $conversionId): void
     {
         //
     }

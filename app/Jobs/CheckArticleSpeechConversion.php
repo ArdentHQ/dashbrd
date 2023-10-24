@@ -18,6 +18,7 @@ use Illuminate\Queue\SerializesModels;
 class CheckArticleSpeechConversion implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     public function __construct(
         public Article $article,
         public string $conversionId
@@ -27,7 +28,7 @@ class CheckArticleSpeechConversion implements ShouldQueue
     /**
      * @throws Exception
      */
-    public function handle(TextToSpeechProvider $provider) : void
+    public function handle(TextToSpeechProvider $provider): void
     {
         $status = $provider->status($this->conversionId);
 
@@ -48,7 +49,7 @@ class CheckArticleSpeechConversion implements ShouldQueue
         $this->release((int) config('dashbrd.text_to_speech.audio_conversion_check_delay_seconds'));
     }
 
-    public function retryUntil() : DateTime
+    public function retryUntil(): DateTime
     {
         return now()->addMinutes(10);
     }

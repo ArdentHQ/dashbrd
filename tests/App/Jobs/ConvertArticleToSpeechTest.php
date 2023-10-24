@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Jobs\ConvertArticleToSpeech;
 use App\Jobs\CheckArticleSpeechConversion;
+use App\Jobs\ConvertArticleToSpeech;
 use App\Models\Article;
 use Illuminate\Support\Facades\Bus;
 use Tests\App\Services\FakeTextToSpeechProvider;
