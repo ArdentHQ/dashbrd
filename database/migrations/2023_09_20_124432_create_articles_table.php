@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('published_at')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('content');
+            $table->string('audio_file_url')->nullable();
             $table->unsignedInteger('views_count_7days')->default(0);
             $table->foreignIdFor(User::class)->index()->constrained()->cascadeOnDelete();
             $table->softDeletes();

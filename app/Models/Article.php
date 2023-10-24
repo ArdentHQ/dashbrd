@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
+use Spatie\LaravelMarkdown\MarkdownRenderer;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -68,6 +69,11 @@ class Article extends Model implements HasMedia, Viewable
                     ->addMediaConversion('meta')
                     ->crop(Manipulations::CROP_CENTER, 1200, 630);
             });
+    }
+
+    public function renderedMarkdown(): string
+    {
+        return app(MarkdownRenderer::class)->toHtml($this->content);
     }
 
     /**
