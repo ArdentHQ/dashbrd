@@ -151,7 +151,7 @@ export const CollectionNavigation = ({
                     {selectedTab === "activity" && (
                         <Tooltip
                             content={updateDisabledReason()}
-                            visible={!isTruthy(updateDisabledReason())}
+                            visible={isTruthy(updateDisabledReason())}
                         >
                             <div className="py-1">
                                 <Button
@@ -172,7 +172,7 @@ export const CollectionNavigation = ({
             {selectedTab === "activity" && (
                 <Tooltip
                     content={updateDisabledReason()}
-                    visible={!isTruthy(updateDisabledReason())}
+                    visible={isTruthy(updateDisabledReason())}
                     touch
                 >
                     <div className="mt-6">
