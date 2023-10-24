@@ -1,63 +1,14 @@
 import { router } from "@inertiajs/core";
-import { usePage } from "@inertiajs/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Tooltip } from "@/Components/Tooltip";
-import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData | null }): JSX.Element => {
     const [loading, setLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
     const { t } = useTranslation();
-
-    const { showToast, clear } = useToasts();
-
-    const { props } = usePage();
-
-    useEffect(() => {
-        if (isTruthy(props.auth.wallet?.isRefreshingCollections)) {
-            const interval = setInterval(() => {
-                void (async () => {
-                    const { data } = await axios.get<{
-                        indexing: boolean;
-                    }>(route("refreshed-collections-status"));
-
-                    if (!data.indexing) {
-                        router.reload({
-                            onFinish: () => {
-                                clear();
-
-                                clearInterval(interval);
-                            },
-                        });
-                    }
-                })();
-            }, 1500);
-
-            return () => {
-                clearInterval(interval);
-            };
-        }
-    }, []);
-
-    useEffect(
-        () =>
-            router.on("navigate", (event) => {
-                if (isTruthy(event.detail.page.props.auth.wallet?.isRefreshingCollections)) {
-                    clear();
-
-                    showToast({
-                        message: t("pages.collections.refresh.toast"),
-                        type: "pending",
-                        isExpanded: true,
-                        isLoading: true,
-                    });
-                }
-            }),
-        [],
-    );
 
     const refresh = (): void => {
         setLoading(true);
@@ -66,9 +17,11 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
             route("refresh-collections"),
             {},
             {
-                preserveState: false,
+                preserveState: true,
+                preserveScroll: true,
                 onFinish: () => {
                     setLoading(false);
+                    setDisabled(true);
                 },
             },
         );
@@ -101,7 +54,10 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
                 <IconButton
                     icon="Refresh"
                     disabled={
-                        isTruthy(wallet?.isRefreshingCollections) || !isTruthy(wallet?.canRefreshCollections) || loading
+                        isTruthy(wallet?.isRefreshingCollections) ||
+                        !isTruthy(wallet?.canRefreshCollections) ||
+                        loading ||
+                        disabled
                     }
                     type="button"
                     onClick={refresh}

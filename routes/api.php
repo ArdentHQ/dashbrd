@@ -30,8 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('tokens.network-native-token')
             ->scopeBindings();
 
-    Route::get('/refreshed-collections-status', [Controllers\RefreshedCollectionController::class, 'show'])->name('refreshed-collections-status');
-
     Route::post('/price_history', Controllers\PriceHistoryController::class)
             ->name('price_history');
 
