@@ -296,16 +296,16 @@ describe('user is signed', function () {
 
         $nftWithNullImage = Nft::factory()->create([
             'wallet_id' => $user->wallet->id,
-            'extra_attributes' =>[
+            'extra_attributes' => [
                 'images' => [
-                    'large' => null
+                    'large' => null,
                 ],
             ],
         ]);
 
         $nftWithEmptyImage = Nft::factory()->create([
             'wallet_id' => $user->wallet->id,
-            'extra_attributes' =>[
+            'extra_attributes' => [
                 'images' => [
                     'large' => '',
                 ],
@@ -314,7 +314,7 @@ describe('user is signed', function () {
 
         $nftWithNoImage = Nft::factory()->create([
             'wallet_id' => $user->wallet->id,
-            'extra_attributes' =>[
+            'extra_attributes' => [
                 'images' => [],
             ],
         ]);
