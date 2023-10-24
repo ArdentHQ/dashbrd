@@ -127,6 +127,68 @@ declare namespace App.Data.Collections {
         slug: string;
         chainId: App.Enums.Chains;
     };
+    export type CollectionData = {
+        id: number;
+        name: string;
+        slug: string;
+        address: string;
+        chainId: App.Enums.Chains;
+        floorPrice: string | null;
+        floorPriceFiat: number | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        image: string | null;
+        banner: string | null;
+        openSeaSlug: string | null;
+        website: string;
+        nftsCount: number;
+        nfts: Array<App.Data.Collections.SimpleNftData>;
+    };
+    export type CollectionDetailData = {
+        name: string;
+        slug: string;
+        description: string | null;
+        address: string;
+        chainId: App.Enums.Chains;
+        floorPrice: string | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        floorPriceFiat: number | null;
+        image: string | null;
+        banner: string | null;
+        bannerUpdatedAt: string | null;
+        openSeaSlug: string | null;
+        website: string | null;
+        twitter: string | null;
+        discord: string | null;
+        supply: number | null;
+        volume: string | null;
+        owners: number | null;
+        nftsCount: number;
+        mintedAt: number | null;
+    };
+    export type CollectionNftData = {
+        id: number;
+        collectionId: number;
+        name: string | null;
+        tokenNumber: string;
+        images: App.Data.Nfts.NftImagesData;
+        traits: Array<App.Data.Collections.CollectionTraitData>;
+    };
+    export type CollectionStatsData = {
+        nfts: number;
+        collections: number;
+        value: number | null;
+    };
+    export type CollectionTraitData = {
+        displayType: string;
+        name: string;
+        /** Use the displayType to infer the actual type. */ value: string | number;
+        /** Only present for numeric displayTypes. */ valueMin: ?number;
+        /** Only present for numeric displayTypes. */ valueMax: ?number;
+        nftsCount: number;
+        nftsPercentage: number;
+    };
     export type CollectionTraitFilterData = {
         name: string;
         value: string;
@@ -268,6 +330,17 @@ declare namespace App.Data.Gallery {
         avatar: App.Data.Wallet.WalletAvatarData;
     };
 }
+declare namespace App.Data.Network {
+    export type NetworkWithCollectionsData = {
+        id: number;
+        name: string;
+        isMainnet: boolean;
+        chainId: App.Enums.Chains;
+        publicRpcProvider: string;
+        explorerUrl: string;
+        collectionsCount: number;
+    };
+}
 declare namespace App.Data.Nfts {
     export type NftActivitiesData = {
         paginated: {
@@ -293,7 +366,7 @@ declare namespace App.Data.Nfts {
         sender: string;
         recipient: string;
         timestamp: number;
-        nft: any;
+        nft: App.Data.Collections.CollectionNftData;
         type: App.Enums.NftTransferType;
         totalNative: string | null;
         totalUsd: string | null;
