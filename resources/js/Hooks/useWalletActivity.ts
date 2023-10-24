@@ -2,7 +2,7 @@ import { LocalStorageKey, useLocalStorage } from "./useLocalStorage";
 
 interface Properties {
     requestActivityUpdate: (collectionAddress: string) => void;
-    hasReachedMaxRequests: () => boolean;
+    hasReachedMaxUpdateRequests: () => boolean;
 }
 
 export const useWalletActivity = (): Properties => {
@@ -15,7 +15,7 @@ export const useWalletActivity = (): Properties => {
         requestActivityUpdate: (collectionAddress: string) => {
             setLastCollectionUpdateRequest({ [collectionAddress]: new Date().getTime() });
         },
-        hasReachedMaxRequests: (): boolean => {
+        hasReachedMaxUpdateRequests: (): boolean => {
             const allRequests = Object.values(collectionUpdateRequests ?? {});
 
             const lastHourRequests = allRequests.filter(
