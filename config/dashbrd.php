@@ -218,5 +218,5 @@ return [
     'text_to_speech' => [
         'enabled' => env('AUDIO_CONVERSION_ENABLED', true),
         'audio_conversion_check_delay_seconds' => env('AUDIO_CONVERSION_DELAY_SECONDS', 3),
-    ]
+    ],
 ];

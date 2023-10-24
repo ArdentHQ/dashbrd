@@ -19,19 +19,19 @@ readonly class Polly implements TextToSpeechProvider
     ) {
     }
 
-    public function convert(Article $article) : string
+    public function convert(Article $article): string
     {
         return $this->polly->startSpeechSynthesisTask([
-            'Engine'             => 'neural',
-            'OutputFormat'       => 'mp3',
+            'Engine' => 'neural',
+            'OutputFormat' => 'mp3',
             'OutputS3BucketName' => config('services.polly.bucket'),
-            'OutputS3KeyPrefix'  => $article->id.'/en',
-            'Text'               => strip_tags($article->renderedMarkdown()),
-            'VoiceId'            => 'Matthew',
+            'OutputS3KeyPrefix' => $article->id.'/en',
+            'Text' => strip_tags($article->renderedMarkdown()),
+            'VoiceId' => 'Matthew',
         ])['SynthesisTask']['TaskId'];
     }
 
-    public function status(string $conversionId) : TextToSpeechConversionStatus
+    public function status(string $conversionId): TextToSpeechConversionStatus
     {
         $status = $this->polly->getSpeechSynthesisTask([
             'TaskId' => $conversionId,
@@ -39,24 +39,24 @@ readonly class Polly implements TextToSpeechProvider
 
         return match ($status) {
             'completed' => TextToSpeechConversionStatus::Completed,
-            'failed'    => TextToSpeechConversionStatus::Failed,
-            default     => TextToSpeechConversionStatus::Running,
+            'failed' => TextToSpeechConversionStatus::Failed,
+            default => TextToSpeechConversionStatus::Running,
         };
     }
 
-    public function url(string $conversionId) : string
+    public function url(string $conversionId): string
     {
         return $this->polly->getSpeechSynthesisTask([
             'TaskId' => $conversionId,
         ])['SynthesisTask']['OutputUri'];
     }
 
-    public function ensureFileIsPublic(Article $article, string $conversionId) : void
+    public function ensureFileIsPublic(Article $article, string $conversionId): void
     {
         $this->s3->putObjectAcl([
-            'ACL'    => 'public-read',
+            'ACL' => 'public-read',
             'Bucket' => config('services.polly.bucket'),
-            'Key'    => sprintf('%s/en.%s.mp3', $article->id, $conversionId),
+            'Key' => sprintf('%s/en.%s.mp3', $article->id, $conversionId),
         ]);
     }
 }

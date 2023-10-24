@@ -26,17 +26,17 @@ class ConvertArticleToSpeech implements ShouldQueue
     ) {
     }
 
-    public static function disable() : void
+    public static function disable(): void
     {
         static::$enabled = false;
     }
 
-    public static function enable() : void
+    public static function enable(): void
     {
         static::$enabled = true;
     }
 
-    public function handle(TextToSpeechProvider $provider) : void
+    public function handle(TextToSpeechProvider $provider): void
     {
         CheckArticleSpeechConversion::dispatch(
             $this->article,

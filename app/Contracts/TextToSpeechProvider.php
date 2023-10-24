@@ -9,11 +9,11 @@ use App\Models\Article;
 
 interface TextToSpeechProvider
 {
-    public function convert(Article $article) : string;
+    public function convert(Article $article): string;
 
-    public function status(string $conversionId) : TextToSpeechConversionStatus;
+    public function status(string $conversionId): TextToSpeechConversionStatus;
 
-    public function url(string $conversionId) : string;
+    public function url(string $conversionId): string;
 
-    public function ensureFileIsPublic(Article $article, string $conversionId) : void;
+    public function ensureFileIsPublic(Article $article, string $conversionId): void;
 }

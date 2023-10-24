@@ -24,12 +24,13 @@ it('releases the job back onto the queue when conversion is still running', func
         $mock->shouldReceive('status')->andReturn(TextToSpeechConversionStatus::Running);
     });
 
-    $fakeJob = new class($article, 'dummy-conversion-id') extends CheckArticleSpeechConversion {
+    $fakeJob = new class($article, 'dummy-conversion-id') extends CheckArticleSpeechConversion
+    {
         public static ?int $releaseDelay = null;
 
         public function release($delay = 0)
         {
-            static::$releaseDelay = $delay;
+            self::$releaseDelay = $delay;
         }
     };
 
