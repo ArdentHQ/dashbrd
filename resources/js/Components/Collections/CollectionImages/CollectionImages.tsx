@@ -29,8 +29,8 @@ export const CollectionImages = ({
         {nftsCount >= maxItems && (
             <div className="relative h-20 w-20 overflow-hidden rounded-lg backdrop-blur-0">
                 {nftsCount > maxItems && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/75 backdrop-blur-md">
-                        <span className="text-base font-medium">
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/75 backdrop-blur-md dark:bg-theme-dark-900/75">
+                        <span className="text-base font-medium dark:text-theme-dark-50">
                             {maxItems > 1 && "+"}
                             {nftsCount - maxItems + 1}
                         </span>

@@ -30,7 +30,8 @@ class FetchCollectionOpenseaSlug extends Command
      */
     public function handle(): int
     {
-        $limit = $this->getLimitPerHour();
+        // Job runs every 5 minutes
+        $limit = $this->getLimitPerMinutes(5);
 
         $this->forEachCollection(
             callback: function ($collection, $index) {

@@ -37,7 +37,15 @@ export const CollectionsFilter = ({
     hiddenCount: number;
     displayType: CollectionDisplayType;
     activeSort: string | null;
-    onSort: (sortBy: string) => void;
+    onSort: ({
+        sortBy,
+        direction,
+        selectedChainIds,
+    }: {
+        sortBy: string;
+        direction?: string;
+        selectedChainIds?: number[];
+    }) => void;
     onChangeVisibilityStatus?: (isHidden: boolean) => void;
     isLoading?: boolean;
     availableNetworks: App.Data.Network.NetworkWithCollectionsData[];
@@ -92,6 +100,7 @@ export const CollectionsFilter = ({
                         disabled={disabled}
                         activeSort={activeSort}
                         onSort={onSort}
+                        selectedChainIds={selectedChainIds}
                     />
                 </div>
 

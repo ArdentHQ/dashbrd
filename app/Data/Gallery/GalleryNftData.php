@@ -58,7 +58,7 @@ class GalleryNftData extends Data
             floorPrice: $collection->floor_price,
             floorPriceCurrency: $collection->floorPriceToken?->symbol,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
-            lastActivityFetchedAt: $nft->last_activity_fetched_at,
+            lastActivityFetchedAt: $collection->activity_updated_at,
             lastViewedAt: $nft->last_viewed_at,
             ownedByCurrentUser: $ownedByCurrentUser,
         );

@@ -48,11 +48,11 @@ export const AddressLink = ({
             <Link
                 variant="link"
                 fontSize="text-sm sm:text-base"
-                textColor="text-theme-primary-600"
+                textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
                 className="flex items-center"
                 href={addressUrl(address)}
                 external
-                iconClassName="ml-2 text-theme-secondary-500"
+                iconClassName="ml-2 text-theme-secondary-500 dark:text-theme-dark-300"
             >
                 <span className="whitespace-nowrap">
                     <TruncateMiddle
@@ -92,7 +92,7 @@ export const Name = ({
             />
         </div>
 
-        <span className="transition-default truncate text-base font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
+        <span className="transition-default truncate text-base text-sm font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 sm:text-base md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
             {activity.nft.name}
         </span>
     </div>
@@ -178,16 +178,21 @@ export const Type = ({
     if (isSmAndAbove) {
         return (
             <>
-                <div className="mr-3 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100">
+                <div className="mr-3 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100 dark:bg-theme-dark-800">
                     {showNameColumn && !isLgAndAbove && (
                         <Img
                             data-testid="ActivityTable__image"
-                            className="block aspect-square h-full w-full grow bg-theme-secondary-100 object-cover"
+                            className="block aspect-square h-full w-full grow bg-theme-secondary-100 object-cover dark:bg-theme-dark-800"
                             src={activity.nft.images.small ?? undefined}
                         />
                     )}
 
-                    {(!showNameColumn || isLgAndAbove) && <Icon name={activityIcon} />}
+                    {(!showNameColumn || isLgAndAbove) && (
+                        <Icon
+                            className="dark:text-theme-dark-300"
+                            name={activityIcon}
+                        />
+                    )}
                 </div>
                 <div className="flex flex-col">
                     <div className="flex items-center">
@@ -200,7 +205,7 @@ export const Type = ({
                         {showNameColumn && !isMdAndAbove && (
                             <>
                                 {!isLgAndAbove && (
-                                    <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300" />
+                                    <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300 dark:bg-theme-secondary-400" />
                                 )}
                                 <Timestamp value={activity.timestamp} />
                             </>
@@ -219,16 +224,16 @@ export const Type = ({
                                 variant="link"
                                 className="flex items-center leading-6"
                                 fontSize="text-base"
-                                textColor="text-theme-primary-600"
+                                textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
                                 href={transactionUrl(activity.id)}
                                 external
-                                iconClassName="ml-2 text-theme-secondary-500"
+                                iconClassName="ml-2 text-theme-secondary-500 dark:text-theme-dark-300"
                             >
                                 {activityTypeLabel}
                             </Link>
                             {!showNameColumn && !isMdAndAbove && (
                                 <>
-                                    <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300" />
+                                    <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300 dark:bg-theme-secondary-400" />
                                     <Timestamp value={activity.timestamp} />
                                 </>
                             )}
@@ -237,7 +242,7 @@ export const Type = ({
                         {!isXlAndAbove && (
                             <>
                                 {showNameColumn && !isLgAndAbove && (
-                                    <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300" />
+                                    <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300 dark:bg-theme-secondary-400" />
                                 )}
                                 {isMdAndAbove && <Timestamp value={activity.timestamp} />}
                                 {!isMdAndAbove && nativeToken != null && (
@@ -278,18 +283,18 @@ export const Type = ({
         <div className="flex items-center space-x-2">
             <Link
                 variant="link"
-                textColor="text-theme-primary-600"
+                textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
                 href={transactionUrl(activity.id)}
                 className="flex items-center"
                 external
-                iconClassName="ml-2 text-theme-secondary-500"
+                iconClassName="ml-2 text-theme-secondary-500 dark:text-theme-dark-300"
             >
                 <span className="text-sm font-medium">{activityTypeLabel}</span>
             </Link>
 
             <Icon
                 name={activityIcon}
-                className="text-theme-primary-600"
+                className="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500"
                 size="lg"
             />
         </div>
@@ -312,7 +317,7 @@ export const Timestamp = ({ value }: { value: number }): JSX.Element => {
         <Tooltip content={toHuman(value * 1000, attributes)}>
             <span
                 data-testid="ActivityTable__timestamp"
-                className="whitespace-nowrap text-sm font-medium leading-5.5 text-theme-secondary-700 sm:text-base"
+                className="whitespace-nowrap text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-300 sm:text-base"
             >
                 <TimeAgo date={new Date(value * 1000).toISOString()} />
             </span>
@@ -321,7 +326,9 @@ export const Timestamp = ({ value }: { value: number }): JSX.Element => {
 };
 
 const Label = ({ children }: { children: React.ReactNode }): JSX.Element => (
-    <span className="text-sm font-medium leading-5.5 text-theme-secondary-700">{children}</span>
+    <span className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200">
+        {children}
+    </span>
 );
 
 export const SalePrice = ({
@@ -344,7 +351,7 @@ export const SalePrice = ({
             >
                 {isTruthy(nativePrice) && isTruthy(usdPrice) ? (
                     <>
-                        <span className="whitespace-nowrap leading-5.5 text-theme-secondary-900">
+                        <span className="whitespace-nowrap leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50">
                             <FormatNumber value={nativePrice} />
                             <span className="ml-1">ETH</span>
                         </span>
@@ -355,7 +362,7 @@ export const SalePrice = ({
                         </span>
                     </>
                 ) : (
-                    <p className="text-sm font-medium leading-5.5 text-theme-secondary-500 sm:text-base xl:w-24">
+                    <p className="text-sm font-medium leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300 sm:text-base xl:w-24">
                         {t("common.na")}
                     </p>
                 )}
@@ -384,7 +391,7 @@ export const CollectionActivityTableItemSkeleton = ({
 
     if (isCompact) {
         return (
-            <div className="flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-3 last:border-none last:pb-0">
+            <div className="flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-3 last:border-none last:pb-0 dark:border-theme-dark-700">
                 {showNameColumn && (
                     <div className="flex items-center justify-between">
                         <Skeleton
@@ -537,7 +544,7 @@ export const CollectionActivityTableItemSkeleton = ({
                                     />
                                     {!isMdAndAbove && (
                                         <div className="flex items-center">
-                                            <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300" />
+                                            <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300 dark:bg-theme-secondary-400" />
                                             <Skeleton
                                                 className="my-1"
                                                 height={16}
@@ -553,7 +560,7 @@ export const CollectionActivityTableItemSkeleton = ({
                                     height={16}
                                     width={80}
                                 />
-                                <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300" />
+                                <div className="mx-2 h-[5px] w-[5px] rounded-full bg-theme-secondary-300 dark:bg-theme-secondary-400" />
                                 <Skeleton
                                     className="my-1"
                                     height={16}
@@ -654,7 +661,7 @@ export const CollectionActivityTableItem = ({
 
     if (isCompact) {
         return (
-            <div className="flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-3 last:border-none last:pb-0">
+            <div className="mt-2 flex flex-col space-y-3 border-b border-dashed border-theme-secondary-300 pb-3 first:mt-0 last:border-none last:pb-0 dark:border-theme-dark-700 lg:mt-0">
                 {showNameColumn && (
                     <div className="flex items-center justify-between">
                         <Label>{t("common.name")}</Label>
@@ -713,7 +720,7 @@ export const CollectionActivityTableItem = ({
         <TableRow
             data-testid="ActivityTable__Row"
             borderClass={cn(
-                "group border-b border-theme-secondary-300 border-dashed",
+                "group border-b border-theme-secondary-300 border-dashed dark:border-theme-dark-700",
                 hasBorderBottom ? "last:border-b-[5px] last:border-solid" : "last:border-b-0",
             )}
         >
@@ -744,7 +751,7 @@ export const CollectionActivityTableItem = ({
                     })}
                 >
                     <div className="flex items-center space-x-2">
-                        {!isXlAndAbove && <span>{t("common.from")}</span>}
+                        {!isXlAndAbove && <span className="dark:text-theme-dark-200">{t("common.from")}</span>}
                         <AddressLink
                             address={activity.sender}
                             chainId={collection.chainId}
@@ -754,7 +761,7 @@ export const CollectionActivityTableItem = ({
 
                     {!isXlAndAbove && (
                         <div className="mt-1 flex items-center space-x-2">
-                            <span>{t("common.to")}</span>
+                            <span className="dark:text-theme-dark-200">{t("common.to")}</span>
                             <AddressLink
                                 address={activity.recipient}
                                 chainId={collection.chainId}

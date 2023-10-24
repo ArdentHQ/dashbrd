@@ -24,6 +24,7 @@ export const CollectionsTable = ({
     sortDirection = "asc",
     onSort,
     onReportCollection,
+    selectedChainIds,
 }: CollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -136,7 +137,7 @@ export const CollectionsTable = ({
                           const direction =
                               column.id === activeSort ? (sortDirection === "asc" ? "desc" : "asc") : "asc";
 
-                          onSort(column.id, direction);
+                          onSort({ sortBy: column.id, direction, selectedChainIds });
                       }
                     : undefined
             }

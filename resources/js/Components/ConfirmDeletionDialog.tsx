@@ -52,7 +52,7 @@ export const ConfirmDeletionDialog = ({
             <div className="space-y-3">
                 <DeleteModal className="mx-auto" />
 
-                <p className="text-theme-secondary-700">{children}</p>
+                <p className="text-theme-secondary-700 dark:text-theme-dark-200">{children}</p>
 
                 <TextInput
                     ref={input}

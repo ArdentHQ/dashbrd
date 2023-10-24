@@ -385,6 +385,7 @@ declare namespace App.Data.Nfts {
     export type NftData = {
         id: number;
         name: string | null;
+        description: string | null;
         tokenNumber: string;
         collection: App.Data.Nfts.NftCollectionData;
         images: App.Data.Nfts.NftImagesData;
@@ -474,6 +475,19 @@ declare namespace App.Data.Wallet {
     };
 }
 declare namespace App.Data.Web3 {
+    export type CollectionActivity = {
+        contractAddress: string;
+        tokenId: string;
+        sender: string;
+        recipient: string;
+        txHash: string;
+        logIndex: string;
+        type: App.Enums.NftTransferType | null;
+        timestamp: string;
+        totalNative: number | null;
+        totalUsd: number | null;
+        extraAttributes: Array<any>;
+    };
     export type Web3ContractMetadata = {
         contractAddress: string;
         collectionName: string | null;
@@ -531,18 +545,8 @@ declare namespace App.Data.Web3 {
         traits: Array<any>;
         mintedBlock: number;
         mintedAt: string | null;
-    };
-    export type Web3NftTransfer = {
-        contractAddress: string;
-        tokenId: string;
-        sender: string;
-        recipient: string;
-        txHash: string;
-        type: App.Enums.NftTransferType;
-        timestamp: string;
-        totalNative: number | null;
-        totalUsd: number | null;
-        extraAttributes: Array<any>;
+        hasError: boolean | null;
+        info: string | null;
     };
     export type Web3NftsChunk = {
         nfts: any;
@@ -553,4 +557,5 @@ declare namespace App.Enums {
     export type Chains = 1 | 5 | 137 | 80001;
     export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER";
     export type Platforms = "ethereum" | "polygon-pos";
+    export type TokenGuid = "ethereum" | "matic-network";
 }

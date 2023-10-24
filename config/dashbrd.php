@@ -5,6 +5,11 @@ declare(strict_types=1);
 use App\Enums\Period;
 
 return [
+    'browsershot' => [
+        'timeout' => (int) env('BROWSERSHOT_TIMEOUT', 60),
+        'node_binary' => env('BROWSERSHOT_NODE_BINARY', '/usr/local/bin/node'),
+        'npm_binary' => env('BROWSERSHOT_NPM_BINARY', '/usr/local/bin/npm'),
+    ],
     'contact_email' => env('CONTACT_EMAIL', 'support@ardenthq.com'),
 
     'features' => [
@@ -12,6 +17,7 @@ return [
         'galleries' => env('GALLERIES_ENABLED', true),
         'collections' => env('COLLECTIONS_ENABLED', true),
         'articles' => env('ARTICLES_ENABLED', true),
+        'activities' => env('ACTIVITIES_ENABLED', false),
     ],
 
     'testing_wallet' => env('LOCAL_TESTING_ADDRESS'),
@@ -199,6 +205,11 @@ return [
         '0x049aba7510f45ba5b64ea9e658e342f904db358d', // Unstoppable Domains
         '0xa9a6a3626993d487d2dbda3173cf58ca1a9d9e9f', // Unstoppable Domains
         '0x495f947276749ce646f68ac8c248420045cb7b5e', // OpenSea Shared Storefront
+    ],
+
+    'activity_blacklist' => [
+        '0xba6666b118f8303f990f3519df07e160227cce87', // Planet IX - Assets
+        '0x22d5f9b75c524fec1d6619787e582644cd4d7422', // Sunflower Land Collectibles
     ],
 
     'test_tokens' => [

@@ -103,13 +103,15 @@ export const DonutChart = ({ assets, currency, size = 276 }: DonutChartPropertie
             >
                 <Icon
                     name="Wallet"
-                    className="bg-theme-primary-50 text-theme-primary-600"
+                    className="bg-theme-primary-50 text-theme-primary-600 dark:bg-theme-dark-950 dark:text-theme-primary-400"
                     size="lg"
                 />
 
-                <div className="mt-2 text-sm font-medium text-theme-secondary-700">{t("common.my_balance")}</div>
+                <div className="mt-2 text-sm font-medium text-theme-secondary-700 dark:text-theme-dark-200">
+                    {t("common.my_balance")}
+                </div>
 
-                <div className="text-lg font-medium">
+                <div className="text-lg font-medium dark:text-theme-dark-50">
                     <FormatFiat
                         value={totalValue.toString()}
                         currency={currency}
