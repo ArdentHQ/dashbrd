@@ -11,20 +11,15 @@ interface Properties {
 
 const remarkFigure = () => (tree) => {
     const nodesToReplace = [];
-    const index = 0;
     let previous;
-
-    function visit(node, index, parent) {
-        previous = parent[index - 1];
-
-        if (previous && previous.type === "paragraph" && previous.children[0].type === "image") {
-            nodesToReplace.push({ figure: previous, caption: node, index: index - 1, parent });
-        }
-    }
 
     tree.children.forEach((node, index, parent) => {
         if (node.type === "blockquote") {
-            visit(node, index, parent);
+            previous = parent[index - 1];
+
+            if (previous && previous.type === "paragraph" && previous.children[0].type === "image") {
+                nodesToReplace.push({ figure: previous, caption: node, index: index - 1, parent });
+            }
         }
     });
 
