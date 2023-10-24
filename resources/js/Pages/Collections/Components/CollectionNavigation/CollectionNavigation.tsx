@@ -97,10 +97,7 @@ export const CollectionNavigation = ({
                                     {t("pages.collections.menu.articles")}
                                 </CollectionNavigationTab>
 
-                                <CollectionNavigationTab
-                                    icon="HeartbeatInCircle"
-                                    disabled
-                                >
+                                <CollectionNavigationTab icon="HeartbeatInCircle">
                                     {t("pages.collections.menu.activity")}
                                 </CollectionNavigationTab>
                             </Tabs>
@@ -153,7 +150,6 @@ export const CollectionNavigationListBox = ({
                     key={index}
                     value={index}
                     hasGradient
-                    isDisabled={index === 2} // TODO(@itsanametoo)[2023-10-25]: remove once rc-0.8.0 is merged into this branch
                 >
                     {option}
                 </Listbox.Option>

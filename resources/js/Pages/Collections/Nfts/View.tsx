@@ -39,7 +39,7 @@ const CollectionsNftsView = ({
                     url={route("collections.view", {
                         slug: nft.collection.slug,
                     })}
-                    className="-mt-6 mb-6 bg-theme-secondary-50 px-6 py-4 sm:-mt-8 sm:mb-8 lg:-mt-4 lg:mb-0 lg:bg-white lg:px-8 2xl:px-0"
+                    className="-mt-6 mb-6 bg-theme-secondary-50 px-6 py-4 dark:bg-theme-dark-950 sm:-mt-8 sm:mb-8 lg:-mt-4 lg:mb-0 lg:bg-white lg:px-8 dark:lg:bg-theme-dark-900 2xl:px-0"
                 />
 
                 <NftHeading

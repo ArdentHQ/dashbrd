@@ -8,10 +8,24 @@ import { Tooltip } from "@/Components/Tooltip";
 interface Properties {
     disabled?: boolean;
     activeSort: string | null;
-    onSort: (sortBy: string) => void;
+    onSort: ({
+        sortBy,
+        direction,
+        selectedChainIds,
+    }: {
+        sortBy: string;
+        direction?: string;
+        selectedChainIds?: number[];
+    }) => void;
+    selectedChainIds?: number[];
 }
 
-export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Properties): JSX.Element => {
+export const CollectionsSorting = ({
+    disabled = false,
+    activeSort,
+    onSort,
+    selectedChainIds,
+}: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     if (disabled) {
@@ -41,12 +55,12 @@ export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Pro
 
             <Dropdown.Content
                 className="left-0 right-0 z-10 w-full origin-top-right px-6 sm:left-auto sm:mt-2 sm:h-fit sm:w-48 sm:px-0"
-                contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5 dark:bg-theme-dark-900 dark:border dark:bordar-theme-dark-700"
+                contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5 dark:bg-theme-dark-900 dark:border dark:border-theme-dark-700"
             >
                 <DropdownButton
                     isActive={activeSort === "received"}
                     onClick={() => {
-                        onSort("received");
+                        onSort({ sortBy: "received", selectedChainIds });
                     }}
                 >
                     {t("pages.collections.sorting.recently_received")}
@@ -55,7 +69,7 @@ export const CollectionsSorting = ({ disabled = false, activeSort, onSort }: Pro
                 <DropdownButton
                     isActive={activeSort === "oldest"}
                     onClick={() => {
-                        onSort("oldest");
+                        onSort({ sortBy: "oldest", selectedChainIds });
                     }}
                 >
                     {t("pages.collections.sorting.oldest_collection")}

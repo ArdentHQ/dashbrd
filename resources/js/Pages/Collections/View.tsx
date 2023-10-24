@@ -41,7 +41,8 @@ interface Properties {
         query: string;
         nftPageLimit: number;
     };
-    activities: App.Data.Nfts.NftActivitiesData;
+    initialActivities: App.Data.Nfts.NftActivitiesData | null;
+    hasActivities: boolean;
     sortByMintDate?: boolean;
     nativeToken: App.Data.Token.TokenData;
     showReportModal: boolean;
@@ -54,11 +55,12 @@ const CollectionsView = ({
     isHidden,
     previousUrl,
     nfts,
-    activities,
+    initialActivities,
     alreadyReported = false,
     reportAvailableIn,
     collectionTraits,
     appliedFilters,
+    hasActivities,
     sortByMintDate = false,
     nativeToken,
     showReportModal,
@@ -73,6 +75,9 @@ const CollectionsView = ({
     const [showOnlyOwned, setShowOnlyOwned] = useState<boolean>(appliedFilters.owned);
     const [filterIsDirty, setFilterIsDirty] = useState(false);
     const [query, setQuery] = useState("");
+    const [activities, setActivities] = useState(initialActivities);
+
+    const [loading, setLoading] = useState(false);
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
 
@@ -125,6 +130,14 @@ const CollectionsView = ({
                 preserveState: true,
                 queryStringArrayFormat: "indices",
                 replace: true,
+                onBefore: () => {
+                    setLoading(true);
+                },
+                onSuccess: (event) => {
+                    setActivities(event.props.initialActivities as App.Data.Nfts.NftActivitiesData | null);
+
+                    setLoading(false);
+                },
             },
         );
     }, [filterIsDirty, filters]);
@@ -227,6 +240,28 @@ const CollectionsView = ({
         return <EmptyBlock>{t("pages.collections.search.no_results_ownership")}</EmptyBlock>;
     };
 
+    const renderActivities = (): JSX.Element => {
+        if (!hasActivities) {
+            return <EmptyBlock>{t("pages.collections.activities.ignores_activities")}</EmptyBlock>;
+        }
+
+        if (!loading && (activities === null || activities.paginated.data.length === 0)) {
+            return <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>;
+        }
+
+        return (
+            <CollectionActivityTable
+                collection={collection}
+                activities={activities}
+                isLoading={loading}
+                showNameColumn
+                pageLimit={activityPageLimit}
+                onPageLimitChange={activityPageLimitChangeHandler}
+                nativeToken={nativeToken}
+            />
+        );
+    };
+
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
             <DefaultLayout toastMessage={props.toast}>
@@ -320,20 +355,7 @@ const CollectionsView = ({
                         </Tab.Panel>
 
                         <Tab.Panel>
-                            <div className="mt-6">
-                                {activities.paginated.data.length === 0 ? (
-                                    <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>
-                                ) : (
-                                    <CollectionActivityTable
-                                        collection={collection}
-                                        activities={activities}
-                                        showNameColumn
-                                        pageLimit={activityPageLimit}
-                                        onPageLimitChange={activityPageLimitChangeHandler}
-                                        nativeToken={nativeToken}
-                                    />
-                                )}
-                            </div>
+                            <div className="mt-6">{renderActivities()}</div>
                         </Tab.Panel>
                     </CollectionNavigation>
                 </div>

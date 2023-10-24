@@ -15,10 +15,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +62,8 @@ class Collection extends Model
         'minted_block' => 'int',
         'minted_at' => 'datetime',
         'last_viewed_at' => 'datetime',
+        'is_fetching_activity' => 'bool',
+        'activity_updated_at' => 'datetime',
     ];
 
     /**
@@ -265,27 +267,23 @@ class Collection extends Model
      */
     public function scopeOrderByReceivedDate(Builder $query, Wallet $wallet, string $direction): Builder
     {
-        // Get the latest timestamp for each NFT
-        $subselect = sprintf("SELECT timestamp
-            FROM nft_activity
-            WHERE nft_activity.nft_id = nfts.id AND lower(recipient) = '%s'
-            -- Latest timestamp
-            ORDER BY timestamp desc
-            LIMIT 1", strtolower($wallet->address));
-
-        $select = sprintf('SELECT (%s) as timestamp
-            FROM nfts
-            WHERE nfts.collection_id = collections.id
-            -- Return the latest timestamp for each NFT
-            ORDER BY timestamp desc
-            LIMIT 1
-        ', $subselect);
-
-        if ($direction === 'asc') {
-            return $query->orderByRaw(sprintf('(%s) ASC NULLS FIRST', $select));
+        // this is to ensure that `addSelect` doesn't override the `select collections.*`
+        if (empty($query->getQuery()->columns)) {
+            $query->select($this->qualifyColumn('*'));
         }
 
-        return $query->orderByRaw(sprintf('(%s) DESC NULLS LAST', $select));
+        $query->leftJoin('nft_activity', function (JoinClause $join) use ($wallet) {
+            $join->on('nft_activity.collection_id', '=', 'collections.id')
+                ->where('nft_activity.recipient', '=', $wallet->address);
+        })
+            ->addSelect(DB::raw('MAX(nft_activity.timestamp) as received_at'))
+            ->groupBy('collections.id');
+
+        if ($direction === 'asc') {
+            return $query->orderByRaw('received_at ASC NULLS FIRST');
+        }
+
+        return $query->orderByRaw('received_at DESC NULLS LAST');
     }
 
     /**
@@ -404,11 +402,11 @@ class Collection extends Model
     }
 
     /**
-     * @return HasManyThrough<NftActivity>
+     * @return HasMany<NftActivity>
      */
-    public function activities(): HasManyThrough
+    public function activities(): HasMany
     {
-        return $this->hasManyThrough(NftActivity::class, Nft::class);
+        return $this->hasMany(NftActivity::class);
     }
 
     public function recentlyViewed(): bool
@@ -482,6 +480,20 @@ class Collection extends Model
         return false;
     }
 
+    public function indexesActivities(): bool
+    {
+        /**
+         * @var string[]
+         */
+        $blacklisted = config('dashbrd.activity_blacklist', []);
+
+        if (collect($blacklisted)->map(fn ($collection) => Str::lower($collection))->contains(Str::lower($this->address))) {
+            return false;
+        }
+
+        return ! $this->isInvalid();
+    }
+
     public function isBlacklisted(): bool
     {
         return BlacklistedCollections::includes($this->address);
@@ -512,5 +524,10 @@ class Collection extends Model
     public function scopeOrderByOpenseaSlugLastFetchedAt(Builder $query): Builder
     {
         return $query->orderByRaw('extra_attributes->>\'opensea_slug_last_fetched_at\' ASC NULLS FIRST');
+    }
+
+    public function isSpam(): bool
+    {
+        return SpamContract::isSpam($this->address, $this->network);
     }
 }

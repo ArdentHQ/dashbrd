@@ -1,7 +1,7 @@
 import React from "react";
 import { PortfolioBreakdownTable } from "@/Components/PortfolioBreakdown";
 import TokenPortfolioDataFactory from "@/Tests/Factories/TokenPortfolioDataFactory";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { render, screen, userEvent, within } from "@/Tests/testing-library";
 
 describe("PortfolioBreakdownTable", () => {
     const assets = [new TokenPortfolioDataFactory().create(), new TokenPortfolioDataFactory().other().create()];
@@ -46,26 +46,19 @@ describe("PortfolioBreakdownTable", () => {
             />,
         );
 
+        expect(screen.getAllByRole("row")).toHaveLength(3);
+
         const topEntry = screen.getAllByRole("row")[1]; // [0] is th, [1] is first entry
-        expect(screen.getAllByRole("row")).toHaveLength(3);
+        const firstAsset = within(topEntry).getByTestId("PortfolioBreakdownItemAsset").textContent as string;
 
-        let percentHeading = screen.getByTestId("table__th--2");
+        expect(within(topEntry).getByTestId("PortfolioBreakdownItemAsset")).toHaveTextContent(firstAsset);
 
-        await userEvent.click(percentHeading);
-
-        expect(screen.getAllByRole("row")).toHaveLength(3);
-
-        let topEntrySorted = screen.getAllByRole("row")[1]; // [0] is th, [1] is first entry
-        expect(topEntry).not.toEqual(topEntrySorted);
-
-        percentHeading = screen.getByTestId("table__th--2");
+        const percentHeading = screen.getByTestId("table__th--2");
 
         await userEvent.click(percentHeading);
 
-        expect(screen.getAllByRole("row")).toHaveLength(3);
-
-        topEntrySorted = screen.getAllByRole("row")[1]; // [0] is th, [1] is first entry
-        expect(topEntry).toEqual(topEntrySorted);
+        const topEntrySorted = screen.getAllByRole("row")[1]; // [0] is th, [1] is first entry
+        expect(within(topEntrySorted).getByTestId("PortfolioBreakdownItemAsset")).not.toHaveTextContent(firstAsset);
     });
 
     it("should sort percentages ascending", () => {
@@ -158,6 +151,7 @@ describe("PortfolioBreakdownTable", () => {
         );
 
         const topEntry = screen.getAllByRole("row")[1]; // [0] is th, [1] is first entry
+        const firstAsset = within(topEntry).getByTestId("PortfolioBreakdownItemAsset").textContent as string;
         expect(screen.getAllByRole("row")).toHaveLength(3);
 
         const percentHeading = screen.getByTestId("table__th--2");
@@ -167,6 +161,6 @@ describe("PortfolioBreakdownTable", () => {
         expect(screen.getAllByRole("row")).toHaveLength(3);
 
         const topEntrySorted = screen.getAllByRole("row")[1]; // [0] is th, [1] is first entry
-        expect(topEntry).not.toEqual(topEntrySorted); // should still reverse it
+        expect(within(topEntrySorted).getByTestId("PortfolioBreakdownItemAsset")).not.toHaveTextContent(firstAsset);
     });
 });

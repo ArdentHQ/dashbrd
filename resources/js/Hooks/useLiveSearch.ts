@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import useAbortController from "react-use-cancel-token";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 const THROTTLE_TIMEOUT = 500;
@@ -23,6 +23,7 @@ export const useLiveSearch = <T>({
     const [query, setQuery] = useState(queryParameter);
     const [throttledQuery, setThrottledQuery] = useState<string>(queryParameter);
     const [searchedQuery, setSearchedQuery] = useState<string>(queryParameter);
+    const { isCancel } = useAbortController();
 
     const doSearch = useCallback(
         async (searchQuery: string): Promise<void> => {
@@ -48,7 +49,7 @@ export const useLiveSearch = <T>({
                 // This is done to allow the component using this hook to assign the
                 // results to a state before changing the state to "not loading".
             } catch (error) {
-                if (!axios.isCancel(error)) {
+                if (!isCancel(error)) {
                     onError?.(error);
                 }
 
