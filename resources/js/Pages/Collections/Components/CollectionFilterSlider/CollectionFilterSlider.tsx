@@ -91,7 +91,7 @@ export const CollectionFilterSlider = ({
 
                 <div className="mt-auto">
                     <Slider.Content includePadding={false}>
-                        <div className="flex justify-end space-x-3 border-t border-theme-secondary-300 px-8 py-3">
+                        <div className="flex justify-end space-x-3 border-t border-theme-secondary-300 px-8 py-3 dark:border-theme-dark-700">
                             <Button
                                 variant="secondary"
                                 className="w-full justify-center sm:w-auto"

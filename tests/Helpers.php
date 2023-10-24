@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Support\PermissionRepository;
+use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -25,4 +26,13 @@ function setUpPermissions(string $guard = 'admin'): void
         'name' => $role,
         'guard_name' => $guard,
     ])->givePermissionTo($permissions));
+}
+
+function emptyMetaImagesFolder(): void
+{
+    $metaImagesDir = storage_path('meta/galleries');
+
+    File::deleteDirectory($metaImagesDir);
+
+    File::makeDirectory($metaImagesDir);
 }

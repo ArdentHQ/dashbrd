@@ -54,10 +54,7 @@ const NftImage = ({
         className="group"
     >
         <Img
-            className={cn(
-                "aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover dark:bg-theme-primary-400",
-                className,
-            )}
+            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover", className)}
             src={nft.images.small ?? undefined}
             data-testid={`NftImageGrid__image--${nft.tokenNumber}`}
         />

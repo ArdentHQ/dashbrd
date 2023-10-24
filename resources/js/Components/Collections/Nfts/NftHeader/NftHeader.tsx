@@ -39,7 +39,7 @@ export const NftHeader = ({
                     <div className="flex flex-col gap-2 xl:flex-row xl:items-center">
                         <NftOwner nft={nft} />
                         <div className="hidden xl:block">
-                            <Point />
+                            <Point className="dark:bg-theme-secondary-400" />
                         </div>
                         <div className="flex flex-row items-center gap-2">
                             <CollectionDescription
@@ -50,7 +50,7 @@ export const NftHeader = ({
 
                             {isTruthy(nft.collection.openSeaSlug) && (
                                 <div className="flex flex-row items-center gap-2">
-                                    <Point />
+                                    <Point className="dark:bg-theme-secondary-400" />
                                     <Marketplaces
                                         type="nft"
                                         nftId={nft.tokenNumber}
@@ -79,13 +79,13 @@ export const NftHeader = ({
     return (
         <>
             <div
-                className="flex w-full flex-col items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur xs:px-8 sm:flex-row sm:border-none sm:pb-4"
+                className="flex w-full flex-col items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur dark:border-theme-dark-700 dark:bg-theme-dark-950 xs:px-8 sm:flex-row sm:border-none sm:pb-4"
                 data-testid="NftHeader__mobile"
             >
                 <div className="flex flex-row items-center justify-center gap-2">
                     <NftOwner nft={nft} />
 
-                    <Point />
+                    <Point className="dark:bg-theme-secondary-400" />
 
                     <CollectionDescription
                         name={t("pages.nfts.about_nft")}
@@ -114,7 +114,7 @@ export const NftHeader = ({
                 </div>
             </div>
 
-            <div className="mb-6 flex w-full flex-col gap-4 border-b border-solid border-theme-secondary-300 bg-white pb-6 pt-4">
+            <div className="mb-6 flex w-full flex-col gap-4 border-b border-solid border-theme-secondary-300 bg-white pb-6 pt-4 dark:border-theme-dark-700 dark:bg-theme-dark-900">
                 <NftBasicInfo nft={nft} />
                 <NftActions
                     alreadyReported={alreadyReported}

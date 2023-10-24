@@ -46,7 +46,7 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
                 />
             </div>
 
-            <div className="truncate font-medium text-theme-secondary-700">
+            <div className="truncate font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                 {t("common.back_to")}{" "}
                 <Link
                     href={url}
@@ -54,6 +54,7 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
                         "transition-default text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none",
                         "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
                         "focus-visible:decoration-theme-primary-700",
+                        "dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500",
                     )}
                 >
                     {nft.collection.name}
