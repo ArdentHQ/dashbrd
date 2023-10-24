@@ -87,10 +87,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(S3Client::class, static function ($app) {
             return new S3Client([
-                'version'     => 'latest',
-                'region'      => $app['config']->get('services.polly.region'),
+                'version' => 'latest',
+                'region' => $app['config']->get('services.polly.region'),
                 'credentials' => [
-                    'key'    => $app['config']->get('services.polly.key'),
+                    'key' => $app['config']->get('services.polly.key'),
                     'secret' => $app['config']->get('services.polly.secret'),
                 ],
             ]);
@@ -98,10 +98,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(PollyClient::class, static function ($app) {
             return new PollyClient([
-                'version'     => 'latest',
-                'region'      => $app['config']->get('services.polly.region'),
+                'version' => 'latest',
+                'region' => $app['config']->get('services.polly.region'),
                 'credentials' => [
-                    'key'    => $app['config']->get('services.polly.key'),
+                    'key' => $app['config']->get('services.polly.key'),
                     'secret' => $app['config']->get('services.polly.secret'),
                 ],
             ]);
