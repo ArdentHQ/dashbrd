@@ -290,6 +290,7 @@ const CollectionsView = ({
                     />
 
                     <CollectionNavigation
+                        hasActivities={hasActivities}
                         selectedTab={selectedTab}
                         onTabChange={tabChangeHandler}
                         onRefreshActivity={handleRefreshActivity}

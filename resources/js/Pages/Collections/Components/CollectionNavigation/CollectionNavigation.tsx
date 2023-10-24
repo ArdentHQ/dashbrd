@@ -61,12 +61,14 @@ export const CollectionNavigation = ({
     onTabChange,
     onRefreshActivity,
     isLoadingActivity,
+    hasActivities,
 }: {
     children: JSX.Element[];
     selectedTab: "collection" | "activity";
     onTabChange: (tab: "collection" | "activity") => void;
     onRefreshActivity: () => void;
     isLoadingActivity?: boolean | null;
+    hasActivities?: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -111,7 +113,7 @@ export const CollectionNavigation = ({
                                 icon="Refresh"
                                 variant="secondary"
                                 className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
-                                disabled={isTruthy(isLoadingActivity)}
+                                disabled={!isTruthy(hasActivities) || isTruthy(isLoadingActivity)}
                                 onClick={onRefreshActivity}
                             >
                                 {t("common.refresh")}
@@ -128,7 +130,7 @@ export const CollectionNavigation = ({
                         variant="secondary"
                         className=" block w-full bg-theme-secondary-100 text-theme-primary-900 sm:hidden"
                         onClick={onRefreshActivity}
-                        disabled={isTruthy(isLoadingActivity)}
+                        disabled={!isTruthy(hasActivities) || isTruthy(isLoadingActivity)}
                     >
                         {t("common.refresh")}
                     </Button>
