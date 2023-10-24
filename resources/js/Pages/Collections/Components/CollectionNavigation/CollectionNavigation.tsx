@@ -8,7 +8,6 @@ import { Tabs } from "@/Components/Tabs";
 import { Tooltip } from "@/Components/Tooltip";
 import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { isTruthy } from "@/Utils/is-truthy";
-import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 
 const CollectionNavigationTab = forwardRef<
     HTMLButtonElement,
@@ -118,7 +117,7 @@ export const CollectionNavigation = ({
         return true;
     };
 
-    const updateDisabledReason = (collection: App.Data.Collections.CollectionDetailData): string | undefined => {
+    const updateDisabledReason = (): string | null => {
         if (!isTruthy(hasActivities)) {
             return t("pages.collections.activities.ignores_activities");
         }
@@ -127,7 +126,7 @@ export const CollectionNavigation = ({
             return t("pages.collections.activities.loading_activities_collection");
         }
 
-        return undefined;
+        return null;
     };
 
     return (
@@ -151,8 +150,8 @@ export const CollectionNavigation = ({
 
                     {selectedTab === "activity" && (
                         <Tooltip
-                            content={updateDisabledReason(collection)}
-                            visible={!!updateDisabledReason(collection)}
+                            content={updateDisabledReason()}
+                            visible={!isTruthy(updateDisabledReason())}
                         >
                             <div className="py-1">
                                 <Button
@@ -172,8 +171,8 @@ export const CollectionNavigation = ({
 
             {selectedTab === "activity" && (
                 <Tooltip
-                    content={updateDisabledReason(collection)}
-                    visible={!!updateDisabledReason(collection)}
+                    content={updateDisabledReason()}
+                    visible={!isTruthy(updateDisabledReason())}
                     touch
                 >
                     <div className="mt-6">
