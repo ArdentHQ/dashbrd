@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Contracts\MarketDataProvider;
+use App\Contracts\TextToSpeechProvider;
 use App\Contracts\Web3DataProvider;
 use App\Jobs\RefreshNftMetadata;
 use App\Services\MarketData\Providers\CoingeckoProvider;
+use App\Services\Polly;
 use App\Services\Web3\Web3ProviderFactory;
+use Aws\Polly\PollyClient;
+use Aws\S3\S3Client;
 use Exception;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\RedirectResponse;
@@ -41,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
             Web3DataProvider::class,
             static fn ($app) => Web3ProviderFactory::create($app['config']['dashbrd.web3_providers.default'])
         );
+
+        $this->app->bind(TextToSpeechProvider::class, Polly::class);
     }
 
     /**
@@ -77,6 +83,28 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return Limit::none();
+        });
+
+        $this->app->bind(S3Client::class, static function ($app) {
+            return new S3Client([
+                'version'     => 'latest',
+                'region'      => $app['config']->get('services.polly.region'),
+                'credentials' => [
+                    'key'    => $app['config']->get('services.polly.key'),
+                    'secret' => $app['config']->get('services.polly.secret'),
+                ],
+            ]);
+        });
+
+        $this->app->bind(PollyClient::class, static function ($app) {
+            return new PollyClient([
+                'version'     => 'latest',
+                'region'      => $app['config']->get('services.polly.region'),
+                'credentials' => [
+                    'key'    => $app['config']->get('services.polly.key'),
+                    'secret' => $app['config']->get('services.polly.secret'),
+                ],
+            ]);
         });
     }
 }
