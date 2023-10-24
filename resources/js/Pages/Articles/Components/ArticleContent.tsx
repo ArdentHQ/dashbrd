@@ -5,7 +5,6 @@ interface Properties {
 }
 
 export const ArticleContent = ({ article }: Properties): JSX.Element => {
-    console.log({ article });
     return (
         <div className="article-content">
             <Markdown remarkPlugins={[remarkFigureCaption]}>{article.content}</Markdown>

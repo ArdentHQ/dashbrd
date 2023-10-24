@@ -10,7 +10,7 @@ function seedArticles(int $articlesCount = 4, int $collectionsCount = 2): array
     $collections = Collection::factory($collectionsCount)->create();
 
     $articles = Article::factory($articlesCount)->create([
-        'published_at' => now()->format('Y-m-d'),
+        'published_at' => now()->subDay()->format('Y-m-d'),
     ]);
 
     $articles->map(fn ($article) => $article
@@ -63,6 +63,21 @@ it('should return articles with the given pageLimit', function ($pageLimit, $res
     [12, 12, 2],
     [24, 24, 1],
 ]);
+
+it('should not return unpublished articles', function () {
+
+    [, $articles] = seedArticles(5, 2);
+
+    $articles[0]->update(['published_at' => null]);
+
+    $articles[2]->update(['published_at' => now()->addDay()]);
+
+    $response = $this->getJson(route('articles'));
+
+    $total = $response->json('articles.paginated.meta.total') + count($response->json('highlightedArticles'));
+
+    expect($total)->toEqual(3);
+});
 
 it('should search in articles', function () {
     $today = now()->format('Y-m-d');
@@ -131,12 +146,12 @@ it('should get featured collections for an article', function () {
 
 it('should keep highlighted articles regardless of the sorting', function () {
     $highlightedArticles = Article::factory(3)->create([
-        'published_at' => now(),
+        'published_at' => now()->addMinutes(10),
     ]);
 
     $article1 = Article::factory()->create([
         'title' => 'nice bunny',
-        'published_at' => now()->subMinutes(10),
+        'published_at' => now()->addMinute(),
     ]);
 
     collect($highlightedArticles->concat([$article1]))->map(fn ($article) => $article

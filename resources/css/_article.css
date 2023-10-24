@@ -99,8 +99,12 @@
 }
 
 .article-content blockquote {
-    @apply rounded-xl border-none bg-theme-hint-50 bg-[url(/images/quote.svg)] bg-no-repeat px-8 pb-8 pt-18 text-xl font-medium not-italic leading-[30px] text-theme-secondary-900;
-    background-position: 32px 32px;
+    @apply rounded-xl border-none bg-theme-hint-50 p-8 text-xl font-medium not-italic leading-[30px] text-theme-secondary-900;
+}
+
+.article-content blockquote::before {
+    content: url("/images/quote.svg");
+    @apply block bg-no-repeat text-theme-primary-600;
 }
 
 .article-content ul ol,
