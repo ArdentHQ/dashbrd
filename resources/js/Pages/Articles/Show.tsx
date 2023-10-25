@@ -20,7 +20,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
         <article className="w-full lg:px-8 2xl:px-0">
             <div className="article-wrapper -mt-6 px-6 sm:-mt-8 sm:px-8 md:px-24 lg:mt-0 lg:rounded-xl lg:border lg:border-theme-secondary-300 lg:px-0">
                 <div className="mx-auto bg-white/20 pt-8 md:max-w-[768px] xl:max-w-[1000px]">
-                    <div className="border-b-2 border-theme-secondary-400 pb-3">
+                    <div className="border-b border-theme-secondary-400 pb-3">
                         <Heading level={1}>{article.title}</Heading>
                     </div>
                 </div>
