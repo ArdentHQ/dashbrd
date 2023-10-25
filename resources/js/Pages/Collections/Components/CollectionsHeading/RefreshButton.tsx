@@ -4,28 +4,34 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Tooltip } from "@/Components/Tooltip";
 import { isTruthy } from "@/Utils/is-truthy";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData | null }): JSX.Element => {
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const { t } = useTranslation();
 
-    const refresh = (): void => {
-        setLoading(true);
+    const { signedAction } = useAuthorizedAction();
 
-        router.post(
-            route("refresh-collections"),
-            {},
-            {
-                preserveState: true,
-                preserveScroll: true,
-                onFinish: () => {
-                    setLoading(false);
-                    setDisabled(true);
-                },
-            },
-        );
-    };
+    const refresh = () =>
+        signedAction(({ authenticated }) => {
+            if (authenticated) {
+                setLoading(true);
+
+                router.post(
+                    route("refresh-collections"),
+                    {},
+                    {
+                        preserveState: true,
+                        preserveScroll: true,
+                        onFinish: () => {
+                            setLoading(false);
+                            setDisabled(true);
+                        },
+                    },
+                );
+            }
+        });
 
     const tooltipContent = (): JSX.Element => {
         if (isTruthy(wallet?.canRefreshCollections)) {

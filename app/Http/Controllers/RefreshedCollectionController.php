@@ -17,7 +17,7 @@ class RefreshedCollectionController extends Controller
             RefreshWalletCollections::dispatch($request->wallet())->onQueue(Queues::WALLETS);
         }
 
-        return back()->toast(
+        return redirect()->route('collections')->toast(
             trans('pages.collections.refresh.toast'),
             type: 'pending',
             expanded: true,
