@@ -190,7 +190,7 @@ class Web3NftHandler
                 $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
                     DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
                 });
-              
+
                 // Index activity only for newly created collections...
                 CollectionModel::query()
                             ->where('is_fetching_activity', false)
