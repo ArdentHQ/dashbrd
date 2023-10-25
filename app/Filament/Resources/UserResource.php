@@ -40,7 +40,7 @@ class UserResource extends Resource
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->autocomplete('new-password'),
-                TextInput::make('display_name')->columnSpan('full'),
+                TextInput::make('username')->label('Display Name')->columnSpan('full'),
                 Select::make('role')
                     ->options(function () {
                         $options = [
@@ -121,7 +121,7 @@ class UserResource extends Resource
                     ->label('Email')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('display_name')
+                TextColumn::make('username')
                     ->label('Display Name')
                     ->sortable()
                     ->searchable(),

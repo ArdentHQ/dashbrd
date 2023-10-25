@@ -12,6 +12,7 @@ use App\Filament\Resources\ArticleResource\Pages\ViewArticle;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
@@ -22,6 +23,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -108,21 +110,26 @@ class ArticleResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('category')
-                    ->label('Category')
+                TextColumn::make('user.username')
+                    ->label('Author')
                     ->sortable()
                     ->searchable(),
 
                 TextColumn::make('published_at')
                         ->label('Date Published')
-                        ->date()
-                        ->sortable(),
+                        ->formatStateUsing(function (string $state): string {
+                            $date = Carbon::parse($state);
 
-                TextColumn::make('created_at')
-                        ->label('Date Created')
-                        ->dateTime()
-                        ->sortable(),
+                            if ($date > Carbon::now()) {
+                                return $date->toFormattedDateString().' ⌛';
+                            }
 
+                            return $date->toFormattedDateString();
+                        })
+                        ->sortable()
+                        ->placeholder('Draft'),
+
+                SpatieMediaLibraryImageColumn::make('cover')->collection('cover')->conversion('small@2x'),
             ])
             ->filters([
                 //
@@ -133,7 +140,8 @@ class ArticleResource extends Resource
             ])
             ->emptyStateActions([
                 CreateAction::make(),
-            ]);
+            ])
+            ->defaultSort('published_at', 'desc');
     }
 
     public static function getRelations(): array
