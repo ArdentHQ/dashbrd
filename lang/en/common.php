@@ -134,6 +134,7 @@ return [
     'refresh' => 'Refresh',
     'refresh_metadata' => 'Refresh Metadata',
     'refreshing_metadata' => 'Refreshing Metadata... Please check back later.',
+    'refreshing_activity' => 'Refreshing Activity... Please check back later.',
     'pending_confirmation' => 'Pending Confirmation',
     'confirmed_transaction' => 'Confirmed Transaction',
     'transaction_error' => 'Transaction Error',
