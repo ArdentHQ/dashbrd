@@ -8,7 +8,7 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
@@ -275,12 +275,12 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
         event.preventDefault();
         event.stopPropagation();
 
-        signedAction(({ authenticated }) => {
+        void signedAction(async ({ authenticated }) => {
             // If user wasnt authenticated, foce a positive
             // like since we dont know if he liked it before
             const likeValue = !authenticated ? true : undefined;
 
-            void like(gallery.slug, likeValue);
+            await like(gallery.slug, likeValue);
         });
     };
 

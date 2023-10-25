@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/react";
 import { CollectionActivityTable } from "@/Components/Collections/CollectionActivityTable";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import NftActivitiesDataFactory from "@/Tests/Factories/Nfts/NftActivitiesDataFactory";
-import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
+import { AuthContextProvider } from "@/Contexts/AuthContext";
 
 const collection = new CollectionDetailDataFactory().create();
 const activities = new NftActivitiesDataFactory().create();
@@ -36,11 +36,11 @@ export default {
 export const Default = {
     render: (args) => {
         return (
-            <ActiveUserContextProvider
+            <AuthContextProvider
                 initialAuth={{ user: { attributes: {} }, wallet: null, authenticated: false, signed: false }}
             >
                 <CollectionActivityTable {...args} />
-            </ActiveUserContextProvider>
+            </AuthContextProvider>
         );
     },
     collection,

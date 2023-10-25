@@ -5,10 +5,14 @@ import { type CollectionsPageMeta, GalleryNfts } from "@/Components/Galleries/Ho
 import { NftSelectionHook } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { NftCollectionSlider } from "@/Components/Galleries/NftCollection/NftCollectionSlider";
 import { SliderContext, useSliderContext } from "@/Components/Slider";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { requestMock, requestMockOnce, server } from "@/Tests/Mocks/server";
 import { SampleLastPageMeta, SamplePageMeta } from "@/Tests/SampleData";
-import { render, screen, userEvent, waitFor } from "@/Tests/testing-library";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
+import { mockAuthContext, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
 
 describe("NftCollectionSlider", () => {
     const baseUrl = SamplePageMeta.paginated.links[0].url;
@@ -131,6 +135,23 @@ describe("NftCollectionSlider", () => {
                 </SliderContext.Provider>
             );
         };
+    });
+
+    let resetAuthContext: () => void;
+
+    beforeAll(() => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+
+        resetAuthContext = mockAuthContext({
+            user: new UserDataFactory().create(),
+            wallet: new WalletFactory().create(),
+        });
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+
+        resetAuthContext();
     });
 
     it("should render unopened", () => {

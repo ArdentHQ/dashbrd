@@ -1,47 +1,36 @@
 import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
 interface Properties {
     mustBeSigned?: boolean;
 }
 
-export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.AuthData & {
+export const useAuthOverlay = ({ mustBeSigned = false }: Properties = {}): {
     showAuthOverlay: boolean;
     showCloseButton: boolean;
-    signed: boolean;
     closeOverlay: () => void;
 } => {
     const [manuallyClosed, setManuallyClosed] = useState<boolean>(false);
 
+    const { authenticated, signed } = useAuth();
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { props } = usePage();
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const auth = props.auth;
 
     const error = props.error;
 
     const allowsGuests = props.allowsGuests;
 
-    const { wallet, authenticated, user } = auth;
-
     const {
-        signed,
         connecting,
         switching,
         errorMessage: metamaskErrorMessage,
         requiresSignature,
         isShowConnectOverlay,
         hideConnectOverlay,
-        onDisconnected,
     } = useMetaMaskContext();
-
-    useEffect(() => {
-        if (!authenticated) {
-            onDisconnected();
-        }
-    }, [authenticated]);
 
     const closeOverlay = (): void => {
         hideConnectOverlay();
@@ -96,10 +85,6 @@ export const useAuth = ({ mustBeSigned = false }: Properties = {}): App.Data.Aut
     const showCloseButton = allowsGuests || requiresSignature;
 
     return {
-        authenticated,
-        signed,
-        user,
-        wallet,
         showAuthOverlay: showAuthOverlay(),
         showCloseButton,
         closeOverlay,

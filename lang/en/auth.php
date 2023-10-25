@@ -21,6 +21,7 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'session_timeout' => 'Your session has timed out. Please refresh the page and try connecting your account again.',
+    'session_timeout_modal' => 'Seems like your session has timed out. Please connnect your wallet again.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 

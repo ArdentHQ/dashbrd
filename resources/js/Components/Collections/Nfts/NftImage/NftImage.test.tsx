@@ -2,11 +2,10 @@ import React from "react";
 import { NftImage } from "./NftImage";
 import { NftHeader } from "@/Components/Collections/Nfts/NftHeader";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { act, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
+import { act, mockAuthContext, render, screen, userEvent, waitFor } from "@/Tests/testing-library";
 
 vi.mock("file-saver", () => ({
     saveAs: vi.fn(),
@@ -25,15 +24,8 @@ describe("NftImage", () => {
             ...getSampleMetaMaskState(),
             showConnectOverlay: showConnectOverlayMock,
         });
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: true,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            signed: true,
-            closeOverlay: vi.fn(),
-        });
+
+        mockAuthContext({});
     });
 
     afterAll(() => {
