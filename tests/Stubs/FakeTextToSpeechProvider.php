@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\TextToSpeech;
+namespace Tests\Stubs;
 
 use App\Contracts\TextToSpeechProvider;
 use App\Enums\TextToSpeechConversionStatus;
