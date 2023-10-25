@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
 use App\Jobs\ConvertArticleToSpeech;
 use App\Models\Article;
 use Illuminate\Support\Facades\Bus;
 
-it("should not start audio conversion if text-to-speech is not enabled", function () {
+it('should not start audio conversion if text-to-speech is not enabled', function () {
     config(['dashbrd.text_to_speech.enabled' => false]);
 
     Bus::fake();
@@ -18,7 +19,7 @@ it("should not start audio conversion if text-to-speech is not enabled", functio
     Bus::assertNotDispatched(ConvertArticleToSpeech::class);
 });
 
-it("should not start audio conversion if article is not published", function () {
+it('should not start audio conversion if article is not published', function () {
     config(['dashbrd.text_to_speech.enabled' => true]);
 
     Bus::fake();
@@ -61,7 +62,7 @@ it('should not start audio conversion if article is published and recently creat
     Bus::assertDispatched(ConvertArticleToSpeech::class);
 });
 
-it("should start preparing audio when an article created", function () {
+it('should start preparing audio when an article created', function () {
     config(['dashbrd.text_to_speech.enabled' => true]);
 
     Bus::fake();
@@ -74,9 +75,8 @@ it("should start preparing audio when an article created", function () {
     Bus::assertDispatched(ConvertArticleToSpeech::class);
 });
 
-it("should start preparing audio when an article content is updated", function () {
+it('should start preparing audio when an article content is updated', function () {
     config(['dashbrd.text_to_speech.enabled' => true]);
-
 
     $article = Article::factory()->create([
         'content' => 'Hello World',
@@ -92,7 +92,7 @@ it("should start preparing audio when an article content is updated", function (
     Bus::assertDispatched(ConvertArticleToSpeech::class);
 });
 
-it("should start preparing audio when an article is published", function () {
+it('should start preparing audio when an article is published', function () {
     config(['dashbrd.text_to_speech.enabled' => true]);
 
     $article = Article::factory()->create([
