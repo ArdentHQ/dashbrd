@@ -48,9 +48,9 @@ it('does not dispatch a job if tts is disabled via a job', function () {
 });
 
 it('dispatches a job for the range of articles', function () {
-    $first  = Article::factory()->published()->create();
+    $first = Article::factory()->published()->create();
     $second = Article::factory()->published()->create();
-    $third  = Article::factory()->published()->create();
+    $third = Article::factory()->published()->create();
 
     Bus::fake();
 
@@ -61,9 +61,9 @@ it('dispatches a job for the range of articles', function () {
 });
 
 it('dispatches a job for the cli invocation with only starting article', function () {
-    $first  = Article::factory()->published()->create();
+    $first = Article::factory()->published()->create();
     $second = Article::factory()->published()->create();
-    $third  = Article::factory()->published()->create();
+    $third = Article::factory()->published()->create();
 
     Bus::fake();
 
@@ -74,9 +74,9 @@ it('dispatches a job for the cli invocation with only starting article', functio
 });
 
 it('dispatches a job for the cli invocation with only ending article', function () {
-    $first  = Article::factory()->published()->create();
+    $first = Article::factory()->published()->create();
     $second = Article::factory()->published()->create();
-    $third  = Article::factory()->published()->create();
+    $third = Article::factory()->published()->create();
 
     Bus::fake();
 
@@ -87,7 +87,7 @@ it('dispatches a job for the cli invocation with only ending article', function 
 });
 
 it('can only query articles with missing audio files', function () {
-    $first  = Article::factory()->published()->create();
+    $first = Article::factory()->published()->create();
     $second = Article::factory()->published()->create([
         'audio_file_url' => 'some-url',
     ]);
@@ -110,9 +110,9 @@ it('displays warning if nothing is done', function () {
 });
 
 it('only queries published articles', function () {
-    $first  = Article::factory()->published()->create();
+    $first = Article::factory()->published()->create();
     $second = Article::factory()->notPublished()->create();
-    $third  = Article::factory()->published()->create();
+    $third = Article::factory()->published()->create();
 
     Bus::fake();
 

@@ -20,7 +20,7 @@ class GenerateAudioFileForArticle extends Command
 
     protected $description = 'Regenerate audio file for the article with the given ID';
 
-    public function handle() : int
+    public function handle(): int
     {
         if (! ConvertArticleToSpeech::$enabled || ! (bool) config('dashbrd.text_to_speech.enabled')) {
             $this->warn('Article text-to-speech is currently disabled.');
@@ -55,7 +55,7 @@ class GenerateAudioFileForArticle extends Command
     /**
      * @return Builder<Article>
      */
-    private function articles() : Builder
+    private function articles(): Builder
     {
         if ($this->argument('id') !== null) {
             return Article::where('id', $this->argument('id'));

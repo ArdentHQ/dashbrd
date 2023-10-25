@@ -10,7 +10,6 @@ use App\Filament\Resources\UserResource\Pages\Traits\HandleRole;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
 class EditUser extends EditRecord
 {
@@ -35,7 +34,7 @@ class EditUser extends EditRecord
         unset($data['role']);
 
         /** @var mixed $permissions */
-        $permissions = Arr::get($data, 'permissions', []);
+        $permissions = $data['permissions'] ?? [];
         unset($data['permissions']);
 
         $this->handleRole($record, $role);
