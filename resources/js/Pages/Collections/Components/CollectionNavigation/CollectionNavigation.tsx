@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { Tab } from "@headlessui/react";
 import classNames from "classnames";
 import { forwardRef, Fragment, useMemo } from "react";
@@ -101,15 +102,11 @@ export const CollectionNavigation = ({
             return false;
         }
 
-        if (hasReachedMaxUpdateRequests()) {
-            return false;
-        }
-
         if (isTruthy(collection.activityUpdateRequestedAt)) {
             return false;
         }
 
-        return true;
+        return !hasReachedMaxUpdateRequests();
     };
 
     const updateDisabledReason = (): string | null => {
