@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use League\CommonMark\CommonMarkConverter;
 use Spatie\Image\Manipulations;
+use Spatie\LaravelMarkdown\MarkdownRenderer;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
@@ -70,6 +70,11 @@ class Article extends Model implements HasMedia, Viewable
                     ->addMediaConversion('meta')
                     ->crop(Manipulations::CROP_CENTER, 1200, 630);
             });
+    }
+
+    public function renderedMarkdown(): string
+    {
+        return app(MarkdownRenderer::class)->toHtml($this->content);
     }
 
     /**
@@ -150,20 +155,14 @@ class Article extends Model implements HasMedia, Viewable
 
     public function metaDescription(): string
     {
-        return Cache::rememberForever(md5("article:{$this->id}:meta_description"), function () {
+        return Cache::rememberForever("article:{$this->id}:meta_description", function () {
             if (boolval($this->meta_description)) {
                 return $this->meta_description;
             }
 
-            $converter = new CommonMarkConverter([
-                'html_input' => 'strip',
-                'allow_unsafe_links' => false,
+            $rawContent = $this->renderedMarkdown();
 
-            ]);
-
-            $rawContent = $converter->convert($this->content)->__toString();
-
-            return Str::limit(trim(html_entity_decode(strip_tags($rawContent))), 157);
+            return Str::limit(trim(preg_replace("/\r?\n/", ' ', html_entity_decode(strip_tags($rawContent)))), 157);
         });
     }
 
