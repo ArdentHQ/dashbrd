@@ -121,7 +121,7 @@ class ArticleResource extends Resource
                             $date = Carbon::parse($state);
 
                             if ($date > Carbon::now()) {
-                                return $date->toFormattedDateString() . ' ⌛';
+                                return $date->toFormattedDateString().' ⌛';
                             }
 
                             return $date->toFormattedDateString();
