@@ -126,7 +126,10 @@ trait StoresGalleries
             'nfts.*' => [
                 'required',
                 // Check all user wallets as they can exist on different networks
-                Rule::exists('nfts', 'id')->whereIn('wallet_id', $user->wallets->map(fn ($wallet) => $wallet->id)),
+                Rule::exists('nfts', 'id')
+                    ->whereNotNull('nfts.extra_attributes->images->large')
+                    ->whereNot('nfts.extra_attributes->images->large', '')
+                    ->whereIn('wallet_id', $user->wallets->map(fn ($wallet) => $wallet->id)),
             ],
             'coverImage' => [
                 'nullable',
