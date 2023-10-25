@@ -24,10 +24,13 @@ export const ArticleCard = ({
         <a
             data-testid="ArticleCard"
             href={route("articles.view", article.slug)}
-            className={cn("group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300", {
-                "bg-white": !isLargeVariant,
-                "bg-theme-dark-900": isLargeVariant,
-            })}
+            className={cn(
+                "group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
+                {
+                    "bg-white": !isLargeVariant,
+                    "bg-theme-dark-900": isLargeVariant,
+                },
+            )}
         >
             <div className="mx-2 mt-2 aspect-video overflow-hidden rounded-lg bg-theme-secondary-300">
                 <Img
