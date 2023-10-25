@@ -126,6 +126,7 @@ class FetchCollectionActivity implements ShouldQueue
                 $this->collection->update([
                     'is_fetching_activity' => false,
                     'activity_updated_at' => now(),
+                    'activity_update_requested_at' => null,
                 ]);
             }
         }, attempts: 5);

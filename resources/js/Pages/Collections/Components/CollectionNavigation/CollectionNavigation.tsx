@@ -105,13 +105,8 @@ export const CollectionNavigation = ({
             return false;
         }
 
-        if (isTruthy(collection.activityUpdatedAt)) {
-            const diffInMs = new Date().getTime() - new Date(collection.activityUpdatedAt).getTime();
-            const diffInHours = diffInMs / (1000 * 60 * 60);
-
-            if (diffInHours <= 6) {
-                return false;
-            }
+        if (isTruthy(collection.activityUpdateRequestedAt)) {
+            return false;
         }
 
         return true;
@@ -123,6 +118,10 @@ export const CollectionNavigation = ({
         }
 
         if (isTruthy(isLoadingActivity)) {
+            return t("pages.collections.activities.loading_activities_collection");
+        }
+
+        if (isTruthy(collection.activityUpdateRequestedAt)) {
             return t("pages.collections.activities.loading_activities_collection");
         }
 

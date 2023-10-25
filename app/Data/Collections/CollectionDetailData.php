@@ -43,6 +43,7 @@ class CollectionDetailData extends Data
         public int $nftsCount,
         public ?int $mintedAt,
         public ?Carbon $activityUpdatedAt,
+        public ?Carbon $activityUpdateRequestedAt,
         public ?bool $isFetchingActivity,
     ) {
     }
@@ -74,7 +75,8 @@ class CollectionDetailData extends Data
             nftsCount: $collection->nfts()->when($user !== null, fn ($q) => $q->ownedBy($user))->count(),
             mintedAt: $collection->minted_at?->getTimestampMs(),
             activityUpdatedAt: $collection->activity_updated_at,
-            isFetchingActivity: $collection->is_fetching_activity
+            activityUpdateRequestedAt: $collection->activity_update_requested_at,
+            isFetchingActivity: $collection->is_fetching_activity,
         );
     }
 }

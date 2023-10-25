@@ -348,6 +348,26 @@ class CollectionController extends Controller
 
     public function refreshActivity(Request $request, Collection $collection): JsonResponse
     {
+
+        if($collection->activity_update_requested_at) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        $hoursUntilNextUpdate = 6;
+        $hasBeenRecentlyUpdated = $collection->activity_updated_at && Carbon::now()->diffInHours($collection->activity_updated_at) < $hoursUntilNextUpdate;
+
+        // If the collection has been recently updated and it requested to update again, dispatch the job with a delay.
+        if($hasBeenRecentlyUpdated && !$collection->is_fetching_activity) {
+            $collection->touch("activity_update_requested_at");
+            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS)->delay(Carbon::now()->addHours($hoursUntilNextUpdate));
+
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
         FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
 
         return response()->json([
