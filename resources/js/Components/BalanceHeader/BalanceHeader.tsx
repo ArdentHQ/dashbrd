@@ -49,13 +49,15 @@ export const BalanceHeader = ({
         <>
             <div
                 data-testid="BalanceHeader"
-                className="hidden items-center justify-between whitespace-nowrap rounded-xl border border-theme-secondary-300 px-6 py-4 sm:block xl:flex"
+                className="hidden items-center justify-between whitespace-nowrap rounded-xl border border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700 sm:block xl:flex"
             >
-                <div className="flex w-auto justify-between xl:justify-start xl:divide-x xl:divide-theme-secondary-300">
-                    <div className="flex divide-x divide-theme-secondary-300 font-medium">
+                <div className="flex w-auto justify-between xl:justify-start xl:divide-x xl:divide-theme-secondary-300 dark:xl:divide-theme-dark-700">
+                    <div className="flex divide-x divide-theme-secondary-300 font-medium dark:divide-theme-dark-700">
                         <div className="pr-4">
-                            <div className="text-sm text-theme-secondary-500">{t("common.my_balance")}</div>
-                            <div className="text-lg text-theme-secondary-900">
+                            <div className="text-sm text-theme-secondary-500 dark:text-theme-dark-300">
+                                {t("common.my_balance")}
+                            </div>
+                            <div className="text-lg text-theme-secondary-900 dark:text-theme-dark-50">
                                 <DynamicBalance
                                     balance={balance}
                                     currency={currency}
@@ -64,17 +66,19 @@ export const BalanceHeader = ({
                         </div>
 
                         <div className="px-4">
-                            <div className="text-sm text-theme-secondary-500">{t("common.tokens")}</div>
-                            <div className="text-lg text-theme-secondary-900">{tokens}</div>
+                            <div className="text-sm text-theme-secondary-500 dark:text-theme-dark-300">
+                                {t("common.tokens")}
+                            </div>
+                            <div className="text-lg text-theme-secondary-900 dark:text-theme-dark-50">{tokens}</div>
                         </div>
                     </div>
 
                     <div className="pl-4 font-medium">
-                        <div className="text-right text-sm text-theme-secondary-500 xl:text-left">
+                        <div className="text-right text-sm text-theme-secondary-500 dark:text-theme-dark-300 xl:text-left">
                             {t("common.my_address")}
                         </div>
 
-                        <div className="flex items-center text-right text-lg text-theme-secondary-900 xl:text-left">
+                        <div className="flex items-center text-right text-lg text-theme-secondary-900 dark:text-theme-dark-50  xl:text-left">
                             <TruncateMiddle
                                 length={16}
                                 text={address}
@@ -106,7 +110,7 @@ export const BalanceHeader = ({
                             />
                         </div>
 
-                        <div className="ml-4 flex pl-4 text-sm xl:border-l xl:border-theme-secondary-300">
+                        <div className="ml-4 flex pl-4 text-sm xl:border-l xl:border-theme-secondary-300 dark:xl:border-theme-dark-700">
                             <LinkButton
                                 data-testid="BalanceHeader__more-details"
                                 onClick={() => {
@@ -118,6 +122,7 @@ export const BalanceHeader = ({
                                     "outline-none outline-3 outline-offset-4",
                                     "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
                                     "focus-visible:outline-theme-primary-300",
+                                    "dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500",
                                 )}
                             >
                                 {t("common.more_details")}

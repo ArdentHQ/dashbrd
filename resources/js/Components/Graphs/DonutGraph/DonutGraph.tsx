@@ -24,7 +24,7 @@ export const DonutGraph = ({ data, size, renderTooltip, children }: DonutGraphPr
                     {...circleProperties}
                     id={`circleTrackLine__${index}`}
                     data-testid="DonutGraph__item-track-line"
-                    className="stroke-theme-secondary-300"
+                    className="stroke-theme-secondary-300 dark:stroke-theme-dark-700"
                     strokeWidth={2}
                     pointerEvents="none"
                 />
@@ -63,7 +63,7 @@ export const DonutGraph = ({ data, size, renderTooltip, children }: DonutGraphPr
                 width={size}
                 height={size}
                 data-testid="DonutGraph__svg"
-                className="fill-theme-secondary-100"
+                className="fill-theme-secondary-100 dark:fill-theme-dark-950"
             >
                 <>
                     <circle {...backgroundCircle} />

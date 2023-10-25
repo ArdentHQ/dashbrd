@@ -2,7 +2,7 @@ import cn from "classnames";
 import { Img } from "@/Components/Image";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.CollectionNftData[] }): JSX.Element => {
+export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.SimpleNftData[] }): JSX.Element => {
     const [cover, second, third, ...rest] = nfts;
 
     return (
@@ -42,9 +42,11 @@ export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.Col
                             {rest.length > 0 && (
                                 <div
                                     data-testid="CollectionCoverImages__more"
-                                    className="absolute inset-0 flex items-center justify-center bg-white/75 backdrop-blur-md"
+                                    className="absolute inset-0 flex items-center justify-center bg-white/75 backdrop-blur-md dark:bg-theme-dark-900/75"
                                 >
-                                    <span className="text-base font-medium">+{rest.length + 1}</span>
+                                    <span className="text-base font-medium dark:text-theme-dark-50">
+                                        +{rest.length + 1}
+                                    </span>
                                 </div>
                             )}
                         </div>

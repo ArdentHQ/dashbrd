@@ -25,6 +25,7 @@ use Illuminate\Support\Str;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /**
  * @property ?int $supply
@@ -33,7 +34,7 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasFactory, HasSlug, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasSlug, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
@@ -362,95 +363,14 @@ class Collection extends Model
     }
 
     /**
+     * Query only the collections that are used by signed wallets.
+     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
     public function scopeWithSignedWallets(Builder $query): Builder
     {
-        $signedWallets = Wallet::query()
-            ->select('id')
-            ->whereNotNull('last_signed_at');
-
-        $distinctCollectionIds = DB::query()
-            ->selectRaw('DISTINCT distinct_collections.collection_id as id')
-            ->withExpression('signed_wallets', $signedWallets)
-            ->from('signed_wallets')
-            ->joinSubLateral(
-                Nft::query()
-                    ->selectRaw('DISTINCT nfts.collection_id')
-                    ->whereRaw('nfts.wallet_id = signed_wallets.id'),
-                'distinct_collections',
-                null // @phpstan-ignore-line
-            );
-
-        return $query
-            ->withExpression('distinct_collection_ids', $distinctCollectionIds)
-            ->join('distinct_collection_ids', 'distinct_collection_ids.id', 'collections.id');
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeForCollectionData(Builder $query, User $user = null): Builder
-    {
-        $extraAttributeSelect = "CASE
-            WHEN collections.extra_attributes->>'%s' = 'null' THEN NULL
-            ELSE collections.extra_attributes->>'%s'
-        END";
-
-        $currency = $user ? $user->currency()->value : CurrencyCode::USD->value;
-
-        $query = $query->select([
-            'collections.id',
-            'collections.name',
-            'collections.slug',
-            'collections.address',
-            'networks.chain_id',
-            'collections.floor_price',
-            DB::raw("(fiat_value->'{$currency}')::numeric as floor_price_fiat"),
-            DB::raw('lower(tokens.symbol) as floor_price_currency'),
-            DB::raw('tokens.decimals as floor_price_decimals'),
-            DB::raw(sprintf($extraAttributeSelect, 'image', 'image').' as image'),
-            DB::raw(sprintf($extraAttributeSelect, 'banner', 'banner').' as banner'),
-            DB::raw(sprintf($extraAttributeSelect, 'opensea_slug', 'opensea_slug').' as opensea_slug'),
-            // gets the website url with the same logic used on the `website` method
-            DB::raw(sprintf('COALESCE(%s, CONCAT(networks.explorer_url, \'%s\', collections.address)) as website', sprintf($extraAttributeSelect, 'website', 'website'), '/token/')),
-            DB::raw('COUNT(DISTINCT nfts.id) as nfts_count'),
-        ])->join(
-            'networks',
-            'networks.id',
-            '=',
-            'collections.network_id'
-        )
-            ->leftJoin(
-                'tokens',
-                'tokens.id',
-                '=',
-                'collections.floor_price_token_id'
-            )
-            ->leftJoin(
-                'nfts',
-                'nfts.collection_id',
-                '=',
-                'collections.id'
-            );
-
-        if ($user !== null) {
-            $query->leftJoin(
-                'wallets as nft_wallets',
-                'nft_wallets.id',
-                '=',
-                'nfts.wallet_id'
-            )
-                ->where('nft_wallets.user_id', $user->id);
-        }
-
-        return $query->groupBy(
-            'collections.id',
-            'networks.id',
-            'tokens.id'
-        );
+        return $query->whereHas('nfts.wallet', fn ($q) => $q->whereNotNull('last_signed_at'));
     }
 
     /**
@@ -574,6 +494,24 @@ class Collection extends Model
     public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
     {
         return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByFloorPriceLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'floor_price_last_fetched_at\' ASC NULLS FIRST');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByOpenseaSlugLastFetchedAt(Builder $query): Builder
+    {
+        return $query->orderByRaw('extra_attributes->>\'opensea_slug_last_fetched_at\' ASC NULLS FIRST');
     }
 
     public function isSpam(): bool

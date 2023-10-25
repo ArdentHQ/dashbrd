@@ -24,7 +24,7 @@ export const GridHeader = ({
     return (
         <div
             className={cn(
-                "flex flex-col whitespace-nowrap rounded-lg bg-theme-secondary-50 px-4 py-3 font-medium lg:rounded-none lg:bg-transparent lg:py-0",
+                "flex flex-col whitespace-nowrap rounded-lg bg-theme-secondary-50 px-4 py-3 font-medium dark:bg-theme-dark-800 lg:rounded-none lg:bg-transparent lg:py-0",
                 className,
             )}
             {...properties}
@@ -32,7 +32,7 @@ export const GridHeader = ({
             <div className="mr-auto flex w-[100px] flex-col space-y-0.5 font-medium md:w-[110px] lg:w-auto">
                 <span
                     data-testid="GridHeader__title"
-                    className="text-sm leading-4.5 text-theme-secondary-500 md:leading-5.5"
+                    className="text-sm leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 md:leading-5.5"
                 >
                     {title}
                 </span>
@@ -41,9 +41,11 @@ export const GridHeader = ({
                     data-testid="GridHeader__value"
                     className="leading-6 md:leading-7"
                 >
-                    {isTruthy(value) && <span>{value}</span>}
+                    {isTruthy(value) && <span className="dark:text-theme-dark-50">{value}</span>}
 
-                    {!isTruthy(value) && <span className="text-theme-secondary-500">{emptyValue}</span>}
+                    {!isTruthy(value) && (
+                        <span className="text-theme-secondary-500 dark:text-theme-dark-300">{emptyValue}</span>
+                    )}
                 </span>
             </div>
         </div>

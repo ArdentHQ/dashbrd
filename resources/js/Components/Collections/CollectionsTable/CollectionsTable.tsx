@@ -12,7 +12,6 @@ const skeletonsCount = 10;
 
 export const CollectionsTable = ({
     collections,
-    nfts,
     user,
     hiddenCollectionAddresses,
     reportByCollectionAvailableIn,
@@ -25,6 +24,7 @@ export const CollectionsTable = ({
     sortDirection = "asc",
     onSort,
     onReportCollection,
+    selectedChainIds,
 }: CollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -137,7 +137,7 @@ export const CollectionsTable = ({
                           const direction =
                               column.id === activeSort ? (sortDirection === "asc" ? "desc" : "asc") : "asc";
 
-                          onSort(column.id, direction);
+                          onSort({ sortBy: column.id, direction, selectedChainIds });
                       }
                     : undefined
             }
@@ -145,7 +145,6 @@ export const CollectionsTable = ({
             row={(collection: App.Data.Collections.CollectionData, index: number) => (
                 <CollectionsTableItem
                     collection={collection}
-                    nfts={nfts}
                     uniqueKey={`${collection.address}-${collection.chainId}`}
                     key={`${collection.address}-${collection.chainId}`}
                     user={user}

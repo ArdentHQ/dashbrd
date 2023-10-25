@@ -11,9 +11,9 @@ export const PriceChange = ({ change }: PriceChangeProperties): JSX.Element => {
             <div
                 data-testid="PriceChange__wrapper"
                 className={cn("font-medium", {
-                    "text-theme-success-600": type === "positive",
+                    "text-theme-success-600 dark:text-theme-success-500": type === "positive",
                     "text-theme-danger-400": type === "negative",
-                    "text-theme-secondary-700": type === "neutral",
+                    "text-theme-secondary-700 dark:text-theme-secondary-500": type === "neutral",
                 })}
             >
                 {formatPriceChange(change)}

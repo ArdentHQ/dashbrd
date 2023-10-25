@@ -40,6 +40,8 @@ class Web3NftData extends Data
         public array $traits,
         public int $mintedBlock,
         public ?Carbon $mintedAt,
+        public ?bool $hasError,
+        public ?string $info,
     ) {
     }
 

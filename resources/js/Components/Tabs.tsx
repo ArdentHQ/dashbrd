@@ -36,9 +36,11 @@ const getTabClasses = ({
             baseClassName,
             "grow sm:grow-0 justify-center select-none rounded-full w-10 h-10 flex items-center justify-center text-sm -outline-offset-[3px]",
             {
-                "border-transparent bg-white text-theme-secondary-900 shadow-sm": selected,
-                "active:bg-theme-secondary-200 hover:bg-theme-secondary-300": !selected && !disabled,
-                "cursor-not-allowed focus:bg-transparent active:bg-transparent": disabled,
+                "border-transparent bg-white text-theme-secondary-900 shadow-sm dark:bg-theme-dark-800 dark:text-theme-dark-50":
+                    selected,
+                "active:bg-theme-secondary-200 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-900 dark:hover:text-theme-dark-200":
+                    !selected && !disabled,
+                "cursor-not-allowed focus:bg-transparent active:bg-transparent dark:text-theme-dark-400": disabled,
             },
             className,
         );

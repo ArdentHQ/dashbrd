@@ -66,6 +66,12 @@ class Web3NftHandler
                 $attributes['opensea_slug'] = $nftData->collectionOpenSeaSlug;
             }
 
+            if ($nftData->hasError) {
+                $attributes = array_filter($attributes, function ($value) {
+                    return $value !== null;
+                });
+            }
+
             return [
                 $nftData->tokenAddress,
                 $nftData->networkId,
@@ -125,21 +131,33 @@ class Web3NftHandler
                 return $this->shouldKeepNft($collection);
             });
 
-            $valuesToUpsert = $nfts->map(fn ($nft) => [
-                'wallet_id' => $this->wallet?->id,
-                'collection_id' => $groupedByAddress->get(Str::lower($nft->tokenAddress))->id,
-                'token_number' => $nft->tokenNumber,
-                'name' => $nft->name,
-                'extra_attributes' => json_encode($nft->extraAttributes),
-                'deleted_at' => null,
-            ])->toArray();
+            $valuesToUpsert = $nfts->map(function ($nft) use ($groupedByAddress, $now) {
+                $collection = $groupedByAddress->get(Str::lower($nft->tokenAddress));
+
+                $values = [
+                    'wallet_id' => $this->wallet?->id,
+                    'collection_id' => $collection->id,
+                    'token_number' => $nft->tokenNumber,
+                    'description' => $nft->description,
+                    'name' => $nft->name,
+                    'extra_attributes' => json_encode($nft->extraAttributes),
+                    'deleted_at' => null,
+                    'metadata_fetched_at' => $now,
+                    'info' => $nft->hasError ? $nft->info : null,
+                ];
+
+                return $values;
+            })->toArray();
 
             $uniqueBy = ['collection_id', 'token_number'];
 
-            $valuesToUpdateIfExists = ['name', 'extra_attributes', 'deleted_at'];
+            $valuesToUpdateIfExists = ['deleted_at', 'info'];
+            $valuesToCheck = ['name', 'description', 'extra_attributes', 'metadata_fetched_at', 'wallet_id'];
 
-            if ($this->wallet !== null) {
-                $valuesToUpdateIfExists[] = 'wallet_id';
+            foreach ($valuesToCheck as $value) {
+                if (array_filter($valuesToUpsert, fn ($v) => $v[$value] !== null)) {
+                    $valuesToUpdateIfExists[] = $value;
+                }
             }
 
             Nft::upsert($valuesToUpsert, $uniqueBy, $valuesToUpdateIfExists);

@@ -27,7 +27,7 @@ const NetworkFilterCheckbox = ({
             "cursor-pointer": count > 0,
         })}
     >
-        <div className="flex items-center justify-center gap-3 text-base font-medium text-theme-secondary-700">
+        <div className="flex items-center justify-center gap-3 text-base font-medium text-theme-secondary-700 dark:text-theme-dark-200">
             <Checkbox
                 value={value}
                 onChange={() => {
@@ -41,15 +41,15 @@ const NetworkFilterCheckbox = ({
                 networkId={value}
                 withoutTooltip
                 textClassName={cn({
-                    "text-theme-secondary-500": count === 0,
+                    "text-theme-secondary-500 dark:text-theme-dark-400": count === 0,
                 })}
             />
         </div>
 
         <div
             className={cn("text-sm font-medium", {
-                "text-theme-secondary-500": count === 0,
-                "text-theme-secondary-700": count > 0,
+                "text-theme-secondary-500 dark:text-theme-dark-400": count === 0,
+                "text-theme-secondary-700 dark:text-theme-dark-200": count > 0,
             })}
         >
             {count}
@@ -65,8 +65,8 @@ const CollectionsNetworksFilter = ({
     const { t } = useTranslation();
 
     return (
-        <div className="flex flex-col overflow-hidden rounded-xl bg-white shadow-xl lg:max-h-screen">
-            <div className="bg-theme-secondary-50 px-6 py-3 text-sm font-medium text-theme-secondary-700">
+        <div className="flex flex-col overflow-hidden rounded-xl bg-white shadow-xl dark:border dark:border-theme-dark-700 dark:bg-theme-dark-900 lg:max-h-screen">
+            <div className="bg-theme-secondary-50 px-6 py-3 text-sm font-medium text-theme-secondary-700 dark:bg-theme-dark-950 dark:text-theme-dark-200">
                 {t("pages.collections.collections_network")}
             </div>
 

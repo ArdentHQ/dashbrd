@@ -30,7 +30,6 @@ describe("CollectionsGrid", () => {
                 isLoading
                 hiddenCollectionAddresses={[]}
                 collections={[]}
-                nfts={[]}
                 alreadyReportedByCollection={{}}
                 reportByCollectionAvailableIn={{}}
                 onChanged={vi.fn()}
@@ -75,7 +74,6 @@ describe("CollectionsGrid", () => {
             <CollectionsGrid
                 hiddenCollectionAddresses={[]}
                 collections={collections}
-                nfts={[]}
                 alreadyReportedByCollection={{}}
                 reportByCollectionAvailableIn={{}}
                 onChanged={vi.fn()}
@@ -130,7 +128,6 @@ describe("CollectionsGrid", () => {
             <CollectionsGrid
                 hiddenCollectionAddresses={[]}
                 collections={collectionsSortedByFloorPrice}
-                nfts={[]}
                 alreadyReportedByCollection={{}}
                 reportByCollectionAvailableIn={{}}
                 onChanged={vi.fn()}

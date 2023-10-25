@@ -41,6 +41,9 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
+        $this->collection->extra_attributes->set('opensea_slug_last_fetched_at', Carbon::now());
+        $this->collection->save();
+
         $nft = $this->collection->nfts()->first();
 
         $result = Opensea::nft(
@@ -56,11 +59,8 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
             ]);
 
             $this->collection->extra_attributes->set('opensea_slug', $result->collectionSlug());
+            $this->collection->save();
         }
-
-        $this->collection->extra_attributes->set('opensea_slug_last_fetched_at', Carbon::now());
-
-        $this->collection->save();
 
         Log::info('FetchCollectionOpenseaSlug Job: Handled', [
             'collection' => $this->collection->address,

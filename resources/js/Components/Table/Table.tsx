@@ -58,7 +58,7 @@ export const Table = <RowDataType extends Record<never, unknown>>({
 
     const createRow = (tableRow: Row<RowDataType>, index: number): JSX.Element => {
         prepareRow(tableRow);
-        return { ...row(tableRow.original, index), ...tableRow.getRowProps() };
+        return { ...tableRow.getRowProps(), ...row(tableRow.original, index), key: String(index) };
     };
 
     if (customWrapper !== undefined) {
@@ -68,7 +68,7 @@ export const Table = <RowDataType extends Record<never, unknown>>({
     return (
         <div
             className={cn({
-                "rounded-xl border border-theme-secondary-300": variant === "default",
+                "rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700": variant === "default",
                 "border-none": variant === "borderless",
             })}
         >

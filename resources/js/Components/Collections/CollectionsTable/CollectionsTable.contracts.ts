@@ -1,6 +1,5 @@
 export interface CollectionTableItemProperties {
     collection: App.Data.Collections.CollectionData;
-    nfts: App.Data.Collections.CollectionNftData[];
     uniqueKey: string;
     user: App.Data.UserData | null;
     isHidden: boolean;
@@ -14,7 +13,6 @@ export interface CollectionTableItemProperties {
 
 export interface CollectionTableProperties {
     collections: App.Data.Collections.CollectionData[];
-    nfts: App.Data.Collections.CollectionNftData[];
     user: App.Data.UserData | null;
     hiddenCollectionAddresses: string[];
     reportByCollectionAvailableIn: Record<string, string | null>;
@@ -25,6 +23,15 @@ export interface CollectionTableProperties {
     onChanged: () => void;
     activeSort?: string;
     sortDirection?: "asc" | "desc";
-    onSort?: (column: string, direction: string) => void;
+    onSort?: ({
+        sortBy,
+        direction,
+        selectedChainIds,
+    }: {
+        sortBy: string;
+        direction?: string;
+        selectedChainIds?: number[];
+    }) => void;
     onReportCollection?: (address: string) => void;
+    selectedChainIds?: number[];
 }
