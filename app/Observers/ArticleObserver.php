@@ -11,15 +11,15 @@ class ArticleObserver
 {
     public function created(Article $article): void
     {
-        $this->forgeMetaDescriptionCache($article);
+        $this->forgetMetaDescriptionCache($article);
     }
 
     public function updated(Article $article): void
     {
-        $this->forgeMetaDescriptionCache($article);
+        $this->forgetMetaDescriptionCache($article);
     }
 
-    private function forgeMetaDescriptionCache(Article $article): void
+    private function forgetMetaDescriptionCache(Article $article): void
     {
         if ($article->isNotPublished()) {
             return;
