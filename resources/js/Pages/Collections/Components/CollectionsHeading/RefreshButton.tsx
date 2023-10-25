@@ -15,8 +15,7 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
     const { showToast } = useToasts();
 
     const refresh = (): void => {
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        signedAction(async ({ authenticated }) => {
+        void signedAction(async ({ authenticated }) => {
             if (authenticated) {
                 setLoading(true);
 
