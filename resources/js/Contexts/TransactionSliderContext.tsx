@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import TokenListItemData = App.Data.TokenListItemData;
 import { type TransactionDirection, TransactionFormSlider } from "@/Components/TransactionFormSlider";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import {
     type Transaction,
     type TransactionRecord,
@@ -36,7 +36,7 @@ export const TransactionSliderProvider = ({ children }: { children: React.ReactN
 
     const [transactionAsset, setTransactionAsset] = useState<App.Data.TokenListItemData | undefined>();
 
-    const { wallet, user } = useActiveUser();
+    const { wallet, user } = useAuth();
     const { registerTransaction, lastTransaction } = useTransactionStatusMonitor();
     const { tokens } = useWalletTokens(wallet);
 

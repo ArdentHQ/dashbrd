@@ -3,11 +3,12 @@ import { EditableGalleryHook, GalleryContext } from "./Hooks/useEditableGalleryC
 import { NftGridEditable } from "./NftGridEditable";
 import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
 import { SliderContext } from "@/Components/Slider";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { SamplePageMeta } from "@/Tests/SampleData";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
-
 const nft = new GalleryNftDataFactory().withImages().create();
 
 describe("NftGridEditable", () => {
@@ -23,6 +24,12 @@ describe("NftGridEditable", () => {
                 },
             }),
         );
+
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
     });
 
     it("should render", () => {

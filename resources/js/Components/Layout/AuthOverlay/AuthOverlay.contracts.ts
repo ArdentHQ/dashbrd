@@ -4,6 +4,7 @@ export interface AuthOverlayProperties extends Omit<OverlayProperties, "showOver
     show: boolean;
     closeOverlay: () => void;
     mustBeSigned?: boolean;
+    sessionMayExpired?: boolean;
     showBackButton: boolean;
 }
 

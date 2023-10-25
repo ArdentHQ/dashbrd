@@ -1,12 +1,11 @@
 import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
 import { CollectionsTable } from "./CollectionsTable";
-import * as useAuthMock from "@/Hooks/useAuth";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 let useAuthorizedActionSpy: SpyInstance;
@@ -74,12 +73,7 @@ describe("CollectionsTable", () => {
     });
 
     it.each(allBreakpoints)("should render loading state if no user", (breakpoint) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        const useAuthSpy = vi.spyOn(useAuthMock, "useAuth").mockReturnValue({
-            authenticated: false,
-            user: null,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any);
+        const resetMock = mockAuthContext({});
 
         render(
             <CollectionsTable
@@ -96,7 +90,7 @@ describe("CollectionsTable", () => {
 
         expect(screen.getByTestId("CollectionsTableSkeleton")).toBeInTheDocument();
 
-        useAuthSpy.mockRestore();
+        resetMock();
     });
 
     it.each(allBreakpoints)("renders without crashing on %s screen", (breakpoint) => {

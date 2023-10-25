@@ -6,7 +6,7 @@ import { IconButton } from "@/Components/Buttons";
 import { CollectionReportModal } from "@/Components/Collections/CollectionReportModal";
 import { NftReportModal } from "@/Components/Collections/Nfts/NftReportModal";
 import { Tooltip } from "@/Components/Tooltip";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 interface Properties {
@@ -136,7 +136,7 @@ export const Report = ({
                         data-testid="Report_flag"
                         icon="Flag"
                         onClick={() => {
-                            signedAction(({ signed }) => {
+                            void signedAction(({ signed }) => {
                                 setShowReportModal(true);
 
                                 if (!signed) {

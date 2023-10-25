@@ -11,6 +11,7 @@ import { type AuthOverlayProperties } from "./AuthOverlay.contracts";
 import { Heading } from "@/Components/Heading";
 import { Overlay } from "@/Components/Layout/Overlay/Overlay";
 import { Toast } from "@/Components/Toast";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { AuthConnectWallet, AuthConnectWalletDark, AuthInstallWallet } from "@/images";
@@ -22,10 +23,13 @@ export const AuthOverlay = ({
     showCloseButton,
     showBackButton,
     mustBeSigned = false,
+    sessionMayExpired = false,
     ...properties
 }: AuthOverlayProperties): JSX.Element => {
     const { t } = useTranslation();
     const { isDark } = useDarkModeContext();
+
+    const { signed } = useAuth();
 
     const {
         needsMetaMask,
@@ -38,7 +42,6 @@ export const AuthOverlay = ({
         errorMessage,
         waitingSignature,
         requiresSignature: metaMaskRequiresSignature,
-        signed,
     } = useMetaMaskContext();
 
     const requiresSignature = (mustBeSigned && !signed) || metaMaskRequiresSignature;
@@ -52,7 +55,7 @@ export const AuthOverlay = ({
             showOverlay={show}
             showCloseButton={showCloseButton}
         >
-            <div className="text-center">
+            <div className="px-5 text-center xs:px-8">
                 <div className="mb-1 text-theme-secondary-900 dark:text-theme-dark-50">
                     <Heading
                         level={3}
@@ -63,11 +66,17 @@ export const AuthOverlay = ({
                 </div>
 
                 <p className="font-medium text-theme-secondary-700 dark:text-theme-dark-300">
-                    {requiresSignature
-                        ? t("auth.wallet.sign_subtitle")
-                        : needsMetaMask
-                        ? t("auth.wallet.install_long")
-                        : t("auth.wallet.connect_long")}
+                    {sessionMayExpired ? (
+                        t("auth.session_timeout_modal")
+                    ) : (
+                        <>
+                            {requiresSignature
+                                ? t("auth.wallet.sign_subtitle")
+                                : needsMetaMask
+                                ? t("auth.wallet.install_long")
+                                : t("auth.wallet.connect_long")}
+                        </>
+                    )}
                 </p>
             </div>
             {needsMetaMask && <AuthInstallWallet />}

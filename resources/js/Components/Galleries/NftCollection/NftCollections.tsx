@@ -110,6 +110,7 @@ export const NftCollections = ({
                                 selectedNfts={selected}
                                 onDeselectNft={removeFromSelection}
                                 onSelectNft={addToSelection}
+                                validateImage={true}
                             />
 
                             {!allNftsLoaded(nfts[0]) && (

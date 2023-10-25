@@ -1,7 +1,7 @@
 import cn from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useInViewport } from "react-in-viewport";
-import { ImageErrorPlaceholer } from "./Image.blocks";
+import { ImageErrorPlaceholder } from "./Image.blocks";
 import { type ImageProperties } from "./Image.contracts";
 import { useImageLoader } from "./useImageLoader";
 import { Skeleton } from "@/Components/Skeleton";
@@ -75,7 +75,7 @@ export const Img = ({
                 )}
 
                 {isErrored && (
-                    <ImageErrorPlaceholer
+                    <ImageErrorPlaceholder
                         errorMessage={errorMessage}
                         className={cn(className, errorClassName)}
                     />
