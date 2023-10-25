@@ -108,7 +108,8 @@ class ArticleResource extends Resource
                 TextColumn::make('title')
                     ->label('Title')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->limit(60),
 
                 TextColumn::make('user.username')
                     ->label('Author')

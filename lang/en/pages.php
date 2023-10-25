@@ -37,7 +37,7 @@ return [
         'header_title' => 'Explore our collection of',
         'header_suffix_one' => 'published article',
         'header_suffix_other' => 'published articles',
-        'consists_of_collections' => '{0} This article consists of :count collections|{1} This article consists of :count collection|[2,*] This article consists of :count collections',
+        'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
     ],
     'collections' => [
         'title' => 'Collections',
