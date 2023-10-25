@@ -26,7 +26,7 @@ export const CollectionNft = ({ nft }: { nft: App.Data.Gallery.GalleryNftData })
         >
             <span className="relative block">
                 <Img
-                    className="block aspect-square h-full w-full grow rounded-lg bg-theme-secondary-100 object-cover dark:bg-theme-dark-900"
+                    className="block grow rounded-lg bg-theme-secondary-100 object-cover dark:bg-theme-dark-900"
                     src={nft.images.small ?? undefined}
                 />
 

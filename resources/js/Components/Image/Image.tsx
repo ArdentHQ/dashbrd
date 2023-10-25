@@ -50,7 +50,7 @@ export const Img = ({
             {showSkeleton && (
                 <Skeleton
                     isCircle={isCircle}
-                    className={className}
+                    className={cn(className, "aspect-square")}
                 />
             )}
 
@@ -69,7 +69,7 @@ export const Img = ({
                         data-testid="Img"
                         src={src ?? undefined}
                         alt={alt}
-                        className={className}
+                        className={cn(className, "w-full")}
                         {...properties}
                     />
                 )}
