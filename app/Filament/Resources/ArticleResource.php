@@ -133,7 +133,8 @@ class ArticleResource extends Resource
             ])
             ->emptyStateActions([
                 CreateAction::make(),
-            ]);
+            ])
+            ->defaultSort('published_at', 'desc');
     }
 
     public static function getRelations(): array
