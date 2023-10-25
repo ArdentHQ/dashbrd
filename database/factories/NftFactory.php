@@ -29,13 +29,13 @@ class NftFactory extends Factory
             'collection_id' => fn () => Collection::factory(),
             'name' => fn () => fake()->name(),
             'token_number' => fn () => (string) BigInteger::of(fake()->unique()->numberBetween(50, 1000) * 1e18),
-            'extra_attributes' => json_encode([
+            'extra_attributes' => [
                 'images' => [
-                    'thumb' => fn () => fake()->imageUrl(360, 360, 'animals', true),
-                    'small' => fn () => fake()->imageUrl(360, 360, 'animals', true),
-                    'large' => fn () => fake()->imageUrl(360, 360, 'animals', true),
+                    'thumb' => fake()->imageUrl(360, 360, 'animals', true),
+                    'small' => fake()->imageUrl(360, 360, 'animals', true),
+                    'large' => fake()->imageUrl(360, 360, 'animals', true),
                 ],
-            ]),
+            ],
         ];
     }
 }
