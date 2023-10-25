@@ -44,7 +44,7 @@ class CheckArticleSpeechConversion implements ShouldQueue
         }
 
         if ($status === TextToSpeechConversionStatus::Failed) {
-            Log::error("Failed to convert article to audio", [
+            Log::error('Failed to convert article to audio', [
                 'id' => $this->article->id,
             ]);
 
