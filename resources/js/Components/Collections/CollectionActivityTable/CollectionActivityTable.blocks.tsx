@@ -92,7 +92,7 @@ export const Name = ({
             />
         </div>
 
-        <span className="transition-default truncate text-base font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
+        <span className="transition-default truncate text-base text-sm font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 sm:text-base md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
             {activity.nft.name}
         </span>
     </div>

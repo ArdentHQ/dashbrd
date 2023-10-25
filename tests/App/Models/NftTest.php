@@ -270,7 +270,9 @@ it('can order nfts by mint date', function () {
         NftTransferType::Mint->value => 3, // timestamp = 3
         NftTransferType::Sale->value => 5, // timestamp = 5
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft1)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft1->collection_id,
+            'token_number' => $nft1->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -282,7 +284,9 @@ it('can order nfts by mint date', function () {
         NftTransferType::Mint->value => 4, // timestamp = 4
         NftTransferType::Sale->value => 6, // timestamp = 6
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft2)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft2->collection_id,
+            'token_number' => $nft2->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -294,7 +298,9 @@ it('can order nfts by mint date', function () {
         NftTransferType::Mint->value => 2, // timestamp = 3
         NftTransferType::Sale->value => 1, // timestamp = 1
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft3)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft3->collection_id,
+            'token_number' => $nft3->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -321,7 +327,9 @@ it('can order nfts by received date', function () {
         NftTransferType::Mint->value => 3, // timestamp = 3
         NftTransferType::Sale->value => 5, // timestamp = 5
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft1)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft1->collection_id,
+            'token_number' => $nft1->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -333,7 +341,9 @@ it('can order nfts by received date', function () {
         NftTransferType::Mint->value => 4, // timestamp = 4
         NftTransferType::Sale->value => 6, // timestamp = 6
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft2)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft2->collection_id,
+            'token_number' => $nft2->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -345,7 +355,9 @@ it('can order nfts by received date', function () {
         NftTransferType::Mint->value => 2, // timestamp = 3
         NftTransferType::Sale->value => 1, // timestamp = 1
     ] as $type => $timestamp) {
-        NftActivity::factory()->for($nft3)->create([
+        NftActivity::factory()->create([
+            'collection_id' => $nft3->collection_id,
+            'token_number' => $nft3->token_number,
             'type' => $type,
             'timestamp' => $timestamp,
         ]);
@@ -375,4 +387,54 @@ it('filters the collections by collection name', function () {
         ->and(Nft::search('NFT')->count())->toBe(2)
         ->and(Nft::search('Test')->get()->pluck('id')->toArray()[0])->toBe($nft3->id)
         ->and(Nft::search('NFT')->get()->pluck('id')->toArray())->toEqualCanonicalizing([$nft1->id, $nft2->id]);
+});
+
+it('has activity', function () {
+    $first = Nft::factory()->create([
+        'token_number' => 1,
+    ]);
+
+    $second = Nft::factory()->create([
+        'collection_id' => $first->collection_id,
+        'token_number' => 2,
+    ]);
+
+    $third = Nft::factory()->create([
+        'token_number' => 1,
+    ]);
+
+    $activity1 = NftActivity::factory()->create([
+        'collection_id' => $first->collection_id,
+        'token_number' => 1,
+    ]);
+
+    $activity2 = NftActivity::factory()->create([
+        'collection_id' => $first->collection_id,
+        'token_number' => 1,
+    ]);
+
+    $activity3 = NftActivity::factory()->create([
+        'collection_id' => $first->collection_id,
+        'token_number' => 2,
+    ]);
+
+    $activity4 = NftActivity::factory()->create([
+        'collection_id' => $third->collection_id,
+        'token_number' => 1,
+    ]);
+
+    $activity5 = NftActivity::factory()->create([
+        'collection_id' => $third->collection_id,
+        'token_number' => 2,
+    ]);
+
+    expect($first->activities()->count())->toBe(2);
+    expect($first->activities->modelKeys())->toContain($activity1->id);
+    expect($first->activities->modelKeys())->toContain($activity2->id);
+
+    expect($second->activities()->count())->toBe(1);
+    expect($second->activities->modelKeys())->toContain($activity3->id);
+
+    expect($third->activities()->count())->toBe(1);
+    expect($third->activities->modelKeys())->toContain($activity4->id);
 });
