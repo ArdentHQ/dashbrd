@@ -1056,3 +1056,66 @@ it('can refresh collection activity', function () {
 
     Bus::assertDispatched(FetchCollectionActivity::class);
 });
+
+it('should refresh collection activity with delay if recently requested', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => null,
+        'supply' => null,
+        'activity_updated_at' => Carbon::now()->addHours(-5),
+        'is_fetching_activity' => false,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+         ->post(route('collection.refresh-activity', [
+             'collection' => $collection->slug,
+         ]))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionActivity::class);
+});
+
+it('should not refresh collection activity if already requested', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => null,
+        'supply' => null,
+        'activity_updated_at' => Carbon::now(),
+        'activity_update_requested_at' => Carbon::now()->addHours(-1),
+        'is_fetching_activity' => false,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+         ->post(route('collection.refresh-activity', [
+             'collection' => $collection->slug,
+         ]))
+        ->assertStatus(200);
+
+    Bus::assertNotDispatched(FetchCollectionActivity::class);
+});
