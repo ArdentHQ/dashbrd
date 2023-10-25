@@ -15,7 +15,7 @@ export const FeaturedCollectionsBanner = ({
     return (
         <div
             data-testid="FeaturedCollectionsBanner"
-            className="flex flex-col items-center justify-between rounded-xl bg-theme-secondary-300 px-6 py-[1.625em] dark:bg-theme-dark-800 lg:flex-row"
+            className="flex flex-col items-center justify-between rounded-xl bg-theme-secondary-100 px-6 py-[1.625em] dark:bg-theme-dark-800 lg:flex-row"
         >
             <div className="text-center lg:text-left">
                 <Heading
