@@ -356,7 +356,7 @@ class CollectionController extends Controller
             ]);
         }
 
-        $hoursUntilNextUpdate = config("dashbrd.idle_time_between_collection_activity_updates", 6);
+        $hoursUntilNextUpdate = config('dashbrd.idle_time_between_collection_activity_updates', 6);
         $hasBeenRecentlyUpdated = $collection->activity_updated_at && Carbon::now()->diffInHours($collection->activity_updated_at) < $hoursUntilNextUpdate;
 
         // If activity has been recently updated and it is requested to update it again, dispatch the job with a delay.

@@ -225,5 +225,5 @@ return [
         'ETH',
     ],
 
-    'idle_time_between_collection_activity_updates' => 6 // hours
+    'idle_time_between_collection_activity_updates' => 6, // hours
 ];
