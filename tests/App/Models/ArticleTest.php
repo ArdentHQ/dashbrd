@@ -49,6 +49,15 @@ it('gets meta description from content if meta description is not set', function
     expect($article->metaDescription())->toBe('This is the content');
 });
 
+it('removes markdown in metadata', function () {
+    $article = Article::factory()->create([
+        'meta_description' => null,
+        'content' => "### This is the content\n\nwith some *markdown*\n",
+    ]);
+
+    expect($article->metaDescription())->toBe("This is the content\nwith some markdown");
+});
+
 it('truncates the content if used as meta description', function () {
     $article = Article::factory()->create([
         'meta_description' => null,

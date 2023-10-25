@@ -25,6 +25,7 @@
         "laravel/slack-notification-channel": "^2.0",
         "laravel/telescope": "^4.16",
         "laravel/tinker": "^2.8",
+        "league/commonmark": "^2.4",
         "monolog/monolog": "^3.4",
         "sentry/sentry-laravel": "^3.8",
         "simplito/elliptic-php": "^1.0",
