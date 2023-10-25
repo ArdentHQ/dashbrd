@@ -146,12 +146,12 @@ it('should get featured collections for an article', function () {
 
 it('should keep highlighted articles regardless of the sorting', function () {
     $highlightedArticles = Article::factory(3)->create([
-        'published_at' => now()->addMinutes(10),
+        'published_at' => now()->subMinutes(10),
     ]);
 
     $article1 = Article::factory()->create([
         'title' => 'nice bunny',
-        'published_at' => now()->addMinute(),
+        'published_at' => now()->subMinutes(30),
     ]);
 
     collect($highlightedArticles->concat([$article1]))->map(fn ($article) => $article
