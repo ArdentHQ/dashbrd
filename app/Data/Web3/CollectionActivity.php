@@ -8,7 +8,7 @@ use App\Enums\NftTransferType;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
-class Web3NftTransfer extends Data
+class CollectionActivity extends Data
 {
     /**
      * @param  array<string, mixed>  $extraAttributes
@@ -19,11 +19,22 @@ class Web3NftTransfer extends Data
         public string $sender,
         public string $recipient,
         public string $txHash,
-        public NftTransferType $type,
+        public string $logIndex,
+        public ?NftTransferType $type,
         public Carbon $timestamp,
         public ?float $totalNative,
         public ?float $totalUsd,
         public array $extraAttributes,
     ) {
+    }
+
+    public function key(): string
+    {
+        return implode(':', [
+            $this->txHash,
+            $this->logIndex,
+            $this->tokenId,
+            $this->type->value,
+        ]);
     }
 }
