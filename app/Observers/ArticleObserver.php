@@ -21,7 +21,7 @@ class ArticleObserver
 
     private function prepareArticleSpeech(Article $article): void
     {
-        if (! config('web.text_to_speech.enabled')) {
+        if (! config('dashbrd.text_to_speech.enabled')) {
             return;
         }
 
