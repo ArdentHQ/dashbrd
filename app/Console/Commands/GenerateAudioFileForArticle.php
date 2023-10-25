@@ -9,7 +9,7 @@ use App\Models\Article;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 
-final class GenerateAudioFileForArticle extends Command
+class GenerateAudioFileForArticle extends Command
 {
     protected $signature = 'articles:generate-audio-file
                             {id? : ID of the article}

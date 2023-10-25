@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CheckArticleSpeechConversion implements ShouldQueue
 {
@@ -43,6 +44,10 @@ class CheckArticleSpeechConversion implements ShouldQueue
         }
 
         if ($status === TextToSpeechConversionStatus::Failed) {
+            Log::error("Failed to convert article to audio", [
+                'id' => $this->article->id,
+            ]);
+
             throw new Exception('Failed to convert article [ID: '.$this->article->id.'] to speech.');
         }
 

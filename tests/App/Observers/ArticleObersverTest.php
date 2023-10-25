@@ -121,4 +121,6 @@ it('should not start preparing audio on creation if tts is disabled via job', fu
     ]);
 
     Bus::assertNotDispatched(ConvertArticleToSpeech::class);
+
+    ConvertArticleToSpeech::enable();
 });
