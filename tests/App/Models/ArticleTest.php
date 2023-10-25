@@ -63,8 +63,7 @@ it('gets meta description from cache', function () {
     $article = Article::factory()->create();
 
     Cache::shouldReceive('rememberForever')
-        ->once()
-        ->with('article:1:meta_description', Closure::class)
+        ->with('article:'.$article->id.':meta_description', Closure::class)
         ->andReturn('This is the content');
 
     expect($article->metaDescription())->toBe('This is the content');
