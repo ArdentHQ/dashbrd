@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('category');
-            $table->date('published_at')->nullable();
+            $table->timestamp('published_at')->nullable()->index();
             $table->text('meta_description')->nullable();
             $table->text('content');
             $table->unsignedInteger('views_count_7days')->default(0);

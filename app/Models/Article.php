@@ -29,7 +29,7 @@ class Article extends Model implements HasMedia, Viewable
 
     protected $casts = [
         'category' => ArticleCategoryEnum::class,
-        'published_at' => 'date',
+        'published_at' => 'datetime',
     ];
 
     public function resolveRouteBinding($value, $field = null)
@@ -121,11 +121,14 @@ class Article extends Model implements HasMedia, Viewable
 
     /**
      * @param  Builder<self>  $query
+     * @param  'asc'|'desc'  $direction
      * @return Builder<self>
      */
-    public function scopeSortByPublishedDate(Builder $query): Builder
+    public function scopeSortByPublishedDate(Builder $query, string $direction = 'desc'): Builder
     {
-        return $query->orderBy('articles.published_at', 'desc');
+        $nullsPosition = Str::lower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        return $query->orderByRaw("articles.published_at {$direction} {$nullsPosition}");
     }
 
     /**
