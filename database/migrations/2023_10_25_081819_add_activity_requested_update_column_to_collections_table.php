@@ -15,8 +15,6 @@ return new class() extends Migration
     {
         Schema::table('collections', function (Blueprint $table) {
             $table->timestamp('activity_update_requested_at')->nullable();
-
-            $table->index('activity_update_requested_at');
         });
     }
 };
