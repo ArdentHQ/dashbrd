@@ -33,7 +33,7 @@ it('should not start audio conversion if article is not published', function () 
 });
 
 it('should not start audio conversion if article content did not change', function () {
-    config(['web.text_to_speech.enabled' => true]);
+    config(['dashbrd.text_to_speech.enabled' => true]);
 
     $article = Article::factory()->create([
         'content' => 'Hello World',
@@ -110,7 +110,7 @@ it('should start preparing audio when an article is published', function () {
 });
 
 it('should not start preparing audio on creation if tts is disabled via job', function () {
-    config(['web.text_to_speech.enabled' => true]);
+    config(['dashbrd.text_to_speech.enabled' => true]);
     ConvertArticleToSpeech::disable();
 
     Bus::fake();
