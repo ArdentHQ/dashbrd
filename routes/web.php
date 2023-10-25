@@ -17,7 +17,6 @@ use App\Http\Controllers\NftController;
 use App\Http\Controllers\NftReportController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\RefreshCsrfTokenController;
-use App\Http\Controllers\RefreshedCollectionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Middleware\RecordGalleryView;
@@ -38,7 +37,6 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['middleware' => 'signed_wallet'], function () {
         Route::put('/settings', [GeneralSettingsController::class, 'update'])->middleware('signed_wallet');
-        Route::post('/refreshed-collections', [RefreshedCollectionController::class, 'store'])->name('refresh-collections');
     });
 
     // Gallery

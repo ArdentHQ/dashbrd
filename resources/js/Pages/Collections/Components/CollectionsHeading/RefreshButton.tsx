@@ -1,10 +1,10 @@
-import { router } from "@inertiajs/core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Tooltip } from "@/Components/Tooltip";
-import { isTruthy } from "@/Utils/is-truthy";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useToasts } from "@/Hooks/useToasts";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData | null }): JSX.Element => {
     const [loading, setLoading] = useState(false);
@@ -12,26 +12,27 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
     const { t } = useTranslation();
 
     const { signedAction } = useAuthorizedAction();
+    const { showToast } = useToasts();
 
-    const refresh = () =>
-        signedAction(({ authenticated }) => {
+    const refresh = (): void => {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        signedAction(async ({ authenticated }) => {
             if (authenticated) {
                 setLoading(true);
 
-                router.post(
-                    route("refresh-collections"),
-                    {},
-                    {
-                        preserveState: true,
-                        preserveScroll: true,
-                        onFinish: () => {
-                            setLoading(false);
-                            setDisabled(true);
-                        },
-                    },
-                );
+                await window.axios.post(route("refresh-collections"));
+
+                setLoading(false);
+                setDisabled(true);
+
+                showToast({
+                    type: "pending",
+                    message: t("pages.collections.refresh.toast"),
+                    isExpanded: true,
+                });
             }
         });
+    };
 
     const tooltipContent = (): JSX.Element => {
         if (isTruthy(wallet?.canRefreshCollections)) {

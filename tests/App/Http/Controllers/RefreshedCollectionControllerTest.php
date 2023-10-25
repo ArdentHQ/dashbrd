@@ -20,9 +20,9 @@ it('can dispatch jobs to refresh all collections for a wallet', function () {
     Nft::factory()->for($user->wallet)->create();
     Nft::factory()->for($user->wallet)->create();
 
-    $response = $this->actingAs($user)->post(route('refresh-collections'));
+    $response = $this->actingAs($user)->postJson(route('refresh-collections'));
 
-    $response->assertStatus(302);
+    $response->assertStatus(200);
 
     Bus::assertDispatched(RefreshWalletCollections::class, fn ($job) => $job->wallet->is($user->wallet));
 });
