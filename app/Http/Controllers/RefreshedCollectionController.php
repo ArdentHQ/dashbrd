@@ -13,9 +13,9 @@ class RefreshedCollectionController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->wallet()->canRefreshCollections(), 403);
-
-        RefreshWalletCollections::dispatch($request->wallet())->onQueue(Queues::WALLETS);
+        if ($request->wallet()->canRefreshCollections()) {
+            RefreshWalletCollections::dispatch($request->wallet())->onQueue(Queues::WALLETS);
+        }
 
         return back()->toast(
             trans('pages.collections.refresh.toast'),
