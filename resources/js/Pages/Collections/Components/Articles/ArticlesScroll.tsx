@@ -14,7 +14,7 @@ export const ArticlesScroll = ({ articles }: { articles: App.Data.Articles.Artic
             <Carousel
                 horizontalOffset={horizontalOffset}
                 headerClassName="mx-6 sm:mx-8 2xl:mx-0"
-                swiperClassName="-m-1 lg:mx-7 2xl:-m-1"
+                swiperClassName="m-0 lg:mx-8 2xl:m-0"
                 spaceBetween={8}
                 slidesPerView={slidesPerView}
                 title={
