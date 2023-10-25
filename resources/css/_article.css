@@ -6,7 +6,7 @@
 }
 
 .article-content {
-    @apply text-theme-secondary-700;
+    @apply max-w-full break-words text-theme-secondary-700;
 }
 
 .article-content > :last-child {
@@ -16,7 +16,9 @@
 .article-content > :first-child {
     @apply mt-0;
 }
-
+.article-content > * {
+    @apply !max-w-full;
+}
 .article-content > p,
 .article-content > ul,
 .article-content > ol,
