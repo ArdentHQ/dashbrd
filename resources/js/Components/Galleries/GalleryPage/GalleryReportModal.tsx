@@ -111,7 +111,7 @@ export const GalleryReportModal = ({
                         icon="Flag"
                         data-testid="GalleryControls__flag-button"
                         onClick={() => {
-                            signedAction(({ signed }) => {
+                            void signedAction(({ signed }) => {
                                 setOpen(true);
 
                                 if (!signed) {

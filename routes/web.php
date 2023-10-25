@@ -47,9 +47,10 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['middleware' => 'signed_wallet'], function () {
             Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
-            Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
             Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');
         });
+
+        Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
 
         Route::get('collections', [MyGalleryCollectionController::class, 'index'])->name('my-galleries.collections');
         Route::get('{collection:slug}/nfts', [MyGalleryCollectionController::class, 'nfts'])->name('my-galleries.nfts');

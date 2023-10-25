@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@storybook/react";
 import { CollectionHeaderBottom } from "@/Components/Collections/CollectionHeader";
 import { SampleToken } from "@/Tests/SampleData";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
-import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
+import { AuthContextProvider } from "@/Contexts/AuthContext";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 
@@ -16,9 +16,9 @@ const user = new UserDataFactory().create();
 export const Bottom = {
     render: (args) => {
         return (
-            <ActiveUserContextProvider initialAuth={{ user, wallet, authenticated: false, signed: false }}>
+            <AuthContextProvider initialAuth={{ user, wallet, authenticated: false, signed: false }}>
                 <CollectionHeaderBottom {...args} />
-            </ActiveUserContextProvider>
+            </AuthContextProvider>
         );
     },
 };

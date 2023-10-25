@@ -46,7 +46,6 @@ export const GalleryPage = ({
 
     const fetchGalleries = async (): Promise<void> => {
         cancelPreviousRequest();
-
         const pageUrlWithSearch = replaceUrlQuery({
             query: debouncedQuery,
             page: (debouncedQuery !== initialQuery ? 1 : currentPage).toString(),

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuth } from "@/Contexts/AuthContext";
 import { assertUser } from "@/Utils/assertions";
 import { FormatFiat, FormatNumber } from "@/Utils/Currency";
 
@@ -11,6 +11,7 @@ interface Properties extends React.HTMLAttributes<HTMLDivElement> {
 export const TokenDetails = ({ token, ...properties }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { user } = useAuth();
+
     assertUser(user);
 
     const currency = user.attributes.currency;

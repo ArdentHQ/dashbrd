@@ -683,7 +683,7 @@ describe('user is not signed', function () {
             ->assertStatus(200);
     });
 
-    it('cant render the "edit" page if owns the gallery', function () {
+    it('can render the "edit" page if owns the gallery', function () {
         $user = createUser();
 
         $gallery = Gallery::factory()->create([
@@ -692,7 +692,7 @@ describe('user is not signed', function () {
 
         $this->actingAs($user)
             ->get(route('my-galleries.edit', $gallery))
-            ->assertRedirect();
+            ->assertOk();
     });
 
 });
