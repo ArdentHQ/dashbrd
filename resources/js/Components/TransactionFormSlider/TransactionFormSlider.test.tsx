@@ -11,7 +11,6 @@ import {
 import { TransactionFormSlider, transactionIntentReducer } from "@/Components/TransactionFormSlider";
 import { TransactionSendForm } from "@/Components/TransactionFormSlider/TransactionFormSlider.blocks";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
@@ -20,7 +19,7 @@ import NetworkFeesFixture from "@/Tests/Fixtures/network_fees.json";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
-import { render, screen, TestProviders, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, TestProviders, userEvent } from "@/Tests/testing-library";
 
 const asset = new TokenListItemDataFactory().create({
     symbol: "BRDY",
@@ -202,17 +201,19 @@ describe("TransactionSendForm", () => {
         user: new UserDataFactory().withUSDCurrency().create(),
     };
 
+    let resetAuthContext: () => void;
+
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+
+        resetAuthContext = mockAuthContext({
             user: new UserDataFactory().withUSDCurrency().create(),
-            wallet: null,
-            authenticated: false,
-            signed: false,
-            showAuthOverlay: true,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
+            wallet: new WalletFactory().create(),
         });
+    });
+
+    afterAll(() => {
+        resetAuthContext();
     });
 
     beforeEach(() => {

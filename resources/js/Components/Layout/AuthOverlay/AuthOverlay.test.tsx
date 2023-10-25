@@ -41,6 +41,22 @@ describe("AuthOverlay", () => {
         expect(connectWalletMock).toHaveBeenCalled();
     });
 
+    it("should show timeout message if session expired", () => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={false}
+                sessionMayExpired
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByText(/timed out/)).toBeInTheDocument();
+    });
+
     it("should sign if requires signature", async () => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
             ...defaultMetamaskConfig,

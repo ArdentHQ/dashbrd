@@ -10,10 +10,14 @@ import {
     GalleryNfts,
     useGalleryNftsContext,
 } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
+import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";
 import { SamplePageMeta } from "@/Tests/SampleData";
-import { render, screen } from "@/Tests/testing-library";
+import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
 describe("useGalleryNftsContext", () => {
     const firstCollectionNfts = new GalleryNftDataFactory().withImages().createMany(3, {
@@ -121,6 +125,23 @@ describe("useGalleryNftsContext", () => {
             <HookTestComponent />
         </GalleryNfts>
     );
+
+    let resetAuthContext: () => void;
+
+    beforeAll(() => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+
+        resetAuthContext = mockAuthContext({
+            user: new UserDataFactory().create(),
+            wallet: new WalletFactory().create(),
+        });
+    });
+
+    afterAll(() => {
+        vi.restoreAllMocks();
+
+        resetAuthContext();
+    });
 
     it("should throw exception if not inside context", () => {
         const originalError = console.error;

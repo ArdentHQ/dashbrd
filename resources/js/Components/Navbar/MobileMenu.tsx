@@ -22,9 +22,16 @@ interface Properties {
     currency?: string;
     connectWallet?: () => Promise<void>;
     isConnectButtonDisabled?: boolean;
+    onLogout: () => void;
 }
 
-export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDisabled }: Properties): JSX.Element => {
+export const MobileMenu = ({
+    wallet,
+    currency,
+    connectWallet,
+    isConnectButtonDisabled,
+    onLogout,
+}: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     const isAuthenticated = isTruthy(wallet);
@@ -81,7 +88,10 @@ export const MobileMenu = ({ wallet, currency, connectWallet, isConnectButtonDis
                                         }}
                                     />
                                     <PortfolioBreakdown wallet={wallet} />
-                                    <Footer address={wallet.address} />
+                                    <Footer
+                                        address={wallet.address}
+                                        onLogout={onLogout}
+                                    />
                                 </div>
                             )}
                             {!isAuthenticated && (
@@ -304,7 +314,7 @@ const PortfolioBreakdown = ({ wallet }: { wallet: App.Data.Wallet.WalletData }):
     );
 };
 
-const Footer = ({ address }: { address: string }): JSX.Element => {
+const Footer = ({ address, onLogout }: { address: string; onLogout: () => void }): JSX.Element => {
     address = formatAddress(address);
 
     return (
@@ -322,16 +332,15 @@ const Footer = ({ address }: { address: string }): JSX.Element => {
                     zIndex={50}
                 />
             </div>
-            <Link
-                href={route("logout")}
-                method="post"
-                as="button"
+            <button
+                onClick={onLogout}
+                type="button"
             >
                 <Icon
                     name="DoorExit"
                     className="h-5 w-5 text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500"
                 />
-            </Link>
+            </button>
         </div>
     );
 };

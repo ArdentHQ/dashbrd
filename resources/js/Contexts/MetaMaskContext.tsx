@@ -5,11 +5,10 @@ const MetaMaskContext = createContext<MetaMaskState | undefined>(undefined);
 
 interface Properties {
     children: React.ReactNode;
-    initialAuth: App.Data.AuthData;
 }
 
-const MetaMaskContextProvider = ({ children, initialAuth }: Properties): JSX.Element => {
-    const metaMaskState = useMetaMask({ initialAuth });
+const MetaMaskContextProvider = ({ children }: Properties): JSX.Element => {
+    const metaMaskState = useMetaMask();
 
     return <MetaMaskContext.Provider value={metaMaskState}>{children}</MetaMaskContext.Provider>;
 };

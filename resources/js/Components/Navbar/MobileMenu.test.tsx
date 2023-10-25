@@ -26,6 +26,7 @@ const properties = {
     wallet,
     isConnectButtonDisabled: false,
     connectWallet: vi.fn(),
+    onLogout: vi.fn(),
     currency: "USD",
 };
 
