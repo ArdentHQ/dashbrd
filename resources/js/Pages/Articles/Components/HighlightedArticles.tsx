@@ -43,7 +43,10 @@ export const HighlightedArticles = ({
                     pagination={pagination}
                 >
                     {articles.map((article, index) => (
-                        <CarouselItem key={index}>
+                        <CarouselItem
+                            className="h-auto"
+                            key={index}
+                        >
                             <ArticleCard
                                 article={article}
                                 variant="large"
