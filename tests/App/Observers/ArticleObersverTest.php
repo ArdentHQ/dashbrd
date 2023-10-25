@@ -49,18 +49,18 @@ it('should not start audio conversion if article content did not change', functi
     Bus::assertNotDispatched(ConvertArticleToSpeech::class);
 });
 
-//it('should not start audio conversion if article is published and recently created', function () {
-//    config(['web.text_to_speech.enabled' => true]);
-//
-//    Bus::fake();
-//
-//    Article::factory()->create([
-//        'content' => 'Hello World',
-//        'published_at' => now()->subMinutes(2),
-//    ]);
-//
-//    Bus::assertDispatched(ConvertArticleToSpeech::class);
-//});
+it('should not start audio conversion if article is published and recently created', function () {
+    config(['dashbrd.text_to_speech.enabled' => true]);
+
+    Bus::fake();
+
+    Article::factory()->create([
+        'content' => 'Hello World',
+        'published_at' => now()->subMinutes(2),
+    ]);
+
+    Bus::assertDispatched(ConvertArticleToSpeech::class);
+});
 
 it('should start preparing audio when an article created', function () {
     config(['dashbrd.text_to_speech.enabled' => true]);
@@ -70,7 +70,7 @@ it('should start preparing audio when an article created', function () {
     Article::factory()->create([
         'content' => 'Hello World',
         'published_at' => now()->subMinutes(2),
-    ])->fresh();
+    ]);
 
     Bus::assertDispatched(ConvertArticleToSpeech::class);
 });
