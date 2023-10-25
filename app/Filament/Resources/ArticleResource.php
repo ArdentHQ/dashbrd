@@ -123,6 +123,7 @@ class ArticleResource extends Resource
                             if ($date > Carbon::now()) {
                                 return $date->toFormattedDateString() . ' ⌛';
                             }
+
                             return $date->toFormattedDateString();
                         })
                         ->sortable()
