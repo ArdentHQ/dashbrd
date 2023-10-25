@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\NftTransferType;
-use App\Models\Nft;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +20,6 @@ class NftActivityFactory extends Factory
     public function definition(): array
     {
         return [
-            'nft_id' => fn () => Nft::factory(),
             'type' => fn () => $this->faker->randomElement([
                 NftTransferType::Mint,
                 NftTransferType::Transfer,

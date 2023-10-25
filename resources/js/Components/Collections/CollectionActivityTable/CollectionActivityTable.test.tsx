@@ -68,6 +68,26 @@ describe("CollectionActivityTable", () => {
         }
     });
 
+    it.each(allBreakpoints)("should render loading %s screen if activities are not set", (breakpoint) => {
+        render(
+            <CollectionActivityTable
+                collection={collection}
+                activities={null}
+                isLoading={false}
+                onPageLimitChange={vi.fn()}
+                pageLimit={10}
+                nativeToken={nativeToken}
+            />,
+            { breakpoint },
+        );
+
+        if (breakpoint === Breakpoint.xs) {
+            expect(screen.getByTestId("CollectionActivityTable__Mobile")).toBeInTheDocument();
+        } else {
+            expect(screen.getByTestId("CollectionActivityTable")).toBeInTheDocument();
+        }
+    });
+
     it.each(allBreakpoints)("should render loading and with name column in %s screen", (breakpoint) => {
         render(
             <CollectionActivityTable
