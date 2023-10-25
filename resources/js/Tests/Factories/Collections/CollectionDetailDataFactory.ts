@@ -26,8 +26,9 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
             owners: this.optional(faker.datatype.number(1000)),
             nftsCount: 0,
             mintedAt: this.optional(faker.date.past().getTime()),
-            isFetchingActivity: false,
             activityUpdatedAt: this.optional(faker.date.recent().toISOString()),
+            activityUpdateRequestedAt: this.optional(faker.date.recent().toISOString()),
+            isFetchingActivity: false,
         };
     }
 
