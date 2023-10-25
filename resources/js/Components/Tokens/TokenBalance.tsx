@@ -44,13 +44,15 @@ export const TokenBalance = ({ asset, currency, onSend, onReceive }: Properties)
             <div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-end sm:space-y-0">
                 <div className="w-full sm:w-2/3">
                     <div className="space-y-0.5 text-center font-medium sm:text-left">
-                        <p className="text-sm leading-5.5 text-theme-secondary-500">{t("common.my_balance")}</p>
+                        <p className="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400">
+                            {t("common.my_balance")}
+                        </p>
                         <Tooltip
                             content={fiatBalance}
                             disabled={!isFiatBalanceTruncated}
                         >
                             <p
-                                className="truncate text-2xl text-theme-secondary-900"
+                                className="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
                                 ref={fiatBalanceReference}
                             >
                                 {fiatBalance}
@@ -74,19 +76,19 @@ export const TokenBalance = ({ asset, currency, onSend, onReceive }: Properties)
                         content={`${formattedBalance} ${asset.symbol}`}
                         disabled={!isCryptoBalanceTruncated}
                     >
-                        <div className="flex min-w-0 pr-2 text-theme-secondary-900">
+                        <div className="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50">
                             <span
                                 className="mr-1 truncate"
                                 ref={cryptoBalanceReference}
                             >
                                 {formattedBalance}
                             </span>
-                            <span>{asset.symbol}</span>
+                            <span className="dark:text-theme-dark-300">{asset.symbol}</span>
                         </div>
                     </Tooltip>
 
                     <Tooltip content={t("pages.token_panel.balance_tooltip")}>
-                        <span className="text-theme-secondary-700">
+                        <span className="text-theme-secondary-700 dark:text-theme-dark-200">
                             <FormatPercentage
                                 value={Number(asset.percentage)}
                                 decimals={2}
@@ -95,7 +97,7 @@ export const TokenBalance = ({ asset, currency, onSend, onReceive }: Properties)
                     </Tooltip>
                 </div>
 
-                <div className="h-2 bg-theme-primary-200">
+                <div className="h-2 bg-theme-primary-200 dark:bg-theme-dark-600">
                     <div
                         className="h-2 bg-theme-primary-600"
                         style={{
