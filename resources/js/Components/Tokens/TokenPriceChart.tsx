@@ -237,12 +237,12 @@ const TransientLoadingIndicator = ({ show }: { show: boolean }): JSX.Element => 
 const InitialLoadingIndicator = ({ show }: { show: boolean }): JSX.Element => (
     <ChartTransition
         show={show}
-        className="absolute inset-0 z-20 flex items-center justify-center bg-white"
+        className="absolute inset-0 z-20 flex items-center justify-center bg-white dark:bg-theme-dark-900"
         data-testid="TokenPriceChart__loading"
     >
         <Icon
             name="Spinner"
-            className="animate-spin text-theme-secondary-500"
+            className="animate-spin text-theme-secondary-500 dark:text-theme-dark-200"
             size="2xl"
         />
     </ChartTransition>
