@@ -124,7 +124,7 @@ class Article extends Model implements HasMedia, Viewable
      * @param  'asc'|'desc'  $direction
      * @return Builder<self>
      */
-    public function scopeSortByPublishedDate(Builder $query, string $direction = "desc"): Builder
+    public function scopeSortByPublishedDate(Builder $query, string $direction = 'desc'): Builder
     {
         $nullsPosition = Str::lower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
