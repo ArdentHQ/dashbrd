@@ -25,7 +25,7 @@ class GenerateAudioFileForArticle extends Command
         if (! ConvertArticleToSpeech::$enabled || ! (bool) config('dashbrd.text_to_speech.enabled')) {
             $this->warn('Article text-to-speech is currently disabled.');
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         $articles = $this->articles()
@@ -36,7 +36,7 @@ class GenerateAudioFileForArticle extends Command
         if ($articles->isEmpty()) {
             $this->warn('No articles found.');
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         $articles->each(static function ($article) {
@@ -49,7 +49,7 @@ class GenerateAudioFileForArticle extends Command
 
         $this->info('Total number of characters sent to AWS: '.number_format($chars).' (could be less because this also includes markdown characters).');
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**

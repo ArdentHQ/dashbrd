@@ -25,15 +25,15 @@ class ArticleObserver
             return;
         }
 
+        if (! ConvertArticleToSpeech::$enabled) {
+            return;
+        }
+
         if ($article->isNotPublished()) {
             return;
         }
 
         if (! ($article->wasRecentlyCreated || $article->wasChanged(['content', 'is_published']))) {
-            return;
-        }
-
-        if (! ConvertArticleToSpeech::$enabled) {
             return;
         }
 
