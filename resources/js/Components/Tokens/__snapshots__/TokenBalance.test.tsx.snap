@@ -15,12 +15,12 @@ exports[`TokenBalance > should render 0 if an undefined fiat balance is provided
           class="space-y-0.5 text-center font-medium sm:text-left"
         >
           <p
-            class="text-sm leading-5.5 text-theme-secondary-500"
+            class="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400"
           >
             My Balance
           </p>
           <p
-            class="truncate text-2xl text-theme-secondary-900"
+            class="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
           >
             $0.00
           </p>
@@ -100,25 +100,27 @@ exports[`TokenBalance > should render 0 if an undefined fiat balance is provided
         class="flex justify-between text-sm font-medium"
       >
         <div
-          class="flex min-w-0 pr-2 text-theme-secondary-900"
+          class="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50"
         >
           <span
             class="mr-1 truncate"
           >
             123
           </span>
-          <span>
+          <span
+            class="dark:text-theme-dark-300"
+          >
             TEST
           </span>
         </div>
         <span
-          class="text-theme-secondary-700"
+          class="text-theme-secondary-700 dark:text-theme-dark-200"
         >
           50%
         </span>
       </div>
       <div
-        class="h-2 bg-theme-primary-200"
+        class="h-2 bg-theme-primary-200 dark:bg-theme-dark-600"
       >
         <div
           class="h-2 bg-theme-primary-600"
@@ -145,12 +147,12 @@ exports[`TokenBalance > should render in lg screen 1`] = `
           class="space-y-0.5 text-center font-medium sm:text-left"
         >
           <p
-            class="text-sm leading-5.5 text-theme-secondary-500"
+            class="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400"
           >
             My Balance
           </p>
           <p
-            class="truncate text-2xl text-theme-secondary-900"
+            class="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
           >
             $100.00
           </p>
@@ -230,25 +232,27 @@ exports[`TokenBalance > should render in lg screen 1`] = `
         class="flex justify-between text-sm font-medium"
       >
         <div
-          class="flex min-w-0 pr-2 text-theme-secondary-900"
+          class="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50"
         >
           <span
             class="mr-1 truncate"
           >
             123
           </span>
-          <span>
+          <span
+            class="dark:text-theme-dark-300"
+          >
             TEST
           </span>
         </div>
         <span
-          class="text-theme-secondary-700"
+          class="text-theme-secondary-700 dark:text-theme-dark-200"
         >
           50%
         </span>
       </div>
       <div
-        class="h-2 bg-theme-primary-200"
+        class="h-2 bg-theme-primary-200 dark:bg-theme-dark-600"
       >
         <div
           class="h-2 bg-theme-primary-600"
@@ -275,12 +279,12 @@ exports[`TokenBalance > should render in md screen 1`] = `
           class="space-y-0.5 text-center font-medium sm:text-left"
         >
           <p
-            class="text-sm leading-5.5 text-theme-secondary-500"
+            class="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400"
           >
             My Balance
           </p>
           <p
-            class="truncate text-2xl text-theme-secondary-900"
+            class="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
           >
             $100.00
           </p>
@@ -360,25 +364,27 @@ exports[`TokenBalance > should render in md screen 1`] = `
         class="flex justify-between text-sm font-medium"
       >
         <div
-          class="flex min-w-0 pr-2 text-theme-secondary-900"
+          class="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50"
         >
           <span
             class="mr-1 truncate"
           >
             123
           </span>
-          <span>
+          <span
+            class="dark:text-theme-dark-300"
+          >
             TEST
           </span>
         </div>
         <span
-          class="text-theme-secondary-700"
+          class="text-theme-secondary-700 dark:text-theme-dark-200"
         >
           50%
         </span>
       </div>
       <div
-        class="h-2 bg-theme-primary-200"
+        class="h-2 bg-theme-primary-200 dark:bg-theme-dark-600"
       >
         <div
           class="h-2 bg-theme-primary-600"
@@ -405,12 +411,12 @@ exports[`TokenBalance > should render in md-lg screen 1`] = `
           class="space-y-0.5 text-center font-medium sm:text-left"
         >
           <p
-            class="text-sm leading-5.5 text-theme-secondary-500"
+            class="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400"
           >
             My Balance
           </p>
           <p
-            class="truncate text-2xl text-theme-secondary-900"
+            class="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
           >
             $100.00
           </p>
@@ -490,25 +496,27 @@ exports[`TokenBalance > should render in md-lg screen 1`] = `
         class="flex justify-between text-sm font-medium"
       >
         <div
-          class="flex min-w-0 pr-2 text-theme-secondary-900"
+          class="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50"
         >
           <span
             class="mr-1 truncate"
           >
             123
           </span>
-          <span>
+          <span
+            class="dark:text-theme-dark-300"
+          >
             TEST
           </span>
         </div>
         <span
-          class="text-theme-secondary-700"
+          class="text-theme-secondary-700 dark:text-theme-dark-200"
         >
           50%
         </span>
       </div>
       <div
-        class="h-2 bg-theme-primary-200"
+        class="h-2 bg-theme-primary-200 dark:bg-theme-dark-600"
       >
         <div
           class="h-2 bg-theme-primary-600"
@@ -535,12 +543,12 @@ exports[`TokenBalance > should render in sm screen 1`] = `
           class="space-y-0.5 text-center font-medium sm:text-left"
         >
           <p
-            class="text-sm leading-5.5 text-theme-secondary-500"
+            class="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400"
           >
             My Balance
           </p>
           <p
-            class="truncate text-2xl text-theme-secondary-900"
+            class="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
           >
             $100.00
           </p>
@@ -620,25 +628,27 @@ exports[`TokenBalance > should render in sm screen 1`] = `
         class="flex justify-between text-sm font-medium"
       >
         <div
-          class="flex min-w-0 pr-2 text-theme-secondary-900"
+          class="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50"
         >
           <span
             class="mr-1 truncate"
           >
             123
           </span>
-          <span>
+          <span
+            class="dark:text-theme-dark-300"
+          >
             TEST
           </span>
         </div>
         <span
-          class="text-theme-secondary-700"
+          class="text-theme-secondary-700 dark:text-theme-dark-200"
         >
           50%
         </span>
       </div>
       <div
-        class="h-2 bg-theme-primary-200"
+        class="h-2 bg-theme-primary-200 dark:bg-theme-dark-600"
       >
         <div
           class="h-2 bg-theme-primary-600"
@@ -665,12 +675,12 @@ exports[`TokenBalance > should render in xl screen 1`] = `
           class="space-y-0.5 text-center font-medium sm:text-left"
         >
           <p
-            class="text-sm leading-5.5 text-theme-secondary-500"
+            class="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400"
           >
             My Balance
           </p>
           <p
-            class="truncate text-2xl text-theme-secondary-900"
+            class="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
           >
             $100.00
           </p>
@@ -750,25 +760,27 @@ exports[`TokenBalance > should render in xl screen 1`] = `
         class="flex justify-between text-sm font-medium"
       >
         <div
-          class="flex min-w-0 pr-2 text-theme-secondary-900"
+          class="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50"
         >
           <span
             class="mr-1 truncate"
           >
             123
           </span>
-          <span>
+          <span
+            class="dark:text-theme-dark-300"
+          >
             TEST
           </span>
         </div>
         <span
-          class="text-theme-secondary-700"
+          class="text-theme-secondary-700 dark:text-theme-dark-200"
         >
           50%
         </span>
       </div>
       <div
-        class="h-2 bg-theme-primary-200"
+        class="h-2 bg-theme-primary-200 dark:bg-theme-dark-600"
       >
         <div
           class="h-2 bg-theme-primary-600"
@@ -795,12 +807,12 @@ exports[`TokenBalance > should render in xs screen 1`] = `
           class="space-y-0.5 text-center font-medium sm:text-left"
         >
           <p
-            class="text-sm leading-5.5 text-theme-secondary-500"
+            class="text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-400"
           >
             My Balance
           </p>
           <p
-            class="truncate text-2xl text-theme-secondary-900"
+            class="truncate text-2xl text-theme-secondary-900 dark:text-theme-dark-50"
           >
             $100.00
           </p>
@@ -880,25 +892,27 @@ exports[`TokenBalance > should render in xs screen 1`] = `
         class="flex justify-between text-sm font-medium"
       >
         <div
-          class="flex min-w-0 pr-2 text-theme-secondary-900"
+          class="flex min-w-0 pr-2 text-theme-secondary-900 dark:text-theme-dark-50"
         >
           <span
             class="mr-1 truncate"
           >
             123
           </span>
-          <span>
+          <span
+            class="dark:text-theme-dark-300"
+          >
             TEST
           </span>
         </div>
         <span
-          class="text-theme-secondary-700"
+          class="text-theme-secondary-700 dark:text-theme-dark-200"
         >
           50%
         </span>
       </div>
       <div
-        class="h-2 bg-theme-primary-200"
+        class="h-2 bg-theme-primary-200 dark:bg-theme-dark-600"
       >
         <div
           class="h-2 bg-theme-primary-600"
