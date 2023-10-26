@@ -24,6 +24,7 @@ class WalletFactory extends Factory
             'address' => '0x'.fake()->sha1(), // To imitate an address
             'total_usd' => fake()->randomFloat(2, 200, 500000),
             'onboarded_at' => now(),
+            'is_refreshing_collections' => false,
             'last_signed_at' => random_int(0, 1) ? now() : null,
         ];
     }

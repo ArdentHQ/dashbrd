@@ -1,4 +1,5 @@
 import { Trans, useTranslation } from "react-i18next";
+import { RefreshButton } from "./RefreshButton";
 import { Heading } from "@/Components/Heading";
 import { formatFiat } from "@/Utils/Currency";
 import { tp } from "@/Utils/TranslatePlural";
@@ -6,9 +7,11 @@ import { tp } from "@/Utils/TranslatePlural";
 export const CollectionsHeading = ({
     stats,
     currency,
+    wallet,
 }: {
     stats: App.Data.Collections.CollectionStatsData;
     currency: string;
+    wallet: App.Data.Wallet.WalletData | null;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -21,7 +24,10 @@ export const CollectionsHeading = ({
                 >
                     {t("common.my_collection")}
                 </Heading>
+
+                <RefreshButton wallet={wallet} />
             </div>
+
             <span className="mt-1 block text-sm font-medium leading-5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-base">
                 <Trans
                     i18nKey="pages.collections.header_title"
