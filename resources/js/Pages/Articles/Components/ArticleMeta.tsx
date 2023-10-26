@@ -1,5 +1,4 @@
 import { ArticleAuthor } from "./ArticleAuthor";
-import { ArticleCopy } from "./ArticleCopy";
 import { ArticleDate } from "./ArticleDate";
 import { ArticleShare } from "./ArticleShare";
 
@@ -18,10 +17,6 @@ export const ArticleMeta = ({ article }: Properties): JSX.Element => (
 
                     <ArticleDate article={article} />
                 </div>
-
-                <div className="hidden md:block">
-                    <ArticleCopy article={article} />
-                </div>
             </div>
 
             <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 md:hidden">
@@ -30,10 +25,6 @@ export const ArticleMeta = ({ article }: Properties): JSX.Element => (
                         article={article}
                         className="flex space-x-2"
                     />
-                </div>
-
-                <div>
-                    <ArticleCopy article={article} />
                 </div>
             </div>
         </div>

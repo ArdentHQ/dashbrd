@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { ArticleCopy } from "./ArticleCopy";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Tooltip } from "@/Components/Tooltip";
 
@@ -61,6 +62,10 @@ export const ArticleShare = ({ article, ...properties }: Properties): JSX.Elemen
                         target="_blank"
                     />
                 </ShareTooltip>
+            </li>
+
+            <li>
+                <ArticleCopy article={article} />
             </li>
         </ul>
     );
