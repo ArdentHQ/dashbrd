@@ -113,7 +113,7 @@
 }
 
 .article-content blockquote {
-    @apply rounded-xl border-none bg-theme-hint-50 p-8 text-xl font-medium not-italic leading-[30px] text-theme-secondary-900 dark:bg-theme-dark-800 dark:text-theme-dark-50;
+    @apply rounded-xl border-none bg-theme-hint-50 p-8 text-lg font-medium not-italic leading-[30px] text-theme-secondary-700 dark:bg-theme-dark-800 dark:text-theme-dark-50;
 }
 
 .article-content blockquote::before {
