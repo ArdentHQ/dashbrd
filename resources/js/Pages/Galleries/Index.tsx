@@ -48,7 +48,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     }, []);
 
     const guestBannerClickHandler = (): void => {
-        authenticatedAction(() => {
+        void authenticatedAction(() => {
             router.visit(route("my-galleries.create"));
         });
     };

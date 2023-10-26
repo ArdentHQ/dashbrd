@@ -16,7 +16,7 @@ import {
     determineIfTimestampGroupChanged,
 } from "@/Components/Tokens/TokenPriceChart.helpers";
 import { type Period } from "@/Components/Tokens/Tokens.contracts";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { getPriceHistory } from "@/Utils/api";
 import { assertUser } from "@/Utils/assertions";

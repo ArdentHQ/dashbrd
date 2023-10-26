@@ -4,6 +4,7 @@ import { Button } from "@/Components/Buttons";
 import { useEditableGalleryContext } from "@/Components/Galleries/Hooks/useEditableGalleryContext";
 import { useNftSelectableContext } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { Slider, useSliderContext } from "@/Components/Slider";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
 export const NftCollectionSlider = (): JSX.Element => {
     const { t } = useTranslation();
@@ -11,10 +12,12 @@ export const NftCollectionSlider = (): JSX.Element => {
     const { nfts } = useEditableGalleryContext();
     const { selected } = useNftSelectableContext();
 
+    const { isShowConnectOverlay } = useMetaMaskContext();
+
     return (
         <Slider
             data-testid="NftCollectionSlider"
-            isOpen={isOpen}
+            isOpen={isOpen && !isShowConnectOverlay}
             onClose={() => {
                 setOpen(false);
             }}

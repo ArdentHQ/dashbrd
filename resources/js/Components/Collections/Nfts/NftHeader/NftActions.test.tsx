@@ -1,7 +1,6 @@
 import { t } from "i18next";
 import { NftActions } from "./NftActions";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import NftImagesDataFactory from "@/Tests/Factories/Nfts/NftImagesDataFactory";
@@ -9,7 +8,7 @@ import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { act, fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
+import { act, fireEvent, mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 import { ExplorerChains } from "@/Utils/Explorer";
 
 describe("Nftactions", () => {
@@ -67,16 +66,12 @@ describe("Nftactions", () => {
         );
 
         const user = new UserDataFactory().create();
+
         const wallet = new WalletFactory().create();
 
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            signed: true,
+        const resetMock = mockAuthContext({
             user,
             wallet,
-            authenticated: true,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
         });
 
         const nft = new NftFactory().create({
@@ -94,19 +89,16 @@ describe("Nftactions", () => {
         await userEvent.click(screen.getByTestId("NftActions__refresh"));
         expect(showConnectOverlayMock).not.toHaveBeenCalled();
         expect(screen.getByTestId("NftActions__refresh")).toBeDisabled();
+
+        resetMock();
     });
 
     it("should display connect overlay if there is no user", () => {
         server.use(requestMock(`${BASE_URL}/nft/refresh`, { success: true }, { method: "post" }));
 
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+        const resetMock = mockAuthContext({
             user: null,
-            signed: true,
             wallet: null,
-            authenticated: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
         });
 
         server.use(
@@ -136,6 +128,8 @@ describe("Nftactions", () => {
         fireEvent.click(screen.getByTestId("NftActions__refresh"));
 
         expect(showConnectOverlayMock).toHaveBeenCalled();
+
+        resetMock();
     });
 
     it("should render polygon network icon and tooltip if chain is polygon", async () => {

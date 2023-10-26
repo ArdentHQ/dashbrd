@@ -4,12 +4,13 @@ import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext"
 import { NftSelectionHook } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { NftCollectionSlider } from "@/Components/Galleries/NftCollection/NftCollectionSlider";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
+import * as NavbarMock from "@/Components/Layout/Navbar";
 import { useSliderContext } from "@/Components/Slider";
 import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { SamplePageMeta } from "@/Tests/SampleData";
-import { render, screen, userEvent } from "@/Tests/testing-library";
-
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { Breakpoint } from "@/Tests/utils";
 vi.mock("@/Hooks/useAuth", () => ({
     useAuth: () => ({
         user: null,
@@ -50,6 +51,35 @@ describe("LayoutWrapper", () => {
 
         expect(screen.getByTestId("test")).toBeInTheDocument();
         expect(screen.getByTestId("LayoutWrapper")).toBeInTheDocument();
+    });
+
+    it("handles logout", async () => {
+        const logoutMock = vi.fn();
+
+        vi.spyOn(NavbarMock, "Navbar").mockImplementation((properties) => (
+            <button
+                data-testid="Logout"
+                onClick={properties.onLogout}
+            ></button>
+        ));
+
+        mockAuthContext({
+            authenticated: true,
+            logout: logoutMock,
+        });
+
+        render(
+            <LayoutWrapper>
+                <div data-testid="test" />
+            </LayoutWrapper>,
+            {
+                breakpoint: Breakpoint.lg,
+            },
+        );
+
+        await userEvent.click(screen.getByTestId("Logout"));
+
+        expect(logoutMock).toHaveBeenCalled();
     });
 
     it("should render with slider", async () => {
