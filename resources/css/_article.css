@@ -1,3 +1,7 @@
+.articles-scroll .swiper-slide {
+    @apply h-auto;
+}
+
 @layer components {
     .article-wrapper {
         @apply bg-[url(../images/articles/article-wrapper-bg.svg)] bg-top bg-no-repeat dark:bg-[url(../images/articles/article-wrapper-bg-dark.svg)];
