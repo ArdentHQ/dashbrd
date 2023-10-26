@@ -17,6 +17,8 @@ export default class WalletFactory extends ModelFactory<App.Data.Wallet.WalletDa
                 tokens_fetched_at: this.optional(faker.date.past().getTime()),
                 native_balances_fetched_at: this.optional(faker.date.past().getTime()),
             },
+            isRefreshingCollections: false,
+            canRefreshCollections: false,
         };
     }
 

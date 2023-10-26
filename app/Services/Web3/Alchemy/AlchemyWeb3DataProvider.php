@@ -19,7 +19,7 @@ use App\Support\Facades\Alchemy;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
+class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
 {
     use LoadsFromCache;
 

@@ -43,6 +43,8 @@ class Wallet extends Model
         'last_signed_at',
         'last_activity_at',
         'onboarded_at',
+        'is_refreshing_collections',
+        'refreshed_collections_at',
     ];
 
     protected $casts = [
@@ -51,6 +53,8 @@ class Wallet extends Model
         'last_activity_at' => 'datetime',
         'last_signed_at' => 'datetime',
         'onboarded_at' => 'datetime',
+        'is_refreshing_collections' => 'bool',
+        'refreshed_collections_at' => 'datetime',
     ];
 
     public static function findByAddress(string $address): ?self
@@ -230,5 +234,20 @@ class Wallet extends Model
     public function onboarded(): bool
     {
         return $this->onboarded_at !== null;
+    }
+
+    public function canRefreshCollections(): bool
+    {
+        if ($this->is_refreshing_collections) {
+            return false;
+        }
+
+        if ($this->refreshed_collections_at === null) {
+            return true;
+        }
+
+        return $this->refreshed_collections_at->lt(
+            now()->subMinutes(15)
+        );
     }
 }
