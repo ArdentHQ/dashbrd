@@ -21,6 +21,7 @@ import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
@@ -83,6 +84,7 @@ const CollectionsView = ({
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
     const { requestActivityUpdate } = useWalletActivity();
+    const { signedAction } = useAuthorizedAction();
 
     const { showToast } = useToasts();
 
@@ -264,19 +266,25 @@ const CollectionsView = ({
     };
 
     const handleRefreshActivity = (): void => {
-        setIsLoadingActivity(true);
-        requestActivityUpdate(collection.address);
+        void signedAction(({ authenticated }) => {
+            if (!authenticated) {
+                console.log("booom!");
+            }
 
-        showToast({
-            message: t("common.refreshing_activity"),
-            isExpanded: true,
+            setIsLoadingActivity(true);
+            requestActivityUpdate(collection.address);
+
+            showToast({
+                message: t("common.refreshing_activity"),
+                isExpanded: true,
+            });
+
+            void axios.post<{ success: boolean }>(
+                route("collection.refresh-activity", {
+                    collection: collection.slug,
+                }),
+            );
         });
-
-        void axios.post<{ success: boolean }>(
-            route("collection.refresh-activity", {
-                collection: collection.slug,
-            }),
-        );
     };
 
     return (
