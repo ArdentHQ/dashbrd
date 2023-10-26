@@ -27,8 +27,10 @@ export const ArticleCard = ({
             className={cn(
                 "transition-default group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
-                    "bg-white ring-inset ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900": !isLargeVariant,
-                    "bg-theme-dark-900 hover:bg-theme-primary-700 dark:border-none dark:bg-theme-primary-700": isLargeVariant,
+                    "bg-white ring-inset ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900":
+                        !isLargeVariant,
+                    "bg-theme-dark-900 hover:bg-theme-primary-700 dark:border-none dark:bg-theme-primary-700":
+                        isLargeVariant,
                 },
             )}
         >
@@ -61,7 +63,8 @@ export const ArticleCard = ({
 
                 <h4
                     className={cn("transition-default mt-1 line-clamp-2 max-h-[3.5rem] text-lg font-medium leading-7", {
-                        "text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50": !isLargeVariant,
+                        "text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50":
+                            !isLargeVariant,
                         "text-theme-secondary-300": isLargeVariant,
                     })}
                 >

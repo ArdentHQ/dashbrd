@@ -85,7 +85,7 @@
 }
 
 .article-content a {
-    @apply text-theme-hint-600 hover:text-theme-primary-800 hover:underline dark:text-theme-primary-400 dark:hover:text-theme-primary-500 transition-default dark:hover:decoration-theme-primary-500;
+    @apply transition-default text-theme-hint-600 hover:text-theme-primary-800 hover:underline dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500;
 }
 .article-content hr {
     @apply border-theme-secondary-300 dark:border-theme-dark-700;
@@ -142,7 +142,7 @@
     counter-increment: item;
 }
 .article-content ol > li:before {
-    @apply absolute -ml-12 mr-3 w-9 text-right font-medium text-theme-secondary-900 dark:text-theme-dark-50;;
+    @apply absolute -ml-12 mr-3 w-9 text-right font-medium text-theme-secondary-900 dark:text-theme-dark-50;
     content: counter(item) ". ";
 }
 .article-content ol ol li,
