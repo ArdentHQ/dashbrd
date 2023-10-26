@@ -6,7 +6,7 @@
 }
 
 .article-content {
-    @apply max-w-full break-words text-theme-secondary-700;
+    @apply max-w-full break-words text-theme-secondary-700 text-lg leading-8;
 }
 
 .article-content > :last-child {
@@ -24,17 +24,19 @@
 .article-content > ol,
 .article-content > img,
 .article-content > figure,
-.article-content > h3,
+.article-content > pre,
+.article-content > code {
+    @apply my-4;
+}
+
 .article-content > h1,
 .article-content > h2,
 .article-content > h3,
 .article-content > h4,
 .article-content > h5,
 .article-content > h6,
-.article-content > blockquote,
-.article-content > pre,
-.article-content > code {
-    @apply my-4;
+.article-content > blockquote {
+    @apply my-6;
 }
 
 .article-content img {
@@ -116,7 +118,7 @@
     @apply my-0;
 }
 .article-content li {
-    @apply my-2;
+    @apply my-1;
 }
 
 .article-content ol {
