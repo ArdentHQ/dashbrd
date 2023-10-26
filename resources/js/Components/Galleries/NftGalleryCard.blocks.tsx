@@ -208,13 +208,7 @@ export const NftImageGrid = ({
     );
 };
 
-export const GalleryHeading = ({
-    name,
-    wallet,
-}: {
-    name: string;
-    wallet: App.Data.Gallery.GalleryWalletData;
-}): JSX.Element => {
+export const GalleryHeading = ({ name, wallet }: { name: string; wallet: App.Data.SimpleWalletData }): JSX.Element => {
     const truncateReference = useRef<HTMLHeadingElement>(null);
 
     const isTruncated = useIsTruncated({ reference: truncateReference });

@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
+import WalletAvatarDataFactory from "./Wallet/WalletAvatarDataFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
-import WalletAvatarDataFactory from "@/Tests/Factories/Wallet/WalletAvatarDataFactory";
 
-export default class GalleryWalletDataFactory extends ModelFactory<App.Data.Gallery.GalleryWalletData> {
-    protected factory(): App.Data.Gallery.GalleryWalletData {
+export default class SimpleWalletDataFactory extends ModelFactory<App.Data.SimpleWalletData> {
+    protected factory(): App.Data.SimpleWalletData {
         return {
             address: this.generateAddress(),
             domain: this.optional(faker.internet.domainName()),
