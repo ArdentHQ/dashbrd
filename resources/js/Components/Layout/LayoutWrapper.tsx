@@ -45,7 +45,7 @@ export const LayoutWrapper = ({
             data-testid="LayoutWrapper"
             className="flex min-h-screen flex-col"
         >
-            <header className="relative z-50">
+            <header className="relative z-50 border-b border-theme-secondary-300 dark:border-theme-dark-700">
                 <Navbar
                     connectWallet={connectWallet}
                     initialized={initialized}
