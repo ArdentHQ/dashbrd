@@ -48,13 +48,13 @@ export const TransactionBreakdown = ({
 
     return (
         <div
-            className="mt-3 overflow-hidden rounded-xl border border-theme-secondary-300"
+            className="mt-3 overflow-hidden rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700"
             data-testid="Transaction__Breakdown"
         >
-            <div className="relative flex flex-col items-center border-b border-theme-secondary-300 px-6 py-4 sm:flex-row">
+            <div className="relative flex flex-col items-center border-b border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700 sm:flex-row">
                 <div className="relative mb-6 sm:mb-0 sm:w-1/2">
                     <div
-                        className="after:absolute after:-right-px after:-top-px after:h-3 after:text-theme-secondary-300 sm:after:border sm:after:content-['']"
+                        className="after:absolute after:-right-px after:-top-px after:h-3 after:text-theme-secondary-300 dark:after:text-theme-dark-700 sm:after:border sm:after:content-['']"
                         data-testid="Transaction__AmountFiat"
                     >
                         <Label>
@@ -66,7 +66,7 @@ export const TransactionBreakdown = ({
                         </Label>
                     </div>
                     <p
-                        className="mt-0.5 text-center font-medium text-theme-secondary-900 after:absolute after:-bottom-px after:-right-px after:h-3 after:text-theme-secondary-300 sm:text-left sm:after:border sm:after:content-['']"
+                        className="mt-0.5 text-center font-medium text-theme-secondary-900 after:absolute after:-bottom-px after:-right-px after:h-3 after:text-theme-secondary-300 dark:text-theme-dark-50 dark:after:text-theme-dark-700 sm:text-left sm:after:border sm:after:content-['']"
                         data-testid="Transaction__AmountNative"
                     >
                         <FormatCrypto
@@ -76,11 +76,11 @@ export const TransactionBreakdown = ({
                     </p>
                 </div>
 
-                <div className="absolute left-0 top-1/2 h-px w-full -translate-y-2/4 bg-theme-secondary-300 sm:hidden"></div>
+                <div className="absolute left-0 top-1/2 h-px w-full -translate-y-2/4 bg-theme-secondary-300 dark:bg-theme-dark-700 sm:hidden"></div>
                 <div className="left-1/2 -mt-1 -translate-x-2/4 sm:absolute sm:mt-0">
                     <Icon
                         name="FatPlus"
-                        className="h-4 w-4 text-theme-secondary-900"
+                        className="h-4 w-4 text-theme-secondary-900 dark:text-theme-dark-50"
                     />
                 </div>
 
@@ -97,7 +97,7 @@ export const TransactionBreakdown = ({
                         />
                     </Label>
                     <p
-                        className="mt-0.5 font-medium text-theme-secondary-900"
+                        className="mt-0.5 font-medium text-theme-secondary-900 dark:text-theme-dark-50"
                         data-testid="Transaction__GasFee"
                     >
                         <FormatCrypto
@@ -107,7 +107,7 @@ export const TransactionBreakdown = ({
                     </p>
                 </div>
             </div>
-            <div className="flex flex-col items-center bg-theme-secondary-50 px-6 py-4">
+            <div className="flex flex-col items-center bg-theme-secondary-50 px-6 py-4 dark:bg-theme-dark-950">
                 <div
                     className={cn("mb-2 h-8 w-8", {
                         "opacity-20 saturate-0": isTestnet(nativeToken.chainId),
@@ -123,7 +123,7 @@ export const TransactionBreakdown = ({
                         currency={userCurrency}
                     />
                 </Label>
-                <p className="mt-0.5 font-medium text-theme-secondary-900">
+                <p className="mt-0.5 font-medium text-theme-secondary-900 dark:text-theme-dark-50">
                     {nativeToken.symbol === symbol ? (
                         <span data-testid="Transaction__TotalAmount">
                             <FormatCrypto

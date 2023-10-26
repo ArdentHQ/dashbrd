@@ -9,7 +9,10 @@ interface Properties extends HTMLAttributes<HTMLDivElement> {
 
 export const TokenLinks = ({ token, className, ...properties }: Properties): JSX.Element => (
     <div
-        className={cn("flex items-center space-x-2 pt-3 sm:bg-theme-secondary-50 sm:px-6 sm:py-4", className)}
+        className={cn(
+            "flex items-center space-x-2 pt-3 sm:bg-theme-secondary-50 sm:px-6 sm:py-4 dark:sm:bg-theme-dark-950",
+            className,
+        )}
         {...properties}
     >
         {token.website_url !== null && (
@@ -70,7 +73,7 @@ const SocialMediaLink = ({
             <Icon
                 name={icon}
                 size="md"
-                className="text-theme-primary-900"
+                className="text-theme-primary-900 dark:text-theme-dark-300"
             />
         </a>
     </Tooltip>

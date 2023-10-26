@@ -1,6 +1,7 @@
 import React from "react";
 import { TokenMarketData } from "./TokenMarketData";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
+import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
@@ -20,6 +21,8 @@ let resetAuthContext: () => void;
 
 describe("TokenMarketData", () => {
     beforeEach(() => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+
         server.use(requestMockOnce(`${BASE_URL}/price_history`, []));
 
         resetAuthContext = mockAuthContext({
@@ -30,6 +33,7 @@ describe("TokenMarketData", () => {
 
     afterEach(() => {
         resetAuthContext();
+        vi.restoreAllMocks();
     });
 
     it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {
