@@ -49,9 +49,9 @@ export const TokenDetailsSlider = ({
                         />
 
                         <div className="flex items-center space-x-2 text-lg font-medium">
-                            <span className="text-theme-secondary-900">{asset.symbol}</span>
+                            <span className="text-theme-secondary-900 dark:text-theme-dark-50">{asset.symbol}</span>
 
-                            <span className="text-theme-secondary-500">{asset.name}</span>
+                            <span className="text-theme-secondary-500 dark:text-theme-dark-300">{asset.name}</span>
                         </div>
                     </div>
                 </Slider.Header>
@@ -66,7 +66,7 @@ export const TokenDetailsSlider = ({
                         />
 
                         <div
-                            className="border-t border-theme-secondary-300 p-6 sm:px-8 sm:pt-5"
+                            className="border-t border-theme-secondary-300 p-6 dark:border-theme-dark-700 sm:px-8 sm:pt-5"
                             data-testid="TokenDetailsSlider__content"
                         >
                             <Tab.Group>
