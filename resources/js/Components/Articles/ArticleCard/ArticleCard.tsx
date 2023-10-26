@@ -25,10 +25,10 @@ export const ArticleCard = ({
             data-testid="ArticleCard"
             href={route("articles.view", article.slug)}
             className={cn(
-                "group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
+                "transition-default group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
-                    "bg-white": !isLargeVariant,
-                    "bg-theme-dark-900": isLargeVariant,
+                    "bg-white ring-inset ring-theme-primary-100 hover:ring": !isLargeVariant,
+                    "bg-theme-dark-900 hover:bg-theme-primary-700": isLargeVariant,
                 },
             )}
         >
@@ -37,7 +37,7 @@ export const ArticleCard = ({
                     className="h-full w-full rounded-lg object-cover"
                     wrapperClassName={cn("h-full [&>span]:h-full", {
                         "bg-white": !isLargeVariant,
-                        "bg-theme-dark-900": isLargeVariant,
+                        "bg-theme-dark-900 group-hover:bg-theme-primary-700": isLargeVariant,
                     })}
                     alt={article.title}
                     srcSet={`${article.image.medium} 1x, ${article.image.medium2x} 2x`}
@@ -47,9 +47,9 @@ export const ArticleCard = ({
 
             <div className="flex flex-1 flex-col px-6 py-3">
                 <div
-                    className={cn("text-sm font-medium", {
+                    className={cn("transition-default text-sm font-medium", {
                         "text-theme-secondary-700": !isLargeVariant,
-                        "text-theme-secondary-500": isLargeVariant,
+                        "text-theme-secondary-500 group-hover:text-theme-primary-300": isLargeVariant,
                     })}
                 >
                     {formatTimestamp(
@@ -60,9 +60,9 @@ export const ArticleCard = ({
                 </div>
 
                 <h4
-                    className={cn("mt-1 line-clamp-2 max-h-[3.5rem] text-lg font-medium leading-7", {
-                        "text-theme-secondary-900": !isLargeVariant,
-                        "text-white": isLargeVariant,
+                    className={cn("transition-default mt-1 line-clamp-2 max-h-[3.5rem] text-lg font-medium leading-7", {
+                        "text-theme-secondary-900 group-hover:text-theme-primary-700": !isLargeVariant,
+                        "text-theme-secondary-300": isLargeVariant,
                     })}
                 >
                     {article.title}
@@ -70,15 +70,16 @@ export const ArticleCard = ({
             </div>
 
             <div
-                className={cn("flex items-center px-6 py-3", {
-                    "bg-theme-secondary-50": !isLargeVariant,
-                    "bg-theme-dark-950": isLargeVariant,
+                className={cn("transition-default flex items-center rounded-b-lg px-6 py-3", {
+                    "bg-theme-secondary-50 group-hover:mx-[3px] group-hover:mx-[3px] group-hover:mb-[3px] group-hover:px-[21px] group-hover:pb-[9px]":
+                        !isLargeVariant,
+                    "bg-theme-dark-950 group-hover:bg-theme-primary-800": isLargeVariant,
                 })}
             >
                 <span
                     className={cn("mr-2 shrink-0 text-sm font-medium", {
                         "text-theme-secondary-700": !isLargeVariant,
-                        "text-theme-secondary-500": isLargeVariant,
+                        "text-theme-secondary-500 group-hover:text-theme-primary-300": isLargeVariant,
                     })}
                 >
                     {t("pages.articles.featured_collections")}:
