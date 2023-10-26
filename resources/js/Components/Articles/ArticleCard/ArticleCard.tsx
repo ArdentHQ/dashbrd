@@ -27,7 +27,7 @@ export const ArticleCard = ({
             className={cn(
                 "transition-default group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
-                    "bg-white ring-theme-primary-100 hover:ring": !isLargeVariant,
+                    "bg-white ring-inset ring-theme-primary-100 hover:ring": !isLargeVariant,
                     "bg-theme-dark-900 hover:bg-theme-primary-700": isLargeVariant,
                 },
             )}
@@ -70,8 +70,9 @@ export const ArticleCard = ({
             </div>
 
             <div
-                className={cn("transition-default flex items-center px-6 py-3", {
-                    "bg-theme-secondary-50": !isLargeVariant,
+                className={cn("transition-default flex items-center rounded-b-lg px-6 py-3", {
+                    "bg-theme-secondary-50 group-hover:mx-[3px] group-hover:mx-[3px] group-hover:mb-[3px] group-hover:px-[21px] group-hover:pb-[9px]":
+                        !isLargeVariant,
                     "bg-theme-dark-950 group-hover:bg-theme-primary-800": isLargeVariant,
                 })}
             >
