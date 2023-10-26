@@ -7,6 +7,7 @@ import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanne
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import AudioPlayer from "@/Pages/Articles/Components/AudioPlayer";
 import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
 import { tp } from "@/Utils/TranslatePlural";
 
@@ -44,7 +45,10 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                             />
                         </div>
 
-                        <ArticleContent article={article} />
+                        <div>
+                            <AudioPlayer audioSrc="https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav" />
+                            <ArticleContent article={article} />
+                        </div>
                     </div>
                 </div>
 
