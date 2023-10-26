@@ -1,3 +1,4 @@
+import { ArticleCopy } from "./ArticleCopy";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 
 interface Properties extends React.AnchorHTMLAttributes<HTMLUListElement> {
@@ -36,6 +37,10 @@ export const ArticleShare = ({ article, ...properties }: Properties): JSX.Elemen
                     icon="Reddit"
                     target="_blank"
                 />
+            </li>
+
+            <li>
+                <ArticleCopy article={article} />
             </li>
         </ul>
     );
