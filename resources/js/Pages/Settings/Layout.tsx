@@ -29,7 +29,7 @@ const Layout = ({
             <SettingsListboxMenu />
         </div>
 
-        <div className="grid-cols-4 gap-6 sm:space-y-6 sm:px-8 xl:grid xl:space-y-0">
+        <div className="grid-cols-4 gap-6 sm:space-y-6 sm:px-8 xl:grid xl:space-y-0 2xl:px-0">
             <aside className="col-span-1">
                 <div className="hidden xl:block">
                     <SettingsSidebar />
