@@ -150,6 +150,27 @@ describe("TokenPriceChart", () => {
         });
     });
 
+    it('should change pointHoverBorderColor to "#3D444D" when dark mode is enabled', async () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        server.use(requestMockOnce(`${BASE_URL}/price_history`, priceHistoryDataMock, { method: "post" }));
+
+        render(
+            <TokenPriceChart
+                period={Period.DAY}
+                token={testToken}
+            />,
+        );
+
+        await waitFor(() => {
+            expect(screen.getByTestId("TokenPriceChart__chart")).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.getByTestId("TokenPriceChart__chart")).toHaveTextContent(`"pointHoverBorderColor":"#3D444D"`);
+        });
+    });
+
     it("changes the data for a new period", async () => {
         server.use(
             requestMockOnce(`${BASE_URL}/price_history`, priceHistoryDataMock, { method: "post" }),
