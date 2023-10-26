@@ -20,6 +20,7 @@ export const MyGallerySidebar = ({
                 title={t("common.published")}
                 isSelected={route().current("my-galleries")}
                 href={route("my-galleries")}
+                rightText={publishedCount.toString()}
             />
 
             <SidebarItem
@@ -27,6 +28,7 @@ export const MyGallerySidebar = ({
                 title={t("common.drafts")}
                 isDisabled
                 tooltip={t("common.coming_soon").toString()}
+                rightText={draftsCount.toString()}
             />
         </Sidebar>
     );
