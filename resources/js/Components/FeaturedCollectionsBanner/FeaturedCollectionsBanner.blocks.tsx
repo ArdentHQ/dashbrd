@@ -99,7 +99,7 @@ export const CollectionCarousel = ({
                                             data-testid={`CollectionCarousel__entry--${index}`}
                                         >
                                             <Img
-                                                className="aspect-square h-15 w-15 rounded-full object-cover"
+                                                className="h-15 w-15 rounded-full"
                                                 src={collection.image}
                                             />
                                         </div>

@@ -38,7 +38,6 @@ export const CollectionImages = ({
                     </div>
                 )}
                 <Img
-                    className="aspect-square h-full w-full object-cover"
                     src={nfts[maxItems - 1].images.small ?? undefined}
                     data-testid={`CollectionImages__image--${nfts[maxItems - 1].tokenNumber}`}
                 />
