@@ -77,8 +77,8 @@ export const FeaturedCollections = ({
                             src={collection.image}
                             isCircle
                             className={cn("h-6 w-6 rounded-full ring-2", {
-                                "ring-white": !isLargeVariant,
-                                "ring-theme-dark-900": isLargeVariant,
+                                "bg-white ring-white": !isLargeVariant,
+                                "bg-theme-dark-900 ring-theme-dark-900": isLargeVariant,
                             })}
                             errorClassName="!p-0"
                         />
