@@ -8,7 +8,7 @@ export const ArticleCardSkeleton = ({ isLoading = true }: { isLoading?: boolean 
     return (
         <div
             data-testid="ArticleCardSkeleton"
-            className="group flex w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300"
+            className="group flex w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700 dark:bg-theme-dark-900"
         >
             <div
                 className={cn("mx-2 mt-2 aspect-video items-center justify-center overflow-hidden rounded-lg", {
@@ -39,22 +39,22 @@ export const ArticleCardSkeleton = ({ isLoading = true }: { isLoading?: boolean 
                 />
             </div>
 
-            <div className="flex items-center bg-theme-secondary-50 px-6 py-3">
+            <div className="flex items-center bg-theme-secondary-50 px-6 py-3 dark:bg-theme-dark-800">
                 <Skeleton
-                    className="h-5 w-30 rounded"
+                    className="h-5 w-30 rounded dark:bg-theme-dark-900"
                     animated={isLoading}
                 />
                 <div className="ml-2 flex">
                     <Skeleton
-                        className="h-5 w-5 rounded-full ring-2 ring-theme-secondary-50"
+                        className="h-5 w-5 rounded-full ring-2 ring-theme-secondary-50 dark:bg-theme-dark-900 dark:ring-theme-dark-800"
                         animated={isLoading}
                     />
                     <Skeleton
-                        className="-ml-1 h-5 w-5 rounded-full ring-2 ring-theme-secondary-50"
+                        className="-ml-1 h-5 w-5 rounded-full ring-2 ring-theme-secondary-50 dark:bg-theme-dark-900 dark:ring-theme-dark-800"
                         animated={isLoading}
                     />
                     <Skeleton
-                        className="-ml-1 h-5 w-5 rounded-full ring-2 ring-theme-secondary-50"
+                        className="-ml-1 h-5 w-5 rounded-full ring-2 ring-theme-secondary-50 dark:bg-theme-dark-900 dark:ring-theme-dark-800"
                         animated={isLoading}
                     />
                 </div>
