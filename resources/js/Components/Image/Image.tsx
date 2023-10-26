@@ -5,6 +5,7 @@ import { ImageErrorPlaceholer } from "./Image.blocks";
 import { type ImageProperties } from "./Image.contracts";
 import { useImageLoader } from "./useImageLoader";
 import { Skeleton } from "@/Components/Skeleton";
+import { twMerge } from "tailwind-merge";
 
 export const Img = ({
     src,
@@ -50,7 +51,7 @@ export const Img = ({
             {showSkeleton && (
                 <Skeleton
                     isCircle={isCircle}
-                    className={cn(className, "aspect-square")}
+                    className={cn(className, "h-full")}
                 />
             )}
 
@@ -69,7 +70,7 @@ export const Img = ({
                         data-testid="Img"
                         src={src ?? undefined}
                         alt={alt}
-                        className={cn(className, "w-full")}
+                        className={twMerge(className, "w-full")}
                         {...properties}
                     />
                 )}

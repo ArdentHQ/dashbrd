@@ -16,7 +16,7 @@ export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.Sim
                         key={cover.id}
                         data-testid="CollectionCoverImages__cover"
                         src={cover.images.large}
-                        className={cn("aspect-square h-full w-full shrink-0 rounded-xl object-cover", {
+                        className={cn("h-44 rounded-xl", {
                             "ml-0.5 translate-x-1/4": nfts.length === 1,
                         })}
                     />
@@ -35,7 +35,8 @@ export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.Sim
                         <div className="relative overflow-hidden rounded-lg backdrop-blur-0">
                             <Img
                                 src={third.images.small}
-                                className="aspect-square rounded-xl object-cover"
+                                wrapperClassName="aspect-square"
+                                className="rounded-xl"
                                 data-testid="CollectionCoverImages__third"
                             />
 

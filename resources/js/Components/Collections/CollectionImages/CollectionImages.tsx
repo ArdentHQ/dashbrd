@@ -19,7 +19,8 @@ export const CollectionImages = ({
                 key={nft.id}
             >
                 <Img
-                    className="block aspect-square h-full w-full grow rounded-lg object-cover"
+                    wrapperClassName="aspect-square"
+                    className="rounded-lg"
                     src={nft.images.small ?? undefined}
                     data-testid={`CollectionImages__image--${nft.tokenNumber}`}
                 />
