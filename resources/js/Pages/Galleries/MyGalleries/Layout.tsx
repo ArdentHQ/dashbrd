@@ -1,8 +1,8 @@
 import { type ReactNode } from "react";
+import { MyGalleryListboxMenu } from "./Components/MyGalleryListboxMenu";
 import { MyGallerySidebar } from "./Components/MyGallerySidebar";
 import { type ToastMessage } from "@/Components/Toast";
 import LeftMenuLayout from "@/Layouts/LeftMenuLayout";
-import { SettingsListboxMenu } from "@/Pages/Settings/Components/SettingsListboxMenu";
 
 const Layout = ({
     title,
@@ -21,7 +21,7 @@ const Layout = ({
         toastMessage={toastMessage}
         mustBeSigned={mustBeSigned}
         showBackButton={showBackButton}
-        mobileMenu={<SettingsListboxMenu />}
+        mobileMenu={<MyGalleryListboxMenu />}
         sidebarMenu={<MyGallerySidebar />}
         title={title}
     >
