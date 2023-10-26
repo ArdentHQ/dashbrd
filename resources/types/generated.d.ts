@@ -435,6 +435,8 @@ declare namespace App.Data.Wallet {
         collectionCount: number;
         galleryCount: number;
         timestamps: { tokens_fetched_at: number | null; native_balances_fetched_at: number | null };
+        isRefreshingCollections: boolean;
+        canRefreshCollections: boolean;
     };
 }
 declare namespace App.Data.Web3 {

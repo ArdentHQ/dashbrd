@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Models\Gallery;
-use App\Models\Network;
 use App\Models\Nft;
 use App\Models\User;
 use App\Models\Wallet;
@@ -25,7 +24,6 @@ it('can assign a wallet to a user', function () {
 
     $user->wallets()->create([
         'address' => $address,
-        'network_id' => Network::factory()->create()->id,
         'total_usd' => 100,
     ]);
 
@@ -43,13 +41,11 @@ it('can retrieve the main wallet of the user', function () {
 
     $user->wallets()->create([
         'address' => '0x1231231231231231231231231231231231231231',
-        'network_id' => Network::factory()->create()->id,
         'total_usd' => 100,
     ]);
 
     $wallet = $user->wallets()->create([
         'address' => $address,
-        'network_id' => Network::factory()->create()->id,
         'total_usd' => 100,
     ]);
 

@@ -74,7 +74,7 @@ class HandleInertiaRequests extends Middleware
             'toast' => [
                 'message' => fn () => $request->session()->get('toast:message'),
                 'type' => fn () => $request->session()->get('toast:type'),
-                'expanded' => fn () => $request->session()->get('toast:expanded', false),
+                'isExpanded' => fn () => $request->session()->get('toast:expanded', false),
                 'isLoading' => fn () => $request->session()->get('toast:loading', false),
             ],
         ]);

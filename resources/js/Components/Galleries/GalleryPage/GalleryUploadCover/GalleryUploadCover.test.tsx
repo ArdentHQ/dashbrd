@@ -42,6 +42,7 @@ describe("GalleryFormSlider", () => {
         fileReaderMock = vi.spyOn(window, "FileReader").mockImplementation(() => fileReader);
         vi.spyOn(ToastsHook, "useToasts").mockImplementation(() => ({
             showToast: showToastMock,
+            clear: vi.fn(),
         }));
 
         forceImageSize();

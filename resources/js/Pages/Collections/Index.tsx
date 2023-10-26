@@ -125,6 +125,7 @@ const CollectionsIndex = ({
             <div>
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     <CollectionsHeading
+                        wallet={auth.wallet}
                         stats={stats}
                         currency={auth.user?.attributes.currency ?? "USD"}
                     />

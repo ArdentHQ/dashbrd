@@ -454,6 +454,7 @@ describe("InitiationStep", () => {
 
         vi.spyOn(ToastsHook, "useToasts").mockImplementation(() => ({
             showToast: showToastMock,
+            clear: vi.fn(),
         }));
 
         render(<InitiationStep {...properties} />);
