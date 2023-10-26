@@ -19,9 +19,9 @@ interface Properties {
 }
 
 interface Galleries {
-    popular: App.Data.Gallery.GalleryData[];
-    newest: App.Data.Gallery.GalleryData[];
-    mostValuable: App.Data.Gallery.GalleryData[];
+    popular: App.Data.Gallery.GalleryCardData[];
+    newest: App.Data.Gallery.GalleryCardData[];
+    mostValuable: App.Data.Gallery.GalleryCardData[];
 }
 
 const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {

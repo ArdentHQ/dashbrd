@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Gallery\GalleriesStatsData;
+use App\Data\Gallery\GalleryCardData;
 use App\Data\Gallery\GalleryData;
 use App\Data\Gallery\GalleryStatsData;
 use App\Enums\CurrencyCode;
 use App\Models\GalleriesStats;
 use App\Models\Gallery;
-use App\Models\User;
+use App\Repositories\GalleriesRepository;
 use App\Support\Cache\GalleryCache;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
@@ -41,24 +42,22 @@ class GalleryController extends Controller
         ]);
     }
 
-    public function galleries(Request $request): JsonResponse
+    public function galleries(Request $request, GalleriesRepository $galleries): JsonResponse
     {
         $user = $request->user();
 
-        $popular = Gallery::popular()->limit(8)->get();
-
-        $newest = Gallery::latest()->limit(8)->get();
-
-        $mostValuable = Gallery::mostValuable($user?->currency() ?? CurrencyCode::USD)->limit(8)->get();
+        $popular = $galleries->popular($user);
+        $newest = $galleries->latest($user);
+        $mostValuable = $galleries->mostValuable($user);
 
         return response()->json([
-            'popular' => GalleryData::collection($popular),
-            'newest' => GalleryData::collection($newest),
-            'mostValuable' => GalleryData::collection($mostValuable),
+            'popular' => $popular->map(fn ($gallery) => GalleryCardData::fromModel($gallery, $user)),
+            'newest' => $newest->map(fn ($gallery) => GalleryCardData::fromModel($gallery, $user)),
+            'mostValuable' => $mostValuable->map(fn ($gallery) => GalleryCardData::fromModel($gallery, $user)),
         ]);
     }
 
-    public function view(Request $request, Gallery $gallery): Response
+    public function show(Request $request, Gallery $gallery): Response
     {
         $galleryCache = new GalleryCache($gallery);
 
@@ -69,7 +68,7 @@ class GalleryController extends Controller
         return Inertia::render('Galleries/View', [
             'title' => trans('metatags.galleries.view.title', ['name' => $gallery->name]),
             'gallery' => GalleryData::fromModel(
-                gallery: $gallery,
+                gallery: $gallery->loadCount('views'),
                 limit: 16,
             ),
             'stats' => new GalleryStatsData(
