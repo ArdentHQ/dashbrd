@@ -29,7 +29,7 @@ export const CollectionCoverImages = ({ nfts }: { nfts: App.Data.Collections.Sim
                     <Img
                         src={second.images.small}
                         wrapperClassName="aspect-square"
-                        className="aspect-square rounded-xl object-cover"
+                        className="rounded-xl"
                         data-testid="CollectionCoverImages__second"
                     />
 
