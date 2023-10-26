@@ -16,12 +16,12 @@ import { CollectionHiddenModal } from "@/Components/Collections/CollectionHidden
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
