@@ -1,11 +1,1 @@
-<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" clip-rule="evenodd"
-    d="M11.3032 19H2.2C1.53726 19 1 18.4627 1 17.8V2.2C1 1.53726 1.53726 1 2.2 1H17.8C18.4627 1 19 1.53726 19 2.2V11.3032C18.9999 11.6212 18.8736 11.9262 18.6488 12.1512L12.1512 18.6488C11.9262 18.8736 11.6212 18.9999 11.3032 19Z"
-    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M11.8008 18.8928V13.0008C11.8008 12.338 12.338 11.8008 13.0008 11.8008H18.8928" stroke="currentColor"
-    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M5.80078 5.80078H15.4008" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-    stroke-linejoin="round" />
-  <path d="M5.80078 9.40039H10.0008" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-    stroke-linejoin="round" />
-</svg>
+<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.303 19H2.2A1.2 1.2 0 0 1 1 17.8V2.2A1.2 1.2 0 0 1 2.2 1h15.6A1.2 1.2 0 0 1 19 2.2v9.103a1.2 1.2 0 0 1-.351.848L12.15 18.65a1.2 1.2 0 0 1-.848.351Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.8 18.893V13a1.2 1.2 0 0 1 1.2-1.2h5.893M5.8 5.8h9.6M5.8 9.4H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
