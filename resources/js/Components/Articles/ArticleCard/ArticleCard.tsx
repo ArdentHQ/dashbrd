@@ -62,7 +62,7 @@ export const ArticleCard = ({
                 <h4
                     className={cn("mt-1 line-clamp-2 max-h-[3.5rem] text-lg font-medium leading-7", {
                         "text-theme-secondary-900": !isLargeVariant,
-                        "text-white": isLargeVariant,
+                        "text-theme-secondary-300": isLargeVariant,
                     })}
                 >
                     {article.title}
