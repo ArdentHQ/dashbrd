@@ -29,7 +29,7 @@ class LikedGalleryController extends Controller
 
         return response()->json([
             'likes' => $gallery->likes()->count(),
-            'hasLiked' => $gallery->isLikedBy($user)
+            'hasLiked' => $gallery->isLikedBy($user),
         ], 201);
     }
 }
