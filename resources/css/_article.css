@@ -46,7 +46,7 @@
 .article-content > h4,
 .article-content > h5,
 .article-content > h6 {
-    @apply mt-6 mb-3;
+    @apply mb-3 mt-6;
 }
 
 .article-content img {
