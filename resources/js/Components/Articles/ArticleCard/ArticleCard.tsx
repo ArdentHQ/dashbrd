@@ -27,8 +27,8 @@ export const ArticleCard = ({
             className={cn(
                 "group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
-                    "bg-white": !isLargeVariant,
-                    "bg-theme-dark-900": isLargeVariant,
+                    "bg-white dark:border-theme-dark-700 dark:bg-theme-dark-900": !isLargeVariant,
+                    "bg-theme-dark-900 dark:border-none dark:bg-theme-primary-700": isLargeVariant,
                 },
             )}
         >
@@ -36,8 +36,8 @@ export const ArticleCard = ({
                 <Img
                     className="h-full w-full rounded-lg object-cover"
                     wrapperClassName={cn("h-full [&>span]:h-full", {
-                        "bg-white": !isLargeVariant,
-                        "bg-theme-dark-900": isLargeVariant,
+                        "bg-white dark:bg-theme-dark-900": !isLargeVariant,
+                        "bg-theme-dark-900 dark:bg-theme-primary-700": isLargeVariant,
                     })}
                     alt={article.title}
                     srcSet={`${article.image.medium} 1x, ${article.image.medium2x} 2x`}
@@ -48,7 +48,7 @@ export const ArticleCard = ({
             <div className="flex flex-1 flex-col px-6 py-3">
                 <div
                     className={cn("text-sm font-medium", {
-                        "text-theme-secondary-700": !isLargeVariant,
+                        "text-theme-secondary-700 dark:text-theme-dark-200": !isLargeVariant,
                         "text-theme-secondary-500": isLargeVariant,
                     })}
                 >
@@ -61,7 +61,7 @@ export const ArticleCard = ({
 
                 <h4
                     className={cn("mt-1 line-clamp-2 max-h-[3.5rem] text-lg font-medium leading-7", {
-                        "text-theme-secondary-900": !isLargeVariant,
+                        "text-theme-secondary-900 dark:text-theme-dark-50": !isLargeVariant,
                         "text-white": isLargeVariant,
                     })}
                 >
@@ -71,13 +71,13 @@ export const ArticleCard = ({
 
             <div
                 className={cn("flex items-center px-6 py-3", {
-                    "bg-theme-secondary-50": !isLargeVariant,
-                    "bg-theme-dark-950": isLargeVariant,
+                    "bg-theme-secondary-50 dark:bg-theme-dark-800": !isLargeVariant,
+                    "bg-theme-dark-950 dark:bg-theme-primary-800": isLargeVariant,
                 })}
             >
                 <span
                     className={cn("mr-2 shrink-0 text-sm font-medium", {
-                        "text-theme-secondary-700": !isLargeVariant,
+                        "text-theme-secondary-700 dark:text-theme-dark-200": !isLargeVariant,
                         "text-theme-secondary-500": isLargeVariant,
                     })}
                 >
