@@ -7,7 +7,7 @@ import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanne
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { AudioPlayer } from "@/Pages/Articles/Components/AudioPlayer";
+import { WaveSurferPlayer } from "@/Pages/Articles/Components/AudioPlayer2";
 import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
 import { tp } from "@/Utils/TranslatePlural";
 
@@ -47,7 +47,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
 
                         <div>
                             <div className="mb-4">
-                                <AudioPlayer audioSrc="https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav" />
+                                <WaveSurferPlayer url={"/CantinaBand60.wav"} />
                             </div>
 
                             <ArticleContent article={article} />
