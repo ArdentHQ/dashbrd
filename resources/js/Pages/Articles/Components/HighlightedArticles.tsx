@@ -18,7 +18,8 @@ export const HighlightedArticles = ({
 
     const pagination = {
         clickable: true,
-        renderBullet: (_index: number, className: string) => `<span class="h-1.5 rounded-xl w-6 ${className}"></span>`,
+        renderBullet: (_index: number, className: string) =>
+            `<span class="h-1.5 rounded-xl w-6 dark:bg-theme-primary-600 ${className}"></span>`,
     };
 
     const { highlightedArticlesCount } = articlesViewDefaults;
@@ -66,9 +67,10 @@ export const HighlightedArticles = ({
             </div>
             <div
                 className={cn("mt-0", {
-                    "-mx-6 -mt-6 space-y-2 border-b-4 border-theme-secondary-100 sm:-mx-8 lg:mx-0 lg:border-b-2 lg:border-theme-secondary-300":
+                    "-mx-6 -mt-6 space-y-2 border-b-4 border-theme-secondary-100 dark:border-theme-dark-700 sm:-mx-8 lg:mx-0 lg:border-b-2 lg:border-theme-secondary-300":
                         withFullBorder && (hasEnoughArticles || isLoading),
-                    "border-b-2 border-theme-secondary-300": !withFullBorder && (hasEnoughArticles || isLoading),
+                    "border-b-2 border-theme-secondary-300 dark:border-theme-dark-700":
+                        !withFullBorder && (hasEnoughArticles || isLoading),
                 })}
             ></div>
         </div>
