@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\Chains;
+use App\Enums\NftTransferType;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection;
@@ -261,19 +262,18 @@ it('should fetch the collection activity', function () {
 
     expect($data)->toHaveCount(18);
 
-    expect($data->first()->toArray())->toEqualCanonicalizing([
-        'contractAddress' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
-        'tokenId' => '8304',
-        'sender' => '0x0000000000000000000000000000000000000000',
-        'recipient' => '0xe66e1e9e37e4e148b21eb22001431818e980d060',
-        'txHash' => '0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de',
-        'logIndex' => '164',
-        'type' => 'LABEL_MINT',
-        'timestamp' => '2022-04-16T16:39:27+00:00',
-        'total_native' => null,
-        'total_usd' => '7547.995011517354',
-        'extra_attributes' => $data->first()->extraAttributes,
-    ]);
+    $data = $data->first();
+
+    expect($data->contractAddress)->toBe('0x23581767a106ae21c074b2276d25e5c3e136a68b');
+    expect($data->tokenId)->toBe('8304');
+    expect($data->sender)->toBe('0x0000000000000000000000000000000000000000');
+    expect($data->recipient)->toBe('0xe66e1e9e37e4e148b21eb22001431818e980d060');
+    expect($data->txHash)->toBe('0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de');
+    expect($data->logIndex)->toBe('164');
+    expect($data->type)->toBe(NftTransferType::Mint);
+    expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
+    expect($data->totalNative)->toBe(null);
+    expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
 it('should convert total to native currency by using historical price for the given date', function () {
@@ -303,20 +303,20 @@ it('should convert total to native currency by using historical price for the gi
     // Note: limit is ignored because the fixture is fixed size
     $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100);
 
-    expect($data)->toHaveCount(18)
-        ->and($data->first()->toArray())->toEqualCanonicalizing([
-            'contractAddress' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
-            'tokenId' => '8304',
-            'sender' => '0x0000000000000000000000000000000000000000',
-            'recipient' => '0xe66e1e9e37e4e148b21eb22001431818e980d060',
-            'txHash' => '0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de',
-            'logIndex' => '164',
-            'type' => 'LABEL_MINT',
-            'timestamp' => '2022-04-16T16:39:27+00:00',
-            'total_native' => 5.031996674344903,
-            'total_usd' => 7547.995011517354,
-            'extra_attributes' => $data->first()->extraAttributes,
-        ]);
+    expect($data)->toHaveCount(18);
+
+    $data = $data->first();
+
+    expect($data->contractAddress)->toBe('0x23581767a106ae21c074b2276d25e5c3e136a68b');
+    expect($data->tokenId)->toBe('8304');
+    expect($data->sender)->toBe('0x0000000000000000000000000000000000000000');
+    expect($data->recipient)->toBe('0xe66e1e9e37e4e148b21eb22001431818e980d060');
+    expect($data->txHash)->toBe('0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de');
+    expect($data->logIndex)->toBe('164');
+    expect($data->type)->toBe(NftTransferType::Mint);
+    expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
+    expect($data->totalNative)->toBe(5.031996674344903);
+    expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
 it('should convert total to native currency by using historical price for the period', function () {
@@ -355,20 +355,20 @@ it('should convert total to native currency by using historical price for the pe
     // Note: limit is ignored because the fixture is fixed size
     $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100);
 
-    expect($data)->toHaveCount(18)
-        ->and($data->first()->toArray())->toEqualCanonicalizing([
-            'contractAddress' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
-            'tokenId' => '8304',
-            'sender' => '0x0000000000000000000000000000000000000000',
-            'recipient' => '0xe66e1e9e37e4e148b21eb22001431818e980d060',
-            'txHash' => '0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de',
-            'logIndex' => '164',
-            'type' => 'LABEL_MINT',
-            'timestamp' => '2022-04-16T16:39:27+00:00',
-            'total_native' => 5.031996674344903,
-            'total_usd' => 7547.995011517354,
-            'extra_attributes' => $data->first()->extraAttributes,
-        ]);
+    expect($data)->toHaveCount(18);
+
+    $data = $data->first();
+
+    expect($data->contractAddress)->toBe('0x23581767a106ae21c074b2276d25e5c3e136a68b');
+    expect($data->tokenId)->toBe('8304');
+    expect($data->sender)->toBe('0x0000000000000000000000000000000000000000');
+    expect($data->recipient)->toBe('0xe66e1e9e37e4e148b21eb22001431818e980d060');
+    expect($data->txHash)->toBe('0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de');
+    expect($data->logIndex)->toBe('164');
+    expect($data->type)->toBe(NftTransferType::Mint);
+    expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
+    expect($data->totalNative)->toBe(5.031996674344903);
+    expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
 it('should ignore activity with unexpected label', function () {
@@ -414,19 +414,18 @@ it('should fetch activity from date', function () {
 
     expect($data)->toHaveCount(18);
 
-    expect($data->first()->toArray())->toEqualCanonicalizing([
-        'contractAddress' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
-        'tokenId' => '8304',
-        'sender' => '0x0000000000000000000000000000000000000000',
-        'recipient' => '0xe66e1e9e37e4e148b21eb22001431818e980d060',
-        'txHash' => '0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de',
-        'logIndex' => '164',
-        'type' => 'LABEL_MINT',
-        'timestamp' => '2022-04-16T16:39:27+00:00',
-        'total_native' => null,
-        'total_usd' => '7547.995011517354',
-        'extra_attributes' => $data->first()->extraAttributes,
-    ]);
+    $data = $data->first();
+
+    expect($data->contractAddress)->toBe('0x23581767a106ae21c074b2276d25e5c3e136a68b');
+    expect($data->tokenId)->toBe('8304');
+    expect($data->sender)->toBe('0x0000000000000000000000000000000000000000');
+    expect($data->recipient)->toBe('0xe66e1e9e37e4e148b21eb22001431818e980d060');
+    expect($data->txHash)->toBe('0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de');
+    expect($data->logIndex)->toBe('164');
+    expect($data->type)->toBe(NftTransferType::Mint);
+    expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
+    expect($data->totalNative)->toBe(null);
+    expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
 it('should return null floor price on 400', function () {
