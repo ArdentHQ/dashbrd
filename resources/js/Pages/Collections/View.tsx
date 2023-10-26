@@ -266,11 +266,7 @@ const CollectionsView = ({
     };
 
     const handleRefreshActivity = (): void => {
-        void signedAction(({ authenticated }) => {
-            if (!authenticated) {
-                console.log("booom!");
-            }
-
+        void signedAction(() => {
             setIsLoadingActivity(true);
             requestActivityUpdate(collection.address);
 
