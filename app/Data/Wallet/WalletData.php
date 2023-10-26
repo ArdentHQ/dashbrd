@@ -21,6 +21,8 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
     'collectionCount' => 'number',
     'galleryCount' => 'number',
     'timestamps' => '{tokens_fetched_at: number|null, native_balances_fetched_at: number|null}',
+    'isRefreshingCollections' => 'boolean',
+    'canRefreshCollections' => 'boolean',
 ])]
 class WalletData extends Data
 {
@@ -40,6 +42,9 @@ class WalletData extends Data
          * @var array{tokens_fetched_at: int|null, native_balances_fetched_at: int|null} $timestamps
          */
         public array $timestamps,
+
+        public bool $isRefreshingCollections,
+        public bool $canRefreshCollections,
     ) {
     }
 
@@ -62,7 +67,9 @@ class WalletData extends Data
             timestamps: [
                 'tokens_fetched_at' => $wallet->tokensFetchedAt()?->getTimestampMs(),
                 'native_balances_fetched_at' => $wallet->nativeBalancesFetchedAt()?->getTimestampMs(),
-            ]
+            ],
+            isRefreshingCollections: (bool) $wallet->is_refreshing_collections,
+            canRefreshCollections: $wallet->canRefreshCollections(),
         );
     }
 }
