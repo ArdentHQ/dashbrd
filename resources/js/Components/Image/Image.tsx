@@ -78,7 +78,7 @@ export const Img = ({
                 {isErrored && (
                     <ImageErrorPlaceholer
                         errorMessage={errorMessage}
-                        className={cn(className, errorClassName)}
+                        className={cn(className, errorClassName, "aspect-square")}
                     />
                 )}
             </div>
