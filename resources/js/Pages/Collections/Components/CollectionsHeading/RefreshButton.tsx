@@ -15,21 +15,19 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
     const { showToast } = useToasts();
 
     const refresh = (): void => {
-        void signedAction(async ({ authenticated }) => {
-            if (authenticated) {
-                setLoading(true);
+        void signedAction(async () => {
+            setLoading(true);
 
-                await window.axios.post(route("refresh-collections"));
+            await window.axios.post(route("refresh-collections"));
 
-                setLoading(false);
-                setDisabled(true);
+            setLoading(false);
+            setDisabled(true);
 
-                showToast({
-                    type: "pending",
-                    message: t("pages.collections.refresh.toast"),
-                    isExpanded: true,
-                });
-            }
+            showToast({
+                type: "pending",
+                message: t("pages.collections.refresh.toast"),
+                isExpanded: true,
+            });
         });
     };
 
