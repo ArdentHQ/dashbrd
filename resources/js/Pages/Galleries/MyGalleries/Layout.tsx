@@ -1,8 +1,8 @@
 import { type ReactNode } from "react";
-import { SettingsListboxMenu } from "./Components/SettingsListboxMenu";
-import { SettingsSidebar } from "./Components/SettingsSidebar";
 import { type ToastMessage } from "@/Components/Toast";
 import LeftMenuLayout from "@/Layouts/LeftMenuLayout";
+import { SettingsListboxMenu } from "@/Pages/Settings/Components/SettingsListboxMenu";
+import { SettingsSidebar } from "@/Pages/Settings/Components/SettingsSidebar";
 
 const Layout = ({
     title,

@@ -1,11 +1,11 @@
-import { Head, router } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import Layout from "./Layout";
 import { Button } from "@/Components/Buttons";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
-import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { Pagination } from "@/Components/Pagination";
 import { Tooltip } from "@/Components/Tooltip";
 
@@ -26,9 +26,7 @@ const Index = ({
     const createGalleryUrl = route("my-galleries.create");
 
     return (
-        <LayoutWrapper>
-            <Head title={title} />
-
+        <Layout title={title}>
             <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <div className="mb-6 flex w-full items-center justify-between">
                     <Heading level={1}>
@@ -126,7 +124,7 @@ const Index = ({
                     />
                 )}
             </div>
-        </LayoutWrapper>
+        </Layout>
     );
 };
 
