@@ -10,52 +10,57 @@ export const AudioPlayer: React.FC<{ audioSrc: string }> = ({ audioSrc }) => {
 
     useEffect(() => {
         const audioElement = audioReference.current;
+        if (audioElement === null) return;
+        const handleTimeUpdate = (): void => {
+            if (!isSeeking) {
+                setCurrentTime(audioElement.currentTime);
+            }
+        };
 
-        if (audioElement) {
-            audioElement.addEventListener("timeupdate", () => {
-                if (!isSeeking) {
-                    setCurrentTime(audioElement.currentTime);
-                }
-            });
+        const handleDurationChange = (): void => {
+            setDuration(audioElement.duration);
+        };
+        const handleEnded = (): void => {
+            setIsPlaying(false);
+        };
 
-            audioElement.addEventListener("durationchange", () => {
-                setDuration(audioElement.duration);
-            });
+        audioElement.addEventListener("timeupdate", handleTimeUpdate);
+        audioElement.addEventListener("durationchange", handleDurationChange);
+        audioElement.addEventListener("ended", handleEnded);
 
-            audioElement.addEventListener("ended", () => {
-                setIsPlaying(false);
-            });
-        }
+        return () => {
+            audioElement.removeEventListener("timeupdate", handleTimeUpdate);
+            audioElement.removeEventListener("durationchange", handleDurationChange);
+            audioElement.removeEventListener("ended", handleEnded);
+        };
     }, [isSeeking]);
 
-    const togglePlay = () => {
+    const togglePlay = (): void => {
         const audioElement = audioReference.current;
-        if (audioElement) {
-            if (isPlaying) {
-                audioElement.pause();
-            } else {
-                audioElement.play();
-            }
-            setIsPlaying(!isPlaying);
+        if (audioElement === null) return;
+
+        if (isPlaying) {
+            audioElement.pause();
+        } else {
+            void audioElement.play();
         }
+        setIsPlaying(!isPlaying);
     };
 
-    const handleSeek = (e: MouseEvent | TouchEvent) => {
+    const handleSeek = (event: MouseEvent | TouchEvent): void => {
         const audioElement = audioReference.current;
-        if (audioElement) {
-            const rect = progressBarReference.current?.getBoundingClientRect();
-            if (rect) {
-                const x = "touches" in e ? e.touches[0].clientX : e.clientX;
-                const percent = ((x - rect.left) / rect.width) * 100;
-                const newTime = (percent / 100) * duration;
-                audioElement.currentTime = newTime;
-                setCurrentTime(newTime);
-            }
-        }
+        if (audioElement === null || progressBarReference.current === null) return;
+
+        const rect = progressBarReference.current.getBoundingClientRect();
+        const x = "touches" in event ? event.touches[0].clientX : event.clientX;
+        const percent = ((x - rect.left) / rect.width) * 100;
+        const newTime = (percent / 100) * duration;
+        audioElement.currentTime = newTime;
+        setCurrentTime(newTime);
     };
 
     // Format duration in MM:SS using padStart
-    const formatDuration = (time: number) => {
+    const formatDuration = (time: number): string => {
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60);
         return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
