@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeRaw from "rehype-raw";
-import tippy from "tippy.js";
+import tippy, { inlinePositioning } from "tippy.js";
 import { extractDomain } from "@/Utils/extract-domain";
 import { remarkFigurePlugin } from "@/Utils/Remark/remarkFigurePlugin";
 
@@ -40,6 +40,8 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => {
                     ${externalIcon}
                 </span>`,
                 allowHTML: true,
+                inlinePositioning: true,
+                plugins: [inlinePositioning],
             });
         });
 
