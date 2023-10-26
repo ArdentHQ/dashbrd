@@ -42,7 +42,7 @@ export const SortDropdown = ({ disabled = false, children }: Properties): JSX.El
 
             <Dropdown.Content
                 className="left-0 right-0 z-10 w-full origin-top-right px-6 sm:left-auto sm:mt-2 sm:h-fit sm:w-48 sm:px-0"
-                contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5"
+                contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5 dark:bg-theme-dark-900 dark:border dark:border-theme-dark-700"
             >
                 {({ setOpen }) => (typeof children === "function" ? children({ setOpen }) : children)}
             </Dropdown.Content>
@@ -64,8 +64,8 @@ export const DropdownButton = ({
         className={cn(
             "transition-default cursor-pointer whitespace-nowrap px-6 py-2.5 text-left text-base font-medium",
             isActive
-                ? "bg-theme-primary-100 text-theme-primary-600"
-                : "text-theme-secondary-700 hover:bg-theme-secondary-100 hover:text-theme-secondary-900",
+                ? "bg-theme-primary-100 text-theme-primary-600 dark:bg-theme-primary-600 dark:text-theme-dark-50"
+                : "text-theme-secondary-700 hover:bg-theme-secondary-100 hover:text-theme-secondary-900 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-50",
         )}
         onClick={onClick}
     >
