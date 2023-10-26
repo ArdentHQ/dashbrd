@@ -18,18 +18,18 @@ interface Properties {
 const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => (
     <DefaultLayout>
         <article className="w-full lg:px-8 2xl:px-0">
-            <div className="article-wrapper -mt-6 px-6 sm:-mt-8 sm:px-8 md:px-24 lg:mt-0 lg:rounded-xl lg:border lg:border-theme-secondary-300 lg:px-0">
-                <div className="mx-auto bg-white/20 pt-8 md:max-w-[768px] xl:max-w-[1000px]">
-                    <div className="border-b border-theme-secondary-400 pb-3">
+            <div className="article-wrapper -mt-6 px-6 sm:-mt-8 sm:px-8 md:px-24 lg:mt-0 lg:rounded-xl lg:border lg:border-theme-secondary-300 lg:px-0 dark:lg:border-theme-dark-700">
+                <div className="mx-auto bg-white/20 pt-8 dark:bg-transparent md:max-w-[768px] xl:max-w-[1000px]">
+                    <div className="border-b border-theme-secondary-400 pb-3 dark:border-theme-dark-700">
                         <Heading level={1}>{article.title}</Heading>
                     </div>
                 </div>
 
                 <div className="mx-auto mt-6 md:max-w-[768px] xl:max-w-[1000px]">
-                    <div className="aspect-video overflow-hidden rounded-lg bg-theme-secondary-300 ">
+                    <div className="aspect-video overflow-hidden rounded-lg bg-theme-secondary-300 dark:bg-theme-dark-700">
                         <Img
                             className="h-full w-full rounded-lg object-cover"
-                            wrapperClassName="h-full [&>span]:h-full bg-white"
+                            wrapperClassName="h-full [&>span]:h-full bg-white dark:bg-theme-dark-950"
                             alt={article.title}
                             srcSet={`${article.image.large} 1x, ${article.image.large2x} 2x`}
                             src={article.image.large}
@@ -48,12 +48,12 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                     </div>
                 </div>
 
-                <div className="-mx-6 flex flex-col border-b border-t border-theme-secondary-300 px-6 py-4 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
+                <div className="-mx-6 flex flex-col border-b border-t border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
                     <div className="flex items-center justify-between">
                         <div className="flex overflow-auto">
                             <ArticleAuthor article={article} />
 
-                            <div className="mx-6 border-r border-theme-secondary-300"></div>
+                            <div className="mx-6 border-r border-theme-secondary-300 dark:border-theme-dark-700"></div>
 
                             <ArticleDate article={article} />
                         </div>
@@ -62,7 +62,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                             <ArticleCopy article={article} />
                         </div>
                     </div>
-                    <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 md:hidden">
+                    <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 dark:border-theme-dark-700 md:hidden">
                         <div>
                             <ArticleShare
                                 article={article}
