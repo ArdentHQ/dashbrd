@@ -1,11 +1,11 @@
 import cn from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useInViewport } from "react-in-viewport";
+import { twMerge } from "tailwind-merge";
 import { ImageErrorPlaceholer } from "./Image.blocks";
 import { type ImageProperties } from "./Image.contracts";
 import { useImageLoader } from "./useImageLoader";
 import { Skeleton } from "@/Components/Skeleton";
-import { twMerge } from "tailwind-merge";
 
 export const Img = ({
     src,
