@@ -1,13 +1,9 @@
-import { router } from "@inertiajs/react";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import Layout from "./Layout";
-import { Button } from "@/Components/Buttons";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
-import { Icon } from "@/Components/Icon";
 import { Pagination } from "@/Components/Pagination";
-import { Tooltip } from "@/Components/Tooltip";
 
 const Index = ({
     title,
@@ -23,79 +19,18 @@ const Index = ({
 
     const userGalleries = galleries.paginated;
 
-    const createGalleryUrl = route("my-galleries.create");
-
     return (
-        <Layout title={title}>
-            <div className="mx-6 sm:mx-8 2xl:mx-0">
-                <div className="mb-6 flex w-full items-center justify-between">
+        <Layout
+            title={title}
+            nftCount={nftCount}
+        >
+            <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
+                <div className="mb-6 hidden w-full xl:flex">
                     <Heading level={1}>
                         <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
                             {t("pages.galleries.my_galleries.title")}
                         </span>
                     </Heading>
-
-                    {nftCount === 0 && (
-                        <>
-                            <Tooltip
-                                content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}
-                                touch
-                            >
-                                <div className="sm:hidden">
-                                    <Button
-                                        icon="Plus"
-                                        variant="icon-primary"
-                                        disabled={true}
-                                    />
-                                </div>
-                            </Tooltip>
-
-                            <Tooltip
-                                content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}
-                                touch
-                            >
-                                <div className="hidden sm:block">
-                                    <Button disabled={true}>
-                                        <span className="flex items-center space-x-2">
-                                            <Icon
-                                                name="Plus"
-                                                size="md"
-                                            />
-                                            <span>{t("common.create_gallery")}</span>
-                                        </span>
-                                    </Button>
-                                </div>
-                            </Tooltip>
-                        </>
-                    )}
-
-                    {nftCount > 0 && (
-                        <>
-                            <Button
-                                onClick={() => {
-                                    router.visit(createGalleryUrl);
-                                }}
-                                className="sm:hidden"
-                                icon="Plus"
-                                variant="icon-primary"
-                            ></Button>
-
-                            <Button
-                                onClick={() => {
-                                    router.visit(createGalleryUrl);
-                                }}
-                                className="hidden sm:block"
-                            >
-                                <span className="flex items-center space-x-2">
-                                    <Icon
-                                        name="Plus"
-                                        size="md"
-                                    />
-                                    <span>{t("common.create_gallery")}</span>
-                                </span>
-                            </Button>
-                        </>
-                    )}
                 </div>
 
                 {userGalleries.meta.total === 0 && (
@@ -107,7 +42,7 @@ const Index = ({
                 )}
 
                 {userGalleries.meta.total > 0 && (
-                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
                         {userGalleries.data.map((gallery, index) => (
                             <NftGalleryCard
                                 key={index}

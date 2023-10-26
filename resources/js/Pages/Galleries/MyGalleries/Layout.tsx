@@ -1,28 +1,26 @@
 import { type ReactNode } from "react";
 import { MyGalleryListboxMenu } from "./Components/MyGalleryListboxMenu";
 import { MyGallerySidebar } from "./Components/MyGallerySidebar";
-import { type ToastMessage } from "@/Components/Toast";
 import LeftMenuLayout from "@/Layouts/LeftMenuLayout";
 
 const Layout = ({
     title,
-    toastMessage,
     children,
-    mustBeSigned = false,
-    showBackButton,
+    nftCount,
 }: {
     title: string;
     children: ReactNode;
-    toastMessage?: ToastMessage;
-    mustBeSigned?: boolean;
-    showBackButton?: boolean;
+    nftCount: number;
 }): JSX.Element => (
     <LeftMenuLayout
-        toastMessage={toastMessage}
-        mustBeSigned={mustBeSigned}
-        showBackButton={showBackButton}
-        mobileMenu={<MyGalleryListboxMenu />}
-        sidebarMenu={<MyGallerySidebar />}
+        mobileMenu={<MyGalleryListboxMenu nftCount={nftCount} />}
+        // temporary use the nftCount from the current page
+        sidebarMenu={
+            <MyGallerySidebar
+                publishedCount={nftCount}
+                draftsCount={0}
+            />
+        }
         title={title}
     >
         {children}

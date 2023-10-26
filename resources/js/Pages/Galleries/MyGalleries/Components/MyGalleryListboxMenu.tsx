@@ -1,25 +1,28 @@
 import { useTranslation } from "react-i18next";
+import { CreateGalleryButton } from "./CreateGalleryButton";
 import { Listbox } from "@/Components/Form/Listbox";
 import { SidebarHead } from "@/Components/Sidebar/SidebarHead";
 
-export const MyGalleryListboxMenu = (): JSX.Element => {
+export const MyGalleryListboxMenu = ({ nftCount }: { nftCount: number }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <>
             <div
-                className="mb-6 px-8"
-                data-testid="SettingsListboxMenu__head"
+                className="mb-6 flex flex-col space-y-3 px-8 sm:flex-row sm:items-end sm:justify-between sm:space-y-0"
+                data-testid="MyGalleryListboxMenu__head"
             >
                 <SidebarHead
                     title={t("pages.galleries.my_galleries.title").toString()}
                     subtitle={t("pages.galleries.my_galleries.subtitle").toString()}
                 />
+
+                <CreateGalleryButton nftCount={nftCount} />
             </div>
 
             <div
                 className="bg-theme-secondary-100 px-6 py-4 dark:bg-theme-dark-800 sm:px-8"
-                data-testid="SettingsListboxMenu"
+                data-testid="MyGalleryListboxMenu"
             >
                 <Listbox
                     isNavigation

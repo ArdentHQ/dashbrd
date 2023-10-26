@@ -1,7 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { Sidebar, SidebarItem } from "@/Components/Sidebar";
 
-export const MyGallerySidebar = (): JSX.Element => {
+export const MyGallerySidebar = ({
+    publishedCount,
+    draftsCount,
+}: {
+    publishedCount: number;
+    draftsCount: number;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
