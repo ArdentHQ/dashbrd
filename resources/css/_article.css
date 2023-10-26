@@ -6,7 +6,7 @@
 }
 
 .article-content {
-    @apply max-w-full break-words text-theme-secondary-700 text-lg leading-8;
+    @apply max-w-full break-words text-lg leading-8 text-theme-secondary-700;
 }
 
 .article-content > :last-child {
