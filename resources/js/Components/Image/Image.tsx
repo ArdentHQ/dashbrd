@@ -45,7 +45,7 @@ export const Img = ({
     return (
         <div
             ref={reference}
-            className={cn("relative", wrapperClassName)}
+            className={twMerge(wrapperClassName, "relative")}
             data-testid="ImgContainer"
         >
             {showSkeleton && (
@@ -57,7 +57,7 @@ export const Img = ({
 
             <div
                 className={cn(
-                    "inset-0 transition duration-1000",
+                    "absolute inset-0 transition duration-1000",
                     isLoaded || isErrored ? "opacity-100" : "opacity-0",
                     {
                         absolute: showSkeleton,
@@ -70,7 +70,7 @@ export const Img = ({
                         data-testid="Img"
                         src={src ?? undefined}
                         alt={alt}
-                        className={twMerge(className, "w-full")}
+                        className={twMerge(className, "h-full w-full object-cover ")}
                         {...properties}
                     />
                 )}
