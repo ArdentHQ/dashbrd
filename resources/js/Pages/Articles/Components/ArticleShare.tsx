@@ -1,5 +1,5 @@
-import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { ArticleCopy } from "./ArticleCopy";
+import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 
 interface Properties extends React.AnchorHTMLAttributes<HTMLUListElement> {
     article: App.Data.Articles.ArticleData;
