@@ -1,93 +1,111 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { type MouseEvent, type TouchEvent, useEffect, useRef, useState } from "react";
 
-interface AudioPlayerProperties {
-    audioSrc: string;
-}
-
-const AudioPlayer: React.FC<AudioPlayerProperties> = ({ audioSrc }) => {
-    const audioReference = useRef<HTMLAudioElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const [currentTime, setCurrentTime] = useState<number>(0);
-    const [duration, setDuration] = useState<number>(0);
+export const AudioPlayer: React.FC<{ audioSrc: string }> = ({ audioSrc }) => {
+    const audioReference = useRef<HTMLAudioElement>(null);
+    const progressBarReference = useRef<HTMLDivElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [isSeeking, setIsSeeking] = useState(false);
 
     useEffect(() => {
         const audioElement = audioReference.current;
-        if (audioElement === null) return;
 
-        audioElement.onloadedmetadata = () => {
-            setDuration(audioElement.duration);
-        };
+        if (audioElement) {
+            audioElement.addEventListener("timeupdate", () => {
+                if (!isSeeking) {
+                    setCurrentTime(audioElement.currentTime);
+                }
+            });
 
-        audioElement.ontimeupdate = () => {
-            setCurrentTime(audioElement.currentTime);
-        };
+            audioElement.addEventListener("durationchange", () => {
+                setDuration(audioElement.duration);
+            });
 
-        audioElement.onended = () => {
-            setIsPlaying(false); // Audio finished, set isPlaying to false
-        };
-    }, []);
-
-    const togglePlayPause = (): void => {
-        const audioElement = audioReference.current;
-
-        if (isPlaying) {
-            audioElement?.pause();
-        } else {
-            void audioElement?.play();
+            audioElement.addEventListener("ended", () => {
+                setIsPlaying(false);
+            });
         }
+    }, [isSeeking]);
 
-        setIsPlaying(!isPlaying);
+    const togglePlay = () => {
+        const audioElement = audioReference.current;
+        if (audioElement) {
+            if (isPlaying) {
+                audioElement.pause();
+            } else {
+                audioElement.play();
+            }
+            setIsPlaying(!isPlaying);
+        }
     };
 
-    const formatTime = (time: number): string => {
+    const handleSeek = (e: MouseEvent | TouchEvent) => {
+        const audioElement = audioReference.current;
+        if (audioElement) {
+            const rect = progressBarReference.current?.getBoundingClientRect();
+            if (rect) {
+                const x = "touches" in e ? e.touches[0].clientX : e.clientX;
+                const percent = ((x - rect.left) / rect.width) * 100;
+                const newTime = (percent / 100) * duration;
+                audioElement.currentTime = newTime;
+                setCurrentTime(newTime);
+            }
+        }
+    };
+
+    // Format duration in MM:SS using padStart
+    const formatDuration = (time: number) => {
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60);
-
-        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-    };
-
-    const handleProgressClick = (event: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-        const audioElement = audioReference.current as HTMLAudioElement;
-        const rect = event.currentTarget.getBoundingClientRect();
-        const xPos = (event as MouseEvent).clientX || (event as TouchEvent).touches[0].clientX;
-        const progress = (xPos - rect.left) / rect.width;
-        const newTime = progress * duration;
-        audioElement.currentTime = newTime;
-        setCurrentTime(newTime);
+        return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     };
 
     return (
-        <div>
+        <div className="bg-gray-200 mx-auto w-full max-w-lg rounded-md p-4">
             <audio
                 ref={audioReference}
                 src={audioSrc}
-            />
-            <div>
-                <button
-                    className="bg-blue-500 hover:bg-blue-700 rounded px-4 py-2 font-bold text-theme-secondary-700"
-                    onClick={togglePlayPause}
-                >
-                    {isPlaying ? "Pause" : "Play"}
-                </button>
+            ></audio>
+            <div className="flex items-center justify-between">
+                <div>
+                    <button
+                        onClick={togglePlay}
+                        className="p-2 text-xl"
+                    >
+                        {isPlaying ? "Pause" : "Play"}
+                    </button>
+                </div>
+                <div className="text-gray-600">
+                    {formatDuration(currentTime)} / {formatDuration(duration)}
+                </div>
             </div>
-            <div>
-                <span className="text-gray-700">{formatTime(currentTime)}</span> /{" "}
-                <span className="text-gray-700">{formatTime(duration)}</span>
-            </div>
-            <div>
-                <button
-                    className="progress-bar-button h-10 w-full bg-theme-hint-50"
-                    onClick={handleProgressClick}
-                    onTouchStart={handleProgressClick}
-                >
-                    <span
-                        className="progress-bar-fill h-10 bg-theme-danger-400"
-                        style={{ width: `${(currentTime / duration) * 100}%` }}
-                    ></span>
-                </button>
+            <div
+                className="relative mt-4 h-4 bg-theme-hint-50"
+                ref={progressBarReference}
+                onClick={handleSeek}
+                onMouseDown={() => {
+                    setIsSeeking(true);
+                }}
+                onTouchStart={() => {
+                    setIsSeeking(true);
+                }}
+                onMouseUp={() => {
+                    setIsSeeking(false);
+                }}
+                onTouchEnd={() => {
+                    setIsSeeking(false);
+                }}
+                onMouseMove={isSeeking ? handleSeek : undefined}
+                onTouchMove={isSeeking ? handleSeek : undefined}
+            >
+                <div
+                    className="absolute top-0 h-4 bg-theme-primary-100"
+                    style={{
+                        width: (currentTime / duration) * 100 + "%",
+                    }}
+                ></div>
             </div>
         </div>
     );
 };
-
-export default AudioPlayer;
