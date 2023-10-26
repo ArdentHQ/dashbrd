@@ -46,7 +46,10 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                         </div>
 
                         <div>
-                            <AudioPlayer audioSrc="https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav" />
+                            <div className="mb-4">
+                                <AudioPlayer audioSrc="https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav" />
+                            </div>
+
                             <ArticleContent article={article} />
                         </div>
                     </div>

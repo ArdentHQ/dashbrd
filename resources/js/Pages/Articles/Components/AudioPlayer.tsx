@@ -1,6 +1,7 @@
 import React, { type MouseEvent, type TouchEvent, useEffect, useRef, useState } from "react";
+import { IconButton } from "@/Components/Buttons";
 
-export const AudioPlayer: React.FC<{ audioSrc: string }> = ({ audioSrc }) => {
+export const AudioPlayer = ({ audioSrc }: { audioSrc: string }): JSX.Element => {
     const audioReference = useRef<HTMLAudioElement>(null);
     const progressBarReference = useRef<HTMLDivElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -53,13 +54,17 @@ export const AudioPlayer: React.FC<{ audioSrc: string }> = ({ audioSrc }) => {
 
         const rect = progressBarReference.current.getBoundingClientRect();
         const x = "touches" in event ? event.touches[0].clientX : event.clientX;
-        const percent = ((x - rect.left) / rect.width) * 100;
+        let percent = ((x - rect.left) / rect.width) * 100;
+
+        percent = percent > 100 ? 100 : percent;
+        percent = percent < 0 ? 0 : percent;
+
         const newTime = (percent / 100) * duration;
         audioElement.currentTime = newTime;
         setCurrentTime(newTime);
     };
 
-    // Format duration in MM:SS using padStart
+    // Format duration in MM:SS
     const formatDuration = (time: number): string => {
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60);
@@ -67,49 +72,65 @@ export const AudioPlayer: React.FC<{ audioSrc: string }> = ({ audioSrc }) => {
     };
 
     return (
-        <div className="bg-gray-200 mx-auto w-full max-w-lg rounded-md p-4">
+        <div className="overflow-hidden rounded-lg bg-theme-secondary-100">
             <audio
                 ref={audioReference}
                 src={audioSrc}
             ></audio>
-            <div className="flex items-center justify-between">
-                <div>
-                    <button
-                        onClick={togglePlay}
-                        className="p-2 text-xl"
-                    >
-                        {isPlaying ? "Pause" : "Play"}
-                    </button>
-                </div>
-                <div className="text-gray-600">
-                    {formatDuration(currentTime)} / {formatDuration(duration)}
-                </div>
+            <div className="rounded-t-lg bg-theme-secondary-200 pb-1.5 pl-4 pt-1">
+                <div className="text-xs font-medium leading-4.5 text-theme-secondary-700"> Audio version</div>
             </div>
-            <div
-                className="relative mt-4 h-4 bg-theme-hint-50"
-                ref={progressBarReference}
-                onClick={handleSeek}
-                onMouseDown={() => {
-                    setIsSeeking(true);
-                }}
-                onTouchStart={() => {
-                    setIsSeeking(true);
-                }}
-                onMouseUp={() => {
-                    setIsSeeking(false);
-                }}
-                onTouchEnd={() => {
-                    setIsSeeking(false);
-                }}
-                onMouseMove={isSeeking ? handleSeek : undefined}
-                onTouchMove={isSeeking ? handleSeek : undefined}
-            >
-                <div
-                    className="absolute top-0 h-4 bg-theme-primary-100"
-                    style={{
-                        width: (currentTime / duration) * 100 + "%",
-                    }}
-                ></div>
+            <div className="px-4 py-3">
+                <div className="flex flex-col sm:flex-row sm:items-center">
+                    <div className="mb-3 flex items-end justify-between sm:mb-0">
+                        <div className="mr-4">
+                            <IconButton
+                                variant="icon"
+                                icon={isPlaying ? "AudioPause" : "AudioPlay"}
+                                iconClass="h-5 w-5 text-theme-primary-600 group-hover:text-white transition-all"
+                                className="h-8 w-8 bg-theme-primary-200 transition-colors hover:border-theme-primary-700 hover:bg-theme-primary-700"
+                                onClick={togglePlay}
+                            />
+                        </div>
+
+                        <div className="text-xs font-medium leading-4.5 text-theme-secondary-700 sm:hidden">
+                            {formatDuration(currentTime)} / {formatDuration(duration)}
+                        </div>
+                    </div>
+
+                    <div className="mr-2 hidden text-xs font-medium leading-4.5 text-theme-secondary-700 sm:block">
+                        {formatDuration(currentTime)}
+                    </div>
+                    <div
+                        className="relative h-2 w-full cursor-pointer rounded-lg bg-theme-primary-100"
+                        ref={progressBarReference}
+                        onClick={handleSeek}
+                        onMouseDown={() => {
+                            setIsSeeking(true);
+                        }}
+                        onTouchStart={() => {
+                            setIsSeeking(true);
+                        }}
+                        onMouseUp={() => {
+                            setIsSeeking(false);
+                        }}
+                        onTouchEnd={() => {
+                            setIsSeeking(false);
+                        }}
+                        onMouseMove={isSeeking ? handleSeek : undefined}
+                        onTouchMove={isSeeking ? handleSeek : undefined}
+                    >
+                        <div
+                            className="absolute top-0 h-2 rounded-lg bg-theme-hint-500"
+                            style={{
+                                width: (currentTime / duration) * 100 + "%",
+                            }}
+                        ></div>
+                    </div>
+                    <div className="ml-2 hidden text-xs font-medium leading-4.5 text-theme-secondary-700 sm:block">
+                        {formatDuration(duration)}
+                    </div>
+                </div>
             </div>
         </div>
     );
