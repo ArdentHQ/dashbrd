@@ -46,7 +46,7 @@
 
 .article-content > h1,
 .article-content > h2 {
-    @apply mt-6 mb-[1.125rem];
+    @apply mb-[1.125rem] mt-6;
 }
 
 .article-content > h3,
