@@ -34,6 +34,12 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
     return wavesurfer;
 };
 
+const formatDuration = (time: number): string => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+};
+
 export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JSX.Element => {
     const containerReference = useRef<HTMLDivElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -73,12 +79,6 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
             for (const unsub of subscriptions) unsub();
         };
     }, [wavesurfer]);
-
-    const formatDuration = (time: number): string => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-    };
 
     return (
         <div className="overflow-hidden rounded-lg bg-theme-secondary-100">

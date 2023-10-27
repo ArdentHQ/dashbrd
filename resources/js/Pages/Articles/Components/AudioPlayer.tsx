@@ -1,6 +1,12 @@
 import React, { type MouseEvent, type TouchEvent, useEffect, useRef, useState } from "react";
 import { IconButton } from "@/Components/Buttons";
 
+const formatDuration = (time: number): string => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+};
+
 export const AudioPlayer = ({ audioSrc }: { audioSrc: string }): JSX.Element => {
     const audioReference = useRef<HTMLAudioElement>(null);
     const progressBarReference = useRef<HTMLDivElement>(null);
@@ -62,13 +68,6 @@ export const AudioPlayer = ({ audioSrc }: { audioSrc: string }): JSX.Element => 
         const newTime = (percent / 100) * duration;
         audioElement.currentTime = newTime;
         setCurrentTime(newTime);
-    };
-
-    // Format duration in MM:SS
-    const formatDuration = (time: number): string => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     };
 
     return (
