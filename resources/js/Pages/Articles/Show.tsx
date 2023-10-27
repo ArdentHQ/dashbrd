@@ -1,4 +1,3 @@
-import React from "react";
 import { ArticleContent } from "./Components/ArticleContent";
 import { ArticleMeta } from "./Components/ArticleMeta";
 import { ArticleShare } from "./Components/ArticleShare";
