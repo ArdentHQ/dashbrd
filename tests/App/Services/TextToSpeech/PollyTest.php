@@ -6,7 +6,6 @@ use App\Enums\TextToSpeechConversionStatus;
 use App\Models\Article;
 use App\Services\TextToSpeech\Polly;
 use Aws\Polly\PollyClient;
-use Aws\S3\S3Client;
 
 it('can convert the article to audio version', function () {
     $article = Article::factory()->create([

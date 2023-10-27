@@ -11,7 +11,8 @@ use Aws\Polly\PollyClient;
 
 readonly class Polly implements TextToSpeechProvider
 {
-    public function __construct(private PollyClient $polly) {
+    public function __construct(private PollyClient $polly)
+    {
     }
 
     public function convert(Article $article): string
