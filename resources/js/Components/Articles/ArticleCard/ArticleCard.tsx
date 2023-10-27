@@ -78,8 +78,7 @@ export const ArticleCard = ({
 
             <div
                 className={cn("transition-default flex items-center rounded-b-lg px-6 py-3", {
-                    "bg-theme-secondary-50 dark:bg-theme-dark-800":
-                        !isLargeVariant,
+                    "bg-theme-secondary-50 dark:bg-theme-dark-800": !isLargeVariant,
                     "bg-theme-dark-950 group-hover:bg-theme-primary-800 dark:bg-theme-primary-800 dark:group-hover:bg-theme-primary-700":
                         isLargeVariant,
                 })}
