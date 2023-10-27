@@ -16,7 +16,7 @@ export const MyGallerySidebar = ({
             subtitle={t("pages.galleries.my_galleries.subtitle").toString()}
         >
             <SidebarItem
-                icon="Cog"
+                icon="DocumentCheckmark"
                 title={t("common.published")}
                 isSelected={route().current("my-galleries")}
                 href={route("my-galleries")}
