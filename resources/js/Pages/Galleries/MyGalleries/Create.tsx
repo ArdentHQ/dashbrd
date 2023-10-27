@@ -17,6 +17,7 @@ import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
+import { useGalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDraft";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -60,6 +61,8 @@ const Create = ({
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
     });
+
+    const { setCover, setTitle, setNfts } = useGalleryDraft();
 
     const totalValue = 0;
 
@@ -155,7 +158,10 @@ const Create = ({
                             }}
                         >
                             <NftGridEditable
-                                onChange={updateSelectedNfts}
+                                onChange={(nfts) => {
+                                    updateSelectedNfts(nfts);
+                                    setNfts(nfts);
+                                }}
                                 error={errors.nfts}
                             />
                         </GalleryNfts>
