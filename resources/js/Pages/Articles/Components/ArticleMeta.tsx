@@ -1,5 +1,4 @@
 import { ArticleAuthor } from "./ArticleAuthor";
-import { ArticleCopy } from "./ArticleCopy";
 import { ArticleDate } from "./ArticleDate";
 import { ArticleShare } from "./ArticleShare";
 
@@ -9,18 +8,14 @@ interface Properties {
 
 export const ArticleMeta = ({ article }: Properties): JSX.Element => (
     <div className="px-6 sm:px-8 lg:px-0">
-        <div className="-mx-6 flex flex-col border-b border-t border-theme-secondary-300 px-6 py-4 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
+        <div className="-mx-6 flex flex-col border-b border-t border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700 sm:-mx-8 sm:px-8 md:mx-0 md:rounded-xl md:border md:px-6 lg:rounded-none lg:border-x-0 lg:border-b-0">
             <div className="flex items-center justify-between">
                 <div className="flex overflow-auto">
                     <ArticleAuthor article={article} />
 
-                    <div className="mx-6 border-r border-theme-secondary-300"></div>
+                    <div className="mx-6 border-r border-theme-secondary-300 dark:border-theme-dark-700"></div>
 
                     <ArticleDate article={article} />
-                </div>
-
-                <div className="hidden md:block">
-                    <ArticleCopy article={article} />
                 </div>
             </div>
 
@@ -30,10 +25,6 @@ export const ArticleMeta = ({ article }: Properties): JSX.Element => (
                         article={article}
                         className="flex space-x-2"
                     />
-                </div>
-
-                <div>
-                    <ArticleCopy article={article} />
                 </div>
             </div>
         </div>
