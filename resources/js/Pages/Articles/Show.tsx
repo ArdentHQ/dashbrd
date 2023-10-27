@@ -47,7 +47,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
 
                         <div>
                             <div className="mb-4">
-                                <WaveSurferPlayer url={"/CantinaBand60.wav"} />
+                                <WaveSurferPlayer url={"https://s3.eu-west-1.amazonaws.com/dashbrd-testing/24/en.3d24f798-e232-4510-8cc4-b8e0418bac27.mp3"} />
                             </div>
 
                             <ArticleContent article={article} />

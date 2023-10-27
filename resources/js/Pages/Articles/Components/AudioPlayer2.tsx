@@ -16,11 +16,12 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
             barGap: 2,
             barRadius: 2,
             progressColor: "text-theme-primary-900",
-            height: 60,
+            height: 30,
             cursorWidth: 0,
             waveColor: "#CFD4FF",
             dragToSeek: true,
             hideScrollbar: true,
+            normalize: true,
         });
 
         setWavesurfer(ws);
@@ -82,9 +83,9 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
             <div className="rounded-t-lg bg-theme-secondary-200 pb-1.5 pl-4 pt-1">
                 <div className="text-xs font-medium leading-4.5 text-theme-secondary-700"> Audio version</div>
             </div>
-            <div className="px-4 py-3 pb-0 sm:pb-4">
+            <div className="px-4 py-3">
                 <div className="flex flex-col sm:flex-row sm:items-center">
-                    <div className="flex items-end justify-between">
+                    <div className="mb-3 flex items-end justify-between sm:mb-0">
                         <div className="mr-4">
                             <IconButton
                                 variant="icon"
