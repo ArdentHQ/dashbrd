@@ -10,7 +10,7 @@ export const ArticlesScroll = ({ articles }: { articles: App.Data.Articles.Artic
     const { slidesPerView, horizontalOffset } = useCarousel();
 
     return (
-        <div className="mt-8">
+        <div className="articles-scroll mt-8">
             <Carousel
                 horizontalOffset={horizontalOffset}
                 headerClassName="mx-6 sm:mx-8 2xl:mx-0"
