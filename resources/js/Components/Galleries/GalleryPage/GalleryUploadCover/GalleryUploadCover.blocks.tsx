@@ -42,7 +42,7 @@ export const ImageEditActions = ({ src, onRemove, onUpload }: ImageEditActionsPr
 
         <Img
             src={src}
-            className="aspect-[3/2] min-w-full rounded-xl object-cover"
+            wrapperClassName="aspect-[3/2] rounded-xl overflow-hidden"
         />
     </div>
 );
