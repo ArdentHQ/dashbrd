@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
@@ -25,12 +26,14 @@ const Index = ({
             nftCount={nftCount}
         >
             <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
-                <div className="mb-6 hidden w-full xl:flex">
+                <div className="mb-6 hidden w-full items-center justify-between xl:flex">
                     <Heading level={1}>
                         <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
                             {t("pages.galleries.my_galleries.title")}
                         </span>
                     </Heading>
+
+                    <CreateGalleryButton nftCount={nftCount} />
                 </div>
 
                 {userGalleries.meta.total === 0 && (
