@@ -31,9 +31,7 @@ export const NftImage = ({ nft }: Properties): JSX.Element => {
                         <Img
                             data-testid="NftImage__image"
                             src={largeImage}
-                            className="h-full w-full max-w-full transition duration-300 ease-in-out lg:w-auto"
-                            wrapperClassName="h-full"
-                            childWrapperClassName="h-full"
+                            wrapperClassName="aspect-square"
                             alt={t("pages.nfts.nft")}
                         />
                     )}

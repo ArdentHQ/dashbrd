@@ -24,7 +24,7 @@ export const NftItemTitle = ({ nft }: { nft: App.Data.Gallery.GalleryNftData }):
             {nft.collectionImage !== null && (
                 <Img
                     src={nft.collectionImage}
-                    className="h-8 w-8 rounded-full"
+                    wrapperClassName="h-8 w-8 rounded-full overflow-hidden"
                     errorClassName="px-1 py-1"
                 />
             )}

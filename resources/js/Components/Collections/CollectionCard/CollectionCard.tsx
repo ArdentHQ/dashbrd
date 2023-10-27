@@ -83,7 +83,8 @@ export const CollectionCard = ({
             <div className="relative mx-auto -mt-11 flex items-center justify-center">
                 <div className="flex h-[5.5rem] w-[5.5rem] items-center justify-center rounded-full backdrop-blur-md">
                     <Img
-                        className="aspect-square h-20 w-20 rounded-full bg-theme-secondary-100 object-cover dark:bg-theme-dark-700"
+                        wrapperClassName="aspect-square h-20 w-20"
+                        className="rounded-full"
                         src={collection.image ?? undefined}
                         data-testid="CollectionCard__image"
                         isCircle
