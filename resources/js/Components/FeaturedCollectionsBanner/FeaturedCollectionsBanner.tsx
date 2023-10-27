@@ -23,7 +23,7 @@ export const FeaturedCollectionsBanner = ({
                     level={2}
                     className="whitespace-nowrap pt-0"
                 >
-                    <span className="text-theme-primary-600">{t("common.featured")}</span>
+                    <span className="text-theme-primary-600 dark:text-theme-primary-400">{t("common.featured")}</span>
 
                     <span> {t("common.collections")}</span>
                 </Heading>

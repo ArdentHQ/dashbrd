@@ -14,6 +14,4 @@ interface TextToSpeechProvider
     public function status(string $conversionId): TextToSpeechConversionStatus;
 
     public function url(string $conversionId): string;
-
-    public function ensureFileIsPublic(Article $article, string $conversionId): void;
 }

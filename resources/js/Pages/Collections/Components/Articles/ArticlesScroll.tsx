@@ -19,7 +19,9 @@ export const ArticlesScroll = ({ articles }: { articles: App.Data.Articles.Artic
                 slidesPerView={slidesPerView}
                 title={
                     <>
-                        <span className="text-theme-primary-600">{t("common.most_popular")}</span>{" "}
+                        <span className="text-theme-primary-600 dark:text-theme-primary-400">
+                            {t("common.most_popular")}
+                        </span>{" "}
                         {t("common.articles")}
                     </>
                 }
