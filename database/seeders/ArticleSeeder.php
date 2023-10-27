@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Jobs\ConvertArticleToSpeech;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\Network;
@@ -21,12 +22,13 @@ class ArticleSeeder extends Seeder
 
         if (! $network) {
             $network = Network::factory()->create();
-
         }
 
         $authors[] = User::factory()->editor()->withAvatar()->create();
         $authors[] = User::factory()->editor()->withAvatar()->create();
         $authors[] = User::factory()->editor()->create();
+
+        ConvertArticleToSpeech::disable();
 
         $articlesData = collect(json_decode(file_get_contents(database_path('seeders/fixtures/articles/articles.json')), true));
 
@@ -48,6 +50,8 @@ class ArticleSeeder extends Seeder
 
             $article->collections()->attach($collections, ['order_index' => 1]);
         });
+
+        ConvertArticleToSpeech::enable();
 
     }
 }

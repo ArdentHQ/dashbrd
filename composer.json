@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.2",
         "atymic/twitter": "^3.2",
+        "aws/aws-sdk-php": "^3.283",
         "cyrildewit/eloquent-viewable": "dev-master",
         "filament/filament": "^3.0",
         "filament/spatie-laravel-media-library-plugin": "^3.0",

@@ -34,8 +34,9 @@ return [
         'featured_collections' => 'Featured Collections',
         'placeholder_more_soon' => 'More Soon',
         'no_articles' => 'No articles have been published yet. Please check back later!',
-        'header_title_one' => 'Explore our collection of {{count}} published article',
-        'header_title_other' => 'Explore our collection of {{count}} published articles',
+        'header_title' => 'Explore our collection of',
+        'header_suffix_one' => 'published article',
+        'header_suffix_other' => 'published articles',
         'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
     ],
     'collections' => [
