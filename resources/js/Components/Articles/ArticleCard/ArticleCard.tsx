@@ -36,9 +36,11 @@ export const ArticleCard = ({
         >
             <div className="mx-2 mt-2 aspect-video overflow-hidden rounded-lg bg-theme-secondary-300">
                 <Img
-                    className="h-full w-full rounded-lg object-cover"
+                    className={cn("h-full w-full rounded-lg object-cover", {
+                        "skeleton-primary": isLargeVariant,
+                    })}
                     wrapperClassName={cn("h-full [&>span]:h-full", {
-                        "bg-white dark:bg-theme-dark-900": !isLargeVariant,
+                        "bg-white dark:bg-theme-primary-900 ": !isLargeVariant,
                         "bg-theme-dark-900 group-hover:bg-theme-primary-700 dark:bg-theme-primary-700 dark:group-hover:bg-theme-primary-600":
                             isLargeVariant,
                     })}
