@@ -40,10 +40,13 @@
     @apply my-4;
 }
 
-.article-content > h1,
-.article-content > h2,
 .article-content > blockquote {
     @apply my-6;
+}
+
+.article-content > h1,
+.article-content > h2 {
+    @apply mt-6 mb-[1.125rem];
 }
 
 .article-content > h3,
