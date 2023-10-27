@@ -8,14 +8,10 @@ use App\Contracts\TextToSpeechProvider;
 use App\Enums\TextToSpeechConversionStatus;
 use App\Models\Article;
 use Aws\Polly\PollyClient;
-use Aws\S3\S3Client;
 
 readonly class Polly implements TextToSpeechProvider
 {
-    public function __construct(
-        private S3Client $s3,
-        private PollyClient $polly
-    ) {
+    public function __construct(private PollyClient $polly) {
     }
 
     public function convert(Article $article): string
@@ -48,14 +44,5 @@ readonly class Polly implements TextToSpeechProvider
         return $this->polly->getSpeechSynthesisTask([
             'TaskId' => $conversionId,
         ])['SynthesisTask']['OutputUri'];
-    }
-
-    public function ensureFileIsPublic(Article $article, string $conversionId): void
-    {
-        $this->s3->putObjectAcl([
-            'ACL' => 'public-read',
-            'Bucket' => config('services.polly.bucket'),
-            'Key' => sprintf('%s/en.%s.mp3', $article->id, $conversionId),
-        ]);
     }
 }

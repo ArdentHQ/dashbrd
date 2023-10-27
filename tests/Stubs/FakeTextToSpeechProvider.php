@@ -24,9 +24,4 @@ class FakeTextToSpeechProvider implements TextToSpeechProvider
     {
         return '';
     }
-
-    public function ensureFileIsPublic(Article $article, string $conversionId): void
-    {
-        //
-    }
 }

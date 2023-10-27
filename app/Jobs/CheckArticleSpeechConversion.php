@@ -34,8 +34,6 @@ class CheckArticleSpeechConversion implements ShouldQueue
         $status = $provider->status($this->conversionId);
 
         if ($status === TextToSpeechConversionStatus::Completed) {
-            $provider->ensureFileIsPublic($this->article, $this->conversionId);
-
             $this->article->update([
                 'audio_file_url' => $provider->url($this->conversionId),
             ]);

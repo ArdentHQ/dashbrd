@@ -94,21 +94,3 @@ it('can get the audio file url', function () {
 
     expect($polly->url('conversion-id'))->toBe('some-url');
 });
-
-it('can ensure the audio file is publicly available', function () {
-    $article = Article::factory()->create();
-
-    $this->mock(S3Client::class, function ($mock) use ($article) {
-        $mock->shouldReceive('putObjectAcl')
-            ->once()
-            ->with([
-                'ACL' => 'public-read',
-                'Bucket' => config('services.polly.bucket'),
-                'Key' => sprintf('%s/en.some-conversion-id.mp3', $article->id),
-            ]);
-    });
-
-    app(Polly::class)->ensureFileIsPublic($article, 'some-conversion-id');
-
-    $this->addToAssertionCount(1);
-});
