@@ -55,8 +55,9 @@ final class NftImageUrl
 
             $size = 'w_'.$imageSize->width().',h_'.$imageSize->height();
             $newPath = preg_replace('/(?<=\/)upload(?=\/)/', "upload/{$size}", $path);
+            $scaledPath = preg_replace('/thumbnailv2/', "scaled", $newPath);
 
-            $url = str_replace($path, $newPath, $url);
+            $url = str_replace($path, $scaledPath, $url);
         }
 
         return $url;
