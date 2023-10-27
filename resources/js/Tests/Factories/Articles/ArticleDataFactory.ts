@@ -16,6 +16,7 @@ export default class ArticleDataFactory extends ModelFactory<App.Data.Articles.A
                 large: faker.image.imageUrl(),
                 large2x: faker.image.imageUrl(),
             },
+            audioSrc: null,
             userId: faker.datatype.number({ min: 1, max: 100000 }),
             content: faker.lorem.paragraph(),
             category: "news",
