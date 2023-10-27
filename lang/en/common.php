@@ -148,5 +148,9 @@ return [
     'website' => 'Website',
     'twitter' => 'Twitter',
     'discord' => 'Discord',
+    'facebook' => 'Facebook',
+    'reddit' => 'Reddit',
+    'x' => 'X',
     'sort' => 'Sort',
+    'share_on' => 'Share on {{platform}}',
 ];
