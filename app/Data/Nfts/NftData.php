@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Nfts;
 
+use App\Data\SimpleWalletData;
 use App\Models\Nft;
 use DateTime;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -22,7 +23,7 @@ class NftData extends Data
         public string $tokenNumber,
         public NftCollectionData $collection,
         public NftImagesData $images,
-        public ?NftWalletData $wallet,
+        public ?SimpleWalletData $wallet,
         public ?DateTime $lastViewedAt,
         public ?DateTime $lastActivityFetchedAt
     ) {
@@ -37,7 +38,7 @@ class NftData extends Data
             tokenNumber: $nft->token_number,
             collection: NftCollectionData::fromModel($nft->collection),
             images: NftImagesData::from($nft->images()),
-            wallet: $nft->wallet_id ? NftWalletData::fromModel($nft->wallet) : null,
+            wallet: $nft->wallet_id ? SimpleWalletData::fromModel($nft->wallet) : null,
             lastViewedAt: $nft->last_viewed_at,
             lastActivityFetchedAt: $nft->collection->activity_updated_at,
         );

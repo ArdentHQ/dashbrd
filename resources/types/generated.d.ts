@@ -31,6 +31,11 @@ declare namespace App.Data {
         timestamp: number;
         price: number;
     };
+    export type SimpleWalletData = {
+        address: string;
+        domain: string | null;
+        avatar: App.Data.Wallet.WalletAvatarData;
+    };
     export type TokenListItemData = {
         guid: number | null;
         name: string;
@@ -232,7 +237,7 @@ declare namespace App.Data.Gallery {
         collectionsCount: number;
         value: number | null;
         coverImage: string | null;
-        wallet: App.Data.Gallery.GalleryWalletData;
+        wallet: App.Data.SimpleWalletData;
         nfts: App.Data.Gallery.GalleryNftsData;
         isOwner: boolean;
         hasLiked: boolean;
@@ -283,11 +288,6 @@ declare namespace App.Data.Gallery {
         collections: number;
         nfts: number;
         likes: number;
-    };
-    export type GalleryWalletData = {
-        address: string;
-        domain: string | null;
-        avatar: App.Data.Wallet.WalletAvatarData;
     };
 }
 declare namespace App.Data.Network {
@@ -349,7 +349,7 @@ declare namespace App.Data.Nfts {
         tokenNumber: string;
         collection: App.Data.Nfts.NftCollectionData;
         images: App.Data.Nfts.NftImagesData;
-        wallet: App.Data.Nfts.NftWalletData | null;
+        wallet: App.Data.SimpleWalletData | null;
         lastViewedAt: string | null;
         lastActivityFetchedAt: string | null;
     };
@@ -359,9 +359,6 @@ declare namespace App.Data.Nfts {
         /** 512x512 */ large: string | null;
         original: string | null;
         originalRaw: string | null;
-    };
-    export type NftWalletData = {
-        address: string;
     };
 }
 declare namespace App.Data.Token {
