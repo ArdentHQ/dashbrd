@@ -22,7 +22,7 @@ export const TransactionDirectionIcon = ({ transaction }: { transaction: App.Dat
             <Icon
                 size="lg"
                 name="XInCircle"
-                className="text-theme-danger-600"
+                className="text-theme-danger-600 dark:text-theme-danger-400"
             />
         );
     }
@@ -33,8 +33,8 @@ export const TransactionDirectionIcon = ({ transaction }: { transaction: App.Dat
                 name="FatArrowUp"
                 size="lg"
                 className={cn({
-                    "text-theme-danger-500": !isTruthy(transaction.isPending),
-                    "text-theme-secondary-500": isTruthy(transaction.isPending),
+                    "text-theme-danger-500 dark:text-theme-danger-400": !isTruthy(transaction.isPending),
+                    "text-theme-secondary-500 dark:text-theme-dark-300": isTruthy(transaction.isPending),
                 })}
             />
         );
@@ -45,8 +45,8 @@ export const TransactionDirectionIcon = ({ transaction }: { transaction: App.Dat
             name="FatArrowDown"
             size="lg"
             className={cn({
-                "text-theme-success-700": !isTruthy(transaction.isPending),
-                "text-theme-secondary-500": isTruthy(transaction.isPending),
+                "text-theme-success-700 dark:text-theme-success-600": !isTruthy(transaction.isPending),
+                "text-theme-secondary-500 dark:text-theme-dark-300": isTruthy(transaction.isPending),
             })}
         />
     );
@@ -107,7 +107,7 @@ export const TokenTransactionItem = ({
 
                     <div className="space-y-0.5 font-medium">
                         <div className="flex items-center space-x-2">
-                            <span className="text-sm leading-5.5 text-theme-secondary-900 sm:text-base md:leading-6">
+                            <span className="text-sm leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50 sm:text-base md:leading-6">
                                 {isTruthy(transaction.isSent) ? t("common.sent") : t("common.received")}
                             </span>
 
@@ -127,7 +127,7 @@ export const TokenTransactionItem = ({
 
             <TableCell innerClassName="py-4 justify-end px-0 pr-0 sm:px-4">
                 <div className="flex flex-col items-end space-y-0.5 font-medium">
-                    <div className="whitespace-nowrap text-sm leading-5.5 text-theme-secondary-900 sm:text-base sm:leading-6">
+                    <div className="whitespace-nowrap text-sm leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50 sm:text-base sm:leading-6">
                         <span>{amountPrefix} </span>
                         <FormatFiat
                             value={convertToFiat(
@@ -138,7 +138,7 @@ export const TokenTransactionItem = ({
                             currency={user.attributes.currency}
                         />
                     </div>
-                    <div className="whitespace-nowrap text-xs leading-4.5 text-theme-secondary-500 sm:text-sm sm:leading-5.5">
+                    <div className="whitespace-nowrap text-xs leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 sm:text-sm sm:leading-5.5">
                         <span>{amountPrefix} </span>
                         <FormatCrypto
                             token={{

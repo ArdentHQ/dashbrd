@@ -14,7 +14,7 @@ export const Wallet = ({ address }: { address: string }): JSX.Element => {
         <div className="mt-1 flex items-center">
             <Avatar address={address} />
             <p
-                className="mx-3 font-medium text-theme-secondary-900"
+                className="mx-3 font-medium text-theme-secondary-900 dark:text-theme-dark-50"
                 data-testid="Transaction__Address"
             >
                 <TruncateMiddle
@@ -29,7 +29,7 @@ export const Wallet = ({ address }: { address: string }): JSX.Element => {
                 <Icon
                     name="Copy"
                     size="md"
-                    className="cursor-pointer text-theme-primary-600"
+                    className="cursor-pointer text-theme-primary-600 dark:text-theme-primary-400"
                 />
             </Clipboard>
         </div>
@@ -37,7 +37,7 @@ export const Wallet = ({ address }: { address: string }): JSX.Element => {
 };
 
 export const Label = ({ children }: { children: ReactNode }): JSX.Element => (
-    <span className="text-sm font-medium text-theme-secondary-500">{children}</span>
+    <span className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300">{children}</span>
 );
 
 export const WaitingMessage = (): JSX.Element => {
@@ -48,14 +48,16 @@ export const WaitingMessage = (): JSX.Element => {
             className="mt-8"
             data-testid="Transaction__WaitingMessage"
         >
-            <p className="text-center text-theme-secondary-700">{t("pages.send_receive_panel.send.waiting_message")}</p>
+            <p className="text-center text-theme-secondary-700 dark:text-theme-dark-200">
+                {t("pages.send_receive_panel.send.waiting_message")}
+            </p>
             <div className="mt-5 flex items-center justify-center">
                 <Icon
                     name="Spinner"
                     size="xl"
-                    className="mr-3 animate-spin text-theme-primary-600"
+                    className="mr-3 animate-spin text-theme-primary-600 dark:text-theme-primary-400"
                 />
-                <span className="font-medium text-theme-secondary-900">
+                <span className="font-medium text-theme-secondary-900 dark:text-theme-dark-50">
                     {t("pages.send_receive_panel.send.waiting_spinner_text")}
                 </span>
             </div>
@@ -72,16 +74,18 @@ export const FailedMessage = (): JSX.Element => {
             data-testid="Transaction__FailedMessage"
         >
             <div className="mb-4 flex items-center justify-center">
-                <div className="mr-4 h-0.5 w-12 bg-theme-secondary-300"></div>
+                <div className="mr-4 h-0.5 w-12 bg-theme-secondary-300 dark:bg-theme-dark-700"></div>
 
                 <Icon
                     name="FatXInCircle"
                     size="2xl"
                     className="h-15 w-15 text-theme-danger-400"
                 />
-                <div className="ml-4 h-0.5 w-12 bg-theme-secondary-300"></div>
+                <div className="ml-4 h-0.5 w-12 bg-theme-secondary-300 dark:bg-theme-dark-700"></div>
             </div>
-            <p className="text-center text-theme-secondary-700">{t("pages.send_receive_panel.send.failed_message")}</p>
+            <p className="text-center text-theme-secondary-700 dark:text-theme-dark-200">
+                {t("pages.send_receive_panel.send.failed_message")}
+            </p>
         </div>
     );
 };

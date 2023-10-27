@@ -108,8 +108,8 @@ export const DetailItem = ({ title, children, ...properties }: DetailItemPropert
         {...properties}
         className="flex items-center justify-between"
     >
-        <dt className="flex leading-6 text-theme-secondary-700">{title}</dt>
+        <dt className="flex leading-6 text-theme-secondary-700 dark:text-theme-dark-200">{title}</dt>
 
-        <dd className="font-medium text-theme-secondary-900">{children}</dd>
+        <dd className="font-medium text-theme-secondary-900 dark:text-theme-dark-50">{children}</dd>
     </div>
 );
