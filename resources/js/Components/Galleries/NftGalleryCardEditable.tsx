@@ -60,7 +60,8 @@ export const NftGalleryCardEditable = ({
                 <Img
                     errorMessage={t("common.unable_to_retrieve_image")}
                     data-testid="NftGalleryCardEditable__image"
-                    className="aspect-square w-full rounded-xl"
+                    wrapperClassName="aspect-square"
+                    className="rounded-xl"
                     src={nft.images.large}
                 />
             </GalleryCard>

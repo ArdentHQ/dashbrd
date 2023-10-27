@@ -10,7 +10,6 @@ use App\Data\Gallery\GalleryStatsData;
 use App\Enums\CurrencyCode;
 use App\Models\GalleriesStats;
 use App\Models\Gallery;
-use App\Models\User;
 use App\Support\Cache\GalleryCache;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
@@ -87,27 +86,5 @@ class GalleryController extends Controller
             'description' => trans('metatags.galleries.view.description', ['name' => $gallery->name]),
             'image' => route('galleries.meta-image', ['gallery' => $gallery->slug]),
         ]);
-    }
-
-    public function like(Request $request, Gallery $gallery): JsonResponse
-    {
-        /** @var User $user */
-        $user = $request->user();
-
-        $like = $request->has('like') ? $request->boolean('like') : null;
-
-        if ($like !== null) {
-            if ($like) {
-                $gallery->addLike($user);
-            } else {
-                $gallery->removeLike($user);
-            }
-        } elseif ($gallery->isLikedBy($user)) {
-            $gallery->removeLike($user);
-        } else {
-            $gallery->addLike($user);
-        }
-
-        return response()->json(['likes' => $gallery->likeCount, 'hasLiked' => $gallery->isLikedBy($user)], 201);
     }
 }
