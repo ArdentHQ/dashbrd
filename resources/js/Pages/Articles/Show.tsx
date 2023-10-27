@@ -6,7 +6,7 @@ import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanne
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { WaveSurferPlayer } from "@/Pages/Articles/Components/AudioPlayer2";
+import { WaveSurferPlayer } from "@/Pages/Articles/Components/WaveSurferPlayer";
 import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
 import { tp } from "@/Utils/TranslatePlural";
 
