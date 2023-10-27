@@ -7,6 +7,7 @@ namespace Database\Factories;
 use App\Enums\ArticleCategoryEnum;
 use App\Models\Article;
 use App\Models\User;
+use Carbon\Carbon;
 use Database\Factories\Traits\RandomTimestamps;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -32,5 +33,23 @@ class ArticleFactory extends Factory
             'content' => fake()->text(),
             'user_id' => fn () => User::factory()->withWallet(),
         ];
+    }
+
+    public function published(Carbon $publishedAt = null): Factory
+    {
+        return $this->state(function (array $attributes) use ($publishedAt) {
+            return [
+                'published_at' => $publishedAt ?? $this->faker->dateTime(max: 'now'),
+            ];
+        });
+    }
+
+    public function notPublished(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => null,
+            ];
+        });
     }
 }

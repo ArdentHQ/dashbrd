@@ -14,9 +14,11 @@ export const ArticleDate = ({ article }: Properties): JSX.Element => {
 
     return (
         <div className="flex flex-col justify-center">
-            <span className="text-sm font-medium text-theme-secondary-500">{t("common.published")}</span>
+            <span className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300">
+                {t("common.published")}
+            </span>
 
-            <span className="whitespace-nowrap font-medium text-theme-secondary-900">
+            <span className="whitespace-nowrap font-medium text-theme-secondary-900 dark:text-theme-dark-50">
                 {formatTimestamp(
                     article.publishedAt * 1000,
                     user?.attributes.date_format as DateFormat,

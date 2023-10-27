@@ -77,8 +77,9 @@ export const FeaturedCollections = ({
                             src={collection.image}
                             isCircle
                             className={cn("h-6 w-6 rounded-full ring-2", {
-                                "ring-white": !isLargeVariant,
-                                "ring-theme-dark-900": isLargeVariant,
+                                "bg-white ring-white dark:bg-theme-dark-800 dark:ring-theme-dark-800": !isLargeVariant,
+                                "bg-theme-dark-900 ring-theme-dark-900 dark:bg-theme-primary-800 dark:ring-theme-primary-800":
+                                    isLargeVariant,
                             })}
                             errorClassName="!p-0"
                         />
@@ -112,8 +113,10 @@ export const MoreCollectionsLabel = ({
                 className={cn(
                     "z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full  px-2 text-xs font-medium ring-2 ",
                     {
-                        "bg-theme-hint-100 text-theme-hint-900 ring-white": !isLargeVariant,
-                        "bg-theme-secondary-800 text-white ring-theme-dark-900": isLargeVariant,
+                        "bg-theme-hint-100 text-theme-hint-900 ring-white dark:bg-theme-secondary-800 dark:text-theme-secondary-200 dark:ring-theme-dark-800":
+                            !isLargeVariant,
+                        "bg-theme-secondary-800 text-white ring-theme-dark-900 dark:bg-theme-primary-100 dark:text-theme-dark-300 dark:ring-theme-primary-800":
+                            isLargeVariant,
                     },
                 )}
             >

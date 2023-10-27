@@ -1,3 +1,7 @@
+.articles-scroll .swiper-slide {
+    @apply h-auto;
+}
+
 @layer components {
     .article-wrapper {
         @apply bg-[url(../images/articles/article-wrapper-bg.svg)] bg-top bg-no-repeat dark:bg-[url(../images/articles/article-wrapper-bg-dark.svg)];
@@ -6,7 +10,7 @@
 }
 
 .article-content {
-    @apply max-w-full break-words text-lg leading-8 text-theme-secondary-700;
+    @apply max-w-full break-words text-lg leading-8 text-theme-secondary-700 dark:text-theme-dark-200;
 }
 
 .article-content > :last-child {
@@ -36,10 +40,13 @@
     @apply my-4;
 }
 
-.article-content > h1,
-.article-content > h2,
 .article-content > blockquote {
     @apply my-6;
+}
+
+.article-content > h1,
+.article-content > h2 {
+    @apply mb-[1.125rem] mt-6;
 }
 
 .article-content > h3,
@@ -56,16 +63,16 @@
 .article-content h2,
 .article-content h3,
 .article-content h4 {
-    @apply font-medium text-theme-secondary-900;
+    @apply font-medium text-theme-secondary-900 dark:text-theme-dark-50;
 }
 
 .article-content h5,
 .article-content h6 {
-    @apply font-normal text-theme-secondary-700;
+    @apply font-normal text-theme-secondary-700 dark:text-theme-dark-200;
 }
 
 .article-content h2 {
-    @apply border-b border-theme-secondary-400 pb-2 text-2xl;
+    @apply border-b border-theme-secondary-400 pb-2 text-2xl dark:border-theme-dark-700;
 }
 
 .article-content h3 {
@@ -85,10 +92,10 @@
 }
 
 .article-content a {
-    @apply text-theme-hint-600 hover:text-theme-primary-800 hover:underline;
+    @apply transition-default text-theme-hint-600 hover:text-theme-primary-800 hover:underline dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500;
 }
 .article-content hr {
-    @apply border-theme-secondary-300;
+    @apply border-theme-secondary-300 dark:border-theme-dark-700;
 }
 
 .article-content figcaption {
@@ -96,12 +103,12 @@
 }
 
 .article-content figcaption:after {
-    @apply absolute bottom-0 left-0 right-0 mx-auto h-px w-full max-w-[400px] bg-theme-secondary-300;
+    @apply absolute bottom-0 left-0 right-0 mx-auto h-px w-full max-w-[400px] bg-theme-secondary-300 dark:bg-theme-dark-700;
     content: "";
 }
 
 .article-content pre {
-    @apply rounded-lg border border-theme-secondary-300 bg-theme-secondary-50 px-6 py-4;
+    @apply rounded-lg border border-theme-secondary-300 bg-theme-secondary-50 px-6 py-4 dark:border-theme-dark-700 dark:bg-theme-dark-950;
 }
 
 .article-content pre code {
@@ -109,16 +116,16 @@
 }
 
 .article-content code {
-    @apply my-[-5px] inline-block rounded-[4px] border border-theme-secondary-300 bg-theme-secondary-50 px-[5px] py-px font-normal text-theme-secondary-900;
+    @apply my-[-5px] inline-block rounded-[4px] border border-theme-secondary-300 bg-theme-secondary-50 px-[5px] py-px font-normal text-theme-secondary-900 dark:border-theme-dark-700 dark:bg-theme-dark-950 dark:text-theme-dark-50;
 }
 
 .article-content blockquote {
-    @apply rounded-xl border-none bg-theme-hint-50 p-8 text-xl font-medium not-italic leading-[30px] text-theme-secondary-900;
+    @apply rounded-xl border-none bg-theme-hint-50 p-8 text-lg font-medium not-italic leading-[30px] text-theme-secondary-700 dark:bg-theme-dark-800 dark:text-theme-dark-50;
 }
 
 .article-content blockquote::before {
     content: url("/images/quote.svg");
-    @apply block bg-no-repeat text-theme-primary-600;
+    @apply block bg-no-repeat text-theme-primary-600 dark:text-theme-primary-400;
 }
 
 .article-content ul ol,
@@ -142,7 +149,7 @@
     counter-increment: item;
 }
 .article-content ol > li:before {
-    @apply absolute -ml-12 mr-3 w-9 text-right font-medium text-theme-secondary-900;
+    @apply absolute -ml-12 mr-3 w-9 text-right font-medium text-theme-secondary-900 dark:text-theme-dark-50;
     content: counter(item) ". ";
 }
 .article-content ol ol li,
@@ -159,7 +166,7 @@
 }
 .article-content ul > li:before {
     content: "";
-    @apply absolute ml-[-18px] mt-[0.8rem] inline-block h-1.5 w-1.5 rounded-full bg-theme-secondary-700;
+    @apply absolute ml-[-18px] mt-[0.8rem] inline-block h-1.5 w-1.5 rounded-full bg-theme-secondary-700 dark:bg-theme-dark-50;
 }
 
 .article-content ul ul li,
@@ -168,6 +175,6 @@
 }
 .article-content ul li ul li:before,
 .article-content ol li ul li:before {
-    @apply h-[7px] w-[7px] border-2 border-theme-secondary-700 bg-transparent;
+    @apply h-[7px] w-[7px] border-2 border-theme-secondary-700 bg-transparent dark:border-theme-dark-50;
     content: "";
 }
