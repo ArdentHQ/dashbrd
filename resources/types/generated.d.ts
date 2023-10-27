@@ -88,6 +88,7 @@ declare namespace App.Data.Articles {
         title: string;
         slug: string;
         category: App.Enums.ArticleCategoryEnum;
+        audioSrc: string | null;
         content: string;
         image: { small: string; small2x: string; medium: string; medium2x: string; large: string; large2x: string };
         publishedAt: number;

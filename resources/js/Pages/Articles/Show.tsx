@@ -1,3 +1,4 @@
+import React from "react";
 import { ArticleContent } from "./Components/ArticleContent";
 import { ArticleMeta } from "./Components/ArticleMeta";
 import { ArticleShare } from "./Components/ArticleShare";
@@ -5,6 +6,7 @@ import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanne
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { WaveSurferPlayer } from "@/Pages/Articles/Components/AudioPlayer2";
 import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
 import { tp } from "@/Utils/TranslatePlural";
 
@@ -42,8 +44,15 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                                     className="absolute -ml-[68px] flex flex-col space-y-2"
                                 />
                             </div>
+                            <div>
+                                {article.audioSrc && (
+                                    <div className="mb-4">
+                                        <WaveSurferPlayer url={article.audioSrc} />
+                                    </div>
+                                )}
 
-                            <ArticleContent article={article} />
+                                <ArticleContent article={article} />
+                            </div>
                         </div>
                     </div>
                 </div>

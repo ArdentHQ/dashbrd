@@ -1,8 +1,8 @@
 import React, { type RefObject, useCallback, useEffect, useRef, useState } from "react";
 import WaveSurfer, { type WaveSurferOptions } from "wavesurfer.js";
-import { IconButton } from "@/Components/Buttons";
+import { Button } from "@/Components/Buttons";
+import { Icon } from "@/Components/Icon";
 
-// WaveSurfer hook
 const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: string): WaveSurfer | null => {
     const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
 
@@ -16,7 +16,7 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
             barGap: 2,
             barRadius: 2,
             progressColor: "text-theme-primary-900",
-            height: 30,
+            height: 24,
             cursorWidth: 0,
             waveColor: "#CFD4FF",
             dragToSeek: true,
@@ -35,10 +35,11 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
 };
 
 export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JSX.Element => {
-    const containerReference = useRef<HTMLElement | null>(null);
+    const containerReference = useRef<HTMLDivElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [isReady, setReady] = useState(false);
     const wavesurfer = useWavesurfer(containerReference, properties.url);
 
     const togglePlay = useCallback(() => {
@@ -63,6 +64,7 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
             }),
 
             wavesurfer.on("ready", () => {
+                setReady(true);
                 setDuration(wavesurfer.getDuration());
             }),
         ];
@@ -87,7 +89,8 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
                 <div className="flex flex-col sm:flex-row sm:items-center">
                     <div className="mb-3 flex items-end justify-between sm:mb-0">
                         <div className="mr-4">
-                            <IconButton
+                            <Button
+                                processing={!isReady}
                                 variant="icon"
                                 icon={isPlaying ? "AudioPause" : "AudioPlay"}
                                 iconClass="h-5 w-5 text-theme-primary-600 group-hover:text-white transition-all"
@@ -107,8 +110,18 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
 
                     <div
                         ref={containerReference}
-                        className="w-full"
-                    ></div>
+                        className="w-full transition-all"
+                    >
+                        {!isReady && (
+                            <div className="flex h-6 translate-y-1/2 items-center justify-center transition-all">
+                                <Icon
+                                    name="Spinner"
+                                    className="animate-spin text-theme-primary-600"
+                                    size="lg"
+                                />
+                            </div>
+                        )}
+                    </div>
 
                     <div className="ml-2 hidden text-xs font-medium leading-4.5 text-theme-secondary-700 sm:block">
                         {formatDuration(duration)}

@@ -27,6 +27,7 @@ class ArticleData extends Data
         public string $slug,
         #[LiteralTypeScriptType('App.Enums.ArticleCategoryEnum')]
         public ArticleCategoryEnum $category,
+        public ?string $audioSrc,
         public string $content,
         /** @var array{ small: string, small2x: string, medium: string, medium2x: string, large: string, large2x: string } */
         #[LiteralTypeScriptType('{ small: string, small2x: string, medium: string, medium2x: string, large: string, large2x: string }')]
@@ -53,6 +54,7 @@ class ArticleData extends Data
             title: $article->title,
             slug: $article->slug,
             category: $article->category,
+            audioSrc: $article->audio_file_url,
             content: $article->content,
             image: [
                 'small' => $article->getFirstMediaUrl('cover', 'small'),
