@@ -14,8 +14,8 @@ export const ArticlesScroll = ({ articles }: { articles: App.Data.Articles.Artic
             <Carousel
                 horizontalOffset={horizontalOffset}
                 headerClassName="mx-6 sm:mx-8 2xl:mx-0"
-                swiperClassName="m-[-3px] lg:mx-[29px] lg:my-[-3px] 2xl:m-[-3px]"
-                spaceBetween={8}
+                swiperClassName="-m-1 lg:-my-1 2xl:-m-1 lg:mx-[28px]"
+                spaceBetween={0}
                 slidesPerView={slidesPerView}
                 title={
                     <>
@@ -32,7 +32,7 @@ export const ArticlesScroll = ({ articles }: { articles: App.Data.Articles.Artic
             >
                 {articles.map((article) => (
                     <CarouselItem key={article.id}>
-                        <div className="h-full p-[3px]">
+                        <div className="h-full p-1">
                             <ArticleCard article={article} />
                         </div>
                     </CarouselItem>
