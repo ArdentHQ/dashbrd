@@ -1,4 +1,5 @@
 import React, { type MouseEvent, type TouchEvent, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 
 const formatDuration = (time: number): string => {
@@ -14,6 +15,8 @@ export const AudioPlayer = ({ audioSrc }: { audioSrc: string }): JSX.Element => 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isSeeking, setIsSeeking] = useState(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         const audioElement = audioReference.current;
@@ -77,7 +80,9 @@ export const AudioPlayer = ({ audioSrc }: { audioSrc: string }): JSX.Element => 
                 src={audioSrc}
             ></audio>
             <div className="rounded-t-lg bg-theme-secondary-200 pb-1.5 pl-4 pt-1">
-                <div className="text-xs font-medium leading-4.5 text-theme-secondary-700"> Audio version</div>
+                <div className="text-xs font-medium leading-4.5 text-theme-secondary-700">
+                    {t("pages.articles.audio_version")}
+                </div>
             </div>
             <div className="px-4 py-3">
                 <div className="flex flex-col sm:flex-row sm:items-center">

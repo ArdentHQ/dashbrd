@@ -1,4 +1,5 @@
 import React, { type RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import WaveSurfer, { type WaveSurferOptions } from "wavesurfer.js";
 import { Button } from "@/Components/Buttons";
 import { Icon } from "@/Components/Icon";
@@ -14,8 +15,8 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
             container: containerReference.current,
             barWidth: 2,
             barGap: 2,
-            barRadius: 2,
-            progressColor: "text-theme-primary-900",
+            barRadius: 10,
+            progressColor: "#212B83",
             height: 24,
             cursorWidth: 0,
             waveColor: "#CFD4FF",
@@ -47,6 +48,8 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
     const [duration, setDuration] = useState(0);
     const [isReady, setReady] = useState(false);
     const wavesurfer = useWavesurfer(containerReference, properties.url);
+
+    const { t } = useTranslation();
 
     const togglePlay = useCallback(() => {
         wavesurfer?.isPlaying() === true ? wavesurfer.pause() : wavesurfer?.play();
@@ -83,7 +86,9 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
     return (
         <div className="overflow-hidden rounded-lg bg-theme-secondary-100">
             <div className="rounded-t-lg bg-theme-secondary-200 pb-1.5 pl-4 pt-1">
-                <div className="text-xs font-medium leading-4.5 text-theme-secondary-700"> Audio version</div>
+                <div className="text-xs font-medium leading-4.5 text-theme-secondary-700">
+                    {t("pages.articles.audio_version")}
+                </div>
             </div>
             <div className="px-4 py-3">
                 <div className="flex flex-col sm:flex-row sm:items-center">
