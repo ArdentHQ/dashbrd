@@ -264,21 +264,17 @@ const CollectionsView = ({
     };
 
     const handleRefreshActivity = (): void => {
-        void (async (): Promise<void> => {
-            setIsLoadingActivity(true);
-            requestActivityUpdate(collection.address);
+        setIsLoadingActivity(true);
+        requestActivityUpdate(collection.address);
 
-            showToast({
-                message: t("common.refreshing_activity"),
-                isExpanded: true,
-            });
+        showToast({
+            message: t("common.refreshing_activity"),
+            isExpanded: true,
+        });
 
-            await axios.post<{ success: boolean }>(
-                route("collection.refresh-activity", {
-                    collection: collection.slug,
-                }),
-            );
-        })();
+        axios.post(route("collection.refresh-activity", {
+            collection: collection.slug,
+        }));
     };
 
     return (

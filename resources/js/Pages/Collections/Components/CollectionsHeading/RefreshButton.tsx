@@ -6,27 +6,21 @@ import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData | null }): JSX.Element => {
-    const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const { t } = useTranslation();
 
     const { showToast } = useToasts();
 
     const refresh = (): void => {
-        void (async (): Promise<void> => {
-            setLoading(true);
+        setDisabled(true);
 
-            await window.axios.post(route("refresh-collections"));
+        window.axios.post(route("refresh-collections"));
 
-            setLoading(false);
-            setDisabled(true);
-
-            showToast({
-                type: "pending",
-                message: t("pages.collections.refresh.toast"),
-                isExpanded: true,
-            });
-        })();
+        showToast({
+            type: "pending",
+            message: t("pages.collections.refresh.toast"),
+            isExpanded: true,
+        });
     };
 
     const tooltipContent = (): JSX.Element => {
@@ -58,7 +52,6 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
                     disabled={
                         isTruthy(wallet?.isRefreshingCollections) ||
                         !isTruthy(wallet?.canRefreshCollections) ||
-                        loading ||
                         disabled
                     }
                     type="button"
