@@ -75,10 +75,6 @@ trait DependsOnCoingeckoRateLimit
      */
     private function getRateLimitFactor(): int
     {
-        if (! $this->usesCoingecko()) {
-            return 0;
-        }
-
         return count($this->jobsThatUseCoingecko);
     }
 
