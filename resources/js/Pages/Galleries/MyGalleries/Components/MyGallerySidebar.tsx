@@ -1,5 +1,8 @@
 import { useTranslation } from "react-i18next";
+import { type RouteParams } from "ziggy-js";
 import { Sidebar, SidebarItem } from "@/Components/Sidebar";
+
+const routeName = "my-galleries";
 
 export const MyGallerySidebar = ({
     publishedCount,
@@ -18,16 +21,18 @@ export const MyGallerySidebar = ({
             <SidebarItem
                 icon="DocumentCheckmark"
                 title={t("common.published")}
-                isSelected={route().current("my-galleries")}
-                href={route("my-galleries")}
+                isSelected={route().current(routeName, { draft: false })}
+                href={route(routeName, {
+                    draft: undefined,
+                } as unknown as RouteParams)}
                 rightText={publishedCount.toString()}
             />
 
             <SidebarItem
                 icon="Document"
                 title={t("common.drafts")}
-                isDisabled
-                tooltip={t("common.coming_soon").toString()}
+                isSelected={route().current(routeName, { draft: true })}
+                href={route(routeName, { draft: true })}
                 rightText={draftsCount.toString()}
             />
         </Sidebar>

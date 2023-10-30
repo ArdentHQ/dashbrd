@@ -32,6 +32,7 @@ class MyGalleryController extends Controller
             'title' => trans('metatags.my_galleries.title'),
             'galleries' => new GalleriesData(GalleryData::collection($user->galleries()->latest()->paginate(12))),
             'nftCount' => $user->nfts->count(),
+            'draft' => $request->boolean('draft'),
         ]);
     }
 

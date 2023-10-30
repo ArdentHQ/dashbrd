@@ -13,7 +13,8 @@ const Layout = ({
     nftCount: number;
 }): JSX.Element => (
     <LeftMenuLayout
-        // temporary use the nftCount from the current page
+        // temporary use the nftCount from the current page as
+        // the publishedCount and draftsCount
         mobileMenu={
             <MyGalleryListboxMenu
                 nftCount={nftCount}

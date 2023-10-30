@@ -55,7 +55,6 @@ export const MyGalleryListboxMenu = ({
 
                     <Listbox.Option
                         value="#"
-                        isDisabled
                         classNames={{
                             optionLabel: "flex w-full justify-between",
                             iconContainer: "flex flex-1 justify-between",
