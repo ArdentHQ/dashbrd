@@ -27,7 +27,7 @@ export const useGalleryForm = ({
     errors: Partial<Record<keyof UseGalleryFormProperties, string>>;
     updateSelectedNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     processing: boolean;
-    setDraftCover: (image: ArrayBuffer | null) => void;
+    setDraftCover: (image: ArrayBuffer | null) => Promise<void>;
 } => {
     const { t } = useTranslation();
     const [selectedNfts, setSelectedNfts] = useState<App.Data.Gallery.GalleryNftData[]>([]);
@@ -35,13 +35,13 @@ export const useGalleryForm = ({
 
     const { draftId: givenDraftId } = getQueryParameters();
 
-    const { setDraftCover, setDraftTitle, setDraftNfts, draftId } = useGalleryDrafts(
+    const { setDraftCover, setDraftTitle, setDraftNfts, draft } = useGalleryDrafts(
         givenDraftId !== "" ? Number(givenDraftId) : undefined,
     );
 
     useEffect(() => {
-        draftId != null && replaceUrlQuery({ draftId: draftId.toString() });
-    }, [draftId]);
+        draft.id != null && replaceUrlQuery({ draftId: draft.id.toString() });
+    }, [draft.id]);
 
     const { data, setData, post, processing, errors, ...form } = useForm<UseGalleryFormProperties>({
         id: gallery?.id ?? null,
@@ -114,7 +114,7 @@ export const useGalleryForm = ({
             nfts.map((nft) => nft.id),
         );
 
-        setDraftNfts(nfts);
+        void setDraftNfts(nfts);
     };
 
     return {

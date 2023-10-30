@@ -199,12 +199,12 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
-                        setDraftCover(null);
+                        void setDraftCover(null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
                         // eslint ignore
                         void blob.arrayBuffer().then((buf) => {
-                            setDraftCover(buf);
+                            void setDraftCover(buf);
                         });
                     }
                     setIsGalleryFormSliderOpen(false);
