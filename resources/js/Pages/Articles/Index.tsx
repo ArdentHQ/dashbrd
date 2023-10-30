@@ -46,7 +46,7 @@ const ArticlesIndex = ({
                     className="pb-2 text-center dark:text-theme-dark-50 sm:text-left"
                 >
                     {t("pages.articles.header_title")}{" "}
-                    <span className="text-theme-primary-600">
+                    <span className="text-theme-primary-600 dark:text-theme-primary-400">
                         {initialHighlightedArticles.length + initialArticles.paginated.meta.total}
                     </span>{" "}
                     {initialHighlightedArticles.length + initialArticles.paginated.meta.total === 1
