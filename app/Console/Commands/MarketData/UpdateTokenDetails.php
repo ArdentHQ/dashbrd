@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\MarketData;
 
+use App\Console\Commands\DependsOnCoingeckoRateLimit;
 use App\Jobs\UpdateTokenDetails as UpdateTokenDetailsJob;
 use App\Models\Token;
 use App\Models\Wallet;
-use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 
 class UpdateTokenDetails extends Command
 {
+    use DependsOnCoingeckoRateLimit;
+
     /**
      * The name and signature of the console command.
      *
@@ -87,9 +89,13 @@ class UpdateTokenDetails extends Command
         $progressBar = $this->output->createProgressBar($totalTokens);
 
         $tokens->each(function (Token $token) use ($progressBar) {
-            UpdateTokenDetailsJob::dispatch(
-                token: $token,
-            )->onQueue(Queues::TOKENS);
+            $this->dispatchDelayed(
+                callback: fn () => UpdateTokenDetailsJob::dispatch(
+                    token: $token,
+                ),
+                index: $progressBar->getProgress(),
+                job: UpdateTokenDetailsJob::class,
+            );
 
             $progressBar->advance();
         });
