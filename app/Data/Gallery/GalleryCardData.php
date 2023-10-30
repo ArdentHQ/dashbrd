@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Data\Gallery;
 
 use App\Data\Collections\SimpleNftData;
+use App\Data\SimpleWalletData;
 use App\Enums\CurrencyCode;
 use App\Models\Gallery;
 use App\Models\User;
@@ -30,7 +31,7 @@ class GalleryCardData extends Data
         public int $collectionsCount,
         public ?float $value,
         public ?string $coverImage,
-        public GalleryWalletData $wallet,
+        public SimpleWalletData $wallet,
         /** @var DataCollection<int, SimpleNftData> */
         #[DataCollectionOf(SimpleNftData::class)]
         public DataCollection $nfts,
@@ -56,7 +57,7 @@ class GalleryCardData extends Data
             collectionsCount: $galleryCache->collectionsCount(),
             value: $gallery->value($user?->currency() ?? CurrencyCode::USD),
             coverImage: $gallery->cover_image,
-            wallet: GalleryWalletData::fromModel($gallery->user->wallet),
+            wallet: SimpleWalletData::fromModel($gallery->user->wallet),
             nfts: $nfts,
             isOwner: $user !== null ? $user->id === $gallery->user_id : false,
             hasLiked: $user !== null ? $gallery->likes->isNotEmpty() : false,

@@ -202,7 +202,7 @@ declare namespace App.Data.Gallery {
         collectionsCount: number;
         value: number | null;
         coverImage: string | null;
-        wallet: App.Data.Gallery.GalleryWalletData;
+        wallet: App.Data.SimpleWalletData;
         nfts: Array<App.Data.Collections.SimpleNftData>;
         isOwner: boolean;
         hasLiked: boolean;
@@ -255,10 +255,6 @@ declare namespace App.Data.Gallery {
         wallet: App.Data.SimpleWalletData;
         nfts: App.Data.Gallery.GalleryNftsData;
         isOwner: boolean;
-        hasLiked: boolean;
-    };
-    export type GalleryLikeData = {
-        likes: number;
         hasLiked: boolean;
     };
     export type GalleryNftData = {
