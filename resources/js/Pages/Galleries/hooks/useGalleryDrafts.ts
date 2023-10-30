@@ -35,6 +35,7 @@ export const useGalleryDrafts = (givenDraftId?: number) => {
         walletAddress: wallet?.address,
     });
 
+    const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
     const [title, setTitle] = useState<string>("");
@@ -45,7 +46,6 @@ export const useGalleryDrafts = (givenDraftId?: number) => {
     // populate `draft` state if `givenDraftId` is present
     useEffect(() => {
         if (givenDraftId === undefined) return;
-        console.log("getting the draft", givenDraftId);
         const getDraft = async (): Promise<void> => {
             const draft: GalleryDraft = await database.getByID(givenDraftId);
 
@@ -57,22 +57,21 @@ export const useGalleryDrafts = (givenDraftId?: number) => {
         void getDraft();
     }, []);
 
-    // persist debounced title
+    // handle debounced title
     useEffect(() => {
         if (isFirstRender) return;
 
-        const updatedDraft = { ...draft, title: debouncedValue };
-
-        setDraft(updatedDraft);
-        void saveDraft(updatedDraft);
+        setDraft({ ...draft, title: debouncedValue });
+        setSave(true);
     }, [debouncedValue]);
 
-    console.log("rendered", draft);
+    useEffect(() => {
+        if (!save || isSaving) return;
 
-    const saveDraft = async (draft: GalleryDraft): Promise<void> => {
-        console.log("saving draft");
-        if (isSaving) return;
+        void saveDraft();
+    }, [save]);
 
+    const saveDraft = async (): Promise<void> => {
         setIsSaving(true);
 
         if (draft.id === null) {
@@ -85,28 +84,25 @@ export const useGalleryDrafts = (givenDraftId?: number) => {
             await database.update(draft);
         }
 
+        setSave(false);
         setIsSaving(false);
     };
 
-    const setDraftCover = async (image: ArrayBuffer | null): Promise<void> => {
-        const updatedDraft = { ...draft, cover: image };
-        setDraft(updatedDraft);
-        await saveDraft(updatedDraft);
+    const setDraftCover = (image: ArrayBuffer | null): void => {
+        setDraft({ ...draft, cover: image });
+        setSave(true);
     };
 
-    const setDraftNfts = async (nfts: App.Data.Gallery.GalleryNftData[]): Promise<void> => {
-        const updatedDraft = {
+    const setDraftNfts = (nfts: App.Data.Gallery.GalleryNftData[]): void => {
+        setDraft({
             ...draft,
             nfts: nfts.map((nft) => ({
                 nftId: nft.id,
                 image: nft.images.large ?? "",
                 collectionSlug: nft.collectionSlug,
             })),
-        };
-
-        setDraft(updatedDraft);
-
-        await saveDraft(updatedDraft);
+        });
+        setSave(true);
     };
 
     return {
