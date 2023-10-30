@@ -36,7 +36,7 @@ export const useGalleryForm = ({
     const { draftId: givenDraftId } = getQueryParameters();
 
     const { setDraftCover, setDraftTitle, setDraftNfts, draft } = useGalleryDrafts(
-        givenDraftId !== "" ? Number(givenDraftId) : undefined,
+        isTruthy(givenDraftId) ? Number(givenDraftId) : undefined,
     );
 
     useEffect(() => {
