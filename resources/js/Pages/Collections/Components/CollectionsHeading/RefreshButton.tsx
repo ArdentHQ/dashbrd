@@ -14,7 +14,7 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
     const refresh = (): void => {
         setDisabled(true);
 
-        window.axios.post(route("refresh-collections"));
+        void window.axios.post(route("refresh-collections"));
 
         showToast({
             type: "pending",
