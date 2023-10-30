@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Console\Commands\DependsOnCoingeckoRateLimit;
 use App\Contracts\MarketDataProvider;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
@@ -24,7 +23,7 @@ use Illuminate\Support\Facades\Log;
 
 class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
 {
-    use DependsOnCoingeckoRateLimit, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.
