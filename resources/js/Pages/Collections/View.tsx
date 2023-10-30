@@ -272,9 +272,11 @@ const CollectionsView = ({
             isExpanded: true,
         });
 
-        axios.post(route("collection.refresh-activity", {
-            collection: collection.slug,
-        }));
+        axios.post(
+            route("collection.refresh-activity", {
+                collection: collection.slug,
+            }),
+        );
     };
 
     return (
