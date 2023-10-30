@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useIndexedDB } from "react-indexed-db-hook";
 import { useAuth } from "@/Contexts/AuthContext";
 import { useDebounce } from "@/Hooks/useDebounce";
+import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 
 interface DraftNft {
     nftId: number;
@@ -39,20 +40,25 @@ export const useGalleryDrafts = (givenDraftId?: number) => {
     const [title, setTitle] = useState<string>("");
     const [debouncedValue] = useDebounce(title, 400);
 
+    const isFirstRender = useIsFirstRender();
+
     // populate `draft` state if `draftId` is present
     useEffect(() => {
-        if (draft.id === null && givenDraftId != null) {
-            const getDraft = async (): Promise<void> => {
-                const draft: GalleryDraft = await database.getByID(givenDraftId);
-                setDraft(draft);
-            };
+        if (givenDraftId === undefined) return;
+        const getDraft = async (): Promise<void> => {
+            const draft: GalleryDraft = await database.getByID(givenDraftId);
 
-            void getDraft();
-        }
+            if (draft.walletAddress === wallet?.address) {
+                setDraft(draft);
+            }
+        };
+
+        void getDraft();
     }, []);
 
     // persist debounced title
     useEffect(() => {
+        if (isFirstRender) return;
         setDraft({ ...draft, title: debouncedValue });
         void saveDraft();
     }, [debouncedValue]);
