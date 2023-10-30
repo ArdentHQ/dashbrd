@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
-use Symfony\Component\HttpKernel\Log\Logger;
+declare(strict_types=1);
 
-return new class () extends Migration {
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+
+return new class() extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -25,7 +24,7 @@ return new class () extends Migration {
             $extraAttributes->images->small = $this->replaceThumbnailsWithScaled($extraAttributes->images->small);
             $extraAttributes->images->large = $this->replaceThumbnailsWithScaled($extraAttributes->images->large);
 
-            if($previousThumb !== $extraAttributes->images->thumb || $previousSmall !== $extraAttributes->images->small || $previousLarge !== $extraAttributes->images->large) {
+            if ($previousThumb !== $extraAttributes->images->thumb || $previousSmall !== $extraAttributes->images->small || $previousLarge !== $extraAttributes->images->large) {
                 DB::table('nfts')
                     ->where('id', $nft->id)
                     ->update(['extra_attributes' => json_encode($extraAttributes)]);
