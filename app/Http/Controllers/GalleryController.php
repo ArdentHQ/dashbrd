@@ -11,7 +11,7 @@ use App\Data\Gallery\GalleryStatsData;
 use App\Enums\CurrencyCode;
 use App\Models\GalleriesStats;
 use App\Models\Gallery;
-use App\Repositories\GalleriesRepository;
+use App\Repositories\GalleryRepository;
 use App\Support\Cache\GalleryCache;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
@@ -42,7 +42,7 @@ class GalleryController extends Controller
         ]);
     }
 
-    public function galleries(Request $request, GalleriesRepository $galleries): JsonResponse
+    public function galleries(Request $request, GalleryRepository $galleries): JsonResponse
     {
         $user = $request->user();
 

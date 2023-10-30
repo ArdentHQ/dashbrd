@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
-class GalleriesRepository
+class GalleryRepository
 {
     /**
      * @return Collection<int, Gallery>
@@ -58,6 +58,8 @@ class GalleriesRepository
                 ->with([
                     'user.wallet.details',
                     'nfts' => fn ($q) => $q->orderByPivot('order_index', 'asc')->limit(6),
+                    'nfts.collection.network',
+                    'nfts.collection.floorPriceToken',
                 ])
                 ->when($user !== null, fn ($q) => $q->with([
                     'likes' => fn ($q) => $q->where('user_id', $user->id),
