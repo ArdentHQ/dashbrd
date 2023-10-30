@@ -33,7 +33,7 @@ enum TraitDisplayType: string
         };
 
         if ($type == self::Property) {
-            return TraitDisplayType::inferDisplayTypeFromValue($value);
+            return self::inferDisplayTypeFromValue($value);
         }
 
         return $type;
@@ -42,17 +42,17 @@ enum TraitDisplayType: string
     public static function fromMnemonicDisplayType(?string $displayType, ?string $value): self
     {
         if (empty($displayType)) {
-            return TraitDisplayType::inferDisplayTypeFromValue($value);
+            return self::inferDisplayTypeFromValue($value);
         }
 
-        return TraitDisplayType::from($displayType);
+        return self::from($displayType);
     }
 
     public function isNumeric(): bool
     {
         return match ($this) {
-            TraitDisplayType::Property => false,
-            TraitDisplayType::Boost, TraitDisplayType::BoostPercentage, TraitDisplayType::Level, TraitDisplayType::Date, TraitDisplayType::Stat => true,
+            self::Property => false,
+            self::Boost, self::BoostPercentage, self::Level, self::Date, self::Stat => true,
         };
 
     }
@@ -76,21 +76,21 @@ enum TraitDisplayType: string
         // index 2: value_date
         return match ($this) {
             // string traits
-            TraitDisplayType::Property => [$value, null, null],
+            self::Property => [$value, null, null],
             // date traits
-            TraitDisplayType::Date => [null, null, $value],
+            self::Date => [null, null, $value],
             // numeric traits
-            TraitDisplayType::Boost,
-            TraitDisplayType::BoostPercentage,
-            TraitDisplayType::Level,
-            TraitDisplayType::Stat => [null, $value, null]
+            self::Boost,
+            self::BoostPercentage,
+            self::Level,
+            self::Stat => [null, $value, null]
         };
     }
 
-    private static function inferDisplayTypeFromValue(?string $value): TraitDisplayType
+    private static function inferDisplayTypeFromValue(?string $value): self
     {
         if (empty($value)) {
-            return TraitDisplayType::Property;
+            return self::Property;
         }
 
         // heuristically check based on the value if it's a date

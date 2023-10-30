@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers;
+use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,9 +41,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/line_chart_data', Controllers\WalletsLineChartController::class)
             ->name('line_chart_data');
 
-    Route::post('/galleries/{gallery:slug}/like', [Controllers\GalleryController::class, 'like'])
-        ->name('galleries.like')
-        ->middleware(['signed_wallet']);
+    Route::post('/galleries/{gallery:slug}/like', [Api\LikedGalleryController::class, 'store'])
+            ->name('galleries.like')
+            ->middleware('signed_wallet');
 
     Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
             ->name('nft.refresh')

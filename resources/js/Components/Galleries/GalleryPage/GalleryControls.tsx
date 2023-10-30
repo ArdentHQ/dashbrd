@@ -22,7 +22,7 @@ export const GalleryControls = ({
 }: {
     likesCount?: number;
     gallery?: App.Data.Gallery.GalleryData;
-    wallet: App.Data.Gallery.GalleryWalletData;
+    wallet: App.Data.SimpleWalletData;
     isDisabled?: boolean;
     showEditAction?: boolean;
     alreadyReported?: boolean;

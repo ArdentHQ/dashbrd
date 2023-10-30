@@ -56,7 +56,8 @@ const NftImage = ({
         className="group"
     >
         <Img
-            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover", className)}
+            wrapperClassName="aspect-square h-full w-full"
+            className={cn("rounded-xl", className)}
             src={nft.images.small ?? undefined}
             data-testid={`NftImageGrid__image--${nft.tokenNumber}`}
         />
@@ -200,7 +201,7 @@ export const NftImageGrid = ({
 
             {Array.from({ length: skeletonCount ?? 0 }).map((_, index) => (
                 <Skeleton
-                    className="NFT_Skeleton aspect-square w-full rounded-xl bg-theme-secondary-100"
+                    className="NFT_Skeleton aspect-square w-full rounded-xl"
                     key={index}
                 />
             ))}
@@ -208,13 +209,7 @@ export const NftImageGrid = ({
     );
 };
 
-export const GalleryHeading = ({
-    name,
-    wallet,
-}: {
-    name: string;
-    wallet: App.Data.Gallery.GalleryWalletData;
-}): JSX.Element => {
+export const GalleryHeading = ({ name, wallet }: { name: string; wallet: App.Data.SimpleWalletData }): JSX.Element => {
     const truncateReference = useRef<HTMLHeadingElement>(null);
 
     const isTruncated = useIsTruncated({ reference: truncateReference });
