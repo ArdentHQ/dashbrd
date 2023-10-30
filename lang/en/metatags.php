@@ -45,6 +45,7 @@ return [
 
     'my_galleries' => [
         'title' => 'My Galleries | Dashbrd',
+        'title_draft' => 'My Draft Galleries | Dashbrd',
         'create' => [
             'title' => 'Create Gallery | Dashbrd',
         ],

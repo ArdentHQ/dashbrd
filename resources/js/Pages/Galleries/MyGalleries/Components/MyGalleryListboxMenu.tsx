@@ -1,7 +1,10 @@
+import { router } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./CreateGalleryButton";
 import { Listbox } from "@/Components/Form/Listbox";
 import { SidebarHead } from "@/Components/Sidebar/SidebarHead";
+
+const routeName = "my-galleries";
 
 export const MyGalleryListboxMenu = ({
     nftCount,
@@ -13,6 +16,12 @@ export const MyGalleryListboxMenu = ({
     draftsCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
+
+    const showPublished = route().current(routeName, { draft: false });
+
+    const publishedRoute = route(routeName);
+
+    const draftRoute = route(routeName, { draft: true });
 
     return (
         <>
@@ -33,17 +42,29 @@ export const MyGalleryListboxMenu = ({
                 data-testid="MyGalleryListboxMenu"
             >
                 <Listbox
+                    onChange={(value: string) => {
+                        router.get(value);
+                    }}
                     isNavigation
-                    value={route("my-galleries")}
+                    value={showPublished ? publishedRoute : draftRoute}
                     label={
-                        <div className="flex w-full justify-between">
-                            <span>{t("common.published")}</span>
-                            <span>{nftCount}</span>
-                        </div>
+                        <>
+                            {showPublished ? (
+                                <div className="flex w-full justify-between">
+                                    <span>{t("common.published")}</span>
+                                    <span>{nftCount}</span>
+                                </div>
+                            ) : (
+                                <div className="flex w-full justify-between">
+                                    <span>{t("common.drafts")}</span>
+                                    <span>{draftsCount}</span>
+                                </div>
+                            )}
+                        </>
                     }
                 >
                     <Listbox.Option
-                        value={route("my-galleries")}
+                        value={publishedRoute}
                         classNames={{
                             optionLabel: "flex w-full justify-between",
                             iconContainer: "flex flex-1 justify-between",
@@ -54,15 +75,14 @@ export const MyGalleryListboxMenu = ({
                     </Listbox.Option>
 
                     <Listbox.Option
-                        value="#"
+                        value={draftRoute}
                         classNames={{
                             optionLabel: "flex w-full justify-between",
                             iconContainer: "flex flex-1 justify-between",
                         }}
                     >
                         <span>{t("common.drafts")}</span>
-                        {/* notice that the color is different because is disabled */}
-                        <span className="text-theme-secondary-500">{draftsCount}</span>
+                        <span className="text-theme-secondary-700">{draftsCount}</span>
                     </Listbox.Option>
                 </Listbox>
             </div>

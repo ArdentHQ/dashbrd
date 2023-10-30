@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { type RouteParams } from "ziggy-js";
 import { Sidebar, SidebarItem } from "@/Components/Sidebar";
 
 const routeName = "my-galleries";
@@ -22,9 +21,7 @@ export const MyGallerySidebar = ({
                 icon="DocumentCheckmark"
                 title={t("common.published")}
                 isSelected={route().current(routeName, { draft: false })}
-                href={route(routeName, {
-                    draft: undefined,
-                } as unknown as RouteParams)}
+                href={route(routeName)}
                 rightText={publishedCount.toString()}
             />
 
