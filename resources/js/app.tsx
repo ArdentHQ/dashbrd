@@ -21,12 +21,14 @@ import {
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
+import { initDB } from "react-indexed-db-hook";
 import { AuthContextProvider } from "./Contexts/AuthContext";
 import DarkModeContextProvider from "./Contexts/DarkModeContex";
 import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
 import { CookieConsent } from "./cookieConsent";
 import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
 import { TransactionSliderProvider } from "@/Contexts/TransactionSliderContext";
+import { databaseConfig } from "@/databaseConfig";
 import { i18n } from "@/I18n";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
@@ -54,6 +56,8 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointE
 const appName = window.document.querySelector("title")?.innerText ?? "Dashbrd";
 
 const queryClient = new QueryClient();
+
+initDB(databaseConfig);
 
 void createInertiaApp({
     title: (title) => (title !== "" ? title : appName),

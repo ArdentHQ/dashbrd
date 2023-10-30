@@ -1,8 +1,11 @@
 import { useForm } from "@inertiajs/react";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useToasts } from "@/Hooks/useToasts";
+import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 interface UseGalleryFormProperties extends Record<string, unknown> {
     id: number | null;
@@ -24,10 +27,21 @@ export const useGalleryForm = ({
     errors: Partial<Record<keyof UseGalleryFormProperties, string>>;
     updateSelectedNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     processing: boolean;
+    setDraftCover: (image: ArrayBuffer | null) => void;
 } => {
     const { t } = useTranslation();
     const [selectedNfts, setSelectedNfts] = useState<App.Data.Gallery.GalleryNftData[]>([]);
     const { showToast } = useToasts();
+
+    const { draftId: givenDraftId } = getQueryParameters();
+
+    const { setDraftCover, setDraftTitle, setDraftNfts, draftId } = useGalleryDrafts(
+        givenDraftId !== "" ? Number(givenDraftId) : undefined,
+    );
+
+    useEffect(() => {
+        draftId != null && replaceUrlQuery({ draftId: draftId.toString() });
+    }, [draftId]);
 
     const { data, setData, post, processing, errors, ...form } = useForm<UseGalleryFormProperties>({
         id: gallery?.id ?? null,
@@ -99,6 +113,8 @@ export const useGalleryForm = ({
             "nfts",
             nfts.map((nft) => nft.id),
         );
+
+        setDraftNfts(nfts);
     };
 
     return {
@@ -108,11 +124,16 @@ export const useGalleryForm = ({
         submit,
         errors,
         processing,
+        setDraftCover,
         setData: (field, value) => {
             setData(field, value);
 
             if (field === "name" && validateName(field)) {
                 form.setError("name", "");
+            }
+
+            if (field === "name") {
+                setDraftTitle(typeof value === "string" ? value : "");
             }
         },
     };

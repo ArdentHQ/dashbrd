@@ -17,7 +17,6 @@ import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { useGalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDraft";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -58,11 +57,10 @@ const Create = ({
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
 
-    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
-        gallery,
-    });
-
-    const { setCover, setTitle, setNfts } = useGalleryDraft();
+    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing, setDraftCover } =
+        useGalleryForm({
+            gallery,
+        });
 
     const totalValue = 0;
 
@@ -158,10 +156,7 @@ const Create = ({
                             }}
                         >
                             <NftGridEditable
-                                onChange={(nfts) => {
-                                    updateSelectedNfts(nfts);
-                                    setNfts(nfts);
-                                }}
+                                onChange={updateSelectedNfts}
                                 error={errors.nfts}
                             />
                         </GalleryNfts>
@@ -204,8 +199,13 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
+                        setDraftCover(null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
+                        // eslint ignore
+                        void blob.arrayBuffer().then((buf) => {
+                            setDraftCover(buf);
+                        });
                     }
                     setIsGalleryFormSliderOpen(false);
                 }}
