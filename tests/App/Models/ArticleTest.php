@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Article;
 use App\Models\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 it('should create an article', function () {
@@ -45,6 +46,25 @@ it('gets meta description from content if meta description is not set', function
         'meta_description' => null,
         'content' => 'This is the content',
     ]);
+
+    expect($article->metaDescription())->toBe('This is the content');
+});
+
+it('removes markdown in meta description', function () {
+    $article = Article::factory()->create([
+        'meta_description' => null,
+        'content' => "### This is the content\n\nwith some *markdown*\n",
+    ]);
+
+    expect($article->metaDescription())->toBe('This is the content with some markdown');
+});
+
+it('gets meta description from cache', function () {
+    $article = Article::factory()->create();
+
+    Cache::shouldReceive('rememberForever')
+        ->with('article:'.$article->id.':meta_description', Closure::class)
+        ->andReturn('This is the content');
 
     expect($article->metaDescription())->toBe('This is the content');
 });

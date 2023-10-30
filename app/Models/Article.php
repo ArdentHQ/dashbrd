@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Image\Manipulations;
@@ -154,7 +155,15 @@ class Article extends Model implements HasMedia, Viewable
 
     public function metaDescription(): string
     {
-        return $this->meta_description ?? Str::limit(strip_tags($this->content), 157);
+        return Cache::rememberForever("article:{$this->id}:meta_description", function () {
+            if (boolval($this->meta_description)) {
+                return $this->meta_description;
+            }
+
+            $rawContent = $this->renderedMarkdown();
+
+            return Str::limit(trim(preg_replace("/\r?\n/", ' ', html_entity_decode(strip_tags($rawContent)))), 157);
+        });
     }
 
     public function isNotPublished(): bool
