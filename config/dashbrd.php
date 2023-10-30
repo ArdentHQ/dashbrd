@@ -224,4 +224,6 @@ return [
         'WETH',
         'ETH',
     ],
+
+    'idle_time_between_collection_activity_updates' => 6, // hours
 ];

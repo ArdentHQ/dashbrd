@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { Tab } from "@headlessui/react";
 import classNames from "classnames";
 import { forwardRef, Fragment, useMemo } from "react";
@@ -6,6 +7,8 @@ import { Button } from "@/Components/Buttons";
 import { type IconName } from "@/Components/Icon";
 import { Tabs } from "@/Components/Tabs";
 import { Tooltip } from "@/Components/Tooltip";
+import { useWalletActivity } from "@/Hooks/useWalletActivity";
+import { isTruthy } from "@/Utils/is-truthy";
 
 const CollectionNavigationTab = forwardRef<
     HTMLButtonElement,
@@ -58,12 +61,21 @@ export const CollectionNavigation = ({
     children,
     selectedTab,
     onTabChange,
+    onRefreshActivity,
+    isLoadingActivity,
+    hasActivities,
+    collection,
 }: {
     children: JSX.Element[];
     selectedTab: "collection" | "activity";
     onTabChange: (tab: "collection" | "activity") => void;
+    onRefreshActivity: () => void;
+    isLoadingActivity?: boolean | null;
+    hasActivities?: boolean;
+    collection: App.Data.Collections.CollectionDetailData;
 }): JSX.Element => {
     const { t } = useTranslation();
+    const { hasReachedMaxUpdateRequests } = useWalletActivity();
 
     const selectedIndex = useMemo(() => {
         if (selectedTab === "activity") {
@@ -79,6 +91,38 @@ export const CollectionNavigation = ({
         } else {
             onTabChange("collection");
         }
+    };
+
+    const canUpdate = (collection: App.Data.Collections.CollectionDetailData): boolean => {
+        if (isTruthy(isLoadingActivity)) {
+            return false;
+        }
+
+        if (!isTruthy(hasActivities)) {
+            return false;
+        }
+
+        if (isTruthy(collection.activityUpdateRequestedAt)) {
+            return false;
+        }
+
+        return !hasReachedMaxUpdateRequests();
+    };
+
+    const updateDisabledReason = (): string | null => {
+        if (!isTruthy(hasActivities)) {
+            return t("pages.collections.activities.ignores_activities");
+        }
+
+        if (isTruthy(isLoadingActivity)) {
+            return t("pages.collections.activities.loading_activities_collection");
+        }
+
+        if (isTruthy(collection.activityUpdateRequestedAt)) {
+            return t("pages.collections.activities.loading_activities_collection");
+        }
+
+        return t("common.refresh");
     };
 
     return (
@@ -99,9 +143,43 @@ export const CollectionNavigation = ({
                             </CollectionNavigationTab>
                         </Tabs>
                     </div>
+
+                    {selectedTab === "activity" && (
+                        <Tooltip content={updateDisabledReason()}>
+                            <div className="py-1">
+                                <Button
+                                    icon="Refresh"
+                                    variant="secondary"
+                                    className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
+                                    disabled={!canUpdate(collection)}
+                                    onClick={onRefreshActivity}
+                                >
+                                    {t("common.refresh")}
+                                </Button>
+                            </div>
+                        </Tooltip>
+                    )}
                 </Tab.List>
             </div>
 
+            {selectedTab === "activity" && (
+                <Tooltip
+                    content={updateDisabledReason()}
+                    touch
+                >
+                    <div className="mt-6">
+                        <Button
+                            icon="Refresh"
+                            variant="secondary"
+                            className=" block w-full bg-theme-secondary-100 text-theme-primary-900 sm:hidden"
+                            onClick={onRefreshActivity}
+                            disabled={!canUpdate(collection)}
+                        >
+                            {t("common.refresh")}
+                        </Button>
+                    </div>
+                </Tooltip>
+            )}
             <Tab.Panels>{children}</Tab.Panels>
         </Tab.Group>
     );
