@@ -86,12 +86,13 @@ export const Name = ({
     >
         <div className="h-5 w-5 overflow-hidden rounded-full md:h-10 md:w-10">
             <Img
+                wrapperClassName="aspect-square"
                 data-testid="ActivityTable__image"
                 src={activity.nft.images.small ?? undefined}
             />
         </div>
 
-        <span className="transition-default truncate text-base text-sm font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 sm:text-base md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
+        <span className="transition-default truncate text-sm font-medium leading-5.5 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 outline-offset-4 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 sm:text-base md:max-w-[8.125rem] lg:max-w-[16.875rem] xl:max-w-[25rem]">
             {activity.nft.name}
         </span>
     </div>
@@ -180,6 +181,7 @@ export const Type = ({
                 <div className="mr-3 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100 dark:bg-theme-dark-800">
                     {showNameColumn && !isLgAndAbove && (
                         <Img
+                            wrapperClassName="aspect-square"
                             data-testid="ActivityTable__image"
                             src={activity.nft.images.small ?? undefined}
                         />
