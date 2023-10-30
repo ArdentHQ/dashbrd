@@ -16,16 +16,17 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class EnsureCollectionIsErc721 implements ShouldQueue, ShouldBeUnique
+class EnsureCollectionIsErc721 implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RecoversFromProviderErrors;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.
      */
     public function __construct(
         public Collection $collection
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
