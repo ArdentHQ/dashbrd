@@ -67,7 +67,10 @@ export const useGalleryDrafts = (givenDraftId?: number) => {
         void saveDraft(updatedDraft);
     }, [debouncedValue]);
 
+    console.log("rendered", draft);
+
     const saveDraft = async (draft: GalleryDraft): Promise<void> => {
+        console.log("saving draft");
         if (isSaving) return;
 
         setIsSaving(true);
