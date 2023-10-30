@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\MarketData;
 
+use App\Console\Commands\DependsOnCoingeckoRateLimit;
 use App\Enums\Period;
 use App\Jobs\FetchPriceHistory as Job;
 use App\Models\Token;
 use App\Models\User;
-use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
 class FetchPriceHistory extends Command
 {
+    use DependsOnCoingeckoRateLimit;
+
     protected $signature = 'marketdata:fetch-price-history {--period=}';
 
     protected $description = 'Retrieves the price history for the given period';
@@ -39,11 +41,17 @@ class FetchPriceHistory extends Command
 
         $currencies->each(function (string $currency) use ($tokens, $progressBar, $period) {
             $tokens->each(function (Token $token) use ($progressBar, $period, $currency) {
-                Job::dispatch(
-                    token: $token,
-                    period: Period::from($period),
-                    currency: $currency,
-                )->onQueue(Queues::SCHEDULED_DEFAULT);
+                $index = $progressBar->getProgress();
+
+                $this->dispatchDelayed(
+                    callback: fn () => Job::dispatch(
+                        token: $token,
+                        period: Period::from($period),
+                        currency: $currency,
+                    ),
+                    index: $index,
+                    job: Job::class,
+                );
 
                 $progressBar->advance();
             });

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Console\Commands\DependsOnCoingeckoRateLimit;
 use App\Contracts\MarketDataProvider;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Token;
 use App\Models\TokenPriceHistory;
+use App\Support\Queues;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Bus\Queueable;
@@ -22,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 
 class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use DependsOnCoingeckoRateLimit, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -32,6 +34,8 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
         private Period $period,
         private string $currency
     ) {
+
+        $this->onQueue(Queues::SCHEDULED_DEFAULT);
     }
 
     /**
