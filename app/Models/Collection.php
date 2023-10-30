@@ -59,6 +59,7 @@ class Collection extends Model
         'minted_at' => 'datetime',
         'last_viewed_at' => 'datetime',
         'is_fetching_activity' => 'bool',
+        'had_erc721_check' => 'bool',
         'activity_updated_at' => 'datetime',
     ];
 

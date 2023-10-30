@@ -231,6 +231,16 @@ class MnemonicPendingRequest extends PendingRequest
         return intval($data['ownersCount']);
     }
 
+    public function isErc721(Chains $chain, string $contractAddress): bool
+    {
+        $this->chain = MnemonicChain::fromChain($chain);
+
+        /** @var array<string, mixed> $data */
+        $data = self::get(sprintf('/collections/v1beta2/%s/metadata', $contractAddress))->json();
+
+        return in_array('TYPE_ERC721', $data['types']);
+    }
+
     // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
     public function getNftCollectionVolume(Chains $chain, string $contractAddress): ?string
     {

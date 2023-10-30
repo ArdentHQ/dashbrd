@@ -65,6 +65,11 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
         return Mnemonic::getCollectionActivity($chain, $contractAddress, $limit, $from);
     }
 
+    public function isErc721(Chains $chain, string $contractAddress): bool
+    {
+        return Mnemonic::isErc721($chain, $contractAddress);
+    }
+
     public function getBlockTimestamp(Network $network, int $blockNumber): Carbon
     {
         throw new NotImplementedException();

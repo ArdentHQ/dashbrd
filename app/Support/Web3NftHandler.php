@@ -7,6 +7,7 @@ namespace App\Support;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
 use App\Jobs\DetermineCollectionMintingDate;
+use App\Jobs\EnsureCollectionIsErc721;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Models\Collection as CollectionModel;
@@ -191,14 +192,16 @@ class Web3NftHandler
                     DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
                 });
 
-                // Index activity only for newly created collections...
-                CollectionModel::query()
-                            ->where('is_fetching_activity', false)
-                            ->whereNull('activity_updated_at')
-                            ->whereIn('id', $ids)
-                            ->chunkById(100, function ($collections) {
-                                $collections->each(fn ($collection) => FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS));
-                            });
+                CollectionModel::whereIn('id', $ids)->chunkById(100, function ($collections) {
+                    $collections->each(function ($collection) {
+                        // Index activity only for newly created collections...
+                        if (! $collection->is_activity_fetching && $collection->activity_updated_at === null) {
+                            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+                        }
+
+                        EnsureCollectionIsErc721::dispatch($collection)->onQueue(Queues::SCHEDULED_COLLECTIONS);
+                    });
+                });
             }
 
             // Passing an empty array means we update all collections which is undesired here.
