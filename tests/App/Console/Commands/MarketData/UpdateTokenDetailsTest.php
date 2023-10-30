@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Console\Commands\MarketData\UpdateTokenDetails as UpdateTokenDetailsCommand;
 use App\Jobs\UpdateTokenDetails;
 use App\Models\Balance;
 use App\Models\Network;
@@ -119,4 +120,12 @@ it('dispatches a job for all wallet tokens using a limit', function () {
     ]);
 
     Bus::assertDispatchedTimes(UpdateTokenDetails::class, 2);
+});
+
+it('calculates the total jobs per minute', function () {
+    expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(15))->toBe(25);
+
+    expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(5))->toBe(8);
+
+    expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(1))->toBe(1);
 });

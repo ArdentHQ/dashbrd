@@ -27,8 +27,8 @@ trait DependsOnCoingeckoRateLimit
      * @var array<string, int>
      */
     private array $jobsDelayThreshold = [
-        FetchPriceHistory::class => 0,
-        UpdateTokenDetails::class => 1,
+        UpdateTokenDetails::class => 0,
+        FetchPriceHistory::class => 1,
         VerifySupportedCurrencies::class => 2,
     ];
 
