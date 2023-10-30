@@ -38,6 +38,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $maxCoingeckoJobsInInterval = $this->maxCoingeckoJobsInInterval();
+
         $schedule
             ->command(VerifySupportedCurrencies::class)
             ->withoutOverlapping()
@@ -46,7 +48,7 @@ class Kernel extends ConsoleKernel
         // Every 15 minutes for top tokens (prioritized on the command)
         $schedule
             ->command(UpdateTokenDetails::class, [
-                '--limit='.$this->maxCoingeckoJobsInInterval(),
+                '--limit='.$maxCoingeckoJobsInInterval,
             ])
             ->withoutOverlapping()
             ->everyFifteenMinutes();
@@ -56,7 +58,7 @@ class Kernel extends ConsoleKernel
         // updated when he is online)
         $schedule
             ->command(UpdateTokenDetails::class, [
-                '--skip='.$this->maxCoingeckoJobsInInterval(),
+                '--skip='.$maxCoingeckoJobsInInterval,
             ])
             ->withoutOverlapping()
             ->dailyAt('19:00');
@@ -232,14 +234,7 @@ class Kernel extends ConsoleKernel
     private function maxCoingeckoJobsInInterval(): int
     {
         // Depends on the frequency of the command, currently `everyFifteenMinutes`)
-        $scheduledEverySeconds = 15 * 60;
-        $maxRequest = (int) config('services.coingecko.rate.max_requests');
-        $perSeconds = (int) config('services.coingecko.rate.per_seconds');
-
-        // Give 5 minutes of room for other tasks
-        $thresholdForOtherTasksSeconds = 5 * 60;
-
-        return (int) ceil($maxRequest / ($perSeconds / ($scheduledEverySeconds - $thresholdForOtherTasksSeconds)));
+        return (new \App\Console\Commands\MarketData\UpdateTokenDetails())->getLimitPerMinutes(15);
     }
 
     /**

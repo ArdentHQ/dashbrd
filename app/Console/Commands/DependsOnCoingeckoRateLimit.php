@@ -56,7 +56,7 @@ trait DependsOnCoingeckoRateLimit
         return $this->jobsDelayThreshold[$job] ?? 0;
     }
 
-    private function getLimitPerMinutes(int $minutes): int
+    public function getLimitPerMinutes(int $minutes): int
     {
         $maxRequests = config('services.coingecko.rate.max_requests');
 
@@ -78,19 +78,8 @@ trait DependsOnCoingeckoRateLimit
         return count($this->jobsThatUseCoingecko);
     }
 
-    private function usesCoingecko(): bool
-    {
-        return config('services.marketdata.provider') === 'coingecko';
-    }
-
     private function dispatchDelayed(Closure $callback, int $index, string $job): void
     {
-        if (! $this->usesCoingecko()) {
-            $callback();
-
-            return;
-        }
-
         // Note: I cant use delay directly on the job because it throws
         // the "too many attempts" error after some time so im delaying
         // with a queued closure instead
