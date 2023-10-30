@@ -10,7 +10,7 @@ use App\Models\Wallet;
 use Illuminate\Support\Facades\Bus;
 
 it('dispatches a job for every token in the database', function () {
-    Bus::fake();
+    Bus::fake([UpdateTokenDetails::class]);
 
     $network = Network::factory()->create(['is_mainnet' => true]);
 
@@ -22,7 +22,7 @@ it('dispatches a job for every token in the database', function () {
 });
 
 it('dispatches a job for every token in the database using a limit', function () {
-    Bus::fake();
+    Bus::fake([UpdateTokenDetails::class]);
 
     $network = Network::factory()->create(['is_mainnet' => true]);
 
@@ -36,7 +36,7 @@ it('dispatches a job for every token in the database using a limit', function ()
 });
 
 it('dispatches a job for every token in the database and skips some', function () {
-    Bus::fake();
+    Bus::fake([UpdateTokenDetails::class]);
 
     $network = Network::factory()->create(['is_mainnet' => true]);
 
@@ -50,7 +50,7 @@ it('dispatches a job for every token in the database and skips some', function (
 });
 
 it('dispatches a job for a single token', function () {
-    Bus::fake();
+    Bus::fake([UpdateTokenDetails::class]);
 
     Token::factory()->count(3)->create();
 
@@ -65,7 +65,7 @@ it('dispatches a job for a single token', function () {
 });
 
 it('dispatches a job for all wallet tokens', function () {
-    Bus::fake();
+    Bus::fake([UpdateTokenDetails::class]);
 
     $network = Network::factory()->create(['is_mainnet' => true]);
 
@@ -93,7 +93,7 @@ it('dispatches a job for all wallet tokens', function () {
 });
 
 it('dispatches a job for all wallet tokens using a limit', function () {
-    Bus::fake();
+    Bus::fake([UpdateTokenDetails::class]);
 
     $network = Network::factory()->create(['is_mainnet' => true]);
 
