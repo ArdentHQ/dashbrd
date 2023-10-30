@@ -234,7 +234,7 @@ class Kernel extends ConsoleKernel
     private function maxCoingeckoJobsInInterval(): int
     {
         // Depends on the frequency of the command, currently `everyFifteenMinutes`)
-        return (new \App\Console\Commands\MarketData\UpdateTokenDetails())->getLimitPerMinutes(15);
+        return (new UpdateTokenDetails())->getLimitPerMinutes(15);
     }
 
     /**
