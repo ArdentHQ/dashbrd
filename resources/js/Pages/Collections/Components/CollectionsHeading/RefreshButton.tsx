@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Tooltip } from "@/Components/Tooltip";
-import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -11,23 +10,20 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
     const [disabled, setDisabled] = useState(false);
     const { t } = useTranslation();
 
-    const { signedAction } = useAuthorizedAction();
     const { showToast } = useToasts();
 
-    const refresh = (): void => {
-        void signedAction(async () => {
-            setLoading(true);
+    const refresh = async (): Promise<void> => {
+        setLoading(true);
 
-            await window.axios.post(route("refresh-collections"));
+        await window.axios.post(route("refresh-collections"));
 
-            setLoading(false);
-            setDisabled(true);
+        setLoading(false);
+        setDisabled(true);
 
-            showToast({
-                type: "pending",
-                message: t("pages.collections.refresh.toast"),
-                isExpanded: true,
-            });
+        showToast({
+            type: "pending",
+            message: t("pages.collections.refresh.toast"),
+            isExpanded: true,
         });
     };
 
