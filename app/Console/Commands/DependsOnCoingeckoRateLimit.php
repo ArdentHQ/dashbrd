@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\FetchPriceHistory;
 use App\Jobs\UpdateTokenDetails;
+use App\Jobs\VerifySupportedCurrencies;
 use Carbon\Carbon;
 use Closure;
 
@@ -17,6 +18,7 @@ trait DependsOnCoingeckoRateLimit
     private array $jobsThatUseCoingecko = [
         FetchPriceHistory::class,
         UpdateTokenDetails::class,
+        VerifySupportedCurrencies::class,
     ];
 
     /**
@@ -27,6 +29,7 @@ trait DependsOnCoingeckoRateLimit
     private array $jobsDelayThreshold = [
         FetchPriceHistory::class => 0,
         UpdateTokenDetails::class => 1,
+        VerifySupportedCurrencies::class => 2,
     ];
 
     private function getDispatchAt(string $job, int $index): Carbon
