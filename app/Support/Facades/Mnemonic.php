@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Http;
  * @method static string | null getNftCollectionBanner(Chains $chain, string $contractAddress)
  * @method static int | null getNftCollectionOwners(Chains $chain, string $contractAddress)
  * @method static string | null getNftCollectionVolume(Chains $chain, string $contractAddress)
+ * @method static bool isErc721(Chains $chain, string $contractAddress)
  * @method static Collection<int, Web3NftCollectionTrait> getNftCollectionTraits(Chains $chain, string $contractAddress)
  * @method static Collection<int, CollectionActivity> getCollectionActivity(Chains $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  *
