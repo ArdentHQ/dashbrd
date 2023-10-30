@@ -16,7 +16,6 @@ import { CollectionHiddenModal } from "@/Components/Collections/CollectionHidden
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
-import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
@@ -84,7 +83,6 @@ const CollectionsView = ({
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
     const { requestActivityUpdate } = useWalletActivity();
-    const { signedAction } = useAuthorizedAction();
 
     const { showToast } = useToasts();
 
@@ -266,7 +264,7 @@ const CollectionsView = ({
     };
 
     const handleRefreshActivity = (): void => {
-        void signedAction(async () => {
+        void (async (): Promise<void> => {
             setIsLoadingActivity(true);
             requestActivityUpdate(collection.address);
 
@@ -280,7 +278,7 @@ const CollectionsView = ({
                     collection: collection.slug,
                 }),
             );
-        });
+        })();
     };
 
     return (

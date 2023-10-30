@@ -12,19 +12,21 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
 
     const { showToast } = useToasts();
 
-    const refresh = async (): Promise<void> => {
-        setLoading(true);
+    const refresh = (): void => {
+        void (async (): Promise<void> => {
+            setLoading(true);
 
-        await window.axios.post(route("refresh-collections"));
+            await window.axios.post(route("refresh-collections"));
 
-        setLoading(false);
-        setDisabled(true);
+            setLoading(false);
+            setDisabled(true);
 
-        showToast({
-            type: "pending",
-            message: t("pages.collections.refresh.toast"),
-            isExpanded: true,
-        });
+            showToast({
+                type: "pending",
+                message: t("pages.collections.refresh.toast"),
+                isExpanded: true,
+            });
+        })();
     };
 
     const tooltipContent = (): JSX.Element => {
