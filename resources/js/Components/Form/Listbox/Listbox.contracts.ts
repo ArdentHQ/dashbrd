@@ -1,4 +1,4 @@
-import { type ElementType } from "react";
+import { type ElementType, type ReactNode } from "react";
 
 export type ListboxButtonVariant = "primary" | "danger";
 
@@ -13,7 +13,7 @@ export interface ListboxProperties<TType, TActualType> {
     className?: string;
     value?: TType;
     defaultValue?: TType;
-    label?: string;
+    label?: string | ReactNode;
     placeholder?: string;
     disabled?: boolean;
     onChange?: (value: TType) => void;
@@ -40,6 +40,7 @@ export interface ListboxOptionProperties {
     hasGradient?: boolean;
     as?: ElementType;
     classNames?: {
+        optionLabel?: string;
         option?: string;
         iconContainer?: string;
         icon?: string;
