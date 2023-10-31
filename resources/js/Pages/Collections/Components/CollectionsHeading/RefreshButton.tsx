@@ -7,21 +7,17 @@ import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData | null }): JSX.Element => {
-    const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const { t } = useTranslation();
 
-    const { signedAction } = useAuthorizedAction();
+    const { authenticatedAction } = useAuthorizedAction();
     const { showToast } = useToasts();
 
     const refresh = (): void => {
-        void signedAction(async () => {
-            setLoading(true);
-
-            await window.axios.post(route("refresh-collections"));
-
-            setLoading(false);
+        void authenticatedAction((): void => {
             setDisabled(true);
+
+            void window.axios.post(route("refresh-collections"));
 
             showToast({
                 type: "pending",
@@ -60,7 +56,6 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
                     disabled={
                         isTruthy(wallet?.isRefreshingCollections) ||
                         !isTruthy(wallet?.canRefreshCollections) ||
-                        loading ||
                         disabled
                     }
                     type="button"

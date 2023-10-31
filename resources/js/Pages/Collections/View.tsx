@@ -84,8 +84,8 @@ const CollectionsView = ({
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
     const { requestActivityUpdate } = useWalletActivity();
-    const { signedAction } = useAuthorizedAction();
 
+    const { authenticatedAction } = useAuthorizedAction();
     const { showToast } = useToasts();
 
     const hasSelectedTraits = useMemo(
@@ -266,7 +266,7 @@ const CollectionsView = ({
     };
 
     const handleRefreshActivity = (): void => {
-        void signedAction(async () => {
+        void authenticatedAction((): void => {
             setIsLoadingActivity(true);
             requestActivityUpdate(collection.address);
 
@@ -275,7 +275,7 @@ const CollectionsView = ({
                 isExpanded: true,
             });
 
-            await axios.post<{ success: boolean }>(
+            void axios.post(
                 route("collection.refresh-activity", {
                     collection: collection.slug,
                 }),

@@ -24,9 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tokens/breakdown', [Controllers\TokenController::class, 'breakdown'])->name('tokens.breakdown');
     Route::get('/tokens/search', [Controllers\TokenController::class, 'searchTokens'])->name('tokens.search');
 
-    Route::post('/refreshed-collections', [Controllers\RefreshedCollectionController::class, 'store'])
-            ->name('refresh-collections')
-            ->middleware('signed_wallet');
+    Route::post('/refreshed-collections', [Controllers\RefreshedCollectionController::class, 'store'])->name('refresh-collections');
 
     Route::post('/transaction-success', Controllers\TransactionSuccessController::class)
             ->name('transaction-success');
