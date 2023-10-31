@@ -17,7 +17,7 @@ export default abstract class ModelFactory<T extends Record<string, unknown>> {
             probability,
         }) ?? null;
 
-    protected chainId = (): App.Enums.Chains =>
+    protected chainId = (): App.Enums.Chain =>
         faker.helpers.arrayElement([ExplorerChains.PolygonMainnet, ExplorerChains.EthereumMainnet]);
 
     protected hexadecimalAddress = (): string => faker.datatype.hexadecimal({ length: 40 });

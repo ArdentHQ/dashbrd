@@ -11,7 +11,7 @@ import {
     type SendTransactionRequest,
     type SendTransactionResponse,
 } from "./useMetaMask.contracts";
-import Chains = App.Enums.Chains;
+import Chains = App.Enums.Chain;
 import { useAuth } from "@/Contexts/AuthContext";
 import { browserLocale } from "@/Utils/browser-locale";
 
@@ -91,7 +91,7 @@ const getSignMessage = async (chainId: number): Promise<string> =>
 
 export interface MetaMaskState {
     account?: string;
-    chainId?: App.Enums.Chains;
+    chainId?: App.Enums.Chain;
     connectWallet: () => Promise<void>;
     signWallet: () => Promise<void>;
     connecting: boolean;
@@ -140,7 +140,7 @@ const useMetaMask = (): MetaMaskState => {
     const { t } = useTranslation();
 
     const [initialized, setInitialized] = useState<boolean>(false);
-    const [chainId, setChainId] = useState<App.Enums.Chains>();
+    const [chainId, setChainId] = useState<App.Enums.Chain>();
     const [account, setAccount] = useState<string>();
     const [ethereumProvider, setEthereumProvider] = useState<ethers.providers.Web3Provider>();
     const [connecting, setConnecting] = useState<boolean>(false);
@@ -184,7 +184,7 @@ const useMetaMask = (): MetaMaskState => {
         chainId,
     }: {
         account?: string;
-        chainId?: App.Enums.Chains;
+        chainId?: App.Enums.Chain;
     }): Promise<void> => {
         setSwitching(true);
 
@@ -232,7 +232,7 @@ const useMetaMask = (): MetaMaskState => {
             const [chain, accounts] = await Promise.all([provider.getNetwork(), provider.listAccounts()]);
 
             const account = accounts.length > 0 ? utils.getAddress(accounts[0]) : undefined;
-            const chainId = chain.chainId as App.Enums.Chains;
+            const chainId = chain.chainId as App.Enums.Chain;
 
             setAccount(account);
 
@@ -251,7 +251,7 @@ const useMetaMask = (): MetaMaskState => {
             const updateChainId = async (): Promise<void> => {
                 const { chainId } = await provider.getNetwork();
 
-                setChainId(chainId as App.Enums.Chains);
+                setChainId(chainId as App.Enums.Chain);
             };
 
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -285,7 +285,7 @@ const useMetaMask = (): MetaMaskState => {
 
         const chainChangedListener = (chainId: string): void => {
             // Chain ID came in as a hex string, so we need to convert it to decimal
-            setChainId(Number.parseInt(chainId, 16) as App.Enums.Chains);
+            setChainId(Number.parseInt(chainId, 16) as App.Enums.Chain);
 
             setRequiresSwitch(true);
         };
@@ -327,7 +327,7 @@ const useMetaMask = (): MetaMaskState => {
                 ethereumProvider.send("eth_chainId", []),
             ])) as [string[], string];
 
-            const chainId = Number.parseInt(chainIdAsHex, 16) as App.Enums.Chains;
+            const chainId = Number.parseInt(chainIdAsHex, 16) as App.Enums.Chain;
 
             return {
                 account: accounts.length > 0 ? accounts[0] : undefined,

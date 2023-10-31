@@ -7,7 +7,7 @@ namespace App\Enums;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-enum Chains: int
+enum Chain: int
 {
     case ETH = 1;
     case Goerli = 5;
@@ -17,8 +17,8 @@ enum Chains: int
     public function nativeCurrency(): string
     {
         return match ($this) {
-            Chains::ETH, Chains::Goerli => 'ETH',
-            Chains::Polygon, Chains::Mumbai => 'MATIC',
+            self::ETH, self::Goerli => 'ETH',
+            self::Polygon, self::Mumbai => 'MATIC',
         };
     }
 }
