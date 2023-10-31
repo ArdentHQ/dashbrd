@@ -39,7 +39,7 @@ describe("Tabs", () => {
 
     it("should render tab link", () => {
         render(
-            <Tabs.Link href="https://ardenthq.com">
+            <Tabs.Link href="https://ardenthq.com/">
                 <span data-testid="test">Click Me</span>
             </Tabs.Link>,
         );
@@ -48,7 +48,7 @@ describe("Tabs", () => {
 
         expect(screen.getByTestId("test").parentElement?.tagName).toBe("A");
 
-        expect(screen.getByTestId("test").parentElement?.getAttribute("href")).toBe("https://ardenthq.com");
+        expect(screen.getByTestId("test").parentElement?.getAttribute("href")).toBe("https://ardenthq.com/");
     });
 
     it("has click event", async () => {
