@@ -87,7 +87,10 @@ describe("Tabs", () => {
 
     it("marks link as selected", () => {
         render(
-            <Tabs.Link selected>
+            <Tabs.Link
+                href="#"
+                selected
+            >
                 <span data-testid="test">Click Me</span>
             </Tabs.Link>,
         );
@@ -96,9 +99,9 @@ describe("Tabs", () => {
     });
     it("marks link as disabled", () => {
         render(
-            <Tabs.Link disabled>
+            <Tabs.DisabledLink disabled>
                 <span data-testid="test">Click Me</span>
-            </Tabs.Link>,
+            </Tabs.DisabledLink>,
         );
 
         expect(screen.getByTestId("test").parentElement?.className).toContain("cursor-not-allowed");
