@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Tooltip } from "@/Components/Tooltip";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { useToasts } from "@/Hooks/useToasts";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -13,6 +14,7 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
 
     const { signedAction } = useAuthorizedAction();
     const { showToast } = useToasts();
+    const { isMdAndAbove } = useBreakpoint();
 
     const refresh = (): void => {
         void signedAction(async () => {
@@ -65,6 +67,8 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
                     }
                     type="button"
                     onClick={refresh}
+                    iconSize={isMdAndAbove ? "sm" : "md"}
+                    className="border-none disabled:!bg-opacity-0 md:border-solid disabled:md:!bg-opacity-100"
                 />
             </span>
         </Tooltip>
