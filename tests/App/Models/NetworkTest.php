@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\Network;
 use App\Models\Token;
 
@@ -26,10 +26,10 @@ it('can retrieve the tokens assigned to the network', function () {
 
 it('can get the chain instance from the network', function () {
     $network = new Network([
-        'chain_id' => Chains::Polygon->value,
+        'chain_id' => Chain::Polygon->value,
     ]);
 
-    expect($network->chain())->toBe(Chains::Polygon);
+    expect($network->chain())->toBe(Chain::Polygon);
 });
 
 it('can get the native token for the network', function () {

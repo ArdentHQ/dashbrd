@@ -12,7 +12,7 @@ export const getSampleMetaMaskState = (overrides: Partial<MetaMaskState> = {}): 
     supportsMetaMask: true,
     sendTransaction: vi.fn(),
     switchToNetwork: vi.fn(),
-    chainId: 80001 as App.Enums.Chains,
+    chainId: 80001 as App.Enums.Chain,
     getBlock: vi.fn(),
     getTransactionReceipt: vi.fn(),
     account: "0xE68cDB02e9453DD7c66f53AceA5CEeAD2ecd637A",

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;
 use App\Jobs\Middleware\RateLimited;
 use App\Models\Collection;
@@ -21,7 +21,7 @@ it('can get nft floor price', function () {
     $collection = Collection::factory()->create();
 
     $provider = new MnemonicWeb3DataProvider();
-    $floorPrice = $provider->getNftCollectionFloorPrice(Chains::Polygon, $collection->address);
+    $floorPrice = $provider->getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
     expect($floorPrice->price)->toBe('10267792581881993')
         ->and($floorPrice->currency)->toBe('matic');
 });
@@ -45,7 +45,7 @@ it('can get nft floor price and lookup fungible token', function () {
     ]);
 
     $provider = new MnemonicWeb3DataProvider();
-    $floorPrice = $provider->getNftCollectionFloorPrice(Chains::Polygon, $collection->address);
+    $floorPrice = $provider->getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
     expect($floorPrice->price)->toBe('6000000000000')
         ->and($floorPrice->currency)->toBe('weth');
 });
@@ -62,7 +62,7 @@ it('can handle missing nft floor price', function () {
     ]);
 
     $provider = new MnemonicWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chains::Polygon, $collection->address))
+    expect($provider->getNftCollectionFloorPrice(Chain::Polygon, $collection->address))
         ->toBeNull();
 });
 
@@ -126,7 +126,7 @@ it('can get collection activity', function () {
 
     $collection = Collection::factory()->create();
 
-    $activity = (new MnemonicWeb3DataProvider)->getCollectionActivity(Chains::Polygon, $collection->address, limit: 10);
+    $activity = (new MnemonicWeb3DataProvider)->getCollectionActivity(Chain::Polygon, $collection->address, limit: 10);
 
     expect($activity)->toHaveCount(18);
 });

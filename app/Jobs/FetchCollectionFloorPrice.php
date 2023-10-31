@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
@@ -54,7 +54,7 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
 
         $web3DataProvider = $this->getWeb3DataProvider();
         $floorPrice = $web3DataProvider->getNftCollectionFloorPrice(
-            Chains::from($this->chainId), $this->address
+            Chain::from($this->chainId), $this->address
         );
 
         if ($floorPrice === null) {

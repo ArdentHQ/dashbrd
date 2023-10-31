@@ -37,7 +37,7 @@ class TokenListItemData extends Data
         public bool $is_native_token,
         public string $balance,
         public int $decimals,
-        #[LiteralTypeScriptType('App.Enums.Chains')]
+        #[LiteralTypeScriptType('App.Enums.Chain')]
         public int $chain_id,
         public int $network_id,
         public ?string $minted_supply,

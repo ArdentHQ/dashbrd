@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 
-it('should return native currency', function (Chains $chain, string $expected) {
+it('should return native currency', function (Chain $chain, string $expected) {
     expect($chain->nativeCurrency())->toBe($expected);
 })->with([
-    [Chains::ETH, 'ETH'],
-    [Chains::Goerli, 'ETH'],
-    [Chains::Polygon, 'MATIC'],
-    [Chains::Mumbai, 'MATIC'],
+    [Chain::ETH, 'ETH'],
+    [Chain::Goerli, 'ETH'],
+    [Chain::Polygon, 'MATIC'],
+    [Chain::Mumbai, 'MATIC'],
 ]);

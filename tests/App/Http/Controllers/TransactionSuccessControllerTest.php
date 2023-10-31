@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Jobs\FetchNativeBalances;
 use App\Jobs\FetchTokens;
 use Illuminate\Support\Facades\Bus;
@@ -14,7 +14,7 @@ it('calls the the fetch native balances job and fetch tokens job for user wallet
 
     $this->actingAs($user)
         ->post(route('transaction-success', [
-            'chainId' => Chains::Polygon,
+            'chainId' => Chain::Polygon,
         ]))
         ->assertSuccessful();
 
