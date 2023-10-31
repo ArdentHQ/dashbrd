@@ -126,4 +126,20 @@ describe("Marketplaces", () => {
 
         expect(screen.getByTestId(testId)).toHaveAttribute("href", url);
     });
+
+    it("should render null url for unknown chain", () => {
+        render(
+            <Marketplaces
+                address={polygonCollection.address}
+                nftId={polygonNft.tokenNumber}
+                chainId={0 as ExplorerChains}
+                type="collection"
+            />,
+        );
+
+        expect(screen.getByTestId("NftMarketplaces__Opensea")).toHaveAttribute("href", "#");
+        expect(screen.getByTestId("NftMarketplaces__Rarible")).toHaveAttribute("href", "#");
+        expect(screen.getByTestId("NftMarketplaces__Blur")).toHaveAttribute("href", "#");
+        expect(screen.getByTestId("NftMarketplaces__LooksRare")).toHaveAttribute("href", "#");
+    });
 });
