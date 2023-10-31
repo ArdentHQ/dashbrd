@@ -11,9 +11,11 @@ export type ArticleCardVariant = "normal" | "large";
 export const ArticleCard = ({
     article,
     variant,
+    className,
 }: {
     article: App.Data.Articles.ArticleData;
     variant?: ArticleCardVariant;
+    className?: string;
 }): JSX.Element => {
     const { t } = useTranslation();
     const { user } = useActiveUser();
@@ -27,18 +29,21 @@ export const ArticleCard = ({
             className={cn(
                 "transition-default group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
-                    "bg-white ring-inset ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500":
+                    "bg-white ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500":
                         !isLargeVariant,
                     "bg-theme-dark-900 hover:bg-theme-primary-700 dark:border-none dark:bg-theme-primary-700 dark:hover:bg-theme-primary-600":
                         isLargeVariant,
                 },
+                className,
             )}
         >
             <div className="mx-2 mt-2 aspect-video overflow-hidden rounded-lg bg-theme-secondary-300">
                 <Img
-                    className="h-full w-full rounded-lg object-cover"
+                    className={cn("h-full w-full rounded-lg object-cover", {
+                        "skeleton-primary": isLargeVariant,
+                    })}
                     wrapperClassName={cn("h-full [&>span]:h-full", {
-                        "bg-white dark:bg-theme-dark-900": !isLargeVariant,
+                        "bg-white dark:bg-theme-primary-900 ": !isLargeVariant,
                         "bg-theme-dark-900 group-hover:bg-theme-primary-700 dark:bg-theme-primary-700 dark:group-hover:bg-theme-primary-600":
                             isLargeVariant,
                     })}
@@ -75,8 +80,7 @@ export const ArticleCard = ({
 
             <div
                 className={cn("transition-default flex items-center rounded-b-lg px-6 py-3", {
-                    "bg-theme-secondary-50 group-hover:mx-[3px] group-hover:mb-[3px] group-hover:px-[21px] group-hover:pb-[9px] dark:bg-theme-dark-800":
-                        !isLargeVariant,
+                    "bg-theme-secondary-50 dark:bg-theme-dark-800": !isLargeVariant,
                     "bg-theme-dark-950 group-hover:bg-theme-primary-800 dark:bg-theme-primary-800 dark:group-hover:bg-theme-primary-700":
                         isLargeVariant,
                 })}
