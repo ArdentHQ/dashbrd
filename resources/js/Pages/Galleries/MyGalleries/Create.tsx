@@ -57,10 +57,9 @@ const Create = ({
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
 
-    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing, setDraftCover } =
-        useGalleryForm({
-            gallery,
-        });
+    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
+        gallery,
+    });
 
     const totalValue = 0;
 
@@ -199,13 +198,8 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
-                        void setDraftCover(null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
-                        // eslint ignore
-                        void blob.arrayBuffer().then((buf) => {
-                            void setDraftCover(buf);
-                        });
                     }
                     setIsGalleryFormSliderOpen(false);
                 }}
