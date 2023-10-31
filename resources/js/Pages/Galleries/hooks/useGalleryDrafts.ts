@@ -13,6 +13,7 @@ interface DraftNft {
 interface GalleryDraft {
     title: string;
     cover: ArrayBuffer | null;
+    coverType: string | null;
     nfts: DraftNft[];
     walletAddress?: string;
     id: number | null;
@@ -21,6 +22,7 @@ interface GalleryDraft {
 const initialGalleryDraft: GalleryDraft = {
     title: "",
     cover: null,
+    coverType: null,
     nfts: [],
     id: null,
 };
@@ -30,7 +32,7 @@ const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 interface GalleryDraftsState {
     reachedLimit: boolean;
     draft: GalleryDraft;
-    setDraftCover: (image: ArrayBuffer | null) => void;
+    setDraftCover: (image: ArrayBuffer | null, type: string | null) => void;
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
 }
@@ -113,8 +115,8 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
         return allDrafts.filter((draft) => draft.walletAddress === wallet?.address);
     };
 
-    const setDraftCover = (image: ArrayBuffer | null): void => {
-        setDraft({ ...draft, cover: image });
+    const setDraftCover = (image: ArrayBuffer | null, type: string | null): void => {
+        setDraft({ ...draft, cover: image, coverType: type });
         setSave(true);
     };
 
