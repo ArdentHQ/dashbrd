@@ -12,29 +12,6 @@ return new class() extends Migration
      */
     public function up(): void
     {
-        DB::select("
-            UPDATE nfts
-            SET extra_attributes =
-              jsonb_set(
-                jsonb_set(
-                  jsonb_set(
-                    extra_attributes::jsonb,
-                    '{images,thumb}',
-                    to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'thumb', '/thumbnailv2/', '/scaled/')),
-                    true
-                  ),
-                  '{images,large}',
-                  to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'large', '/thumbnailv2/', '/scaled/')),
-                  true
-                ),
-                '{images,small}',
-                to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'small', '/thumbnailv2/', '/scaled/')),
-                true
-              )::json
-
-            WHERE
-              extra_attributes->'images'->>'thumb' LIKE '%/thumbnailv2/%'
-              OR extra_attributes->'images'->>'large' LIKE '%/thumbnailv2/%'
-              OR extra_attributes->'images'->>'small' LIKE '%/thumbnailv2/%'; ");
+        DB::select(get_query('migrations.nfts.update_thumbnailv2_to_scaled'));
     }
 };
