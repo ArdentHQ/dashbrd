@@ -115,10 +115,10 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
 
                     <div
                         ref={containerReference}
-                        className="w-full transition-all"
+                        className="h-6 w-full transition-all"
                     >
                         {!isReady && (
-                            <div className="flex h-6 translate-y-1/2 items-center justify-center transition-all">
+                            <div className="flex h-6 items-center justify-center transition-all">
                                 <Icon
                                     name="Spinner"
                                     className="animate-spin text-theme-primary-600"
