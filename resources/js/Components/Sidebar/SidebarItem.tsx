@@ -43,6 +43,8 @@ export const SidebarItem = ({
                     className={cn("ml-auto", {
                         "text-theme-secondary-500": isDisabled,
                         "text-theme-secondary-700": !isDisabled,
+                        "dark:text-theme-dark-100": !isDisabled && isSelected,
+                        "dark:text-theme-dark-200": !isDisabled && !isSelected,
                     })}
                 >
                     {rightText}
