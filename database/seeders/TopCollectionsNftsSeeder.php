@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\Collection;
 use App\Models\Collection as NftCollection;
 use App\Models\CollectionTrait;
@@ -116,7 +116,7 @@ class TopCollectionsNftsSeeder extends Seeder
         $ethCollections = collect($ethCollections->data)
             ->filter(fn ($collection) => $collection->items_total <= 20000)
             ->map(function ($collection) {
-                $collection->chain = Chains::from(1);
+                $collection->chain = Chain::from(1);
 
                 return $collection;
             })
@@ -127,7 +127,7 @@ class TopCollectionsNftsSeeder extends Seeder
         $polygonCollections = collect($polygonCollections->data)
             ->filter(fn ($collection) => $collection->items_total <= 20000)
             ->map(function ($collection) {
-                $collection->chain = Chains::from(137);
+                $collection->chain = Chain::from(137);
 
                 return $collection;
             })
@@ -171,7 +171,7 @@ class TopCollectionsNftsSeeder extends Seeder
         return $collectionModel;
     }
 
-    private function loadCollectionNfts(object $collection, Chains $chain): array|Items
+    private function loadCollectionNfts(object $collection, Chain $chain): array|Items
     {
         $address = $collection->contract_address;
         $path = $this->prepareCollectionPath($chain, $address);
@@ -199,7 +199,7 @@ class TopCollectionsNftsSeeder extends Seeder
         }
     }
 
-    private function loadCollectionTraits(object $collection, Chains $chain): array
+    private function loadCollectionTraits(object $collection, Chain $chain): array
     {
         $address = $collection->contract_address;
         $path = $this->prepareCollectionPath($chain, $address);
@@ -215,7 +215,7 @@ class TopCollectionsNftsSeeder extends Seeder
         return json_decode($fs->get($fileName), true);
     }
 
-    private function prepareCollectionPath(Chains $chain, string $contractAddress): string
+    private function prepareCollectionPath(Chain $chain, string $contractAddress): string
     {
         return self::nftsSubDir.'/'.Str::lower($chain->name).'_'.$contractAddress;
     }

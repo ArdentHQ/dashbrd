@@ -6,7 +6,7 @@ import { isTruthy } from "@/Utils/is-truthy";
 interface Properties extends React.HTMLAttributes<HTMLDivElement> {
     tokenName: string;
     imgSource: string | null;
-    chainId?: App.Enums.Chains;
+    chainId?: App.Enums.Chain;
     isSelected?: boolean;
     networkIconSize?: "sm" | "md" | "xl";
 }

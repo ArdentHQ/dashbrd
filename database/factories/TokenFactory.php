@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\Network;
 use App\Models\TokenGuid;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -77,14 +77,14 @@ class TokenFactory extends Factory
     {
         return $this->state(fn () => [
             'network_id' => function () {
-                $network = Network::where('chain_id', Chains::Polygon->value)->first();
+                $network = Network::where('chain_id', Chain::Polygon->value)->first();
 
                 if ($network !== null) {
                     return $network;
                 }
 
                 return Network::factory()->create([
-                    'chain_id' => Chains::Polygon->value,
+                    'chain_id' => Chain::Polygon->value,
                     'name' => 'Polygon Mainnet',
                 ]);
             },

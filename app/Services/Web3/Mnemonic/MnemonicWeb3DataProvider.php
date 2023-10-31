@@ -7,7 +7,7 @@ namespace App\Services\Web3\Mnemonic;
 use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\Service;
 use App\Exceptions\NotImplementedException;
 use App\Jobs\Middleware\RateLimited;
@@ -49,7 +49,7 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getNftCollectionFloorPrice(Chains $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return $this->fromCache(
             static fn () => Mnemonic::getNftCollectionFloorPrice($chain, $contractAddress),
@@ -60,7 +60,7 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, CollectionActivity>
      */
-    public function getCollectionActivity(Chains $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
     {
         return Mnemonic::getCollectionActivity($chain, $contractAddress, $limit, $from);
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\Network;
 use App\Models\SpamContract;
 use App\Support\Facades\Alchemy;
@@ -33,7 +33,7 @@ class SyncSpamContracts extends Command
      */
     public function handle(): int
     {
-        $chain = Chains::from($this->option('chain-id') === null ? 1 : (int) $this->option('chain-id'));
+        $chain = Chain::from($this->option('chain-id') === null ? 1 : (int) $this->option('chain-id'));
 
         /** @var Network $network */
         $network = Network::query()->where('chain_id', $chain)->first();

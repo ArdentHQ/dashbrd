@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\Collection as NftCollection;
 use App\Models\Network;
 use App\Models\Token;
@@ -89,7 +89,7 @@ class LiveDumpNfts extends Command
             return Command::INVALID;
         }
 
-        $chain = Chains::from($this->option('chain-id') === null ? 1 : (int) $this->option('chain-id'));
+        $chain = Chain::from($this->option('chain-id') === null ? 1 : (int) $this->option('chain-id'));
 
         $topCollections = $this->getTopCollections($chain, self::COLLECTION_LIMIT);
 
@@ -133,7 +133,7 @@ class LiveDumpNfts extends Command
         return Command::SUCCESS;
     }
 
-    private function prepareCollectionModel(Chains $chain, stdClass $collection): NftCollection
+    private function prepareCollectionModel(Chain $chain, stdClass $collection): NftCollection
     {
         $network = Network::firstWhere('chain_id', $chain->value);
 
@@ -161,7 +161,7 @@ class LiveDumpNfts extends Command
     /**
      * @return IlluminateCollection<int, array<string, mixed>> $collections
      */
-    private function getTopCollections(Chains $chain, int $limit = 25): IlluminateCollection
+    private function getTopCollections(Chain $chain, int $limit = 25): IlluminateCollection
     {
         $chainName = strtolower($chain->name);
         $fileName = self::nftsSubDir."/top-{$chainName}-collections.json";
@@ -215,7 +215,7 @@ class LiveDumpNfts extends Command
 
     private function getCollectionNftsAndPersist(
         NftCollection $collection,
-        Chains $chain,
+        Chain $chain,
         int $itemsTotal,
         int $chunk,
         string $cursor = null,
@@ -250,7 +250,7 @@ class LiveDumpNfts extends Command
         $progressBar->finish();
     }
 
-    private function mergeNftChunks(Chains $chain, string $contractAddress): void
+    private function mergeNftChunks(Chain $chain, string $contractAddress): void
     {
         $fs = Storage::disk(self::diskName);
 
@@ -272,12 +272,12 @@ class LiveDumpNfts extends Command
         $this->info('Total NFTs count: '.count($nfts));
     }
 
-    private function prepareCollectionPath(Chains $chain, string $contractAddress): string
+    private function prepareCollectionPath(Chain $chain, string $contractAddress): string
     {
         return self::nftsSubDir.'/'.Str::lower($chain->name).'_'.$contractAddress;
     }
 
-    private function getTokenCursorForChunk(int $chunk, Chains $chain, string $contractAddress): ?string
+    private function getTokenCursorForChunk(int $chunk, Chain $chain, string $contractAddress): ?string
     {
         $path = $this->prepareCollectionPath($chain, $contractAddress);
 
@@ -294,7 +294,7 @@ class LiveDumpNfts extends Command
         return Arr::get($nftChunk, 'nextToken');
     }
 
-    private function getCollectionTraitsAndPersist(Chains $chain, string $address): void
+    private function getCollectionTraitsAndPersist(Chain $chain, string $address): void
     {
         $this->info('Fetching collection traits...');
 

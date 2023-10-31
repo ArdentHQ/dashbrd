@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\CoingeckoPlatform;
 
 it('should return chain', function () {
-    expect(CoingeckoPlatform::Polygon->toChain())->toEqual(Chains::Polygon);
+    expect(CoingeckoPlatform::Polygon->toChain())->toEqual(Chain::Polygon);
 });
 
 it('should match chainId', function (int $chainId, CoingeckoPlatform $platform) {
     expect(CoingeckoPlatform::tryFromChainId($chainId))->toEqual($platform);
 })->with([
-    'ETH' => [Chains::ETH->value, CoingeckoPlatform::Ethereum],
-    'Polygon' => [Chains::Polygon->value, CoingeckoPlatform::Polygon],
+    'ETH' => [Chain::ETH->value, CoingeckoPlatform::Ethereum],
+    'Polygon' => [Chain::Polygon->value, CoingeckoPlatform::Polygon],
 ]);
 
 it('should return null if no match found', function (int $chainId) {

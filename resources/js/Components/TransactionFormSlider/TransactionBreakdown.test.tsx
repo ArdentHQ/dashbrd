@@ -38,7 +38,7 @@ describe("TransactionBreakdown", () => {
     const nativeTokenPrice = {
         guid: 1,
         symbol: nativeToken.symbol,
-        chainId: 137 as App.Enums.Chains,
+        chainId: 137 as App.Enums.Chain,
         price: {
             [currency]: {
                 price: 12.25,
