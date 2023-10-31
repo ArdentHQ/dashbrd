@@ -37,6 +37,7 @@ return [
         'header_title' => 'Explore our collection of',
         'header_suffix_one' => 'published article',
         'header_suffix_other' => 'published articles',
+        'audio_version' => 'Audio version',
         'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
     ],
     'collections' => [

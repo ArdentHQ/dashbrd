@@ -5,7 +5,9 @@ import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanne
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { WaveSurferPlayer } from "@/Pages/Articles/Components/WaveSurferPlayer";
 import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
+import { isTruthy } from "@/Utils/is-truthy";
 import { tp } from "@/Utils/TranslatePlural";
 
 interface Properties {
@@ -42,8 +44,15 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                                     className="absolute -ml-[68px] flex flex-col space-y-2"
                                 />
                             </div>
+                            <div>
+                                {isTruthy(article.audioSrc) && (
+                                    <div className="mb-4 border-theme-secondary-300 sm:border-b sm:pb-4">
+                                        <WaveSurferPlayer url={article.audioSrc} />
+                                    </div>
+                                )}
 
-                            <ArticleContent article={article} />
+                                <ArticleContent article={article} />
+                            </div>
                         </div>
                     </div>
                 </div>
