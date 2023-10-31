@@ -51,6 +51,16 @@ describe("Tabs", () => {
         expect(screen.getByTestId("test").parentElement?.getAttribute("href")).toBe("https://ardenthq.com/");
     });
 
+    it("should render disabled link", () => {
+        render(
+            <Tabs.DisabledLink>
+                <span data-testid="test">Click Me</span>
+            </Tabs.DisabledLink>,
+        );
+
+        expect(screen.getByTestId("test").parentElement?.tagName).toBe("SPAN");
+    });
+
     it("has click event", async () => {
         const onClick = vi.fn();
 

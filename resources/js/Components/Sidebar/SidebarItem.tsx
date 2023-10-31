@@ -23,7 +23,7 @@ export const SidebarItem = ({
                 title={title}
                 selected={isSelected}
                 disabled={isDisabled}
-                data-testid="SidebarItem"
+                data-testid="SidebarItem__disabled"
             >
                 {isTruthy(icon) && (
                     <Icon
