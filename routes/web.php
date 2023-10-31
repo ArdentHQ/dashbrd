@@ -92,7 +92,7 @@ Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], fu
     Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
     Route::get('newest', [GalleryFiltersController::class, 'index'])->name('galleries.newest');
 
-    Route::get('{gallery:slug}', [GalleryController::class, 'view'])
+    Route::get('{gallery:slug}', [GalleryController::class, 'show'])
         ->middleware(RecordGalleryView::class)
         ->name('galleries.view');
 

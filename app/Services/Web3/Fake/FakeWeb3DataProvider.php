@@ -8,7 +8,7 @@ use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;
 use App\Models\Collection as CollectionModel;
 use App\Models\Network;
@@ -82,7 +82,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
                 name: $nft->name,
                 description: null,
                 extraAttributes: $nft['extra_attributes']->toArray(),
-                floorPrice: $this->getNftCollectionFloorPrice(Chains::ETH, $wallet->address),
+                floorPrice: $this->getNftCollectionFloorPrice(Chain::ETH, $wallet->address),
                 traits: [],
                 mintedBlock: random_int(1, 10000),
                 mintedAt: now(),
@@ -114,7 +114,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
         return now();
     }
 
-    public function getNftCollectionFloorPrice(Chains $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return new Web3NftCollectionFloorPrice((string) (random_int(50, 1000) * 1e18), 'eth', Carbon::now());
     }
