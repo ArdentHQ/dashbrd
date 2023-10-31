@@ -168,6 +168,7 @@ export const CollectionNavigation = ({
             {selectedTab === "activity" && (
                 <Tooltip
                     content={updateDisabledReason()}
+                    disabled={!isTruthy(updateDisabledReason())}
                     touch
                 >
                     <div className="mt-6">
