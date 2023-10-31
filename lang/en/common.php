@@ -147,4 +147,5 @@ return [
     'sort' => 'Sort',
     'published' => 'Published',
     'drafts' => 'Drafts',
+    'draft' => 'Draft',
 ];
