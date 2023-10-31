@@ -192,6 +192,21 @@ declare namespace App.Data.Gallery {
         collections: number;
         nfts: number;
     };
+    export type GalleryCardData = {
+        id: number;
+        name: string;
+        slug: string;
+        likes: number;
+        views: number;
+        nftsCount: number;
+        collectionsCount: number;
+        value: number | null;
+        coverImage: string | null;
+        wallet: App.Data.SimpleWalletData;
+        nfts: Array<App.Data.Collections.SimpleNftData>;
+        isOwner: boolean;
+        hasLiked: boolean;
+    };
     export type GalleryCollectionData = {
         name: string;
         slug: string;
