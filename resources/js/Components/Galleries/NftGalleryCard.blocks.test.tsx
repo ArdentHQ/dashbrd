@@ -1,6 +1,7 @@
 import React from "react";
 import { type SpyInstance } from "vitest";
 import {
+    GalleryFooter,
     GalleryHeading,
     GalleryHeadingPlaceholder,
     GalleryStats,
@@ -369,6 +370,23 @@ describe("GalleryStats", () => {
         expect(container.getElementsByClassName("fill-theme-danger-100 text-theme-danger-400").length).toBe(0);
     });
 
+    it("should display GalleryFooter by default", () => {
+        render(<GalleryStats gallery={gallery} />);
+
+        expect(screen.getByTestId("GalleryFooter")).toBeInTheDocument();
+    });
+
+    it("should render a custom footer", () => {
+        render(
+            <GalleryStats
+                gallery={gallery}
+                footer={<div data-testid="CustomFooter" />}
+            />,
+        );
+
+        expect(screen.getByTestId("CustomFooter")).toBeInTheDocument();
+    });
+
     it("should display gallery stats if no authenticated", () => {
         useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
             user: null,
@@ -546,5 +564,61 @@ describe("GalleryStats", () => {
         await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
 
         expect(likeMock).toHaveBeenCalledWith(gallery.slug, undefined);
+    });
+});
+
+describe("GalleryFooter", () => {
+    const gallery = new GalleryDataFactory().create({
+        likes: 12,
+        views: 45,
+        hasLiked: false,
+    });
+
+    const user = new UserDataFactory().withUSDCurrency().create();
+
+    let useAuthSpy: SpyInstance;
+
+    const useAuthState = {
+        user,
+        wallet: null,
+        authenticated: true,
+        signed: false,
+        showAuthOverlay: false,
+        showCloseButton: false,
+        closeOverlay: vi.fn(),
+    };
+
+    let useAuthorizedActionSpy: SpyInstance;
+    const signedActionMock = vi.fn();
+
+    beforeEach(() => {
+        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
+
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        useAuthSpy.mockRestore();
+
+        useAuthorizedActionSpy.mockRestore();
+    });
+
+    it("should render", () => {
+        render(<GalleryFooter gallery={gallery} />);
+
+        expect(screen.getByTestId("GalleryFooter")).toBeInTheDocument();
+    });
+
+    it("should display the amount of views", () => {
+        render(<GalleryFooter gallery={gallery} />);
+
+        expect(screen.getByTestId("GalleryStats__views")).toHaveTextContent(gallery.views.toString());
     });
 });
