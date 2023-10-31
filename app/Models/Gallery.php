@@ -23,13 +23,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /**
  * @property int $views_count
  */
 class Gallery extends Model implements Viewable
 {
-    use BelongsToUser, CanBeLiked, HasFactory, HasSlug, InteractsWithViews, Reportable, SoftDeletes;
+    use BelongsToUser, CanBeLiked, HasEagerLimit, HasFactory, HasSlug, InteractsWithViews, Reportable, SoftDeletes;
 
     /**
      * @var array<string>
