@@ -122,7 +122,7 @@ export const CollectionNavigation = ({
             return t("pages.collections.activities.loading_activities_collection");
         }
 
-        return t("common.refresh");
+        return null;
     };
 
     return (
@@ -145,7 +145,10 @@ export const CollectionNavigation = ({
                     </div>
 
                     {selectedTab === "activity" && (
-                        <Tooltip content={updateDisabledReason()}>
+                        <Tooltip
+                            content={updateDisabledReason()}
+                            disabled={!isTruthy(updateDisabledReason())}
+                        >
                             <div className="py-1">
                                 <Button
                                     icon="Refresh"
