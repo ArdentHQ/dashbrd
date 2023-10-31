@@ -16,6 +16,7 @@ import { CollectionHiddenModal } from "@/Components/Collections/CollectionHidden
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
@@ -84,6 +85,7 @@ const CollectionsView = ({
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
     const { requestActivityUpdate } = useWalletActivity();
 
+    const { authenticatedAction } = useAuthorizedAction();
     const { showToast } = useToasts();
 
     const hasSelectedTraits = useMemo(
@@ -264,19 +266,21 @@ const CollectionsView = ({
     };
 
     const handleRefreshActivity = (): void => {
-        setIsLoadingActivity(true);
-        requestActivityUpdate(collection.address);
+        void authenticatedAction((): void => {
+            setIsLoadingActivity(true);
+            requestActivityUpdate(collection.address);
 
-        showToast({
-            message: t("common.refreshing_activity"),
-            isExpanded: true,
+            showToast({
+                message: t("common.refreshing_activity"),
+                isExpanded: true,
+            });
+
+            void axios.post(
+                route("collection.refresh-activity", {
+                    collection: collection.slug,
+                }),
+            );
         });
-
-        void axios.post(
-            route("collection.refresh-activity", {
-                collection: collection.slug,
-            }),
-        );
     };
 
     return (
