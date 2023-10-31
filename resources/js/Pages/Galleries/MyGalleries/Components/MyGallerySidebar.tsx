@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Sidebar, SidebarItem } from "@/Components/Sidebar";
 
+const routeName = "my-galleries";
+
 export const MyGallerySidebar = ({
     publishedCount,
     draftsCount,
@@ -18,16 +20,16 @@ export const MyGallerySidebar = ({
             <SidebarItem
                 icon="DocumentCheckmark"
                 title={t("common.published")}
-                isSelected={route().current("my-galleries")}
-                href={route("my-galleries")}
+                isSelected={route().current(routeName, { draft: false })}
+                href={route(routeName)}
                 rightText={publishedCount.toString()}
             />
 
             <SidebarItem
                 icon="Document"
                 title={t("common.drafts")}
-                isDisabled
-                tooltip={t("common.coming_soon").toString()}
+                isSelected={route().current(routeName, { draft: true })}
+                href={route(routeName, { draft: true })}
                 rightText={draftsCount.toString()}
             />
         </Sidebar>

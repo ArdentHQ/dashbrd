@@ -10,11 +10,13 @@ const Index = ({
     title,
     galleries,
     nftCount = 0,
+    showDrafts,
 }: {
     title: string;
     children: ReactNode;
     galleries: App.Data.Gallery.GalleriesData;
     nftCount?: number;
+    showDrafts: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -29,7 +31,7 @@ const Index = ({
                 <div className="mb-6 hidden w-full items-center justify-between xl:flex">
                     <Heading level={1}>
                         <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
-                            {t("common.published")}
+                            {showDrafts ? t("common.drafts") : t("common.published")}
                         </span>
                     </Heading>
 
