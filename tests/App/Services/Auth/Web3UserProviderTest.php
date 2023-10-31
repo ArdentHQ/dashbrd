@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\Auth\Web3UserProvider;
@@ -52,7 +52,7 @@ it('should create a fresh user with new wallet', function () {
 
     $provider = new Web3UserProvider(User::class);
     $user = $provider->retrieveByCredentials([
-        'chainId' => Chains::Polygon->value,
+        'chainId' => Chain::Polygon->value,
         'timezone' => 'Europe/London',
         'address' => '0x1231231231231231231231231231231231231231',
     ]);
@@ -75,7 +75,7 @@ it('should create network wallets', function () {
 
     $provider = new Web3UserProvider(User::class);
     $user = $provider->retrieveByCredentials([
-        'chainId' => Chains::Polygon->value,
+        'chainId' => Chain::Polygon->value,
         'address' => '0x1231231231231231231231231231231231231231',
     ]);
 
@@ -97,7 +97,7 @@ it('should create a new user when logging in with a different wallet', function 
 
     $provider = new Web3UserProvider(User::class);
     $returnedUser = $provider->retrieveByCredentials([
-        'chainId' => Chains::Mumbai->value,
+        'chainId' => Chain::Mumbai->value,
         'address' => '0x1231231231231231231231231231231231231231',
     ]);
 
@@ -107,7 +107,7 @@ it('should create a new user when logging in with a different wallet', function 
     expect($wallets)->toHaveLength(1);
 
     $returnedUser = $provider->retrieveByCredentials([
-        'chainId' => Chains::Mumbai->value,
+        'chainId' => Chain::Mumbai->value,
         'timezone' => 'Europe/London',
         'address' => '0x'.fake()->sha1(),
     ]);
@@ -133,7 +133,7 @@ it('should not create a new user when switching networks', function () {
 
     $provider = new Web3UserProvider(User::class);
     $returnedUser = $provider->retrieveByCredentials([
-        'chainId' => Chains::Polygon->value,
+        'chainId' => Chain::Polygon->value,
         'address' => '0x1231231231231231231231231231231231231231',
     ]);
 
@@ -143,7 +143,7 @@ it('should not create a new user when switching networks', function () {
     expect($wallets)->toHaveLength(1);
 
     $returnedUser = $provider->retrieveByCredentials([
-        'chainId' => Chains::Polygon->value,
+        'chainId' => Chain::Polygon->value,
         'timezone' => 'Europe/London',
         'address' => $address = '0x'.fake()->sha1(),
     ]);
@@ -152,7 +152,7 @@ it('should not create a new user when switching networks', function () {
     expect(User::count())->toBe(2);
 
     $returnedUser = $provider->retrieveByCredentials([
-        'chainId' => Chains::Mumbai->value,
+        'chainId' => Chain::Mumbai->value,
         'timezone' => 'Europe/London',
         'address' => $address,
     ]);
@@ -181,7 +181,7 @@ it('should not create a new user when logging into an existing user with a new a
 
     $provider = new Web3UserProvider(User::class);
     $returnedUser = $provider->retrieveByCredentials([
-        'chainId' => Chains::Mumbai->value,
+        'chainId' => Chain::Mumbai->value,
         'timezone' => 'Europe/London',
         'address' => '0x1231231231231231231231231231231231231231',
     ]);

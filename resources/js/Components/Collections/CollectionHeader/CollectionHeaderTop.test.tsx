@@ -218,7 +218,7 @@ describe("CollectionHeaderTop", () => {
         ["https://mumbai.polygonscan.com/address/", 80001],
     ])(`should use %s for address`, (url, chainId) => {
         const collection = new CollectionDetailDataFactory().create({
-            chainId: chainId as App.Enums.Chains,
+            chainId: chainId as App.Enums.Chain,
         });
 
         render(<CollectionHeaderTop collection={collection} />);

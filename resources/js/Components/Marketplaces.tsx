@@ -6,12 +6,12 @@ import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
     type: "nft" | "collection";
-    chainId: App.Enums.Chains;
+    chainId: App.Enums.Chain;
     address: App.Data.Nfts.NftCollectionData["address"];
     nftId?: App.Data.Nfts.NftData["tokenNumber"];
 }
 
-const getNetworkName = (chainId: App.Enums.Chains): string | null => {
+const getNetworkName = (chainId: App.Enums.Chain): string | null => {
     switch (chainId) {
         case ExplorerChains.EthereumMainnet:
             return "ethereum";

@@ -7,7 +7,7 @@ namespace App\Support\Facades;
 use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftCollectionTrait;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Http\Client\Mnemonic\MnemonicFactory;
 use App\Models\Network;
 use App\Models\Wallet;
@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Http;
 
 /**
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
- * @method static Web3NftCollectionFloorPrice | null getNftCollectionFloorPrice(Chains $chain, string $contractAddress)
- * @method static string | null getNftCollectionBanner(Chains $chain, string $contractAddress)
- * @method static int | null getNftCollectionOwners(Chains $chain, string $contractAddress)
- * @method static string | null getNftCollectionVolume(Chains $chain, string $contractAddress)
- * @method static Collection<int, Web3NftCollectionTrait> getNftCollectionTraits(Chains $chain, string $contractAddress)
- * @method static Collection<int, CollectionActivity> getCollectionActivity(Chains $chain, string $contractAddress, int $limit, ?Carbon $from = null)
+ * @method static Web3NftCollectionFloorPrice | null getNftCollectionFloorPrice(Chain $chain, string $contractAddress)
+ * @method static string | null getNftCollectionBanner(Chain $chain, string $contractAddress)
+ * @method static int | null getNftCollectionOwners(Chain $chain, string $contractAddress)
+ * @method static string | null getNftCollectionVolume(Chain $chain, string $contractAddress)
+ * @method static Collection<int, Web3NftCollectionTrait> getNftCollectionTraits(Chain $chain, string $contractAddress)
+ * @method static Collection<int, CollectionActivity> getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  *
  * @see App\Http\Client\Mnemonic\MnemonicPendingRequest
  */

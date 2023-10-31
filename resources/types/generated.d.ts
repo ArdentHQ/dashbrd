@@ -45,7 +45,7 @@ declare namespace App.Data {
         is_native_token: boolean;
         balance: string;
         decimals: number;
-        chain_id: App.Enums.Chains;
+        chain_id: App.Enums.Chain;
         network_id: number;
         minted_supply: string | null;
         total_market_cap: string | null;
@@ -90,14 +90,14 @@ declare namespace App.Data {
 declare namespace App.Data.Collections {
     export type CollectionBasicDetailsData = {
         slug: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
     };
     export type CollectionData = {
         id: number;
         name: string;
         slug: string;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
@@ -114,7 +114,7 @@ declare namespace App.Data.Collections {
         slug: string;
         description: string | null;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
@@ -211,7 +211,7 @@ declare namespace App.Data.Gallery {
         name: string;
         slug: string;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
@@ -306,7 +306,7 @@ declare namespace App.Data.Network {
         id: number;
         name: string;
         isMainnet: boolean;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         publicRpcProvider: string;
         explorerUrl: string;
         collectionsCount: number;
@@ -347,7 +347,7 @@ declare namespace App.Data.Nfts {
         slug: string;
         description: string | null;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         website: string;
         image: string | null;
@@ -377,7 +377,7 @@ declare namespace App.Data.Token {
         address: string;
         isNativeToken: boolean;
         isDefaultToken: boolean;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         guid: number | null;
         name: string;
         symbol: string;
@@ -445,7 +445,7 @@ declare namespace App.Data.Wallet {
     };
 }
 declare namespace App.Enums {
-    export type Chains = 1 | 5 | 137 | 80001;
+    export type Chain = 1 | 5 | 137 | 80001;
     export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER";
     export type Platforms = "ethereum" | "polygon-pos";
     export type TokenGuid = "ethereum" | "matic-network";

@@ -9,7 +9,7 @@ use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\MoralisChain;
 use App\Enums\TokenType;
 use App\Exceptions\ConnectionException;
@@ -241,7 +241,7 @@ class MoralisPendingRequest extends PendingRequest
      * @see https://docs.moralis.io/web3-data-api/evm/reference/get-nft-lowest-price
      * Get the lowest executed price for an NFT contract for the last x days (only trades paid in ETH).
      */
-    public function getNftCollectionFloorPrice(Chains $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         try {
             $data = self::get(sprintf('nft/%s/lowestprice', $contractAddress), [
