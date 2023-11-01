@@ -43,6 +43,7 @@ import { ReactComponent as Explorer } from "@icons/explorer.svg";
 import { ReactComponent as Eye } from "@icons/eye.svg";
 import { ReactComponent as FatArrowDown } from "@icons/fat-arrow-down.svg";
 import { ReactComponent as FatArrowUp } from "@icons/fat-arrow-up.svg";
+import { ReactComponent as FatDoubleCheck } from "@icons/fat-double-check.svg";
 import { ReactComponent as FatPlus } from "@icons/fat-plus.svg";
 import { ReactComponent as FatXInCircle } from "@icons/fat-x-in-circle.svg";
 import { ReactComponent as FingerTap } from "@icons/finger-tap.svg";
@@ -210,4 +211,5 @@ export const SvgCollection = {
     Moralis,
     Mnemonic,
     Menu,
+    FatDoubleCheck,
 };

@@ -21,6 +21,7 @@ interface GalleryDraft {
 
 interface GalleryDraftsState {
     reachedLimit: boolean;
+    isSaving: boolean;
     draft: GalleryDraft;
     setDraftCover: (image: ArrayBuffer | null, type: string | null) => void;
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
@@ -36,7 +37,7 @@ const initialGalleryDraft: GalleryDraft = {
     id: null,
 };
 
-export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
+export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): GalleryDraftsState => {
     const { wallet } = useAuth();
 
     const database = useIndexedDB("gallery-drafts");
@@ -53,7 +54,7 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
 
     // populate `draft` state if `givenDraftId` is present
     useEffect(() => {
-        if (givenDraftId === undefined) return;
+        if (givenDraftId === undefined || disabled === true) return;
         const getDraft = async (): Promise<void> => {
             const draft: GalleryDraft | undefined = await database.getByID(givenDraftId);
             if (draft !== undefined && draft.walletAddress === wallet?.address) {
@@ -65,7 +66,7 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
     }, [givenDraftId, wallet?.address]);
 
     useEffect(() => {
-        if (!save || isSaving || reachedLimit) return;
+        if (disabled === true || !save || isSaving || reachedLimit) return;
 
         void saveDraft();
     }, [save]);
@@ -77,6 +78,7 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
             const walletDrafts = await getWalletDrafts();
 
             if (walletDrafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
+                setIsSaving(false);
                 setReachedLimit(true);
                 return;
             }
@@ -123,7 +125,7 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
     };
 
     const deleteDraft = async (): Promise<void> => {
-        if (draft.id === null) return;
+        if (disabled === true || draft.id === null) return;
         await database.deleteRecord(draft.id);
 
         setReachedLimit(false);
@@ -131,6 +133,7 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
 
     return {
         reachedLimit,
+        isSaving,
         draft,
         setDraftCover,
         setDraftNfts,

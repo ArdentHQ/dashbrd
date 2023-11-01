@@ -62,8 +62,9 @@ const Create = ({
 
     const { draftId } = getQueryParameters();
 
-    const { setDraftCover, setDraftNfts, setDraftTitle, draft } = useGalleryDrafts(
+    const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving } = useGalleryDrafts(
         isTruthy(draftId) ? Number(draftId) : undefined,
+        isTruthy(gallery?.slug),
     );
 
     useEffect(() => {
@@ -187,6 +188,8 @@ const Create = ({
                 showDelete={isTruthy(gallery)}
                 isProcessing={processing}
                 galleryCoverUrl={galleryCoverImageUrl}
+                isSavingDraft={isSaving}
+                draftId={draft.id ?? undefined}
                 onCoverClick={({ currentTarget }: MouseEvent<HTMLButtonElement>) => {
                     currentTarget.blur();
                     setGallerySliderActiveTab(GalleryFormSliderTabs.Cover);
