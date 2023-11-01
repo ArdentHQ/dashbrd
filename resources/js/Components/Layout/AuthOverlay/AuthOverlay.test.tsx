@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
-import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
