@@ -56,4 +56,42 @@ describe("Navbar", () => {
 
         expect(connectMock).toHaveBeenCalled();
     });
+
+    it("shows dark mode toggle if dark mode is enabled", () => {
+        const connectMock = vi.fn();
+
+        localStorage.setItem("theme", "dark");
+
+        render(
+            <DarkModeContextProvider>
+                <Navbar
+                    authenticated={false}
+                    connecting={false}
+                    initialized
+                    wallet={null}
+                    connectWallet={connectMock}
+                    onLogout={vi.fn()}
+                />
+            </DarkModeContextProvider>,
+        );
+
+        expect(screen.getByTestId("Navbar__darkMode__dark")).toBeInTheDocument();
+
+        localStorage.removeItem("theme");
+
+        render(
+            <DarkModeContextProvider>
+                <Navbar
+                    authenticated={false}
+                    connecting={false}
+                    initialized
+                    wallet={null}
+                    connectWallet={connectMock}
+                    onLogout={vi.fn()}
+                />
+            </DarkModeContextProvider>,
+        );
+
+        expect(screen.getByTestId("Navbar__darkMode__light")).toBeInTheDocument();
+    });
 });

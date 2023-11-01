@@ -101,12 +101,14 @@ export const Navbar = ({
                             variant="icon"
                             icon="Moon"
                             onClick={toggleDarkMode}
+                            data-testid="Navbar__darkMode__dark"
                         />
                     ) : (
                         <Button
                             variant="icon"
                             icon="Sun"
                             onClick={toggleDarkMode}
+                            data-testid="Navbar__darkMode__light"
                         />
                     )}
                 </div>
