@@ -3,7 +3,7 @@ import basic from "@images/gallery-templates/basic.png";
 
 import { useTranslation } from "react-i18next";
 import { SliderFormActionsToolbar } from "@/Components/SliderFormActionsToolbar";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 
 export const GallerySelectTemplate = ({
     className,

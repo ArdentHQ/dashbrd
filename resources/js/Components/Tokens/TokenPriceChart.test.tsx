@@ -1,7 +1,7 @@
 import React from "react";
 import { TokenPriceChart } from "./TokenPriceChart";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
-import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
