@@ -1,11 +1,11 @@
 import { expect, type SpyInstance } from "vitest";
 import { useGalleryDrafts } from "./useGalleryDrafts";
 import * as AuthContextMock from "@/Contexts/AuthContext";
-
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
 import { act, renderHook, waitFor } from "@/Tests/testing-library";
 
 let useAuthSpy: SpyInstance;
+
 vi.mock("@/Contexts/AuthContext", () => ({
     useAuth: () => ({ wallet: { address: "mockedWalletAddress" } }),
 }));
@@ -19,19 +19,17 @@ const defaultGalleryDraft = {
     coverTye: null,
 };
 
-const indexedDBMocks = {
-    add: vi.fn(),
-    getAll: vi.fn().mockResolvedValue([]),
-    update: vi.fn(),
-    deleteRecord: vi.fn(),
-    openCursor: vi.fn(),
-    getByIndex: vi.fn(),
-    clear: vi.fn(),
-    getByID: vi.fn().mockResolvedValue(defaultGalleryDraft),
-};
-
 const mocks = vi.hoisted(() => ({
-    useIndexedDB: () => indexedDBMocks,
+    useIndexedDB: () => ({
+        add: vi.fn(),
+        getAll: vi.fn().mockResolvedValue([]),
+        update: vi.fn(),
+        deleteRecord: vi.fn(),
+        openCursor: vi.fn(),
+        getByIndex: vi.fn(),
+        clear: vi.fn(),
+        getByID: vi.fn().mockResolvedValue(defaultGalleryDraft),
+    }),
 }));
 
 vi.mock("react-indexed-db-hook", () => ({
