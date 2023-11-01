@@ -63,8 +63,6 @@ class UpdateTokenDetails extends Command
                 // the command defined on the `Kernel.php` file, currently `everyFifteenMinutes`
                 $limit = $this->getLimitPerMinutes(15);
 
-                dd($limit);
-
                 if ($top) {
                     return $query->limit($limit);
                 }

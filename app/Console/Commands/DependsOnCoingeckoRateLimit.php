@@ -13,25 +13,6 @@ use Closure;
 trait DependsOnCoingeckoRateLimit
 {
     /**
-     * @var array<string>
-     */
-    private array $jobsThatRunDaily = [
-        FetchPriceHistory::class,
-        // Notice that this job is called twice
-        UpdateTokenDetails::class,
-    ];
-
-    /**
-     * Notice that we use on `Monday` because is the value used on the `Kernel.php`
-     * file, we should update the code if that value changes.
-     *
-     * @var array<string>
-     */
-    private array $jobsThatRunOnMonday = [
-        VerifySupportedCurrencies::class,
-    ];
-
-    /**
      * Used to delay jobs by a certain amount of seconds to prevent overlapping
      *
      * @var array<string, int>
@@ -89,14 +70,45 @@ trait DependsOnCoingeckoRateLimit
      */
     private function getRateLimitFactor(): int
     {
-        return count($this->jobsThatRunDaily)
-            + 1 // +1 for the second call of the `UpdateTokenDetails` job
-            + ($this->isMonday() ? count($this->jobsThatRunOnMonday) : 0);
+        return
+            ($this->runsVerifySupportedCurrencies() ? 1 : 0)
+            + ($this->runsUpdateTokenDetailsForRestOfTokens() ? 2 : 1)
+            + ($this->runsFetchPriceHistory() ? 1 : 0);
+
     }
 
-    private function isMonday(): bool
+    private function runsVerifySupportedCurrencies(): bool
     {
-        return date('N') === '1';
+        $isMonday = date('N') === '1';
+
+        return $isMonday;
+    }
+
+    /**
+     * After 19hrs it runs the `UpdateTokenDetails` + the job for the rest of
+     * the tokens (see `app/Console/Kernel.php` file).
+     *
+     * *Subtracting 15 minutes to leave room for the `UpdateTokenDetails` that
+     * runs every 15 minutes
+     */
+    private function runsUpdateTokenDetailsForRestOfTokens(): bool
+    {
+        $isAfter1845 = Carbon::now()->gt(Carbon::today()->setTime(18, 45));
+
+        return $isAfter1845;
+    }
+
+    /**
+     * After 13hrs it runs the `FetchPriceHistory` job
+     *
+     * *Subtracting 15 minutes to leave room for the `UpdateTokenDetails` that
+     * runs every 15 minutes
+     */
+    private function runsFetchPriceHistory(): bool
+    {
+        $isAfter1245 = Carbon::now()->gt(Carbon::today()->setTime(12, 45));
+
+        return $isAfter1245;
     }
 
     private function dispatchDelayed(Closure $callback, int $index, string $job, int $delayThreshold = null): void

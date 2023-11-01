@@ -206,6 +206,8 @@ class Kernel extends ConsoleKernel
                 '--period='.config('dashbrd.wallets.line_chart.period'),
             ])
             ->withoutOverlapping()
+            // In you update this time consider to update the related conditions
+            // on the `DependsOnCoingeckoRateLimit.php` file
             ->dailyAt('13:00');
 
         $schedule
