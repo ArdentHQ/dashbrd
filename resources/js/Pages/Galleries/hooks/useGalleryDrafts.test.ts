@@ -19,24 +19,26 @@ const defaultGalleryDraft = {
     coverTye: null,
 };
 
+const indexedDBMocks = {
+    add: vi.fn(),
+    getAll: vi.fn().mockResolvedValue([]),
+    update: vi.fn(),
+    deleteRecord: vi.fn(),
+    openCursor: vi.fn(),
+    getByIndex: vi.fn(),
+    clear: vi.fn(),
+    getByID: vi.fn().mockResolvedValue(defaultGalleryDraft),
+};
+
 const mocks = vi.hoisted(() => ({
-    useIndexedDB: () => ({
-        add: vi.fn(),
-        getAll: vi.fn().mockResolvedValue([]),
-        update: vi.fn(),
-        deleteRecord: vi.fn(),
-        openCursor: vi.fn(),
-        getByIndex: vi.fn(),
-        clear: vi.fn(),
-        getByID: vi.fn().mockResolvedValue(defaultGalleryDraft),
-    }),
+    useIndexedDB: () => indexedDBMocks,
 }));
 
 vi.mock("react-indexed-db-hook", () => ({
     useIndexedDB: mocks.useIndexedDB,
 }));
 
-describe("useGalleryDrafts custom hook", () => {
+describe("useGalleryDrafts", () => {
     beforeAll(() => {
         useAuthSpy = vi.spyOn(AuthContextMock, "useAuth").mockReturnValue({
             user: null,
@@ -186,6 +188,46 @@ describe("useGalleryDrafts custom hook", () => {
         await waitFor(() => {
             expect(addMock).not.toHaveBeenCalled();
             expect(result.current.reachedLimit).toBe(true);
+        });
+    });
+
+    it("should delete the draft if id is present", async () => {
+        const givenDraftId = 2;
+
+        const deleteMock = vi.fn();
+
+        mocks.useIndexedDB().getByID.mockResolvedValue({ ...defaultGalleryDraft, id: givenDraftId });
+        mocks.useIndexedDB().deleteRecord.mockImplementation(deleteMock);
+
+        const { result } = renderHook(() => useGalleryDrafts(givenDraftId));
+
+        await waitFor(() => {
+            expect(result.current.draft.id).toBe(givenDraftId);
+        });
+
+        await act(async () => {
+            await result.current.deleteDraft();
+        });
+
+        await waitFor(() => {
+            expect(deleteMock).toHaveBeenCalled();
+            expect(result.current.reachedLimit).toBe(false);
+        });
+    });
+
+    it("should not delete the draft if id is not present", async () => {
+        const deleteMock = vi.fn();
+
+        mocks.useIndexedDB().deleteRecord.mockImplementation(deleteMock);
+
+        const { result } = renderHook(() => useGalleryDrafts());
+
+        await act(async () => {
+            await result.current.deleteDraft();
+        });
+
+        await waitFor(() => {
+            expect(deleteMock).not.toHaveBeenCalled();
         });
     });
 });
