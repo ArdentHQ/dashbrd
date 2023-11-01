@@ -12,7 +12,7 @@ interface ProviderProperties {
 const DarkModeContext = createContext<ContextProperties | undefined>(undefined);
 
 export const DarkModeContextProvider = ({ children }: ProviderProperties): JSX.Element => {
-    const [isDark, setIsDark] = useState<boolean>(false);
+    const [isDark, setIsDark] = useState(false);
 
     const enableDarkMode = (): void => {
         document.documentElement.classList.add("dark");
