@@ -15,7 +15,7 @@ export const GalleryListbox = ({
 
     const { isLgAndAbove } = useBreakpoint();
 
-    const query = isTruthy(searchQuery) ? { query: searchQuery } : [];
+    const query = isTruthy(searchQuery) ? { query: searchQuery } : {};
 
     return (
         <Listbox
@@ -35,12 +35,12 @@ export const GalleryListbox = ({
                 </>
             }
             onChange={(path) => {
-                router.visit(path);
+                router.visit(path, { data: query });
             }}
         >
             <Listbox.Option
                 key={route("galleries.most-popular")}
-                value={route("galleries.most-popular", query)}
+                value={route("galleries.most-popular")}
                 hasGradient
             >
                 {t("pages.galleries.most_popular")}
@@ -48,7 +48,7 @@ export const GalleryListbox = ({
 
             <Listbox.Option
                 key={route("galleries.newest")}
-                value={route("galleries.newest", query)}
+                value={route("galleries.newest")}
                 hasGradient
             >
                 {t("pages.galleries.newest")}
@@ -56,7 +56,7 @@ export const GalleryListbox = ({
 
             <Listbox.Option
                 key={route("galleries.most-valuable")}
-                value={route("galleries.most-valuable", query)}
+                value={route("galleries.most-valuable")}
                 hasGradient
             >
                 {t("pages.galleries.most_valuable")}
