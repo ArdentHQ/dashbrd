@@ -68,6 +68,23 @@ export const Navbar = ({
         );
     };
 
+    const renderDarkModeToggle = (): JSX.Element =>
+        isDark ? (
+            <Button
+                variant="icon"
+                icon="Moon"
+                onClick={toggleDarkMode}
+                data-testid="Navbar__darkMode__dark"
+            />
+        ) : (
+            <Button
+                variant="icon"
+                icon="Sun"
+                onClick={toggleDarkMode}
+                data-testid="Navbar__darkMode__light"
+            />
+        );
+
     return (
         <nav
             data-testid="Navbar"
@@ -77,41 +94,29 @@ export const Navbar = ({
             )}
             {...properties}
         >
-            <div className="flex items-center">
-                <MobileMenu
-                    wallet={wallet}
-                    connectWallet={connectWallet}
-                    onLogout={onLogout}
-                    currency={user?.attributes.currency}
-                    isConnectButtonDisabled={isTruthy(isMaintenanceModeActive) || connecting || !initialized}
-                />
-                <div className="flex items-center sm:space-x-4">
-                    <Logo />
+            <div className="flex items-center justify-between w-full">
+                <div className="flex items-center">
+                    <MobileMenu
+                        wallet={wallet}
+                        connectWallet={connectWallet}
+                        onLogout={onLogout}
+                        currency={user?.attributes.currency}
+                        isConnectButtonDisabled={isTruthy(isMaintenanceModeActive) || connecting || !initialized}
+                    />
+                    <div className="flex items-center sm:space-x-4">
+                        <Logo />
 
-                    <AppMenu />
+                        <AppMenu />
+                    </div>
                 </div>
+
+                <div className="md-lg:hidden">{renderDarkModeToggle()}</div>
             </div>
 
             <div className="hidden items-center sm:space-x-3 md-lg:flex">
                 {renderAddress()}
 
-                <div>
-                    {isDark ? (
-                        <Button
-                            variant="icon"
-                            icon="Moon"
-                            onClick={toggleDarkMode}
-                            data-testid="Navbar__darkMode__dark"
-                        />
-                    ) : (
-                        <Button
-                            variant="icon"
-                            icon="Sun"
-                            onClick={toggleDarkMode}
-                            data-testid="Navbar__darkMode__light"
-                        />
-                    )}
-                </div>
+                <div>{renderDarkModeToggle()}</div>
             </div>
         </nav>
     );
