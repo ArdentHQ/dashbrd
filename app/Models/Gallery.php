@@ -31,7 +31,6 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 class Gallery extends Model implements Viewable
 {
     use BelongsToUser, CanBeLiked, HasEagerLimit, HasFactory, InteractsWithViews, Reportable, SoftDeletes;
-
     use HasSlug {
         otherRecordExistsWithSlug as baseOtherRecordExistsWithSlug;
     }

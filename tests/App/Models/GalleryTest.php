@@ -413,7 +413,7 @@ it('can get reporting throttle duration', function () {
     expect($method->invoke(new Collection))->toBeInt();
 });
 
-it("prevents reserved keywords to be used for slugs", function () {
+it('prevents reserved keywords to be used for slugs', function () {
     $gallery = Gallery::factory()->create([
         'name' => 'Most Valuable',
     ]);
