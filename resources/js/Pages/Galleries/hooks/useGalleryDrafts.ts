@@ -25,6 +25,7 @@ interface GalleryDraftsState {
     setDraftCover: (image: ArrayBuffer | null, type: string | null) => void;
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
+    deleteDraft: () => Promise<void>;
 }
 
 const initialGalleryDraft: GalleryDraft = {
@@ -54,8 +55,8 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
     useEffect(() => {
         if (givenDraftId === undefined) return;
         const getDraft = async (): Promise<void> => {
-            const draft: GalleryDraft = await database.getByID(givenDraftId);
-            if (draft.walletAddress === wallet?.address) {
+            const draft: GalleryDraft | undefined = await database.getByID(givenDraftId);
+            if (draft !== undefined && draft.walletAddress === wallet?.address) {
                 setDraft(draft);
             }
         };
@@ -121,11 +122,19 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
         setSave(true);
     };
 
+    const deleteDraft = async (): Promise<void> => {
+        if (draft.id === null) return;
+        await database.deleteRecord(draft.id);
+
+        setReachedLimit(false);
+    };
+
     return {
         reachedLimit,
         draft,
         setDraftCover,
         setDraftNfts,
         setDraftTitle,
+        deleteDraft,
     };
 };
