@@ -10,7 +10,7 @@ use App\Repositories\GalleryRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class GalleryController extends Controller
+class GalleryOverviewController extends Controller
 {
     public function index(Request $request, GalleryRepository $galleries): JsonResponse
     {

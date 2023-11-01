@@ -10,7 +10,7 @@ it('can get galleries', function () {
     Gallery::factory()->count(10)->create();
 
     $response = $this->actingAs($user)
-        ->get(route('api-galleries.index'))
+        ->get(route('galleries-overview.index'))
         ->assertStatus(200)
         ->json();
 
