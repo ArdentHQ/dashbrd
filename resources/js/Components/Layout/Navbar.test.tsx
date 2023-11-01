@@ -1,10 +1,10 @@
 import React from "react";
 import { Navbar } from "@/Components/Layout/Navbar";
+import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { useTransactionSliderContextSpy } from "@/Tests/Spies/useTransactionSliderContextSpy";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
-import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 const user = new UserDataFactory().create();
 
 const wallet = new WalletFactory().create();
