@@ -266,7 +266,7 @@ const CollectionsView = ({
     };
 
     const handleRefreshActivity = (): void => {
-        void authenticatedAction((): void => {
+        void authenticatedAction(async () => {
             setIsLoadingActivity(true);
             requestActivityUpdate(collection.address);
 
@@ -275,7 +275,7 @@ const CollectionsView = ({
                 isExpanded: true,
             });
 
-            void axios.post(
+            await axios.post(
                 route("collection.refresh-activity", {
                     collection: collection.slug,
                 }),

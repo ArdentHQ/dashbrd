@@ -16,10 +16,10 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
     const { isMdAndAbove } = useBreakpoint();
 
     const refresh = (): void => {
-        void authenticatedAction((): void => {
+        void authenticatedAction(async () => {
             setDisabled(true);
 
-            void window.axios.post(route("refresh-collections"));
+            await window.axios.post(route("refresh-collections"));
 
             showToast({
                 type: "pending",
