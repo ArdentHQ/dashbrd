@@ -6,7 +6,7 @@ import { NftCollectionSlider } from "@/Components/Galleries/NftCollection/NftCol
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import * as NavbarMock from "@/Components/Layout/Navbar";
 import { useSliderContext } from "@/Components/Slider";
-import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import { BASE_URL, requestMock, server } from "@/Tests/Mocks/server";
 import { SamplePageMeta } from "@/Tests/SampleData";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
