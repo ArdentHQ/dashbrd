@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Gallery\GalleriesStatsData;
-use App\Data\Gallery\GalleryCardData;
 use App\Data\Gallery\GalleryData;
 use App\Data\Gallery\GalleryStatsData;
 use App\Enums\CurrencyCode;
 use App\Models\GalleriesStats;
 use App\Models\Gallery;
-use App\Repositories\GalleryRepository;
 use App\Support\Cache\GalleryCache;
 use App\Support\RateLimiterHelpers;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -39,21 +36,6 @@ class GalleryController extends Controller
             'title' => trans('metatags.galleries.title'),
             'image' => trans('metatags.galleries.image'),
             'description' => trans('metatags.galleries.description'),
-        ]);
-    }
-
-    public function galleries(Request $request, GalleryRepository $galleries): JsonResponse
-    {
-        $user = $request->user();
-
-        $popular = $galleries->popular($user);
-        $newest = $galleries->latest($user);
-        $mostValuable = $galleries->mostValuable($user);
-
-        return response()->json([
-            'popular' => $popular->map(fn ($gallery) => GalleryCardData::fromModel($gallery, $user)),
-            'newest' => $newest->map(fn ($gallery) => GalleryCardData::fromModel($gallery, $user)),
-            'mostValuable' => $mostValuable->map(fn ($gallery) => GalleryCardData::fromModel($gallery, $user)),
         ]);
     }
 
