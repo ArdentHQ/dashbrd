@@ -94,7 +94,7 @@ export const Navbar = ({
             )}
             {...properties}
         >
-            <div className="flex w-full items-center justify-between">
+            <div className="flex flex-1 items-center justify-between">
                 <div className="flex items-center">
                     <MobileMenu
                         wallet={wallet}
