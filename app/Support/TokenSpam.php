@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Support;
 
 use App\Enums\Chain;
-use App\Enums\Platforms;
+use App\Enums\Platform;
 use App\Models\CoingeckoToken;
 use App\Models\Token;
 use Illuminate\Support\Str;
@@ -97,9 +97,9 @@ final class TokenSpam
         $isTokenValid = true;
 
         if ($token->network->chain_id == Chain::Polygon->value) {
-            $isTokenValid = self::matchesCoingeckoTokenAddress($token, $addressByNetwork, Platforms::Polygon->value);
+            $isTokenValid = self::matchesCoingeckoTokenAddress($token, $addressByNetwork, Platform::Polygon->value);
         } elseif ($token->network->chain_id == Chain::ETH->value) {
-            $isTokenValid = self::matchesCoingeckoTokenAddress($token, $addressByNetwork, Platforms::Ethereum->value);
+            $isTokenValid = self::matchesCoingeckoTokenAddress($token, $addressByNetwork, Platform::Ethereum->value);
         }
 
         return $isTokenValid;
