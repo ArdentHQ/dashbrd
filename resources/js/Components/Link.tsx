@@ -1,6 +1,6 @@
 import { Link as InertiaLink } from "@inertiajs/react";
 import cn from "classnames";
-import { type MouseEvent, useMemo } from "react";
+import { forwardRef, type MouseEvent, useMemo } from "react";
 import { Icon } from "@/Components/Icon";
 import { useExternalLinkContext } from "@/Contexts/ExternalLinkContext";
 
@@ -16,7 +16,7 @@ interface ClassNameProperties {
 interface Properties extends ClassNameProperties {
     external?: boolean;
     href: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
     "data-testid"?: string;
     showExternalIcon?: boolean;
     confirmBeforeProceeding?: boolean;
@@ -84,82 +84,91 @@ export const LinkButton = ({
     />
 );
 
-export const Link = ({
-    external = false,
-    disabled = false,
-    useAnchorTag = false,
-    variant,
-    className,
-    fontSize,
-    textColor,
-    showExternalIcon = true,
-    confirmBeforeProceeding = false,
-    iconClassName,
-    children,
-    href,
-    ...properties
-}: Properties): JSX.Element => {
-    const { openConfirmationModal, hasDisabledLinkWarning, isDomainAllowed } = useExternalLinkContext();
+export const Link = forwardRef<HTMLAnchorElement, Properties>(
+    (
+        {
+            external = false,
+            disabled = false,
+            useAnchorTag = false,
+            variant,
+            className,
+            fontSize,
+            textColor,
+            showExternalIcon = true,
+            confirmBeforeProceeding = false,
+            iconClassName,
+            children,
+            href,
+            ...properties
+        }: Properties,
+        reference,
+    ): JSX.Element => {
+        const { openConfirmationModal, hasDisabledLinkWarning, isDomainAllowed } = useExternalLinkContext();
 
-    if (external) {
-        const handleExternalClick = (event: MouseEvent<HTMLElement>): void => {
-            if (confirmBeforeProceeding) {
-                if (!hasDisabledLinkWarning && !isDomainAllowed(href)) {
-                    event.preventDefault();
-                    event.stopPropagation();
+        if (external) {
+            const handleExternalClick = (event: MouseEvent<HTMLElement>): void => {
+                if (confirmBeforeProceeding) {
+                    if (!hasDisabledLinkWarning && !isDomainAllowed(href)) {
+                        event.preventDefault();
+                        event.stopPropagation();
 
-                    openConfirmationModal(href);
+                        openConfirmationModal(href);
+                    }
+                    return;
                 }
-                return;
-            }
 
-            stopPropagationAndBlur(event);
-        };
+                stopPropagationAndBlur(event);
+            };
+
+            return (
+                <a
+                    data-testid="Link__anchor"
+                    href={href}
+                    target="_blank"
+                    ref={reference}
+                    rel="noreferrer"
+                    className={variantClassName({ variant, className, fontSize, textColor, disabled })}
+                    onClick={handleExternalClick}
+                    {...properties}
+                >
+                    {children}
+
+                    {showExternalIcon && (
+                        <Icon
+                            name="ArrowExternalSmall"
+                            size="sm"
+                            className={iconClassName ?? "ml-1 text-theme-secondary-500"}
+                        />
+                    )}
+                </a>
+            );
+        }
+
+        if (useAnchorTag) {
+            return (
+                <a
+                    href={href}
+                    ref={reference}
+                    className={variantClassName({ variant, className, fontSize, textColor, disabled })}
+                    {...properties}
+                    data-testid="Link__anchor"
+                >
+                    {children}
+                </a>
+            );
+        }
 
         return (
-            <a
-                data-testid="Link__anchor"
-                href={href}
-                target="_blank"
-                rel="noreferrer"
-                className={variantClassName({ variant, className, fontSize, textColor, disabled })}
-                onClick={handleExternalClick}
+            <InertiaLink
                 {...properties}
+                href={href}
+                disabled={disabled}
+                className={variantClassName({ variant, className, fontSize, textColor, disabled })}
             >
                 {children}
-
-                {showExternalIcon && (
-                    <Icon
-                        name="ArrowExternalSmall"
-                        size="sm"
-                        className={iconClassName ?? "ml-1 text-theme-secondary-500"}
-                    />
-                )}
-            </a>
+            </InertiaLink>
         );
-    }
+    },
+);
 
-    if (useAnchorTag) {
-        return (
-            <a
-                href={href}
-                className={variantClassName({ variant, className, fontSize, textColor, disabled })}
-                {...properties}
-                data-testid="Link__anchor"
-            >
-                {children}
-            </a>
-        );
-    }
-
-    return (
-        <InertiaLink
-            {...properties}
-            href={href}
-            disabled={disabled}
-            className={variantClassName({ variant, className, fontSize, textColor, disabled })}
-        >
-            {children}
-        </InertiaLink>
-    );
-};
+Link.displayName = "Link";
