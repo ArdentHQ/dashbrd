@@ -17,7 +17,7 @@ import {
 } from "@/Components/Tokens/TokenPriceChart.helpers";
 import { type Period } from "@/Components/Tokens/Tokens.contracts";
 import { useAuth } from "@/Contexts/AuthContext";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { type DateFormat } from "@/Types/enums";
 import { getPriceHistory } from "@/Utils/api";
 import { assertUser } from "@/Utils/assertions";
