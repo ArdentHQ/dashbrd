@@ -32,7 +32,7 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
         return () => {
             ws.destroy();
         };
-    }, [containerReference]);
+    }, [containerReference, isDark]);
 
     return wavesurfer;
 };
