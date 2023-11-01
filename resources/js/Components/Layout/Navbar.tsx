@@ -8,6 +8,7 @@ import { MobileMenu } from "@/Components/Navbar/MobileMenu";
 import { UserDetails } from "@/Components/Navbar/UserDetails";
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
 import { isTruthy } from "@/Utils/is-truthy";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 
 interface Properties
     extends React.HTMLAttributes<HTMLDivElement>,
@@ -34,6 +35,8 @@ export const Navbar = ({
     const { t } = useTranslation();
 
     const isAuthenticated = authenticated && isTruthy(wallet) && isTruthy(user);
+
+    const { isDark, toggleDarkMode } = useDarkModeContext();
 
     const renderAddress = (): JSX.Element => {
         if (isAuthenticated) {
@@ -89,7 +92,25 @@ export const Navbar = ({
                 </div>
             </div>
 
-            <div className="hidden items-center sm:space-x-3 md-lg:flex">{renderAddress()}</div>
+            <div className="hidden items-center sm:space-x-3 md-lg:flex">
+                {renderAddress()}
+
+                <div>
+                    {isDark ? (
+                        <Button
+                            variant="icon"
+                            icon="Moon"
+                            onClick={toggleDarkMode}
+                        />
+                    ) : (
+                        <Button
+                            variant="icon"
+                            icon="Sun"
+                            onClick={toggleDarkMode}
+                        />
+                    )}
+                </div>
+            </div>
         </nav>
     );
 };
