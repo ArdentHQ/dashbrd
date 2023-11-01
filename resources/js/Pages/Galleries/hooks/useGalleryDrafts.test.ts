@@ -188,6 +188,7 @@ describe("useGalleryDrafts", () => {
         await waitFor(() => {
             expect(addMock).not.toHaveBeenCalled();
             expect(result.current.reachedLimit).toBe(true);
+            expect(result.current.isSaving).toBe(false);
         });
     });
 
