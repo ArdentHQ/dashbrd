@@ -4,6 +4,14 @@ import { Listbox } from "@/Components/Form/Listbox";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { isTruthy } from "@/Utils/is-truthy";
 
+const url = (filter: "most-popular" | "newest" | "most-valuable", query: string | null = null): string => {
+    if (query !== null) {
+        return route("filtered-galleries.index", { filter, query });
+    }
+
+    return route("filtered-galleries.index", { filter });
+};
+
 export const GalleryListbox = ({
     selectedOption,
     searchQuery,
@@ -15,7 +23,7 @@ export const GalleryListbox = ({
 
     const { isLgAndAbove } = useBreakpoint();
 
-    const query = isTruthy(searchQuery) ? { query: searchQuery } : [];
+    const query = isTruthy(searchQuery) ? searchQuery : null;
 
     return (
         <Listbox
@@ -39,24 +47,24 @@ export const GalleryListbox = ({
             }}
         >
             <Listbox.Option
-                key={route("galleries.most-popular")}
-                value={route("galleries.most-popular", query)}
+                key={url("most-popular")}
+                value={url("most-popular", query)}
                 hasGradient
             >
                 {t("pages.galleries.most_popular")}
             </Listbox.Option>
 
             <Listbox.Option
-                key={route("galleries.newest")}
-                value={route("galleries.newest", query)}
+                key={url("newest")}
+                value={url("newest", query)}
                 hasGradient
             >
                 {t("pages.galleries.newest")}
             </Listbox.Option>
 
             <Listbox.Option
-                key={route("galleries.most-valuable")}
-                value={route("galleries.most-valuable", query)}
+                key={url("most-valuable")}
+                value={url("most-valuable", query)}
                 hasGradient
             >
                 {t("pages.galleries.most_valuable")}

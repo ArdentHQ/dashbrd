@@ -4,27 +4,31 @@ declare(strict_types=1);
 
 use App\Models\Gallery;
 
-it('can render the galleries dataset pages', function ($page) {
+it('can render the galleries dataset pages', function ($filter) {
     $user = createUser();
 
     Gallery::factory()->create();
 
     $this->actingAs($user)
-        ->get(route($page))
+        ->get(route('filtered-galleries.index', [
+            'filter' => $filter,
+        ]))
         ->assertStatus(200);
 })->with([
-    'galleries.most-popular',
-    'galleries.most-valuable',
-    'galleries.newest',
+    'most-popular',
+    'most-valuable',
+    'newest',
 ]);
 
-it('can render the galleries dataset pages for live search', function ($page) {
+it('can render the galleries dataset pages for live search', function ($filter) {
     $user = createUser();
 
     Gallery::factory()->count(2)->create();
 
     $response = $this->actingAs($user)
-        ->getJson(route($page))
+        ->getJson(route('filtered-galleries.index', [
+            'filter' => $filter,
+        ]))
         ->assertStatus(200)
         ->assertJsonStructure(['paginated' => [
             'data',
@@ -33,12 +37,12 @@ it('can render the galleries dataset pages for live search', function ($page) {
 
     expect($response->json('paginated.meta.total'))->toBe(2);
 })->with([
-    'galleries.most-popular',
-    'galleries.most-valuable',
-    'galleries.newest',
+    'most-popular',
+    'most-valuable',
+    'newest',
 ]);
 
-it('filters the gallery', function ($page) {
+it('filters the gallery', function ($filter) {
     $user = createUser();
 
     Gallery::factory()->create([
@@ -50,7 +54,10 @@ it('filters the gallery', function ($page) {
     ]);
 
     $response = $this->actingAs($user)
-        ->getJson(route($page, ['query' => 'Test']))
+        ->getJson(route('filtered-galleries.index', [
+            'filter' => $filter,
+            'query' => 'Test',
+        ]))
         ->assertStatus(200)
         ->assertJsonStructure(['paginated' => [
             'data',
@@ -59,7 +66,7 @@ it('filters the gallery', function ($page) {
 
     expect($response->json('paginated.meta.total'))->toBe(1);
 })->with([
-    'galleries.most-popular',
-    'galleries.most-valuable',
-    'galleries.newest',
+    'most-popular',
+    'most-valuable',
+    'newest',
 ]);
