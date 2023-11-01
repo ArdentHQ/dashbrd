@@ -6,9 +6,9 @@ import { Icon } from "@/Components/Icon";
 import { AppMenu } from "@/Components/Navbar/AppMenu";
 import { MobileMenu } from "@/Components/Navbar/MobileMenu";
 import { UserDetails } from "@/Components/Navbar/UserDetails";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 
 interface Properties
     extends React.HTMLAttributes<HTMLDivElement>,
