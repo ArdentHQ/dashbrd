@@ -41,7 +41,7 @@ class UpdateTokenDetails extends Command
         if ($walletId) {
             $wallet = Wallet::findOrFail($walletId);
 
-            $this->updateWalletTokenDetails($wallet);
+            $this->updateAllTokenDetails($wallet);
         } elseif (is_string($tokenSymbol)) {
             $tokens = Token::mainnet()->bySymbol($tokenSymbol)->limit(1)->get();
 
@@ -51,13 +51,14 @@ class UpdateTokenDetails extends Command
         }
     }
 
-    private function updateAllTokenDetails(): void
+    private function updateAllTokenDetails(Wallet $wallet = null): void
     {
         $top = $this->option('top');
 
         $noTop = $this->option('no-top');
 
         $tokens = Token::mainnet()
+            ->prioritized()
             ->when($top || $noTop, function ($query) use ($top) {
                 // Consider that the minutes here should match the frequency of
                 // the command defined on the `Kernel.php` file, currently `everyFifteenMinutes`
@@ -69,19 +70,7 @@ class UpdateTokenDetails extends Command
 
                 return $query->skip($limit);
             })
-            ->get();
-
-        $this->dispatchJobForTokens($tokens);
-    }
-
-    private function updateWalletTokenDetails(Wallet $wallet): void
-    {
-        $limit = $this->option('limit');
-
-        $tokens = Token::mainnet()
-            ->prioritized()
-            ->when($limit !== null, fn ($query) => $query->limit((int) $limit))
-            ->where('wallet_id', $wallet->id)
+            ->when($wallet !== null, fn ($query) => $query->where('wallet_id', $wallet->id))
             ->get();
 
         $this->dispatchJobForTokens($tokens);

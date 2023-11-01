@@ -79,9 +79,7 @@ trait DependsOnCoingeckoRateLimit
 
     private function runsVerifySupportedCurrencies(): bool
     {
-        $isMonday = date('N') === '1';
-
-        return $isMonday;
+        return Carbon::now()->isMonday();
     }
 
     /**
