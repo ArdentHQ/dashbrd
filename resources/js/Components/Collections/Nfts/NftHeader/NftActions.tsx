@@ -53,7 +53,7 @@ export const NftActions = ({
         });
     };
 
-    const getTooltipText = (chainId: App.Enums.Chains): string => {
+    const getTooltipText = (chainId: App.Enums.Chain): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
                 return t("common.view_nft_on_etherscan").toString();
@@ -66,7 +66,7 @@ export const NftActions = ({
         }
     };
 
-    const getChainLink = (chainId: App.Enums.Chains, collectionAddress: string, tokenNumber: string): string => {
+    const getChainLink = (chainId: App.Enums.Chain, collectionAddress: string, tokenNumber: string): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
                 return t("urls.explorers.etherscan.nft", {

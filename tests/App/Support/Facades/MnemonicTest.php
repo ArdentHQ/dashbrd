@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3NftCollectionFloorPrice;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Http\Client\Mnemonic\MnemonicUnknownChainException;
 use App\Models\Collection;
 use App\Models\Network;
@@ -20,7 +20,7 @@ it('can use the facade', function () {
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
-    $data = Mnemonic::getNftCollectionFloorPrice(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
 
     expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
 });

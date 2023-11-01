@@ -3,6 +3,7 @@ import { useIndexedDB } from "react-indexed-db-hook";
 import { useAuth } from "@/Contexts/AuthContext";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
+
 interface DraftNft {
     nftId: number;
     image: string;

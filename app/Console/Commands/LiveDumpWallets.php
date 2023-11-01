@@ -6,7 +6,7 @@ namespace App\Console\Commands;
 
 use App\Contracts\Web3DataProvider;
 use App\Data\Web3\Web3NftData;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\Network;
 use App\Models\User;
 use App\Models\Wallet;
@@ -46,7 +46,7 @@ class LiveDumpWallets extends Command
 
         $providers = [new AlchemyWeb3DataProvider(), new MoralisWeb3DataProvider()];
 
-        $chains = [Chains::ETH, Chains::Polygon];
+        $chains = [Chain::ETH, Chain::Polygon];
 
         /** @var string[] */
         $addresses = config('dashbrd.live_dump_wallets');
@@ -114,7 +114,7 @@ class LiveDumpWallets extends Command
         // Download traits for each collection
         $allTraits = $nftCollections->mapWithKeys(function ($collectionAddresses, $chainId) {
             $traits = $collectionAddresses->unique()
-                ->mapWithKeys(fn ($collectionAddress) => [$collectionAddress => Mnemonic::getNftCollectionTraits(Chains::from($chainId), $collectionAddress)]);
+                ->mapWithKeys(fn ($collectionAddress) => [$collectionAddress => Mnemonic::getNftCollectionTraits(Chain::from($chainId), $collectionAddress)]);
 
             return [$chainId => $traits];
         });

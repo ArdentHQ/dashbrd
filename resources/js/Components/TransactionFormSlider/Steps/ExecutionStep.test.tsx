@@ -26,7 +26,7 @@ describe("ExecutionStep", () => {
     const nativeTokenPrice = {
         guid: 1,
         symbol: nativeToken.symbol,
-        chainId: 137 as App.Enums.Chains,
+        chainId: 137 as App.Enums.Chain,
         price: {
             [currency]: {
                 price: 12.25,
@@ -64,7 +64,7 @@ describe("ExecutionStep", () => {
     const defaultMetamaskConfig = getSampleMetaMaskState({
         sendTransaction: vi.fn().mockReturnValue({ errorMessage: "Insufficient funds" }),
         switchToNetwork: switchToNetworkMock,
-        chainId: 137 as App.Enums.Chains,
+        chainId: 137 as App.Enums.Chain,
     });
 
     beforeEach(() => {
@@ -210,7 +210,7 @@ describe("ExecutionStep", () => {
                 nativeTokenPrice: {
                     guid: 2,
                     symbol: ethNativeToken.symbol,
-                    chainId: 1 as App.Enums.Chains,
+                    chainId: 1 as App.Enums.Chain,
                     price: {
                         [currency]: {
                             price: 12.25,
@@ -241,7 +241,7 @@ describe("ExecutionStep", () => {
                 nativeTokenPrice: {
                     guid: 2,
                     symbol: ethNativeToken.symbol,
-                    chainId: 1 as App.Enums.Chains,
+                    chainId: 1 as App.Enums.Chain,
                     price: {
                         [currency]: {
                             price: 12.25,
