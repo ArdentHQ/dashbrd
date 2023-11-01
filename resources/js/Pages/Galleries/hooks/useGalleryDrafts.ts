@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useIndexedDB } from "react-indexed-db-hook";
 import { useAuth } from "@/Contexts/AuthContext";
-import { useDebounce } from "@/Hooks/useDebounce";
-import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 
+const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 interface DraftNft {
     nftId: number;
     image: string;
@@ -19,16 +18,6 @@ interface GalleryDraft {
     id: number | null;
 }
 
-const initialGalleryDraft: GalleryDraft = {
-    title: "",
-    cover: null,
-    coverType: null,
-    nfts: [],
-    id: null,
-};
-
-const MAX_DRAFT_LIMIT_PER_WALLET = 6;
-
 interface GalleryDraftsState {
     reachedLimit: boolean;
     draft: GalleryDraft;
@@ -36,6 +25,14 @@ interface GalleryDraftsState {
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
 }
+
+const initialGalleryDraft: GalleryDraft = {
+    title: "",
+    cover: null,
+    coverType: null,
+    nfts: [],
+    id: null,
+};
 
 export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
     const { wallet } = useAuth();
@@ -50,11 +47,6 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-    const [title, setTitle] = useState<string>("");
-    const [debouncedValue] = useDebounce(title, 400);
-
-    const isFirstRender = useIsFirstRender();
-
     const [reachedLimit, setReachedLimit] = useState(false);
 
     // populate `draft` state if `givenDraftId` is present
@@ -62,22 +54,13 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
         if (givenDraftId === undefined) return;
         const getDraft = async (): Promise<void> => {
             const draft: GalleryDraft = await database.getByID(givenDraftId);
-
             if (draft.walletAddress === wallet?.address) {
                 setDraft(draft);
             }
         };
 
         void getDraft();
-    }, []);
-
-    // handle debounced title
-    useEffect(() => {
-        if (isFirstRender) return;
-
-        setDraft({ ...draft, title: debouncedValue });
-        setSave(true);
-    }, [debouncedValue]);
+    }, [givenDraftId, wallet?.address]);
 
     useEffect(() => {
         if (!save || isSaving || reachedLimit) return;
@@ -132,11 +115,16 @@ export const useGalleryDrafts = (givenDraftId?: number): GalleryDraftsState => {
         setSave(true);
     };
 
+    const setDraftTitle = (title: string): void => {
+        setDraft({ ...draft, title });
+        setSave(true);
+    };
+
     return {
         reachedLimit,
         draft,
         setDraftCover,
         setDraftNfts,
-        setDraftTitle: setTitle,
+        setDraftTitle,
     };
 };
