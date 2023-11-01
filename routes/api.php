@@ -42,8 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('line_chart_data');
 
     Route::post('/galleries/{gallery:slug}/like', [Api\LikedGalleryController::class, 'store'])
-    ->name('galleries.like')
-    ->middleware('signed_wallet');
+            ->name('galleries.like')
+            ->middleware('signed_wallet');
 
     Route::get('/galleries-overview', [Api\GalleryOverviewController::class, 'index'])
             ->name('galleries-overview.index');
