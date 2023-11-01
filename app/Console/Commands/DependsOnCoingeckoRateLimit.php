@@ -15,9 +15,19 @@ trait DependsOnCoingeckoRateLimit
     /**
      * @var array<string>
      */
-    private array $jobsThatUseCoingecko = [
+    private array $jobsThatRunDaily = [
         FetchPriceHistory::class,
+        // Notice that this job is called twice
         UpdateTokenDetails::class,
+    ];
+
+    /**
+     * Notice that we use on `Monday` because is the value used on the `Kernel.php`
+     * file, we should update the code if that value changes.
+     *
+     * @var array<string>
+     */
+    private array $jobsThatRunOnMonday = [
         VerifySupportedCurrencies::class,
     ];
 
@@ -28,17 +38,21 @@ trait DependsOnCoingeckoRateLimit
      */
     private array $jobsDelayThreshold = [
         UpdateTokenDetails::class => 0,
-        FetchPriceHistory::class => 1,
-        VerifySupportedCurrencies::class => 2,
+        // Notice that im skiping the index `1` because that is the threshold
+        // for the second call of the `UpdateTokenDetails` job (passed as an argument)
+        FetchPriceHistory::class => 2,
+        VerifySupportedCurrencies::class => 3,
     ];
 
-    private function getDispatchAt(string $job, int $index): Carbon
+    private function getDispatchAt(string $job, int $index, ?int $delayThreshold): Carbon
     {
         $maxRequests = config('services.coingecko.rate.max_requests');
 
         $perSeconds = config('services.coingecko.rate.per_seconds');
 
         $delayInSeconds = (int) floor($index / $maxRequests) * $perSeconds * $this->getRateLimitFactor();
+
+        $delayThreshold = $delayThreshold !== null ? $delayThreshold : $this->getDelayTreshold($job);
 
         return Carbon::now()
             // Round to the next minute so the delay is always calculated from
@@ -48,7 +62,7 @@ trait DependsOnCoingeckoRateLimit
             ->addMinute()->startOfMinute()
             // Delay the job by the amount of seconds + the delay treshold
             // e.g. 12:01:00 + 1 -> 12:01:01, 12:01:00 + 2 -> 12:01:02
-            ->addSeconds($delayInSeconds + $this->getDelayTreshold($job));
+            ->addSeconds($delayInSeconds + $delayThreshold);
     }
 
     private function getDelayTreshold(string $job): int
@@ -75,14 +89,21 @@ trait DependsOnCoingeckoRateLimit
      */
     private function getRateLimitFactor(): int
     {
-        return count($this->jobsThatUseCoingecko);
+        return count($this->jobsThatRunDaily)
+            + 1 // +1 for the second call of the `UpdateTokenDetails` job
+            + ($this->isMonday() ? count($this->jobsThatRunOnMonday) : 0);
     }
 
-    private function dispatchDelayed(Closure $callback, int $index, string $job): void
+    private function isMonday(): bool
+    {
+        return date('N') === '1';
+    }
+
+    private function dispatchDelayed(Closure $callback, int $index, string $job, int $delayThreshold = null): void
     {
         // Note: I cant use delay directly on the job because it throws
         // the "too many attempts" error after some time so im delaying
         // with a queued closure instead
-        dispatch($callback)->delay($this->getDispatchAt($job, $index));
+        dispatch($callback)->delay($this->getDispatchAt($job, $index, $delayThreshold));
     }
 }

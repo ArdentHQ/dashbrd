@@ -20,7 +20,7 @@ class UpdateTokenDetails extends Command
      *
      * @var string
      */
-    protected $signature = 'marketdata:update-token-details {token_symbol?} {--wallet-id=} {--limit=} {--skip=}';
+    protected $signature = 'marketdata:update-token-details {token_symbol?} {--wallet-id=} {--top} {--no-top}';
 
     /**
      * The console command description.
@@ -53,14 +53,24 @@ class UpdateTokenDetails extends Command
 
     private function updateAllTokenDetails(): void
     {
-        $limit = $this->option('limit');
+        $top = $this->option('top');
 
-        $skip = $this->option('skip');
+        $noTop = $this->option('no-top');
 
         $tokens = Token::mainnet()
-            ->prioritized()
-            ->when($limit !== null, fn ($query) => $query->limit((int) $limit))
-            ->when($skip !== null, fn ($query) => $query->skip((int) $skip))
+            ->when($top || $noTop, function ($query) use ($top) {
+                // Consider that the minutes here should match the frequency of
+                // the command defined on the `Kernel.php` file, currently `everyFifteenMinutes`
+                $limit = $this->getLimitPerMinutes(15);
+
+                dd($limit);
+
+                if ($top) {
+                    return $query->limit($limit);
+                }
+
+                return $query->skip($limit);
+            })
             ->get();
 
         $this->dispatchJobForTokens($tokens);
@@ -95,6 +105,8 @@ class UpdateTokenDetails extends Command
                 ),
                 index: $progressBar->getProgress(),
                 job: UpdateTokenDetailsJob::class,
+                // @see comment on `DependsOnCoingeckoRateLimit.php` file
+                delayThreshold: $this->option('no-top') ? 1 : null,
             );
 
             $progressBar->advance();

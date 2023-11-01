@@ -38,17 +38,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $maxCoingeckoJobsInInterval = $this->maxCoingeckoJobsInInterval();
-
         $schedule
             ->command(VerifySupportedCurrencies::class)
             ->withoutOverlapping()
+            // If the day of the week (or the period) changes update the
+            // `DependsOnCoingeckoRateLimit.php` (see $jobsThatRunOnMonday)
             ->weeklyOn(Schedule::MONDAY, '10:00');
 
-        // Every 15 minutes for top tokens (prioritized on the command)
+        // Consider that the frequency here (currently `everyFifteenMinutes`)
+        // should match the parameter used on the `getLimitPerMinutes` method
+        // inside the `UpdateTokenDetails` command.
         $schedule
             ->command(UpdateTokenDetails::class, [
-                '--limit='.$maxCoingeckoJobsInInterval,
+                '--top',
             ])
             ->withoutOverlapping()
             ->everyFifteenMinutes();
@@ -58,7 +60,7 @@ class Kernel extends ConsoleKernel
         // updated when he is online)
         $schedule
             ->command(UpdateTokenDetails::class, [
-                '--skip='.$maxCoingeckoJobsInInterval,
+                '--no-top',
             ])
             ->withoutOverlapping()
             ->dailyAt('19:00');
@@ -229,12 +231,6 @@ class Kernel extends ConsoleKernel
             ])
             ->withoutOverlapping()
             ->everyFiveMinutes();
-    }
-
-    private function maxCoingeckoJobsInInterval(): int
-    {
-        // Depends on the frequency of the command, currently `everyFifteenMinutes`)
-        return (new UpdateTokenDetails())->getLimitPerMinutes(15);
     }
 
     /**
