@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/landing-data', Controllers\LandingPageDataController::class)->name('landing-data');
 
+Route::get('/galleries-overview', [Api\GalleryOverviewController::class, 'index'])
+        ->name('galleries-overview.index');
+
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
     Route::get('/tokens', [Controllers\TokenController::class, 'list'])->name('tokens.list');
@@ -44,9 +47,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/galleries/{gallery:slug}/like', [Api\LikedGalleryController::class, 'store'])
             ->name('galleries.like')
             ->middleware('signed_wallet');
-
-    Route::get('/galleries-overview', [Api\GalleryOverviewController::class, 'index'])
-            ->name('galleries-overview.index');
 
     Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
             ->name('nft.refresh')
