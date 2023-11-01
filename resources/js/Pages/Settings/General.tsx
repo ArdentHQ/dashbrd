@@ -7,8 +7,6 @@ import { SetDefaultsButton } from "./SetDefaultsButton";
 import { Button } from "@/Components/Buttons/Button";
 import { InputGroup } from "@/Components/Form/InputGroup";
 import { Listbox } from "@/Components/Form/Listbox";
-import { Toggle } from "@/Components/Form/Toggle";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 import { Form } from "@/Pages/Settings/Form";
 
 interface Currency {
@@ -107,8 +105,6 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
             },
         });
     };
-
-    const { isDark, toggleDarkMode } = useDarkModeContext();
 
     return (
         <Layout
@@ -238,26 +234,6 @@ const General = ({ auth, currencies, timezones, dateFormats, title }: Properties
                         </div>
                     </div>
                 </Form.Section>
-
-                {["local", "testing_e2e"].includes(props.environment) && (
-                    <>
-                        <Form.Separator />
-                        <Form.Section
-                            title={"Dark Mode"}
-                            subtitle={"Test only"}
-                        >
-                            <div className="space-y-4">
-                                <div>
-                                    <Toggle
-                                        className="ml-auto"
-                                        checked={isDark}
-                                        onChange={toggleDarkMode}
-                                    />
-                                </div>
-                            </div>
-                        </Form.Section>
-                    </>
-                )}
             </Form>
         </Layout>
     );
