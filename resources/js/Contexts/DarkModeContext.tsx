@@ -22,12 +22,15 @@ export const DarkModeContextProvider = ({ children }: ProviderProperties): JSX.E
 
     const disableDarkMode = (): void => {
         document.documentElement.classList.remove("dark");
-        localStorage.removeItem("theme");
+        localStorage.setItem("theme", "light");
         setIsDark(false);
     };
 
     useEffect(() => {
-        if (localStorage.theme === "dark") {
+        if (
+            localStorage.getItem("theme") === "dark" ||
+            (localStorage.getItem("theme") === null && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
             enableDarkMode();
         } else {
             disableDarkMode();
