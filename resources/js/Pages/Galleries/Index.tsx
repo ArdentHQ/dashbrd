@@ -38,7 +38,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const isEmpty = galleries !== undefined && galleries.popular.length === 0;
 
     const loadGalleries = async (): Promise<void> => {
-        const { data } = await axios.get<Galleries>(route("galleries.galleries"));
+        const { data } = await axios.get<Galleries>(route("api-galleries.index"));
 
         setGalleries(data);
     };

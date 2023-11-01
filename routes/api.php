@@ -42,8 +42,11 @@ Route::middleware('auth:sanctum')->group(function () {
             ->name('line_chart_data');
 
     Route::post('/galleries/{gallery:slug}/like', [Api\LikedGalleryController::class, 'store'])
-            ->name('galleries.like')
-            ->middleware('signed_wallet');
+    ->name('galleries.like')
+    ->middleware('signed_wallet');
+
+    Route::get('/galleries', [Api\GalleryController::class, 'index'])
+            ->name('api-galleries.index');
 
     Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
             ->name('nft.refresh')
