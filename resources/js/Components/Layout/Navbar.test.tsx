@@ -75,7 +75,9 @@ describe("Navbar", () => {
             </DarkModeContextProvider>,
         );
 
-        expect(screen.getByTestId("Navbar__darkMode__dark")).toBeInTheDocument();
+        screen.getAllByTestId("Navbar__darkMode__dark").forEach((el) => {
+            expect(el).toBeInTheDocument();
+        });
 
         localStorage.removeItem("theme");
 
@@ -92,6 +94,8 @@ describe("Navbar", () => {
             </DarkModeContextProvider>,
         );
 
-        expect(screen.getByTestId("Navbar__darkMode__light")).toBeInTheDocument();
+        screen.getAllByTestId("Navbar__darkMode__light").forEach((el) => {
+            expect(el).toBeInTheDocument();
+        });
     });
 });
