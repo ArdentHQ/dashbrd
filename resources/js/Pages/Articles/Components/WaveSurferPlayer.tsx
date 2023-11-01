@@ -3,9 +3,11 @@ import { useTranslation } from "react-i18next";
 import WaveSurfer, { type WaveSurferOptions } from "wavesurfer.js";
 import { Button } from "@/Components/Buttons";
 import { Icon } from "@/Components/Icon";
+import { useDarkModeContext } from "@/Contexts/DarkModeContex";
 
 const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: string): WaveSurfer | null => {
     const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
+    const { isDark } = useDarkModeContext();
 
     useEffect(() => {
         if (containerReference.current === null) return;
@@ -16,10 +18,10 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
             barWidth: 2,
             barGap: 2,
             barRadius: 10,
-            progressColor: "#212B83",
+            progressColor: isDark ? "#8692FF" : "#212B83",
             height: 24,
             cursorWidth: 0,
-            waveColor: "#CFD4FF",
+            waveColor: isDark ? "#5D6F7D" : "#CFD4FF",
             dragToSeek: true,
             hideScrollbar: true,
             normalize: true,
@@ -30,7 +32,7 @@ const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: 
         return () => {
             ws.destroy();
         };
-    }, [containerReference]);
+    }, [containerReference, isDark]);
 
     return wavesurfer;
 };
@@ -84,32 +86,30 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
     }, [wavesurfer]);
 
     return (
-        <div className="overflow-hidden rounded-lg bg-theme-secondary-100">
-            <div className="rounded-t-lg bg-theme-secondary-200 pb-1.5 pl-4 pt-1">
-                <div className="text-xs font-medium leading-4.5 text-theme-secondary-700">
-                    {t("pages.articles.audio_version")}
+        <div className="overflow-hidden rounded-lg bg-theme-secondary-100 dark:bg-theme-dark-800">
+            <div className="flex flex-row items-center justify-between rounded-t-lg bg-theme-secondary-200 pb-1.5 pl-4 pt-1 text-xs font-medium leading-4.5 text-theme-secondary-700 dark:bg-theme-dark-950 dark:text-theme-dark-200">
+                <div>{t("pages.articles.audio_version")}</div>
+
+                <div className="pr-4 sm:hidden">
+                    {formatDuration(currentTime)} / {formatDuration(duration)}
                 </div>
             </div>
             <div className="px-4 py-3">
-                <div className="flex flex-col sm:flex-row sm:items-center">
-                    <div className="mb-3 flex items-end justify-between sm:mb-0">
+                <div className="flex flex-row items-center">
+                    <div className="flex items-end justify-between">
                         <div className="mr-4">
                             <Button
                                 processing={!isReady}
                                 variant="icon"
                                 icon={isPlaying ? "AudioPause" : "AudioPlay"}
-                                iconClass="h-5 w-5 text-theme-primary-600 group-hover:text-white transition-all"
-                                className="h-8 w-8 bg-theme-primary-200 transition-colors hover:border-theme-primary-700 hover:bg-theme-primary-700"
+                                iconClass="h-5 w-5 text-theme-primary-600 group-hover:text-white transition-all dark:text-theme-primary-400 dark:group-hover:text-theme-primary-500"
+                                className="dark:transition-default h-8 w-8 bg-theme-primary-200 transition-colors hover:border-theme-primary-700 hover:bg-theme-primary-700 dark:bg-theme-dark-700 dark:hover:border-transparent dark:hover:bg-theme-dark-600"
                                 onClick={togglePlay}
                             />
                         </div>
-
-                        <div className="text-xs font-medium leading-4.5 text-theme-secondary-700 sm:hidden">
-                            {formatDuration(currentTime)} / {formatDuration(duration)}
-                        </div>
                     </div>
 
-                    <div className="mr-2 hidden text-xs font-medium leading-4.5 text-theme-secondary-700 sm:block">
+                    <div className="mr-2 hidden text-xs font-medium leading-4.5 text-theme-secondary-700 dark:text-theme-dark-200 sm:block">
                         {formatDuration(currentTime)}
                     </div>
 
@@ -121,14 +121,14 @@ export const WaveSurferPlayer = (properties: Pick<WaveSurferOptions, "url">): JS
                             <div className="flex h-6 items-center justify-center transition-all">
                                 <Icon
                                     name="Spinner"
-                                    className="animate-spin text-theme-primary-600"
+                                    className="animate-spin text-theme-primary-600 dark:text-theme-primary-400"
                                     size="lg"
                                 />
                             </div>
                         )}
                     </div>
 
-                    <div className="ml-2 hidden text-xs font-medium leading-4.5 text-theme-secondary-700 sm:block">
+                    <div className="ml-2 hidden text-xs font-medium leading-4.5 text-theme-secondary-700 dark:text-theme-dark-200 sm:block">
                         {formatDuration(duration)}
                     </div>
                 </div>
