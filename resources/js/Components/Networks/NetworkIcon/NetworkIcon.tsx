@@ -5,7 +5,7 @@ import { useNetwork } from "@/Hooks/useNetwork";
 import { Ethereum, Polygon } from "@/images";
 
 interface Properties {
-    networkId: App.Enums.Chains;
+    networkId: App.Enums.Chain;
     withoutTooltip?: boolean;
     className?: string;
     textClassName?: string;

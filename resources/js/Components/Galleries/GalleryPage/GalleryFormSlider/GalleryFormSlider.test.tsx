@@ -1,7 +1,7 @@
 import React from "react";
 import { GalleryFormSlider } from "./GalleryFormSlider";
 import { GalleryFormSliderTabs } from "./GalleryFormSlider.contracts";
-import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import { render, screen } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Models\Collection;
 use App\Models\Network;
@@ -15,7 +15,7 @@ it('should fetch nft collection floor price', function () {
         'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats')),
     ]);
 
-    $network = Network::where('chain_id', Chains::ETH->value)->first();
+    $network = Network::where('chain_id', Chain::ETH->value)->first();
 
     $token = Token::factory(['network_id' => $network->id])->create([
         'symbol' => 'ETH',
@@ -48,7 +48,7 @@ it('should handle null floor price in response', function () {
         'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_floor_price_null')),
     ]);
 
-    $network = Network::where('chain_id', Chains::ETH->value)->first();
+    $network = Network::where('chain_id', Chain::ETH->value)->first();
 
     $token = Token::factory(['network_id' => $network->id])->create([
         'symbol' => 'ETH',
@@ -84,7 +84,7 @@ it('should handle non existing collection when fetching floor price', function (
         'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_missing_collection'), 404),
     ]);
 
-    $network = Network::where('chain_id', Chains::ETH->value)->first();
+    $network = Network::where('chain_id', Chain::ETH->value)->first();
 
     $token = Token::factory(['network_id' => $network->id])->create([
         'symbol' => 'ETH',
