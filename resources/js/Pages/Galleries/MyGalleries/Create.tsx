@@ -16,8 +16,8 @@ import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useGalleryDrafts } from "@/Hooks/useGalleryDrafts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
@@ -133,8 +133,10 @@ const Create = ({
                     error={errors.name}
                     name={data.name}
                     onChange={(name) => {
-                        setDraftTitle(name);
                         setData("name", name);
+                    }}
+                    onBlur={() => {
+                        setDraftTitle(data.name);
                     }}
                 />
 
@@ -199,6 +201,7 @@ const Create = ({
                     setShowDeleteModal(true);
                 }}
                 onCancel={() => {
+                    setDraftTitle(data.name);
                     router.visit(route("my-galleries"));
                 }}
                 onPublish={publishHandler}
