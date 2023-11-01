@@ -172,4 +172,22 @@ describe("useGalleryDrafts custom hook", () => {
             expect(result.current.draft.coverType).toBe("png");
         });
     });
+
+    it("should not add new draft if reached to the limit", async () => {
+        const addMock = vi.fn();
+
+        mocks.useIndexedDB().getAll.mockReturnValue(Array.from({ length: 6 }).fill({ walletAddress: "mockedAddress" }));
+        mocks.useIndexedDB().add.mockImplementation(addMock);
+
+        const { result } = renderHook(() => useGalleryDrafts());
+
+        act(() => {
+            result.current.setDraftTitle("hello");
+        });
+
+        await waitFor(() => {
+            expect(addMock).not.toHaveBeenCalled();
+            expect(result.current.reachedLimit).toBe(true);
+        });
+    });
 });
