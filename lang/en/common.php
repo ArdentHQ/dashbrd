@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 return [
+    'author' => 'Author',
     'add' => 'Add',
     'amount' => 'Amount',
     'balance' => 'Balance',
@@ -31,6 +32,7 @@ return [
     'wallet' => 'Wallet',
     'pending' => 'Pending',
     'publish' => 'Publish',
+    'published' => 'Published',
     'empty' => 'Empty',
     'your_address' => 'Your Address',
     'warning' => 'Warning',
@@ -56,6 +58,8 @@ return [
     'close_toast' => 'Close toast',
     'loading' => 'Loading',
     'price' => 'Price',
+    'articles' => 'Articles',
+    'most_popular' => 'Most Popular',
     'market_cap' => 'Market Cap',
     'volume' => 'Volume :frequency',
     'value' => 'Value',
@@ -146,5 +150,9 @@ return [
     'website' => 'Website',
     'twitter' => 'Twitter',
     'discord' => 'Discord',
+    'facebook' => 'Facebook',
+    'reddit' => 'Reddit',
+    'x' => 'X',
     'sort' => 'Sort',
+    'share_on' => 'Share on {{platform}}',
 ];

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Data\Articles\ArticleData;
+use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionStatsData;
@@ -200,7 +202,7 @@ class CollectionController extends Controller
         // Allow any number but not more than 100
         $activityPageLimit = min($request->has('activityPageLimit') ? (int) $request->get('activityPageLimit') : 10, 100);
 
-        $tab = $request->get('tab') === 'activity' ? 'activity' : 'collection';
+        $tab = in_array($request->get('tab'), ['collection', 'articles', 'activity']) ? $request->get('tab') : 'collection';
         $hasActivity = $collection->indexesActivities();
 
         $activities = ($tab === 'activity' && $hasActivity) ? $collection->activities()
@@ -254,6 +256,28 @@ class CollectionController extends Controller
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
             'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),
             'image' => trans('metatags.collections.view.image'),
+        ]);
+    }
+
+    public function articles(Collection $collection, Request $request): JsonResponse
+    {
+        $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 12, 96);
+
+        $articles = $collection
+            ->articles()
+            ->isPublished()
+            ->search($request->get('search'))
+            ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
+            ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
+            ->orderByPivot('order_index', 'asc')
+            ->withFeaturedCollections()
+            ->paginate($pageLimit);
+
+        /** @var PaginatedDataCollection<int, ArticleData> $paginated */
+        $paginated = ArticleData::collection($articles);
+
+        return response()->json([
+            'articles' => new ArticlesData($paginated),
         ]);
     }
 

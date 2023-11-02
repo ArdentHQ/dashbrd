@@ -16,6 +16,7 @@ return [
         'portfolio' => env('PORTFOLIO_ENABLED', true),
         'galleries' => env('GALLERIES_ENABLED', true),
         'collections' => env('COLLECTIONS_ENABLED', true),
+        'articles' => env('ARTICLES_ENABLED', true),
         'activities' => env('ACTIVITIES_ENABLED', false),
     ],
 
@@ -223,6 +224,11 @@ return [
         'SAND',
         'WETH',
         'ETH',
+    ],
+
+    'text_to_speech' => [
+        'enabled' => env('AUDIO_CONVERSION_ENABLED', true),
+        'audio_conversion_check_delay_seconds' => env('AUDIO_CONVERSION_DELAY_SECONDS', 3),
     ],
 
     'idle_time_between_collection_activity_updates' => 6, // hours

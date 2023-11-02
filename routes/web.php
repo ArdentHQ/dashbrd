@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\DashboardController;
@@ -79,9 +80,15 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+Route::group(['prefix' => 'articles', 'middleware' => 'features:articles'], function () {
+    Route::get('', [ArticleController::class, 'index'])->name('articles');
+    Route::get('{article:slug}', [ArticleController::class, 'show'])->name('articles.view');
+});
+
 Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
     Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
     Route::get('{collection:slug}', [CollectionController::class, 'show'])->name('collections.view');
+    Route::get('{collection:slug}/articles', [CollectionController::class, 'articles'])->name('collections.articles');
     Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
 });
 
