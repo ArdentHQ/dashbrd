@@ -16,7 +16,7 @@ export const NftDraftCard = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                 "group-hover:outline-theme-primary-100 dark:group-hover:outline-theme-dark-500",
                 "group-focus-visible:outline-theme-primary-300",
             )}
-            data-testid="NftGalleryCard"
+            data-testid="NftDraftCard"
         >
             <div className="px-6 pb-3 pt-6">
                 {gallery.coverImage !== null && <GalleryCoverImage image={gallery.coverImage} />}
