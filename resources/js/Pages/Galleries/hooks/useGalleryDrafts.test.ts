@@ -112,6 +112,20 @@ describe("useGalleryDrafts", () => {
         });
     });
 
+    it("should not create a new row if disabled", async () => {
+        mocks.useIndexedDB().add.mockResolvedValue(2);
+
+        const { result } = renderHook(() => useGalleryDrafts(undefined, true));
+
+        act(() => {
+            result.current.setDraftTitle("hello");
+        });
+
+        await waitFor(() => {
+            expect(result.current.draft.id).toBe(null);
+        });
+    });
+
     it("should try to update the row if draft is present", async () => {
         const givenDraftId = 2;
         const updateMock = vi.fn();

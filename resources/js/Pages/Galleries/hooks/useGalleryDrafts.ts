@@ -125,7 +125,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const deleteDraft = async (): Promise<void> => {
-        if (disabled === true || draft.id === null) return;
+        if (draft.id === null) return;
         await database.deleteRecord(draft.id);
 
         setReachedLimit(false);
