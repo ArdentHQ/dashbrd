@@ -8,10 +8,13 @@ describe("SidebarItem", () => {
             <SidebarItem
                 icon="Cog"
                 title="General"
+                href="/hello"
             />,
         );
 
         expect(screen.getByTestId("SidebarItem")).toBeInTheDocument();
+
+        expect(screen.queryByText("1234")).not.toBeInTheDocument();
     });
 
     it("should render with rightText", () => {
@@ -20,10 +23,25 @@ describe("SidebarItem", () => {
                 icon="Cog"
                 title="General"
                 rightText="1234"
+                href="/hello"
             />,
         );
 
         expect(screen.getByTestId("SidebarItem")).toBeInTheDocument();
+
+        expect(screen.getByText("1234")).toBeInTheDocument();
+    });
+
+    it("should render disabled with rightText", () => {
+        render(
+            <SidebarItem
+                icon="Cog"
+                title="General"
+                rightText="1234"
+            />,
+        );
+
+        expect(screen.getByTestId("SidebarItem__disabled")).toBeInTheDocument();
 
         expect(screen.getByText("1234")).toBeInTheDocument();
     });
