@@ -2,7 +2,7 @@ import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
 import cn from "classnames";
 import { useEffect, useRef } from "react";
 import { type OverlayProperties } from "./Overlay.contracts";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 
 export const Overlay = ({
     className,

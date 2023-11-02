@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { type ConnectionErrorProperties, type ConnectWalletProperties } from "./AuthOverlay.contracts";
