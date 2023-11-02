@@ -13,6 +13,8 @@ describe("SidebarItem", () => {
         );
 
         expect(screen.getByTestId("SidebarItem")).toBeInTheDocument();
+
+        expect(screen.queryByText("1234")).not.toBeInTheDocument();
     });
 
     it("should render with rightText", () => {
