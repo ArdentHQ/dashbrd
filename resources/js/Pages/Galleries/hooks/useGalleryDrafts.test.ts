@@ -98,7 +98,7 @@ describe("useGalleryDrafts", () => {
         });
     });
 
-    it("should try to create a new row if draft hasn't been created yet", async () => {
+    it("should try to create a new record if draft hasn't been created yet", async () => {
         mocks.useIndexedDB().add.mockResolvedValue(2);
 
         const { result } = renderHook(() => useGalleryDrafts());
@@ -112,7 +112,7 @@ describe("useGalleryDrafts", () => {
         });
     });
 
-    it("should not create a new row if disabled", async () => {
+    it("should not create a new draft if disabled", async () => {
         mocks.useIndexedDB().add.mockResolvedValue(2);
 
         const { result } = renderHook(() => useGalleryDrafts(undefined, true));
