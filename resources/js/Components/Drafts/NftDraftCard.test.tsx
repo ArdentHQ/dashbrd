@@ -9,7 +9,7 @@ import { render, screen } from "@/Tests/testing-library";
 
 const user = new UserDataFactory().create();
 
-describe("NftGalleryCard", () => {
+describe("NftDraftCard", () => {
     vi.spyOn(useAuth, "useAuth").mockReturnValue({
         user,
         wallet: null,
@@ -27,7 +27,7 @@ describe("NftGalleryCard", () => {
 
         render(<NftDraftCard gallery={gallery} />);
 
-        expect(screen.getByTestId("NftGalleryCard")).toBeInTheDocument();
+        expect(screen.getByTestId("NftDraftCard")).toBeInTheDocument();
 
         expect(screen.getByTestId("GalleryCoverImage")).toBeInTheDocument();
         expect(screen.queryByTestId("NftImageGrid")).not.toBeInTheDocument();
@@ -38,7 +38,7 @@ describe("NftGalleryCard", () => {
 
         render(<NftDraftCard gallery={gallery} />);
 
-        expect(screen.getByTestId("NftGalleryCard")).toBeInTheDocument();
+        expect(screen.getByTestId("NftDraftCard")).toBeInTheDocument();
 
         expect(screen.getByTestId("NftImageGrid")).toBeInTheDocument();
         expect(screen.queryByTestId("GalleryCoverImage")).not.toBeInTheDocument();
