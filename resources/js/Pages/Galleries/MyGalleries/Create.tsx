@@ -62,7 +62,7 @@ const Create = ({
 
     const { draftId } = getQueryParameters();
 
-    const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving } = useGalleryDrafts(
+    const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
         isTruthy(draftId) ? Number(draftId) : undefined,
         isTruthy(gallery?.slug),
     );
@@ -76,6 +76,10 @@ const Create = ({
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
         setDraftNfts,
+        onDelete: (): void => {
+            void deleteDraft();
+            replaceUrlQuery({ draftId: "" });
+        },
     });
 
     const totalValue = 0;
