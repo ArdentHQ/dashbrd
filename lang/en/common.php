@@ -148,4 +148,5 @@ return [
     'published' => 'Published',
     'drafts' => 'Drafts',
     'draft' => 'Draft',
+    'delete_draft' => 'Delete Draft',
 ];
