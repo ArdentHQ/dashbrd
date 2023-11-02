@@ -5,15 +5,15 @@ SET extra_attributes =
       jsonb_set(
         extra_attributes::jsonb,
         '{images,thumb}',
-        to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'thumb', '/thumbnailv2/', '/scaled/')),
+        to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'thumb', ',h_\d+\/thumbnailv2', '/scaled')),
         true
       ),
       '{images,large}',
-      to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'large', '/thumbnailv2/', '/scaled/')),
+      to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'large', ',h_\d+\/thumbnailv2', '/scaled/')),
       true
     ),
     '{images,small}',
-    to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'small', '/thumbnailv2/', '/scaled/')),
+    to_jsonb(REGEXP_REPLACE(extra_attributes->'images'->>'small', ',h_\d+\/thumbnailv2', '/scaled/')),
     true
   )::json
 
