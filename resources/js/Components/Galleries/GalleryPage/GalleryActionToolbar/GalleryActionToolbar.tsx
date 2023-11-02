@@ -97,6 +97,7 @@ export const GalleryActionToolbar = ({
                                             <Icon
                                                 size="lg"
                                                 name="FatDoubleCheck"
+                                                data-testid="Icon_DraftSaved"
                                                 className="text-theme-secondary-700"
                                             />
                                         )}
@@ -105,6 +106,7 @@ export const GalleryActionToolbar = ({
                                             <Icon
                                                 size="lg"
                                                 name="Refresh"
+                                                data-testid="Icon_SavingDraft"
                                                 className="text-theme-secondary-700 dark:text-theme-dark-200"
                                             />
                                         )}
