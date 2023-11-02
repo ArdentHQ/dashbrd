@@ -6,21 +6,53 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 
-const Index = ({
-    title,
-    galleries,
-    nftCount = 0,
-    showDrafts,
-}: {
+interface Properties {
     title: string;
     children: ReactNode;
     galleries: App.Data.Gallery.GalleriesData;
     nftCount?: number;
     showDrafts: boolean;
-}): JSX.Element => {
+}
+const Drafts = (): JSX.Element => <p>fsdgds</p>;
+
+const Galleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Element => {
+    const userGalleries = galleries.paginated;
+
     const { t } = useTranslation();
 
-    const userGalleries = galleries.paginated;
+    return (
+        <>
+            {userGalleries.meta.total === 0 && (
+                <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
+                    <span className="text-center font-medium text-theme-secondary-700">
+                        {t("pages.galleries.my_galleries.no_galleries")}
+                    </span>
+                </div>
+            )}
+
+            {userGalleries.meta.total > 0 && (
+                <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+                    {userGalleries.data.map((gallery, index) => (
+                        <NftGalleryCard
+                            key={index}
+                            gallery={gallery}
+                        />
+                    ))}
+                </div>
+            )}
+
+            {userGalleries.meta.last_page > 1 && (
+                <Pagination
+                    className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
+                    data={userGalleries}
+                />
+            )}
+        </>
+    );
+};
+
+const Index = ({ showDrafts, galleries, title, nftCount = 0 }: Properties): JSX.Element => {
+    const { t } = useTranslation();
 
     return (
         <Layout
@@ -37,33 +69,9 @@ const Index = ({
 
                     <CreateGalleryButton nftCount={nftCount} />
                 </div>
-
-                {userGalleries.meta.total === 0 && (
-                    <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
-                        <span className="text-center font-medium text-theme-secondary-700">
-                            {t("pages.galleries.my_galleries.no_galleries")}
-                        </span>
-                    </div>
-                )}
-
-                {userGalleries.meta.total > 0 && (
-                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
-                        {userGalleries.data.map((gallery, index) => (
-                            <NftGalleryCard
-                                key={index}
-                                gallery={gallery}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {userGalleries.meta.last_page > 1 && (
-                    <Pagination
-                        className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
-                        data={userGalleries}
-                    />
-                )}
             </div>
+
+            {showDrafts ? <Drafts /> : <Galleries galleries={galleries} />}
         </Layout>
     );
 };
