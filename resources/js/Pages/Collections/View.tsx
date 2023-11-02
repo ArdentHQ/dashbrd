@@ -1,6 +1,7 @@
 import { Tab } from "@headlessui/react";
 import { type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
+import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionHeading } from "./Components/CollectionHeading";
@@ -15,6 +16,9 @@ import { CollectionHiddenModal } from "@/Components/Collections/CollectionHidden
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useToasts } from "@/Hooks/useToasts";
+import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -76,8 +80,13 @@ const CollectionsView = ({
     const [activities, setActivities] = useState(initialActivities);
 
     const [loading, setLoading] = useState(false);
+    const [isLoadingActivity, setIsLoadingActivity] = useState(collection.isFetchingActivity);
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
+    const { requestActivityUpdate } = useWalletActivity();
+
+    const { authenticatedAction } = useAuthorizedAction();
+    const { showToast } = useToasts();
 
     const hasSelectedTraits = useMemo(
         () =>
@@ -235,6 +244,10 @@ const CollectionsView = ({
             return <EmptyBlock>{t("pages.collections.activities.ignores_activities")}</EmptyBlock>;
         }
 
+        if (isTruthy(isLoadingActivity) && activities?.paginated.data.length === 0) {
+            return <EmptyBlock>{t("pages.collections.activities.loading_activities_collection")}</EmptyBlock>;
+        }
+
         if (!loading && (activities === null || activities.paginated.data.length === 0)) {
             return <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>;
         }
@@ -250,6 +263,24 @@ const CollectionsView = ({
                 nativeToken={nativeToken}
             />
         );
+    };
+
+    const handleRefreshActivity = (): void => {
+        void authenticatedAction(async () => {
+            setIsLoadingActivity(true);
+            requestActivityUpdate(collection.address);
+
+            showToast({
+                message: t("common.refreshing_activity"),
+                isExpanded: true,
+            });
+
+            await axios.post(
+                route("collection.refresh-activity", {
+                    collection: collection.slug,
+                }),
+            );
+        });
     };
 
     return (
@@ -274,8 +305,12 @@ const CollectionsView = ({
                     />
 
                     <CollectionNavigation
+                        collection={collection}
+                        hasActivities={hasActivities}
                         selectedTab={selectedTab}
                         onTabChange={tabChangeHandler}
+                        onRefreshActivity={handleRefreshActivity}
+                        isLoadingActivity={isLoadingActivity}
                     >
                         <Tab.Panel>
                             <div className="mt-6 flex lg:space-x-6">

@@ -60,6 +60,7 @@ class Collection extends Model
         'last_viewed_at' => 'datetime',
         'is_fetching_activity' => 'bool',
         'activity_updated_at' => 'datetime',
+        'activity_update_requested_at' => 'datetime',
     ];
 
     /**

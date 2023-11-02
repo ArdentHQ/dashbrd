@@ -19,10 +19,11 @@ export const NftBasicInfo = ({ nft }: Properties): JSX.Element => {
             <div className="flex items-center gap-2">
                 {nft.collection.image != null && (
                     <Img
+                        wrapperClassName="aspect-square h-4 w-4 "
                         data-testid="NftHeader__collectionImage"
                         src={nft.collection.image}
                         alt={t("pages.nfts.collection_image")}
-                        className="h-4 w-4 rounded-full"
+                        className="rounded-full"
                     />
                 )}
 

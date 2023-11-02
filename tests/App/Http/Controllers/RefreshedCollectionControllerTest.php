@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Jobs\RefreshWalletCollections;
 use App\Models\Nft;
-use App\Support\Facades\Signature;
 use Illuminate\Support\Facades\Bus;
 
 it('can dispatch jobs to refresh all collections for a wallet', function () {
@@ -14,8 +13,6 @@ it('can dispatch jobs to refresh all collections for a wallet', function () {
         'last_activity_at' => now(),
         'onboarded_at' => now(),
     ]);
-
-    Signature::setWalletIsSigned($user->wallet->id);
 
     Nft::factory()->for($user->wallet)->create();
     Nft::factory()->for($user->wallet)->create();

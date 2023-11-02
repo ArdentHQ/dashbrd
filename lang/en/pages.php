@@ -53,6 +53,7 @@ return [
         'owned' => 'Owned',
         'activities' => [
             'loading_activities' => "We're fetching Activity for this NFT, please hang tight, this can take a while.",
+            'loading_activities_collection' => "We're fetching Activity for this collection, please hang tight, this can take a while.",
             'ignores_activities' => "We don't support activity history for this collection yet.",
             'no_activity' => 'This collection does not have any activity yet.',
             'types' => [
