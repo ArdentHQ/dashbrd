@@ -200,6 +200,8 @@ return [
             'can_purchase' => 'You can purchase NFTs with these top NFT Marketplaces:',
             'must_own_one_nft' => 'You must own at least one (1) NFT in order to create a gallery.',
             'back_to_galleries' => 'Back to Galleries',
+            'draft_saved' => 'Draft Saved',
+            'saving_to_draft' => 'Saving to draft',
         ],
         'delete_modal' => [
             'title' => 'Delete Gallery',
