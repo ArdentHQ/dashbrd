@@ -20,7 +20,9 @@ export const ArticleCardSkeleton = ({ isLoading = true }: { isLoading?: boolean 
                         <Skeleton className="h-full w-full bg-theme-secondary-100" />
                     </div>
                 ) : (
-                    <p className="font-medium text-theme-secondary-500 dark:text-theme-dark-200">{t("pages.articles.placeholder_more_soon")}</p>
+                    <p className="font-medium text-theme-secondary-500 dark:text-theme-dark-200">
+                        {t("pages.articles.placeholder_more_soon")}
+                    </p>
                 )}
             </div>
 
