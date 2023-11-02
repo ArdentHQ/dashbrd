@@ -5,8 +5,8 @@ declare(strict_types=1);
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FilteredGalleryController;
 use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\GalleryFiltersController;
 use App\Http\Controllers\GalleryReportController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\HiddenCollectionController;
@@ -88,13 +88,13 @@ Route::group(['prefix' => 'collections', 'middleware' => 'features:collections']
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
     Route::redirect('/', '/'); // due to the prefix it's hard to see, but it redirects from /galleries to /
 
-    Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
-    Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
-    Route::get('newest', [GalleryFiltersController::class, 'index'])->name('galleries.newest');
+    Route::get('{filter}', [FilteredGalleryController::class, 'index'])
+            ->name('filtered-galleries.index')
+            ->whereIn('filter', ['most-popular', 'most-valuable', 'newest']);
 
     Route::get('{gallery:slug}', [GalleryController::class, 'show'])
-        ->middleware(RecordGalleryView::class)
-        ->name('galleries.view');
+            ->middleware(RecordGalleryView::class)
+            ->name('galleries.view');
 
     Route::get('{gallery:slug}/meta-image.png', MetaImageController::class)->name('galleries.meta-image');
 });

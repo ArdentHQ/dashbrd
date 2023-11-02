@@ -76,15 +76,15 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                     <div className="mt-5 space-y-9">
                         <GallerySkeleton
                             title={t("pages.galleries.most_popular_galleries")}
-                            viewAllPath={route("galleries.most-popular")}
+                            viewAllPath={route("filtered-galleries.index", { filter: "most-popular" })}
                         />
                         <GallerySkeleton
                             title={t("pages.galleries.newest_galleries")}
-                            viewAllPath={route("galleries.newest")}
+                            viewAllPath={route("filtered-galleries.index", { filter: "newest" })}
                         />
                         <GallerySkeleton
                             title={t("pages.galleries.most_valuable_galleries")}
-                            viewAllPath={route("galleries.most-valuable")}
+                            viewAllPath={route("filtered-galleries.index", { filter: "most-valuable" })}
                         />
                     </div>
                 ) : (
@@ -104,7 +104,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                                     spaceBetween={8}
                                     slidesPerView={slidesPerView}
                                     title={t("pages.galleries.most_popular_galleries")}
-                                    viewAllPath={route("galleries.most-popular")}
+                                    viewAllPath={route("filtered-galleries.index", { filter: "most-popular" })}
                                 >
                                     {galleries.popular.map((gallery, index) => (
                                         <CarouselItem key={index}>
@@ -121,7 +121,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                                     spaceBetween={8}
                                     carouselKey="2"
                                     title={t("pages.galleries.newest_galleries")}
-                                    viewAllPath={route("galleries.newest")}
+                                    viewAllPath={route("filtered-galleries.index", { filter: "newest" })}
                                 >
                                     {galleries.newest.map((gallery, index) => (
                                         <CarouselItem key={index}>
@@ -138,7 +138,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                                     spaceBetween={8}
                                     carouselKey="3"
                                     title={t("pages.galleries.most_valuable_galleries")}
-                                    viewAllPath={route("galleries.most-valuable")}
+                                    viewAllPath={route("filtered-galleries.index", { filter: "most-valuable" })}
                                 >
                                     {galleries.mostValuable.map((gallery, index) => (
                                         <CarouselItem key={index}>
