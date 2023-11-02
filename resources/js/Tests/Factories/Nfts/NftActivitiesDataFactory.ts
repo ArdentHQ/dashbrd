@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-
 import { faker } from "@faker-js/faker";
 import NFTActivityFactory from "./NFTActivityFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
