@@ -10,9 +10,6 @@ interface ConfigOption {
     };
 }
 
-const url = (filter: "most-popular" | "newest" | "most-valuable"): string =>
-    route("filtered-galleries.index", { filter });
-
 const FilterView = ({ type }: GalleryFiltersPageProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -20,21 +17,21 @@ const FilterView = ({ type }: GalleryFiltersPageProperties): JSX.Element => {
         "most-popular": {
             title: t("metatags.galleries.most_popular.title"),
             routeInfo: {
-                value: url("most-popular"),
+                value: route("filtered-galleries.index", { filter: "most-popular" }),
                 label: t("pages.galleries.most_popular"),
             },
         },
         newest: {
             title: t("metatags.galleries.newest.title"),
             routeInfo: {
-                value: url("newest"),
+                value: route("filtered-galleries.index", { filter: "newest" }),
                 label: t("pages.galleries.newest"),
             },
         },
         "most-valuable": {
             title: t("metatags.galleries.most_valuable.title"),
             routeInfo: {
-                value: url("most-valuable"),
+                value: route("filtered-galleries.index", { filter: "most-valuable" }),
                 label: t("pages.galleries.most_valuable"),
             },
         },
