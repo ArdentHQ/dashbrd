@@ -37,14 +37,14 @@ export const SidebarItem = ({
                 )}
 
                 <span>{title}</span>
-        
+
                 {rightText !== undefined && (
                     <span
                         className={cn("ml-auto", {
-                        "text-theme-secondary-500": isDisabled,
-                        "text-theme-secondary-700": !isDisabled,
-                        "dark:text-theme-dark-100": !isDisabled && isSelected,
-                        "dark:text-theme-dark-200": !isDisabled && !isSelected,
+                            "text-theme-secondary-500": isDisabled,
+                            "text-theme-secondary-700": !isDisabled,
+                            "dark:text-theme-dark-100": !isDisabled && isSelected,
+                            "dark:text-theme-dark-200": !isDisabled && !isSelected,
                         })}
                     >
                         {rightText}
@@ -75,10 +75,10 @@ export const SidebarItem = ({
                 {rightText !== undefined && (
                     <span
                         className={cn("ml-auto", {
-                        "text-theme-secondary-500": isDisabled,
-                        "text-theme-secondary-700": !isDisabled,
-                        "dark:text-theme-dark-100": !isDisabled && isSelected,
-                        "dark:text-theme-dark-200": !isDisabled && !isSelected,
+                            "text-theme-secondary-500": isDisabled,
+                            "text-theme-secondary-700": !isDisabled,
+                            "dark:text-theme-dark-100": !isDisabled && isSelected,
+                            "dark:text-theme-dark-200": !isDisabled && !isSelected,
                         })}
                     >
                         {rightText}
