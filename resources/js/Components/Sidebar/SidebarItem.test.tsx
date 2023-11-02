@@ -8,6 +8,7 @@ describe("SidebarItem", () => {
             <SidebarItem
                 icon="Cog"
                 title="General"
+                href="/hello"
             />,
         );
 
@@ -20,6 +21,7 @@ describe("SidebarItem", () => {
                 icon="Cog"
                 title="General"
                 rightText="1234"
+                href="/hello"
             />,
         );
 
