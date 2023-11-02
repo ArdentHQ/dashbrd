@@ -24,7 +24,10 @@ export const useLikes = (options: LikeOptions): UseLikesReturnType => {
             query.like = like;
         }
 
-        const response = await axios.post<App.Data.Gallery.GalleryLikeData>(
+        const response = await axios.post<{
+            likes: number;
+            hasLiked: boolean;
+        }>(
             route("galleries.like", {
                 gallery: slug,
                 _query: query,

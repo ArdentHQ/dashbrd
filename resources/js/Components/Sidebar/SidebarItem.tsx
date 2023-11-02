@@ -18,38 +18,73 @@ export const SidebarItem = ({
         content={tooltip}
         disabled={tooltip === undefined}
     >
-        <Tabs.Link
-            tabIndex={0}
-            title={title}
-            selected={isSelected}
-            disabled={isDisabled}
-            href={href}
-            data-testid="SidebarItem"
-        >
-            {isTruthy(icon) && (
-                <Icon
-                    className={cn("transition-default ml-0 mr-2", {
-                        "border-transparent text-theme-primary-600 dark:text-theme-dark-50": isSelected,
-                    })}
-                    name={icon}
-                    size="lg"
-                />
-            )}
+        {isDisabled || href === undefined ? (
+            <Tabs.DisabledLink
+                tabIndex={0}
+                title={title}
+                selected={isSelected}
+                disabled={isDisabled}
+                data-testid="SidebarItem__disabled"
+            >
+                {isTruthy(icon) && (
+                    <Icon
+                        className={cn("transition-default ml-0 mr-2", {
+                            "border-transparent text-theme-primary-600 dark:text-theme-dark-50": isSelected,
+                        })}
+                        name={icon}
+                        size="lg"
+                    />
+                )}
 
-            <div>{title}</div>
-
-            {rightText !== undefined && (
-                <span
-                    className={cn("ml-auto", {
+                <span>{title}</span>
+        
+                {rightText !== undefined && (
+                    <span
+                        className={cn("ml-auto", {
                         "text-theme-secondary-500": isDisabled,
                         "text-theme-secondary-700": !isDisabled,
                         "dark:text-theme-dark-100": !isDisabled && isSelected,
                         "dark:text-theme-dark-200": !isDisabled && !isSelected,
-                    })}
-                >
-                    {rightText}
-                </span>
-            )}
-        </Tabs.Link>
+                        })}
+                    >
+                        {rightText}
+                    </span>
+                )}
+            </Tabs.DisabledLink>
+        ) : (
+            <Tabs.Link
+                tabIndex={0}
+                title={title}
+                selected={isSelected}
+                disabled={isDisabled}
+                href={href}
+                data-testid="SidebarItem"
+            >
+                {isTruthy(icon) && (
+                    <Icon
+                        className={cn("transition-default ml-0 mr-2", {
+                            "border-transparent text-theme-primary-600 dark:text-theme-dark-50": isSelected,
+                        })}
+                        name={icon}
+                        size="lg"
+                    />
+                )}
+
+                <span>{title}</span>
+
+                {rightText !== undefined && (
+                    <span
+                        className={cn("ml-auto", {
+                        "text-theme-secondary-500": isDisabled,
+                        "text-theme-secondary-700": !isDisabled,
+                        "dark:text-theme-dark-100": !isDisabled && isSelected,
+                        "dark:text-theme-dark-200": !isDisabled && !isSelected,
+                        })}
+                    >
+                        {rightText}
+                    </span>
+                )}
+            </Tabs.Link>
+        )}
     </Tooltip>
 );

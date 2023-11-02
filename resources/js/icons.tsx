@@ -71,6 +71,7 @@ import { ReactComponent as Menu } from "@icons/menu.svg";
 import { ReactComponent as MetamaskColored } from "@icons/metamask-colored.svg";
 import { ReactComponent as Metamask } from "@icons/metamask.svg";
 import { ReactComponent as Minus } from "@icons/minus.svg";
+import { ReactComponent as Moon } from "@icons/moon.svg";
 import { ReactComponent as DiamondOpacity } from "@icons/opacity/diamond.svg";
 import { ReactComponent as ImageOpacity } from "@icons/opacity/image.svg";
 import { ReactComponent as UserTeamOpacity } from "@icons/opacity/user-team.svg";
@@ -96,6 +97,7 @@ import { ReactComponent as SpeechBalloon } from "@icons/speech-balloon.svg";
 import { ReactComponent as SpinnerNarrow } from "@icons/spinner-narrow.svg";
 import { ReactComponent as Spinner } from "@icons/spinner.svg";
 import { ReactComponent as SquareWithPencil } from "@icons/square-with-pencil.svg";
+import { ReactComponent as Sun } from "@icons/sun.svg";
 import { ReactComponent as Trash } from "@icons/trash.svg";
 import { ReactComponent as Upload } from "@icons/upload.svg";
 import { ReactComponent as UserTeam } from "@icons/user-team.svg";
@@ -172,6 +174,7 @@ export const SvgCollection = {
     MetamaskColored,
     Megaphone,
     Minus,
+    Moon,
     Pencil,
     Plus,
     FatPlus,
@@ -182,6 +185,7 @@ export const SvgCollection = {
     SpeechBalloon,
     SpinnerNarrow,
     Spinner,
+    Sun,
     SquareWithPencil,
     HeartbeatInCircle,
     Upload,

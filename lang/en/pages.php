@@ -94,6 +94,12 @@ return [
             this site. Are you sure you wish to continue?',
             'not_show' => 'Do not show this message again.',
         ],
+        'refresh' => [
+            'title' => 'Refresh your collection',
+            'notice' => 'You can refresh data every 15 minutes.',
+            'notice_wait' => 'Please wait. You can refresh data every 15 minutes.',
+            'toast' => "We're updating information for your collection.",
+        ],
     ],
 
     'nfts' => [
@@ -177,6 +183,7 @@ return [
             'input_placeholder' => 'Enter gallery name',
             'title_too_long' => 'Gallery name must not exceed :max characters.',
             'already_selected_nft' => 'NFT already exists in this gallery',
+            'nft_missing_image' => 'Only NFTs with images can be added to galleries',
             'gallery_cover' => 'Gallery Cover',
             'gallery_cover_description' => 'The cover is used for the card on the gallery list page. While the cover is not a requirement it will allow you to add personality and stand out from the crowd.',
             'gallery_cover_information' => 'Image dimensions must be at least 287px x 190px, with a max size of 2 MB (JPG, PNG or GIF)',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\TokenGuid;
 use App\Models\Network;
 use Illuminate\Console\Command;
@@ -50,7 +50,7 @@ class SyncActivityPrices extends Command
             DB::beginTransaction();
             $this->info('Updating NFT activity table...');
 
-            $network = Network::firstWhere('chain_id', Chains::Polygon);
+            $network = Network::firstWhere('chain_id', Chain::Polygon);
             $ethereumGuid = TokenGuid::Ethereum->value;
             $polygonGuid = TokenGuid::Polygon->value;
 

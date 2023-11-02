@@ -12,30 +12,33 @@ interface ProviderProperties {
 const DarkModeContext = createContext<ContextProperties | undefined>(undefined);
 
 export const DarkModeContextProvider = ({ children }: ProviderProperties): JSX.Element => {
-    const [isDark, setIsDark] = useState<boolean>(false);
+    const [isDark, setIsDark] = useState(false);
 
-    const setDarkModeTrue = (): void => {
+    const enableDarkMode = (): void => {
         document.documentElement.classList.add("dark");
         localStorage.setItem("theme", "dark");
         setIsDark(true);
     };
 
-    const setDarkModeFalse = (): void => {
+    const disableDarkMode = (): void => {
         document.documentElement.classList.remove("dark");
-        localStorage.removeItem("theme");
+        localStorage.setItem("theme", "light");
         setIsDark(false);
     };
 
     useEffect(() => {
-        if (localStorage.theme === "dark") {
-            setDarkModeTrue();
+        if (
+            localStorage.getItem("theme") === "dark" ||
+            (localStorage.getItem("theme") === null && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+            enableDarkMode();
         } else {
-            setDarkModeFalse();
+            disableDarkMode();
         }
     }, []);
 
     const toggleDarkMode = (): void => {
-        isDark ? setDarkModeFalse() : setDarkModeTrue();
+        isDark ? disableDarkMode() : enableDarkMode();
     };
 
     return <DarkModeContext.Provider value={{ isDark, toggleDarkMode }}>{children}</DarkModeContext.Provider>;

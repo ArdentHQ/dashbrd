@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Gallery;
 
+use App\Data\SimpleWalletData;
 use App\Enums\CurrencyCode;
 use App\Models\Gallery;
 use App\Models\User;
@@ -28,7 +29,7 @@ class GalleryData extends Data
         public int $collectionsCount,
         public ?float $value,
         public ?string $coverImage,
-        public GalleryWalletData $wallet,
+        public SimpleWalletData $wallet,
         public GalleryNftsData $nfts,
         public bool $isOwner = false,
         public bool $hasLiked = false,
@@ -62,8 +63,8 @@ class GalleryData extends Data
             collectionsCount: $galleryCache->collectionsCount(),
             value: $gallery->value($currency),
             coverImage: $gallery->cover_image,
-            wallet: GalleryWalletData::fromModel($gallery->user->wallet),
             nfts: new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit, ['*'], 'page', 1))),
+            wallet: SimpleWalletData::fromModel($gallery->user->wallet),
             isOwner: $isOwner,
             hasLiked: $hasLiked,
         );

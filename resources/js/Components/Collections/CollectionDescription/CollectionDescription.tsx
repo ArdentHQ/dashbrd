@@ -54,7 +54,7 @@ export const CollectionDescription = ({
                     </LinkButton>
 
                     <Dialog
-                        title={t("pages.collections.about_collection")}
+                        title={name}
                         isOpen={showDescriptionModal}
                         onClose={() => {
                             setShowDescriptionModal(false);

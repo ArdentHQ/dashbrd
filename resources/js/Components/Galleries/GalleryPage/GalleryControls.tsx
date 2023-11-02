@@ -22,7 +22,7 @@ export const GalleryControls = ({
 }: {
     likesCount?: number;
     gallery?: App.Data.Gallery.GalleryData;
-    wallet: App.Data.Gallery.GalleryWalletData;
+    wallet: App.Data.SimpleWalletData;
     isDisabled?: boolean;
     showEditAction?: boolean;
     alreadyReported?: boolean;
@@ -62,12 +62,12 @@ export const GalleryControls = ({
                             icon="Heart"
                             className={cn(hasLiked && "button-like-selected")}
                             onClick={() => {
-                                signedAction(({ authenticated }) => {
+                                void signedAction(async ({ authenticated }) => {
                                     // If user wasnt authenticated, force a positive
                                     // like since we dont know if he liked it before
                                     const likeValue = !authenticated ? true : undefined;
 
-                                    void like(gallery.slug, likeValue);
+                                    await like(gallery.slug, likeValue);
 
                                     router.reload({
                                         only: ["stats", "gallery"],
@@ -122,7 +122,7 @@ export const GalleryControls = ({
                                 icon="Pencil"
                                 variant="icon-primary"
                                 onClick={() => {
-                                    signedAction(() => {
+                                    void signedAction(() => {
                                         router.get(route("my-galleries.edit", { slug: gallery.slug }));
                                     });
                                 }}

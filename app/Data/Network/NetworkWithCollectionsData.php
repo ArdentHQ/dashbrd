@@ -18,7 +18,7 @@ class NetworkWithCollectionsData extends Data
         public int $id,
         public string $name,
         public bool $isMainnet,
-        #[LiteralTypeScriptType('App.Enums.Chains')]
+        #[LiteralTypeScriptType('App.Enums.Chain')]
         public int $chainId,
         public string $publicRpcProvider,
         public string $explorerUrl,

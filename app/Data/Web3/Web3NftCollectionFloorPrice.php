@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Data\Web3;
 
 use Carbon\Carbon;
-use Spatie\LaravelData\Data;
 
-class Web3NftCollectionFloorPrice extends Data
+class Web3NftCollectionFloorPrice
 {
     public function __construct(
         // WEI

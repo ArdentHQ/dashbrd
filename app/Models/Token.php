@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Data\Token\TokenData;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\BelongsToTokenGuid;
@@ -154,7 +154,7 @@ class Token extends Model
     public function scopeMatic(Builder $query): Builder
     {
         return $query->bySymbol('MATIC')->whereHas(
-            'network', fn ($q) => $q->where('chain_id', Chains::Polygon)
+            'network', fn ($q) => $q->where('chain_id', Chain::Polygon)
         );
     }
 

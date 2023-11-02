@@ -98,7 +98,7 @@ export const CollectionHeaderTop = ({
                 <div className="flex flex-col items-center space-y-4 lg:flex-row lg:items-end lg:space-x-4 lg:space-y-0">
                     <div className="flex h-32 w-32 items-center justify-center rounded-2xl p-1 backdrop-blur-md">
                         <Img
-                            className="aspect-square h-30 w-30 rounded-xl bg-theme-secondary-100 object-cover"
+                            wrapperClassName="aspect-square overflow-hidden rounded-xl h-full w-full"
                             src={collection.image ?? undefined}
                             data-testid="CollectionHeaderTop__image"
                         />

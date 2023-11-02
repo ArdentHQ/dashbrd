@@ -14,7 +14,7 @@ class CollectionBasicDetailsData extends Data
 {
     public function __construct(
         public string $slug,
-        #[LiteralTypeScriptType('App.Enums.Chains')]
+        #[LiteralTypeScriptType('App.Enums.Chain')]
         public int $chainId,
     ) {
     }

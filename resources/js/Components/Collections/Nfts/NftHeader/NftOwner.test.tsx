@@ -1,7 +1,7 @@
 import { NftOwner } from "./NftOwner";
 import NFTCollectionFactory from "@/Tests/Factories/Nfts/NFTCollectionFactory";
 import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
-import NftWalletFactory from "@/Tests/Factories/Nfts/NftWalletFactory";
+import SimpleWalletDataFactory from "@/Tests/Factories/SimpleWalletDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 import { ExplorerChains } from "@/Utils/Explorer";
 
@@ -34,7 +34,7 @@ describe("NftOwner", () => {
         const collection = new NFTCollectionFactory().create({
             chainId: ExplorerChains.PolygonMainnet,
         });
-        const wallet = new NftWalletFactory().create();
+        const wallet = new SimpleWalletDataFactory().create();
         const nft = new NftFactory().withWallet().create({
             collection,
             wallet,
@@ -54,7 +54,7 @@ describe("NftOwner", () => {
         const collection = new NFTCollectionFactory().create({
             chainId: ExplorerChains.EthereumMainnet,
         });
-        const wallet = new NftWalletFactory().create();
+        const wallet = new SimpleWalletDataFactory().create();
         const nft = new NftFactory().withWallet().create({
             collection,
             wallet,

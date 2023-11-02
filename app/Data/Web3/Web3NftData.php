@@ -7,12 +7,8 @@ namespace App\Data\Web3;
 use App\Enums\TraitDisplayType;
 use App\Models\Token;
 use Carbon\Carbon;
-use Spatie\LaravelData\Data;
 
-/**
- * Generic nft data object for Web3DataProviders.
- */
-class Web3NftData extends Data
+class Web3NftData
 {
     /**
      * @param  array{images: array{thumb: string | null, small: string | null, large: string | null, originalRaw: string | null, original: string | null}}  $extraAttributes

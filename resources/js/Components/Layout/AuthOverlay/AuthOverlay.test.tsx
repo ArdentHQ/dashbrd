@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
-import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
@@ -39,6 +39,22 @@ describe("AuthOverlay", () => {
         await userEvent.click(screen.getByTestId("Button"));
 
         expect(connectWalletMock).toHaveBeenCalled();
+    });
+
+    it("should show timeout message if session expired", () => {
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={false}
+                sessionMayExpired
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.getByText(/timed out/)).toBeInTheDocument();
     });
 
     it("should sign if requires signature", async () => {
