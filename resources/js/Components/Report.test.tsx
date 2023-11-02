@@ -130,6 +130,7 @@ describe("Report", () => {
     });
 
     it("show report modal on load", async () => {
+        const collection = new CollectionDetailDataFactory().create();
 
         await act(() =>
             render(
@@ -140,7 +141,6 @@ describe("Report", () => {
                 />,
             )
         );
-        const collection = new CollectionDetailDataFactory().create();
 
         expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
     });
