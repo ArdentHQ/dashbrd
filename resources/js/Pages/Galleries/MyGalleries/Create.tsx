@@ -204,7 +204,6 @@ const Create = ({
                     setShowDeleteModal(true);
                 }}
                 onCancel={() => {
-                    setDraftTitle(data.name);
                     router.visit(route("my-galleries"));
                 }}
                 onPublish={publishHandler}
