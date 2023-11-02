@@ -1,4 +1,5 @@
 import { router } from "@inertiajs/react";
+import { act } from "@testing-library/react-hooks";
 import { t } from "i18next";
 import React from "react";
 import { expect, type SpyInstance } from "vitest";
@@ -12,7 +13,6 @@ import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
-import { act } from "@testing-library/react-hooks";
 
 let routerSpy: SpyInstance;
 let useAuthorizedActionSpy: SpyInstance;
