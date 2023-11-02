@@ -31,4 +31,18 @@ describe("SidebarItem", () => {
 
         expect(screen.getByText("1234")).toBeInTheDocument();
     });
+
+    it("should render disabled with rightText", () => {
+        render(
+            <SidebarItem
+                icon="Cog"
+                title="General"
+                rightText="1234"
+            />,
+        );
+
+        expect(screen.getByTestId("SidebarItem__disabled")).toBeInTheDocument();
+
+        expect(screen.getByText("1234")).toBeInTheDocument();
+    });
 });
