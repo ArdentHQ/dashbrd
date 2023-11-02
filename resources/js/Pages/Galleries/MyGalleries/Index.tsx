@@ -1,10 +1,11 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
+import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 interface Properties {
     title: string;
@@ -13,7 +14,17 @@ interface Properties {
     nftCount?: number;
     showDrafts: boolean;
 }
-const Drafts = (): JSX.Element => <p>fsdgds</p>;
+const Drafts = (): JSX.Element => {
+    const { walletDrafts, loadingWalletDrafts } = useGalleryDrafts();
+
+    // const [walletDrafts, setWalletDrafts] = useState([]);
+
+    useEffect(() => {
+        console.log({ loadingWalletDrafts, walletDrafts });
+    }, [walletDrafts, loadingWalletDrafts]);
+
+    return <></>;
+};
 
 const Galleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Element => {
     const userGalleries = galleries.paginated;

@@ -27,6 +27,8 @@ interface GalleryDraftsState {
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
     deleteDraft: () => Promise<void>;
+    walletDrafts: GalleryDraft[];
+    loadingWalletDrafts: boolean;
 }
 
 const initialGalleryDraft: GalleryDraft = {
@@ -46,6 +48,9 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         ...initialGalleryDraft,
         walletAddress: wallet?.address,
     });
+
+    const [loadingWalletDrafts, setLoadingWalletDrafts] = useState<boolean>(true);
+    const [walletDrafts, setWalletDrafts] = useState<GalleryDraft[]>([]);
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -70,6 +75,17 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
         void saveDraft();
     }, [save]);
+
+    useEffect(() => {
+        const loadWalletDrafts = async (): Promise<void> => {
+            const drafts = await getWalletDrafts();
+            setWalletDrafts(drafts);
+
+            setLoadingWalletDrafts(false);
+        };
+
+        void loadWalletDrafts();
+    }, []);
 
     const saveDraft = async (): Promise<void> => {
         setIsSaving(true);
@@ -139,5 +155,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setDraftNfts,
         setDraftTitle,
         deleteDraft,
+        walletDrafts,
+        loadingWalletDrafts,
     };
 };
