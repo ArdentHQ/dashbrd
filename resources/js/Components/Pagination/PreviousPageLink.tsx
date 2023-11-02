@@ -1,7 +1,14 @@
-import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { ButtonLink, type ButtonLinkOnClick } from "@/Components/Buttons/ButtonLink";
 
-export const PreviousPageLink = ({ href }: { href: string | null }): JSX.Element => (
+export const PreviousPageLink = ({
+    href,
+    onClick,
+}: {
+    href: string | null;
+    onClick?: ButtonLinkOnClick;
+}): JSX.Element => (
     <ButtonLink
+        onClick={onClick}
         disabled={href === null}
         href={href ?? "#"}
         variant="icon"

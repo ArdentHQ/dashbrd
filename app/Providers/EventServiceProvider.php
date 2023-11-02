@@ -6,9 +6,11 @@ namespace App\Providers;
 
 use App\Events\WalletBecameActive;
 use App\Listeners\WalletBecameActiveListener;
+use App\Models\Article;
 use App\Models\CoingeckoToken;
 use App\Models\SpamToken;
 use App\Models\Token;
+use App\Observers\ArticleObserver;
 use App\Observers\CoingeckoTokenObserver;
 use App\Observers\SpamTokenObserver;
 use App\Observers\TokenObserver;
@@ -39,6 +41,7 @@ class EventServiceProvider extends ServiceProvider
         Token::observe(TokenObserver::class);
         CoingeckoToken::observe(CoingeckoTokenObserver::class);
         SpamToken::observe(SpamTokenObserver::class);
+        Article::observe(ArticleObserver::class);
     }
 
     /**

@@ -77,6 +77,7 @@ export const CollectionCarousel = ({
                 shouldShowHeader={false}
                 onUpdate={checkIfRequiresNavigation}
                 spaceBetween={16}
+                carouselKey="collections"
             >
                 {collections.map((collection, index) => (
                     <CarouselItem
@@ -136,7 +137,7 @@ export const CollectionCarousel = ({
                 })}
             >
                 <div className="hidden md:block">
-                    <CarouselPreviousButton />
+                    <CarouselPreviousButton carouselKey="collections" />
                 </div>
             </div>
 
@@ -156,10 +157,13 @@ export const CollectionCarousel = ({
                 })}
             >
                 <div className="block md:hidden">
-                    <CarouselPreviousButton />
+                    <CarouselPreviousButton carouselKey="collections" />
                 </div>
 
-                <CarouselNextButton className="flex-shrink-0" />
+                <CarouselNextButton
+                    carouselKey="collections"
+                    className="flex-shrink-0"
+                />
             </div>
         </div>
     );

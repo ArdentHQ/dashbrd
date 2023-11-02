@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
+use App\Models\Article;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\Nft;
@@ -269,7 +271,6 @@ it('can render the collections view page with owned filter', function ($owned) {
                         ->where('tab', 'collection')
                         ->where('activityPageLimit', 10)
                         ->where('nftPageLimit', 24)
-
                 )
         );
 })->with([
@@ -1024,4 +1025,237 @@ it('can get stats', function () {
     ]));
 
     expect($response['stats']['nfts'] === 1 && $response['stats']['collections'] === 1)->toBeTrue();
+});
+
+it('should return collection articles', function () {
+    $collections = Collection::factory(8)->create();
+
+    $articles = Article::factory(2)->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $articles->map(fn ($article) => $article
+        ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
+        ->preservingOriginal()
+        ->toMediaCollection()
+    );
+
+    $collections->map(function ($collection) use ($articles) {
+        $collection->articles()->attach($articles, ['order_index' => 1]);
+    });
+
+    $collection = $collections->first();
+
+    $response = $this->getJson(route('collections.articles', $collection))->json('articles');
+
+    expect(count($response['paginated']['data']))->toEqual(2)
+        ->and(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(8);
+});
+
+it('should return collection articles with the given pageLimit', function ($pageLimit, $resultCount) {
+    $collections = Collection::factory(2)->create();
+
+    $articles = Article::factory(35)->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $articles->map(fn ($article) => $article
+        ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
+        ->preservingOriginal()
+        ->toMediaCollection()
+    );
+
+    $collections->map(function ($collection) use ($articles) {
+        $collection->articles()->attach($articles, ['order_index' => 1]);
+    });
+
+    $response = $this->getJson(route('collections.articles', [
+        'collection' => $collections->first(),
+        'pageLimit' => $pageLimit,
+    ]))->json('articles');
+
+    expect(count($response['paginated']['data']))->toEqual($resultCount);
+})->with([
+    [123, 35],
+    [12, 12],
+    [24, 24],
+]);
+it('should return published collection articles', function () {
+    $collection = Collection::factory()->create();
+
+    $articles = Article::factory(3)->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $unpublishedArticle = Article::factory()->create([
+        'published_at' => null,
+    ]);
+
+    $articles->push($unpublishedArticle);
+
+    attachImageToArticles($articles);
+
+    $collection->articles()->attach($articles, ['order_index' => 1]);
+
+    $response = $this->getJson(route('collections.articles', $collection))->json('articles');
+
+    expect(count($response['paginated']['data']))->toEqual(3)
+        ->and(array_column($response['paginated']['data'], 'id'))->not()->toContain($unpublishedArticle->id);
+});
+
+it('should get collection articles sorted: popularity', function () {
+    $collection = Collection::factory()->create();
+
+    $article1 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+        'views_count_7days' => 1,
+    ]);
+
+    $article2 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+        'views_count_7days' => 3,
+    ]);
+
+    $collection->articles()->attach($article1, ['order_index' => 1]);
+    $collection->articles()->attach($article2, ['order_index' => 1]);
+
+    attachImageToArticles(collect([$article2, $article1]));
+
+    $response = $this->getJson(
+        route('collections.articles', [
+            'collection' => $collection,
+            'sort' => 'popularity',
+        ])
+    )->json('articles');
+
+    $returnedArticles = $response['paginated']['data'];
+
+    expect($returnedArticles[0]['id'])->toBe($article2->id)
+        ->and($returnedArticles[1]['id'])->toBe($article1->id);
+});
+
+it('should get collection articles sorted: latest', function () {
+    $collection = Collection::factory()->create();
+
+    $article1 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $article2 = Article::factory()->create([
+        'published_at' => now()->format('Y-m-d'),
+    ]);
+
+    $collection->articles()->attach($article1, ['order_index' => 1]);
+    $collection->articles()->attach($article2, ['order_index' => 1]);
+
+    attachImageToArticles(collect([$article2, $article1]));
+
+    $response = $this->getJson(route('collections.articles', $collection))->json('articles');
+
+    $returnedArticles = $response['paginated']['data'];
+
+    expect($returnedArticles[0]['id'])->toBe($article2->id)
+        ->and($returnedArticles[1]['id'])->toBe($article1->id);
+});
+
+function attachImageToArticles($articles)
+{
+    $articles->map(fn ($article) => $article
+        ->addMedia('database/seeders/fixtures/articles/images/discovery-of-the-day-luchadores.png')
+        ->preservingOriginal()
+        ->toMediaCollection()
+    );
+}
+it('can refresh collection activity', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => null,
+        'supply' => null,
+        'activity_updated_at' => null,
+        'is_fetching_activity' => false,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+         ->post(route('collection.refresh-activity', [
+             'collection' => $collection->slug,
+         ]))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionActivity::class);
+});
+
+it('should refresh collection activity with delay if recently requested', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => null,
+        'supply' => null,
+        'activity_updated_at' => Carbon::now()->addHours(-5),
+        'is_fetching_activity' => false,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+         ->post(route('collection.refresh-activity', [
+             'collection' => $collection->slug,
+         ]))
+        ->assertStatus(200);
+
+    Bus::assertDispatched(FetchCollectionActivity::class);
+});
+
+it('should not refresh collection activity if already requested', function () {
+    $user = createUser();
+
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'last_viewed_at' => null,
+        'supply' => null,
+        'activity_updated_at' => Carbon::now(),
+        'activity_update_requested_at' => Carbon::now()->addHours(-1),
+        'is_fetching_activity' => false,
+    ]);
+
+    Token::factory()->create([
+        'network_id' => $network->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $this->actingAs($user)
+         ->post(route('collection.refresh-activity', [
+             'collection' => $collection->slug,
+         ]))
+        ->assertStatus(200);
+
+    Bus::assertNotDispatched(FetchCollectionActivity::class);
 });

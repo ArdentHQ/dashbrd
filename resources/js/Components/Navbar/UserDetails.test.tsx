@@ -15,6 +15,7 @@ const environmentDefault = {
         collections: true,
         galleries: true,
         portfolio: true,
+        articles: true,
     },
 };
 

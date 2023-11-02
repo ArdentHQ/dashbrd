@@ -27,6 +27,19 @@ describe("FeaturedCollectionsBanner", () => {
         expect(screen.queryByTestId("CollectionCarousel__entry--1")).not.toBeInTheDocument();
     });
 
+    it("should render with the given subtitle", () => {
+        const collections = new NFTCollectionFactory().withImage().createMany(1);
+
+        render(
+            <FeaturedCollectionsBanner
+                collections={collections}
+                subtitle="Test title for article"
+            />,
+        );
+
+        expect(screen.getByText("Test title for article")).toBeInTheDocument();
+    });
+
     it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {
         render(<FeaturedCollectionsBanner collections={[]} />, { breakpoint });
 
