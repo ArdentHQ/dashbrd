@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
 
 export const ArticleListItem = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
     const { t } = useTranslation();
-    const { user } = useActiveUser();
+    const { user } = useAuth();
 
     return (
         <a

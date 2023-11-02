@@ -1,8 +1,10 @@
 import cn from "classnames";
 import { type AnchorHTMLAttributes, type ButtonHTMLAttributes, forwardRef, type HTMLAttributes } from "react";
 import { Icon, type IconName } from "./Icon";
+import { Link as InertiaLink } from "@/Components/Link";
 
-interface TabAnchorProperties extends AnchorHTMLAttributes<HTMLAnchorElement> {
+interface TabAnchorProperties extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
+    href: string;
     disabled?: boolean;
     selected?: boolean;
 }
@@ -75,7 +77,7 @@ const getTabClasses = ({
 
 const Link = forwardRef<HTMLAnchorElement, TabAnchorProperties>(
     ({ className, disabled = false, selected = false, ...properties }, reference): JSX.Element => (
-        <a
+        <InertiaLink
             ref={reference}
             {...properties}
             className={getTabClasses({ variant: "vertical", disabled, selected, className })}
@@ -83,6 +85,17 @@ const Link = forwardRef<HTMLAnchorElement, TabAnchorProperties>(
     ),
 );
 Link.displayName = "Tabs.Link";
+
+const DisabledLink = forwardRef<HTMLAnchorElement, Omit<TabAnchorProperties, "href">>(
+    ({ className, disabled = false, selected = false, ...properties }, reference): JSX.Element => (
+        <span
+            ref={reference}
+            {...properties}
+            className={getTabClasses({ variant: "vertical", disabled, selected, className })}
+        />
+    ),
+);
+DisabledLink.displayName = "Tabs.DisabledLink";
 
 const Button = forwardRef<HTMLButtonElement, TabButtonProperties>(
     ({ className, disabled, selected = false, children, icon, ...properties }, reference): JSX.Element => (
@@ -122,4 +135,4 @@ export const List = ({ wrapperClassName, className, ...properties }: WrapperProp
     </div>
 );
 
-export const Tabs = Object.assign(List, { Button, Link });
+export const Tabs = Object.assign(List, { Button, Link, DisabledLink });

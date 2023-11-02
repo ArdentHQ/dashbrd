@@ -10,7 +10,7 @@ use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\AlchemyChain;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\ImageSize;
 use App\Enums\NftInfo;
@@ -485,7 +485,7 @@ class AlchemyPendingRequest extends PendingRequest
     }
 
     // https://docs.alchemy.com/reference/getfloorprice
-    public function getNftCollectionFloorPrice(Chains $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         // Only ETH is supported at the moment since this API is still considered in beta:
 
@@ -494,7 +494,7 @@ class AlchemyPendingRequest extends PendingRequest
         // Polygon	   X       X
         // Optimism	   X       X
         // Arbitrum	   X       X
-        if ($chain !== Chains::ETH) {
+        if ($chain !== Chain::ETH) {
             return null;
         }
 

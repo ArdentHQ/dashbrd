@@ -6,9 +6,8 @@ namespace App\Data\Web3;
 
 use App\Enums\NftTransferType;
 use Carbon\Carbon;
-use Spatie\LaravelData\Data;
 
-class CollectionActivity extends Data
+readonly class CollectionActivity
 {
     /**
      * @param  array<string, mixed>  $extraAttributes

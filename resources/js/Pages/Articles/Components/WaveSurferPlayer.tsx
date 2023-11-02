@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import WaveSurfer, { type WaveSurferOptions } from "wavesurfer.js";
 import { Button } from "@/Components/Buttons";
 import { Icon } from "@/Components/Icon";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 
 const useWavesurfer = (containerReference: RefObject<HTMLElement | null>, url?: string): WaveSurfer | null => {
     const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);

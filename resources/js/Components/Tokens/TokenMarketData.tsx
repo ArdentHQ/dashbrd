@@ -19,7 +19,10 @@ export const TokenMarketData = ({ token, className, ...properties }: Properties)
 
     return (
         <div
-            className={cn("overflow-hidden rounded-xl border-theme-secondary-300 sm:border", className)}
+            className={cn(
+                "overflow-hidden rounded-xl border-theme-secondary-300 dark:border-theme-dark-700 sm:border",
+                className,
+            )}
             {...properties}
         >
             <div className="sm:p-6">
@@ -32,7 +35,7 @@ export const TokenMarketData = ({ token, className, ...properties }: Properties)
                     period={period}
                 />
 
-                <div className="mt-6 border-t border-dashed border-theme-secondary-300 pt-6">
+                <div className="mt-6 border-t border-dashed border-theme-secondary-300 pt-6 dark:border-theme-dark-700">
                     <TokenDetails token={token} />
                 </div>
             </div>

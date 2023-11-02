@@ -75,8 +75,9 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                             data-testid="GalleryNftsNft__collection_image"
                         >
                             <Img
+                                wrapperClassName="h-15 w-15 aspect-square"
                                 src={nft.collectionImage}
-                                className="h-15 w-15 rounded-full"
+                                className="rounded-full"
                             />
                         </div>
                     )}
@@ -176,7 +177,7 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                 <Img
                     errorMessage={t("common.unable_to_retrieve_image")}
                     data-testid="GalleryNftsNft__image"
-                    className="aspect-square w-full object-cover"
+                    wrapperClassName="aspect-square"
                     src={imageSource}
                 />
             )}

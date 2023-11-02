@@ -6,8 +6,8 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FilteredGalleryController;
 use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\GalleryFiltersController;
 use App\Http\Controllers\GalleryReportController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\HiddenCollectionController;
@@ -48,9 +48,10 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['middleware' => 'signed_wallet'], function () {
             Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
-            Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
             Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');
         });
+
+        Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
 
         Route::get('collections', [MyGalleryCollectionController::class, 'index'])->name('my-galleries.collections');
         Route::get('{collection:slug}/nfts', [MyGalleryCollectionController::class, 'nfts'])->name('my-galleries.nfts');
@@ -93,14 +94,14 @@ Route::group(['prefix' => 'collections', 'middleware' => 'features:collections']
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
     Route::redirect('/', '/'); // due to the prefix it's hard to see, but it redirects from /galleries to /
-    Route::get('galleries', [GalleryController::class, 'galleries'])->name('galleries.galleries');
-    Route::get('most-popular', [GalleryFiltersController::class, 'index'])->name('galleries.most-popular');
-    Route::get('most-valuable', [GalleryFiltersController::class, 'index'])->name('galleries.most-valuable');
-    Route::get('newest', [GalleryFiltersController::class, 'index'])->name('galleries.newest');
 
-    Route::get('{gallery:slug}', [GalleryController::class, 'view'])
-        ->middleware(RecordGalleryView::class)
-        ->name('galleries.view');
+    Route::get('{filter}', [FilteredGalleryController::class, 'index'])
+            ->name('filtered-galleries.index')
+            ->whereIn('filter', ['most-popular', 'most-valuable', 'newest']);
+
+    Route::get('{gallery:slug}', [GalleryController::class, 'show'])
+            ->middleware(RecordGalleryView::class)
+            ->name('galleries.view');
 
     Route::get('{gallery:slug}/meta-image.png', MetaImageController::class)->name('galleries.meta-image');
 });

@@ -230,4 +230,6 @@ return [
         'enabled' => env('AUDIO_CONVERSION_ENABLED', true),
         'audio_conversion_check_delay_seconds' => env('AUDIO_CONVERSION_DELAY_SECONDS', 3),
     ],
+
+    'idle_time_between_collection_activity_updates' => 6, // hours
 ];

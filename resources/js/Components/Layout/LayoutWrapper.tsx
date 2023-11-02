@@ -5,8 +5,9 @@ import { Footer } from "@/Components/Layout/Footer";
 import { Navbar } from "@/Components/Layout/Navbar";
 import { SliderContext } from "@/Components/Slider";
 import { ToastContainer, type ToastMessage } from "@/Components/Toast";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuthOverlay } from "@/Hooks/useAuthOverlay";
 
 interface LayoutWrapperProperties extends HTMLAttributes<HTMLDivElement> {
     useVerticalOffset?: boolean;
@@ -31,7 +32,9 @@ export const LayoutWrapper = ({
     displayAuthOverlay = true,
     showBackButton = false,
 }: LayoutWrapperProperties): JSX.Element => {
-    const { authenticated, showAuthOverlay, wallet, user, showCloseButton, closeOverlay } = useAuth({
+    const { authenticated, signed, wallet, user, logout } = useAuth();
+
+    const { showAuthOverlay, showCloseButton, closeOverlay } = useAuthOverlay({
         mustBeSigned,
     });
 
@@ -42,7 +45,7 @@ export const LayoutWrapper = ({
             data-testid="LayoutWrapper"
             className="flex min-h-screen flex-col"
         >
-            <header className="relative z-50">
+            <header className="relative z-50 border-b border-theme-secondary-300 dark:border-theme-dark-700">
                 <Navbar
                     connectWallet={connectWallet}
                     initialized={initialized}
@@ -51,6 +54,9 @@ export const LayoutWrapper = ({
                     wallet={wallet}
                     user={user ?? undefined}
                     isMaintenanceModeActive={isMaintenanceModeActive}
+                    onLogout={() => {
+                        void logout();
+                    }}
                 />
             </header>
 
@@ -61,6 +67,9 @@ export const LayoutWrapper = ({
                     mustBeSigned={mustBeSigned}
                     closeOverlay={closeOverlay}
                     showBackButton={showBackButton}
+                    // If we show the auth overlay even if the state says we are signed,
+                    // means that the session has expired
+                    sessionMayExpired={authenticated && signed}
                 />
             )}
 

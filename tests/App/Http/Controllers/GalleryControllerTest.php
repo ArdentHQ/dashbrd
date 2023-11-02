@@ -6,7 +6,6 @@ use App\Models\Collection;
 use App\Models\Gallery;
 use App\Models\Nft;
 use App\Models\Token;
-use App\Support\Facades\Signature;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -29,27 +28,6 @@ it('can render the galleries view page', function () {
     $this->actingAs($user)
         ->get(route('galleries.view', $gallery))
         ->assertStatus(200);
-});
-
-it('can get the galleries', function () {
-    $user = createUser();
-
-    Gallery::factory()->count(10)->create();
-
-    $response = $this->actingAs($user)
-        ->get(route('galleries.galleries'))
-        ->assertStatus(200)
-        ->json();
-
-    expect(array_keys($response))->toEqual([
-        'popular',
-        'newest',
-        'mostValuable',
-    ])
-        ->and($response['popular'])->toHaveCount(8)
-        ->and($response['newest'])->toHaveCount(8)
-        ->and($response['mostValuable'])->toHaveCount(8);
-
 });
 
 it('can render the galleries overview page with the proper counts', function () {
@@ -98,106 +76,6 @@ it('can render the galleries overview page with the proper counts', function () 
                 ->where('stats.nfts', 6)
                 ->where('stats.users', 1)
         );
-});
-
-describe('user is signed', function () {
-    beforeEach(function () {
-        Signature::shouldReceive('walletIsSigned')
-            ->once()
-            ->andReturn(true);
-    });
-
-    it('can add a like to a gallery', function () {
-        $user = createUser();
-        $gallery = Gallery::factory()->create();
-
-        expect($gallery->likeCount)->toBe(0);
-
-        $this->actingAs($user)
-            ->post(route('galleries.like', $gallery->slug))
-            ->assertStatus(201);
-
-        expect($gallery->fresh()->likeCount)->toBe(1);
-    });
-
-    it('can force a like to a gallery', function () {
-        $user = createUser();
-        $gallery = Gallery::factory()->create();
-
-        $gallery->addLike($user);
-
-        expect($gallery->likeCount)->toBe(1);
-
-        $this->actingAs($user)
-            ->post(route('galleries.like', ['gallery' => $gallery->slug, 'like' => 1]))
-            ->assertStatus(201);
-
-        expect($gallery->fresh()->likeCount)->toBe(1);
-    });
-
-    it('can remove a like from a gallery', function () {
-        $user = createUser();
-        $gallery = Gallery::factory()->create();
-
-        $gallery->addLike($user);
-
-        expect($gallery->likeCount)->toBe(1);
-
-        $this->actingAs($user)
-            ->post(route('galleries.like', $gallery->slug))
-            ->assertStatus(201);
-
-        expect($gallery->fresh()->likeCount)->toBe(0);
-    });
-
-    it('can force remove like to a gallery', function () {
-        $user = createUser();
-        $gallery = Gallery::factory()->create();
-
-        expect($gallery->likeCount)->toBe(0);
-
-        $this->actingAs($user)
-            ->post(route('galleries.like', ['gallery' => $gallery->slug, 'like' => 0]))
-            ->assertStatus(201);
-
-        expect($gallery->fresh()->likeCount)->toBe(0);
-    });
-});
-
-describe('user is not signed', function () {
-    beforeEach(function () {
-        Signature::shouldReceive('walletIsSigned')
-            ->once()
-            ->andReturn(false);
-    });
-
-    it('cant add a like to a gallery', function () {
-        $user = createUser();
-        $gallery = Gallery::factory()->create();
-
-        expect($gallery->likeCount)->toBe(0);
-
-        $this->actingAs($user)
-            ->post(route('galleries.like', $gallery->slug))
-            ->assertRedirect();
-
-        expect($gallery->fresh()->likeCount)->toBe(0);
-    });
-
-    it('cant remove a like from a gallery', function () {
-        $user = createUser();
-        $gallery = Gallery::factory()->create();
-
-        $gallery->addLike($user);
-
-        expect($gallery->likeCount)->toBe(1);
-
-        $this->actingAs($user)
-            ->post(route('galleries.like', $gallery->slug))
-            ->assertRedirect();
-
-        expect($gallery->fresh()->likeCount)->toBe(1);
-    });
 });
 
 it('should increment view count when visiting a gallery', function () {

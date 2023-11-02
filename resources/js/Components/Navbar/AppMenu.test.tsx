@@ -1,11 +1,10 @@
 import React from "react";
-import { afterAll, type SpyInstance } from "vitest";
+import { afterAll } from "vitest";
 import { AppMenu } from "./AppMenu";
-import * as activeUserContextMock from "@/Contexts/ActiveUserContext";
 import * as environmentContextMock from "@/Contexts/EnvironmentContext";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
 const environmentDefault = {
     environment: "local",
@@ -18,21 +17,18 @@ const environmentDefault = {
     },
 };
 
-const activeUserContext = {
-    user: new UserDataFactory().create(),
-    wallet: new WalletFactory().create(),
-    authenticated: true,
-};
-
-let activeUserSpy: SpyInstance;
+let resetAuthContextMock: () => void;
 
 describe("AppMenu", () => {
     beforeAll(() => {
-        activeUserSpy = vi.spyOn(activeUserContextMock, "useActiveUser").mockReturnValue(activeUserContext);
+        resetAuthContextMock = mockAuthContext({
+            user: new UserDataFactory().create(),
+            wallet: new WalletFactory().create(),
+        });
     });
 
     afterAll(() => {
-        activeUserSpy.mockRestore();
+        resetAuthContextMock();
     });
 
     it("should render with 3 enabled items", () => {

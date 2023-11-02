@@ -14,10 +14,10 @@ enum MoralisChain: string
     public static function fromChainId(int $chainId): self
     {
         return match ($chainId) {
-            Chains::ETH->value => self::ETH,
-            Chains::Goerli->value => self::Goerli,
-            Chains::Polygon->value => self::Polygon,
-            Chains::Mumbai->value => self::Mumbai,
+            Chain::ETH->value => self::ETH,
+            Chain::Goerli->value => self::Goerli,
+            Chain::Polygon->value => self::Polygon,
+            Chain::Mumbai->value => self::Mumbai,
             default => throw new \InvalidArgumentException(sprintf('Chain ID %d is not supported', $chainId)),
         };
     }

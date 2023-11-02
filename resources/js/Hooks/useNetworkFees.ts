@@ -8,7 +8,7 @@ interface NetworkFeesState {
     networkFees?: FeeData[];
 }
 
-export const useNetworkFees = ({ chainId }: { chainId?: App.Enums.Chains }): NetworkFeesState => {
+export const useNetworkFees = ({ chainId }: { chainId?: App.Enums.Chain }): NetworkFeesState => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [networkFees, setNetworkFees] = useState<FeeData[] | undefined>();

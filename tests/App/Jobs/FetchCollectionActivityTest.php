@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Data\Web3\CollectionActivity;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\NftTransferType;
 use App\Jobs\FetchCollectionActivity;
 use App\Models\Collection;
@@ -248,7 +248,7 @@ it('starts from the timestamp of the newest activity', function () {
     $mock = $this->mock(
         MnemonicWeb3DataProvider::class,
         fn ($mock) => $mock->shouldReceive('getCollectionActivity')->once()->withArgs(function ($chain, $address, $limit, $from) use ($date, $collection) {
-            return $chain === Chains::Polygon
+            return $chain === Chain::Polygon
                 && $address === $collection->address
                 && $limit === 500
                 && ($from->toDateTimeString() === $date->toDateTimeString());

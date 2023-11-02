@@ -8,8 +8,7 @@ import { Clipboard } from "@/Components/Clipboard";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Report } from "@/Components/Report";
 import { Tooltip } from "@/Components/Tooltip";
-import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { ExplorerChains } from "@/Utils/Explorer";
 
@@ -32,9 +31,7 @@ export const NftActions = ({
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { showToast } = useToasts();
-    const { showConnectOverlay } = useMetaMaskContext();
-    const { authenticated } = useAuth();
-
+    const { authenticatedAction } = useAuthorizedAction();
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const { large: largeImage, original, originalRaw } = nft.images;
@@ -56,7 +53,7 @@ export const NftActions = ({
         });
     };
 
-    const getTooltipText = (chainId: App.Enums.Chains): string => {
+    const getTooltipText = (chainId: App.Enums.Chain): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
                 return t("common.view_nft_on_etherscan").toString();
@@ -69,7 +66,7 @@ export const NftActions = ({
         }
     };
 
-    const getChainLink = (chainId: App.Enums.Chains, collectionAddress: string, tokenNumber: string): string => {
+    const getChainLink = (chainId: App.Enums.Chain, collectionAddress: string, tokenNumber: string): string => {
         switch (chainId) {
             case ExplorerChains.EthereumMainnet:
                 return t("urls.explorers.etherscan.nft", {
@@ -95,13 +92,9 @@ export const NftActions = ({
     };
 
     const handleClick = (): void => {
-        if (authenticated) {
-            void handleRefresh();
-        } else {
-            showConnectOverlay(() => {
-                void handleRefresh();
-            });
-        }
+        void authenticatedAction(async () => {
+            await handleRefresh();
+        });
     };
 
     return (

@@ -19,12 +19,14 @@ use App\Data\Token\TokenData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\User;
 use App\Support\Cache\UserCache;
+use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -366,5 +368,35 @@ class CollectionController extends Controller
             'activityPageLimit' => $activityPageLimit,
             'nftPageLimit' => $nftPageLimit,
         ];
+    }
+
+    public function refreshActivity(Request $request, Collection $collection): JsonResponse
+    {
+
+        // Request has already been made after recent update, and job is already scheduled.
+        if ($collection->activity_update_requested_at) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        $hoursUntilNextUpdate = config('dashbrd.idle_time_between_collection_activity_updates', 6);
+        $hasBeenRecentlyUpdated = $collection->activity_updated_at && Carbon::now()->diffInHours($collection->activity_updated_at) < $hoursUntilNextUpdate;
+
+        // If activity has been recently updated and it is requested to update it again, dispatch the job with a delay.
+        if ($hasBeenRecentlyUpdated && ! $collection->is_fetching_activity) {
+            $collection->touch('activity_update_requested_at');
+            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS)->delay(Carbon::now()->addHours($hoursUntilNextUpdate));
+
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

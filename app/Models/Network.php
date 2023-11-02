@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -49,12 +49,12 @@ class Network extends Model
      */
     public static function polygon(): self
     {
-        return static::where('chain_id', Chains::Polygon)->firstOrFail();
+        return static::where('chain_id', Chain::Polygon)->firstOrFail();
     }
 
-    public function chain(): Chains
+    public function chain(): Chain
     {
-        return Chains::from($this->chain_id);
+        return Chain::from($this->chain_id);
     }
 
     /**

@@ -6,7 +6,7 @@ use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\NotImplementedException;
 use App\Models\Collection as CollectionModel;
@@ -247,7 +247,7 @@ it('can get nft floor price', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chains::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
         '1235000000000000000',
         'eth',
         Carbon::parse('2023-03-30T04:08:09.791Z'),
@@ -260,7 +260,7 @@ it('can get nft floor price with some errors', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chains::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
         '1247200000000000000',
         'eth',
         Carbon::parse('2023-03-30T03:59:09.707Z'),
@@ -276,7 +276,7 @@ it('handles error when calling nft floor price', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chains::ETH, 'asdf'))->toBeNull();
+    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toBeNull();
 });
 
 it('returns null for unsupported network when calling nft floor price', function () {
@@ -288,8 +288,8 @@ it('returns null for unsupported network when calling nft floor price', function
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    collect(Chains::cases())
-        ->filter(fn ($case) => $case !== Chains::ETH)
+    collect(Chain::cases())
+        ->filter(fn ($case) => $case !== Chain::ETH)
         ->each(
             fn ($case) => expect($provider->getNftCollectionFloorPrice($case, 'asdf'))
                 ->toBeNull()

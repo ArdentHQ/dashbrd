@@ -3,17 +3,18 @@ import { expect } from "vitest";
 import { type TransactionIntent, TransactionState } from "@/Components/TransactionFormSlider";
 import { ResultStep } from "@/Components/TransactionFormSlider/Steps/ResultStep";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 
 import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { render } from "@/Tests/testing-library";
+import { mockAuthContext, render } from "@/Tests/testing-library";
 import { toHuman } from "@/Utils/dates";
 
 describe("ResultStep", () => {
     const user = new UserDataFactory().withUSDCurrency().create();
+    const wallet = new WalletFactory().create();
 
     const asset = new TokenListItemDataFactory().create({
         name: "BRDY TOKEN",
@@ -34,7 +35,7 @@ describe("ResultStep", () => {
     const nativeTokenPrice = {
         guid: 1,
         symbol: nativeToken.symbol,
-        chainId: 137 as App.Enums.Chains,
+        chainId: 137 as App.Enums.Chain,
         price: {
             [currency]: {
                 price: 12.25,
@@ -103,7 +104,7 @@ describe("ResultStep", () => {
     };
 
     const defaultMetamaskConfig = getSampleMetaMaskState({
-        chainId: 137 as App.Enums.Chains,
+        chainId: 137 as App.Enums.Chain,
         getTransactionReceipt: vi.fn().mockReturnValue({
             data: receipt,
         }),
@@ -112,17 +113,19 @@ describe("ResultStep", () => {
         }),
     });
 
+    let resetAuthContext: () => void;
+
     beforeEach(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(defaultMetamaskConfig);
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
+
+        resetAuthContext = mockAuthContext({
             user,
-            wallet: null,
-            authenticated: false,
-            signed: false,
-            showAuthOverlay: true,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
+            wallet,
         });
+    });
+
+    afterEach(() => {
+        resetAuthContext();
     });
 
     it("should show a skeleton while fetching receipt & block data", async () => {

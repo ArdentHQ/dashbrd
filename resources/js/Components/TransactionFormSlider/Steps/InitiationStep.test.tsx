@@ -74,7 +74,7 @@ describe("InitiationStep", () => {
     const nativeTokenPrice = {
         guid: 1,
         symbol: nativeToken.symbol,
-        chainId: 137 as App.Enums.Chains,
+        chainId: 137 as App.Enums.Chain,
         price: {
             [currency]: {
                 price: 12.25,
@@ -454,6 +454,7 @@ describe("InitiationStep", () => {
 
         vi.spyOn(ToastsHook, "useToasts").mockImplementation(() => ({
             showToast: showToastMock,
+            clear: vi.fn(),
         }));
 
         render(<InitiationStep {...properties} />);
@@ -610,7 +611,7 @@ describe("InitiationStep", () => {
                 nativeTokenPrice: {
                     guid: 1,
                     symbol: nativeToken.symbol,
-                    chainId: 137 as App.Enums.Chains,
+                    chainId: 137 as App.Enums.Chain,
                     price: {},
                 },
             },

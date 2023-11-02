@@ -43,6 +43,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -52,6 +53,32 @@ describe("UserDetails", () => {
 
         expect(screen.getByTestId("AccountNavigation__galleries")).toBeInTheDocument();
         expect(screen.getByTestId("AccountNavigation__collections")).toBeInTheDocument();
+    });
+
+    it("should logout", async () => {
+        const wallet = new WalletFactory().withoutAvatar().create();
+
+        const onLogout = vi.fn();
+
+        render(
+            <UserDetails
+                wallet={wallet}
+                galleriesCount={0}
+                collectionCount={0}
+                currency="USD"
+                onLogout={onLogout}
+            />,
+        );
+
+        expect(screen.getByTestId("UserDetails__trigger")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("UserDetails__trigger"));
+
+        expect(screen.getByTestId("UserDetails__disconnect")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("UserDetails__disconnect"));
+
+        expect(onLogout).toHaveBeenCalled();
     });
 
     it("should render without galleries", async () => {
@@ -71,6 +98,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -98,6 +126,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -117,6 +146,7 @@ describe("UserDetails", () => {
                 collectionCount={0}
                 currency="USD"
                 wallet={wallet}
+                onLogout={vi.fn()}
             />,
         );
 
@@ -136,6 +166,7 @@ describe("UserDetails", () => {
                 collectionCount={0}
                 currency="USD"
                 wallet={wallet}
+                onLogout={vi.fn()}
             />,
         );
 
@@ -156,6 +187,7 @@ describe("UserDetails", () => {
                 collectionCount={0}
                 currency="USD"
                 wallet={wallet}
+                onLogout={vi.fn()}
             />,
         );
 
@@ -171,6 +203,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 
@@ -198,6 +231,7 @@ describe("UserDetails", () => {
                     galleriesCount={0}
                     collectionCount={0}
                     currency="USD"
+                    onLogout={vi.fn()}
                 />
             </>,
         );
@@ -230,6 +264,7 @@ describe("UserDetails", () => {
                 galleriesCount={0}
                 collectionCount={0}
                 currency="USD"
+                onLogout={vi.fn()}
             />,
         );
 

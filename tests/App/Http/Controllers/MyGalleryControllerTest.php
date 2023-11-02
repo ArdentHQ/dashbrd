@@ -289,6 +289,57 @@ describe('user is signed', function () {
             ->assertInvalid(['name', 'nfts']);
     });
 
+    it('should not create a gallery if NFT does not have a valid large image', function () {
+        $user = createUser();
+
+        $nftWithNullImage = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+            'extra_attributes' => [
+                'images' => [
+                    'large' => null,
+                ],
+            ],
+        ]);
+
+        $nftWithEmptyImage = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+            'extra_attributes' => [
+                'images' => [
+                    'large' => '',
+                ],
+            ],
+        ]);
+
+        $nftWithNoImage = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+            'extra_attributes' => [
+                'images' => [],
+            ],
+        ]);
+
+        $validNft = Nft::factory()->create([
+            'wallet_id' => $user->wallet->id,
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('my-galleries.store'), [
+                'name' => 'Test',
+                'nfts' => [
+                    $nftWithNullImage->id,
+                    $nftWithEmptyImage->id,
+                    $nftWithNoImage->id,
+                    $validNft->id,
+                ],
+                'coverImage' => null,
+            ])
+            ->assertInvalid([
+                'nfts.0',
+                'nfts.1',
+                'nfts.2',
+            ]);
+
+    });
+
     it('can not create a gallery with nfts that are not owned by the user', function () {
         $user = createUser();
         $nft = Nft::factory()->create();
@@ -630,7 +681,7 @@ describe('user is not signed', function () {
             ->assertStatus(200);
     });
 
-    it('cant render the "edit" page if owns the gallery', function () {
+    it('can render the "edit" page if owns the gallery', function () {
         $user = createUser();
 
         $gallery = Gallery::factory()->create([
@@ -639,7 +690,7 @@ describe('user is not signed', function () {
 
         $this->actingAs($user)
             ->get(route('my-galleries.edit', $gallery))
-            ->assertRedirect();
+            ->assertOk();
     });
 
 });

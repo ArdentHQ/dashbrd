@@ -16,7 +16,8 @@ import {
     determineIfTimestampGroupChanged,
 } from "@/Components/Tokens/TokenPriceChart.helpers";
 import { type Period } from "@/Components/Tokens/Tokens.contracts";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuth } from "@/Contexts/AuthContext";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { type DateFormat } from "@/Types/enums";
 import { getPriceHistory } from "@/Utils/api";
 import { assertUser } from "@/Utils/assertions";
@@ -36,6 +37,8 @@ export const TokenPriceChart = ({ token, period, ...properties }: Properties): J
     const { t } = useTranslation();
 
     const { user } = useAuth();
+
+    const { isDark } = useDarkModeContext();
 
     assertUser(user);
 
@@ -132,7 +135,7 @@ export const TokenPriceChart = ({ token, period, ...properties }: Properties): J
                     fill: true,
                     clip: 10,
                     pointHoverRadius: 5,
-                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderColor: isDark ? "#3D444D" : "#fff",
                     pointHoverBorderWidth: 2,
                     pointHoverBackgroundColor: chartColors.primary.default,
                 },
@@ -234,12 +237,12 @@ const TransientLoadingIndicator = ({ show }: { show: boolean }): JSX.Element => 
 const InitialLoadingIndicator = ({ show }: { show: boolean }): JSX.Element => (
     <ChartTransition
         show={show}
-        className="absolute inset-0 z-20 flex items-center justify-center bg-white"
+        className="absolute inset-0 z-20 flex items-center justify-center bg-white dark:bg-theme-dark-900"
         data-testid="TokenPriceChart__loading"
     >
         <Icon
             name="Spinner"
-            className="animate-spin text-theme-secondary-500"
+            className="animate-spin text-theme-secondary-500 dark:text-theme-dark-200"
             size="2xl"
         />
     </ChartTransition>

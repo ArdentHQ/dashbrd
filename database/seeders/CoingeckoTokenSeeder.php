@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Enums\Platforms;
+use App\Enums\Platform;
 use App\Http\Client\MarketData\Data\CoingeckoTokens;
 use App\Models\CoingeckoToken;
 use Illuminate\Database\Seeder;
@@ -21,7 +21,7 @@ class CoingeckoTokenSeeder extends Seeder
         $filteredData = [];
 
         foreach ($data as $item) {
-            $filteredPlatforms = array_intersect_key($item['platforms'], array_flip(Platforms::platforms()));
+            $filteredPlatforms = array_intersect_key($item['platforms'], array_flip(Platform::all()));
 
             $filteredData[] = [
                 'id' => $item['id'],

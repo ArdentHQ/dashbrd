@@ -9,19 +9,19 @@ enum CoingeckoPlatform: string
     case Ethereum = 'ethereum';
     case Polygon = 'polygon-pos';
 
-    public function toChain(): Chains
+    public function toChain(): Chain
     {
         return match ($this) {
-            CoingeckoPlatform::Ethereum => Chains::ETH,
-            CoingeckoPlatform::Polygon => Chains::Polygon,
+            CoingeckoPlatform::Ethereum => Chain::ETH,
+            CoingeckoPlatform::Polygon => Chain::Polygon,
         };
     }
 
     public static function tryFromChainId(int $chainId): ?CoingeckoPlatform
     {
         return match ($chainId) {
-            Chains::ETH->value => CoingeckoPlatform::Ethereum,
-            Chains::Polygon->value => CoingeckoPlatform::Polygon,
+            Chain::ETH->value => CoingeckoPlatform::Ethereum,
+            Chain::Polygon->value => CoingeckoPlatform::Polygon,
             default => null,
         };
     }

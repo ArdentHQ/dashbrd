@@ -7,7 +7,7 @@ namespace Database\Seeders;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftCollectionTrait;
 use App\Data\Web3\Web3NftData;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\Features;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\NotImplementedException;
@@ -95,7 +95,7 @@ class LiveUserSeeder extends UserSeeder
             $user = User::whereHas('wallet', static fn ($query) => $query->where('address', $address))
                 ->first() ?? User::factory()->create();
 
-            $chainId = collect(Chains::cases())->firstOrFail(fn ($case) => Str::lower($case->name) === Str::lower($networkName))->value;
+            $chainId = collect(Chain::cases())->firstOrFail(fn ($case) => Str::lower($case->name) === Str::lower($networkName))->value;
             $networkId = Network::firstWhere('chain_id', $chainId)->id;
 
             Wallet::withoutEvents(function () use ($address, $networkId, $user, $what, $file) {

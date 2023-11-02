@@ -8,7 +8,7 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
-import { useAuth } from "@/Hooks/useAuth";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { useLikes } from "@/Hooks/useLikes";
@@ -29,6 +29,7 @@ interface NftImageContainerProperties {
     allowSelection?: boolean;
     isSelected?: boolean;
     isAdded?: boolean;
+    validateImage?: boolean;
 }
 
 interface NftImageGridProperties {
@@ -41,6 +42,7 @@ interface NftImageGridProperties {
     onDeselectNft?: (nft: App.Data.Gallery.GalleryNftData) => void;
     selectedNfts?: App.Data.Gallery.GalleryNftData[];
     addedNfts?: App.Data.Gallery.GalleryNftData[];
+    validateImage?: boolean;
 }
 
 const NftImage = ({
@@ -54,7 +56,8 @@ const NftImage = ({
         className="group"
     >
         <Img
-            className={cn("aspect-square w-full rounded-xl bg-theme-secondary-100 object-cover", className)}
+            wrapperClassName="aspect-square h-full w-full"
+            className={cn("rounded-xl", className)}
             src={nft.images.small ?? undefined}
             data-testid={`NftImageGrid__image--${nft.tokenNumber}`}
         />
@@ -90,6 +93,7 @@ const NftImageContainer = ({
     allowSelection,
     isSelected,
     isAdded,
+    validateImage,
 }: NftImageContainerProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -105,6 +109,21 @@ const NftImageContainer = ({
                             nft={nft}
                             className="blur-sm grayscale"
                         />
+                    </div>
+                </Tooltip>
+            </div>
+        );
+    }
+
+    if (Boolean(validateImage) && !isTruthy(nft.images.large)) {
+        return (
+            <div
+                data-testid={`NftImageGrid__container--${nft.tokenNumber}--invalid_image`}
+                className="relative overflow-hidden rounded-xl"
+            >
+                <Tooltip content={t("pages.galleries.create.nft_missing_image")}>
+                    <div>
+                        <NftImage nft={nft} />
                     </div>
                 </Tooltip>
             </div>
@@ -138,6 +157,7 @@ export const NftImageGrid = ({
     addedNfts,
     onSelectNft,
     onDeselectNft,
+    validateImage,
 }: NftImageGridProperties): JSX.Element => {
     const nftData = "paginated" in nfts ? nfts.paginated.data : nfts;
 
@@ -164,6 +184,7 @@ export const NftImageGrid = ({
                         }}
                         isSelected={isSelected}
                         isAdded={isAdded}
+                        validateImage={validateImage}
                     />
                 );
             })}
@@ -180,7 +201,7 @@ export const NftImageGrid = ({
 
             {Array.from({ length: skeletonCount ?? 0 }).map((_, index) => (
                 <Skeleton
-                    className="NFT_Skeleton aspect-square w-full rounded-xl bg-theme-secondary-100"
+                    className="NFT_Skeleton aspect-square w-full rounded-xl"
                     key={index}
                 />
             ))}
@@ -188,13 +209,7 @@ export const NftImageGrid = ({
     );
 };
 
-export const GalleryHeading = ({
-    name,
-    wallet,
-}: {
-    name: string;
-    wallet: App.Data.Gallery.GalleryWalletData;
-}): JSX.Element => {
+export const GalleryHeading = ({ name, wallet }: { name: string; wallet: App.Data.SimpleWalletData }): JSX.Element => {
     const truncateReference = useRef<HTMLHeadingElement>(null);
 
     const isTruncated = useIsTruncated({ reference: truncateReference });
@@ -255,12 +270,12 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
         event.preventDefault();
         event.stopPropagation();
 
-        signedAction(({ authenticated }) => {
+        void signedAction(async ({ authenticated }) => {
             // If user wasnt authenticated, foce a positive
             // like since we dont know if he liked it before
             const likeValue = !authenticated ? true : undefined;
 
-            void like(gallery.slug, likeValue);
+            await like(gallery.slug, likeValue);
         });
     };
 

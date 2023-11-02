@@ -1,7 +1,8 @@
 import cn from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useInViewport } from "react-in-viewport";
-import { ImageErrorPlaceholer } from "./Image.blocks";
+import { twMerge } from "tailwind-merge";
+import { ImageErrorPlaceholder } from "./Image.blocks";
 import { type ImageProperties } from "./Image.contracts";
 import { useImageLoader } from "./useImageLoader";
 import { Skeleton } from "@/Components/Skeleton";
@@ -45,19 +46,19 @@ export const Img = ({
     return (
         <div
             ref={reference}
-            className={cn("relative", wrapperClassName)}
+            className={twMerge(wrapperClassName, "relative")}
             data-testid="ImgContainer"
         >
             {showSkeleton && (
                 <Skeleton
                     isCircle={isCircle}
-                    className={className}
+                    className={cn(className, "h-full")}
                 />
             )}
 
             <div
                 className={cn(
-                    "inset-0 transition duration-1000",
+                    "absolute inset-0 transition duration-1000",
                     isLoaded || isErrored ? "opacity-100" : "opacity-0",
                     {
                         absolute: showSkeleton,
@@ -71,15 +72,15 @@ export const Img = ({
                         src={src ?? undefined}
                         srcSet={srcSet}
                         alt={alt}
-                        className={className}
+                        className={twMerge(className, "h-full w-full object-cover ")}
                         {...properties}
                     />
                 )}
 
                 {isErrored && (
-                    <ImageErrorPlaceholer
+                    <ImageErrorPlaceholder
                         errorMessage={errorMessage}
-                        className={cn(className, errorClassName)}
+                        className={cn(className, errorClassName, "aspect-square")}
                     />
                 )}
             </div>

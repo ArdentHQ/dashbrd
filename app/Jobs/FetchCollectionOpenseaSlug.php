@@ -47,7 +47,7 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
         $nft = $this->collection->nfts()->first();
 
         $result = Opensea::nft(
-            chains: $this->collection->network->chain(),
+            chain: $this->collection->network->chain(),
             address: $this->collection->address,
             identifier: $nft->token_number,
         );
