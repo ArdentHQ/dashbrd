@@ -139,7 +139,7 @@ describe("Report", () => {
                     modelType={"collection"}
                     show={true}
                 />,
-            );
+            )
         );
 
         expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
