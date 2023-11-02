@@ -573,23 +573,15 @@ describe("GalleryFooter", () => {
 
     const user = new UserDataFactory().withUSDCurrency().create();
 
-    let useAuthSpy: SpyInstance;
-
-    const useAuthState = {
-        user,
-        wallet: null,
-        authenticated: true,
-        signed: false,
-        showAuthOverlay: false,
-        showCloseButton: false,
-        closeOverlay: vi.fn(),
-    };
+    let resetAuthContextMock: () => void;
 
     let useAuthorizedActionSpy: SpyInstance;
     const signedActionMock = vi.fn();
 
     beforeEach(() => {
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue(useAuthState);
+        resetAuthContextMock = mockAuthContext({
+            user,
+        });
 
         signedActionMock.mockImplementation((action) => {
             action({ authenticated: true, signed: true });
@@ -602,7 +594,7 @@ describe("GalleryFooter", () => {
     });
 
     afterEach(() => {
-        useAuthSpy.mockRestore();
+        resetAuthContextMock();
 
         useAuthorizedActionSpy.mockRestore();
     });

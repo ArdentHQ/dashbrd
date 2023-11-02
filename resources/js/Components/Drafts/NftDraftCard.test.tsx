@@ -1,26 +1,30 @@
 import React from "react";
 import { NftDraftCard } from "./NftDraftCard";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
+import { SpyInstance } from "vitest";
 
 const user = new UserDataFactory().create();
+let resetAuthContextMock: () => void;
+let useMetaMaskContextSpy: SpyInstance;
 
 describe("NftDraftCard", () => {
-    vi.spyOn(useAuth, "useAuth").mockReturnValue({
-        user,
-        wallet: null,
-        authenticated: true,
-        showAuthOverlay: false,
-        showCloseButton: false,
-        signed: false,
-        closeOverlay: vi.fn(),
+    beforeEach(() => {
+        resetAuthContextMock = mockAuthContext({ user });
+
+        useMetaMaskContextSpy = vi
+            .spyOn(useMetaMaskContext, "useMetaMaskContext")
+            .mockReturnValue(getSampleMetaMaskState());
     });
 
-    vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
+    afterEach(() => {
+        resetAuthContextMock();
+
+        useMetaMaskContextSpy.mockRestore();
+    });
 
     it("shows an NFT gallery card for the user", () => {
         const gallery = new GalleryDataFactory().withCoverImage().create();
