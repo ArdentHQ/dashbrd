@@ -76,7 +76,7 @@ const Create = ({
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
         setDraftNfts,
-        onDelete: (): void => {
+        deleteDraft: (): void => {
             void deleteDraft();
             replaceUrlQuery({ draftId: "" });
         },
