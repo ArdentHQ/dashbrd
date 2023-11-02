@@ -35,7 +35,6 @@ export const GalleryDraftStatus = ({
                     className="text-theme-secondary-700 dark:text-theme-dark-200"
                 />
                 <div className="ml-2 hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 xs:block">
-                    Saving to draft
                     {t("pages.galleries.create.saving_to_draft")}
                 </div>
             </div>
