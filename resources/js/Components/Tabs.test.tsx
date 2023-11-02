@@ -39,7 +39,7 @@ describe("Tabs", () => {
 
     it("should render tab link", () => {
         render(
-            <Tabs.Link href="https://ardenthq.com">
+            <Tabs.Link href="https://ardenthq.com/">
                 <span data-testid="test">Click Me</span>
             </Tabs.Link>,
         );
@@ -48,7 +48,17 @@ describe("Tabs", () => {
 
         expect(screen.getByTestId("test").parentElement?.tagName).toBe("A");
 
-        expect(screen.getByTestId("test").parentElement?.getAttribute("href")).toBe("https://ardenthq.com");
+        expect(screen.getByTestId("test").parentElement?.getAttribute("href")).toBe("https://ardenthq.com/");
+    });
+
+    it("should render disabled link", () => {
+        render(
+            <Tabs.DisabledLink>
+                <span data-testid="test">Click Me</span>
+            </Tabs.DisabledLink>,
+        );
+
+        expect(screen.getByTestId("test").parentElement?.tagName).toBe("SPAN");
     });
 
     it("has click event", async () => {
@@ -87,7 +97,10 @@ describe("Tabs", () => {
 
     it("marks link as selected", () => {
         render(
-            <Tabs.Link selected>
+            <Tabs.Link
+                href="#"
+                selected
+            >
                 <span data-testid="test">Click Me</span>
             </Tabs.Link>,
         );
@@ -96,9 +109,9 @@ describe("Tabs", () => {
     });
     it("marks link as disabled", () => {
         render(
-            <Tabs.Link disabled>
+            <Tabs.DisabledLink disabled>
                 <span data-testid="test">Click Me</span>
-            </Tabs.Link>,
+            </Tabs.DisabledLink>,
         );
 
         expect(screen.getByTestId("test").parentElement?.className).toContain("cursor-not-allowed");
