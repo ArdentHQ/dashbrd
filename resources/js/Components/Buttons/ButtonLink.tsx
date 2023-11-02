@@ -9,6 +9,10 @@ interface LinkProperties extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 export type ButtonLinkProperties = React.ComponentProps<typeof InertiaLink> & ButtonContentProperties;
 
+export type ButtonLinkOnClick = (
+    event: KeyboardEvent<HTMLAnchorElement> | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+) => void;
+
 export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProperties>(
     (
         {

@@ -74,6 +74,13 @@ return [
         'title' => 'Settings | Dashbrd',
     ],
 
+    'articles' => [
+        'title' => 'Articles | Dashbrd',
+        'view' => [
+            'title' => ':title | Dashbrd',
+        ],
+    ],
+
     'login' => [
         'title' => 'Login | Dashbrd',
     ],

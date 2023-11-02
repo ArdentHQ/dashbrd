@@ -23,7 +23,11 @@ use Throwable;
 
 class FetchCollectionActivity implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use RecoversFromProviderErrors;
+    use SerializesModels;
 
     public const LIMIT = 500;
 
@@ -122,6 +126,7 @@ class FetchCollectionActivity implements ShouldQueue
                 $this->collection->update([
                     'is_fetching_activity' => false,
                     'activity_updated_at' => now(),
+                    'activity_update_requested_at' => null,
                 ]);
             }
         }, attempts: 5);

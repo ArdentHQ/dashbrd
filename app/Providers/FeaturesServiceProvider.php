@@ -20,6 +20,7 @@ class FeaturesServiceProvider extends ServiceProvider
         Feature::define(Features::Portfolio->value, config('dashbrd.features.portfolio'));
         Feature::define(Features::Galleries->value, config('dashbrd.features.galleries'));
         Feature::define(Features::Collections->value, config('dashbrd.features.collections'));
+        Feature::define(Features::Articles->value, config('dashbrd.features.articles'));
     }
 
     public function register(): void
