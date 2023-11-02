@@ -11,7 +11,7 @@ import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { act, mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 
 let routerSpy: SpyInstance;
 let useAuthorizedActionSpy: SpyInstance;
@@ -132,13 +132,15 @@ describe("Report", () => {
     it("show report modal on load", () => {
         const collection = new CollectionDetailDataFactory().create();
 
-        render(
-            <Report
-                model={collection}
-                modelType={"collection"}
-                show={true}
-            />,
-        );
+        act(() => {
+            render(
+                <Report
+                    model={collection}
+                    modelType={"collection"}
+                    show={true}
+                />,
+            );
+        });
 
         expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
     });
