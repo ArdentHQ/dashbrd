@@ -130,11 +130,11 @@ describe("Report", () => {
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
     });
 
-    it("show report modal on load", () => {
+    it("show report modal on load", async () => {
         const collection = new CollectionDetailDataFactory().create();
 
-        act(() => {
-            render(
+        await act(async () => {
+            await render(
                 <Report
                     model={collection}
                     modelType={"collection"}
