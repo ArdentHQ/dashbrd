@@ -245,10 +245,6 @@ declare namespace App.Data.Gallery {
         isOwner: boolean;
         hasLiked: boolean;
     };
-    export type GalleryLikeData = {
-        likes: number;
-        hasLiked: boolean;
-    };
     export type GalleryNftData = {
         id: number;
         name: string | null;
