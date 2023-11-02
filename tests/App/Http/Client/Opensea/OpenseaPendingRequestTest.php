@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3NftCollectionFloorPrice;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Support\Facades\Opensea;
@@ -57,14 +57,14 @@ it('can get nft collection slug', function () {
         'https://api.opensea.io/api/v2*' => Opensea::response(fixtureData('opensea.nft')),
     ]);
 
-    $chain = Chains::Polygon;
+    $chain = Chain::Polygon;
 
     $address = '0x670fd103b1a08628e9557cd66b87ded841115190';
 
     $identifier = '2428';
 
     $data = Opensea::nft(
-        chains: $chain,
+        chain: $chain,
         address: $address,
         identifier: $identifier
     );
@@ -77,14 +77,14 @@ it('handles not found exception', function () {
         'https://api.opensea.io/api/v2*' => Opensea::response(fixtureData('opensea.nft_not_found'), 400),
     ]);
 
-    $chain = Chains::Polygon;
+    $chain = Chain::Polygon;
 
     $address = '0x670fd103b1a08628e9557cd66b87ded841115190';
 
     $identifier = '2428';
 
     $data = Opensea::nft(
-        chains: $chain,
+        chain: $chain,
         address: $address,
         identifier: $identifier
     );
@@ -97,14 +97,14 @@ it('handles not found exception for nft', function () {
         'https://api.opensea.io/api/v2*' => Opensea::response('', 404),
     ]);
 
-    $chain = Chains::Polygon;
+    $chain = Chain::Polygon;
 
     $address = '0x670fd103b1a08628e9557cd66b87ded841115190';
 
     $identifier = '2428';
 
     Opensea::nft(
-        chains: $chain,
+        chain: $chain,
         address: $address,
         identifier: $identifier
     );

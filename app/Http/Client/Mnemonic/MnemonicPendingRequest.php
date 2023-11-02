@@ -7,7 +7,7 @@ namespace App\Http\Client\Mnemonic;
 use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftCollectionTrait;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\CurrencyCode;
 use App\Enums\ImageSize;
@@ -99,7 +99,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/marketplacesservice_getfloorprice
-    public function getNftCollectionFloorPrice(Chains $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -180,7 +180,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getmetadata
-    public function getNftCollectionBanner(Chains $chain, string $contractAddress): ?string
+    public function getNftCollectionBanner(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -215,7 +215,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getownerscount
-    public function getNftCollectionOwners(Chains $chain, string $contractAddress): ?int
+    public function getNftCollectionOwners(Chain $chain, string $contractAddress): ?int
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -232,7 +232,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
-    public function getNftCollectionVolume(Chains $chain, string $contractAddress): ?string
+    public function getNftCollectionVolume(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -258,7 +258,7 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * @return Collection<int, Web3NftCollectionTrait>
      */
-    public function getNftCollectionTraits(Chains $chain, string $contractAddress): Collection
+    public function getNftCollectionTraits(Chain $chain, string $contractAddress): Collection
     {
         //  {
         //      "name": "string",
@@ -298,7 +298,7 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * @return Collection<int, Web3NftCollectionTrait>
      */
-    private function fetchCollectionTraits(Chains $chain, string $contractAddress, string $kind, callable $mapper): Collection
+    private function fetchCollectionTraits(Chain $chain, string $contractAddress, string $kind, callable $mapper): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -348,13 +348,13 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return Collection<int, CollectionActivity>
      */
-    public function getCollectionActivity(Chains $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
         // Grab the ETH token regardless of the chain, because always want to report prices in ETH...
         $ethToken = Token::query()
-                    ->whereHas('network', fn ($query) => $query->where('chain_id', Chains::ETH->value))
+                    ->whereHas('network', fn ($query) => $query->where('chain_id', Chain::ETH->value))
                     ->where('is_native_token', true)
                     ->firstOrFail();
 
@@ -412,7 +412,7 @@ class MnemonicPendingRequest extends PendingRequest
      * @param  array<string, mixed>  $transfer
      * @return array{ usd: float | null, native: float | null }
      */
-    private function extractActivityPrices(Chains $chain, array $transfer, CurrencyCode $currency, Token $ethToken, Carbon $blockchainTimestamp): array
+    private function extractActivityPrices(Chain $chain, array $transfer, CurrencyCode $currency, Token $ethToken, Carbon $blockchainTimestamp): array
     {
         // Relevant: https://docs.mnemonichq.com/docs/price-attribution#getting-nft-prices
 
@@ -422,7 +422,7 @@ class MnemonicPendingRequest extends PendingRequest
         $nativeTotalString = Arr::get($transfer, 'recipientPaid.totalNative');
         $nativePrice = $nativeTotalString ? (float) $nativeTotalString : null;
 
-        if ($chain !== Chains::ETH && $usdPrice !== null) {
+        if ($chain !== Chain::ETH && $usdPrice !== null) {
             // On non-ETH chains we get native in e.g. MATIC so normalize it to ETH using our historical price data.
             $nativePrice = $this->getActivityNativePrice($ethToken, $currency, $blockchainTimestamp, $usdPrice);
         }

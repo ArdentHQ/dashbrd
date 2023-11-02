@@ -26,7 +26,7 @@ class CollectionData extends Data
         public string $name,
         public string $slug,
         public string $address,
-        #[LiteralTypeScriptType('App.Enums.Chains')]
+        #[LiteralTypeScriptType('App.Enums.Chain')]
         public int $chainId,
         public ?string $floorPrice,
         public ?float $floorPriceFiat,

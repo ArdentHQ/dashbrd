@@ -24,7 +24,8 @@ export const CollectionName = ({
             <div className="absolute flex w-full  items-center space-x-4">
                 <div className="relative h-8 w-8 shrink-0 md:h-20 md:w-20">
                     <Img
-                        className="aspect-square h-full w-full rounded-full object-cover"
+                        wrapperClassName="aspect-square"
+                        className="h-full w-full rounded-full object-cover"
                         src={collection.image}
                         isCircle
                     />

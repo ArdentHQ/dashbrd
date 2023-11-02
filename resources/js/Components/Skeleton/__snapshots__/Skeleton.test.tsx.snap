@@ -5,7 +5,7 @@ exports[`Skeleton > should render 1`] = `
   <span
     aria-busy="true"
     aria-live="polite"
-    class="flex w-auto max-w-full items-center leading-none"
+    class="flex w-auto max-w-full items-center leading-none h-full"
     data-testid="Skeleton"
   >
     <span
@@ -24,7 +24,7 @@ exports[`Skeleton > should render circle 1`] = `
   <span
     aria-busy="true"
     aria-live="polite"
-    class="flex w-auto max-w-full items-center leading-none"
+    class="flex w-auto max-w-full items-center leading-none h-full"
     data-testid="Skeleton"
   >
     <span

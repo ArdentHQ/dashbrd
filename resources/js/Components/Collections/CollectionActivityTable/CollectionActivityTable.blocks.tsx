@@ -10,7 +10,7 @@ import { Skeleton } from "@/Components/Skeleton";
 import { TableCell, TableRow } from "@/Components/Table";
 import { TimeAgo } from "@/Components/TimeAgo";
 import { Tooltip } from "@/Components/Tooltip";
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { useNetwork } from "@/Hooks/useNetwork";
 import { FormatFiat, FormatFiatShort, FormatNumber } from "@/Utils/Currency";
@@ -87,7 +87,6 @@ export const Name = ({
         <div className="h-5 w-5 overflow-hidden rounded-full md:h-10 md:w-10">
             <Img
                 data-testid="ActivityTable__image"
-                className="block aspect-square h-full w-full grow bg-theme-secondary-100 object-cover"
                 src={activity.nft.images.small ?? undefined}
             />
         </div>
@@ -182,7 +181,6 @@ export const Type = ({
                     {showNameColumn && !isLgAndAbove && (
                         <Img
                             data-testid="ActivityTable__image"
-                            className="block aspect-square h-full w-full grow bg-theme-secondary-100 object-cover dark:bg-theme-dark-800"
                             src={activity.nft.images.small ?? undefined}
                         />
                     )}
@@ -302,7 +300,7 @@ export const Type = ({
 };
 
 export const Timestamp = ({ value }: { value: number }): JSX.Element => {
-    const { user } = useActiveUser();
+    const { user } = useAuth();
 
     const attributes =
         user != null

@@ -21,10 +21,10 @@ import {
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
-import DarkModeContextProvider from "./Contexts/DarkModeContex";
+import { AuthContextProvider } from "./Contexts/AuthContext";
+import DarkModeContextProvider from "./Contexts/DarkModeContext";
 import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
 import { CookieConsent } from "./cookieConsent";
-import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
 import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
 import { TransactionSliderProvider } from "@/Contexts/TransactionSliderContext";
 import { i18n } from "@/I18n";
@@ -70,15 +70,15 @@ void createInertiaApp({
                     features={props.initialPage.props.features}
                 >
                     <I18nextProvider i18n={i18n}>
-                        <ActiveUserContextProvider initialAuth={props.initialPage.props.auth}>
-                            <MetaMaskContextProvider initialAuth={props.initialPage.props.auth}>
+                        <AuthContextProvider initialAuth={props.initialPage.props.auth}>
+                            <MetaMaskContextProvider>
                                 <TransactionSliderProvider>
                                     <DarkModeContextProvider>
                                         <App {...props} />
                                     </DarkModeContextProvider>
                                 </TransactionSliderProvider>
                             </MetaMaskContextProvider>
-                        </ActiveUserContextProvider>
+                        </AuthContextProvider>
                     </I18nextProvider>
                 </EnvironmentContextProvider>
             </QueryClientProvider>,

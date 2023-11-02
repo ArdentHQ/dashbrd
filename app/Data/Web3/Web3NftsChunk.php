@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Data\Web3;
 
 use Illuminate\Support\Collection;
-use Spatie\LaravelData\Data;
 
-class Web3NftsChunk extends Data
+readonly class Web3NftsChunk
 {
     /**
      * @param  Collection<int, Web3NftData>  $nfts

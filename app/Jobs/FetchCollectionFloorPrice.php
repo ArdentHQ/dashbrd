@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
 use App\Models\Token;
 use App\Support\Queues;
 use Carbon\Carbon;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +23,7 @@ use Illuminate\Support\Str;
 
 class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
 
     /**
      * Create a new job instance.
@@ -53,7 +54,7 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
 
         $web3DataProvider = $this->getWeb3DataProvider();
         $floorPrice = $web3DataProvider->getNftCollectionFloorPrice(
-            Chains::from($this->chainId), $this->address
+            Chain::from($this->chainId), $this->address
         );
 
         if ($floorPrice === null) {

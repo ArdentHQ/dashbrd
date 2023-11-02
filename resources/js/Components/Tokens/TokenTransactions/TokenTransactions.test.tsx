@@ -67,7 +67,7 @@ describe("TokenTransactions", () => {
 
     it.each([Breakpoint.lg])("should render in %s screen", async (breakpoint) => {
         render(
-            <MetaMaskContextProvider initialAuth={auth}>
+            <MetaMaskContextProvider>
                 <TokenTransactions
                     user={user}
                     asset={asset}
@@ -95,7 +95,7 @@ describe("TokenTransactions", () => {
         });
 
         render(
-            <MetaMaskContextProvider initialAuth={auth}>
+            <MetaMaskContextProvider>
                 <TokenTransactions
                     user={user}
                     asset={asset}
@@ -116,7 +116,7 @@ describe("TokenTransactions", () => {
         });
 
         render(
-            <MetaMaskContextProvider initialAuth={auth}>
+            <MetaMaskContextProvider>
                 <TokenTransactions
                     user={user}
                     asset={asset}

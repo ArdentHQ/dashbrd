@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Console\Commands\LiveDumpNfts;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Models\Network;
 use App\Models\Token;
 use App\Support\Facades\Alchemy;
@@ -35,7 +35,7 @@ beforeEach(function () {
             200),
     ]);
 
-    $network = Network::query()->where('chain_id', Chains::ETH->value)->first();
+    $network = Network::query()->where('chain_id', Chain::ETH->value)->first();
 
     Token::factory()->create([
         'symbol' => 'ETH',

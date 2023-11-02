@@ -40,7 +40,8 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
 
             <div className="flex-shrink-0">
                 <Img
-                    className="aspect-square h-6 w-6 rounded-full object-cover lg:h-10 lg:w-10"
+                    wrapperClassName="aspect-square h-7 w-6 lg:h-10 lg:w-10"
+                    className="rounded-full"
                     src={nft.collection.image}
                     isCircle
                 />

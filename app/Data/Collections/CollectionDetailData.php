@@ -22,7 +22,7 @@ class CollectionDetailData extends Data
         public string $slug,
         public ?string $description,
         public string $address,
-        #[LiteralTypeScriptType('App.Enums.Chains')]
+        #[LiteralTypeScriptType('App.Enums.Chain')]
         public int $chainId,
         public ?string $floorPrice,
         public ?string $floorPriceCurrency,

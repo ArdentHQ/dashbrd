@@ -11,8 +11,8 @@ import {
     type SendTransactionRequest,
     type SendTransactionResponse,
 } from "./useMetaMask.contracts";
-import Chains = App.Enums.Chains;
-import { useActiveUser } from "@/Contexts/ActiveUserContext";
+import Chains = App.Enums.Chain;
+import { useAuth } from "@/Contexts/AuthContext";
 import { browserLocale } from "@/Utils/browser-locale";
 
 const networkConfigs: Record<number, object> = {
@@ -91,12 +91,11 @@ const getSignMessage = async (chainId: number): Promise<string> =>
 
 export interface MetaMaskState {
     account?: string;
-    chainId?: App.Enums.Chains;
+    chainId?: App.Enums.Chain;
     connectWallet: () => Promise<void>;
     signWallet: () => Promise<void>;
     connecting: boolean;
     signing: boolean;
-    signed: boolean;
     initialized: boolean;
     needsMetaMask: boolean;
     supportsMetaMask: boolean;
@@ -110,10 +109,9 @@ export interface MetaMaskState {
     getTransactionReceipt: (hash: string) => Promise<ProviderResponse<ethers.providers.TransactionReceipt>>;
     getBlock: (blockHash: string) => Promise<ProviderResponse<ethers.providers.Block>>;
     hideConnectOverlay: () => void;
-    showConnectOverlay: (onConnected?: () => void) => void;
+    showConnectOverlay: (onConnected?: () => Promise<void>) => Promise<void>;
     isShowConnectOverlay: boolean;
-    askForSignature: (onSigned?: () => void) => void;
-    onDisconnected: () => void;
+    askForSignature: (onSigned?: () => Promise<void>) => Promise<void>;
 }
 
 enum ErrorType {
@@ -134,19 +132,15 @@ const ErrorTypes = {
     [ErrorType.UserRejected]: "user_rejected",
 };
 
-interface Properties {
-    initialAuth: App.Data.AuthData;
-}
-
 /**
  * Note consider that the `initialAuth` property is not reactive, it contains
  * the initial auth state when page is loaded.
  */
-const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
+const useMetaMask = (): MetaMaskState => {
     const { t } = useTranslation();
 
     const [initialized, setInitialized] = useState<boolean>(false);
-    const [chainId, setChainId] = useState<App.Enums.Chains>();
+    const [chainId, setChainId] = useState<App.Enums.Chain>();
     const [account, setAccount] = useState<string>();
     const [ethereumProvider, setEthereumProvider] = useState<ethers.providers.Web3Provider>();
     const [connecting, setConnecting] = useState<boolean>(false);
@@ -154,7 +148,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const [requiresSignature, setRequiresSignature] = useState<boolean>(false);
     const [requiresSwitch, setRequiresSwitch] = useState<boolean>(false);
     const [signing, setSigning] = useState<boolean>(false);
-    const [signed, setSigned] = useState<boolean>(initialAuth.signed);
     const [waitingSignature, setWaitingSignature] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isShowConnectOverlay, setShowConnectOverlay] = useState<boolean>(false);
@@ -162,11 +155,11 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
     const needsMetaMask = !hasMetaMask() || !supportsMetaMask;
 
     const [onConnected, setOnConnected] = useState<() => void>();
-    const [onSigned, setOnSigned] = useState<() => void>();
+    const [onSigned, setOnSigned] = useState<() => Promise<void>>();
 
     const undefinedProviderError = t("auth.errors.metamask.provider_not_set");
 
-    const { setAuthData } = useActiveUser();
+    const { setAuthData, logout, authenticated } = useAuth();
 
     const onError = useCallback((error: ErrorType, errorMessage?: string) => {
         setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());
@@ -191,7 +184,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         chainId,
     }: {
         account?: string;
-        chainId?: App.Enums.Chains;
+        chainId?: App.Enums.Chain;
     }): Promise<void> => {
         setSwitching(true);
 
@@ -201,33 +194,13 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 chainId,
             });
 
-            setAuthData?.(response.data);
+            setAuthData(response.data);
 
             router.reload();
         } catch (error) {
             handleAxiosError(error);
         } finally {
             setSwitching(false);
-
-            setSigned(false);
-        }
-    };
-
-    const logout = async (): Promise<void> => {
-        setSwitching(true);
-
-        try {
-            const response = await axios.post<{ redirectTo: string | null }>(route("logout"));
-
-            setAuthData?.();
-
-            const redirectTo = response.data.redirectTo;
-            redirectTo === null ? router.reload() : router.get(route(redirectTo));
-        } catch (error) {
-            handleAxiosError(error);
-        } finally {
-            setSwitching(false);
-            setSigned(false);
         }
     };
 
@@ -259,7 +232,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             const [chain, accounts] = await Promise.all([provider.getNetwork(), provider.listAccounts()]);
 
             const account = accounts.length > 0 ? utils.getAddress(accounts[0]) : undefined;
-            const chainId = chain.chainId as App.Enums.Chains;
+            const chainId = chain.chainId as App.Enums.Chain;
 
             setAccount(account);
 
@@ -278,7 +251,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
             const updateChainId = async (): Promise<void> => {
                 const { chainId } = await provider.getNetwork();
 
-                setChainId(chainId as App.Enums.Chains);
+                setChainId(chainId as App.Enums.Chain);
             };
 
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -312,7 +285,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
 
         const chainChangedListener = (chainId: string): void => {
             // Chain ID came in as a hex string, so we need to convert it to decimal
-            setChainId(Number.parseInt(chainId, 16) as App.Enums.Chains);
+            setChainId(Number.parseInt(chainId, 16) as App.Enums.Chain);
 
             setRequiresSwitch(true);
         };
@@ -354,7 +327,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 ethereumProvider.send("eth_chainId", []),
             ])) as [string[], string];
 
-            const chainId = Number.parseInt(chainIdAsHex, 16) as App.Enums.Chains;
+            const chainId = Number.parseInt(chainIdAsHex, 16) as App.Enums.Chain;
 
             return {
                 account: accounts.length > 0 ? accounts[0] : undefined,
@@ -385,16 +358,38 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         [ethereumProvider],
     );
 
-    const showConnectOverlay = (onConnected?: () => void): void => {
+    const showConnectOverlay = async (onConnected?: () => Promise<void>): Promise<void> => {
         setShowConnectOverlay(true);
 
-        setOnConnected(() => onConnected);
+        await new Promise<void>((resolve, reject) => {
+            // eslint-disable-next-line unicorn/consistent-function-scoping
+            setOnConnected(() => async (): Promise<void> => {
+                try {
+                    await onConnected?.();
+
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
     };
 
-    const askForSignature = (onSigned?: () => void): void => {
+    const askForSignature = async (onSigned?: () => Promise<void>): Promise<void> => {
         setRequiresSignature(true);
 
-        setOnSigned(() => onSigned);
+        await new Promise<void>((resolve, reject) => {
+            // eslint-disable-next-line unicorn/consistent-function-scoping
+            setOnSigned(() => async (): Promise<void> => {
+                try {
+                    await onSigned?.();
+
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
     };
 
     const hideConnectOverlay = (): void => {
@@ -459,16 +454,14 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 chainId,
             });
 
-            setAuthData?.(response.data);
-
-            setSigned(true);
+            setAuthData(response.data);
 
             hideConnectOverlay();
 
             router.reload();
 
             if (onSigned !== undefined) {
-                onSigned();
+                await onSigned();
             }
         } catch (error) {
             handleAxiosError(error);
@@ -499,7 +492,7 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
                 locale: browserLocale(),
             });
 
-            setAuthData?.(response.data);
+            setAuthData(response.data);
 
             hideConnectOverlay();
 
@@ -643,13 +636,13 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         }
     };
 
-    const onDisconnected = (): void => {
-        setAccount(undefined);
+    useEffect(() => {
+        if (!authenticated) {
+            setAccount(undefined);
 
-        setChainId(undefined);
-
-        setSigned(false);
-    };
+            setChainId(undefined);
+        }
+    }, [authenticated]);
 
     return {
         account,
@@ -657,7 +650,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         connectWallet,
         connecting,
         signing,
-        signed,
         initialized,
         needsMetaMask,
         supportsMetaMask,
@@ -667,7 +659,6 @@ const useMetaMask = ({ initialAuth }: Properties): MetaMaskState => {
         requiresSignature,
         ethereumProvider,
         sendTransaction,
-        onDisconnected,
         switchToNetwork,
         getTransactionReceipt,
         getBlock,

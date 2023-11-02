@@ -3,11 +3,11 @@ import React from "react";
 import { CollectionHeaderTop } from "./CollectionHeaderTop";
 import { MarkdownImage } from "@/Components/Collections/CollectionDescription";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import * as useAuth from "@/Hooks/useAuth";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+
 const collection = new CollectionDetailDataFactory().create({
     description: "This is a test collection",
     website: "https://website.com",
@@ -18,15 +18,8 @@ const collection = new CollectionDetailDataFactory().create({
 describe("CollectionHeaderTop", () => {
     beforeAll(() => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue(getSampleMetaMaskState());
-        vi.spyOn(useAuth, "useAuth").mockReturnValue({
-            user: null,
-            wallet: null,
-            authenticated: true,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            signed: true,
-            closeOverlay: vi.fn(),
-        });
+
+        mockAuthContext({});
     });
 
     afterAll(() => {
@@ -225,7 +218,7 @@ describe("CollectionHeaderTop", () => {
         ["https://mumbai.polygonscan.com/address/", 80001],
     ])(`should use %s for address`, (url, chainId) => {
         const collection = new CollectionDetailDataFactory().create({
-            chainId: chainId as App.Enums.Chains,
+            chainId: chainId as App.Enums.Chain,
         });
 
         render(<CollectionHeaderTop collection={collection} />);

@@ -12,7 +12,7 @@ export const GalleryCurator = ({
     className,
     truncate = 10,
 }: {
-    wallet: App.Data.Gallery.GalleryWalletData;
+    wallet: App.Data.SimpleWalletData;
     className?: string;
     truncate?: number | false;
 }): JSX.Element => {
