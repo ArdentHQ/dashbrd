@@ -1,6 +1,7 @@
 import { isNumber } from "@ardenthq/sdk-helpers";
 import axios from "axios";
 import { useCallback, useRef, useState } from "react";
+import useAbortController from "react-use-cancel-token";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useInertiaHeader } from "@/Hooks/useInertiaHeader";
 import { useLiveSearch } from "@/Hooks/useLiveSearch";
@@ -22,7 +23,6 @@ interface QueryParameters {
 
 interface CollectionsResponse {
     collections: PaginationData<App.Data.Collections.CollectionData>;
-    nfts: App.Data.Collections.CollectionNftData[];
     stats: App.Data.Collections.CollectionStatsData;
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
@@ -42,7 +42,6 @@ interface CollectionsState {
         selectedChainIds?: number[];
     }) => void;
     collections: App.Data.Collections.CollectionData[];
-    nfts: App.Data.Collections.CollectionNftData[];
     isLoading: boolean;
     reportByCollectionAvailableIn: ReportByCollectionAvailableIn;
     alreadyReportedByCollection: AlreadyReportedByCollection;
@@ -67,17 +66,20 @@ export const useCollections = ({
         collections: 0,
         value: null,
     },
+    initialSelectedChainIds,
 }: {
     view: CollectionDisplayType;
     initialStats: App.Data.Collections.CollectionStatsData;
     showHidden: boolean;
     sortBy: string | null;
     onSearchError: (error: unknown) => void;
+    initialSelectedChainIds?: string[];
 }): CollectionsState => {
+    const { newAbortSignal, cancelPreviousRequest } = useAbortController();
+
     const [isLoading, setIsLoading] = useState(true);
     const isLoadingMore = useRef(false);
     const [collections, setCollections] = useState<App.Data.Collections.CollectionData[]>([]);
-    const [nfts, setNfts] = useState<App.Data.Collections.CollectionNftData[]>([]);
     const [pageMeta, setPageMeta] = useState({ currentPage: 1, lastPage: 1 });
 
     const [hiddenCollectionAddresses, setHiddenCollectionAddresses] = useState<string[]>([]);
@@ -86,11 +88,14 @@ export const useCollections = ({
     const [reportByCollectionAvailableIn, setSeportByCollectionAvailableIn] = useState<ReportByCollectionAvailableIn>(
         {},
     );
+
+    const getSelectedChainIds = (initialArray?: string[]): number[] =>
+        isTruthy(initialArray) && initialArray.length > 0
+            ? initialArray.map((id) => Number(id))
+            : [ExplorerChains.EthereumMainnet, ExplorerChains.PolygonMainnet];
+
     const [availableNetworks, setAvailableNetworks] = useState<App.Data.Network.NetworkWithCollectionsData[]>([]);
-    const [selectedChainIds, setSelectedChainIds] = useState<number[]>([
-        ExplorerChains.EthereumMainnet,
-        ExplorerChains.PolygonMainnet,
-    ]);
+    const [selectedChainIds, setSelectedChainIds] = useState<number[]>(getSelectedChainIds(initialSelectedChainIds));
     const { headers } = useInertiaHeader();
 
     const fetchCollections = async ({
@@ -99,6 +104,7 @@ export const useCollections = ({
         showHidden = false,
         sort = null,
     }: QueryParameters = {}): Promise<CollectionsResponse> => {
+        cancelPreviousRequest();
         setIsLoading(true);
         isLoadingMore.current = true;
 
@@ -108,14 +114,16 @@ export const useCollections = ({
             sort: sort ?? "",
             showHidden: showHidden ? "true" : "",
             view,
+            chain: selectedChainIds.join(","),
         });
 
         if (selectedChainIds.length > 0) {
             pageUrlWithSearch += `&chain=${selectedChainIds.join(",")}`;
         }
 
+        // The `useAbortController@isCancel` exception handling is done on the `useLiveSearch` hook.
         const { data } = await axios.get<CollectionsResponse>(pageUrlWithSearch, {
-            requestId: "collections-page",
+            signal: newAbortSignal(),
             headers,
         });
 
@@ -123,10 +131,8 @@ export const useCollections = ({
 
         if (page !== 1) {
             setCollections([...existingCollections, ...data.collections.data]);
-            setNfts((existing) => [...existing, ...data.nfts]);
         } else {
             setCollections(data.collections.data);
-            setNfts(data.nfts);
         }
         setHiddenCollectionAddresses(data.hiddenCollectionAddresses);
         setStats(data.stats);
@@ -202,7 +208,6 @@ export const useCollections = ({
 
     return {
         collections,
-        nfts,
         isLoading: isLoading && collections.length === 0 && !isTruthy(query),
         loadMore,
         reload,

@@ -6,9 +6,10 @@ use App\Jobs\FetchCollectionFloorPrice;
 use App\Models\Collection;
 use App\Models\SpamContract;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Config;
 
 it('dispatches a job for collections', function () {
-    Bus::fake();
+    Bus::fake([FetchCollectionFloorPrice::class]);
 
     Collection::factory(3)->create();
 
@@ -19,8 +20,26 @@ it('dispatches a job for collections', function () {
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 3);
 });
 
+it('dispatches a job for collections if provider is not opensea', function () {
+    Config::set('dashbrd.web3_providers.'.FetchCollectionFloorPrice::class, 'mnemonic');
+
+    Bus::fake([FetchCollectionFloorPrice::class]);
+
+    Collection::factory(3)->create();
+
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
+
+    $this->artisan('nfts:fetch-collection-floor-price');
+
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 3);
+
+    Bus::assertDispatched(FetchCollectionFloorPrice::class, function ($job) {
+        return $job->delay === null;
+    });
+});
+
 it('should not dispatch a job for a spam collection', function () {
-    Bus::fake();
+    Bus::fake([FetchCollectionFloorPrice::class]);
 
     $collections = Collection::factory(3)->create();
 
@@ -37,7 +56,7 @@ it('should not dispatch a job for a spam collection', function () {
 });
 
 it('dispatches a job for a specific collection', function () {
-    Bus::fake();
+    Bus::fake([FetchCollectionFloorPrice::class]);
 
     $collection = Collection::factory()->create();
 
@@ -51,7 +70,7 @@ it('dispatches a job for a specific collection', function () {
 });
 
 it('should not dispatch a job for a given spam collection', function () {
-    Bus::fake();
+    Bus::fake([FetchCollectionFloorPrice::class]);
 
     $collection = Collection::factory()->create();
 

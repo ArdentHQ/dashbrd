@@ -4,6 +4,7 @@ import { Button } from "@/Components/Buttons";
 import { useEditableGalleryContext } from "@/Components/Galleries/Hooks/useEditableGalleryContext";
 import { useNftSelectableContext } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { Slider, useSliderContext } from "@/Components/Slider";
+import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
 export const NftCollectionSlider = (): JSX.Element => {
     const { t } = useTranslation();
@@ -11,10 +12,12 @@ export const NftCollectionSlider = (): JSX.Element => {
     const { nfts } = useEditableGalleryContext();
     const { selected } = useNftSelectableContext();
 
+    const { isShowConnectOverlay } = useMetaMaskContext();
+
     return (
         <Slider
             data-testid="NftCollectionSlider"
-            isOpen={isOpen}
+            isOpen={isOpen && !isShowConnectOverlay}
             onClose={() => {
                 setOpen(false);
             }}
@@ -25,7 +28,7 @@ export const NftCollectionSlider = (): JSX.Element => {
             <Slider.Content className="relative pb-28">
                 <NftCollectionSearch />
 
-                <div className="fixed inset-x-0 bottom-0 flex w-full items-center justify-end space-x-3 border-t border-theme-secondary-300 bg-white px-8 py-4">
+                <div className="fixed inset-x-0 bottom-0 flex w-full items-center justify-end space-x-3 border-t border-theme-secondary-300 bg-white px-8 py-4 dark:border-theme-dark-700 dark:bg-theme-dark-900">
                     <Button
                         data-testid="NftCollectionSlider__cancel"
                         className="inline-flex flex-1 justify-center sm:flex-none"

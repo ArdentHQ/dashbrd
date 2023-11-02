@@ -11,6 +11,7 @@ use App\Enums\Chains;
 use App\Exceptions\NotImplementedException;
 use App\Models\Collection as CollectionModel;
 use App\Models\Network;
+use App\Models\Nft;
 use App\Models\Wallet;
 use App\Services\Traits\LoadsFromCache;
 use App\Services\Web3\AbstractWeb3DataProvider;
@@ -18,7 +19,7 @@ use App\Support\Facades\Alchemy;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
+class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
 {
     use LoadsFromCache;
 
@@ -41,6 +42,16 @@ final class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
         int $limit = null
     ): Web3NftsChunk {
         return Alchemy::collectionNfts($collection, $startToken, $limit);
+    }
+
+    /**
+     * @see https://docs.alchemy.com/reference/getnftmetadatabatch
+     *
+     * @param  Collection<int, Nft>  $nfts
+     */
+    public function getNftMetadata(Collection $nfts, Network $network): Web3NftsChunk
+    {
+        return Alchemy::nftMetadataBatch($nfts, $network);
     }
 
     public function getEnsDomain(Wallet $wallet): ?string

@@ -40,13 +40,14 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
 
             <div className="flex-shrink-0">
                 <Img
-                    className="aspect-square h-6 w-6 rounded-full object-cover lg:h-10 lg:w-10"
+                    wrapperClassName="aspect-square h-7 w-6 lg:h-10 lg:w-10"
+                    className="rounded-full"
                     src={nft.collection.image}
                     isCircle
                 />
             </div>
 
-            <div className="truncate font-medium text-theme-secondary-700">
+            <div className="truncate font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                 {t("common.back_to")}{" "}
                 <Link
                     href={url}
@@ -54,6 +55,7 @@ export const NftBackButton = ({ nft, url, className }: Properties): JSX.Element 
                         "transition-default text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none",
                         "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
                         "focus-visible:decoration-theme-primary-700",
+                        "dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500",
                     )}
                 >
                     {nft.collection.name}

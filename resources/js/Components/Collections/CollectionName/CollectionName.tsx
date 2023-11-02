@@ -24,7 +24,8 @@ export const CollectionName = ({
             <div className="absolute flex w-full  items-center space-x-4">
                 <div className="relative h-8 w-8 shrink-0 md:h-20 md:w-20">
                     <Img
-                        className="aspect-square h-full w-full rounded-full object-cover"
+                        wrapperClassName="aspect-square"
+                        className="h-full w-full rounded-full object-cover"
                         src={collection.image}
                         isCircle
                     />
@@ -42,7 +43,7 @@ export const CollectionName = ({
                         <p
                             ref={collectionNameReference}
                             data-testid="CollectionName__name"
-                            className="group-hover md:leading-auto truncate text-sm font-medium leading-6 text-theme-secondary-900 group-hover:text-theme-primary-700 md:text-lg"
+                            className="group-hover md:leading-auto truncate text-sm font-medium leading-6 text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400 md:text-lg"
                         >
                             {collection.name}
                         </p>

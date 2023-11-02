@@ -24,15 +24,15 @@ export const NftItemTitle = ({ nft }: { nft: App.Data.Gallery.GalleryNftData }):
             {nft.collectionImage !== null && (
                 <Img
                     src={nft.collectionImage}
-                    className="h-8 w-8 rounded-full"
+                    wrapperClassName="h-8 w-8 rounded-full overflow-hidden"
                     errorClassName="px-1 py-1"
                 />
             )}
 
-            <div className="truncate font-medium">{nft.collectionName}</div>
+            <div className="truncate font-medium dark:text-theme-dark-50">{nft.collectionName}</div>
         </div>
 
-        <div className="whitespace-nowrap text-sm font-medium text-theme-secondary-700">
+        <div className="whitespace-nowrap text-sm font-medium text-theme-secondary-700 dark:text-theme-dark-200">
             {tp("common.nft_count", nft.collectionNftCount, { count: nft.collectionNftCount })}
         </div>
     </div>
@@ -110,6 +110,7 @@ export const NftCollections = ({
                                 selectedNfts={selected}
                                 onDeselectNft={removeFromSelection}
                                 onSelectNft={addToSelection}
+                                validateImage={true}
                             />
 
                             {!allNftsLoaded(nfts[0]) && (

@@ -16,6 +16,7 @@ interface Properties
     wallet: App.Data.AuthData["wallet"];
     user?: App.Data.UserData;
     isMaintenanceModeActive?: boolean;
+    onLogout: () => void;
 }
 
 export const Navbar = ({
@@ -27,6 +28,7 @@ export const Navbar = ({
     connectWallet,
     authenticated,
     isMaintenanceModeActive,
+    onLogout,
     ...properties
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
@@ -43,6 +45,7 @@ export const Navbar = ({
                     collectionCount={collectionCount}
                     galleriesCount={galleryCount}
                     currency={user.attributes.currency}
+                    onLogout={onLogout}
                 />
             );
         }
@@ -66,7 +69,7 @@ export const Navbar = ({
         <nav
             data-testid="Navbar"
             className={cn(
-                "transition-default flex h-14 items-center justify-between border-b border-theme-secondary-300 bg-white px-6 py-2 dark:border-theme-dark-700 dark:bg-theme-dark-900 xs:h-18 sm:px-8 sm:py-0",
+                "transition-default mx-auto flex h-14 max-w-content items-center justify-between bg-white px-6 py-2 dark:bg-theme-dark-900 xs:h-18 sm:px-8 sm:py-0 2xl:px-0",
                 className,
             )}
             {...properties}
@@ -75,6 +78,7 @@ export const Navbar = ({
                 <MobileMenu
                     wallet={wallet}
                     connectWallet={connectWallet}
+                    onLogout={onLogout}
                     currency={user?.attributes.currency}
                     isConnectButtonDisabled={isTruthy(isMaintenanceModeActive) || connecting || !initialized}
                 />

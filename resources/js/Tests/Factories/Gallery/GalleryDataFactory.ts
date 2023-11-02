@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import GalleryNftDataFactory from "./GalleryNftDataFactory";
-import GalleryWalletDataFactory from "./GalleryWalletDataFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
+import SimpleWalletDataFactory from "@/Tests/Factories/SimpleWalletDataFactory";
 
 const url = "http://test.test";
 
@@ -17,7 +17,7 @@ export default class GalleryDataFactory extends ModelFactory<App.Data.Gallery.Ga
             collectionsCount: faker.datatype.number({ min: 1, max: 16 }),
             value: this.optional(Number(faker.finance.amount(1 * 1e18, 25 * 1e18, 0))),
             coverImage: this.optional(faker.image.avatar()),
-            wallet: new GalleryWalletDataFactory().create(),
+            wallet: new SimpleWalletDataFactory().create(),
             nfts: {
                 paginated: {
                     data: new GalleryNftDataFactory().createMany(faker.datatype.number({ min: 0, max: 3 })),

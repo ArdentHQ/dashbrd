@@ -34,18 +34,18 @@ export const NftGalleryCardEditable = ({
             >
                 <GalleryCard.Overlay>
                     <div className="flex items-center space-x-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md dark:bg-theme-dark-900/30 dark:backdrop-blur-none">
                             <IconButton
                                 data-testid="NftGalleryCardEditable__add"
                                 icon="Plus"
-                                className="border-white outline-offset-4"
+                                className="border-white outline-offset-4 dark:border-none dark:bg-theme-dark-900 dark:hover:border-theme-primary-400 dark:hover:bg-theme-primary-400 dark:hover:text-white"
                                 onClick={() => {
                                     onAdd?.();
                                 }}
                             />
                         </div>
 
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md dark:bg-theme-dark-900/30 dark:backdrop-blur-none">
                             <IconButton
                                 data-testid="NftGalleryCardEditable__delete"
                                 icon="Trash"
@@ -60,7 +60,8 @@ export const NftGalleryCardEditable = ({
                 <Img
                     errorMessage={t("common.unable_to_retrieve_image")}
                     data-testid="NftGalleryCardEditable__image"
-                    className="aspect-square w-full rounded-xl"
+                    wrapperClassName="aspect-square"
+                    className="rounded-xl"
                     src={nft.images.large}
                 />
             </GalleryCard>
@@ -78,9 +79,10 @@ export const NftGalleryCardEditable = ({
             <div
                 data-testid="NftGalleryCardEditable"
                 className={classNames(
-                    "group flex aspect-square cursor-pointer items-center justify-center rounded-xl border hover:outline hover:outline-3",
+                    "transition-default group flex aspect-square cursor-pointer items-center justify-center rounded-xl border hover:outline hover:outline-3",
                     {
-                        "border-theme-secondary-300 hover:outline-theme-primary-100": !isTruthy(error),
+                        "border-theme-secondary-300 hover:outline-theme-primary-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-700":
+                            !isTruthy(error),
                         "border-2 border-theme-danger-400 hover:outline-theme-danger-100": isTruthy(error),
                     },
                 )}
@@ -88,7 +90,10 @@ export const NftGalleryCardEditable = ({
                     onAdd?.();
                 }}
             >
-                <IconButton icon="Plus" />
+                <IconButton
+                    icon="Plus"
+                    className="dark:hover:border-theme-primary-400 dark:hover:bg-theme-primary-400 dark:hover:text-white"
+                />
             </div>
         </Tooltip>
     );

@@ -10,6 +10,7 @@ use App\Http\Controllers\GalleryFiltersController;
 use App\Http\Controllers\GalleryReportController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\HiddenCollectionController;
+use App\Http\Controllers\MetaImageController;
 use App\Http\Controllers\MyGalleryCollectionController;
 use App\Http\Controllers\MyGalleryController;
 use App\Http\Controllers\NftController;
@@ -46,9 +47,10 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['middleware' => 'signed_wallet'], function () {
             Route::post('create', [MyGalleryController::class, 'store'])->name('my-galleries.store')->middleware(EnsureOnboarded::class);
-            Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
             Route::delete('{gallery:slug}', [MyGalleryController::class, 'destroy'])->name('my-galleries.destroy');
         });
+
+        Route::get('{gallery:slug}/edit', [MyGalleryController::class, 'edit'])->name('my-galleries.edit');
 
         Route::get('collections', [MyGalleryCollectionController::class, 'index'])->name('my-galleries.collections');
         Route::get('{collection:slug}/nfts', [MyGalleryCollectionController::class, 'nfts'])->name('my-galleries.nfts');
@@ -93,6 +95,8 @@ Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], fu
     Route::get('{gallery:slug}', [GalleryController::class, 'view'])
         ->middleware(RecordGalleryView::class)
         ->name('galleries.view');
+
+    Route::get('{gallery:slug}/meta-image.png', MetaImageController::class)->name('galleries.meta-image');
 });
 
 require __DIR__.'/auth.php';

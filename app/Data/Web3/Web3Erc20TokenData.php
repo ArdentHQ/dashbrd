@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Web3;
 
-use Spatie\LaravelData\Data;
-
-/**
- * Generic token data object for Web3DataProviders.
- */
-class Web3Erc20TokenData extends Data
+readonly class Web3Erc20TokenData
 {
     public function __construct(
         public string $tokenAddress,

@@ -285,11 +285,35 @@ it('filters wallets that have been signed at least one time', function () {
         'last_signed_at' => now(),
     ]);
 
-    Wallet::factory()->create();
+    Wallet::factory()->create([
+        'last_signed_at' => null,
+    ]);
 
     $filtered = Wallet::hasBeenSigned()->get();
 
     expect($filtered->count())->toBe(1);
 
     expect($filtered->first()->id)->toBe($signed->id);
+});
+
+it('can determine whether wallet can refresh the collections', function () {
+    expect((new Wallet([
+        'is_refreshing_collections' => false,
+        'refreshed_collections_at' => null,
+    ]))->canRefreshCollections())->toBeTrue();
+
+    expect((new Wallet([
+        'is_refreshing_collections' => true,
+        'refreshed_collections_at' => null,
+    ]))->canRefreshCollections())->toBeFalse();
+
+    expect((new Wallet([
+        'is_refreshing_collections' => false,
+        'refreshed_collections_at' => now()->subMinutes(10),
+    ]))->canRefreshCollections())->toBeFalse();
+
+    expect((new Wallet([
+        'is_refreshing_collections' => false,
+        'refreshed_collections_at' => now()->subMinutes(16),
+    ]))->canRefreshCollections())->toBeTrue();
 });

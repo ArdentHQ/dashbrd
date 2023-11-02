@@ -75,8 +75,9 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                             data-testid="GalleryNftsNft__collection_image"
                         >
                             <Img
+                                wrapperClassName="h-15 w-15 aspect-square"
                                 src={nft.collectionImage}
-                                className="h-15 w-15 rounded-full"
+                                className="rounded-full"
                             />
                         </div>
                     )}
@@ -84,7 +85,7 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                         href={route("collections.view", {
                             slug: nft.collectionSlug,
                         })}
-                        className="outline-offset-3 transition-default mx-auto flex max-w-full items-center overflow-hidden truncate rounded-full px-2 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300"
+                        className="outline-offset-3 transition-default mx-auto flex max-w-full items-center overflow-hidden truncate rounded-full px-2 text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none outline-3 hover:text-theme-primary-700 hover:decoration-theme-primary-700 focus-visible:outline-theme-primary-300 dark:text-theme-primary-400 dark:hover:text-theme-primary-600 dark:hover:decoration-theme-primary-600"
                         data-testid="GalleryNftsNft__website"
                     >
                         <span className="truncate">{nft.collectionName}</span>
@@ -96,7 +97,7 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                         delay={[500, 0]}
                         zIndex={10}
                     >
-                        <div className="mt-0.5 flex max-w-full items-center space-x-1.5 text-2xl text-theme-secondary-900">
+                        <div className="mt-0.5 flex max-w-full items-center space-x-1.5 text-2xl text-theme-secondary-900 dark:text-theme-dark-50">
                             {hasNftName && (
                                 <span
                                     className="block truncate"
@@ -120,10 +121,12 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                     </Tooltip>
 
                     <div className="mx-auto mt-8 flex space-x-2 text-sm">
-                        <span className="truncate text-theme-secondary-700">{t("pages.galleries.floor_price")}:</span>
+                        <span className="truncate text-theme-secondary-700 dark:text-theme-dark-200">
+                            {t("pages.galleries.floor_price")}:
+                        </span>
                         <span
                             data-testid="GalleryNftsNft__price"
-                            className="whitespace-nowrap text-theme-secondary-900"
+                            className="whitespace-nowrap text-theme-secondary-900 dark:text-theme-dark-50"
                         >
                             <FormatCrypto
                                 value={nft.floorPrice ?? "0"}
@@ -140,7 +143,7 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                         <Link
                             external
                             href={openSeaLink}
-                            className="button-icon border-0"
+                            className="button-icon border-0 dark:bg-theme-dark-900"
                             data-testid="GalleryNftsNft__socials-opensea"
                             showExternalIcon={false}
                         >
@@ -151,7 +154,7 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                             external
                             href={blurLink}
                             data-testid="GalleryNftsNft__socials-blur"
-                            className="button-icon border-0"
+                            className="button-icon border-0 dark:bg-theme-dark-900"
                             showExternalIcon={false}
                         >
                             <Icon name="Blur" />
@@ -160,7 +163,7 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                         <Link
                             external
                             href={uniswapLink}
-                            className="button-icon border-0"
+                            className="button-icon border-0 dark:bg-theme-dark-900"
                             data-testid="GalleryNftsNft__socials-uniswap"
                             showExternalIcon={false}
                         >
@@ -174,7 +177,7 @@ export const GalleryNftsNft = ({ nft, isSelected, onClick }: Properties): JSX.El
                 <Img
                     errorMessage={t("common.unable_to_retrieve_image")}
                     data-testid="GalleryNftsNft__image"
-                    className="aspect-square w-full object-cover"
+                    wrapperClassName="aspect-square"
                     src={imageSource}
                 />
             )}

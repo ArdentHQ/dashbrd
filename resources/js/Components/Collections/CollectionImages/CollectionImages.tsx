@@ -5,7 +5,7 @@ export const CollectionImages = ({
     nftsCount,
     maxItems = 4,
 }: {
-    nfts: App.Data.Collections.CollectionNftData[];
+    nfts: App.Data.Collections.SimpleNftData[];
     nftsCount: number;
     maxItems?: number;
 }): JSX.Element => (
@@ -19,7 +19,8 @@ export const CollectionImages = ({
                 key={nft.id}
             >
                 <Img
-                    className="block aspect-square h-full w-full grow rounded-lg object-cover"
+                    wrapperClassName="aspect-square"
+                    className="rounded-lg"
                     src={nft.images.small ?? undefined}
                     data-testid={`CollectionImages__image--${nft.tokenNumber}`}
                 />
@@ -29,16 +30,16 @@ export const CollectionImages = ({
         {nftsCount >= maxItems && (
             <div className="relative h-20 w-20 overflow-hidden rounded-lg backdrop-blur-0">
                 {nftsCount > maxItems && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/75 backdrop-blur-md">
-                        <span className="text-base font-medium">
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/75 backdrop-blur-md dark:bg-theme-dark-900/75">
+                        <span className="text-base font-medium dark:text-theme-dark-50">
                             {maxItems > 1 && "+"}
                             {nftsCount - maxItems + 1}
                         </span>
                     </div>
                 )}
                 <Img
-                    className="aspect-square h-full w-full object-cover"
                     src={nfts[maxItems - 1].images.small ?? undefined}
+                    wrapperClassName="aspect-square"
                     data-testid={`CollectionImages__image--${nfts[maxItems - 1].tokenNumber}`}
                 />
             </div>

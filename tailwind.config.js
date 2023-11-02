@@ -14,6 +14,7 @@ module.exports = {
         "./resources/views/**/*.blade.php",
         "./resources/js/**/*.tsx",
         "./resources/js/**/*.ts",
+        "./resources/images/**/*.svg",
         "./stories/**/*.tsx",
         "./stories/**/*.mdx",
         "./stories/**/*.css",

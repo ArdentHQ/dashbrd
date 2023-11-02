@@ -6,12 +6,10 @@ namespace App\Models;
 
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
-use App\Models\Collection as CollectionModel;
 use App\Models\Traits\BelongsToWallet;
 use App\Models\Traits\Reportable;
 use App\Notifications\NftReport;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,11 +21,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /** @property string $token_number */
 class Nft extends Model
 {
-    use BelongsToWallet, HasFactory, Reportable, SoftDeletes;
+    use BelongsToWallet, HasEagerLimit, HasFactory, Reportable, SoftDeletes;
 
     /**
      * @var array<string>
@@ -251,30 +250,6 @@ class Nft extends Model
             $query->whereRaw("concat(nfts.name, ' #', nfts.token_number) ilike ?", $searchQuery)
                 ->orWhereRaw("concat(nfts.name, ' ', nfts.token_number) ilike ?", $searchQuery);
         });
-    }
-
-    /**
-     * Returns the nfts that belongs to the collections passed as argument and
-     * limits the number of nfts per collection to the limit passed as argument.
-     *
-     * @param  Builder<self>  $query
-     * @param  LengthAwarePaginator<CollectionModel>|EloquentCollection<int, CollectionModel>  $collections
-     * @return Builder<self>
-     */
-    public function scopeForCollections(Builder $query, LengthAwarePaginator|EloquentCollection $collections, int $limitPerCollection, User $user = null): Builder
-    {
-        $rankedNftsQuery = DB::table('nfts')
-            ->selectRaw('nfts.id, ROW_NUMBER() OVER (PARTITION BY nfts.collection_id, wallets.user_id ORDER BY nfts.id) AS row_number')
-            ->join('wallets', 'nfts.wallet_id', '=', 'wallets.id')
-            ->when($user !== null, fn ($query) => $query->where('wallets.user_id', $user->id))
-            ->whereIn('nfts.collection_id', $collections->pluck('id'));
-
-        $nftsQuery = DB::table(DB::raw("({$rankedNftsQuery->toSql()}) AS ranked_nfts"))
-            ->mergeBindings($rankedNftsQuery)
-            ->select('id')
-            ->where('row_number', '<=', $limitPerCollection);
-
-        return $query->with('traits')->whereIn('id', $nftsQuery);
     }
 
     public function newReportNotification(Report $report): Notification

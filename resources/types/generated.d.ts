@@ -31,6 +31,11 @@ declare namespace App.Data {
         timestamp: number;
         price: number;
     };
+    export type SimpleWalletData = {
+        address: string;
+        domain: string | null;
+        avatar: App.Data.Wallet.WalletAvatarData;
+    };
     export type TokenListItemData = {
         guid: number | null;
         name: string;
@@ -102,6 +107,7 @@ declare namespace App.Data.Collections {
         openSeaSlug: string | null;
         website: string;
         nftsCount: number;
+        nfts: Array<App.Data.Collections.SimpleNftData>;
     };
     export type CollectionDetailData = {
         name: string;
@@ -125,6 +131,9 @@ declare namespace App.Data.Collections {
         owners: number | null;
         nftsCount: number;
         mintedAt: number | null;
+        activityUpdatedAt: string | null;
+        activityUpdateRequestedAt: string | null;
+        isFetchingActivity: boolean | null;
     };
     export type CollectionNftData = {
         id: number;
@@ -153,6 +162,11 @@ declare namespace App.Data.Collections {
         value: string;
         displayType: string;
         nftsCount: number;
+    };
+    export type SimpleNftData = {
+        id: number;
+        tokenNumber: string;
+        images: App.Data.Nfts.NftImagesData;
     };
 }
 declare namespace App.Data.Gallery {
@@ -226,13 +240,9 @@ declare namespace App.Data.Gallery {
         collectionsCount: number;
         value: number | null;
         coverImage: string | null;
-        wallet: App.Data.Gallery.GalleryWalletData;
+        wallet: App.Data.SimpleWalletData;
         nfts: App.Data.Gallery.GalleryNftsData;
         isOwner: boolean;
-        hasLiked: boolean;
-    };
-    export type GalleryLikeData = {
-        likes: number;
         hasLiked: boolean;
     };
     export type GalleryNftData = {
@@ -277,11 +287,6 @@ declare namespace App.Data.Gallery {
         collections: number;
         nfts: number;
         likes: number;
-    };
-    export type GalleryWalletData = {
-        address: string;
-        domain: string | null;
-        avatar: App.Data.Wallet.WalletAvatarData;
     };
 }
 declare namespace App.Data.Network {
@@ -339,10 +344,11 @@ declare namespace App.Data.Nfts {
     export type NftData = {
         id: number;
         name: string | null;
+        description: string | null;
         tokenNumber: string;
         collection: App.Data.Nfts.NftCollectionData;
         images: App.Data.Nfts.NftImagesData;
-        wallet: App.Data.Nfts.NftWalletData | null;
+        wallet: App.Data.SimpleWalletData | null;
         lastViewedAt: string | null;
         lastActivityFetchedAt: string | null;
     };
@@ -352,9 +358,6 @@ declare namespace App.Data.Nfts {
         /** 512x512 */ large: string | null;
         original: string | null;
         originalRaw: string | null;
-    };
-    export type NftWalletData = {
-        address: string;
     };
 }
 declare namespace App.Data.Token {
@@ -422,93 +425,11 @@ declare namespace App.Data.Wallet {
         totalUsd: number;
         totalBalanceInCurrency: string;
         totalTokens: number;
-        nfts: WalletNftData[];
-        nftCount: number;
         collectionCount: number;
-        collectionsValue: number | null;
         galleryCount: number;
         timestamps: { tokens_fetched_at: number | null; native_balances_fetched_at: number | null };
-    };
-    export type WalletNftData = {
-        id: number;
-        images: App.Data.ImagesData;
-    };
-}
-declare namespace App.Data.Web3 {
-    export type CollectionActivity = {
-        contractAddress: string;
-        tokenId: string;
-        sender: string;
-        recipient: string;
-        txHash: string;
-        logIndex: string;
-        type: App.Enums.NftTransferType | null;
-        timestamp: string;
-        totalNative: number | null;
-        totalUsd: number | null;
-        extraAttributes: Array<any>;
-    };
-    export type Web3ContractMetadata = {
-        contractAddress: string;
-        collectionName: string | null;
-        totalSupply: number | null;
-        mintedBlock: number | null;
-        collectionSlug: string | null;
-        imageUrl: string | null;
-        floorPrice: number | null;
-        bannerImageUrl: string | null;
-        description: string | null;
-    };
-    export type Web3Erc20TokenData = {
-        tokenAddress: string;
-        networkId: number;
-        ownedByAddress: string | null;
-        name: string | null;
-        symbol: string | null;
-        decimals: number | null;
-        logo: string | null;
-        thumbnail: string | null;
-        balance: string | null;
-    };
-    export type Web3NftCollectionFloorPrice = {
-        price: string;
-        currency: string;
-        retrievedAt: string;
-    };
-    export type Web3NftCollectionTrait = {
-        name: string;
-        value: string;
-        valueMin: number | null;
-        valueMax: number | null;
-        nftsCount: string;
-        nftsPercentage: number;
-        displayType: any;
-    };
-    export type Web3NftData = {
-        tokenAddress: string;
-        tokenNumber: string;
-        networkId: number;
-        collectionName: string;
-        collectionSymbol: string;
-        collectionImage: string | null;
-        collectionWebsite: string | null;
-        collectionDescription: string | null;
-        collectionBannerImageUrl: string | null;
-        collectionBannerUpdatedAt: string | null;
-        collectionOpenSeaSlug: string | null;
-        collectionSocials: Array<any> | null;
-        collectionSupply: number | null;
-        name: string | null;
-        description: string | null;
-        extraAttributes: Array<any>;
-        floorPrice: App.Data.Web3.Web3NftCollectionFloorPrice | null;
-        traits: Array<any>;
-        mintedBlock: number;
-        mintedAt: string | null;
-    };
-    export type Web3NftsChunk = {
-        nfts: any;
-        nextToken: string | null;
+        isRefreshingCollections: boolean;
+        canRefreshCollections: boolean;
     };
 }
 declare namespace App.Enums {

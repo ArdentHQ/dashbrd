@@ -1,13 +1,12 @@
 import React from "react";
-import { type SpyInstance } from "vitest";
 import { TokenMarketData } from "./TokenMarketData";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
-import * as useAuth from "@/Hooks/useAuth";
+import * as useDarkModeContext from "@/Contexts/DarkModeContex";
 import TokenListItemDataFactory from "@/Tests/Factories/Token/TokenListItemDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 const user = new UserDataFactory().create();
@@ -18,24 +17,23 @@ const token = new TokenListItemDataFactory().create({
     total_market_cap: "100000",
 });
 
-let useAuthSpy: SpyInstance;
+let resetAuthContext: () => void;
 
 describe("TokenMarketData", () => {
     beforeEach(() => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+
         server.use(requestMockOnce(`${BASE_URL}/price_history`, []));
-        useAuthSpy = vi.spyOn(useAuth, "useAuth").mockReturnValue({
+
+        resetAuthContext = mockAuthContext({
             user,
             wallet,
-            authenticated: true,
-            signed: false,
-            showAuthOverlay: false,
-            showCloseButton: false,
-            closeOverlay: vi.fn(),
         });
     });
 
     afterEach(() => {
-        useAuthSpy.mockRestore();
+        resetAuthContext();
+        vi.restoreAllMocks();
     });
 
     it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {

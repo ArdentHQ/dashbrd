@@ -1,8 +1,10 @@
 import { groupBy } from "@ardenthq/sdk-helpers";
 import axios from "axios";
 import { useMemo, useState } from "react";
+import useAbortController from "react-use-cancel-token";
 import GalleryNftData = App.Data.Gallery.GalleryNftData;
 import { type CollectionsPageMeta, type GalleryNftsState } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { isTruthy } from "@/Utils/is-truthy";
 
 type NftData = App.Data.Gallery.GalleryNftData;
@@ -47,6 +49,8 @@ export const useGalleryNtfs = ({
 }: GalleryNftsProperties): GalleryNftsState => {
     const [loadingCollections, setLoadingCollections] = useState(false);
     const [isSearchingCollections, setIsSearchingCollections] = useState(false);
+    const { newAbortSignal, cancelPreviousRequest, isCancel } = useAbortController();
+    const { authenticatedAction } = useAuthorizedAction();
 
     const [nfts, setNfts] = useState<GalleryNftData[]>(loadedNfts);
 
@@ -83,7 +87,7 @@ export const useGalleryNtfs = ({
         });
     };
 
-    const fetchNfts = async (nextPage: number, nft: GalleryNftData): Promise<NftsResponse> => {
+    const fetchNfts = async (nextPage: number, nft: GalleryNftData): Promise<void> => {
         const { currentPage } = nftsPageMeta[nft.collectionSlug];
 
         updateNftPageMetaState(nft, {
@@ -91,20 +95,20 @@ export const useGalleryNtfs = ({
             currentPage,
         });
 
-        const { data } = await axios.get<NftsResponse>(route("my-galleries.nfts", { slug: nft.collectionSlug }), {
-            params: {
-                page: nextPage,
-            },
+        await authenticatedAction(async () => {
+            const { data } = await axios.get<NftsResponse>(route("my-galleries.nfts", { slug: nft.collectionSlug }), {
+                params: {
+                    page: nextPage,
+                },
+            });
+
+            setNfts([...nfts, ...data.nfts]);
+
+            updateNftPageMetaState(nft, {
+                isLoading: false,
+                currentPage: nextPage,
+            });
         });
-
-        setNfts([...nfts, ...data.nfts]);
-
-        updateNftPageMetaState(nft, {
-            isLoading: false,
-            currentPage: nextPage,
-        });
-
-        return data;
     };
 
     const getRemainingNftCount = (nft: GalleryNftData): number => {
@@ -149,7 +153,9 @@ export const useGalleryNtfs = ({
         }
     };
 
-    const fetchCollections = async (nextPageUrl: string, query?: string): Promise<CollectionsResponse> => {
+    const fetchCollections = async (nextPageUrl: string, query?: string): Promise<void> => {
+        cancelPreviousRequest();
+
         setLoadingCollections(true);
 
         // let url = new URLSearchParams(nextPageUrl);
@@ -159,28 +165,42 @@ export const useGalleryNtfs = ({
             url.searchParams.append("query", query);
         }
 
-        const { data } = await axios.get<CollectionsResponse>(decodeURIComponent(url.toString()), {
-            requestId: "gallery-page",
+        await authenticatedAction(async () => {
+            let data: CollectionsResponse;
+
+            try {
+                const response = await axios.get<CollectionsResponse>(decodeURIComponent(url.toString()), {
+                    signal: newAbortSignal(),
+                });
+
+                data = response.data;
+            } catch (error) {
+                /* istanbul ignore next -- @preserve */
+                if (isCancel(error)) {
+                    return;
+                }
+
+                /* istanbul ignore next -- @preserve */
+                throw error;
+            }
+
+            setPageMeta(data.collections.paginated.meta);
+
+            setNftsPageMeta({
+                ...nftsPageMeta,
+                ...makeNftPageMeta(data.nfts.map(({ collectionSlug }) => collectionSlug)),
+            });
+
+            let existingNfts = nfts;
+
+            if (nextPageUrl === pageMeta.first_page_url) {
+                existingNfts = [];
+            }
+
+            setNfts([...existingNfts, ...data.nfts]);
+
+            setLoadingCollections(false);
         });
-
-        setPageMeta(data.collections.paginated.meta);
-
-        setNftsPageMeta({
-            ...nftsPageMeta,
-            ...makeNftPageMeta(data.nfts.map(({ collectionSlug }) => collectionSlug)),
-        });
-
-        let existingNfts = nfts;
-
-        if (nextPageUrl === pageMeta.first_page_url) {
-            existingNfts = [];
-        }
-
-        setNfts([...existingNfts, ...data.nfts]);
-
-        setLoadingCollections(false);
-
-        return data;
     };
 
     const searchNfts = async (query?: string): Promise<void> => {

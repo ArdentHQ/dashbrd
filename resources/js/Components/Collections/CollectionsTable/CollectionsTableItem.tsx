@@ -15,7 +15,6 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 export const CollectionsTableItem = ({
     collection,
-    nfts,
     uniqueKey,
     user,
     isHidden,
@@ -47,8 +46,6 @@ export const CollectionsTableItem = ({
         return 1;
     }, [isXlAndAbove, isLgAndAbove]);
 
-    const collectionNfts = useMemo(() => nfts.filter((nft) => nft.collectionId === collection.id), [nfts]);
-
     const token = {
         symbol: collection.floorPriceCurrency ?? "ETH",
         name: collection.floorPriceCurrency ?? "ETH",
@@ -60,7 +57,7 @@ export const CollectionsTableItem = ({
             ref={reference}
             key={uniqueKey}
             borderClass=""
-            className="group cursor-pointer"
+            className="group cursor-pointer dark:border-theme-dark-700"
             onClick={() => {
                 router.visit(
                     route("collections.view", {
@@ -90,7 +87,7 @@ export const CollectionsTableItem = ({
                     {collection.floorPrice === null || user === null ? (
                         <span
                             data-testid="CollectionsTableItem__unknown-floor-price"
-                            className="text-sm font-medium text-theme-secondary-500"
+                            className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
                         >
                             {t("common.na")}
                         </span>
@@ -114,7 +111,7 @@ export const CollectionsTableItem = ({
                 {collection.floorPrice === null || user === null ? (
                     <span
                         data-testid="CollectionsTableItem__unknown-value"
-                        className="text-sm font-medium text-theme-secondary-500"
+                        className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
                     >
                         {t("common.na")}
                     </span>
@@ -151,7 +148,7 @@ export const CollectionsTableItem = ({
                     hoverClassName=""
                 >
                     <CollectionImages
-                        nfts={collectionNfts}
+                        nfts={collection.nfts}
                         nftsCount={collection.nftsCount}
                         maxItems={nftsToShow}
                     />

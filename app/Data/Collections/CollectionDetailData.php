@@ -8,6 +8,7 @@ use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Models\User;
 use App\Transformers\IpfsGatewayUrlTransformer;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
@@ -41,6 +42,9 @@ class CollectionDetailData extends Data
         public ?int $owners,
         public int $nftsCount,
         public ?int $mintedAt,
+        public ?Carbon $activityUpdatedAt,
+        public ?Carbon $activityUpdateRequestedAt,
+        public ?bool $isFetchingActivity,
     ) {
     }
 
@@ -70,6 +74,9 @@ class CollectionDetailData extends Data
             owners: $collection->owners,
             nftsCount: $collection->nfts()->when($user !== null, fn ($q) => $q->ownedBy($user))->count(),
             mintedAt: $collection->minted_at?->getTimestampMs(),
+            activityUpdatedAt: $collection->activity_updated_at,
+            activityUpdateRequestedAt: $collection->activity_update_requested_at,
+            isFetchingActivity: $collection->is_fetching_activity,
         );
     }
 }

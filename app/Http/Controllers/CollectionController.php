@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
-use App\Data\Collections\CollectionNftData;
 use App\Data\Collections\CollectionStatsData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Gallery\GalleryNftData;
@@ -18,13 +17,14 @@ use App\Data\Token\TokenData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Network;
-use App\Models\Nft;
 use App\Models\User;
 use App\Support\Cache\UserCache;
+use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -83,7 +83,6 @@ class CollectionController extends Controller
 
             /** @var LengthAwarePaginator<Collection> $collections */
             $collections = $user->collections()
-                ->forCollectionData($user)
                 ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
                 ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
@@ -94,7 +93,13 @@ class CollectionController extends Controller
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
                 ->when($sortBy === 'received' || $sortBy === null, fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
                 ->search($user, $searchQuery)
-                ->with('reports')
+                ->with([
+                    'reports',
+                    'network',
+                    'floorPriceToken',
+                    'nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)->limit(4),
+                ])
+                ->withCount(['nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)])
                 ->paginate(25);
 
             $reportByCollectionAvailableIn = $collections->mapWithKeys(function ($collection) use ($request) {
@@ -105,15 +110,10 @@ class CollectionController extends Controller
                 return [$collection->address => $collection->wasReportedByUserRecently($user, useRelationship: true)];
             });
 
-            $nfts = Nft::forCollections(
-                collections: $collections,
-                limitPerCollection: 4,
-                user: $user
-            )->get();
-
             return new JsonResponse([
-                'collections' => CollectionData::collection($collections),
-                'nfts' => CollectionNftData::collection($nfts),
+                'collections' => CollectionData::collection(
+                    $collections->through(fn ($collection) => CollectionData::fromModel($collection, $user->currency()))
+                ),
                 'reportByCollectionAvailableIn' => $reportByCollectionAvailableIn,
                 'alreadyReportedByCollection' => $alreadyReportedByCollection,
                 'hiddenCollectionAddresses' => $hiddenCollections,
@@ -344,5 +344,35 @@ class CollectionController extends Controller
             'activityPageLimit' => $activityPageLimit,
             'nftPageLimit' => $nftPageLimit,
         ];
+    }
+
+    public function refreshActivity(Request $request, Collection $collection): JsonResponse
+    {
+
+        // Request has already been made after recent update, and job is already scheduled.
+        if ($collection->activity_update_requested_at) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        $hoursUntilNextUpdate = config('dashbrd.idle_time_between_collection_activity_updates', 6);
+        $hasBeenRecentlyUpdated = $collection->activity_updated_at && Carbon::now()->diffInHours($collection->activity_updated_at) < $hoursUntilNextUpdate;
+
+        // If activity has been recently updated and it is requested to update it again, dispatch the job with a delay.
+        if ($hasBeenRecentlyUpdated && ! $collection->is_fetching_activity) {
+            $collection->touch('activity_update_requested_at');
+            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS)->delay(Carbon::now()->addHours($hoursUntilNextUpdate));
+
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

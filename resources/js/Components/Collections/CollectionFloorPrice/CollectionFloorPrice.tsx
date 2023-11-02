@@ -32,7 +32,8 @@ export const CollectionFloorPrice = ({
             <div
                 data-testid="CollectionFloorPrice__crypto"
                 className={cn("text-sm leading-5.5 md:text-base md:leading-6", {
-                    "text-theme-secondary-700": variant === "list",
+                    "text-theme-secondary-700 dark:text-theme-dark-200": variant === "list",
+                    "dark:text-theme-dark-50": variant === "grid",
                 })}
             >
                 <FormatCrypto
@@ -42,7 +43,7 @@ export const CollectionFloorPrice = ({
             </div>
 
             {variant === "list" && (
-                <div className="text-sm text-theme-secondary-500">
+                <div className="text-sm text-theme-secondary-500 dark:text-theme-dark-300">
                     {fiatValue != null && isTruthy(user) && (
                         <span data-testid="CollectionFloorPrice__fiat">
                             <FormatFiat

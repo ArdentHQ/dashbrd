@@ -20,6 +20,6 @@ export const Skeleton = ({ isCircle, width, height, className, animated = true }
             "rounded-lg": !isTruthy(isCircle),
         })}
         duration={1.3}
-        containerClassName="flex w-auto max-w-full items-center leading-none"
+        containerClassName="flex w-auto max-w-full items-center leading-none h-full"
     />
 );

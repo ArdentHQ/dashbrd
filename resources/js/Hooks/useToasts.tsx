@@ -26,6 +26,10 @@ const showToast = (toastMessage?: ToastMessage): void => {
 
 export const useToasts = (): {
     showToast: (toastMessage?: ToastMessage) => void;
+    clear: () => void;
 } => ({
     showToast,
+    clear: (): void => {
+        toastService.dismiss();
+    },
 });

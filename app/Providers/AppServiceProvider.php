@@ -72,11 +72,16 @@ class AppServiceProvider extends ServiceProvider
                     Limit::perMinutes(
                         config('dashbrd.collections.throttle.nft_refresh.job_per_nft_every_minutes', 15),
                         1,
-                    )->by($job->nft->id),
+                    ),
                 ];
             }
 
             return Limit::none();
         });
+
+        RateLimiter::for('collections-refresh', fn () => [
+            Limit::perMinute(maxAttempts: 50),
+            Limit::perMinutes(decayMinutes: 10, maxAttempts: 5),
+        ]);
     }
 }

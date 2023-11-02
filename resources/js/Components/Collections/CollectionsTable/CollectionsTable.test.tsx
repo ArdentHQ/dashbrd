@@ -1,13 +1,11 @@
 import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
 import { CollectionsTable } from "./CollectionsTable";
-import * as useAuthMock from "@/Hooks/useAuth";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
-import CollectionNftDataFactory from "@/Tests/Factories/Collections/CollectionNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 let useAuthorizedActionSpy: SpyInstance;
@@ -30,12 +28,6 @@ describe("CollectionsTable", () => {
     });
 
     const collections = new CollectionFactory().withPrices().createMany(3);
-
-    const nfts = collections.flatMap((collection) =>
-        new CollectionNftDataFactory().createMany(3, {
-            collectionId: collection.id,
-        }),
-    );
 
     const collection = new CollectionFactory().withoutPrices().create();
 
@@ -66,7 +58,6 @@ describe("CollectionsTable", () => {
     it.each(allBreakpoints)("should render loading state in %s screen", (breakpoint) => {
         render(
             <CollectionsTable
-                nfts={nfts}
                 isLoading
                 hiddenCollectionAddresses={[]}
                 collections={collections}
@@ -82,16 +73,10 @@ describe("CollectionsTable", () => {
     });
 
     it.each(allBreakpoints)("should render loading state if no user", (breakpoint) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        const useAuthSpy = vi.spyOn(useAuthMock, "useAuth").mockReturnValue({
-            authenticated: false,
-            user: null,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any);
+        const resetMock = mockAuthContext({});
 
         render(
             <CollectionsTable
-                nfts={nfts}
                 isLoading
                 hiddenCollectionAddresses={[]}
                 collections={collections}
@@ -105,13 +90,12 @@ describe("CollectionsTable", () => {
 
         expect(screen.getByTestId("CollectionsTableSkeleton")).toBeInTheDocument();
 
-        useAuthSpy.mockRestore();
+        resetMock();
     });
 
     it.each(allBreakpoints)("renders without crashing on %s screen", (breakpoint) => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -130,7 +114,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -149,7 +132,6 @@ describe("CollectionsTable", () => {
     it("should not render if there are no collections", () => {
         render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={[]}
                 user={user}
@@ -171,7 +153,6 @@ describe("CollectionsTable", () => {
 
         render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={[...collections, ...collections, ...collections, ...collections]}
                 user={user}
@@ -192,7 +173,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId, getAllByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -214,7 +194,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -235,7 +214,7 @@ describe("CollectionsTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith("name", "asc");
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
     });
 
     it("can sort the table when sortable heading is clicked but reverse the direction", async () => {
@@ -243,7 +222,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -264,7 +242,7 @@ describe("CollectionsTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith("name", "desc");
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "desc", selectedChainIds: undefined, sortBy: "name" });
     });
 
     it("can sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
@@ -272,7 +250,6 @@ describe("CollectionsTable", () => {
 
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collections}
                 user={user}
@@ -293,13 +270,12 @@ describe("CollectionsTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith("name", "asc");
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
     });
 
     it.each(allBreakpoints)("renders without crashing on %s screen if no floor price data", (breakpoint) => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collectionsWithNoFloorPriceCurrencyData}
                 user={user}
@@ -316,7 +292,6 @@ describe("CollectionsTable", () => {
     it("should render when floor price fiat is null", () => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collectionsWithNullFloorPriceFiatData}
                 user={user}
@@ -332,7 +307,6 @@ describe("CollectionsTable", () => {
     it("should render when floor price is null", () => {
         const { getByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={collectionsWithNullFloorPriceData}
                 user={user}
@@ -350,7 +324,6 @@ describe("CollectionsTable", () => {
     it("defaults fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
             <CollectionsTable
-                nfts={nfts}
                 hiddenCollectionAddresses={[]}
                 collections={[
                     {

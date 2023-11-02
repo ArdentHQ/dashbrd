@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 
 class FetchCollectionFloorPrice extends Command
 {
-    use InteractsWithCollections;
+    use DependsOnOpenseaRateLimit, InteractsWithCollections;
 
     /**
      * The name and signature of the console command.
@@ -30,9 +30,31 @@ class FetchCollectionFloorPrice extends Command
      */
     public function handle(): int
     {
-        $this->forEachCollection(function ($collection) {
-            FetchCollectionFloorPriceJob::dispatch($collection->network->chain_id, $collection->address);
-        });
+        $usesOpensea = $this->usesOpensea(FetchCollectionFloorPriceJob::class);
+
+        // Job runs every hour (60 minutes)
+        $limit = $usesOpensea ? $this->getLimitPerMinutes(60) : null;
+
+        $this->forEachCollection(
+            callback: function ($collection, $index) {
+                $this->dispatchDelayed(
+                    callback: fn () => FetchCollectionFloorPriceJob::dispatch(
+                        chainId: $collection->network->chain_id,
+                        address: $collection->address,
+                    ),
+                    index: $index,
+                    job: FetchCollectionFloorPriceJob::class,
+                );
+            },
+            queryCallback: function ($query) use ($limit) {
+                return $query
+                    ->when(
+                        $limit !== null,
+                        fn ($q) => $q->orderByFloorPriceLastFetchedAt()
+                    );
+            },
+            limit: $limit === null ? null : (int) $limit
+        );
 
         return Command::SUCCESS;
     }

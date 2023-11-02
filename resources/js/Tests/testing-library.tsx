@@ -8,14 +8,14 @@ import testUserEvent from "@testing-library/user-event";
 import React from "react";
 import { I18nextProvider } from "react-i18next";
 import { Context as ResponsiveContext } from "react-responsive";
-import { type SpyInstance } from "vitest";
+import { type Mock, type SpyInstance } from "vitest";
 import { type Breakpoint, breakpointWidth } from "./utils";
-import { ActiveUserContextProvider } from "@/Contexts/ActiveUserContext";
+import { AuthContextProvider } from "@/Contexts/AuthContext";
+import * as AuthContextMock from "@/Contexts/AuthContext";
 import EnvironmentContextProvider from "@/Contexts/EnvironmentContext";
 import { i18n } from "@/I18n";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-
 export * from "@testing-library/react";
 
 const wallet = new WalletFactory().create();
@@ -40,11 +40,11 @@ export const TestProviders = ({
             }}
         >
             <I18nextProvider i18n={i18n}>
-                <ActiveUserContextProvider initialAuth={{ wallet, user, authenticated: false, signed: false }}>
+                <AuthContextProvider initialAuth={{ wallet, user, authenticated: false, signed: false }}>
                     <ResponsiveContext.Provider value={{ width: breakpointWidth(options?.breakpoint) }}>
                         {children}
                     </ResponsiveContext.Provider>
-                </ActiveUserContextProvider>
+                </AuthContextProvider>
             </I18nextProvider>
         </EnvironmentContextProvider>
     </QueryClientProvider>
@@ -60,6 +60,29 @@ interface InertiaUseFormProperties extends Partial<Omit<InertiaFormProps<Record<
 }
 
 export const mockInertiaUseForm = (properties: InertiaUseFormProperties): SpyInstance =>
-    // TODO(@goga-m)[2023-10-31]: Remove ts-ignore and construct an object that matches the return type.
+    // TODO(@goga-m)[2023-11-01]: Remove ts-ignore and construct an object that matches the return type.
     // @ts-ignore
     vi.spyOn(inertia, "useForm").mockReturnValue(properties as InertiaFormProps<Record<string, unknown>>);
+
+export const mockAuthContext = (
+    properties: Partial<
+        App.Data.AuthData & {
+            logout: Mock;
+            setAuthData: Mock;
+        }
+    >,
+): (() => void) => {
+    const useAuthSpy = vi.spyOn(AuthContextMock, "useAuth").mockReturnValue({
+        user: null,
+        wallet: null,
+        authenticated: properties.user != null && properties.wallet != null,
+        signed: false,
+        logout: vi.fn(),
+        setAuthData: vi.fn(),
+        ...properties,
+    });
+
+    return () => {
+        useAuthSpy.mockRestore();
+    };
+};

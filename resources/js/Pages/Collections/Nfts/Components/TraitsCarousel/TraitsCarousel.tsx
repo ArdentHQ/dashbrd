@@ -108,11 +108,11 @@ export const TraitsCarousel = ({
 
                         if (isSm) {
                             if (traits.length - index > (traits.length % 2 === 0 ? 2 : 1)) {
-                                return "border-b border-theme-secondary-300 border-dashed";
+                                return "border-b border-theme-secondary-300 border-dashed dark:border-theme-dark-700";
                             }
                         } else {
                             if (traits.length - index > 1) {
-                                return "border-b border-theme-secondary-300 border-dashed";
+                                return "border-b border-theme-secondary-300 border-dashed dark:border-theme-dark-700";
                             }
                         }
                     },
@@ -126,28 +126,28 @@ export const TraitsCarousel = ({
                     >
                         <div
                             className={cn(
-                                "flex w-full justify-between py-4 font-medium md:flex-col md:space-y-2 md:rounded-lg md:bg-theme-secondary-50 md:px-4 md:py-3 lg:bg-white",
+                                "flex w-full justify-between py-4 font-medium md:flex-col md:space-y-2 md:rounded-lg md:bg-theme-secondary-50 md:px-4 md:py-3 lg:bg-white dark:lg:bg-theme-dark-900",
                                 borderClassName(index),
                             )}
                         >
                             <div className="flex flex-1 flex-col space-y-0.5 truncate">
-                                <span className="text-xs leading-4.5 text-theme-secondary-500 md:text-sm md:leading-5.5">
+                                <span className="text-xs leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 md:text-sm md:leading-5.5">
                                     {trait.name}
                                 </span>
-                                <div className="flex items-center justify-between text-sm leading-5.5 md:text-base md:leading-6">
+                                <div className="flex items-center justify-between text-sm leading-5.5 dark:text-theme-dark-50 md:text-base  md:leading-6">
                                     <Tooltip
                                         content={trait.value}
                                         disabled={!isValueTruncated}
                                     >
                                         <span
                                             ref={valueReference}
-                                            className="truncate whitespace-nowrap"
+                                            className="truncate whitespace-nowrap dark:text-theme-dark-50"
                                         >
                                             {trait.value}
                                         </span>
                                     </Tooltip>
 
-                                    <span className="ml-2 hidden text-theme-secondary-700 md:inline">
+                                    <span className="ml-2 hidden text-theme-secondary-700 dark:text-theme-dark-200 md:inline">
                                         <FormatPercentage
                                             value={trait.nftsPercentage / 100}
                                             decimals={2}
@@ -157,7 +157,7 @@ export const TraitsCarousel = ({
                             </div>
 
                             <div className="flex flex-col items-end">
-                                <span className="mb-1.5 text-sm leading-5.5 text-theme-secondary-700 md:hidden">
+                                <span className="mb-1.5 text-sm leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:hidden">
                                     <FormatPercentage
                                         value={trait.nftsPercentage / 100}
                                         decimals={2}
@@ -165,7 +165,7 @@ export const TraitsCarousel = ({
                                     {t("pages.collections.rarity")}
                                 </span>
 
-                                <div className="relative h-2 w-25 bg-theme-primary-200 md:w-full">
+                                <div className="relative h-2 w-25 bg-theme-primary-200 dark:bg-theme-dark-700 md:w-full">
                                     <div
                                         className="left-0 h-full bg-theme-primary-600 md:absolute"
                                         style={{ width: `${trait.nftsPercentage}%` }}
@@ -184,15 +184,15 @@ export const TraitsCarousel = ({
             <div className="mb-3 hidden items-end justify-between lg:flex">
                 <div className="flex flex-col space-y-0.5 font-medium">
                     <div className="flex items-center gap-2.5">
-                        <span className="leading-6">{t("pages.collections.properties")}</span>
-                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-secondary-200 backdrop-blur-md">
-                            <span className="text-sm font-medium leading-5.5 text-theme-secondary-700">
+                        <span className="leading-6 dark:text-theme-dark-50">{t("pages.collections.properties")}</span>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-theme-secondary-200 backdrop-blur-md dark:bg-theme-dark-900">
+                            <span className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200">
                                 {traits.length}
                             </span>
                         </div>
                     </div>
 
-                    <span className="text-sm leading-5.5 text-theme-secondary-700">
+                    <span className="text-sm leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200">
                         {t("pages.collections.traits.description")}
                     </span>
                 </div>
