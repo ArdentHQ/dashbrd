@@ -43,7 +43,7 @@ describe("SidebarItem", () => {
         );
         expect(screen.getByTestId("SidebarItem__disabled")).toBeInTheDocument();
     });
-            
+
     it("should render disabled with rightText", () => {
         render(
             <SidebarItem
