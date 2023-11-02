@@ -11,7 +11,8 @@ import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { act, mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { act } from "@testing-library/react-hooks";
 
 let routerSpy: SpyInstance;
 let useAuthorizedActionSpy: SpyInstance;
