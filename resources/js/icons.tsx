@@ -35,6 +35,8 @@ import { ReactComponent as Clock } from "@icons/clock.svg";
 import { ReactComponent as Cog } from "@icons/cog.svg";
 import { ReactComponent as Copy } from "@icons/copy.svg";
 import { ReactComponent as Diamond } from "@icons/diamond.svg";
+import { ReactComponent as DocumentCheckmark } from "@icons/document-checkmark.svg";
+import { ReactComponent as Document } from "@icons/document.svg";
 import { ReactComponent as DoorExit } from "@icons/door-exit.svg";
 import { ReactComponent as DoubleCheck } from "@icons/double-check.svg";
 import { ReactComponent as Ellipsis } from "@icons/ellipsis.svg";
@@ -106,6 +108,8 @@ import { ReactComponent as XInCircle } from "@icons/x-in-circle.svg";
 import { ReactComponent as X } from "@icons/x.svg";
 
 export const SvgCollection = {
+    Document,
+    DocumentCheckmark,
     RaribleColor,
     BlurColor,
     LooksRareColor,

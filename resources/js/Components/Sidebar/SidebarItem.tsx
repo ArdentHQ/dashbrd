@@ -12,6 +12,7 @@ export const SidebarItem = ({
     isDisabled = false,
     href,
     tooltip,
+    rightText,
 }: SidebarItemProperties): JSX.Element => (
     <Tooltip
         content={tooltip}
@@ -36,6 +37,17 @@ export const SidebarItem = ({
                 )}
 
                 <span>{title}</span>
+
+                {rightText !== undefined && (
+                    <span
+                        className={cn("ml-auto", {
+                            "text-theme-secondary-500": isDisabled,
+                            "text-theme-secondary-700": !isDisabled,
+                        })}
+                    >
+                        {rightText}
+                    </span>
+                )}
             </Tabs.DisabledLink>
         ) : (
             <Tabs.Link
@@ -57,6 +69,17 @@ export const SidebarItem = ({
                 )}
 
                 <span>{title}</span>
+
+                {rightText !== undefined && (
+                    <span
+                        className={cn("ml-auto", {
+                            "text-theme-secondary-500": isDisabled,
+                            "text-theme-secondary-700": !isDisabled,
+                        })}
+                    >
+                        {rightText}
+                    </span>
+                )}
             </Tabs.Link>
         )}
     </Tooltip>

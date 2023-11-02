@@ -28,10 +28,13 @@ class MyGalleryController extends Controller
         /** @var User $user */
         $user = $request->user();
 
+        $showDrafts = $request->boolean('draft');
+
         return Inertia::render('Galleries/MyGalleries/Index', [
-            'title' => trans('metatags.my_galleries.title'),
+            'title' => $showDrafts ? trans('metatags.my_galleries.title_draft') : trans('metatags.my_galleries.title'),
             'galleries' => new GalleriesData(GalleryData::collection($user->galleries()->latest()->paginate(12))),
             'nftCount' => $user->nfts->count(),
+            'showDrafts' => $showDrafts,
         ]);
     }
 
