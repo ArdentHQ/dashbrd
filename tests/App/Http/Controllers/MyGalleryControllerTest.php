@@ -18,8 +18,6 @@ use Inertia\Testing\AssertableInertia;
 
 beforeEach(function () {
     Token::factory()->wethWithPrices()->create();
-
-    setUpPermissions();
 });
 
 it('can render the "my galleries" page', function () {

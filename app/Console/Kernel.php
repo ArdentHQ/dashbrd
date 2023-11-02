@@ -21,6 +21,7 @@ use App\Console\Commands\MarketData\UpdateTokenDetails;
 use App\Console\Commands\MarketData\VerifySupportedCurrencies;
 use App\Console\Commands\PruneMetaImages;
 use App\Console\Commands\SyncSpamContracts;
+use App\Console\Commands\UpdateArticlesViewCount;
 use App\Console\Commands\UpdateCollectionsFiatValue;
 use App\Console\Commands\UpdateDiscordMembers;
 use App\Console\Commands\UpdateGalleriesScore;
@@ -100,6 +101,13 @@ class Kernel extends ConsoleKernel
             ->command(FetchCoingeckoTokens::class)
             ->withoutOverlapping()
             ->twiceMonthly(1, 16);
+
+        if (Feature::active(Features::Articles->value)) {
+            $schedule
+                ->command(UpdateArticlesViewCount::class)
+                ->withoutOverlapping()
+                ->hourlyAt(2);
+        }
     }
 
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void

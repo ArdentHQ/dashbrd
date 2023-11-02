@@ -2,7 +2,6 @@ import { router } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import { Listbox } from "@/Components/Form/Listbox";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
-import { isTruthy } from "@/Utils/is-truthy";
 
 export const GalleryListbox = ({
     selectedOption,
@@ -14,8 +13,6 @@ export const GalleryListbox = ({
     const { t } = useTranslation();
 
     const { isLgAndAbove } = useBreakpoint();
-
-    const query = isTruthy(searchQuery) ? { query: searchQuery } : [];
 
     return (
         <Listbox
@@ -39,24 +36,24 @@ export const GalleryListbox = ({
             }}
         >
             <Listbox.Option
-                key={route("galleries.most-popular")}
-                value={route("galleries.most-popular", query)}
+                key={route("filtered-galleries.index", { filter: "most-popular" })}
+                value={route("filtered-galleries.index", { filter: "most-popular", query: searchQuery })}
                 hasGradient
             >
                 {t("pages.galleries.most_popular")}
             </Listbox.Option>
 
             <Listbox.Option
-                key={route("galleries.newest")}
-                value={route("galleries.newest", query)}
+                key={route("filtered-galleries.index", { filter: "newest" })}
+                value={route("filtered-galleries.index", { filter: "newest", query: searchQuery })}
                 hasGradient
             >
                 {t("pages.galleries.newest")}
             </Listbox.Option>
 
             <Listbox.Option
-                key={route("galleries.most-valuable")}
-                value={route("galleries.most-valuable", query)}
+                key={route("filtered-galleries.index", { filter: "most-valuable" })}
+                value={route("filtered-galleries.index", { filter: "most-valuable", query: searchQuery })}
                 hasGradient
             >
                 {t("pages.galleries.most_valuable")}
