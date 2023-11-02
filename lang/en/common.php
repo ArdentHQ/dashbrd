@@ -145,4 +145,6 @@ return [
     'twitter' => 'Twitter',
     'discord' => 'Discord',
     'sort' => 'Sort',
+    'published' => 'Published',
+    'drafts' => 'Drafts',
 ];

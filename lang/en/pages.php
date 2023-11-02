@@ -145,6 +145,7 @@ return [
         ],
         'my_galleries' => [
             'title' => 'My Galleries',
+            'subtitle' => 'Manage your galleries',
             'new_gallery' => 'New Gallery',
             'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'succesfully_deleted' => 'Gallery successfully deleted',

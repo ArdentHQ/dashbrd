@@ -18,4 +18,5 @@ export interface SidebarItemProperties {
     icon?: IconName;
     href?: string;
     tooltip?: string;
+    rightText?: string;
 }
