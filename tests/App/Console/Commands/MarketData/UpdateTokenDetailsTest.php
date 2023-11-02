@@ -73,7 +73,6 @@ it('dispatches a job for top tokens in the database', function ($date, $expected
 
 it('dispatches a job for rest of the tokens', function () { // To ensure all jobs run
     $mondayAtNight = Carbon::parse('2023-10-30 22:00:00');
-
     Carbon::setTestNow($mondayAtNight);
 
     Bus::fake([UpdateTokenDetails::class]);
@@ -133,9 +132,11 @@ it('dispatches a job for all wallet tokens', function () {
 });
 
 it('calculates the total jobs per minute', function () {
-    expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(15))->toBe(25);
+    Carbon::setTestNow(Carbon::parse('2023-10-30 22:00:00'));
 
-    expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(5))->toBe(8);
+    expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(15))->toBe(18);
+
+    expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(5))->toBe(6);
 
     expect((new UpdateTokenDetailsCommand())->getLimitPerMinutes(1))->toBe(1);
 });
