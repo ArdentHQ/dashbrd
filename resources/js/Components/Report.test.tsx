@@ -132,8 +132,8 @@ describe("Report", () => {
     it("show report modal on load", async () => {
         const collection = new CollectionDetailDataFactory().create();
 
-        await act(async () => {
-            await render(
+        await act(() => {
+            render(
                 <Report
                     model={collection}
                     modelType={"collection"}
