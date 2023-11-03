@@ -10,7 +10,7 @@
 
     .button-secondary,
     .button-icon-secondary {
-        @apply transition-default inline-flex items-center rounded-3xl bg-theme-secondary-100 px-5 py-2 font-medium outline-none outline-3 outline-offset-0 hover:bg-theme-secondary-300 focus-visible:bg-theme-secondary-300 focus-visible:outline-theme-primary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-800 dark:text-theme-dark-200 dark:focus-within:bg-theme-dark-800 dark:focus-within:text-theme-dark-200 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-200 dark:active:bg-theme-dark-800 dark:active:text-theme-dark-100;
+        @apply transition-default inline-flex items-center rounded-3xl bg-theme-secondary-100 px-5 py-2 font-medium outline-none outline-3 outline-offset-0 hover:bg-theme-secondary-300 focus-visible:bg-theme-secondary-300 focus-visible:outline-theme-primary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-800 dark:text-theme-dark-50 dark:focus-within:bg-theme-dark-800 dark:focus-within:text-theme-dark-50 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-50 dark:active:bg-theme-dark-800 dark:active:text-theme-dark-100;
     }
 
     .button-light {
