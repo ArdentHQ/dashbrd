@@ -1,3 +1,4 @@
+import { type SpyInstance } from "vitest";
 import {
     NftDraftFooter,
     NftDraftHeading,
@@ -5,10 +6,9 @@ import {
     NftDraftImageGrid,
     NftDraftStats,
 } from "./NftDraftCard.blocks";
-import UserDataFactory from "@/Tests/Factories/UserDataFactory";
-import { SpyInstance } from "vitest";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
 describe("NftDraftFooter", () => {
