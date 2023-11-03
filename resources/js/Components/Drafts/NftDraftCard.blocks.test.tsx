@@ -6,7 +6,10 @@ import {
     NftDraftImageGrid,
     NftDraftStats,
 } from "./NftDraftCard.blocks";
-import { render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen } from "@/Tests/testing-library";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
+import { SpyInstance } from "vitest";
+import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 
 describe("NftDraftFooter", () => {
     it("should render", () => {
@@ -53,6 +56,34 @@ describe("NftDraftStats", () => {
         collectionsCount: 0,
     };
 
+    const user = new UserDataFactory().withUSDCurrency().create();
+
+    let resetAuthContextMock: () => void;
+
+    let useAuthorizedActionSpy: SpyInstance;
+    const signedActionMock = vi.fn();
+
+    beforeEach(() => {
+        resetAuthContextMock = mockAuthContext({
+            user,
+        });
+
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        resetAuthContextMock();
+
+        useAuthorizedActionSpy.mockRestore();
+    });
+
     it("should render", () => {
         render(<NftDraftStats draft={draft} />);
 
@@ -75,6 +106,18 @@ describe("NftDraftStats", () => {
         render(<NftDraftStats draft={draft} />);
 
         expect(screen.getByTestId("NftDraftStats__nftCount")).toHaveTextContent("0");
+    });
+
+    it("shoud display - if value is not set", () => {
+        render(<NftDraftStats draft={{ ...draft, value: null }} />);
+
+        expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("-");
+    });
+
+    it("should display USD as currency if no currency is set", () => {
+        render(<NftDraftStats draft={draft} />);
+
+        expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("$400.00");
     });
 });
 

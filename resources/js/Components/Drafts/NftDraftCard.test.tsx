@@ -68,4 +68,17 @@ describe("NftDraftCard", () => {
         expect(screen.getByTestId("GalleryCoverImage")).toBeInTheDocument();
         expect(screen.queryByTestId("NftDraftImageGrid")).not.toBeInTheDocument();
     });
+
+    it("should send default value as wallet address if no wallet address is set", () => {
+        const draftWithoutWalletAddress = {
+            ...draft,
+            walletAddress: undefined,
+        };
+
+        render(<NftDraftCard draft={draftWithoutWalletAddress} />);
+
+        expect(screen.getByTestId("GalleryHeading__address")).toHaveTextContent(
+            "0x000…0000",
+        );
+    });
 });
