@@ -1,4 +1,3 @@
-import { DraftNft, GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import {
     NftDraftFooter,
     NftDraftHeading,
@@ -6,6 +5,7 @@ import {
     NftDraftImageGrid,
     NftDraftStats,
 } from "./NftDraftCard.blocks";
+import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { render, screen } from "@/Tests/testing-library";
 
 describe("NftDraftFooter", () => {

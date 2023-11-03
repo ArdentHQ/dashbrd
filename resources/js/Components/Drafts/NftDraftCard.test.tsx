@@ -2,10 +2,10 @@ import React from "react";
 import { type SpyInstance } from "vitest";
 import { NftDraftCard } from "./NftDraftCard";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
+import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { mockAuthContext, render, screen } from "@/Tests/testing-library";
-import { GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const user = new UserDataFactory().create();
 let resetAuthContextMock: () => void;

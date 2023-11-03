@@ -1,13 +1,13 @@
-import { useState, type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useIndexedDB } from "react-indexed-db-hook";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
+import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useIndexedDB } from "react-indexed-db-hook";
-import { GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
-import { NftGalleryCard } from "@/Components/Galleries";
+import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const Index = ({
     title,
@@ -22,7 +22,7 @@ const Index = ({
     showDrafts: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
-    //!NOTE: Remove lines 26-38 after useGalleryDrafts hook has been implemented
+    //! NOTE: Remove lines 26-38 after useGalleryDrafts hook has been implemented
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
     const database = useIndexedDB("gallery-drafts");
 
