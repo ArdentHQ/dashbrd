@@ -242,8 +242,35 @@ describe("useGalleryDrafts", () => {
             await result.current.deleteDraft();
         });
 
-        await waitFor(() => {
-            expect(deleteMock).not.toHaveBeenCalled();
+        expect(deleteMock).not.toHaveBeenCalled();
+    });
+
+    it("should delete expired drafts", async () => {
+        const deleteMock = vi.fn();
+
+        const date = new Date(2023, 10, 4);
+
+        vi.useFakeTimers();
+        vi.setSystemTime(date);
+
+        mocks.useIndexedDB().deleteRecord.mockImplementation(deleteMock);
+        mocks.useIndexedDB().getAll.mockReturnValue([
+            { updatedAt: 1693833267000, id: 1 }, // 4 Sep 2023
+            { updatedAt: 1667481267241, id: 2 }, // 3 Nov 2022
+            { updatedAt: 1699019421000, id: 3 }, // 4 Nov 2023
+        ]);
+
+        const { result } = renderHook(() => useGalleryDrafts());
+
+        await act(async () => {
+            await result.current.deleteExpiredDrafts();
         });
+
+        expect(deleteMock).toHaveBeenCalledTimes(2);
+
+        expect(deleteMock).toHaveBeenCalledWith(1);
+        expect(deleteMock).toHaveBeenCalledWith(2);
+
+        vi.useRealTimers();
     });
 });
