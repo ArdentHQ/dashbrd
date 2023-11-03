@@ -51,7 +51,7 @@ export const CollectionHiddenModal = ({ collection, previousUrl }: Properties): 
 
             <p
                 data-testid="CollectionHiddenModal__description"
-                className="mt-3 leading-6 text-theme-secondary-700"
+                className="mt-3 leading-6 text-theme-secondary-700 dark:text-theme-dark-200"
             >
                 {t("pages.collections.hidden_modal.description")}
             </p>
