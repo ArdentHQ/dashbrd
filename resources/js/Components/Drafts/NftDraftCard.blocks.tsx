@@ -1,19 +1,19 @@
-import { useTranslation } from "react-i18next";
-import { IconButton } from "@/Components/Buttons/IconButton";
-import { Icon } from "@/Components/Icon";
-import { Tooltip } from "@/Components/Tooltip";
 import { useRef } from "react";
-import { useIsTruncated } from "@/Hooks/useIsTruncated";
-import { formatAddress } from "@/Utils/format-address";
-import { TruncateMiddle } from "@/Utils/TruncateMiddle";
-import { useAuth } from "@/Contexts/AuthContext";
-import { DraftNft, GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
-import { Skeleton } from "@/Components/Skeleton";
-import { Img } from "@/Components/Image";
-import { isTruthy } from "@/Utils/is-truthy";
+import { useTranslation } from "react-i18next";
 import { Avatar } from "@/Components/Avatar";
-import { Heading } from "@/Components/Heading";
+import { IconButton } from "@/Components/Buttons/IconButton";
 import { DynamicBalance } from "@/Components/DynamicBalance";
+import { Heading } from "@/Components/Heading";
+import { Icon } from "@/Components/Icon";
+import { Img } from "@/Components/Image";
+import { Skeleton } from "@/Components/Skeleton";
+import { Tooltip } from "@/Components/Tooltip";
+import { useAuth } from "@/Contexts/AuthContext";
+import { useIsTruncated } from "@/Hooks/useIsTruncated";
+import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { formatAddress } from "@/Utils/format-address";
+import { isTruthy } from "@/Utils/is-truthy";
+import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
 export const NftDraftFooter = (): JSX.Element => {
     const { t } = useTranslation();
@@ -150,21 +150,19 @@ export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element =
     );
 };
 
-export const NftDraftImageContainer = ({ nft }: { nft: DraftNft }): JSX.Element => {
-    return (
-        <div
-            data-testid={`NftDraftImageGrid__container--${nft.nftId}`}
-            className="group relative overflow-hidden rounded-xl"
-        >
-            <Img
-                wrapperClassName="aspect-square h-full w-full"
-                className="rounded-xl"
-                src={nft.image}
-                data-testid={`NftDraftImageGrid__image--${nft.nftId}`}
-            />
-        </div>
-    );
-};
+export const NftDraftImageContainer = ({ nft }: { nft: DraftNft }): JSX.Element => (
+    <div
+        data-testid={`NftDraftImageGrid__container--${nft.nftId}`}
+        className="group relative overflow-hidden rounded-xl"
+    >
+        <Img
+            wrapperClassName="aspect-square h-full w-full"
+            className="rounded-xl"
+            src={nft.image}
+            data-testid={`NftDraftImageGrid__image--${nft.nftId}`}
+        />
+    </div>
+);
 
 export const NftDraftImageGrid = ({
     nfts,
@@ -182,14 +180,12 @@ export const NftDraftImageGrid = ({
             data-testid="NftDraftImageGrid"
             className="mb-3 grid aspect-[3/2] grid-cols-3 gap-1"
         >
-            {nftData.map((nft, index) => {
-                return (
-                    <NftDraftImageContainer
-                        key={index}
-                        nft={nft}
-                    />
-                );
-            })}
+            {nftData.map((nft, index) => (
+                <NftDraftImageContainer
+                    key={index}
+                    nft={nft}
+                />
+            ))}
 
             {Array.from({ length: minimumToShow - nftData.length })
                 .fill(0)

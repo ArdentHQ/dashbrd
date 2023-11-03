@@ -2,7 +2,7 @@ import { Link } from "@inertiajs/react";
 import cn from "classnames";
 import { NftDraftHeading, NftDraftImageGrid, NftDraftStats } from "./NftDraftCard.blocks";
 import { GalleryCoverImage } from "@/Components/Galleries/GalleryPage/GalleryCoverImage";
-import { GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const NftDraftCard = ({ draft }: { draft: GalleryDraft }): JSX.Element => {
