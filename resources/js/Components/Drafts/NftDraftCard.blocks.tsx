@@ -11,9 +11,9 @@ import { DraftNft, GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts
 import { Skeleton } from "@/Components/Skeleton";
 import { Img } from "@/Components/Image";
 import { isTruthy } from "@/Utils/is-truthy";
-import { Avatar } from '@/Components/Avatar';
-import { Heading } from '@/Components/Heading';
-import { DynamicBalance } from '@/Components/DynamicBalance';
+import { Avatar } from "@/Components/Avatar";
+import { Heading } from "@/Components/Heading";
+import { DynamicBalance } from "@/Components/DynamicBalance";
 
 export const NftDraftFooter = (): JSX.Element => {
     const { t } = useTranslation();
