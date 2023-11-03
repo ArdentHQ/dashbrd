@@ -108,7 +108,7 @@ export const ListboxButtonPlaceholder = ({
     <span
         data-testid="ListboxButtonPlaceholder"
         className={cn("block truncate", {
-            "text-theme-secondary-500": variant === undefined || isDisabled,
+            "text-theme-secondary-500 dark:text-theme-dark-400": variant === undefined || isDisabled,
             "text-theme-danger-100": variant === "danger",
             "text-white": variant === "primary" && isDisabled !== true,
         })}
@@ -132,7 +132,7 @@ export const ListboxButtonIcon = ({
                 "-rotate-180 ": isOpen,
             },
             isTruthy(isDisabled)
-                ? "text-theme-secondary-500"
+                ? "text-theme-secondary-500 dark:text-theme-dark-400"
                 : {
                       "text-white dark:text-theme-dark-50": variant === "primary" || variant === "danger",
                       "text-theme-secondary-700": variant === undefined && !isTruthy(isNavigation),
