@@ -37,7 +37,7 @@ export const Toggle = ({
                     ? "bg-theme-secondary-200 dark:bg-theme-dark-700"
                     : [
                           checked
-                              ? "bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800 dark:bg-theme-primary-700 dark:hover:bg-theme-primary-600 dark:focus-visible:bg-theme-primary-400 dark:active:bg-theme-primary-400"
+                              ? "bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800 dark:bg-theme-primary-500 dark:hover:bg-theme-primary-600 dark:focus-visible:bg-theme-primary-400 dark:active:bg-theme-primary-500"
                               : "bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-700 dark:focus-within:bg-theme-dark-700 dark:hover:bg-theme-dark-800 dark:active:bg-theme-dark-800",
                       ],
             )}
