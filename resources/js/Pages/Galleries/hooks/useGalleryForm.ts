@@ -14,9 +14,11 @@ interface UseGalleryFormProperties extends Record<string, unknown> {
 export const useGalleryForm = ({
     gallery,
     setDraftNfts,
+    deleteDraft,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
     setDraftNfts?: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
+    deleteDraft?: () => void;
 }): {
     selectedNfts: App.Data.Gallery.GalleryNftData[];
     gallery?: App.Data.Gallery.GalleryData;
@@ -82,6 +84,9 @@ export const useGalleryForm = ({
                     message: Object.values(errors)[0],
                     type: "error",
                 });
+            },
+            onSuccess: () => {
+                deleteDraft?.();
             },
         });
     };
