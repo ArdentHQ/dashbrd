@@ -4,19 +4,21 @@ import { useAuth } from "@/Contexts/AuthContext";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 
-interface DraftNft {
+export interface DraftNft {
     nftId: number;
     image: string;
     collectionSlug: string;
 }
 
-interface GalleryDraft {
+export interface GalleryDraft {
     title: string;
     cover: ArrayBuffer | null;
     coverType: string | null;
     nfts: DraftNft[];
     walletAddress?: string;
     id: number | null;
+    value: string | null;
+    collectionsCount: number;
 }
 
 interface GalleryDraftsState {
@@ -35,6 +37,8 @@ const initialGalleryDraft: GalleryDraft = {
     coverType: null,
     nfts: [],
     id: null,
+    value: null,
+    collectionsCount: 0,
 };
 
 export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): GalleryDraftsState => {
