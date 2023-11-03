@@ -2,6 +2,20 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons/IconButton";
 import { Icon } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
+import { useRef } from "react";
+import { useIsTruncated } from "@/Hooks/useIsTruncated";
+import { Avatar } from "../Avatar";
+import { formatAddress } from "@/Utils/format-address";
+import { TruncateMiddle } from "@/Utils/TruncateMiddle";
+import { Heading } from "../Heading";
+import { useAuth } from "@/Contexts/AuthContext";
+import { DynamicBalance } from "../DynamicBalance";
+import { DraftNft, GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { Skeleton } from '@/Components/Skeleton';
+import { NftImage } from "../Collections/Nfts/NftImage";
+import { Img } from '@/Components/Image';
+import { GalleryCard } from '@/Components/Galleries/GalleryPage/GalleryCard';
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const NftDraftFooter = (): JSX.Element => {
     const { t } = useTranslation();
@@ -29,6 +43,166 @@ export const NftDraftFooter = (): JSX.Element => {
                     />
                 </Tooltip>
             </div>
+        </div>
+    );
+};
+
+export const NftDraftHeading = ({
+    walletAddress,
+    title,
+}: {
+    walletAddress: string,
+    title: GalleryDraft['title']
+}): JSX.Element => {
+    const truncateReference = useRef<HTMLHeadingElement>(null);
+
+    const isTruncated = useIsTruncated({ reference: truncateReference });
+
+    return (
+        <div data-testid="NftDraftHeading">
+            <div className="flex text-sm font-medium text-theme-secondary-700">
+                <div className="flex shrink-0 items-center pr-2">
+                    <Avatar
+                        address={walletAddress}
+                        size={16}
+                    />
+                </div>
+
+                <span
+                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-sm"
+                    data-testid="GalleryHeading__address"
+                >
+                    <TruncateMiddle
+                        length={10}
+                        text={formatAddress(walletAddress)}
+                    />
+                </span>
+            </div>
+            <Tooltip
+                disabled={!isTruncated}
+                content={title}
+                delay={[500, 0]}
+            >
+                <Heading
+                    className="transition-default truncate pt-0.5 group-hover:text-theme-primary-700 dark:group-hover:text-theme-primary-400"
+                    level={4}
+                    ref={truncateReference}
+                >
+                    {title}
+                </Heading>
+            </Tooltip>
+        </div>
+    );
+}
+
+export const NftDraftStats = ({
+    draft,
+}: {
+    draft: GalleryDraft;
+}): JSX.Element => {
+    const { user } = useAuth();
+    const { t } = useTranslation();
+
+    return (
+        <div
+            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium dark:bg-theme-dark-800"
+            data-testid="NftDraftStats"
+        >
+            <div className="flex justify-between pt-3">
+                <div className="flex flex-col">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
+                        {t("pages.galleries.value")}
+                    </span>
+                    <span
+                        data-testid="NftDraftStats__value"
+                        className="text-sm dark:text-theme-dark-50 sm:text-base"
+                    >
+                        {isTruthy(draft.value) ? (
+                            <DynamicBalance
+                                balance={draft.value.toString()}
+                                currency={user?.attributes.currency ?? "USD"}
+                            />
+                        ) : (
+                            "-"
+                        )}
+                    </span>
+                </div>
+                <div className="flex flex-col">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
+                        {t("pages.galleries.nfts")}
+                    </span>
+                    <span className="text-sm dark:text-theme-dark-50 sm:text-base" data-testid="NftDraftStats__nftCount">{draft.nfts.length}</span>
+                </div>
+                <div className="flex flex-col">
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300" >
+                        {t("pages.galleries.collections")}
+                    </span>
+                    <span className="text-sm dark:text-theme-dark-50 sm:text-base" data-testid="NftDraftStats__collectionsCount">{draft.collectionsCount}</span>
+                </div>
+            </div>
+            <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
+            <NftDraftFooter />
+        </div>
+    );
+};
+
+export const NftDraftImageContainer = ({
+    nft,
+}: {nft: DraftNft}): JSX.Element => {
+    return (
+        <div
+            data-testid={`NftDraftImageGrid__container--${nft.nftId}`}
+            className="relative overflow-hidden rounded-xl group"
+        >
+            <Img
+                wrapperClassName="aspect-square h-full w-full"
+                className="rounded-xl"
+                src={nft.image}
+                data-testid={`NftDraftImageGrid__image--${nft.nftId}`}
+            />
+        </div>
+    );
+};
+
+export const NftDraftImageGrid = ({
+    nfts,
+    minimumToShow = 6,
+    skeletonCount,
+}: {nfts: GalleryDraft['nfts'], minimumToShow?: number,
+skeletonCount?: number}): JSX.Element => {
+    const nftData = nfts.slice(0, minimumToShow);
+
+    return (
+        <div
+            data-testid="NftDraftImageGrid"
+            className="mb-3 grid aspect-[3/2] grid-cols-3 gap-1"
+        >
+            {nftData.map((nft, index) => {
+
+                return (
+                    <NftDraftImageContainer
+                        key={index}
+                        nft={nft}
+                    />
+                );
+            })}
+
+            {Array.from({ length: minimumToShow - nftData.length })
+                .fill(0)
+                .map((_, index) => (
+                    <div
+                        key={index}
+                        className="aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
+                        data-testid={`NftDraftImageGrid__placeholder--${index}`}
+                    />
+                ))}
+
+            {Array.from({ length: skeletonCount ?? 0 }).map((_, index) => (
+                <Skeleton
+                    className="NFT_Skeleton aspect-square w-full rounded-xl"
+                    key={index}
+                />
+            ))}
         </div>
     );
 };
