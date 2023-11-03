@@ -1,10 +1,11 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
+import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const Index = ({
     title,
@@ -21,6 +22,12 @@ const Index = ({
     const { t } = useTranslation();
 
     const userGalleries = galleries.paginated;
+
+    const { deleteExpiredDrafts } = useGalleryDrafts(undefined, true);
+
+    useEffect(() => {
+        void deleteExpiredDrafts();
+    }, []);
 
     return (
         <Layout
