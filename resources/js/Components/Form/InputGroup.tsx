@@ -19,7 +19,9 @@ interface Properties extends Omit<InputHTMLAttributes<HTMLInputElement>, "childr
 }
 
 const InputError = ({ message }: { message: string }): JSX.Element => (
-    <span className="block w-full rounded-b-xl px-4 py-2 text-xs font-medium text-theme-danger-600">{message}</span>
+    <span className="block w-full rounded-b-xl px-4 py-2 text-xs font-medium text-theme-danger-600 dark:text-white">
+        {message}
+    </span>
 );
 
 const InputHint = ({ message, position }: { message: Hint; position?: HintPosition }): JSX.Element => {
@@ -80,7 +82,7 @@ export const InputGroup = forwardRef<HTMLDivElement, Properties>(
                     onClick={inputGroupClickHandler}
                     className={cn("rounded-xl", className, {
                         "bg-theme-secondary-100 dark:bg-theme-dark-950": hasHint && !hasError,
-                        "bg-theme-danger-100": hasError,
+                        "bg-theme-danger-100 dark:bg-theme-danger-400": hasError,
                         "mt-1": hasLabel,
                     })}
                     {...properties}
