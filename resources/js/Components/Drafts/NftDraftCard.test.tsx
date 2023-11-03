@@ -51,7 +51,7 @@ describe("NftDraftCard", () => {
     });
 
     it("shows an NFT gallery card for the user with cover", () => {
-        const createObjectURL = vi.fn((blob) => `mocked-url:${blob.type}`);
+        const createObjectURL = vi.fn((blob: Blob): string => `mocked-url:${blob.type}`);
         const originalURL = globalThis.URL;
         originalURL.createObjectURL = createObjectURL;
 
