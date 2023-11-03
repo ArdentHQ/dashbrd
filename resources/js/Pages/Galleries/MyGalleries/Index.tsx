@@ -34,7 +34,7 @@ const Index = ({
     };
 
     useEffect(() => {
-        loadDrafts();
+        void loadDrafts();
     }, [database]);
 
     const userGalleries = galleries.paginated;
