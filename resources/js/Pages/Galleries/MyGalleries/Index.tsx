@@ -6,7 +6,7 @@ import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 import { useIndexedDB } from "react-indexed-db-hook";
-import { GalleryDraft } from '@/Pages/Galleries/hooks/useGalleryDrafts';
+import { GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { NftGalleryCard } from "@/Components/Galleries";
 
 const Index = ({
@@ -26,12 +26,12 @@ const Index = ({
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
     const database = useIndexedDB("gallery-drafts");
 
-    const loadDrafts = async() => {
-        const {getAll} = database;
+    const loadDrafts = async () => {
+        const { getAll } = database;
 
         const records = await getAll();
         setDrafts(records);
-    }
+    };
 
     useEffect(() => {
         loadDrafts();
@@ -74,15 +74,15 @@ const Index = ({
                     </div>
                 )}
 
-
                 {showDrafts && drafts.length > 0 && (
                     <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
-                        {drafts.length > 0 && drafts.map((draft, index) => (
-                            <NftDraftCard
-                                key={index}
-                                draft={draft}
-                            />
-                        ))}
+                        {drafts.length > 0 &&
+                            drafts.map((draft, index) => (
+                                <NftDraftCard
+                                    key={index}
+                                    draft={draft}
+                                />
+                            ))}
                     </div>
                 )}
 

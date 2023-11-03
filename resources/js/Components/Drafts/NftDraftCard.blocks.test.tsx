@@ -1,5 +1,11 @@
 import { DraftNft, GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
-import { NftDraftFooter, NftDraftHeading, NftDraftImageContainer, NftDraftImageGrid, NftDraftStats } from "./NftDraftCard.blocks";
+import {
+    NftDraftFooter,
+    NftDraftHeading,
+    NftDraftImageContainer,
+    NftDraftImageGrid,
+    NftDraftStats,
+} from "./NftDraftCard.blocks";
 import { render, screen } from "@/Tests/testing-library";
 
 describe("NftDraftFooter", () => {
@@ -12,16 +18,24 @@ describe("NftDraftFooter", () => {
 
 describe("NftDraftHeading", () => {
     it("should render", () => {
-        render(<NftDraftHeading
-            walletAddress="0x22Fd644149ea87ca26237183ad6A66f91dfcFB87" title="Test title" />);
+        render(
+            <NftDraftHeading
+                walletAddress="0x22Fd644149ea87ca26237183ad6A66f91dfcFB87"
+                title="Test title"
+            />,
+        );
 
         expect(screen.getByTestId("NftDraftHeading")).toBeInTheDocument();
         expect(screen.queryByTestId("Avatar__image")).not.toBeInTheDocument();
     });
 
     it("should truncate the wallet address", () => {
-        render(<NftDraftHeading
-            walletAddress="0x22Fd644149ea87ca26237183ad6A66f91dfcFB87" title="Test title" />);
+        render(
+            <NftDraftHeading
+                walletAddress="0x22Fd644149ea87ca26237183ad6A66f91dfcFB87"
+                title="Test title"
+            />,
+        );
 
         expect(screen.getByTestId("GalleryHeading__address")).toHaveTextContent("0x22F…cFB87");
     });
@@ -36,8 +50,8 @@ describe("NftDraftStats", () => {
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
         nfts: [],
         value: "400",
-        collectionsCount: 0
-    }
+        collectionsCount: 0,
+    };
 
     it("should render", () => {
         render(<NftDraftStats draft={draft} />);
@@ -69,13 +83,13 @@ describe("NftDraftImageContainer", () => {
         nftId: 1,
         image: "https://example.com/image.png",
         collectionSlug: "test-collection",
-    }
+    };
 
     it("should render", () => {
         render(<NftDraftImageContainer nft={nft} />);
 
         expect(screen.getByTestId("NftDraftImageGrid__container--1")).toBeInTheDocument();
-    })
+    });
 
     it("should render the image", () => {
         render(<NftDraftImageContainer nft={nft} />);
@@ -95,7 +109,7 @@ describe("NftDraftImageGrid", () => {
             nftId: 2,
             image: "https://example.com/image.png",
             collectionSlug: "test-collection",
-        }
+        },
     ];
 
     it("should render", () => {
@@ -118,20 +132,35 @@ describe("NftDraftImageGrid", () => {
     });
 
     it("should ony display the minimum number of nfts", () => {
-        render(<NftDraftImageGrid nfts={nfts} minimumToShow={1} />);
+        render(
+            <NftDraftImageGrid
+                nfts={nfts}
+                minimumToShow={1}
+            />,
+        );
 
         expect(screen.getByTestId("NftDraftImageGrid__container--1")).toBeInTheDocument();
         expect(screen.queryByTestId("NftDraftImageGrid__container--2")).not.toBeInTheDocument();
     });
 
     it("should render the difference between the amount of nfts and the minimum to show as placeholders", () => {
-        render(<NftDraftImageGrid nfts={nfts} minimumToShow={3} />);
+        render(
+            <NftDraftImageGrid
+                nfts={nfts}
+                minimumToShow={3}
+            />,
+        );
 
         expect(screen.getByTestId("NftDraftImageGrid__placeholder--0")).toBeInTheDocument();
     });
 
     it("should render skeleton elements if skeletonCount is provided", () => {
-        render(<NftDraftImageGrid nfts={[]} skeletonCount={3} />);
+        render(
+            <NftDraftImageGrid
+                nfts={[]}
+                skeletonCount={3}
+            />,
+        );
 
         expect(screen.getAllByTestId("Skeleton").length).toBe(3);
     });

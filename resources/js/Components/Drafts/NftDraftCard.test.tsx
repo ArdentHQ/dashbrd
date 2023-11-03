@@ -20,8 +20,8 @@ describe("NftDraftCard", () => {
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
         nfts: [],
         value: "0",
-        collectionsCount: 0
-    }
+        collectionsCount: 0,
+    };
 
     beforeEach(() => {
         resetAuthContextMock = mockAuthContext({ user });
@@ -41,8 +41,7 @@ describe("NftDraftCard", () => {
         render(<NftDraftCard draft={draft} />);
 
         expect(screen.getByTestId("NftDraftCard")).toBeInTheDocument();
-    })
-
+    });
 
     it("shows an NFT gallery card for the user when no cover image is set", () => {
         render(<NftDraftCard draft={draft} />);
@@ -61,7 +60,7 @@ describe("NftDraftCard", () => {
         const draftWithCover = {
             ...draft,
             cover: arrayBuffer,
-            coverType: "image/jpeg"
+            coverType: "image/jpeg",
         };
 
         render(<NftDraftCard draft={draftWithCover} />);

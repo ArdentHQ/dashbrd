@@ -11,10 +11,10 @@ import { Heading } from "../Heading";
 import { useAuth } from "@/Contexts/AuthContext";
 import { DynamicBalance } from "../DynamicBalance";
 import { DraftNft, GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
-import { Skeleton } from '@/Components/Skeleton';
+import { Skeleton } from "@/Components/Skeleton";
 import { NftImage } from "../Collections/Nfts/NftImage";
-import { Img } from '@/Components/Image';
-import { GalleryCard } from '@/Components/Galleries/GalleryPage/GalleryCard';
+import { Img } from "@/Components/Image";
+import { GalleryCard } from "@/Components/Galleries/GalleryPage/GalleryCard";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const NftDraftFooter = (): JSX.Element => {
@@ -51,8 +51,8 @@ export const NftDraftHeading = ({
     walletAddress,
     title,
 }: {
-    walletAddress: string,
-    title: GalleryDraft['title']
+    walletAddress: string;
+    title: GalleryDraft["title"];
 }): JSX.Element => {
     const truncateReference = useRef<HTMLHeadingElement>(null);
 
@@ -93,13 +93,9 @@ export const NftDraftHeading = ({
             </Tooltip>
         </div>
     );
-}
+};
 
-export const NftDraftStats = ({
-    draft,
-}: {
-    draft: GalleryDraft;
-}): JSX.Element => {
+export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
 
@@ -131,13 +127,23 @@ export const NftDraftStats = ({
                     <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.nfts")}
                     </span>
-                    <span className="text-sm dark:text-theme-dark-50 sm:text-base" data-testid="NftDraftStats__nftCount">{draft.nfts.length}</span>
+                    <span
+                        className="text-sm dark:text-theme-dark-50 sm:text-base"
+                        data-testid="NftDraftStats__nftCount"
+                    >
+                        {draft.nfts.length}
+                    </span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300" >
+                    <span className="pb-0.5 text-sm leading-5.5 text-theme-secondary-500 dark:text-theme-dark-300">
                         {t("pages.galleries.collections")}
                     </span>
-                    <span className="text-sm dark:text-theme-dark-50 sm:text-base" data-testid="NftDraftStats__collectionsCount">{draft.collectionsCount}</span>
+                    <span
+                        className="text-sm dark:text-theme-dark-50 sm:text-base"
+                        data-testid="NftDraftStats__collectionsCount"
+                    >
+                        {draft.collectionsCount}
+                    </span>
                 </div>
             </div>
             <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
@@ -146,13 +152,11 @@ export const NftDraftStats = ({
     );
 };
 
-export const NftDraftImageContainer = ({
-    nft,
-}: {nft: DraftNft}): JSX.Element => {
+export const NftDraftImageContainer = ({ nft }: { nft: DraftNft }): JSX.Element => {
     return (
         <div
             data-testid={`NftDraftImageGrid__container--${nft.nftId}`}
-            className="relative overflow-hidden rounded-xl group"
+            className="group relative overflow-hidden rounded-xl"
         >
             <Img
                 wrapperClassName="aspect-square h-full w-full"
@@ -168,8 +172,11 @@ export const NftDraftImageGrid = ({
     nfts,
     minimumToShow = 6,
     skeletonCount,
-}: {nfts: GalleryDraft['nfts'], minimumToShow?: number,
-skeletonCount?: number}): JSX.Element => {
+}: {
+    nfts: GalleryDraft["nfts"];
+    minimumToShow?: number;
+    skeletonCount?: number;
+}): JSX.Element => {
     const nftData = nfts.slice(0, minimumToShow);
 
     return (
@@ -178,7 +185,6 @@ skeletonCount?: number}): JSX.Element => {
             className="mb-3 grid aspect-[3/2] grid-cols-3 gap-1"
         >
             {nftData.map((nft, index) => {
-
                 return (
                     <NftDraftImageContainer
                         key={index}

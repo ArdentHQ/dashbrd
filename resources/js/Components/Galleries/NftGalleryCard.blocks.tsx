@@ -328,11 +328,7 @@ export const GalleryFooter = ({ gallery }: { gallery: App.Data.Gallery.GalleryDa
     </div>
 );
 
-export const GalleryStats = ({
-    gallery,
-}: {
-    gallery: App.Data.Gallery.GalleryData;
-}): JSX.Element => {
+export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
 
