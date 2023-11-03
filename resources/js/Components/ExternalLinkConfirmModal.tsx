@@ -56,7 +56,7 @@ export const ExternalLinkConfirmModal = ({
 
                 <div
                     data-testid="ExternalLinkConfirmModal__info"
-                    className="mt-4 text-theme-secondary-700"
+                    className="mt-4 text-theme-secondary-700 dark:text-theme-dark-200"
                 >
                     {t("pages.collections.external_modal.you_wish_continue")}
                 </div>
@@ -70,7 +70,9 @@ export const ExternalLinkConfirmModal = ({
                     }}
                 />
 
-                <div className="text-theme-secondary-700">{t("pages.collections.external_modal.not_show")}</div>
+                <div className="text-theme-secondary-700 dark:text-theme-dark-200">
+                    {t("pages.collections.external_modal.not_show")}
+                </div>
             </label>
         </ConfirmationDialog>,
         document.body,
