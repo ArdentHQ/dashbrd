@@ -26,7 +26,7 @@ const Index = ({
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
     const database = useIndexedDB("gallery-drafts");
 
-    const loadDrafts = async () => {
+    const loadDrafts = async (): Promise<void> => {
         const { getAll } = database;
 
         const records = await getAll();
