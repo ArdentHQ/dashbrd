@@ -1,7 +1,7 @@
 import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import uniqBy from "lodash/uniqBy";
-import { type FormEvent, type MouseEvent, useCallback, useMemo, useState } from "react";
+import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
@@ -17,9 +17,12 @@ import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
+import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
+import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -57,8 +60,26 @@ const Create = ({
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
 
+    const { draftId } = getQueryParameters();
+
+    const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
+        isTruthy(draftId) ? Number(draftId) : undefined,
+        isTruthy(gallery?.slug),
+    );
+
+    useEffect(() => {
+        if (draft.id !== null) {
+            replaceUrlQuery({ draftId: draft.id.toString() });
+        }
+    }, [draft.id]);
+
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
+        setDraftNfts,
+        deleteDraft: (): void => {
+            void deleteDraft();
+            replaceUrlQuery({ draftId: "" });
+        },
     });
 
     const totalValue = 0;
@@ -119,6 +140,9 @@ const Create = ({
                     onChange={(name) => {
                         setData("name", name);
                     }}
+                    onBlur={() => {
+                        setDraftTitle(data.name);
+                    }}
                 />
 
                 <EditableGalleryHook
@@ -168,6 +192,8 @@ const Create = ({
                 showDelete={isTruthy(gallery)}
                 isProcessing={processing}
                 galleryCoverUrl={galleryCoverImageUrl}
+                isSavingDraft={isSaving}
+                draftId={draft.id ?? undefined}
                 onCoverClick={({ currentTarget }: MouseEvent<HTMLButtonElement>) => {
                     currentTarget.blur();
                     setGallerySliderActiveTab(GalleryFormSliderTabs.Cover);
@@ -198,8 +224,13 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
+                        setDraftCover(null, null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
+                        // eslint-disable-next-line promise/prefer-await-to-then
+                        void blob.arrayBuffer().then((buf) => {
+                            setDraftCover(buf, blob.type);
+                        });
                     }
                     setIsGalleryFormSliderOpen(false);
                 }}

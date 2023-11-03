@@ -1,6 +1,8 @@
 import { type FormEvent, type MouseEvent, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, IconButton } from "@/Components/Buttons";
+import { GalleryDraftStatus } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar/GalleryDraftStatus";
+import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -13,6 +15,8 @@ export const GalleryActionToolbar = ({
     onCancel,
     isProcessing = false,
     showDelete = true,
+    draftId,
+    isSavingDraft,
 }: {
     onCoverClick?: (event: MouseEvent<HTMLButtonElement>) => void;
     onTemplateClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -22,6 +26,8 @@ export const GalleryActionToolbar = ({
     galleryCoverUrl?: string;
     isProcessing?: boolean;
     showDelete?: boolean;
+    draftId?: number;
+    isSavingDraft?: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
     const [scrollbarWidth, setScrollbarWidth] = useState(0);
@@ -85,17 +91,48 @@ export const GalleryActionToolbar = ({
                                     )}
                                 </div>
 
+                                <div className="xs:hidden">
+                                    <div className="flex items-center">
+                                        {isTruthy(draftId) && isSavingDraft === false && (
+                                            <Icon
+                                                size="lg"
+                                                name="FatDoubleCheck"
+                                                data-testid="Icon_DraftSaved"
+                                                className="text-theme-secondary-700"
+                                            />
+                                        )}
+
+                                        {isSavingDraft === true && (
+                                            <Icon
+                                                size="lg"
+                                                name="Refresh"
+                                                data-testid="Icon_SavingDraft"
+                                                className="text-theme-secondary-700 dark:text-theme-dark-200"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+
                                 <div className="flex space-x-3 sm:hidden">
-                                    <IconButton
-                                        icon="DoorExit"
-                                        className="rotate-180"
-                                        onClick={onCancel}
-                                    />
-                                    <IconButton
-                                        icon="CheckSmall"
-                                        variant="primary"
-                                        onClick={onPublish}
-                                    />
+                                    <div className="hidden xs:flex">
+                                        <GalleryDraftStatus
+                                            isSavingDraft={isSavingDraft}
+                                            draftId={draftId}
+                                        />
+                                    </div>
+
+                                    <div className="flex space-x-3 sm:hidden">
+                                        <IconButton
+                                            icon="DoorExit"
+                                            className="rotate-180"
+                                            onClick={onCancel}
+                                        />
+                                        <IconButton
+                                            icon="CheckSmall"
+                                            variant="primary"
+                                            onClick={onPublish}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="hidden w-auto flex-nowrap space-x-3 lg:flex">
@@ -158,6 +195,11 @@ export const GalleryActionToolbar = ({
                                 </div>
 
                                 <div className="hidden space-x-3 sm:flex">
+                                    <GalleryDraftStatus
+                                        isSavingDraft={isSavingDraft}
+                                        draftId={draftId}
+                                    />
+
                                     {showDelete && (
                                         <IconButton
                                             data-testid="GalleryActionToolbar__delete"

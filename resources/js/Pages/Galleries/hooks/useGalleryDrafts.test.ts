@@ -98,7 +98,7 @@ describe("useGalleryDrafts", () => {
         });
     });
 
-    it("should try to create a new row if draft hasn't been created yet", async () => {
+    it("should try to create a new record if draft hasn't been created yet", async () => {
         mocks.useIndexedDB().add.mockResolvedValue(2);
 
         const { result } = renderHook(() => useGalleryDrafts());
@@ -109,6 +109,20 @@ describe("useGalleryDrafts", () => {
 
         await waitFor(() => {
             expect(result.current.draft.id).toBe(2);
+        });
+    });
+
+    it("should not create a new draft if disabled", async () => {
+        mocks.useIndexedDB().add.mockResolvedValue(2);
+
+        const { result } = renderHook(() => useGalleryDrafts(undefined, true));
+
+        act(() => {
+            result.current.setDraftTitle("hello");
+        });
+
+        await waitFor(() => {
+            expect(result.current.draft.id).toBe(null);
         });
     });
 
@@ -188,6 +202,7 @@ describe("useGalleryDrafts", () => {
         await waitFor(() => {
             expect(addMock).not.toHaveBeenCalled();
             expect(result.current.reachedLimit).toBe(true);
+            expect(result.current.isSaving).toBe(false);
         });
     });
 
