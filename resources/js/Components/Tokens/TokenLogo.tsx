@@ -37,11 +37,11 @@ export const TokenLogo = ({
                         className={cn(
                             "transition-default absolute bottom-0 right-0 overflow-hidden rounded-full",
                             {
-                                "border-theme-primary-100 group-hover:border-theme-primary-100 dark:border-theme-dark-700 dark:group-hover:border-theme-dark-700":
+                                "border-theme-primary-100 group-hover:border-theme-primary-100 dark:border-theme-dark-700 dark:group-hover:border-theme-primary-600":
                                     isSelected,
                             },
                             {
-                                "border-white group-hover:border-theme-primary-50 dark:border-theme-dark-800 dark:group-hover:border-theme-primary-600":
+                                "border-white group-hover:border-theme-primary-50 dark:border-theme-dark-900 dark:group-hover:border-theme-dark-800":
                                     !isSelected,
                             },
                             { "-m-1.5 border-3": networkIconSize === "sm" },
