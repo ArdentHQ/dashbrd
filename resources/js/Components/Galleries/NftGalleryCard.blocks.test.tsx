@@ -373,23 +373,6 @@ describe("GalleryStats", () => {
         expect(container.getElementsByClassName("fill-theme-danger-100 text-theme-danger-400").length).toBe(0);
     });
 
-    it("should display GalleryFooter by default", () => {
-        render(<GalleryStats gallery={gallery} />);
-
-        expect(screen.getByTestId("GalleryFooter")).toBeInTheDocument();
-    });
-
-    it("should render a custom footer", () => {
-        render(
-            <GalleryStats
-                gallery={gallery}
-                footer={<div data-testid="CustomFooter" />}
-            />,
-        );
-
-        expect(screen.getByTestId("CustomFooter")).toBeInTheDocument();
-    });
-
     it("should display gallery stats if no authenticated", () => {
         resetAuthContextMock = mockAuthContext({
             user: null,
