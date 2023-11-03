@@ -17,6 +17,7 @@ const defaultGalleryDraft = {
     title: "",
     cover: null,
     coverTye: null,
+    updatedAt: 169901639000,
 };
 
 const indexedDBMocks = {

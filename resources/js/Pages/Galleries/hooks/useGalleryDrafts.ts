@@ -80,8 +80,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
         const updatedAt = new Date().getTime();
 
-        const draftToSave = { ...draft, updatedAt };
-
         if (draft.id === null) {
             const walletDrafts = await getWalletDrafts();
 
@@ -91,16 +89,15 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
                 return;
             }
 
-            const draftToCreate: Partial<GalleryDraft> = { ...draftToSave };
+            const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
             delete draftToCreate.id;
 
             const id = await database.add(draftToCreate);
-            setDraft({ ...draft, id });
+            setDraft({ ...draft, id, updatedAt });
         } else {
-            await database.update(draftToSave);
+            await database.update(draft);
+            setDraft({ ...draft, updatedAt });
         }
-
-        setDraft(draftToSave);
 
         setSave(false);
         setIsSaving(false);
