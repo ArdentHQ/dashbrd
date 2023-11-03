@@ -24,7 +24,10 @@ export const TokenLogo = ({
 
     return (
         <div
-            className={cn("relative flex items-center justify-center rounded-full bg-theme-secondary-100", className)}
+            className={cn(
+                "relative flex items-center justify-center rounded-full bg-theme-secondary-100 dark:bg-theme-dark-800",
+                className,
+            )}
             {...properties}
         >
             <div className="overflow-auto rounded-full">
