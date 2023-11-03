@@ -4,18 +4,16 @@ import { Icon } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
 import { useRef } from "react";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
-import { Avatar } from "../Avatar";
 import { formatAddress } from "@/Utils/format-address";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
-import { Heading } from "../Heading";
 import { useAuth } from "@/Contexts/AuthContext";
-import { DynamicBalance } from "../DynamicBalance";
 import { DraftNft, GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { Skeleton } from "@/Components/Skeleton";
-import { NftImage } from "../Collections/Nfts/NftImage";
 import { Img } from "@/Components/Image";
-import { GalleryCard } from "@/Components/Galleries/GalleryPage/GalleryCard";
 import { isTruthy } from "@/Utils/is-truthy";
+import { Avatar } from '@/Components/Avatar';
+import { Heading } from '@/Components/Heading';
+import { DynamicBalance } from '@/Components/DynamicBalance';
 
 export const NftDraftFooter = (): JSX.Element => {
     const { t } = useTranslation();
