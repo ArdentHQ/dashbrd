@@ -77,8 +77,6 @@ describe("NftDraftCard", () => {
 
         render(<NftDraftCard draft={draftWithoutWalletAddress} />);
 
-        expect(screen.getByTestId("GalleryHeading__address")).toHaveTextContent(
-            "0x000…0000",
-        );
+        expect(screen.getByTestId("GalleryHeading__address")).toHaveTextContent("0x000…0000");
     });
 });
