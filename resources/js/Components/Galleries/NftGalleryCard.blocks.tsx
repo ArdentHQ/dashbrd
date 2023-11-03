@@ -87,7 +87,7 @@ const NftImage = ({
     </div>
 );
 
-const NftImageContainer = ({
+export const NftImageContainer = ({
     nft,
     onClick,
     allowSelection,
@@ -330,10 +330,8 @@ export const GalleryFooter = ({ gallery }: { gallery: App.Data.Gallery.GalleryDa
 
 export const GalleryStats = ({
     gallery,
-    footer = <GalleryFooter gallery={gallery} />,
 }: {
     gallery: App.Data.Gallery.GalleryData;
-    footer?: JSX.Element;
 }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
@@ -376,7 +374,7 @@ export const GalleryStats = ({
                 </div>
             </div>
             <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
-            {footer}
+            <GalleryFooter gallery={gallery} />
         </div>
     );
 };
