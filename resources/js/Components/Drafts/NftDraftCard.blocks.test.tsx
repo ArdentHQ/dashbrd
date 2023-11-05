@@ -56,7 +56,8 @@ describe("NftDraftStats", () => {
         collectionsCount: 0,
     };
 
-    const user = new UserDataFactory().withUSDCurrency().create();
+    const user = new UserDataFactory().create();
+    user.attributes.currency = "EUR";
 
     let resetAuthContextMock: () => void;
 
@@ -114,7 +115,16 @@ describe("NftDraftStats", () => {
         expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("-");
     });
 
+    it("should display the currency set by the user", () => {
+        render(<NftDraftStats draft={draft} />);
+
+        expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("€400.00");
+    });
+
     it("should display USD as currency if no currency is set", () => {
+        resetAuthContextMock = mockAuthContext({
+            user: null,
+        });
         render(<NftDraftStats draft={draft} />);
 
         expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("$400.00");
