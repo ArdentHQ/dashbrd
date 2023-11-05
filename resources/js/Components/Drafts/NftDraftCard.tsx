@@ -33,7 +33,7 @@ export const NftDraftCard = ({ draft }: { draft: GalleryDraft }): JSX.Element =>
 
                     <NftDraftHeading
                         title={draft.title}
-                        walletAddress={draft.walletAddress ?? ""}
+                        walletAddress={draft.walletAddress}
                     />
                 </div>
 

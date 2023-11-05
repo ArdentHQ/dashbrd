@@ -69,7 +69,7 @@ describe("NftDraftCard", () => {
         expect(screen.queryByTestId("NftDraftImageGrid")).not.toBeInTheDocument();
     });
 
-    it("should send default value as wallet address if no wallet address is set", () => {
+    it("should send not render address if it is not defined", () => {
         const draftWithoutWalletAddress = {
             ...draft,
             walletAddress: undefined,
@@ -77,8 +77,6 @@ describe("NftDraftCard", () => {
 
         render(<NftDraftCard draft={draftWithoutWalletAddress} />);
 
-        expect(screen.getByTestId("GalleryHeading__address")).toHaveTextContent(
-            "0x000…0000",
-        );
+        expect(screen.queryByTestId("NftDraftHeading__address")).not.toBeInTheDocument();
     });
 });

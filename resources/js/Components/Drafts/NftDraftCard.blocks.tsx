@@ -45,37 +45,36 @@ export const NftDraftFooter = (): JSX.Element => {
     );
 };
 
-export const NftDraftHeading = ({
-    walletAddress,
-    title,
-}: {
-    walletAddress: string;
-    title: GalleryDraft["title"];
-}): JSX.Element => {
+export const NftDraftHeading = ({ walletAddress, title }: { walletAddress?: string; title: string }): JSX.Element => {
     const truncateReference = useRef<HTMLHeadingElement>(null);
 
     const isTruncated = useIsTruncated({ reference: truncateReference });
 
     return (
         <div data-testid="NftDraftHeading">
-            <div className="flex text-sm font-medium text-theme-secondary-700">
-                <div className="flex shrink-0 items-center pr-2">
-                    <Avatar
-                        address={walletAddress}
-                        size={16}
-                    />
-                </div>
-
-                <span
-                    className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-sm"
-                    data-testid="GalleryHeading__address"
+            {isTruthy(walletAddress) && (
+                <div
+                    className="flex text-sm font-medium text-theme-secondary-700"
+                    data-testid="NftDraftHeading__address"
                 >
-                    <TruncateMiddle
-                        length={10}
-                        text={formatAddress(walletAddress)}
-                    />
-                </span>
-            </div>
+                    <div className="flex shrink-0 items-center pr-2">
+                        <Avatar
+                            address={walletAddress}
+                            size={16}
+                        />
+                    </div>
+
+                    <span
+                        className="flex overflow-auto text-xs font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-sm"
+                        data-testid="GalleryHeading__address"
+                    >
+                        <TruncateMiddle
+                            length={10}
+                            text={formatAddress(walletAddress)}
+                        />
+                    </span>
+                </div>
+            )}
             <Tooltip
                 disabled={!isTruncated}
                 content={title}
