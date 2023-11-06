@@ -2,7 +2,7 @@ import { isObject } from "@ardenthq/sdk-helpers";
 import { router } from "@inertiajs/react";
 import axios from "axios";
 import { ethers, utils } from "ethers";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     type ERC20TokenContract,
@@ -112,6 +112,7 @@ export interface MetaMaskState {
     showConnectOverlay: (onConnected?: () => Promise<void>) => Promise<void>;
     isShowConnectOverlay: boolean;
     askForSignature: (onSigned?: () => Promise<void>) => Promise<void>;
+    setOnWalletSwitch: (callback: () => void) => void;
 }
 
 enum ErrorType {
@@ -161,6 +162,12 @@ const useMetaMask = (): MetaMaskState => {
 
     const { setAuthData, logout, authenticated } = useAuth();
 
+    const onWalletSwitch = useRef<() => void>();
+
+    const setOnWalletSwitch = (callback: () => void): void => {
+        onWalletSwitch.current = callback;
+    };
+
     const onError = useCallback((error: ErrorType, errorMessage?: string) => {
         setErrorMessage(errorMessage ?? t(`auth.errors.metamask.${ErrorTypes[error]}`).toString());
 
@@ -196,7 +203,12 @@ const useMetaMask = (): MetaMaskState => {
 
             setAuthData(response.data);
 
-            router.reload();
+            router.reload({
+                onFinish: () => {
+                    console.log("triggered wallet switch callback");
+                    onWalletSwitch.current?.();
+                },
+            });
         } catch (error) {
             handleAxiosError(error);
         } finally {
@@ -667,6 +679,7 @@ const useMetaMask = (): MetaMaskState => {
         askForSignature,
         signWallet,
         isShowConnectOverlay,
+        setOnWalletSwitch,
     };
 };
 

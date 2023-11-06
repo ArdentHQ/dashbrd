@@ -51,7 +51,7 @@ const Create = ({
 
     const { signedAction } = useAuthorizedAction();
 
-    const { initialized } = useMetaMaskContext();
+    const { initialized, setOnWalletSwitch } = useMetaMaskContext();
 
     const [isGalleryFormSliderOpen, setIsGalleryFormSliderOpen] = useState(false);
     const [gallerySliderActiveTab, setGallerySliderActiveTab] = useState<GalleryFormSliderTabs>();
@@ -81,6 +81,16 @@ const Create = ({
             replaceUrlQuery({ draftId: "" });
         },
     });
+
+    console.log(paginatedNfts);
+    useEffect(() => {
+        setOnWalletSwitch(() => {
+            console.log("run the callback");
+            updateSelectedNfts([]);
+
+            replaceUrlQuery({ draftId: "" });
+        });
+    }, []);
 
     const totalValue = 0;
 
@@ -169,7 +179,7 @@ const Create = ({
 
                     <div className="space-y-4">
                         <GalleryNfts
-                            nfts={paginatedNfts}
+                            nfts={[]}
                             nftsPerPage={nftsPerPage}
                             pageMeta={{
                                 first_page_url: paginatedCollections.paginated.meta.first_page_url,

@@ -46,10 +46,12 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     const database = useIndexedDB("gallery-drafts");
 
-    const [draft, setDraft] = useState<GalleryDraft>({
+    const getInitialState = (): GalleryDraft => ({
         ...initialGalleryDraft,
         walletAddress: wallet?.address,
     });
+
+    const [draft, setDraft] = useState<GalleryDraft>(getInitialState());
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -58,7 +60,15 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     // populate `draft` state if `givenDraftId` is present
     useEffect(() => {
-        if (givenDraftId === undefined || disabled === true) return;
+        if (disabled === true || (givenDraftId === undefined && draft.id === null)) return;
+
+        // if wallet changed reset state
+        if (givenDraftId === undefined) {
+            setDraft(getInitialState());
+            setReachedLimit(false);
+            return;
+        }
+
         const getDraft = async (): Promise<void> => {
             const draft: GalleryDraft | undefined = await database.getByID(givenDraftId);
             if (draft !== undefined && draft.walletAddress === wallet?.address) {
