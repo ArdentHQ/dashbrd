@@ -32,12 +32,12 @@ export const GalleryListbox = ({
                 </>
             }
             onChange={(path) => {
-                router.visit(path);
+                router.visit(path, { data: { query: searchQuery } });
             }}
         >
             <Listbox.Option
                 key={route("filtered-galleries.index", { filter: "most-popular" })}
-                value={route("filtered-galleries.index", { filter: "most-popular", query: searchQuery })}
+                value={route("filtered-galleries.index", { filter: "most-popular" })}
                 hasGradient
             >
                 {t("pages.galleries.most_popular")}
@@ -45,7 +45,7 @@ export const GalleryListbox = ({
 
             <Listbox.Option
                 key={route("filtered-galleries.index", { filter: "newest" })}
-                value={route("filtered-galleries.index", { filter: "newest", query: searchQuery })}
+                value={route("filtered-galleries.index", { filter: "newest" })}
                 hasGradient
             >
                 {t("pages.galleries.newest")}
@@ -53,7 +53,7 @@ export const GalleryListbox = ({
 
             <Listbox.Option
                 key={route("filtered-galleries.index", { filter: "most-valuable" })}
-                value={route("filtered-galleries.index", { filter: "most-valuable", query: searchQuery })}
+                value={route("filtered-galleries.index", { filter: "most-valuable" })}
                 hasGradient
             >
                 {t("pages.galleries.most_valuable")}
