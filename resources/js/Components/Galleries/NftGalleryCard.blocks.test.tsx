@@ -326,7 +326,6 @@ describe("NftImageGrid", () => {
                         ...paginationData,
                     },
                 }}
-                storedNfts={[]}
                 nftLimit={1}
             />,
         );
