@@ -45,7 +45,7 @@ export const SetDefaultsButton = ({ onConfirm, isDisabled }: Properties): JSX.El
                     <WarningExclamation />
                 </div>
 
-                <p className="mt-3 leading-6 text-theme-secondary-700">
+                <p className="mt-3 leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
                     {t("pages.settings.general.set_defaults_content")}
                 </p>
             </ConfirmationDialog>
