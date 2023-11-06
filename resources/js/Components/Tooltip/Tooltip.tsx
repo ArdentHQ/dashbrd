@@ -37,7 +37,7 @@ export const Tooltip = ({
                 {
                     "[&.tippy-box>.tippy-svg-arrow]:fill-theme-primary-50 [&.tippy-box]:bg-theme-secondary-900 dark:[&.tippy-box]:bg-theme-primary-50":
                         variant === "default",
-                    "[&.tippy-box>.tippy-svg-arrow]:fill-theme-danger-400 [&.tippy-box]:bg-theme-danger-400":
+                    "[&.tippy-box>.tippy-svg-arrow]:fill-theme-danger-400 [&.tippy-box]:bg-theme-danger-400 [&.tippy-box]:text-white":
                         variant === "danger",
                 },
             )}
