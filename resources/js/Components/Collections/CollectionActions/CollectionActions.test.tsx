@@ -242,7 +242,9 @@ describe("CollectionActions", () => {
 
         await userEvent.click(reportButton);
 
-        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+        });
 
         const closeButton = screen.getByTestId("ConfirmationDialog__close");
 
