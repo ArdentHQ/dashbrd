@@ -26,6 +26,8 @@ interface BuildOptionsParameters {
     getTooltipLabel: (tooltipItem: TooltipItem<"line">) => string;
     getYTickLabel: (tickValue: string | number, index: number, ticks: Tick[]) => string;
     getXTickLabel: (tickValue: string | number, index: number, ticks: Tick[]) => string | null;
+    gridColor: string;
+    tickColor: string;
     yTickStepSize: number;
     maxValue: number;
 }
@@ -36,6 +38,8 @@ export const buildChartOptions = ({
     getYTickLabel,
     getXTickLabel,
     yTickStepSize,
+    gridColor,
+    tickColor,
     maxValue,
 }: BuildOptionsParameters): ChartOptions<"line"> => ({
     layout: {
@@ -75,7 +79,7 @@ export const buildChartOptions = ({
         y: {
             suggestedMax: maxValue,
             ticks: {
-                color: "rgba(178, 181, 204, 1)",
+                color: tickColor,
                 font: labelFont,
                 padding: 8,
                 maxTicksLimit: 5,
@@ -84,7 +88,7 @@ export const buildChartOptions = ({
             },
             grid: {
                 drawTicks: false,
-                color: "rgba(226, 227, 241, 1)",
+                color: gridColor,
             },
             border: {
                 display: false,
@@ -96,7 +100,7 @@ export const buildChartOptions = ({
                 display: false,
             },
             ticks: {
-                color: "rgba(178, 181, 204, 1)",
+                color: tickColor,
                 maxRotation: 0,
                 minRotation: 0,
                 font: labelFont,
