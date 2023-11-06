@@ -3,14 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Listbox } from "@/Components/Form/Listbox";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-const url = (filter: "most-popular" | "newest" | "most-valuable", query: string | null = null): string => {
-    if (query !== null) {
-        return route("filtered-galleries.index", { filter, query });
-    }
-
-    return route("filtered-galleries.index", { filter });
-};
-
 export const GalleryListbox = ({
     selectedOption,
     searchQuery,

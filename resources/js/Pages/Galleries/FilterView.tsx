@@ -10,9 +10,6 @@ interface ConfigOption {
     };
 }
 
-const url = (filter: "most-popular" | "newest" | "most-valuable"): string =>
-    route("filtered-galleries.index", { filter });
-
 const FilterView = ({ type }: GalleryFiltersPageProperties): JSX.Element => {
     const { t } = useTranslation();
 

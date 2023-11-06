@@ -24,9 +24,6 @@ interface Galleries {
     mostValuable: App.Data.Gallery.GalleryData[];
 }
 
-const url = (filter: "most-popular" | "newest" | "most-valuable"): string =>
-    route("filtered-galleries.index", { filter });
-
 const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
