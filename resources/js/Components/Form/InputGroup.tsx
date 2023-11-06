@@ -16,6 +16,9 @@ interface Properties extends Omit<InputHTMLAttributes<HTMLInputElement>, "childr
     hintPosition?: HintPosition;
     error?: string;
     label?: string | ReactElement;
+    // In some cases, the feedback element needs to be positioned differently due
+    // to stuff like having a group of inputs
+    erroredFeedbackClass?: string;
 }
 
 const InputError = ({ message, className }: { message: string; className?: string }): JSX.Element => (
@@ -68,7 +71,10 @@ const inputGroupClickHandler: React.MouseEventHandler<HTMLDivElement> = (event):
 };
 
 export const InputGroup = forwardRef<HTMLDivElement, Properties>(
-    ({ children, hint, hintPosition, error, className, label, id, ...properties }, reference): JSX.Element => {
+    (
+        { children, hint, hintPosition, error, className, label, id, erroredFeedbackClass = "-mx-px", ...properties },
+        reference,
+    ): JSX.Element => {
         const hasError = isTruthy(error);
 
         const hasHint = isTruthy(hint);
@@ -97,7 +103,7 @@ export const InputGroup = forwardRef<HTMLDivElement, Properties>(
                         <div
                             data-testid="InputGroup__feedback"
                             className={cn({
-                                "-mx-px": hasError,
+                                [erroredFeedbackClass]: hasError,
                             })}
                         >
                             {hasError && (
