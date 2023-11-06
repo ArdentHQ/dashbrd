@@ -1,5 +1,5 @@
 import { groupBy } from "@ardenthq/sdk-helpers";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { beforeEach, expect } from "vitest";
 import GalleryNftData = App.Data.Gallery.GalleryNftData;
 import { GalleryNfts, useGalleryNftsContext } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
@@ -191,14 +191,14 @@ describe("useGalleryNftsContext", () => {
 
         expect(container.getElementsByClassName("TestGallery_NFT").length).toBe(6);
 
-        const newNfts1 = new GalleryNftDataFactory().withImages().createMany(2, {
+        const newNfts = new GalleryNftDataFactory().withImages().createMany(2, {
             collectionSlug: "severus-snape",
             collectionName: "Severus Snape",
         });
 
         server.use(
             requestMockOnce(`${BASE_URL}/my-galleries/collections`, {
-                nfts: newNfts1,
+                nfts: newNfts,
                 collections: {
                     paginated: {
                         data: [],

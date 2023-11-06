@@ -23,7 +23,7 @@ interface GalleryNftsProperties {
 export interface CollectionsPageMeta {
     total: number;
     next_page_url: string | null;
-    first_page_url?: string | null;
+    first_page_url: string;
     per_page: number;
 }
 

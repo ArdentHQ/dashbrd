@@ -198,10 +198,6 @@ export const useGalleryNtfs = ({ nftsPerPage, collectionsPerPage }: GalleryNftsP
     };
 
     const searchNfts = async (query?: string): Promise<void> => {
-        if (!isTruthy(pageMeta.first_page_url)) {
-            throw new Error("[searchNfts] First page url is not defined.");
-        }
-
         setIsSearchingCollections(true);
         await fetchCollections(pageMeta.first_page_url, query);
         setIsSearchingCollections(false);
