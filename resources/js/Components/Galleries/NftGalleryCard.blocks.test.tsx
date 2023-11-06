@@ -316,6 +316,24 @@ describe("NftImageGrid", () => {
         expect(screen.getByTestId(`NftImageGrid__container--5--limit_reached`)).toBeInTheDocument();
         expect(screen.getByTestId(`NftImageGrid__image--5`)).toHaveClass("blur-sm");
     });
+
+    it("should not show a limit reached message if the limit is not reached", () => {
+        render(
+            <NftImageGrid
+                nfts={{
+                    paginated: {
+                        data: nfts,
+                        ...paginationData,
+                    },
+                }}
+                storedNfts={[]}
+                nftLimit={1}
+            />,
+        );
+
+        expect(screen.getByTestId(`NftImageGrid__container--5--limit_reached`)).not.toBeInTheDocument();
+        expect(screen.getByTestId(`NftImageGrid__image--1`)).not.toHaveClass("blur-sm");
+    });
 });
 
 describe("GalleryHeading", () => {
