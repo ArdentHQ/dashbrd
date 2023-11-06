@@ -126,7 +126,7 @@ export const TraitsCarousel = ({
                     >
                         <div
                             className={cn(
-                                "flex w-full justify-between py-4 font-medium md:flex-col md:space-y-2 md:rounded-lg md:bg-theme-secondary-50 md:px-4 md:py-3 lg:bg-white dark:lg:bg-theme-dark-900",
+                                "flex w-full justify-between py-4 font-medium md:flex-col md:space-y-2 md:rounded-lg md:bg-theme-secondary-50 md:px-4 md:py-3 lg:bg-white dark:md:bg-theme-dark-900",
                                 borderClassName(index),
                             )}
                         >
