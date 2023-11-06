@@ -125,8 +125,6 @@ export const TokenPriceChart = ({ token, period, ...properties }: Properties): J
             return;
         }
 
-        console.log(chartColors.primary.default);
-
         setData({
             labels: Array.from({ length: periodData.length }).map((_, index) => index),
             datasets: [
