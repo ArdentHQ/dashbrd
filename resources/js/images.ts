@@ -21,6 +21,7 @@ import { ReactComponent as Ethereum } from "@images/networks/ethereum.svg";
 import { ReactComponent as Polygon } from "@images/networks/polygon.svg";
 import { ReactComponent as SocialLeftGrid } from "@images/social-grid-left.svg";
 import { ReactComponent as SocialRightGrid } from "@images/social-grid-right.svg";
+import { ReactComponent as WarningExclamationDark } from "@images/warning-exclamation-dark.svg";
 import { ReactComponent as WarningExclamation } from "@images/warning-exclamation.svg";
 
 export {
@@ -29,6 +30,7 @@ export {
     AuthInstallWallet,
     AuthInstallWalletDark,
     WarningExclamation,
+    WarningExclamationDark,
     ImageLoadError,
     DeleteModal,
     Polygon,

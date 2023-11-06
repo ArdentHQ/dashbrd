@@ -158,7 +158,7 @@ export const CollectionActivityTable = ({
                 footer={
                     activities !== null &&
                     activities.paginated.meta.total > 10 && (
-                        <div className="flex items-center justify-between space-x-3 rounded-b border-t border-theme-secondary-300 p-4">
+                        <div className="flex items-center justify-between space-x-3 rounded-b border-t border-theme-secondary-300 p-4 dark:border-theme-dark-700">
                             <SelectPageLimit
                                 value={pageLimit}
                                 onChange={({ value }) => {
