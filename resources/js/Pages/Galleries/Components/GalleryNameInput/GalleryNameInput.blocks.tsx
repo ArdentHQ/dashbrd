@@ -30,6 +30,7 @@ export const NameLengthIndicator = ({
                     content={t("pages.galleries.create.title_too_long", { max: maxLength })}
                     visible
                     variant="danger"
+                    zIndex={1}
                 >
                     <span>
                         {name.length}/{maxLength}
