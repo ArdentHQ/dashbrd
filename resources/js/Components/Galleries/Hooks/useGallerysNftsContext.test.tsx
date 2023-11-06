@@ -116,8 +116,8 @@ describe("useGalleryNftsContext", () => {
         collectionsPerPage?: number;
     }): JSX.Element => (
         <GalleryNfts
-            nftsPerPage={nftsPerPage ?? 10}
-            collectionsPerPage={collectionsPerPage ?? 10}
+            nftsPerPage={nftsPerPage}
+            collectionsPerPage={collectionsPerPage}
         >
             <HookTestComponent />
         </GalleryNfts>
