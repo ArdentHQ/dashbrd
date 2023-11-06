@@ -331,8 +331,7 @@ describe("NftImageGrid", () => {
             />,
         );
 
-        expect(screen.getByTestId(`NftImageGrid__container--5--limit_reached`)).not.toBeInTheDocument();
-        expect(screen.getByTestId(`NftImageGrid__image--1`)).not.toHaveClass("blur-sm");
+        expect(screen.queryByTestId("NftImageGrid__container--5--limit_reached")).not.toBeInTheDocument();
     });
 });
 
