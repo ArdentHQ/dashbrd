@@ -91,7 +91,7 @@ const NftImage = ({
     </div>
 );
 
-const NftImageContainer = ({
+export const NftImageContainer = ({
     nft,
     onClick,
     allowSelection,
