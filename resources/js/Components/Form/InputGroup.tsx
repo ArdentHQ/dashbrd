@@ -18,8 +18,13 @@ interface Properties extends Omit<InputHTMLAttributes<HTMLInputElement>, "childr
     label?: string | ReactElement;
 }
 
-const InputError = ({ message }: { message: string }): JSX.Element => (
-    <span className="block w-full rounded-b-xl px-4 py-2 text-xs font-medium text-theme-danger-600 dark:text-white">
+const InputError = ({ message, className }: { message: string; className?: string }): JSX.Element => (
+    <span
+        className={cn(
+            "-mx-px -mt-3 block bg-theme-danger-100 px-4 pb-2 pt-5 text-xs font-medium text-theme-danger-600 dark:bg-theme-danger-400 dark:text-white",
+            className,
+        )}
+    >
         {message}
     </span>
 );
@@ -82,7 +87,6 @@ export const InputGroup = forwardRef<HTMLDivElement, Properties>(
                     onClick={inputGroupClickHandler}
                     className={cn("rounded-xl", className, {
                         "bg-theme-secondary-100 dark:bg-theme-dark-950": hasHint && !hasError,
-                        "bg-theme-danger-100 dark:bg-theme-danger-400": hasError,
                         "mt-1": hasLabel,
                     })}
                     {...properties}
@@ -90,11 +94,15 @@ export const InputGroup = forwardRef<HTMLDivElement, Properties>(
                     {typeof children === "function" ? children({ hasError }) : children}
 
                     {hasFeedback && (
-                        <div
-                            data-testid="InputGroup__feedback"
-                            className="overflow-hidden rounded-b-xl"
-                        >
-                            {hasError && <InputError message={error} />}
+                        <div data-testid="InputGroup__feedback">
+                            {hasError && (
+                                <InputError
+                                    message={error}
+                                    className={cn({
+                                        "rounded-b-xl": !hasHint,
+                                    })}
+                                />
+                            )}
 
                             {hasHint && (
                                 <InputHint
