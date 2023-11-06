@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Gallery\GalleriesData;
-use App\Data\Gallery\GalleryCollectionData;
-use App\Data\Gallery\GalleryCollectionsData;
 use App\Data\Gallery\GalleryData;
-use App\Data\Gallery\GalleryNftData;
 use App\Enums\ToastType;
 use App\Http\Controllers\Concerns\StoresGalleries;
 use App\Models\Gallery;
-use App\Models\Nft;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
