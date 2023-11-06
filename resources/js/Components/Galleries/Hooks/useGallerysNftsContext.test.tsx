@@ -1,4 +1,6 @@
 import { groupBy } from "@ardenthq/sdk-helpers";
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
+import axios from "axios";
 import { useEffect } from "react";
 import { beforeEach, expect } from "vitest";
 import GalleryNftData = App.Data.Gallery.GalleryNftData;
@@ -11,8 +13,6 @@ import { BASE_URL, requestMock, requestMockOnce, server } from "@/Tests/Mocks/se
 import { SamplePageMeta } from "@/Tests/SampleData";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { mockAuthContext, render } from "@/Tests/testing-library";
-import { act, fireEvent, screen, waitFor } from "@testing-library/react";
-import axios from "axios";
 
 describe("useGalleryNftsContext", () => {
     const firstCollectionNfts = new GalleryNftDataFactory().withImages().createMany(3, {
