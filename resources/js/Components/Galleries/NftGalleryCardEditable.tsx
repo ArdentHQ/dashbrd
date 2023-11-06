@@ -79,12 +79,11 @@ export const NftGalleryCardEditable = ({
             <div
                 data-testid="NftGalleryCardEditable"
                 className={classNames(
-                    "transition-default group flex aspect-square cursor-pointer items-center justify-center rounded-xl border group hover:bg-theme-primary-100 dark:hover:bg-theme-dark-800",
+                    "transition-default group group flex aspect-square cursor-pointer items-center justify-center rounded-xl border hover:bg-theme-primary-100 dark:hover:bg-theme-dark-800",
                     {
-                        "border-theme-secondary-300 dark:border-theme-dark-700 dark:hover:border-theme-dark-800 hover:border-theme-primary-100":
+                        "border-theme-secondary-300 hover:border-theme-primary-100 dark:border-theme-dark-700 dark:hover:border-theme-dark-800":
                             !isTruthy(error),
-                        "border-2 border-theme-danger-400":
-                            isTruthy(error),
+                        "border-2 border-theme-danger-400": isTruthy(error),
                     },
                 )}
                 onClick={() => {
@@ -93,7 +92,7 @@ export const NftGalleryCardEditable = ({
             >
                 <IconButton
                     icon="Plus"
-                    className="dark:group-hover:border-theme-primary-400 transition-default group-hover:bg-theme-primary-700 group-hover:text-white dark:group-hover:bg-theme-primary-400 dark:group-hover:text-white"
+                    className="transition-default group-hover:bg-theme-primary-700 group-hover:text-white dark:group-hover:border-theme-primary-400 dark:group-hover:bg-theme-primary-400 dark:group-hover:text-white"
                 />
             </div>
         </Tooltip>
