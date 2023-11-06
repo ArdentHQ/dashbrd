@@ -11,17 +11,27 @@ const collection = new CollectionDetailDataFactory().create();
 let useDarkModeContextSpy: SpyInstance;
 
 describe("CollectionHiddenModal", () => {
-    beforeAll(() => {
+    beforeEach(() => {
         useDarkModeContextSpy = vi
             .spyOn(useDarkModeContext, "useDarkModeContext")
-            .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+            .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
     });
 
-    afterAll(() => {
+    afterEach(() => {
         useDarkModeContextSpy.mockRestore();
     });
 
     it("should render", () => {
+        render(<CollectionHiddenModal collection={collection} />);
+
+        expect(screen.getByTestId("CollectionHiddenModal__description")).toBeInTheDocument();
+    });
+
+    it("should render in dark mode", () => {
+        useDarkModeContextSpy = vi
+            .spyOn(useDarkModeContext, "useDarkModeContext")
+            .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
         render(<CollectionHiddenModal collection={collection} />);
 
         expect(screen.getByTestId("CollectionHiddenModal__description")).toBeInTheDocument();
