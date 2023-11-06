@@ -27,7 +27,7 @@ class MyGalleryController extends Controller
         return Inertia::render('Galleries/MyGalleries/Index', [
             'title' => trans('metatags.my_galleries.title'),
             'galleries' => new GalleriesData(GalleryData::collection($user->galleries()->latest()->paginate(12))),
-            'nftCount' => $user->nfts->count(),
+            'nftCount' => $user->nfts()->count(),
         ]);
     }
 
@@ -41,7 +41,7 @@ class MyGalleryController extends Controller
             'nftsPerPage' => (int) config('dashbrd.gallery.pagination.nfts_per_page'),
             'collectionsPerPage' => (int) config('dashbrd.gallery.pagination.collections_per_page'),
             'nftLimit' => config('dashbrd.gallery.nft_limit'),
-            'nftCount' => $user->nfts->count(),
+            'nftCount' => $user->nfts()->count(),
         ]);
     }
 
@@ -73,7 +73,7 @@ class MyGalleryController extends Controller
             'nftsPerPage' => (int) config('dashbrd.gallery.pagination.nfts_per_page'),
             'collectionsPerPage' => (int) config('dashbrd.gallery.pagination.collections_per_page'),
             'nftLimit' => config('dashbrd.gallery.nft_limit'),
-            'nftCount' => $user->nfts->count(),
+            'nftCount' => $user->nfts()->count(),
         ]);
     }
 
