@@ -21,7 +21,7 @@ interface Properties extends Omit<InputHTMLAttributes<HTMLInputElement>, "childr
 const InputError = ({ message, className }: { message: string; className?: string }): JSX.Element => (
     <span
         className={cn(
-            "-mx-px -mt-3 block bg-theme-danger-100 px-4 pb-2 pt-5 text-xs font-medium text-theme-danger-600 dark:bg-theme-danger-400 dark:text-white",
+            "-mt-3 block bg-theme-danger-100 px-4 pb-2 pt-5 text-xs font-medium text-theme-danger-600 dark:bg-theme-danger-400 dark:text-white",
             className,
         )}
     >
@@ -94,7 +94,12 @@ export const InputGroup = forwardRef<HTMLDivElement, Properties>(
                     {typeof children === "function" ? children({ hasError }) : children}
 
                     {hasFeedback && (
-                        <div data-testid="InputGroup__feedback">
+                        <div
+                            data-testid="InputGroup__feedback"
+                            className={cn({
+                                "-mx-px": hasError,
+                            })}
+                        >
                             {hasError && (
                                 <InputError
                                     message={error}
