@@ -20,6 +20,7 @@ interface GalleryDraft {
 }
 
 interface GalleryDraftsState {
+    getDrafts: () => Promise<GalleryDraft[]>;
     reachedLimit: boolean;
     isSaving: boolean;
     draft: GalleryDraft;
@@ -132,6 +133,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     return {
+        getDrafts: getWalletDrafts,
         reachedLimit,
         isSaving,
         draft,
