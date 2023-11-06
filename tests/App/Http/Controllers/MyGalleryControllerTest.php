@@ -12,7 +12,6 @@ use App\Support\Cache\GalleryCache;
 use App\Support\Cache\UserCache;
 use App\Support\Facades\Signature;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 
