@@ -82,7 +82,7 @@ export const NftGalleryCardEditable = ({
                 className={classNames(
                     "transition-default group group flex aspect-square cursor-pointer items-center justify-center rounded-xl border hover:bg-theme-primary-100 dark:hover:bg-theme-dark-800",
                     {
-                        "border-theme-secondary-300 hover:border-theme-primary-100 dark:border-theme-dark-700 dark:hover:border-theme-dark-800":
+                        "border-theme-secondary-300 hover:border-theme-primary-100 dark:border-theme-dark-700":
                             !isTruthy(error),
                         "border-2 border-theme-danger-400": isTruthy(error),
                     },
