@@ -75,6 +75,7 @@ export const NftGalleryCardEditable = ({
             content={error}
             placement="bottom"
             visible={isTruthy(error)}
+            zIndex={1}
         >
             <div
                 data-testid="NftGalleryCardEditable"
