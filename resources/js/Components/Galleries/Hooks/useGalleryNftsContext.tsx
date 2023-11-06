@@ -16,9 +16,8 @@ export interface GalleryNftsState {
 
 interface GalleryNftsProperties {
     children: React.ReactNode;
-    nfts: App.Data.Gallery.GalleryNftData[];
-    pageMeta?: Partial<CollectionsPageMeta>;
     nftsPerPage?: number;
+    collectionsPerPage?: number;
 }
 
 export interface CollectionsPageMeta {
@@ -40,8 +39,8 @@ export const useGalleryNftsContext = (): GalleryNftsState => {
     return context;
 };
 
-export const GalleryNfts = ({ children, nfts, pageMeta, nftsPerPage }: GalleryNftsProperties): JSX.Element => {
-    const galleryNtfs = useGalleryNtfs({ nfts, pageMeta, nftsPerPage });
+export const GalleryNfts = ({ children, nftsPerPage, collectionsPerPage }: GalleryNftsProperties): JSX.Element => {
+    const galleryNtfs = useGalleryNtfs({ nftsPerPage, collectionsPerPage });
 
     return (
         <GalleryNftsContext.Provider

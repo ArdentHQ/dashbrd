@@ -40,24 +40,12 @@ class MyGalleryController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $collections = $user
-            ->collections()
-            ->withUserNftsCount($user)
-            ->orderBy('id')
-            ->paginate((int) config('dashbrd.gallery.pagination.collections_per_page'));
-
-        $collections->withPath(route('my-galleries.collections'));
-
-        $nftsPerPage = (int) config('dashbrd.gallery.pagination.nfts_per_page');
-
-        $nfts = Nft::paginatedCollectionNfts($collections, $user, $nftsPerPage);
-
         return Inertia::render('Galleries/MyGalleries/Create', [
             'title' => trans('metatags.my_galleries.create.title'),
-            'nfts' => GalleryNftData::collection($nfts),
-            'collections' => new GalleryCollectionsData(GalleryCollectionData::collection($collections)),
-            'nftsPerPage' => $nftsPerPage,
+            'nftsPerPage' => (int) config('dashbrd.gallery.pagination.nfts_per_page'),
+            'collectionsPerPage' => (int) config('dashbrd.gallery.pagination.collections_per_page'),
             'nftLimit' => config('dashbrd.gallery.nft_limit'),
+            'nftCount' => $user->nfts->count(),
         ]);
     }
 
@@ -80,28 +68,16 @@ class MyGalleryController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $collections = $user
-            ->collections()
-            ->withUserNftsCount($user)
-            ->orderBy('id')
-            ->paginate((int) config('dashbrd.gallery.pagination.collections_per_page'));
-
-        $collections->withPath(route('my-galleries.collections'));
-
-        $nftsPerPage = (int) config('dashbrd.gallery.pagination.nfts_per_page');
-
-        $nfts = Nft::paginatedCollectionNfts($collections, $user, $nftsPerPage);
-
         return Inertia::render('Galleries/MyGalleries/Create', [
             'title' => trans('metatags.my_galleries.edit.title', ['name' => $gallery->name]),
-            'nfts' => GalleryNftData::collection($nfts),
-            'collections' => new GalleryCollectionsData(GalleryCollectionData::collection($collections)),
             'gallery' => GalleryData::fromModel(
                 gallery: $gallery,
                 limit: config('dashbrd.gallery.nft_limit'),
             ),
-            'nftsPerPage' => $nftsPerPage,
+            'nftsPerPage' => (int) config('dashbrd.gallery.pagination.nfts_per_page'),
+            'collectionsPerPage' => (int) config('dashbrd.gallery.pagination.collections_per_page'),
             'nftLimit' => config('dashbrd.gallery.nft_limit'),
+            'nftCount' => $user->nfts->count(),
         ]);
     }
 
