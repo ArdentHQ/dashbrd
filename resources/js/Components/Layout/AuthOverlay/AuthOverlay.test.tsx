@@ -217,7 +217,7 @@ describe("AuthOverlay", () => {
     });
 
     it("should require metamask on dark mode", () => {
-        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
 
         const needsMetamaskMessage = "Install MetaMask";
 
