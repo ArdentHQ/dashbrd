@@ -30,6 +30,8 @@ interface NftImageContainerProperties {
     isSelected?: boolean;
     isAdded?: boolean;
     validateImage?: boolean;
+    combinedNfts?: App.Data.Gallery.GalleryNftData[];
+    nftLimit?: number;
 }
 
 interface NftImageGridProperties {
@@ -43,6 +45,8 @@ interface NftImageGridProperties {
     selectedNfts?: App.Data.Gallery.GalleryNftData[];
     addedNfts?: App.Data.Gallery.GalleryNftData[];
     validateImage?: boolean;
+    storedNfts?: App.Data.Gallery.GalleryNftData[];
+    nftLimit?: number;
 }
 
 const NftImage = ({
@@ -94,6 +98,8 @@ const NftImageContainer = ({
     isSelected,
     isAdded,
     validateImage,
+    combinedNfts = [],
+    nftLimit,
 }: NftImageContainerProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -130,6 +136,25 @@ const NftImageContainer = ({
         );
     }
 
+    if (isTruthy(nftLimit) && combinedNfts.length >= nftLimit && !isTruthy(isSelected)) {
+        return (
+            <div
+                data-testid={`NftImageGrid__container--${nft.tokenNumber}--limit_reached`}
+                className="relative overflow-hidden rounded-xl"
+            >
+                <Tooltip content={t("pages.galleries.create.nft_gallery_limit")}>
+                    <div>
+                        <NftImage
+                            nft={nft}
+                            allowSelection={false}
+                            className="blur-sm grayscale"
+                        />
+                    </div>
+                </Tooltip>
+            </div>
+        );
+    }
+
     return (
         <div
             data-testid={`NftImageGrid__container--${nft.tokenNumber}`}
@@ -158,8 +183,11 @@ export const NftImageGrid = ({
     onSelectNft,
     onDeselectNft,
     validateImage,
+    storedNfts = [],
+    nftLimit,
 }: NftImageGridProperties): JSX.Element => {
     const nftData = "paginated" in nfts ? nfts.paginated.data : nfts;
+    const combinedNfts = [...storedNfts, ...(isTruthy(selectedNfts) ? selectedNfts : [])];
 
     return (
         <div
@@ -184,6 +212,8 @@ export const NftImageGrid = ({
                         }}
                         isSelected={isSelected}
                         isAdded={isAdded}
+                        combinedNfts={combinedNfts}
+                        nftLimit={nftLimit}
                         validateImage={validateImage}
                     />
                 );
