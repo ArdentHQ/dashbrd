@@ -47,19 +47,19 @@ export const ExternalLinkConfirmModal = ({
             childrenClassName="flex flex-col pb-4"
         >
             <div className="flex-grow">
+                <div
+                    data-testid="ExternalLinkConfirmModal__info"
+                    className="mb-4 text-theme-secondary-700 dark:text-theme-dark-200"
+                >
+                    {t("pages.collections.external_modal.you_wish_continue")}
+                </div>
+
                 <Toast
                     type="warning"
                     isStatic
                     isExpanded
                     message={href}
                 />
-
-                <div
-                    data-testid="ExternalLinkConfirmModal__info"
-                    className="mt-4 text-theme-secondary-700 dark:text-theme-dark-200"
-                >
-                    {t("pages.collections.external_modal.you_wish_continue")}
-                </div>
             </div>
 
             <label className="mt-auto flex items-center space-x-3 sm:mt-4">
