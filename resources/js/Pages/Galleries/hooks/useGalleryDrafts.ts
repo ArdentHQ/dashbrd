@@ -139,11 +139,11 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const deleteExpiredDrafts = async (): Promise<void> => {
-        const thirtyDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
+        const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
         const drafts: GalleryDraft[] = await database.getAll();
 
         for (const draft of drafts) {
-            if ((draft.updatedAt ?? 0) < thirtyDaysAgo) {
+            if ((draft.updatedAt ?? 0) < thresholdDaysAgo) {
                 void database.deleteRecord(Number(draft.id));
             }
         }
