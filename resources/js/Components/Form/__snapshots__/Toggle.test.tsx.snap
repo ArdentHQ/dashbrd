@@ -4,7 +4,7 @@ exports[`Toggle > should render as checked 1`] = `
 <DocumentFragment>
   <button
     aria-checked="true"
-    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700 bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800 dark:bg-theme-primary-500 dark:hover:bg-theme-primary-600 dark:focus-visible:bg-theme-primary-400 dark:active:bg-theme-primary-500"
+    class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700 bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800 dark:bg-theme-primary-400 dark:hover:bg-theme-primary-600 dark:focus-visible:bg-theme-primary-400 dark:active:bg-theme-primary-400"
     data-headlessui-state="checked"
     data-testid="Toggle"
     id="headlessui-switch-:r0:"
