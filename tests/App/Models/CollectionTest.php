@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\Gallery;
@@ -31,6 +32,16 @@ it('can retrieve the nfts that belong to the collection', function () {
     ]);
 
     expect($collection->nfts()->count())->toBe(1);
+});
+
+it('should have an article', function () {
+    $collection = Collection::factory()->create();
+
+    $article = Article::factory()->create();
+
+    $collection->articles()->attach($article, ['order_index' => 1]);
+
+    expect($collection->articles->first()->id)->toBe($article->id);
 });
 
 it('can retrieve the galleries that have an item from the collection', function () {

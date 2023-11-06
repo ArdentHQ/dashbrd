@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 import { GalleriesHeading } from "./Components/GalleriesHeading";
 import GalleryGuestBanner from "./Components/GalleryGuestBanner";
 import { GallerySkeleton } from "./Components/GallerySkeleton/GallerySkeleton";
-import { useGalleryCarousel } from "./hooks/use-gallery-carousel";
 import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useCarousel } from "@/Hooks/useCarousel";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface Properties {
@@ -34,7 +34,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
     const { initialized, connecting } = useMetaMaskContext();
 
     const { props } = usePage();
-    const { slidesPerView, horizontalOffset } = useGalleryCarousel();
+    const { slidesPerView, horizontalOffset } = useCarousel();
 
     const [galleries, setGalleries] = useState<Galleries>();
 
@@ -79,15 +79,15 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                     <div className="mt-5 space-y-9">
                         <GallerySkeleton
                             title={t("pages.galleries.most_popular_galleries")}
-                            viewAllPath={url("most-popular")}
+                            viewAllPath={route("filtered-galleries.index", { filter: "most-popular" })}
                         />
                         <GallerySkeleton
                             title={t("pages.galleries.newest_galleries")}
-                            viewAllPath={url("newest")}
+                            viewAllPath={route("filtered-galleries.index", { filter: "newest" })}
                         />
                         <GallerySkeleton
                             title={t("pages.galleries.most_valuable_galleries")}
-                            viewAllPath={url("most-valuable")}
+                            viewAllPath={route("filtered-galleries.index", { filter: "most-valuable" })}
                         />
                     </div>
                 ) : (
@@ -107,7 +107,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                                     spaceBetween={8}
                                     slidesPerView={slidesPerView}
                                     title={t("pages.galleries.most_popular_galleries")}
-                                    viewAllPath={url("most-popular")}
+                                    viewAllPath={route("filtered-galleries.index", { filter: "most-popular" })}
                                 >
                                     {galleries.popular.map((gallery, index) => (
                                         <CarouselItem key={index}>
@@ -124,7 +124,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                                     spaceBetween={8}
                                     carouselKey="2"
                                     title={t("pages.galleries.newest_galleries")}
-                                    viewAllPath={url("newest")}
+                                    viewAllPath={route("filtered-galleries.index", { filter: "newest" })}
                                 >
                                     {galleries.newest.map((gallery, index) => (
                                         <CarouselItem key={index}>
@@ -141,7 +141,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                                     spaceBetween={8}
                                     carouselKey="3"
                                     title={t("pages.galleries.most_valuable_galleries")}
-                                    viewAllPath={url("most-valuable")}
+                                    viewAllPath={route("filtered-galleries.index", { filter: "most-valuable" })}
                                 >
                                     {galleries.mostValuable.map((gallery, index) => (
                                         <CarouselItem key={index}>

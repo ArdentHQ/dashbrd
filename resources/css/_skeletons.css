@@ -20,3 +20,29 @@
         rgb(var(--theme-color-dark-700))
     );
 }
+
+.dark .react-loading-skeleton.skeleton-primary {
+    background-color: rgb(var(--theme-color-primary-400));
+}
+
+.dark .react-loading-skeleton.skeleton-primary::after {
+    background-image: linear-gradient(
+        90deg,
+        rgb(var(--theme-color-primary-500)),
+        rgb(var(--theme-color-primary-600)),
+        rgb(var(--theme-color-primary-500))
+    );
+}
+
+.react-loading-skeleton.skeleton-primary {
+    background-color: rgb(var(--theme-color-dark-600));
+}
+
+.react-loading-skeleton.skeleton-primary::after {
+    background-image: linear-gradient(
+        90deg,
+        rgb(var(--theme-color-dark-700)),
+        rgb(var(--theme-color-dark-800)),
+        rgb(var(--theme-color-dark-700))
+    );
+}

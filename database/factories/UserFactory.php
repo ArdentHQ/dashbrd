@@ -6,6 +6,8 @@ namespace Database\Factories;
 
 use App\Enums\CurrencyCode;
 use App\Enums\DateFormat;
+use App\Enums\Role as RoleEnum;
+use App\Models\Role;
 use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -37,5 +39,25 @@ class UserFactory extends Factory
         return $this->state(fn () => [
             'wallet_id' => fn () => Wallet::factory(),
         ]);
+    }
+
+    public function editor()
+    {
+        return $this->afterCreating(function ($user) {
+            $user->assignRole([
+                Role::where('name', RoleEnum::Editor->value)->where('guard_name', 'admin')->firstOrFail(),
+            ])->save();
+        });
+    }
+
+    public function withAvatar()
+    {
+        return $this->afterCreating(function ($user) {
+            $imageIndex = fake()->numberBetween(1, 3);
+
+            $imagePath = database_path("seeders/fixtures/users/avatars/unsplash-$imageIndex.avif");
+
+            $user->addMedia($imagePath)->preservingOriginal()->toMediaCollection('avatar');
+        });
     }
 }

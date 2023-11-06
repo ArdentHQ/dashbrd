@@ -29,6 +29,17 @@ return [
         ],
     ],
 
+    'articles' => [
+        'title' => 'Articles',
+        'featured_collections' => 'Featured Collections',
+        'placeholder_more_soon' => 'More Soon',
+        'no_articles' => 'No articles have been published yet. Please check back later!',
+        'header_title' => 'Explore our collection of',
+        'header_suffix_one' => 'published article',
+        'header_suffix_other' => 'published articles',
+        'audio_version' => 'Audio version',
+        'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
+    ],
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
@@ -53,6 +64,7 @@ return [
         'owned' => 'Owned',
         'activities' => [
             'loading_activities' => "We're fetching Activity for this NFT, please hang tight, this can take a while.",
+            'loading_activities_collection' => "We're fetching Activity for this collection, please hang tight, this can take a while.",
             'ignores_activities' => "We don't support activity history for this collection yet.",
             'no_activity' => 'This collection does not have any activity yet.',
             'types' => [
@@ -60,6 +72,13 @@ return [
                 'LABEL_TRANSFER' => 'Transfer',
                 'LABEL_SALE' => 'Sale',
             ],
+        ],
+        'articles' => [
+            'no_articles' => 'No articles have been linked to this collection as of now.',
+            'no_articles_with_filters' => 'We could not find any articles matching your search criteria, please try again!',
+            'search_placeholder' => 'Search in Articles',
+            'sort_latest' => 'Latest',
+            'sort_popularity' => 'Most Popular',
         ],
         'search' => [
             'loading_results' => 'Loading results...',
@@ -80,6 +99,7 @@ return [
         ],
         'menu' => [
             'collection' => 'Collection',
+            'articles' => 'Articles',
             'activity' => 'Activity',
         ],
         'hidden_modal' => [

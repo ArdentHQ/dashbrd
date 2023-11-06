@@ -2,7 +2,6 @@ import { router } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import { Listbox } from "@/Components/Form/Listbox";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
-import { isTruthy } from "@/Utils/is-truthy";
 
 const url = (filter: "most-popular" | "newest" | "most-valuable", query: string | null = null): string => {
     if (query !== null) {
@@ -23,8 +22,6 @@ export const GalleryListbox = ({
 
     const { isLgAndAbove } = useBreakpoint();
 
-    const query = isTruthy(searchQuery) ? searchQuery : null;
-
     return (
         <Listbox
             value={selectedOption.value}
@@ -43,28 +40,28 @@ export const GalleryListbox = ({
                 </>
             }
             onChange={(path) => {
-                router.visit(path);
+                router.visit(path, { data: { query: searchQuery } });
             }}
         >
             <Listbox.Option
-                key={url("most-popular")}
-                value={url("most-popular", query)}
+                key={route("filtered-galleries.index", { filter: "most-popular" })}
+                value={route("filtered-galleries.index", { filter: "most-popular" })}
                 hasGradient
             >
                 {t("pages.galleries.most_popular")}
             </Listbox.Option>
 
             <Listbox.Option
-                key={url("newest")}
-                value={url("newest", query)}
+                key={route("filtered-galleries.index", { filter: "newest" })}
+                value={route("filtered-galleries.index", { filter: "newest" })}
                 hasGradient
             >
                 {t("pages.galleries.newest")}
             </Listbox.Option>
 
             <Listbox.Option
-                key={url("most-valuable")}
-                value={url("most-valuable", query)}
+                key={route("filtered-galleries.index", { filter: "most-valuable" })}
+                value={route("filtered-galleries.index", { filter: "most-valuable" })}
                 hasGradient
             >
                 {t("pages.galleries.most_valuable")}
