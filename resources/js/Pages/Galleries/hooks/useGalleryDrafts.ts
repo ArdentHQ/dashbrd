@@ -33,6 +33,8 @@ interface GalleryDraftsState {
     setDraftTitle: (title: string) => void;
     deleteDraft: () => Promise<void>;
     deleteExpiredDrafts: () => Promise<void>;
+    walletDrafts: GalleryDraft[];
+    loadingWalletDrafts: boolean;
 }
 
 const initialGalleryDraft: GalleryDraft = {
@@ -58,7 +60,8 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-
+    const [loadingWalletDrafts, setLoadingWalletDrafts] = useState<boolean>(true);
+    const [walletDrafts, setWalletDrafts] = useState<GalleryDraft[]>([]);
     const [reachedLimit, setReachedLimit] = useState(false);
 
     // populate `draft` state if `givenDraftId` is present
@@ -79,6 +82,17 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
         void saveDraft();
     }, [save]);
+
+    useEffect(() => {
+        const loadWalletDrafts = async (): Promise<void> => {
+            const drafts = await getWalletDrafts();
+            setWalletDrafts(drafts);
+
+            setLoadingWalletDrafts(false);
+        };
+
+        void loadWalletDrafts();
+    }, []);
 
     const saveDraft = async (): Promise<void> => {
         setIsSaving(true);
@@ -164,5 +178,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setDraftTitle,
         deleteDraft,
         deleteExpiredDrafts,
+        loadingWalletDrafts,
+        walletDrafts,
     };
 };
