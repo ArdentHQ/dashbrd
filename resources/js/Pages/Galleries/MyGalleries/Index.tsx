@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
@@ -7,7 +7,7 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { DraftGalleriesContextProvider, useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
 
 interface Properties {
     title: string;
@@ -27,21 +27,21 @@ const NoGalleries = ({ text }: { text: string }): JSX.Element => (
 const Drafts = (): JSX.Element => {
     const { t } = useTranslation();
 
-    const { loadingWalletDrafts, walletDrafts, deleteDraft } = useGalleryDrafts();
+    const { drafts, deleteDraft } = useDraftGalleriesContext();
 
     const [draftToDelete, setDraftToDelete] = useState<number | null>(null);
 
-    if (loadingWalletDrafts) {
+    if (drafts === undefined) {
         return <></>;
     }
 
-    if (walletDrafts.length === 0) {
+    if (drafts.length === 0) {
         return <NoGalleries text={t("pages.galleries.my_galleries.no_draft_galleries").toString()} />;
     }
 
     return (
         <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
-            {walletDrafts.map((draft, index) => (
+            {drafts.map((draft, index) => (
                 <NftDraftCard
                     key={index}
                     draft={draft}
@@ -99,32 +99,28 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
 const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    const { deleteExpiredDrafts } = useGalleryDrafts(undefined, true);
-
-    useEffect(() => {
-        void deleteExpiredDrafts();
-    }, []);
-
     return (
-        <Layout
-            title={title}
-            nftCount={nftCount}
-            galleryCount={galleryCount}
-        >
-            <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
-                <div className="mb-6 hidden w-full items-center justify-between xl:flex">
-                    <Heading level={1}>
-                        <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
-                            {showDrafts ? t("common.drafts") : t("common.published")}
-                        </span>
-                    </Heading>
+        <DraftGalleriesContextProvider>
+            <Layout
+                title={title}
+                nftCount={nftCount}
+                galleryCount={galleryCount}
+            >
+                <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
+                    <div className="mb-6 hidden w-full items-center justify-between xl:flex">
+                        <Heading level={1}>
+                            <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
+                                {showDrafts ? t("common.drafts") : t("common.published")}
+                            </span>
+                        </Heading>
 
-                    <CreateGalleryButton nftCount={nftCount} />
+                        <CreateGalleryButton nftCount={nftCount} />
+                    </div>
                 </div>
-            </div>
 
-            {showDrafts ? <Drafts /> : <StoredGalleries galleries={galleries} />}
-        </Layout>
+                {showDrafts ? <Drafts /> : <StoredGalleries galleries={galleries} />}
+            </Layout>
+        </DraftGalleriesContextProvider>
     );
 };
 

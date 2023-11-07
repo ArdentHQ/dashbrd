@@ -33,8 +33,6 @@ interface GalleryDraftsState {
     setDraftTitle: (title: string) => void;
     deleteDraft: (draftId: number | null) => Promise<void>;
     deleteExpiredDrafts: () => Promise<void>;
-    walletDrafts: GalleryDraft[];
-    loadingWalletDrafts: boolean;
 }
 
 const initialGalleryDraft: GalleryDraft = {
@@ -60,8 +58,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [loadingWalletDrafts, setLoadingWalletDrafts] = useState<boolean>(true);
-    const [walletDrafts, setWalletDrafts] = useState<GalleryDraft[]>([]);
     const [reachedLimit, setReachedLimit] = useState(false);
 
     // populate `draft` state if `givenDraftId` is present
@@ -78,22 +74,10 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     }, [givenDraftId, wallet?.address]);
 
     useEffect(() => {
-        if (disabled === true || !save || isSaving || reachedLimit || loadingWalletDrafts) return;
+        if (disabled === true || !save || isSaving || reachedLimit) return;
 
         void saveDraft();
-    }, [save, loadingWalletDrafts]);
-
-    const loadWalletDrafts = async (): Promise<void> => {
-        const drafts = await getWalletDrafts();
-
-        setWalletDrafts(drafts);
-
-        setLoadingWalletDrafts(false);
-    };
-
-    useEffect(() => {
-        void loadWalletDrafts();
-    }, []);
+    }, [save]);
 
     const saveDraft = async (): Promise<void> => {
         setIsSaving(true);
@@ -101,6 +85,8 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         const updatedAt = new Date().getTime();
 
         if (draft.id === null) {
+            const walletDrafts = await getWalletDrafts();
+
             if (walletDrafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
                 setIsSaving(false);
                 setReachedLimit(true);
@@ -155,8 +141,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
         await database.deleteRecord(draftId);
 
-        await loadWalletDrafts();
-
         setReachedLimit(false);
     };
 
@@ -181,7 +165,5 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setDraftTitle,
         deleteDraft,
         deleteExpiredDrafts,
-        loadingWalletDrafts,
-        walletDrafts,
     };
 };
