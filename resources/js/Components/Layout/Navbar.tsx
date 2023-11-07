@@ -93,7 +93,7 @@ export const Navbar = ({
         <nav
             data-testid="Navbar"
             className={cn(
-                "transition-default mx-auto flex h-14 max-w-content items-center justify-between px-6 py-2 xs:h-18 sm:px-8 sm:py-0 2xl:px-0",
+                "transition-default mx-auto flex h-14 max-w-content items-center justify-between px-6 py-2 sm:h-18 sm:px-8 sm:py-0 2xl:px-0",
                 className,
             )}
             {...properties}
