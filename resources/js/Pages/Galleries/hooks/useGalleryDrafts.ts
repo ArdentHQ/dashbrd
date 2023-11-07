@@ -69,7 +69,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     // populate `draft` state if `givenDraftId` is present
     useEffect(() => {
-        if (disabled === true || givenDraftId === undefined) return;
+        if (givenDraftId === undefined || disabled === true) return;
 
         const getDraft = async (): Promise<void> => {
             const draft: GalleryDraft | undefined = await database.getByID(givenDraftId);

@@ -84,6 +84,7 @@ const Create = ({
 
     useEffect(() => {
         if (!switching) return;
+
         updateSelectedNfts([], true);
         replaceUrlQuery({ draftId: "" });
     }, [switching]);
@@ -92,6 +93,7 @@ const Create = ({
         const cover = data.coverImage;
 
         if (isTruthy(data.coverImage) && cover instanceof File) {
+            // eslint-disable-next-line promise/prefer-await-to-then
             void cover.arrayBuffer().then((buf) => {
                 setDraftCover(buf, cover.type);
                 setDraftTitle(data.name);
