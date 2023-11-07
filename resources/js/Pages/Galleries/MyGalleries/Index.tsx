@@ -67,7 +67,7 @@ const Index = ({
                     </div>
                 )}
 
-                {userGalleries.meta.last_page > 1 && (
+                {!showDrafts && userGalleries.meta.last_page > 1 && (
                     <Pagination
                         className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
                         data={userGalleries}
