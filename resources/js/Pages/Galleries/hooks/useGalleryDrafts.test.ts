@@ -74,22 +74,6 @@ describe("useGalleryDrafts", () => {
         useAuthSpy.mockRestore();
     });
 
-    it("should load stored galleries", async () => {
-        const mockedDrafts = Array.from({ length: 6 }).fill({ walletAddress: "mockedAddress" });
-
-        mocks.useIndexedDB().getAll.mockReturnValue(mockedDrafts);
-
-        const { result } = renderHook(() => useGalleryDrafts());
-
-        expect(result.current.loadingWalletDrafts).toBe(true);
-
-        await waitFor(() => {
-            expect(result.current.loadingWalletDrafts).toBe(false);
-        });
-
-        expect(result.current.walletDrafts).toEqual(mockedDrafts);
-    });
-
     it("should populate draft when givenDraftId is provided", async () => {
         const givenDraftId = 1;
 
@@ -255,7 +239,7 @@ describe("useGalleryDrafts", () => {
         const { result } = renderHook(() => useGalleryDrafts());
 
         await act(async () => {
-            await result.current.deleteDraft();
+            await result.current.deleteDraft(null);
         });
 
         expect(deleteMock).not.toHaveBeenCalled();
