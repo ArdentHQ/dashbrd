@@ -24,28 +24,20 @@ const Index = ({
     galleryCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
-    //! NOTE: Remove lines 26-38 after useGalleryDrafts hook has been implemented
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
-    const database = useIndexedDB("gallery-drafts");
+
+    const { getUnExpiredDrafts, deleteExpiredDrafts } = useGalleryDrafts();
 
     const loadDrafts = async (): Promise<void> => {
-        const { getAll } = database;
-
-        const records = await getAll();
-        setDrafts(records);
+        setDrafts(await getUnExpiredDrafts());
     };
 
     useEffect(() => {
         void loadDrafts();
-    }, [database]);
-
-    const userGalleries = galleries.paginated;
-
-    const { deleteExpiredDrafts } = useGalleryDrafts(undefined, true);
-
-    useEffect(() => {
         void deleteExpiredDrafts();
     }, []);
+
+    const userGalleries = galleries.paginated;
 
     return (
         <Layout

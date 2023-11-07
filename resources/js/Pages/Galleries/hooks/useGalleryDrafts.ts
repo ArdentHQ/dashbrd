@@ -25,6 +25,7 @@ export interface GalleryDraft {
 
 interface GalleryDraftsState {
     getDrafts: () => Promise<GalleryDraft[]>;
+    getUnExpiredDrafts: () => Promise<GalleryDraft[]>;
     reachedLimit: boolean;
     isSaving: boolean;
     draft: GalleryDraft;
@@ -86,7 +87,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         const updatedAt = new Date().getTime();
 
         if (draft.id === null) {
-            const walletDrafts = await getWalletDrafts();
+            const walletDrafts = await getDrafts();
 
             if (walletDrafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
                 setIsSaving(false);
@@ -108,10 +109,15 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setIsSaving(false);
     };
 
-    const getWalletDrafts = async (): Promise<GalleryDraft[]> => {
+    const getDrafts = async (): Promise<GalleryDraft[]> => {
         const allDrafts: GalleryDraft[] = await database.getAll();
 
         return allDrafts.filter((draft) => draft.walletAddress === wallet?.address);
+    };
+
+    const getUnExpiredDrafts = async (): Promise<GalleryDraft[]> => {
+        const allDrafts = await getDrafts();
+        return allDrafts.filter((draft) => !isExpired(draft));
     };
 
     const setDraftCover = (image: ArrayBuffer | null, type: string | null): void => {
@@ -143,19 +149,24 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setReachedLimit(false);
     };
 
-    const deleteExpiredDrafts = async (): Promise<void> => {
+    const isExpired = (draft: GalleryDraft) => {
         const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
-        const drafts: GalleryDraft[] = await database.getAll();
+        return (draft.updatedAt ?? 0) < thresholdDaysAgo;
+    };
+
+    const deleteExpiredDrafts = async (): Promise<void> => {
+        const drafts = await getDrafts();
 
         for (const draft of drafts) {
-            if ((draft.updatedAt ?? 0) < thresholdDaysAgo) {
+            if (isExpired(draft)) {
                 void database.deleteRecord(Number(draft.id));
             }
         }
     };
 
     return {
-        getDrafts: getWalletDrafts,
+        getDrafts,
+        getUnExpiredDrafts,
         reachedLimit,
         isSaving,
         draft,
