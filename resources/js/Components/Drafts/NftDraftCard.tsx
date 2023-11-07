@@ -5,7 +5,7 @@ import { GalleryCoverImage } from "@/Components/Galleries/GalleryPage/GalleryCov
 import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const NftDraftCard = ({ draft }: { draft: GalleryDraft }): JSX.Element => {
+export const NftDraftCard = ({ draft, onDelete }: { draft: GalleryDraft; onDelete: () => void }): JSX.Element => {
     let coverImage: string | null = null;
 
     if (isTruthy(draft.cover) && isTruthy(draft.coverType)) {
@@ -37,7 +37,10 @@ export const NftDraftCard = ({ draft }: { draft: GalleryDraft }): JSX.Element =>
                     />
                 </div>
 
-                <NftDraftStats draft={draft} />
+                <NftDraftStats
+                    draft={draft}
+                    onDelete={onDelete}
+                />
             </div>
         </Link>
     );

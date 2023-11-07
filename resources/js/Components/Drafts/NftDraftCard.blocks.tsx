@@ -15,8 +15,14 @@ import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
-export const NftDraftFooter = (): JSX.Element => {
+export const NftDraftFooter = ({ onDelete }: { onDelete: () => void }): JSX.Element => {
     const { t } = useTranslation();
+
+    const deleteHandler: React.MouseEventHandler<HTMLButtonElement> = (event): void => {
+        event.preventDefault();
+
+        onDelete();
+    };
 
     return (
         <div
@@ -31,16 +37,18 @@ export const NftDraftFooter = (): JSX.Element => {
                 />
                 <span className="text-sm text-theme-secondary-700 dark:text-theme-dark-200">{t("common.draft")}</span>
             </div>
-            <div className="flex items-center space-x-2">
-                <Tooltip content={t("common.delete_draft")}>
+
+            <Tooltip content={t("common.delete_draft")}>
+                <div>
                     <IconButton
                         icon="Trash"
                         iconClass="text-theme-primary-900 dark:text-theme-dark-200"
                         iconSize="md"
                         className="border-transparent bg-transparent dark:border-transparent"
+                        onClick={deleteHandler}
                     />
-                </Tooltip>
-            </div>
+                </div>
+            </Tooltip>
         </div>
     );
 };
@@ -92,7 +100,7 @@ export const NftDraftHeading = ({ walletAddress, title }: { walletAddress?: stri
     );
 };
 
-export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element => {
+export const NftDraftStats = ({ draft, onDelete }: { draft: GalleryDraft; onDelete: () => void }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
 
@@ -144,7 +152,7 @@ export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element =
                 </div>
             </div>
             <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
-            <NftDraftFooter />
+            <NftDraftFooter onDelete={onDelete} />
         </div>
     );
 };

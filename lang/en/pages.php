@@ -173,6 +173,10 @@ return [
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',
             'new_gallery_no_nfts' => 'Creating a Gallery requires you to own an NFT.',
+            'delete_modal' => [
+                'title' => 'Delete Draft',
+                'text' => 'Are you sure you want to delete the draft? Everything you\'ve done will be deleted and you won\'t be able to get it back.',
+            ],
         ],
         'copy_gallery_link' => 'Copy Gallery Link',
         'my_nfts' => 'My NFTs',

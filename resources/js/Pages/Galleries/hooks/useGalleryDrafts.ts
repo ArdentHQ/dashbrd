@@ -31,7 +31,7 @@ interface GalleryDraftsState {
     setDraftCover: (image: ArrayBuffer | null, type: string | null) => void;
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
-    deleteDraft: () => Promise<void>;
+    deleteDraft: (draftId: number | null) => Promise<void>;
     deleteExpiredDrafts: () => Promise<void>;
     walletDrafts: GalleryDraft[];
     loadingWalletDrafts: boolean;
@@ -83,15 +83,15 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         void saveDraft();
     }, [save, loadingWalletDrafts]);
 
+    const loadWalletDrafts = async (): Promise<void> => {
+        const drafts = await getWalletDrafts();
+
+        setWalletDrafts(drafts);
+
+        setLoadingWalletDrafts(false);
+    };
+
     useEffect(() => {
-        const loadWalletDrafts = async (): Promise<void> => {
-            const drafts = await getWalletDrafts();
-
-            setWalletDrafts(drafts);
-
-            setLoadingWalletDrafts(false);
-        };
-
         void loadWalletDrafts();
     }, []);
 
@@ -108,9 +108,8 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
             }
 
             const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
-            delete draftToCreate.id;
 
-            console.log("AAAA");
+            delete draftToCreate.id;
 
             const id = await database.add(draftToCreate);
             setDraft({ ...draft, id, updatedAt });
@@ -151,9 +150,12 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setSave(true);
     };
 
-    const deleteDraft = async (): Promise<void> => {
-        if (draft.id === null) return;
-        await database.deleteRecord(draft.id);
+    const deleteDraft = async (draftId: number | null): Promise<void> => {
+        if (draftId === null) return;
+
+        await database.deleteRecord(draftId);
+
+        await loadWalletDrafts();
 
         setReachedLimit(false);
     };

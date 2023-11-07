@@ -1,9 +1,10 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
 import { NftGalleryCard } from "@/Components/Galleries";
+import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
@@ -26,7 +27,9 @@ const NoGalleries = ({ text }: { text: string }): JSX.Element => (
 const Drafts = (): JSX.Element => {
     const { t } = useTranslation();
 
-    const { loadingWalletDrafts, walletDrafts } = useGalleryDrafts();
+    const { loadingWalletDrafts, walletDrafts, deleteDraft } = useGalleryDrafts();
+
+    const [draftToDelete, setDraftToDelete] = useState<number | null>(null);
 
     if (loadingWalletDrafts) {
         return <></>;
@@ -42,8 +45,23 @@ const Drafts = (): JSX.Element => {
                 <NftDraftCard
                     key={index}
                     draft={draft}
+                    onDelete={() => {
+                        setDraftToDelete(draft.id);
+                    }}
                 />
             ))}
+
+            <DraftGalleryDeleteModal
+                open={draftToDelete !== null}
+                onClose={() => {
+                    setDraftToDelete(null);
+                }}
+                onConfirm={() => {
+                    void deleteDraft(draftToDelete);
+
+                    setDraftToDelete(null);
+                }}
+            />
         </div>
     );
 };

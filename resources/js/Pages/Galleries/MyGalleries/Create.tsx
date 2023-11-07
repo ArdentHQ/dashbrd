@@ -77,7 +77,8 @@ const Create = ({
         gallery,
         setDraftNfts,
         deleteDraft: (): void => {
-            void deleteDraft();
+            void deleteDraft(draft.id);
+
             replaceUrlQuery({ draftId: "" });
         },
     });
