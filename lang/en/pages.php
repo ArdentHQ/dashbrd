@@ -168,6 +168,7 @@ return [
             'subtitle' => 'Manage your galleries',
             'new_gallery' => 'New Gallery',
             'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
+            'no_draft_galleries' => 'You have no draft galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'succesfully_deleted' => 'Gallery successfully deleted',
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',

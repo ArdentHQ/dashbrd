@@ -86,6 +86,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     useEffect(() => {
         const loadWalletDrafts = async (): Promise<void> => {
             const drafts = await getWalletDrafts();
+
             setWalletDrafts(drafts);
 
             setLoadingWalletDrafts(false);
@@ -100,8 +101,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         const updatedAt = new Date().getTime();
 
         if (draft.id === null) {
-            const walletDrafts = await getWalletDrafts();
-
             if (walletDrafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
                 setIsSaving(false);
                 setReachedLimit(true);
