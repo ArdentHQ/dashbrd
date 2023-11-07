@@ -29,7 +29,7 @@ export const ArticleCard = ({
             className={cn(
                 "transition-default group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
-                    "bg-white ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500":
+                    "bg-white ring-theme-primary-100 dark:border-theme-dark-700 dark:bg-theme-dark-900 ":
                         !isLargeVariant,
                     "bg-theme-dark-900 hover:bg-theme-primary-700 dark:border-none dark:bg-theme-primary-700 dark:hover:bg-theme-primary-600":
                         isLargeVariant,
