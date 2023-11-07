@@ -68,12 +68,12 @@ const SocialMediaLink = ({
             target="_blank"
             rel="noopener noreferrer"
             data-testid={`TokenLinks__${testId}`}
-            className="button-icon button-icon-secondary flex h-10 w-10 items-center justify-center"
+            className="button-icon button-icon-secondary group flex h-10 w-10 items-center justify-center"
         >
             <Icon
                 name={icon}
                 size="md"
-                className="text-theme-primary-900 dark:text-theme-dark-300"
+                className="text-theme-primary-900 transition-all dark:text-theme-dark-300 dark:group-hover:text-theme-dark-200"
             />
         </a>
     </Tooltip>
