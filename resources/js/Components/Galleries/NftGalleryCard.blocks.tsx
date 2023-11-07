@@ -32,6 +32,7 @@ interface NftImageContainerProperties {
     validateImage?: boolean;
     combinedNfts?: App.Data.Gallery.GalleryNftData[];
     nftLimit?: number;
+    reachedLimit: boolean;
 }
 
 interface NftImageGridProperties {
@@ -98,8 +99,7 @@ export const NftImageContainer = ({
     isSelected,
     isAdded,
     validateImage,
-    combinedNfts = [],
-    nftLimit,
+    reachedLimit = false,
 }: NftImageContainerProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -136,7 +136,7 @@ export const NftImageContainer = ({
         );
     }
 
-    if (isTruthy(nftLimit) && combinedNfts.length >= nftLimit && !isTruthy(isSelected)) {
+    if (isTruthy(reachedLimit) && !isTruthy(isSelected)) {
         return (
             <div
                 data-testid={`NftImageGrid__container--${nft.tokenNumber}--limit_reached`}
@@ -197,6 +197,7 @@ export const NftImageGrid = ({
             {nftData.map((nft, index) => {
                 const isSelected = selectedNfts?.some((selectedNft) => selectedNft.tokenNumber === nft.tokenNumber);
                 const isAdded = addedNfts?.some((addedNft) => addedNft.tokenNumber === nft.tokenNumber);
+                const reachedLimit = isTruthy(nftLimit) && combinedNfts.length >= nftLimit && !isTruthy(isSelected);
 
                 return (
                     <NftImageContainer
@@ -212,8 +213,7 @@ export const NftImageGrid = ({
                         }}
                         isSelected={isSelected}
                         isAdded={isAdded}
-                        combinedNfts={combinedNfts}
-                        nftLimit={nftLimit}
+                        reachedLimit={reachedLimit}
                         validateImage={validateImage}
                     />
                 );

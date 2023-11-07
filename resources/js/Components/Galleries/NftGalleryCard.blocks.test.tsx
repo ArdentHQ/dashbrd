@@ -5,7 +5,6 @@ import {
     GalleryHeadingPlaceholder,
     GalleryStats,
     GalleryStatsPlaceholder,
-    NftImageContainer,
     NftImageGrid,
 } from "./NftGalleryCard.blocks";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
@@ -332,55 +331,6 @@ describe("NftImageGrid", () => {
         );
 
         expect(screen.queryByTestId("NftImageGrid__container--5--limit_reached")).not.toBeInTheDocument();
-    });
-});
-
-describe("NftImageContainer", () => {
-    const nft: App.Data.Gallery.GalleryNftData = {
-        id: 1,
-        name: "nft_1",
-        images: { thumb: "nft_image_1", small: "nft_image_1", large: "nft_image_1" },
-        tokenNumber: "1",
-        ownedByCurrentUser: false,
-        ...collectionInfo,
-    };
-
-    it("should render", () => {
-        render(
-            <NftImageContainer
-                nft={nft}
-                validateImage={true}
-            />,
-        );
-
-        expect(screen.getByTestId("NftImageGrid__container--1")).toBeInTheDocument();
-    });
-
-    it("should blur image if nft is in selected list", () => {
-        render(
-            <NftImageContainer
-                nft={nft}
-                validateImage={true}
-                nftLimit={1}
-                combinedNfts={[nft]}
-            />,
-        );
-
-        expect(screen.getByTestId("NftImageGrid__container--1--limit_reached")).toBeInTheDocument();
-        expect(screen.getByTestId("NftImageGrid__image--1")).toHaveClass("blur-sm");
-    });
-
-    it("should not blur image if no list is passed", () => {
-        render(
-            <NftImageContainer
-                nft={nft}
-                validateImage={true}
-                nftLimit={1}
-            />,
-        );
-
-        expect(screen.queryByTestId("NftImageGrid__container--1--limit_reached")).not.toBeInTheDocument();
-        expect(screen.queryByTestId("NftImageGrid__image--1")).not.toHaveClass("blur-sm");
     });
 });
 
