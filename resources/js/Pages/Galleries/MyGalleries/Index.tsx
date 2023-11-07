@@ -1,6 +1,5 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useIndexedDB } from "react-indexed-db-hook";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
@@ -29,7 +28,9 @@ const Index = ({
     const { getDrafts, deleteExpiredDrafts } = useGalleryDrafts();
 
     useEffect(() => {
-        const loadDrafts = async (): Promise<void> => setDrafts(await getDrafts());
+        const loadDrafts = async (): Promise<void> => {
+            setDrafts(await getDrafts());
+        };
 
         void loadDrafts();
         void deleteExpiredDrafts();

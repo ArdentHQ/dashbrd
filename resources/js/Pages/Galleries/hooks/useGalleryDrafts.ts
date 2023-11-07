@@ -149,7 +149,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const deleteExpiredDrafts = async (): Promise<void> => {
-        const drafts = await database.getAll();
+        const drafts: GalleryDraft[] = await database.getAll();
 
         for (const draft of drafts) {
             if (isExpired(draft)) {
