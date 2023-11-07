@@ -1,6 +1,7 @@
 import cn from "classnames";
 import { type HTMLAttributes } from "react";
-import { Icon, type IconName } from "@/Components/Icon";
+import { ButtonLink } from "../Buttons/ButtonLink";
+import { type IconName } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
 
 interface Properties extends HTMLAttributes<HTMLDivElement> {
@@ -63,18 +64,13 @@ const SocialMediaLink = ({
     testId: string;
 }): JSX.Element => (
     <Tooltip content={tooltip}>
-        <a
+        <ButtonLink
+            icon={icon}
             href={href}
             target="_blank"
-            rel="noopener noreferrer"
+            variant="icon"
             data-testid={`TokenLinks__${testId}`}
-            className="button-icon button-icon-secondary group flex h-10 w-10 items-center justify-center"
-        >
-            <Icon
-                name={icon}
-                size="md"
-                className="text-theme-primary-900 transition-all dark:text-theme-dark-300 dark:group-hover:text-theme-dark-200"
-            />
-        </a>
+            rel="noopener noreferrer"
+        />
     </Tooltip>
 );
