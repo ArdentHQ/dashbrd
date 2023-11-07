@@ -13,7 +13,7 @@ export const Sidebar = ({ children, title, subtitle }: SidebarProperties): JSX.E
                 subtitle={subtitle}
             />
 
-            <ul className="mt-0.5 flex flex-col space-x-0 space-y-1 px-3 py-1">{children}</ul>
+            <ul className="mt-0.5 flex flex-col space-x-0 space-y-1 px-3 pb-3 pt-1">{children}</ul>
         </div>
     </nav>
 );
