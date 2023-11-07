@@ -109,7 +109,7 @@ const Index = ({
                 )}
 
                 {userGalleries.meta.total > 0 && (
-                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4 md-lg:grid-cols-3">
                         {userGalleries.data.map((gallery, index) => (
                             <NftGalleryCard
                                 key={index}
@@ -121,7 +121,7 @@ const Index = ({
 
                 {userGalleries.meta.last_page > 1 && (
                     <Pagination
-                        className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
+                        className="my-6 flex w-full flex-col justify-center px-6 sm:px-8 lg:mb-0  xs:items-center"
                         data={userGalleries}
                     />
                 )}

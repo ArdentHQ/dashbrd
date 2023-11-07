@@ -28,7 +28,7 @@ export const CollectionsGrid = ({
         return (
             <div
                 data-testid="CollectionsGridSkeleton"
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4"
+                className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 md-lg:grid-cols-3"
             >
                 {Array.from({ length: skeletonsCount })
                     .fill({})
@@ -42,7 +42,7 @@ export const CollectionsGrid = ({
     return (
         <div
             data-testid="CollectionsGrid"
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4"
+            className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 md-lg:grid-cols-3"
         >
             {collections.map((collection, index) => (
                 <CollectionCard

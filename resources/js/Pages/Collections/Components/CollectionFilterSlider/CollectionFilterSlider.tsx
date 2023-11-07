@@ -69,7 +69,7 @@ export const CollectionFilterSlider = ({
 
                     <Slider.Content
                         includePadding={false}
-                        className="pb-28 xs:px-6 xs:pt-6 sm:px-8"
+                        className="pb-28 sm:px-8 xs:px-6 xs:pt-6"
                     >
                         <div className="xs:space-y-3">
                             {user != null && (

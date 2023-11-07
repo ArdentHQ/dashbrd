@@ -9,7 +9,7 @@ export default {
 export const Default = {
     render: ({ sets }: { sets: App.Data.Articles.ArticleData[] }) => {
         return (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 md-lg:grid-cols-3">
                 {sets.map((article, index) => (
                     <ArticleCard article={article} />
                 ))}

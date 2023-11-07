@@ -352,7 +352,7 @@ const CollectionsView = ({
                                             />
                                         </div>
 
-                                        <div className="order-last block md-lg:order-none lg:hidden">
+                                        <div className="order-last block lg:hidden md-lg:order-none">
                                             <IconButton
                                                 icon="Funnel"
                                                 onClick={() => {

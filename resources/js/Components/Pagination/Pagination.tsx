@@ -111,7 +111,7 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                 />
             ) : (
                 <>
-                    <div className="mt-3 hidden items-center space-x-3 xs:flex xs:space-x-1 sm:w-fit  md:mt-0 ">
+                    <div className="mt-3 hidden items-center space-x-3 sm:w-fit md:mt-0 xs:flex  xs:space-x-1 ">
                         {data.meta.current_page > 1 && (
                             <ButtonLink
                                 onClick={(event) => {

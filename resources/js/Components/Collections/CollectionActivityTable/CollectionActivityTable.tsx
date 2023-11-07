@@ -197,7 +197,7 @@ export const CollectionActivityTable = ({
                                           {activities.paginated.meta.last_page > 1 && (
                                               <Pagination
                                                   data={activities.paginated}
-                                                  className="flex w-full flex-col justify-center xs:items-center  sm:px-8"
+                                                  className="flex w-full flex-col justify-center sm:px-8  xs:items-center"
                                               />
                                           )}
                                       </div>

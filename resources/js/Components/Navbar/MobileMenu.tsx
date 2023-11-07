@@ -57,7 +57,7 @@ export const MobileMenu = ({
                     setMenuOpen(false);
                 }}
             >
-                <Slider.Header className="fixed h-14 w-full bg-white px-6 py-4 text-lg font-medium leading-7 text-theme-secondary-900 xs:h-18 sm:px-8">
+                <Slider.Header className="fixed h-14 w-full bg-white px-6 py-4 text-lg font-medium leading-7 text-theme-secondary-900 sm:px-8 xs:h-18">
                     {t("common.menu")}
                 </Slider.Header>
 

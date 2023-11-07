@@ -24,7 +24,7 @@ export const SelectPageLimit = ({
 
     return (
         <Listbox
-            className={cn("w-full xs:w-48 sm:flex sm:justify-between", className)}
+            className={cn("w-full sm:flex sm:justify-between xs:w-48", className)}
             optionsClassName={cn("right-0 w-32 bottom-16 rounded-xl", optionClassName)}
             onChange={(value) => {
                 const urlParameters = new URLSearchParams(window.location.href);

@@ -79,7 +79,7 @@ export const NftHeader = ({
     return (
         <>
             <div
-                className="flex w-full flex-col items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur dark:border-theme-dark-700 dark:bg-theme-dark-950 xs:px-8 sm:flex-row sm:border-none sm:pb-4"
+                className="flex w-full flex-col items-center justify-center gap-2 border-b border-solid border-theme-secondary-300 bg-theme-secondary-50 px-7 pb-4 pt-4 backdrop-blur dark:border-theme-dark-700 dark:bg-theme-dark-950 sm:flex-row sm:border-none sm:pb-4 xs:px-8"
                 data-testid="NftHeader__mobile"
             >
                 <div className="flex flex-row items-center justify-center gap-2">

@@ -7,7 +7,7 @@ export const GalleryNfts = ({ nfts }: { nfts: App.Data.Gallery.GalleryNftData[] 
     return (
         <ul
             data-testid="GalleryNfts"
-            className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4"
+            className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 md-lg:grid-cols-3"
         >
             {nfts.map((nft) => (
                 <li

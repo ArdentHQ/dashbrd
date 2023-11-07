@@ -24,7 +24,7 @@ export const InstallMetamask = ({
                     data-testid="AuthOverlay__close-button"
                     variant="secondary"
                     onClick={closeOverlay}
-                    className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
+                    className="w-auto min-w-[193px] justify-center sm:w-auto xs:w-[17rem]"
                 >
                     {t("common.close")}
                 </Button>
@@ -35,7 +35,7 @@ export const InstallMetamask = ({
                 target="_blank"
                 icon="Metamask"
                 rel="noopener nofollow noreferrer"
-                className="w-auto min-w-[193px] justify-center xs:w-[17rem] sm:w-auto"
+                className="w-auto min-w-[193px] justify-center sm:w-auto xs:w-[17rem]"
             >
                 {t("auth.wallet.install")}
             </ButtonLink>

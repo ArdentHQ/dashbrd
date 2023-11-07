@@ -25,7 +25,7 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
         <>
             <div
                 data-testid="CollectionHeaderBottom"
-                className="hide-scrollbar flex items-center justify-between space-x-2 overflow-x-auto px-6 dark:bg-theme-dark-900 md-lg:mx-auto lg:mx-0 lg:space-x-6 lg:bg-theme-secondary-100 lg:px-6 lg:py-4 dark:lg:bg-theme-dark-800"
+                className="hide-scrollbar flex items-center justify-between space-x-2 overflow-x-auto px-6 dark:bg-theme-dark-900 lg:mx-0 lg:space-x-6 lg:bg-theme-secondary-100 lg:px-6 lg:py-4 dark:lg:bg-theme-dark-800 md-lg:mx-auto"
             >
                 <GridHeader
                     data-testid="CollectionHeaderBottom__floor"
