@@ -299,7 +299,7 @@ return [
             ],
             'search_dropdown' => [
                 'placeholder' => 'Search token',
-                'no_results' => 'No results',
+                'no_results' => 'No Results',
                 'error' => 'Error occurred while searching tokens.',
             ],
             'transaction_time' => 'Transaction Time: ~{{ time }} minutes',
