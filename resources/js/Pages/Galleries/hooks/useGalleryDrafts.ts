@@ -3,23 +3,28 @@ import { useIndexedDB } from "react-indexed-db-hook";
 import { useAuth } from "@/Contexts/AuthContext";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
+const DRAFT_TTL_DAYS = 30;
 
-interface DraftNft {
+export interface DraftNft {
     nftId: number;
     image: string;
     collectionSlug: string;
 }
 
-interface GalleryDraft {
+export interface GalleryDraft {
     title: string;
     cover: ArrayBuffer | null;
     coverType: string | null;
     nfts: DraftNft[];
     walletAddress?: string;
     id: number | null;
+    value: string | null;
+    collectionsCount: number;
+    updatedAt: number | null;
 }
 
 interface GalleryDraftsState {
+    getDrafts: () => Promise<GalleryDraft[]>;
     reachedLimit: boolean;
     isSaving: boolean;
     draft: GalleryDraft;
@@ -27,8 +32,7 @@ interface GalleryDraftsState {
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
     deleteDraft: () => Promise<void>;
-    walletDrafts: GalleryDraft[];
-    loadingWalletDrafts: boolean;
+    deleteExpiredDrafts: () => Promise<void>;
 }
 
 const initialGalleryDraft: GalleryDraft = {
@@ -37,6 +41,9 @@ const initialGalleryDraft: GalleryDraft = {
     coverType: null,
     nfts: [],
     id: null,
+    value: null,
+    collectionsCount: 0,
+    updatedAt: null,
 };
 
 export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): GalleryDraftsState => {
@@ -48,9 +55,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         ...initialGalleryDraft,
         walletAddress: wallet?.address,
     });
-
-    const [loadingWalletDrafts, setLoadingWalletDrafts] = useState<boolean>(true);
-    const [walletDrafts, setWalletDrafts] = useState<GalleryDraft[]>([]);
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -76,19 +80,10 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         void saveDraft();
     }, [save]);
 
-    useEffect(() => {
-        const loadWalletDrafts = async (): Promise<void> => {
-            const drafts = await getWalletDrafts();
-            setWalletDrafts(drafts);
-
-            setLoadingWalletDrafts(false);
-        };
-
-        void loadWalletDrafts();
-    }, []);
-
     const saveDraft = async (): Promise<void> => {
         setIsSaving(true);
+
+        const updatedAt = new Date().getTime();
 
         if (draft.id === null) {
             const walletDrafts = await getWalletDrafts();
@@ -99,13 +94,14 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
                 return;
             }
 
-            const draftToCreate: Partial<GalleryDraft> = { ...draft };
+            const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
             delete draftToCreate.id;
 
             const id = await database.add(draftToCreate);
-            setDraft({ ...draft, id });
+            setDraft({ ...draft, id, updatedAt });
         } else {
             await database.update(draft);
+            setDraft({ ...draft, updatedAt });
         }
 
         setSave(false);
@@ -147,7 +143,19 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setReachedLimit(false);
     };
 
+    const deleteExpiredDrafts = async (): Promise<void> => {
+        const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
+        const drafts: GalleryDraft[] = await database.getAll();
+
+        for (const draft of drafts) {
+            if ((draft.updatedAt ?? 0) < thresholdDaysAgo) {
+                void database.deleteRecord(Number(draft.id));
+            }
+        }
+    };
+
     return {
+        getDrafts: getWalletDrafts,
         reachedLimit,
         isSaving,
         draft,
@@ -155,7 +163,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setDraftNfts,
         setDraftTitle,
         deleteDraft,
-        walletDrafts,
-        loadingWalletDrafts,
+        deleteExpiredDrafts,
     };
 };

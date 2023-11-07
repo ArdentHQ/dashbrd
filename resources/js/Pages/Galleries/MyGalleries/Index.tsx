@@ -1,74 +1,57 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useIndexedDB } from "react-indexed-db-hook";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
+import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
-interface Properties {
+const Index = ({
+    title,
+    galleries,
+    nftCount = 0,
+    galleryCount,
+    showDrafts,
+}: {
     title: string;
     children: ReactNode;
     galleries: App.Data.Gallery.GalleriesData;
     nftCount?: number;
     showDrafts: boolean;
-}
-const Drafts = (): JSX.Element => {
-    const { walletDrafts, loadingWalletDrafts } = useGalleryDrafts();
+    galleryCount: number;
+}): JSX.Element => {
+    const { t } = useTranslation();
+    //! NOTE: Remove lines 26-38 after useGalleryDrafts hook has been implemented
+    const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
+    const database = useIndexedDB("gallery-drafts");
 
-    // const [walletDrafts, setWalletDrafts] = useState([]);
+    const loadDrafts = async (): Promise<void> => {
+        const { getAll } = database;
+
+        const records = await getAll();
+        setDrafts(records);
+    };
 
     useEffect(() => {
-        console.log({ loadingWalletDrafts, walletDrafts });
-    }, [walletDrafts, loadingWalletDrafts]);
+        void loadDrafts();
+    }, [database]);
 
-    return <></>;
-};
-
-const Galleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Element => {
     const userGalleries = galleries.paginated;
 
-    const { t } = useTranslation();
+    const { deleteExpiredDrafts } = useGalleryDrafts(undefined, true);
 
-    return (
-        <>
-            {userGalleries.meta.total === 0 && (
-                <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
-                    <span className="text-center font-medium text-theme-secondary-700">
-                        {t("pages.galleries.my_galleries.no_galleries")}
-                    </span>
-                </div>
-            )}
-
-            {userGalleries.meta.total > 0 && (
-                <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
-                    {userGalleries.data.map((gallery, index) => (
-                        <NftGalleryCard
-                            key={index}
-                            gallery={gallery}
-                        />
-                    ))}
-                </div>
-            )}
-
-            {userGalleries.meta.last_page > 1 && (
-                <Pagination
-                    className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
-                    data={userGalleries}
-                />
-            )}
-        </>
-    );
-};
-
-const Index = ({ showDrafts, galleries, title, nftCount = 0 }: Properties): JSX.Element => {
-    const { t } = useTranslation();
+    useEffect(() => {
+        void deleteExpiredDrafts();
+    }, []);
 
     return (
         <Layout
             title={title}
             nftCount={nftCount}
+            galleryCount={galleryCount}
         >
             <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
                 <div className="mb-6 hidden w-full items-center justify-between xl:flex">
@@ -80,9 +63,45 @@ const Index = ({ showDrafts, galleries, title, nftCount = 0 }: Properties): JSX.
 
                     <CreateGalleryButton nftCount={nftCount} />
                 </div>
-            </div>
 
-            {showDrafts ? <Drafts /> : <Galleries galleries={galleries} />}
+                {userGalleries.meta.total === 0 && (
+                    <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
+                        <span className="text-center font-medium text-theme-secondary-700">
+                            {t("pages.galleries.my_galleries.no_galleries")}
+                        </span>
+                    </div>
+                )}
+
+                {!showDrafts && userGalleries.meta.total > 0 && (
+                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+                        {userGalleries.data.map((gallery, index) => (
+                            <NftGalleryCard
+                                key={index}
+                                gallery={gallery}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                {showDrafts && drafts.length > 0 && (
+                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+                        {drafts.length > 0 &&
+                            drafts.map((draft, index) => (
+                                <NftDraftCard
+                                    key={index}
+                                    draft={draft}
+                                />
+                            ))}
+                    </div>
+                )}
+
+                {!showDrafts && userGalleries.meta.last_page > 1 && (
+                    <Pagination
+                        className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
+                        data={userGalleries}
+                    />
+                )}
+            </div>
         </Layout>
     );
 };

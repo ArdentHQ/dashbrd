@@ -412,3 +412,29 @@ it('can get reporting throttle duration', function () {
 
     expect($method->invoke(new Collection))->toBeInt();
 });
+
+it('prevents reserved keywords to be used for slugs', function () {
+    $gallery = Gallery::factory()->create([
+        'name' => 'Most Valuable',
+    ]);
+
+    expect($gallery->slug)->toBe('most-valuable-1');
+
+    $gallery = Gallery::factory()->create([
+        'name' => 'Most Popular',
+    ]);
+
+    expect($gallery->slug)->toBe('most-popular-1');
+
+    $gallery = Gallery::factory()->create([
+        'name' => 'Newest',
+    ]);
+
+    expect($gallery->slug)->toBe('newest-1');
+
+    $gallery = Gallery::factory()->create([
+        'name' => 'Newest',
+    ]);
+
+    expect($gallery->slug)->toBe('newest-2');
+});

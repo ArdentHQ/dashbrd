@@ -20,6 +20,11 @@ export const AppMenu = (): JSX.Element => {
             title: t("pages.galleries.title"),
             route: "galleries",
         },
+        {
+            isVisible: features.articles,
+            title: t("pages.articles.title"),
+            route: "articles",
+        },
     ];
 
     const components = items

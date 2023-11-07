@@ -14,7 +14,6 @@ class DemoSeeder extends Seeder
         Cache::clear();
 
         // Seed data but ignore the dummy NFTs
-        $this->call(PermissionSeeder::class);
         $this->call(AdminUserSeeder::class);
         $this->call(UserRoleSeeder::class);
         $this->call(NetworkSeeder::class);
