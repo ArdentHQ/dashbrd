@@ -3,6 +3,7 @@ import { useIndexedDB } from "react-indexed-db-hook";
 import { useAuth } from "@/Contexts/AuthContext";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
+const DRAFT_TTL_DAYS = 30;
 
 interface DraftNft {
     nftId: number;
@@ -17,6 +18,7 @@ interface GalleryDraft {
     nfts: DraftNft[];
     walletAddress?: string;
     id: number | null;
+    updatedAt: number | null;
 }
 
 interface GalleryDraftsState {
@@ -27,6 +29,7 @@ interface GalleryDraftsState {
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
     deleteDraft: () => Promise<void>;
+    deleteExpiredDrafts: () => Promise<void>;
 }
 
 const initialGalleryDraft: GalleryDraft = {
@@ -35,6 +38,7 @@ const initialGalleryDraft: GalleryDraft = {
     coverType: null,
     nfts: [],
     id: null,
+    updatedAt: null,
 };
 
 export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): GalleryDraftsState => {
@@ -74,6 +78,8 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     const saveDraft = async (): Promise<void> => {
         setIsSaving(true);
 
+        const updatedAt = new Date().getTime();
+
         if (draft.id === null) {
             const walletDrafts = await getWalletDrafts();
 
@@ -83,13 +89,14 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
                 return;
             }
 
-            const draftToCreate: Partial<GalleryDraft> = { ...draft };
+            const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
             delete draftToCreate.id;
 
             const id = await database.add(draftToCreate);
-            setDraft({ ...draft, id });
+            setDraft({ ...draft, id, updatedAt });
         } else {
             await database.update(draft);
+            setDraft({ ...draft, updatedAt });
         }
 
         setSave(false);
@@ -131,6 +138,17 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setReachedLimit(false);
     };
 
+    const deleteExpiredDrafts = async (): Promise<void> => {
+        const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
+        const drafts: GalleryDraft[] = await database.getAll();
+
+        for (const draft of drafts) {
+            if ((draft.updatedAt ?? 0) < thresholdDaysAgo) {
+                void database.deleteRecord(Number(draft.id));
+            }
+        }
+    };
+
     return {
         reachedLimit,
         isSaving,
@@ -139,5 +157,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setDraftNfts,
         setDraftTitle,
         deleteDraft,
+        deleteExpiredDrafts,
     };
 };
