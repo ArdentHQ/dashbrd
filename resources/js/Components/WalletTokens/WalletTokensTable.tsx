@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
 import uniq from "lodash/uniq";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

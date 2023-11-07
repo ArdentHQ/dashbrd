@@ -17,21 +17,21 @@ const FilterView = ({ type }: GalleryFiltersPageProperties): JSX.Element => {
         "most-popular": {
             title: t("metatags.galleries.most_popular.title"),
             routeInfo: {
-                value: route("galleries.most-popular"),
+                value: route("filtered-galleries.index", { filter: "most-popular" }),
                 label: t("pages.galleries.most_popular"),
             },
         },
         newest: {
             title: t("metatags.galleries.newest.title"),
             routeInfo: {
-                value: route("galleries.newest"),
+                value: route("filtered-galleries.index", { filter: "newest" }),
                 label: t("pages.galleries.newest"),
             },
         },
         "most-valuable": {
             title: t("metatags.galleries.most_valuable.title"),
             routeInfo: {
-                value: route("galleries.most-valuable"),
+                value: route("filtered-galleries.index", { filter: "most-valuable" }),
                 label: t("pages.galleries.most_valuable"),
             },
         },

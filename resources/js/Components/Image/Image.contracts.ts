@@ -5,6 +5,7 @@ export interface ImageProperties {
     errorClassName?: string;
     isCircle?: boolean;
     src?: string | null;
+    srcSet?: string;
     alt?: string;
     errorMessage?: string;
     onError?: () => void;

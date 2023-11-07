@@ -118,12 +118,13 @@ const Button = forwardRef<HTMLButtonElement, TabButtonProperties>(
 Button.displayName = "Tabs.Button";
 
 interface WrapperProperties extends HTMLAttributes<HTMLDivElement> {
+    wrapperClassName?: string;
     selected?: boolean;
     disabled?: boolean;
 }
 
-export const List = ({ className, ...properties }: WrapperProperties): JSX.Element => (
-    <div className="overflow-x-auto">
+export const List = ({ wrapperClassName, className, ...properties }: WrapperProperties): JSX.Element => (
+    <div className={cn("overflow-x-auto", wrapperClassName)}>
         <div
             className={cn(
                 "inline-flex w-full max-w-full rounded-full bg-theme-secondary-100 p-1 dark:bg-theme-dark-950 sm:w-auto",
