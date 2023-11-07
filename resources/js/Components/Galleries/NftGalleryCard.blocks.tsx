@@ -92,14 +92,14 @@ const NftImage = ({
     </div>
 );
 
-export const NftImageContainer = ({
+const NftImageContainer = ({
     nft,
     onClick,
     allowSelection,
     isSelected,
     isAdded,
     validateImage,
-    reachedLimit = false,
+    reachedLimit,
 }: NftImageContainerProperties): JSX.Element => {
     const { t } = useTranslation();
 
