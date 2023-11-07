@@ -41,6 +41,7 @@ export const NftDraftFooter = ({ onDelete }: { onDelete: () => void }): JSX.Elem
             <Tooltip content={t("common.delete_draft")}>
                 <div>
                     <IconButton
+                        data-testid="NftDraftCard__delete-button"
                         icon="Trash"
                         iconClass="text-theme-primary-900 dark:text-theme-dark-200"
                         iconSize="md"

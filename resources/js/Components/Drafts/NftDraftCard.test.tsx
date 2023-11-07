@@ -5,7 +5,7 @@ import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { mockAuthContext, render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 
 const user = new UserDataFactory().create();
 let resetAuthContextMock: () => void;
@@ -39,13 +39,37 @@ describe("NftDraftCard", () => {
     });
 
     it("renders", () => {
-        render(<NftDraftCard draft={draft} />);
+        render(
+            <NftDraftCard
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftDraftCard")).toBeInTheDocument();
     });
 
+    it("handles on delete", async () => {
+        const onDelete = vi.fn();
+        render(
+            <NftDraftCard
+                draft={draft}
+                onDelete={onDelete}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("NftDraftCard__delete-button"));
+
+        expect(onDelete).toHaveBeenCalled();
+    });
+
     it("shows an NFT gallery card for the user when no cover image is set", () => {
-        render(<NftDraftCard draft={draft} />);
+        render(
+            <NftDraftCard
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.queryByTestId("GalleryCoverImage")).not.toBeInTheDocument();
         expect(screen.getByTestId("NftDraftImageGrid")).toBeInTheDocument();
@@ -64,7 +88,12 @@ describe("NftDraftCard", () => {
             coverType: "image/jpeg",
         };
 
-        render(<NftDraftCard draft={draftWithCover} />);
+        render(
+            <NftDraftCard
+                draft={draftWithCover}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("GalleryCoverImage")).toBeInTheDocument();
         expect(screen.queryByTestId("NftDraftImageGrid")).not.toBeInTheDocument();
@@ -76,7 +105,12 @@ describe("NftDraftCard", () => {
             walletAddress: undefined,
         };
 
-        render(<NftDraftCard draft={draftWithoutWalletAddress} />);
+        render(
+            <NftDraftCard
+                draft={draftWithoutWalletAddress}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.queryByTestId("NftDraftHeading__address")).not.toBeInTheDocument();
     });

@@ -222,7 +222,7 @@ describe("useGalleryDrafts", () => {
         });
 
         await act(async () => {
-            await result.current.deleteDraft();
+            await result.current.deleteDraft(result.current.draft.id);
         });
 
         await waitFor(() => {
