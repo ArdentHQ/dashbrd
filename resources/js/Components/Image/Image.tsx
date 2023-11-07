@@ -80,7 +80,7 @@ export const Img = ({
                 {isErrored && (
                     <ImageErrorPlaceholder
                         errorMessage={errorMessage}
-                        className={cn(className, errorClassName, "aspect-square")}
+                        className={cn(className, errorClassName, "w-full h-full")}
                     />
                 )}
             </div>
