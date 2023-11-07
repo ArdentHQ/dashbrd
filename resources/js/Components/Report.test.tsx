@@ -11,7 +11,7 @@ import NftFactory from "@/Tests/Factories/Nfts/NftFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { act, mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
 
 let routerSpy: SpyInstance;
 let useAuthorizedActionSpy: SpyInstance;
@@ -129,15 +129,17 @@ describe("Report", () => {
         expect(screen.queryByTestId("ReportModal")).not.toBeInTheDocument();
     });
 
-    it("show report modal on load", () => {
+    it("show report modal on load", async () => {
         const collection = new CollectionDetailDataFactory().create();
 
-        render(
-            <Report
-                model={collection}
-                modelType={"collection"}
-                show={true}
-            />,
+        await act(() =>
+            render(
+                <Report
+                    model={collection}
+                    modelType={"collection"}
+                    show={true}
+                />,
+            ),
         );
 
         expect(screen.getByTestId("ReportModal")).toBeInTheDocument();

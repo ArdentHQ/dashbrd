@@ -13,6 +13,7 @@ use App\Support\BlacklistedCollections;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,6 +32,9 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  * @property ?int $supply
  * @property ?string $floor_price
  * @property ?string $last_indexed_token_number
+ * @property ?string $image
+ *
+ * @method BelongsToMany<Article> articlesWithCollections()
  */
 class Collection extends Model
 {
@@ -60,6 +64,7 @@ class Collection extends Model
         'last_viewed_at' => 'datetime',
         'is_fetching_activity' => 'bool',
         'activity_updated_at' => 'datetime',
+        'activity_update_requested_at' => 'datetime',
     ];
 
     /**
@@ -105,6 +110,14 @@ class Collection extends Model
             ->whereHas('nfts', function (Builder $query) {
                 $query->where('collection_id', $this->id);
             });
+    }
+
+    /**
+     * @return BelongsToMany<Article>
+     */
+    public function articles(): BelongsToMany
+    {
+        return $this->belongsToMany(Article::class, 'article_collection')->withPivot('order_index');
     }
 
     public function image(): ?string

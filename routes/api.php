@@ -27,9 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tokens/breakdown', [Controllers\TokenController::class, 'breakdown'])->name('tokens.breakdown');
     Route::get('/tokens/search', [Controllers\TokenController::class, 'searchTokens'])->name('tokens.search');
 
-    Route::post('/refreshed-collections', [Controllers\RefreshedCollectionController::class, 'store'])
-            ->name('refresh-collections')
-            ->middleware('signed_wallet');
+    Route::post('/refreshed-collections', [Controllers\RefreshedCollectionController::class, 'store'])->name('refresh-collections');
 
     Route::post('/transaction-success', Controllers\TransactionSuccessController::class)
             ->name('transaction-success');
@@ -51,6 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
             ->name('nft.refresh')
             ->middleware('throttle:nft:refresh');
+
+    Route::post('/collections/{collection:slug}/refresh', [Controllers\CollectionController::class, 'refreshActivity'])
+            ->name('collection.refresh-activity');
 
     Route::get('/networks/{chainId}', Controllers\NetworkController::class)
             ->name('network-by-chain');

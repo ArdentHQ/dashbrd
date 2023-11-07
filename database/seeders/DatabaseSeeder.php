@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         Cache::clear();
 
-        $this->call(PermissionSeeder::class);
         $this->call(AdminUserSeeder::class);
         $this->call(UserRoleSeeder::class);
         $this->call(NetworkSeeder::class);
@@ -39,6 +38,10 @@ class DatabaseSeeder extends Seeder
         if (Feature::active(Features::Galleries->value)) {
             $this->call(GallerySeeder::class);
             $this->call(GalleryLikesSeeder::class);
+        }
+
+        if (Feature::active(Features::Articles->value)) {
+            $this->call(ArticleSeeder::class);
         }
 
         Cache::clear();

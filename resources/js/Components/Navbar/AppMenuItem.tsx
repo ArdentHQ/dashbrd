@@ -27,7 +27,7 @@ export const AppMenuItem = ({
     const { t } = useTranslation();
 
     const defaultItemStyles =
-        "transition-default group flex w-full py-3 border-b-3 pt-6 pb-5 outline-0 focus-visible:ring focus-visible:ring-theme-primary-300 focus-visible:z-10 dark:focus-visible:ring-theme-primary-700";
+        "transition-default group flex w-full py-3 border-b-3 pt-6 pb-5 outline-0 focus-visible:ring focus-visible:ring-theme-primary-300 focus-visible:z-10 dark:focus-visible:ring-theme-primary-700 h-18";
     const defaultTextContainerStyles = cn("flex px-[1.125rem] border-r group-last:border-r-0 ", {
         "border-theme-secondary-800 dark:border-theme-dark-700": dark,
         "border-theme-secondary-300 dark:border-theme-dark-700": !dark,

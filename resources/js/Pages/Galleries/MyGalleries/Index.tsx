@@ -11,6 +11,7 @@ const Index = ({
     title,
     galleries,
     nftCount = 0,
+    galleryCount,
     showDrafts,
 }: {
     title: string;
@@ -18,6 +19,7 @@ const Index = ({
     galleries: App.Data.Gallery.GalleriesData;
     nftCount?: number;
     showDrafts: boolean;
+    galleryCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -33,6 +35,7 @@ const Index = ({
         <Layout
             title={title}
             nftCount={nftCount}
+            galleryCount={galleryCount}
         >
             <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
                 <div className="mb-6 hidden w-full items-center justify-between xl:flex">

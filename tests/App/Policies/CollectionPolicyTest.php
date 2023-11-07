@@ -9,8 +9,6 @@ use App\Models\User;
 use App\Policies\CollectionPolicy;
 
 beforeEach(function () {
-    setUpPermissions();
-
     $this->instance = new CollectionPolicy();
     $this->user = User::factory()->create();
     $this->admin = User::factory()->create();
