@@ -28,11 +28,9 @@ const Index = ({
 
     const { getDrafts, deleteExpiredDrafts } = useGalleryDrafts();
 
-    const loadDrafts = async (): Promise<void> => {
-        setDrafts(await getDrafts());
-    };
-
     useEffect(() => {
+        const loadDrafts = async (): Promise<void> => setDrafts(await getDrafts());
+
         void loadDrafts();
         void deleteExpiredDrafts();
     }, []);
