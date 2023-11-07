@@ -87,6 +87,47 @@ declare namespace App.Data {
         attributes: Attributes;
     };
 }
+declare namespace App.Data.Articles {
+    export type ArticleData = {
+        id: number;
+        title: string;
+        slug: string;
+        category: App.Enums.ArticleCategoryEnum;
+        audioSrc: string | null;
+        content: string;
+        image: { small: string; small2x: string; medium: string; medium2x: string; large: string; large2x: string };
+        publishedAt: number;
+        userId: number;
+        authorName: string;
+        authorAvatar: { thumb: string | null; thumb2x: string | null };
+        featuredCollections: Array<App.Data.Articles.FeaturedCollectionData>;
+        metaDescription: string | null;
+    };
+    export type ArticlesData = {
+        paginated: {
+            data: Array<App.Data.Articles.ArticleData>;
+            links: Array<{ url: string | null; label: string; active: boolean }>;
+            meta: {
+                current_page: number;
+                first_page_url: string;
+                from: number | null;
+                last_page: number;
+                last_page_url: string;
+                next_page_url: string | null;
+                path: string;
+                per_page: number;
+                prev_page_url: string | null;
+                to: number | null;
+                total: number;
+            };
+        };
+    };
+    export type FeaturedCollectionData = {
+        name: string;
+        slug: string;
+        image: string | null;
+    };
+}
 declare namespace App.Data.Collections {
     export type CollectionBasicDetailsData = {
         slug: string;
@@ -131,6 +172,9 @@ declare namespace App.Data.Collections {
         owners: number | null;
         nftsCount: number;
         mintedAt: number | null;
+        activityUpdatedAt: string | null;
+        activityUpdateRequestedAt: string | null;
+        isFetchingActivity: boolean | null;
     };
     export type CollectionNftData = {
         id: number;
@@ -167,6 +211,25 @@ declare namespace App.Data.Collections {
     };
 }
 declare namespace App.Data.Gallery {
+    export type GalleriesCardData = {
+        paginated: {
+            data: Array<App.Data.Gallery.GalleryCardData>;
+            links: Array<{ url: string | null; label: string; active: boolean }>;
+            meta: {
+                current_page: number;
+                first_page_url: string;
+                from: number | null;
+                last_page: number;
+                last_page_url: string;
+                next_page_url: string | null;
+                path: string;
+                per_page: number;
+                prev_page_url: string | null;
+                to: number | null;
+                total: number;
+            };
+        };
+    };
     export type GalleriesData = {
         paginated: {
             data: Array<App.Data.Gallery.GalleryData>;

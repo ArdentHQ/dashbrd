@@ -9,6 +9,7 @@ import { Skeleton } from "@/Components/Skeleton";
 
 export const Img = ({
     src,
+    srcSet,
     alt,
     className,
     wrapperClassName,
@@ -69,6 +70,7 @@ export const Img = ({
                     <img
                         data-testid="Img"
                         src={src ?? undefined}
+                        srcSet={srcSet}
                         alt={alt}
                         className={twMerge(className, "h-full w-full object-cover ")}
                         {...properties}

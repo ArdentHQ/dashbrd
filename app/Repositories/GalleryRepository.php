@@ -8,6 +8,7 @@ use App\Enums\CurrencyCode;
 use App\Models\Gallery;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class GalleryRepository
@@ -43,6 +44,24 @@ class GalleryRepository
             query: Gallery::mostValuable($user?->currency() ?? CurrencyCode::USD),
             user: $user
         )->get();
+    }
+
+    /**
+     * @param  "most-valuable"|"newest"|"most-popular"  $filter
+     * @return LengthAwarePaginator<Gallery>
+     */
+    public function all(?User $user, string $filter, ?string $searchQuery): LengthAwarePaginator
+    {
+        $query = Gallery::query()
+                    ->when($filter === 'most-popular', fn ($q) => $q->popular())
+                    ->when($filter === 'most-valuable', fn ($q) => $q->mostValuable($user?->currency() ?? CurrencyCode::USD))
+                    ->when($filter === 'newest', fn ($q) => $q->latest())
+                    ->search($searchQuery);
+
+        return $this->modifyQueryForIndex(
+            query: $query,
+            user: $user,
+        )->paginate(12);
     }
 
     /**

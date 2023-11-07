@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Icon } from "@/Components/Icon";
 import { Sidebar, SidebarItem } from "@/Components/Sidebar";
 
 const routeName = "my-galleries";
@@ -8,7 +9,7 @@ export const MyGallerySidebar = ({
     draftsCount,
 }: {
     publishedCount: number;
-    draftsCount: number;
+    draftsCount?: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -30,7 +31,14 @@ export const MyGallerySidebar = ({
                 title={t("common.drafts")}
                 isSelected={route().current(routeName, { draft: true })}
                 href={route(routeName, { draft: true })}
-                rightText={draftsCount.toString()}
+                rightText={
+                    draftsCount?.toString() ?? (
+                        <Icon
+                            name="Spinner"
+                            className="animate-spin"
+                        />
+                    )
+                }
             />
         </Sidebar>
     );

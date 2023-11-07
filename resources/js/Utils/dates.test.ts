@@ -1,7 +1,8 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+import { expect } from "vitest";
 import { Period } from "@/Components/Tokens/Tokens.contracts";
 import { DateFormat } from "@/Types/enums";
-import { formatTimestampForPeriod, getTimestampParts, toHuman, toMonthYear } from "@/Utils/dates";
+import { formatTimestamp, formatTimestampForPeriod, getTimestampParts, toHuman, toMonthYear } from "@/Utils/dates";
 
 // Thu Mar 16 2023 12:30:01 GMT-0600 (Central Standard Time)
 const timestamp = 1678991401469;
@@ -257,6 +258,18 @@ describe("dates", () => {
             const result = toMonthYear(1677628800000, { timezone: "UTC" });
 
             expect(result).toBe("Mar 2023");
+        });
+    });
+
+    describe("formatTimestamp", () => {
+        it("should format timestamp in the given format", () => {
+            const result = formatTimestamp(1677628800000, DateFormat.A, "UTC");
+            expect(result).toBe("01/03/2023");
+        });
+
+        it("should format timestamp in the pre-defined format", () => {
+            const result = formatTimestamp(1677628800000);
+            expect(result).toBe("01 Mar 2023");
         });
     });
 });
