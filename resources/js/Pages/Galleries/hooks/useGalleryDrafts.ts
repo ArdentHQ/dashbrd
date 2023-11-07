@@ -149,7 +149,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setReachedLimit(false);
     };
 
-    const isExpired = (draft: GalleryDraft) => {
+    const isExpired = (draft: GalleryDraft): boolean => {
         const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
         return (draft.updatedAt ?? 0) < thresholdDaysAgo;
     };
