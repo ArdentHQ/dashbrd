@@ -92,12 +92,14 @@ const Create = ({
     useEffect(() => {
         const cover = data.coverImage;
 
-        if (isTruthy(data.coverImage) && cover instanceof File) {
+        if (cover instanceof File) {
             // eslint-disable-next-line promise/prefer-await-to-then
             void cover.arrayBuffer().then((buf) => {
                 setDraftCover(buf, cover.type);
                 setDraftTitle(data.name);
             });
+        } else if (isTruthy(data.name)) {
+            setDraftTitle(data.name);
         }
     }, [auth.wallet.address]);
 

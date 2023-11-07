@@ -74,7 +74,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
         const getDraft = async (): Promise<void> => {
             const draft: GalleryDraft | undefined = await database.getByID(givenDraftId);
-            if (draft !== undefined && draft.walletAddress === wallet?.address) {
+            if (draft !== undefined && draft.walletAddress?.toLowerCase() === wallet?.address.toLowerCase()) {
                 setDraft(draft);
             }
         };
