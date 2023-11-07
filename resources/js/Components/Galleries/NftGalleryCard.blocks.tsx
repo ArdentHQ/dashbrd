@@ -1,6 +1,7 @@
 import cn from "classnames";
 import { type MouseEventHandler, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import DeleteGalleryButton from "./DeleteGalleryButton";
 import { Avatar } from "@/Components/Avatar";
 import { DynamicBalance } from "@/Components/DynamicBalance";
 import { Heading } from "@/Components/Heading";
@@ -306,13 +307,22 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
     );
 };
 
-export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
+export const GalleryStats = ({
+    gallery,
+    showDeleteButton = false,
+}: {
+    gallery: App.Data.Gallery.GalleryData;
+    showDeleteButton?: boolean;
+}): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
 
     return (
         <div
-            className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium dark:bg-theme-dark-800"
+            className={cn(
+                "rounded-b-xl bg-theme-secondary-50 px-6 font-medium dark:bg-theme-dark-800",
+                showDeleteButton ? "pb-1.5" : "pb-3",
+            )}
             data-testid="GalleryStats"
         >
             <div className="flex justify-between pt-3">
@@ -347,21 +357,38 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                     <span className="text-sm dark:text-theme-dark-50 sm:text-base">{gallery.collectionsCount}</span>
                 </div>
             </div>
-            <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
+
+            <hr
+                className={cn(
+                    "mt-3 text-theme-secondary-300 dark:text-theme-dark-700",
+                    showDeleteButton ? "mb-2" : "mb-3",
+                )}
+            />
+
             <div className="flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200">
                 <GalleryStatsLikeButton gallery={gallery} />
 
-                <div className="flex items-center space-x-2">
-                    <Icon
-                        name="Eye"
-                        size="lg"
-                    />
-                    <span
-                        className="text-sm"
-                        data-testid="GalleryStats__views"
-                    >
-                        {gallery.views}
-                    </span>
+                <div className="flex items-center">
+                    <div className="flex items-center space-x-2">
+                        <Icon
+                            name="Eye"
+                            size="lg"
+                        />
+                        <span
+                            className="text-sm"
+                            data-testid="GalleryStats__views"
+                        >
+                            {gallery.views}
+                        </span>
+                    </div>
+
+                    {showDeleteButton && (
+                        <>
+                            <span className="ml-3 mr-1 flex h-1.25 w-1.25 rounded-full bg-theme-secondary-400 dark:bg-theme-dark-700"></span>
+
+                            <DeleteGalleryButton gallery={gallery} />
+                        </>
+                    )}
                 </div>
             </div>
         </div>
