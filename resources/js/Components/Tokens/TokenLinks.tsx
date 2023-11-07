@@ -1,6 +1,6 @@
 import cn from "classnames";
 import { type HTMLAttributes } from "react";
-import { ButtonLink } from "../Buttons/ButtonLink";
+import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { type IconName } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
 
