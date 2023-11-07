@@ -51,7 +51,7 @@ const Create = ({
 
     const { signedAction } = useAuthorizedAction();
 
-    const { initialized, setOnWalletSwitch } = useMetaMaskContext();
+    const { initialized, switching } = useMetaMaskContext();
 
     const [isGalleryFormSliderOpen, setIsGalleryFormSliderOpen] = useState(false);
     const [gallerySliderActiveTab, setGallerySliderActiveTab] = useState<GalleryFormSliderTabs>();
@@ -82,15 +82,12 @@ const Create = ({
         },
     });
 
-    console.log(paginatedNfts);
     useEffect(() => {
-        setOnWalletSwitch(() => {
-            console.log("run the callback");
-            updateSelectedNfts([]);
-
-            replaceUrlQuery({ draftId: "" });
-        });
-    }, []);
+        if (!switching) return;
+        console.log("switching ue run");
+        updateSelectedNfts([], true);
+        replaceUrlQuery({ draftId: "" });
+    }, [switching]);
 
     const totalValue = 0;
 
@@ -158,6 +155,7 @@ const Create = ({
                 <EditableGalleryHook
                     selectedNfts={gallery?.nfts.paginated.data}
                     nftLimit={nftLimit}
+                    key={auth.wallet.address}
                 >
                     <GalleryHeading
                         value={totalValue}
@@ -179,7 +177,7 @@ const Create = ({
 
                     <div className="space-y-4">
                         <GalleryNfts
-                            nfts={[]}
+                            nfts={paginatedNfts}
                             nftsPerPage={nftsPerPage}
                             pageMeta={{
                                 first_page_url: paginatedCollections.paginated.meta.first_page_url,
