@@ -9,7 +9,7 @@ export const MyGallerySidebar = ({
     draftsCount,
 }: {
     publishedCount: number;
-    draftsCount: number | undefined;
+    draftsCount?: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 
