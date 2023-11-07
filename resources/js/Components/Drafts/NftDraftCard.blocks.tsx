@@ -37,7 +37,7 @@ export const NftDraftFooter = (): JSX.Element => {
                         icon="Trash"
                         iconClass="text-theme-primary-900 dark:text-theme-dark-200"
                         iconSize="md"
-                        className="border-transparent bg-transparent dark:border-transparent"
+                        className="h-8 w-8 border-transparent bg-transparent dark:border-transparent"
                     />
                 </Tooltip>
             </div>
