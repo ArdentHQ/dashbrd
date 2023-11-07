@@ -15,6 +15,7 @@ export const DraftGalleryDeleteModal = ({
     return (
         <>
             <ConfirmDeletionDialog
+                data-testid="DraftGalleryDeleteModal"
                 isOpen={open}
                 onClose={onClose}
                 title={t("pages.galleries.my_galleries.delete_modal.title")}
