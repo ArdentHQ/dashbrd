@@ -67,6 +67,7 @@ module.exports = {
                 },
             },
         ],
+        "sonarjs/no-duplicate-string": "off",
         "import/default": "error",
         "import/export": "error",
         "import/first": "error",
@@ -140,7 +141,6 @@ module.exports = {
             rules: {
                 "@typescript-eslint/no-unsafe-call": "off",
                 "import/no-namespace": "off",
-                "sonarjs/no-duplicate-string": "off",
             },
         },
     ],

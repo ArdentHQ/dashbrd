@@ -1,10 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import { ExternalLinkConfirmModal } from "@/Components/ExternalLinkConfirmModal";
-import { isTruthy } from "@/Utils/is-truthy";
 
 interface ContextProperties {
     allowedExternalDomains: string[];
     setUrl?: (url: string) => void;
+    setOpen?: (open: boolean) => void;
 }
 
 interface ProviderProperties extends ContextProperties {
@@ -20,21 +20,23 @@ export const ExternalLinkContextProvider = ({
     allowedExternalDomains = [],
 }: ProviderProperties): JSX.Element => {
     const [url, setUrl] = useState<string | undefined>();
+    const [open, setOpen] = useState(false);
 
     return (
         <ExternalLinkContext.Provider
             value={{
                 allowedExternalDomains,
                 setUrl,
+                setOpen,
             }}
         >
             <div>
                 {children}
 
                 <ExternalLinkConfirmModal
-                    isOpen={isTruthy(url)}
+                    isOpen={open}
                     onClose={() => {
-                        setUrl(undefined);
+                        setOpen(false);
                     }}
                     href={url}
                     hasDisabledLinkWarning={localStorage.getItem("has_disabled_link_warning") === "true"}
@@ -58,6 +60,7 @@ export const useExternalLinkContext = (): {
         isDomainAllowed: (url: string): boolean => context.allowedExternalDomains.includes(new URL(url).hostname),
         hasDisabledLinkWarning: localStorage.getItem("has_disabled_link_warning") === "true",
         openConfirmationModal: (url: string) => {
+            context.setOpen?.(true);
             context.setUrl?.(url);
         },
     };

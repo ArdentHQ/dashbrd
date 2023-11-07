@@ -3,6 +3,7 @@ import { isTruthy } from "@/Utils/is-truthy";
 
 export enum LocalStorageKey {
     LastTransactionSentAt = "LastTransactionSentAt",
+    CollectionActivityUpdateRequests = "CollectionActivityUpdateRequests",
 }
 
 export const useLocalStorage = <T>(

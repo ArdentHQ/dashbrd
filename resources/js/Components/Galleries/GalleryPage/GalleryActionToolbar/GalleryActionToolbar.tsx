@@ -186,8 +186,9 @@ export const GalleryActionToolbar = ({
                                                 iconPosition="right"
                                             >
                                                 <Img
+                                                    wrapperClassName="mr-2 aspect-[3/2] w-12 "
                                                     src={galleryCoverUrl}
-                                                    className="mr-2 aspect-[3/2] w-12 rounded-md object-cover"
+                                                    className="rounded-md"
                                                 />
                                             </Button>
                                         )}

@@ -1,10 +1,11 @@
 import { Tab } from "@headlessui/react";
 import { type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
+import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionHeading } from "./Components/CollectionHeading";
-import { CollectionNavigation } from "./Components/CollectionNavigation";
+import { CollectionNavigation, type TabName } from "./Components/CollectionNavigation";
 import { CollectionNftsGrid } from "./Components/CollectionNftsGrid";
 import { NftsSorting } from "./Components/CollectionNftsGrid/NftsSorting";
 import { CollectionOwnedToggle } from "./Components/CollectionOwnedToggle";
@@ -15,9 +16,14 @@ import { CollectionHiddenModal } from "@/Components/Collections/CollectionHidden
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { ExternalLinkContextProvider } from "@/Contexts/ExternalLinkContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useToasts } from "@/Hooks/useToasts";
+import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { ArticlesTab } from "@/Pages/Collections/Components/Articles/ArticlesTab";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
@@ -66,7 +72,7 @@ const CollectionsView = ({
     const { t } = useTranslation();
     const { props } = usePage();
 
-    const [selectedTab, setSelectedTab] = useState<"collection" | "activity">(appliedFilters.tab);
+    const [selectedTab, setSelectedTab] = useState<TabName>(appliedFilters.tab);
     const [activityPageLimit, setActivityPageLimit] = useState<number>(appliedFilters.pageLimit);
     const [nftPageLimit, setNftPageLimit] = useState<number>(appliedFilters.nftPageLimit);
     const [selectedTraits, setSelectedTraits] = useState<TraitsFilters>(appliedFilters.traits);
@@ -76,8 +82,13 @@ const CollectionsView = ({
     const [activities, setActivities] = useState(initialActivities);
 
     const [loading, setLoading] = useState(false);
+    const [isLoadingActivity, setIsLoadingActivity] = useState(collection.isFetchingActivity);
 
     const [showCollectionFilterSlider, setShowCollectionFilterSlider] = useState(false);
+    const { requestActivityUpdate } = useWalletActivity();
+
+    const { authenticatedAction } = useAuthorizedAction();
+    const { showToast } = useToasts();
 
     const hasSelectedTraits = useMemo(
         () =>
@@ -87,6 +98,13 @@ const CollectionsView = ({
     );
 
     const filters = useMemo(() => {
+        if (selectedTab === "articles") {
+            return {
+                tab: selectedTab,
+                activityPageLimit: activityPageLimit === 10 ? undefined : activityPageLimit,
+            };
+        }
+
         if (selectedTab === "activity") {
             return {
                 tab: selectedTab,
@@ -172,10 +190,11 @@ const CollectionsView = ({
         setFilterIsDirty(true);
     };
 
-    const tabChangeHandler = (tab: "collection" | "activity"): void => {
+    const tabChangeHandler = (tab: TabName): void => {
         setSelectedTab(tab);
-
-        setFilterIsDirty(true);
+        replaceUrlQuery({
+            tab,
+        });
     };
 
     const activityPageLimitChangeHandler = (pageLimit: number): void => {
@@ -235,6 +254,10 @@ const CollectionsView = ({
             return <EmptyBlock>{t("pages.collections.activities.ignores_activities")}</EmptyBlock>;
         }
 
+        if (isTruthy(isLoadingActivity) && activities?.paginated.data.length === 0) {
+            return <EmptyBlock>{t("pages.collections.activities.loading_activities_collection")}</EmptyBlock>;
+        }
+
         if (!loading && (activities === null || activities.paginated.data.length === 0)) {
             return <EmptyBlock>{t("pages.collections.activities.no_activity")}</EmptyBlock>;
         }
@@ -252,6 +275,24 @@ const CollectionsView = ({
         );
     };
 
+    const handleRefreshActivity = (): void => {
+        void authenticatedAction(async () => {
+            setIsLoadingActivity(true);
+            requestActivityUpdate(collection.address);
+
+            showToast({
+                message: t("common.refreshing_activity"),
+                isExpanded: true,
+            });
+
+            await axios.post(
+                route("collection.refresh-activity", {
+                    collection: collection.slug,
+                }),
+            );
+        });
+    };
+
     return (
         <ExternalLinkContextProvider allowedExternalDomains={props.allowedExternalDomains}>
             <DefaultLayout toastMessage={props.toast}>
@@ -263,7 +304,6 @@ const CollectionsView = ({
                         collection={collection}
                     />
                 )}
-
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     <CollectionHeading
                         reportReasons={props.reportReasons}
@@ -274,8 +314,12 @@ const CollectionsView = ({
                     />
 
                     <CollectionNavigation
+                        collection={collection}
+                        hasActivities={hasActivities}
                         selectedTab={selectedTab}
                         onTabChange={tabChangeHandler}
+                        onRefreshActivity={handleRefreshActivity}
+                        isLoadingActivity={isLoadingActivity}
                     >
                         <Tab.Panel>
                             <div className="mt-6 flex lg:space-x-6">
@@ -342,11 +386,14 @@ const CollectionsView = ({
                         </Tab.Panel>
 
                         <Tab.Panel>
+                            <ArticlesTab collection={collection} />
+                        </Tab.Panel>
+
+                        <Tab.Panel>
                             <div className="mt-6">{renderActivities()}</div>
                         </Tab.Panel>
                     </CollectionNavigation>
                 </div>
-
                 <CollectionFilterSlider
                     open={showCollectionFilterSlider}
                     traits={collectionTraits}
