@@ -84,10 +84,20 @@ const Create = ({
 
     useEffect(() => {
         if (!switching) return;
-        console.log("switching ue run");
         updateSelectedNfts([], true);
         replaceUrlQuery({ draftId: "" });
     }, [switching]);
+
+    useEffect(() => {
+        const cover = data.coverImage;
+
+        if (isTruthy(data.coverImage) && cover instanceof File) {
+            void cover.arrayBuffer().then((buf) => {
+                setDraftCover(buf, cover.type);
+                setDraftTitle(data.name);
+            });
+        }
+    }, [auth.wallet.address]);
 
     const totalValue = 0;
 

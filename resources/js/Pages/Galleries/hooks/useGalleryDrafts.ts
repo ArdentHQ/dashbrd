@@ -46,28 +46,30 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     const database = useIndexedDB("gallery-drafts");
 
-    const getInitialState = (): GalleryDraft => ({
+    const [draft, setDraft] = useState<GalleryDraft>({
         ...initialGalleryDraft,
         walletAddress: wallet?.address,
     });
-
-    const [draft, setDraft] = useState<GalleryDraft>(getInitialState());
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
     const [reachedLimit, setReachedLimit] = useState(false);
 
+    // if wallet changed reset state
+    useEffect(() => {
+        if (disabled === true && draft.id === null) return;
+
+        setDraft({
+            ...initialGalleryDraft,
+            walletAddress: wallet?.address,
+        });
+        setReachedLimit(false);
+    }, [wallet?.address]);
+
     // populate `draft` state if `givenDraftId` is present
     useEffect(() => {
-        if (disabled === true || (givenDraftId === undefined && draft.id === null)) return;
-
-        // if wallet changed reset state
-        if (givenDraftId === undefined) {
-            setDraft(getInitialState());
-            setReachedLimit(false);
-            return;
-        }
+        if (disabled === true || givenDraftId === undefined) return;
 
         const getDraft = async (): Promise<void> => {
             const draft: GalleryDraft | undefined = await database.getByID(givenDraftId);
@@ -81,7 +83,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     useEffect(() => {
         if (disabled === true || !save || isSaving || reachedLimit) return;
-
         void saveDraft();
     }, [save]);
 
@@ -120,7 +121,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const setDraftCover = (image: ArrayBuffer | null, type: string | null): void => {
-        setDraft({ ...draft, cover: image, coverType: type });
+        setDraft((previousDraft) => ({ ...previousDraft, cover: image, coverType: type }));
         setSave(true);
     };
 
@@ -137,7 +138,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const setDraftTitle = (title: string): void => {
-        setDraft({ ...draft, title });
+        setDraft((previousDraft) => ({ ...previousDraft, title }));
         setSave(true);
     };
 
