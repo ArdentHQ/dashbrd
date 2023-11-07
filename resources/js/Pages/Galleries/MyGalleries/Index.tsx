@@ -1,3 +1,4 @@
+import { type ReactNode, useEffect,  } from "react";
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useIndexedDB } from "react-indexed-db-hook";
@@ -7,7 +8,7 @@ import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const Index = ({
     title,
@@ -38,6 +39,12 @@ const Index = ({
     }, [database]);
 
     const userGalleries = galleries.paginated;
+
+    const { deleteExpiredDrafts } = useGalleryDrafts(undefined, true);
+
+    useEffect(() => {
+        void deleteExpiredDrafts();
+    }, []);
 
     return (
         <Layout

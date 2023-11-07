@@ -11,6 +11,7 @@ export const databaseConfig = {
                 { name: "cover", keypath: "cover", options: { unique: false } },
                 { name: "coverType", keypath: "coverType", options: { unique: false } },
                 { name: "nfts", keypath: "nfts", options: { unique: false } },
+                { name: "updatedAt", keypath: "updatedAt", options: { unique: false } },
             ],
         },
     ],
