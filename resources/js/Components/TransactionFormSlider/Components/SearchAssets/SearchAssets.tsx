@@ -86,7 +86,7 @@ export const SearchAssets = ({
                     }}
                     placeholder={t("pages.send_receive_panel.send.search_dropdown.placeholder")}
                     data-testid="InitiationToken__SearchInput"
-                    className="flex w-full border-0 text-theme-secondary-900 transition placeholder:text-theme-secondary-500 dark:placeholder:text-theme-dark-400 focus:border-0 focus:outline-none focus:ring-0 dark:bg-theme-dark-800 dark:text-theme-dark-50"
+                    className="flex w-full border-0 text-theme-secondary-900 transition placeholder:text-theme-secondary-500 focus:border-0 focus:outline-none focus:ring-0 dark:bg-theme-dark-800 dark:text-theme-dark-50 dark:placeholder:text-theme-dark-400"
                 />
                 <Icon
                     name="MagnifyingGlass"
