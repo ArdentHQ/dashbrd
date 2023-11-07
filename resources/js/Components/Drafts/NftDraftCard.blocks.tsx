@@ -81,7 +81,8 @@ export const NftDraftHeading = ({ walletAddress, title }: { walletAddress?: stri
                 delay={[500, 0]}
             >
                 <Heading
-                    className="transition-default min-h-[1.875em] truncate pt-0.5 group-hover:text-theme-primary-700 dark:group-hover:text-theme-primary-400"
+                    className="transition-default min-h-[1.875rem] truncate pt-0.5 group-hover:text-theme-primary-700 dark:group-hover:text-theme-primary-400"
+
                     level={4}
                     ref={truncateReference}
                 >
