@@ -1,11 +1,13 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useIndexedDB } from "react-indexed-db-hook";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
+import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const Index = ({
     title,
@@ -22,6 +24,20 @@ const Index = ({
     galleryCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
+    //! NOTE: Remove lines 26-38 after useGalleryDrafts hook has been implemented
+    const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
+    const database = useIndexedDB("gallery-drafts");
+
+    const loadDrafts = async (): Promise<void> => {
+        const { getAll } = database;
+
+        const records = await getAll();
+        setDrafts(records);
+    };
+
+    useEffect(() => {
+        void loadDrafts();
+    }, [database]);
 
     const userGalleries = galleries.paginated;
 
@@ -56,7 +72,7 @@ const Index = ({
                     </div>
                 )}
 
-                {userGalleries.meta.total > 0 && (
+                {!showDrafts && userGalleries.meta.total > 0 && (
                     <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
                         {userGalleries.data.map((gallery, index) => (
                             <NftGalleryCard
@@ -64,6 +80,18 @@ const Index = ({
                                 gallery={gallery}
                             />
                         ))}
+                    </div>
+                )}
+
+                {showDrafts && drafts.length > 0 && (
+                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+                        {drafts.length > 0 &&
+                            drafts.map((draft, index) => (
+                                <NftDraftCard
+                                    key={index}
+                                    draft={draft}
+                                />
+                            ))}
                     </div>
                 )}
 

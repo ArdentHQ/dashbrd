@@ -87,7 +87,7 @@ const NftImage = ({
     </div>
 );
 
-const NftImageContainer = ({
+export const NftImageContainer = ({
     nft,
     onClick,
     allowSelection,
@@ -306,6 +306,28 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
     );
 };
 
+export const GalleryFooter = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => (
+    <div
+        className="flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200"
+        data-testid="GalleryFooter"
+    >
+        <GalleryStatsLikeButton gallery={gallery} />
+
+        <div className="flex items-center space-x-2">
+            <Icon
+                name="Eye"
+                size="lg"
+            />
+            <span
+                className="text-sm"
+                data-testid="GalleryStats__views"
+            >
+                {gallery.views}
+            </span>
+        </div>
+    </div>
+);
+
 export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
@@ -348,22 +370,7 @@ export const GalleryStats = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                 </div>
             </div>
             <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
-            <div className="flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200">
-                <GalleryStatsLikeButton gallery={gallery} />
-
-                <div className="flex items-center space-x-2">
-                    <Icon
-                        name="Eye"
-                        size="lg"
-                    />
-                    <span
-                        className="text-sm"
-                        data-testid="GalleryStats__views"
-                    >
-                        {gallery.views}
-                    </span>
-                </div>
-            </div>
+            <GalleryFooter gallery={gallery} />
         </div>
     );
 };
