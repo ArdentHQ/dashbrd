@@ -13,7 +13,7 @@ export const MyGalleryListboxMenu = ({
 }: {
     nftCount: number;
     publishedCount: number;
-    draftsCount: number;
+    draftsCount: number | undefined;
 }): JSX.Element => {
     const { t } = useTranslation();
 

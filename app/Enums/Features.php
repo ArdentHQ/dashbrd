@@ -9,4 +9,5 @@ enum Features: string
     case Collections = 'collections';
     case Galleries = 'galleries';
     case Portfolio = 'portfolio';
+    case Articles = 'articles';
 }

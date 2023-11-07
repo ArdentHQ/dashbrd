@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-
 import { router } from "@inertiajs/core";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
@@ -86,6 +84,7 @@ export const Name = ({
     >
         <div className="h-5 w-5 overflow-hidden rounded-full md:h-10 md:w-10">
             <Img
+                wrapperClassName="aspect-square"
                 data-testid="ActivityTable__image"
                 src={activity.nft.images.small ?? undefined}
             />
@@ -180,6 +179,7 @@ export const Type = ({
                 <div className="mr-3 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100 dark:bg-theme-dark-800">
                     {showNameColumn && !isLgAndAbove && (
                         <Img
+                            wrapperClassName="aspect-square"
                             data-testid="ActivityTable__image"
                             src={activity.nft.images.small ?? undefined}
                         />

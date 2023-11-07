@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Data\Articles\ArticleData;
+use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionStatsData;
@@ -17,12 +19,14 @@ use App\Data\Token\TokenData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\User;
 use App\Support\Cache\UserCache;
+use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -198,7 +202,7 @@ class CollectionController extends Controller
         // Allow any number but not more than 100
         $activityPageLimit = min($request->has('activityPageLimit') ? (int) $request->get('activityPageLimit') : 10, 100);
 
-        $tab = $request->get('tab') === 'activity' ? 'activity' : 'collection';
+        $tab = in_array($request->get('tab'), ['collection', 'articles', 'activity']) ? $request->get('tab') : 'collection';
         $hasActivity = $collection->indexesActivities();
 
         $activities = ($tab === 'activity' && $hasActivity) ? $collection->activities()
@@ -252,6 +256,28 @@ class CollectionController extends Controller
             'title' => trans('metatags.collections.view.title', ['name' => $collection->name]),
             'description' => trans('metatags.collections.view.description', ['name' => $collection->name]),
             'image' => trans('metatags.collections.view.image'),
+        ]);
+    }
+
+    public function articles(Collection $collection, Request $request): JsonResponse
+    {
+        $pageLimit = min($request->has('pageLimit') ? (int) $request->get('pageLimit') : 12, 96);
+
+        $articles = $collection
+            ->articles()
+            ->isPublished()
+            ->search($request->get('search'))
+            ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
+            ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
+            ->orderByPivot('order_index', 'asc')
+            ->withFeaturedCollections()
+            ->paginate($pageLimit);
+
+        /** @var PaginatedDataCollection<int, ArticleData> $paginated */
+        $paginated = ArticleData::collection($articles);
+
+        return response()->json([
+            'articles' => new ArticlesData($paginated),
         ]);
     }
 
@@ -342,5 +368,35 @@ class CollectionController extends Controller
             'activityPageLimit' => $activityPageLimit,
             'nftPageLimit' => $nftPageLimit,
         ];
+    }
+
+    public function refreshActivity(Request $request, Collection $collection): JsonResponse
+    {
+
+        // Request has already been made after recent update, and job is already scheduled.
+        if ($collection->activity_update_requested_at) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        $hoursUntilNextUpdate = config('dashbrd.idle_time_between_collection_activity_updates', 6);
+        $hasBeenRecentlyUpdated = $collection->activity_updated_at && Carbon::now()->diffInHours($collection->activity_updated_at) < $hoursUntilNextUpdate;
+
+        // If activity has been recently updated and it is requested to update it again, dispatch the job with a delay.
+        if ($hasBeenRecentlyUpdated && ! $collection->is_fetching_activity) {
+            $collection->touch('activity_update_requested_at');
+            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS)->delay(Carbon::now()->addHours($hoursUntilNextUpdate));
+
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

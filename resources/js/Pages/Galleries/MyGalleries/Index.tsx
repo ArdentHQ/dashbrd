@@ -13,6 +13,7 @@ const Index = ({
     title,
     galleries,
     nftCount = 0,
+    galleryCount,
     showDrafts,
 }: {
     title: string;
@@ -20,6 +21,7 @@ const Index = ({
     galleries: App.Data.Gallery.GalleriesData;
     nftCount?: number;
     showDrafts: boolean;
+    galleryCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
     //! NOTE: Remove lines 26-38 after useGalleryDrafts hook has been implemented
@@ -49,6 +51,7 @@ const Index = ({
         <Layout
             title={title}
             nftCount={nftCount}
+            galleryCount={galleryCount}
         >
             <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
                 <div className="mb-6 hidden w-full items-center justify-between xl:flex">
@@ -92,7 +95,7 @@ const Index = ({
                     </div>
                 )}
 
-                {userGalleries.meta.last_page > 1 && (
+                {!showDrafts && userGalleries.meta.last_page > 1 && (
                     <Pagination
                         className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
                         data={userGalleries}
