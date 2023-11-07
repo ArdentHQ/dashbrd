@@ -75,6 +75,8 @@ export const Navbar = ({
                 icon="Moon"
                 onClick={toggleDarkMode}
                 data-testid="Navbar__darkMode__dark"
+                className="border-0 sm:border"
+                iconClass="w-5 h-5 sm:w-4 sm:h-4"
             />
         ) : (
             <Button
@@ -82,6 +84,8 @@ export const Navbar = ({
                 icon="Sun"
                 onClick={toggleDarkMode}
                 data-testid="Navbar__darkMode__light"
+                className="border-0 sm:border"
+                iconClass="w-5 h-5 sm:w-4 sm:h-4"
             />
         );
 
