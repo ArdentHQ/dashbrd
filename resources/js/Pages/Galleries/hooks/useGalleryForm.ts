@@ -91,7 +91,7 @@ export const useGalleryForm = ({
         });
     };
 
-    const updateSelectedNfts = (nfts: App.Data.Gallery.GalleryNftData[], disableDraft= false): void => {
+    const updateSelectedNfts = (nfts: App.Data.Gallery.GalleryNftData[], disableDraft = false): void => {
         // Convert them to strings to compare ordering too.
         const selectedNftsOrder = data.nfts.join();
         const nftsOrder = nfts.map((nft) => nft.id).join();
