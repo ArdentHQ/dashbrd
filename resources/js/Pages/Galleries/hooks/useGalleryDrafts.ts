@@ -78,10 +78,10 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     }, [givenDraftId, wallet?.address]);
 
     useEffect(() => {
-        if (disabled === true || !save || isSaving || reachedLimit) return;
+        if (disabled === true || !save || isSaving || reachedLimit || loadingWalletDrafts) return;
 
         void saveDraft();
-    }, [save]);
+    }, [save, loadingWalletDrafts]);
 
     useEffect(() => {
         const loadWalletDrafts = async (): Promise<void> => {
@@ -109,6 +109,8 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
             const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
             delete draftToCreate.id;
+
+            console.log("AAAA");
 
             const id = await database.add(draftToCreate);
             setDraft({ ...draft, id, updatedAt });
