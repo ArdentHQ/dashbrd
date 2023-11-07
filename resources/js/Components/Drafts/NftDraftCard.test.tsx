@@ -21,6 +21,7 @@ describe("NftDraftCard", () => {
         nfts: [],
         value: "0",
         collectionsCount: 0,
+        updatedAt: 123,
     };
 
     beforeEach(() => {

@@ -54,6 +54,7 @@ describe("NftDraftStats", () => {
         nfts: [],
         value: "400",
         collectionsCount: 0,
+        updatedAt: 123,
     };
 
     const user = new UserDataFactory().create();
