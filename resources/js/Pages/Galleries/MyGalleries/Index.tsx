@@ -26,10 +26,10 @@ const Index = ({
     const { t } = useTranslation();
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
 
-    const { getUnExpiredDrafts, deleteExpiredDrafts } = useGalleryDrafts();
+    const { getDrafts, deleteExpiredDrafts } = useGalleryDrafts();
 
     const loadDrafts = async (): Promise<void> => {
-        setDrafts(await getUnExpiredDrafts());
+        setDrafts(await getDrafts());
     };
 
     useEffect(() => {

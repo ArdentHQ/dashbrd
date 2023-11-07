@@ -25,7 +25,6 @@ export interface GalleryDraft {
 
 interface GalleryDraftsState {
     getDrafts: () => Promise<GalleryDraft[]>;
-    getUnExpiredDrafts: () => Promise<GalleryDraft[]>;
     reachedLimit: boolean;
     isSaving: boolean;
     draft: GalleryDraft;
@@ -87,7 +86,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         const updatedAt = new Date().getTime();
 
         if (draft.id === null) {
-            const walletDrafts = await getDrafts();
+            const walletDrafts = await getWalletDrafts();
 
             if (walletDrafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
                 setIsSaving(false);
@@ -109,15 +108,10 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setIsSaving(false);
     };
 
-    const getDrafts = async (): Promise<GalleryDraft[]> => {
+    const getWalletDrafts = async (): Promise<GalleryDraft[]> => {
         const allDrafts: GalleryDraft[] = await database.getAll();
 
-        return allDrafts.filter((draft) => draft.walletAddress === wallet?.address);
-    };
-
-    const getUnExpiredDrafts = async (): Promise<GalleryDraft[]> => {
-        const allDrafts = await getDrafts();
-        return allDrafts.filter((draft) => !isExpired(draft));
+        return allDrafts.filter((draft) => draft.walletAddress === wallet?.address && !isExpired(draft));
     };
 
     const setDraftCover = (image: ArrayBuffer | null, type: string | null): void => {
@@ -155,7 +149,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const deleteExpiredDrafts = async (): Promise<void> => {
-        const drafts = await getDrafts();
+        const drafts = await database.getAll();
 
         for (const draft of drafts) {
             if (isExpired(draft)) {
@@ -165,8 +159,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     return {
-        getDrafts,
-        getUnExpiredDrafts,
+        getDrafts: getWalletDrafts,
         reachedLimit,
         isSaving,
         draft,
