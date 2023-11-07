@@ -44,7 +44,7 @@ export const NftDraftFooter = ({ onDelete }: { onDelete: () => void }): JSX.Elem
                         icon="Trash"
                         iconClass="text-theme-primary-900 dark:text-theme-dark-200"
                         iconSize="md"
-                        className="border-transparent bg-transparent dark:border-transparent"
+                        className="h-8 w-8 border-transparent bg-transparent dark:border-transparent"
                         onClick={deleteHandler}
                     />
                 </div>
