@@ -64,7 +64,7 @@ export const ListboxOption = ({
                         !selected && isDisabled !== true,
                     "bg-theme-primary-100 text-theme-secondary-900 dark:bg-theme-primary-600 dark:text-theme-dark-50":
                         (selected || isSelected) && !isTruthy(hasGradient),
-                    "bg-theme-primary-100 text-theme-primary-600 dark:bg-theme-dark-700 dark:text-theme-dark-50":
+                    "bg-theme-primary-100 text-theme-primary-600 dark:bg-theme-primary-600 dark:text-theme-dark-50":
                         (selected || isSelected) && isTruthy(hasGradient),
                     "bg-theme-primary-50 text-theme-secondary-900": active && !selected,
                     "text-theme-secondary-500 hover:bg-transparent hover:text-theme-secondary-500":
