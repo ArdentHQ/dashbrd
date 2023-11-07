@@ -78,11 +78,14 @@ export const HighlightedArticles = ({
 };
 
 const useArticlesSlidesPerPage = (): number => {
-    const { is2Xs, isXs, isSm, isMd, isMdLg } = useBreakpoint();
+    const { is2Xs, isXs, isSm, isMd, isMdLg, isMaxWidth } = useBreakpoint();
 
-    if (isXs || is2Xs || isSm) return 1;
+    const smWidth = isMaxWidth(768);
+    const lgWidth = isMaxWidth(1024);
 
-    if (isMdLg || isMd) return 2;
+    if (isXs || is2Xs || isSm || smWidth) return 1;
+
+    if (isMdLg || isMd || lgWidth) return 2;
 
     return 3;
 };

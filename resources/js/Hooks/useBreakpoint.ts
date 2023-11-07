@@ -17,6 +17,7 @@ export const useBreakpoint = (): {
     isXlAndAbove: boolean;
     is2Xl: boolean;
     isMinWidth: (minWidth: number) => boolean;
+    isMaxWidth: (minWidth: number) => boolean;
     isTouch: boolean;
 } => {
     const is2Xs = useMediaQuery({ maxWidth: 374 });
@@ -29,6 +30,7 @@ export const useBreakpoint = (): {
     const is2Xl = useMediaQuery({ minWidth: 1440 });
 
     const isMinWidth = (minWidth: number): boolean => useMediaQuery({ minWidth });
+    const isMaxWidth = (maxWidth: number): boolean => useMediaQuery({ maxWidth });
 
     const isXsAndAbove = !is2Xs;
     const isSmAndAbove = isXsAndAbove && !isXs;
@@ -55,6 +57,7 @@ export const useBreakpoint = (): {
         isXlAndAbove,
         is2Xl,
         isMinWidth,
+        isMaxWidth,
         isTouch,
     };
 };
