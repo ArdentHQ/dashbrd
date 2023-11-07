@@ -9,6 +9,7 @@
 @import "./_collection.css";
 @import "./_gallery.css";
 @import "./_article.css";
+@import "./_tooltips.css";
 
 @tailwind base;
 @tailwind components;
