@@ -43,6 +43,7 @@ const Index = ({
             title={title}
             nftCount={nftCount}
             galleryCount={galleryCount}
+            showDrafts={showDrafts}
         >
             <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
                 <div className="mb-6 hidden w-full items-center justify-between xl:flex">
