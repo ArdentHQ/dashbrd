@@ -1,9 +1,9 @@
 import React from "react";
 import { Img } from "./Image";
 import * as ImageLoaderHook from "./useImageLoader";
+import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { act, render, screen, waitFor } from "@/Tests/testing-library";
-import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 
 describe("Image", () => {
     const image = new Image();

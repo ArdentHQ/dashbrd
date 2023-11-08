@@ -2,12 +2,12 @@ import { router } from "@inertiajs/react";
 import React from "react";
 import { CollectionHeaderTop } from "./CollectionHeaderTop";
 import { MarkdownImage } from "@/Components/Collections/CollectionDescription";
+import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
-import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 
 const collection = new CollectionDetailDataFactory().create({
     description: "This is a test collection",
