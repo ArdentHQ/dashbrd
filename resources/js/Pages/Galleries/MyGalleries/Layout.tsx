@@ -4,7 +4,6 @@ import { MyGalleryListboxMenu } from "./Components/MyGalleryListboxMenu";
 import { MyGallerySidebar } from "./Components/MyGallerySidebar";
 import LeftMenuLayout from "@/Layouts/LeftMenuLayout";
 import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
-import { isTruthy } from "@/Utils/is-truthy";
 
 const Layout = ({
     title,
@@ -31,7 +30,7 @@ const Layout = ({
         })();
     }, []);
 
-    if (showDrafts && (!isTruthy(drafts) || drafts === 0)) {
+    if (showDrafts && drafts === 0) {
         router.visit(
             route("my-galleries", {
                 draft: false,
