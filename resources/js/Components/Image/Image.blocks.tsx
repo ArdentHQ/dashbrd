@@ -1,7 +1,7 @@
 import cn from "classnames";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { ImageLoadError, ImageLoadErrorDark } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 
 export const ImageErrorPlaceholder = ({
     className,
