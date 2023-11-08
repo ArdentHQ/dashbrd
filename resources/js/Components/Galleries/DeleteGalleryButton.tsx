@@ -33,6 +33,7 @@ const DeleteGalleryButton = ({ gallery }: { gallery: App.Data.Gallery.GalleryDat
                 variant="secondary"
                 iconSize="md"
                 className="bg-transparent p-2"
+                data-testid="DeleteGalleryButton"
             />
 
             <ConfirmDeletionDialog
