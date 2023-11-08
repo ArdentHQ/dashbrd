@@ -60,11 +60,11 @@ export const ListboxOption = ({
             cn(
                 "transition-default group relative flex h-11 cursor-default select-none items-center justify-start px-6 py-3",
                 {
-                    "cursor-pointer text-theme-secondary-700 hover:bg-theme-primary-50 hover:text-theme-secondary-900 dark:bg-theme-dark-800 dark:text-theme-dark-200 dark:hover:bg-theme-primary-600 dark:hover:text-theme-dark-50":
+                    "cursor-pointer text-theme-secondary-700 hover:bg-theme-primary-50 hover:text-theme-secondary-900 dark:bg-theme-dark-800 dark:text-theme-dark-200 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-50":
                         !selected && isDisabled !== true,
-                    "bg-theme-primary-100 text-theme-secondary-900 dark:bg-theme-dark-700 dark:text-theme-dark-50":
+                    "bg-theme-primary-100 text-theme-secondary-900 dark:bg-theme-primary-600 dark:text-theme-dark-50":
                         (selected || isSelected) && !isTruthy(hasGradient),
-                    "bg-theme-primary-100 text-theme-primary-600 dark:bg-theme-dark-700 dark:text-theme-dark-50":
+                    "bg-theme-primary-100 text-theme-primary-600 dark:bg-theme-primary-600 dark:text-theme-dark-50":
                         (selected || isSelected) && isTruthy(hasGradient),
                     "bg-theme-primary-50 text-theme-secondary-900": active && !selected,
                     "text-theme-secondary-500 hover:bg-transparent hover:text-theme-secondary-500":
