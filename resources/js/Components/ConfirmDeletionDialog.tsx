@@ -39,7 +39,6 @@ export const ConfirmDeletionDialog = ({
         if (isOpen) {
             return;
         }
-
         // Reset after transition ends...
         setTimeout(() => {
             setConfirmationValue("");

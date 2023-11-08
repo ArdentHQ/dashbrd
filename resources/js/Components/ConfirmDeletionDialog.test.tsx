@@ -91,4 +91,51 @@ describe("ConfirmDeletionDialog", () => {
 
         expect(onConfirmMock).toHaveBeenCalled();
     });
+
+    it("removes the confirmation input text when modal is closed", async () => {
+        const { getByTestId, rerender } = render(
+            <ConfirmDeletionDialog
+                isOpen={true}
+                onClose={vi.fn()}
+                onConfirm={vi.fn()}
+                title="Test Title"
+            >
+                Test children
+            </ConfirmDeletionDialog>,
+        );
+
+        let confirmationInput = getByTestId("ConfirmDeletionDialog__input");
+
+        await userEvent.type(confirmationInput, "DELETE");
+
+        expect(confirmationInput).toHaveValue("DELETE");
+
+        rerender(
+            <ConfirmDeletionDialog
+                isOpen={false}
+                onClose={vi.fn()}
+                onConfirm={vi.fn()}
+                title="Test Title"
+            >
+                Test children
+            </ConfirmDeletionDialog>,
+        );
+
+        rerender(
+            <ConfirmDeletionDialog
+                isOpen={true}
+                onClose={vi.fn()}
+                onConfirm={vi.fn()}
+                title="Test Title"
+            >
+                Test children
+            </ConfirmDeletionDialog>,
+        );
+
+        confirmationInput = getByTestId("ConfirmDeletionDialog__input");
+
+        await waitFor(() => {
+            expect(confirmationInput).toHaveValue("");
+        });
+    });
 });
