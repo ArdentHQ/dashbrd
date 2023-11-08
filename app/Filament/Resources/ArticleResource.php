@@ -81,7 +81,7 @@ class ArticleResource extends Resource
                     ->image()
                     ->imageEditor()
                     ->imageCropAspectRatio('16:9')
-                    ->rules(['max:5120']),
+                    ->maxSize(5000),
 
                 MarkdownEditor::make('content')
                     ->columnSpan('full')
