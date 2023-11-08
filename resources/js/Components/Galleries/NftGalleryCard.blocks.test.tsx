@@ -496,6 +496,17 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
+    it("should render gallery stats when delete button is enabled", () => {
+        render(
+            <GalleryStats
+                gallery={gallery}
+                showDeleteButton
+            />,
+        );
+
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+    });
+
     it("should force like if user was not authenticated", async () => {
         signedActionMock.mockImplementation((action) => {
             action({ authenticated: false, signed: false });
@@ -592,5 +603,16 @@ describe("GalleryFooter", () => {
         render(<GalleryFooter gallery={gallery} />);
 
         expect(screen.getByTestId("GalleryStats__views")).toHaveTextContent(gallery.views.toString());
+    });
+
+    it("shows delete button when enabled", () => {
+        render(
+            <GalleryFooter
+                gallery={gallery}
+                showDeleteButton
+            />,
+        );
+
+        expect(screen.getByTestId("DeleteGalleryButton")).toBeInTheDocument();
     });
 });
