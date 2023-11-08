@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./CreateGalleryButton";
 import { Listbox } from "@/Components/Form/Listbox";
 import { SidebarHead } from "@/Components/Sidebar/SidebarHead";
-import { isTruthy } from "@/Utils/is-truthy";
 
 const routeName = "my-galleries";
 
@@ -81,7 +80,6 @@ export const MyGalleryListboxMenu = ({
                             optionLabel: "flex w-full justify-between",
                             iconContainer: "flex flex-1 justify-between",
                         }}
-                        isDisabled={!isTruthy(draftsCount) || draftsCount === 0}
                     >
                         <span>{t("common.drafts")}</span>
                         <span className="text-theme-secondary-700">{draftsCount}</span>
