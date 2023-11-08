@@ -1,8 +1,8 @@
 import cn from "classnames";
+import { twMerge } from "tailwind-merge";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { getInitials } from "@/Utils/get-initials";
 import { isTruthy } from "@/Utils/is-truthy";
-import { twMerge } from "tailwind-merge";
 
 interface Properties extends React.HTMLAttributes<HTMLDivElement> {
     tokenName: string;
