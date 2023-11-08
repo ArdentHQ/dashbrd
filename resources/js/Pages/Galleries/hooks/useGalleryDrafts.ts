@@ -5,19 +5,21 @@ import { useAuth } from "@/Contexts/AuthContext";
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 const DRAFT_TTL_DAYS = 30;
 
-interface DraftNft {
+export interface DraftNft {
     nftId: number;
     image: string;
     collectionSlug: string;
 }
 
-interface GalleryDraft {
+export interface GalleryDraft {
     title: string;
     cover: ArrayBuffer | null;
     coverType: string | null;
     nfts: DraftNft[];
     walletAddress?: string;
     id: number | null;
+    value: string | null;
+    collectionsCount: number;
     updatedAt: number | null;
 }
 
@@ -39,6 +41,8 @@ const initialGalleryDraft: GalleryDraft = {
     coverType: null,
     nfts: [],
     id: null,
+    value: null,
+    collectionsCount: 0,
     updatedAt: null,
 };
 
@@ -118,7 +122,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     const getWalletDrafts = async (): Promise<GalleryDraft[]> => {
         const allDrafts: GalleryDraft[] = await database.getAll();
 
-        return allDrafts.filter((draft) => draft.walletAddress === wallet?.address);
+        return allDrafts.filter((draft) => draft.walletAddress === wallet?.address && !isExpired(draft));
     };
 
     const setDraftCover = (image: ArrayBuffer | null, type: string | null): void => {
@@ -150,12 +154,16 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setReachedLimit(false);
     };
 
-    const deleteExpiredDrafts = async (): Promise<void> => {
+    const isExpired = (draft: GalleryDraft): boolean => {
         const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
+        return (draft.updatedAt ?? 0) < thresholdDaysAgo;
+    };
+
+    const deleteExpiredDrafts = async (): Promise<void> => {
         const drafts: GalleryDraft[] = await database.getAll();
 
         for (const draft of drafts) {
-            if ((draft.updatedAt ?? 0) < thresholdDaysAgo) {
+            if (isExpired(draft)) {
                 void database.deleteRecord(Number(draft.id));
             }
         }

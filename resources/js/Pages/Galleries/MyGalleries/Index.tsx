@@ -1,11 +1,12 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
+import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const Index = ({
     title,
@@ -22,14 +23,20 @@ const Index = ({
     galleryCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
+    const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
 
-    const userGalleries = galleries.paginated;
-
-    const { deleteExpiredDrafts } = useGalleryDrafts(undefined, true);
+    const { getDrafts, deleteExpiredDrafts } = useGalleryDrafts();
 
     useEffect(() => {
+        const loadDrafts = async (): Promise<void> => {
+            setDrafts(await getDrafts());
+        };
+
+        void loadDrafts();
         void deleteExpiredDrafts();
     }, []);
+
+    const userGalleries = galleries.paginated;
 
     return (
         <Layout
@@ -56,7 +63,7 @@ const Index = ({
                     </div>
                 )}
 
-                {userGalleries.meta.total > 0 && (
+                {!showDrafts && userGalleries.meta.total > 0 && (
                     <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
                         {userGalleries.data.map((gallery, index) => (
                             <NftGalleryCard
@@ -67,7 +74,19 @@ const Index = ({
                     </div>
                 )}
 
-                {userGalleries.meta.last_page > 1 && (
+                {showDrafts && drafts.length > 0 && (
+                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+                        {drafts.length > 0 &&
+                            drafts.map((draft, index) => (
+                                <NftDraftCard
+                                    key={index}
+                                    draft={draft}
+                                />
+                            ))}
+                    </div>
+                )}
+
+                {!showDrafts && userGalleries.meta.last_page > 1 && (
                     <Pagination
                         className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
                         data={userGalleries}
