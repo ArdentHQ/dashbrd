@@ -1,7 +1,7 @@
 import DeleteGalleryButton from "./DeleteGalleryButton";
 import GalleryDataFactory from "@/Tests/Factories/Gallery/GalleryDataFactory";
 import { mockInertiaUseForm, render, screen } from "@/Tests/testing-library";
-import userEvent from "@testing-library/user-event"
+import userEvent from "@testing-library/user-event";
 
 describe("DeleteGalleryButton", () => {
     const gallery = new GalleryDataFactory().create();
