@@ -69,6 +69,7 @@ const Index = ({
                             <NftGalleryCard
                                 key={index}
                                 gallery={gallery}
+                                showDeleteButton
                             />
                         ))}
                     </div>
