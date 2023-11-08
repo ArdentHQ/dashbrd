@@ -58,7 +58,7 @@ describe("NftGalleryDraftCard", () => {
             />,
         );
 
-        await userEvent.click(screen.getByTestId("NftDraftCard__delete-button"));
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
 
         expect(onDelete).toHaveBeenCalled();
     });

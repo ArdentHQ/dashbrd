@@ -24,7 +24,7 @@ describe("NftGalleryDraftFooter", () => {
 
         render(<NftGalleryDraftFooter onDelete={onDelete} />);
 
-        await userEvent.click(screen.getByTestId("NftDraftCard__delete-button"));
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
 
         expect(onDelete).toHaveBeenCalled();
     });
@@ -118,7 +118,7 @@ describe("NftGalleryDraftStats", () => {
             />,
         );
 
-        await userEvent.click(screen.getByTestId("NftDraftCard__delete-button"));
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
 
         expect(onDelete).toHaveBeenCalled();
     });
