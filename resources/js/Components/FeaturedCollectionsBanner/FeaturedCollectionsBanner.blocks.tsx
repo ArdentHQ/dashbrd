@@ -66,7 +66,7 @@ export const CollectionCarousel = ({
             return (
                 <div
                     data-testid="CollectionCarousel__entry__no_image"
-                    className="aspect-square h-15 w-15 rounded-full border border-theme-secondary-300 bg-white object-cover"
+                    className="aspect-square h-15 w-15 rounded-full border border-theme-secondary-300 bg-white object-cover dark:border dark:border-solid dark:border-theme-dark-700 dark:bg-theme-dark-900"
                 />
             );
         }
