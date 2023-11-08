@@ -48,7 +48,3 @@
 .dark .auth-overlay-shadow {
     box-shadow: 0px 15px 35px 0px rgba(18, 18, 19, 0.4);
 }
-
-body * {
-    @apply transition-colors duration-200 ease-in-out;
-}
