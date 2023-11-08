@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftGalleryDraftCard } from "@/Components/Drafts/NftGalleryDraftCard";
+import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
-import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 
 const Index = ({
     title,
