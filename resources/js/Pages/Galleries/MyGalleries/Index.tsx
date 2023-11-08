@@ -7,6 +7,7 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 
 const Index = ({
     title,
@@ -56,11 +57,7 @@ const Index = ({
                 </div>
 
                 {!showDrafts && userGalleries.meta.total === 0 && (
-                    <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
-                        <span className="text-center font-medium text-theme-secondary-700">
-                            {t("pages.galleries.my_galleries.no_galleries")}
-                        </span>
-                    </div>
+                    <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>
                 )}
 
                 {!showDrafts && userGalleries.meta.total > 0 && (
