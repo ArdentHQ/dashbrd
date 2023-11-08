@@ -36,6 +36,7 @@ const AssetList = ({
                             })}
                             isSelected={isTruthy(asset) && asset.symbol === optionAsset.symbol}
                             chainId={optionAsset.chain_id}
+                            badgeClassname="dark:border-theme-dark-800 dark:group-hover:border-theme-dark-700"
                         />
                     }
                     classNames={{
