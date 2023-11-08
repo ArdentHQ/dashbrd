@@ -65,7 +65,7 @@ export const DropdownButton = ({
             "transition-default cursor-pointer whitespace-nowrap px-6 py-2.5 text-left text-base font-medium",
             isActive
                 ? "bg-theme-primary-100 text-theme-primary-600 dark:bg-theme-primary-600 dark:text-theme-dark-50"
-                : "text-theme-secondary-700 hover:bg-theme-secondary-100 hover:text-theme-secondary-900 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-50",
+                : "text-theme-secondary-700 hover:bg-theme-secondary-100 hover:text-theme-secondary-900 dark:text-theme-dark-200 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-50",
         )}
         onClick={onClick}
     >
