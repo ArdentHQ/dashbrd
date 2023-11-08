@@ -15,13 +15,13 @@ import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
-export const NftDraftFooter = (): JSX.Element => {
+export const NftGalleryDraftFooter = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <div
             className="-my-1.5 flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200"
-            data-testid="NftDraftCard__Footer"
+            data-testid="NftGalleryDraftCard__Footer"
         >
             <div className="flex items-center space-x-2">
                 <Icon
@@ -45,17 +45,23 @@ export const NftDraftFooter = (): JSX.Element => {
     );
 };
 
-export const NftDraftHeading = ({ walletAddress, title }: { walletAddress?: string; title: string }): JSX.Element => {
+export const NftGalleryDraftHeading = ({
+    walletAddress,
+    title,
+}: {
+    walletAddress?: string;
+    title: string;
+}): JSX.Element => {
     const truncateReference = useRef<HTMLHeadingElement>(null);
 
     const isTruncated = useIsTruncated({ reference: truncateReference });
 
     return (
-        <div data-testid="NftDraftHeading">
+        <div data-testid="NftGalleryDraftHeading">
             {isTruthy(walletAddress) && (
                 <div
                     className="flex text-sm font-medium text-theme-secondary-700"
-                    data-testid="NftDraftHeading__address"
+                    data-testid="NftGalleryDraftHeading__address"
                 >
                     <div className="flex shrink-0 items-center pr-2">
                         <Avatar
@@ -92,14 +98,14 @@ export const NftDraftHeading = ({ walletAddress, title }: { walletAddress?: stri
     );
 };
 
-export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element => {
+export const NftGalleryDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
 
     return (
         <div
             className="rounded-b-xl bg-theme-secondary-50 px-6 pb-3 font-medium dark:bg-theme-dark-800"
-            data-testid="NftDraftStats"
+            data-testid="NftGalleryDraftStats"
         >
             <div className="flex justify-between pt-3">
                 <div className="flex flex-col">
@@ -107,7 +113,7 @@ export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element =
                         {t("pages.galleries.value")}
                     </span>
                     <span
-                        data-testid="NftDraftStats__value"
+                        data-testid="NftGalleryDraftStats__value"
                         className="text-sm dark:text-theme-dark-50 sm:text-base"
                     >
                         {isTruthy(draft.value) ? (
@@ -126,7 +132,7 @@ export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element =
                     </span>
                     <span
                         className="text-sm dark:text-theme-dark-50 sm:text-base"
-                        data-testid="NftDraftStats__nftCount"
+                        data-testid="NftGalleryDraftStats__nftCount"
                     >
                         {draft.nfts.length}
                     </span>
@@ -137,33 +143,33 @@ export const NftDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element =
                     </span>
                     <span
                         className="text-sm dark:text-theme-dark-50 sm:text-base"
-                        data-testid="NftDraftStats__collectionsCount"
+                        data-testid="NftGalleryDraftStats__collectionsCount"
                     >
                         {draft.collectionsCount}
                     </span>
                 </div>
             </div>
             <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
-            <NftDraftFooter />
+            <NftGalleryDraftFooter />
         </div>
     );
 };
 
-export const NftDraftImageContainer = ({ nft }: { nft: DraftNft }): JSX.Element => (
+export const NftGalleryDraftImageContainer = ({ nft }: { nft: DraftNft }): JSX.Element => (
     <div
-        data-testid={`NftDraftImageGrid__container--${nft.nftId}`}
+        data-testid={`NftGalleryDraftImageGrid__container--${nft.nftId}`}
         className="group relative overflow-hidden rounded-xl"
     >
         <Img
             wrapperClassName="aspect-square h-full w-full"
             className="rounded-xl"
             src={nft.image}
-            data-testid={`NftDraftImageGrid__image--${nft.nftId}`}
+            data-testid={`NftGalleryDraftImageGrid__image--${nft.nftId}`}
         />
     </div>
 );
 
-export const NftDraftImageGrid = ({
+export const NftGalleryDraftImageGrid = ({
     nfts,
     minimumToShow = 6,
     skeletonCount,
@@ -176,11 +182,11 @@ export const NftDraftImageGrid = ({
 
     return (
         <div
-            data-testid="NftDraftImageGrid"
+            data-testid="NftGalleryDraftImageGrid"
             className="mb-3 grid aspect-[3/2] grid-cols-3 gap-1"
         >
             {nftData.map((nft, index) => (
-                <NftDraftImageContainer
+                <NftGalleryDraftImageContainer
                     key={index}
                     nft={nft}
                 />
@@ -192,7 +198,7 @@ export const NftDraftImageGrid = ({
                     <div
                         key={index}
                         className="aspect-square w-full rounded-xl bg-theme-secondary-100 dark:bg-theme-dark-800"
-                        data-testid={`NftDraftImageGrid__placeholder--${index}`}
+                        data-testid={`NftGalleryDraftImageGrid__placeholder--${index}`}
                     />
                 ))}
 

@@ -2,7 +2,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
-import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
+import { NftGalleryDraftCard } from "@/Components/Drafts/NftGalleryDraftCard";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
@@ -79,7 +79,7 @@ const Index = ({
                     <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
                         {drafts.length > 0 &&
                             drafts.map((draft, index) => (
-                                <NftDraftCard
+                                <NftGalleryDraftCard
                                     key={index}
                                     draft={draft}
                                 />
