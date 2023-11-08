@@ -3,7 +3,7 @@
 exports[`Heading > should render h1 1`] = `
 <DocumentFragment>
   <h1
-    class="text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-medium"
+    class="break-words text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-medium"
   />
 </DocumentFragment>
 `;
@@ -11,7 +11,7 @@ exports[`Heading > should render h1 1`] = `
 exports[`Heading > should render h1 as bold 1`] = `
 <DocumentFragment>
   <h1
-    class="text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-bold"
+    class="break-words text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-bold"
   />
 </DocumentFragment>
 `;
@@ -19,7 +19,7 @@ exports[`Heading > should render h1 as bold 1`] = `
 exports[`Heading > should render h1 as medium 1`] = `
 <DocumentFragment>
   <h1
-    class="text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-medium"
+    class="break-words text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-medium"
   />
 </DocumentFragment>
 `;
@@ -27,7 +27,7 @@ exports[`Heading > should render h1 as medium 1`] = `
 exports[`Heading > should render h1 as normal 1`] = `
 <DocumentFragment>
   <h1
-    class="text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-normal"
+    class="break-words text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem] font-normal"
   />
 </DocumentFragment>
 `;
