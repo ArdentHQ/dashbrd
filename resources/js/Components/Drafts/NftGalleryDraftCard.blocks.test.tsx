@@ -1,40 +1,40 @@
 import { type SpyInstance } from "vitest";
 import {
-    NftDraftFooter,
-    NftDraftHeading,
-    NftDraftImageContainer,
-    NftDraftImageGrid,
-    NftDraftStats,
-} from "./NftDraftCard.blocks";
+    NftGalleryDraftFooter,
+    NftGalleryDraftHeading,
+    NftGalleryDraftImageContainer,
+    NftGalleryDraftImageGrid,
+    NftGalleryDraftStats,
+} from "./NftGalleryDraftCard.blocks";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
-describe("NftDraftFooter", () => {
+describe("NftGalleryDraftFooter", () => {
     it("should render", () => {
-        render(<NftDraftFooter />);
+        render(<NftGalleryDraftFooter />);
 
-        expect(screen.getByTestId("NftDraftCard__Footer")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftCard__Footer")).toBeInTheDocument();
     });
 });
 
-describe("NftDraftHeading", () => {
+describe("NftGalleryDraftHeading", () => {
     it("should render", () => {
         render(
-            <NftDraftHeading
+            <NftGalleryDraftHeading
                 walletAddress="0x22Fd644149ea87ca26237183ad6A66f91dfcFB87"
                 title="Test title"
             />,
         );
 
-        expect(screen.getByTestId("NftDraftHeading")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftHeading")).toBeInTheDocument();
         expect(screen.queryByTestId("Avatar__image")).not.toBeInTheDocument();
     });
 
     it("should truncate the wallet address", () => {
         render(
-            <NftDraftHeading
+            <NftGalleryDraftHeading
                 walletAddress="0x22Fd644149ea87ca26237183ad6A66f91dfcFB87"
                 title="Test title"
             />,
@@ -44,7 +44,7 @@ describe("NftDraftHeading", () => {
     });
 });
 
-describe("NftDraftStats", () => {
+describe("NftGalleryDraftStats", () => {
     const draft: GalleryDraft = {
         id: 1,
         title: "Test draft",
@@ -87,52 +87,52 @@ describe("NftDraftStats", () => {
     });
 
     it("should render", () => {
-        render(<NftDraftStats draft={draft} />);
+        render(<NftGalleryDraftStats draft={draft} />);
 
-        expect(screen.getByTestId("NftDraftStats")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftStats")).toBeInTheDocument();
     });
 
     it("should render the draft value", () => {
-        render(<NftDraftStats draft={draft} />);
+        render(<NftGalleryDraftStats draft={draft} />);
 
-        expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("400");
+        expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("400");
     });
 
     it("should render the draft collections count", () => {
-        render(<NftDraftStats draft={draft} />);
+        render(<NftGalleryDraftStats draft={draft} />);
 
-        expect(screen.getByTestId("NftDraftStats__collectionsCount")).toHaveTextContent("0");
+        expect(screen.getByTestId("NftGalleryDraftStats__collectionsCount")).toHaveTextContent("0");
     });
 
     it("should render the nft count", () => {
-        render(<NftDraftStats draft={draft} />);
+        render(<NftGalleryDraftStats draft={draft} />);
 
-        expect(screen.getByTestId("NftDraftStats__nftCount")).toHaveTextContent("0");
+        expect(screen.getByTestId("NftGalleryDraftStats__nftCount")).toHaveTextContent("0");
     });
 
     it("shoud display - if value is not set", () => {
-        render(<NftDraftStats draft={{ ...draft, value: null }} />);
+        render(<NftGalleryDraftStats draft={{ ...draft, value: null }} />);
 
-        expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("-");
+        expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("-");
     });
 
     it("should display the currency set by the user", () => {
-        render(<NftDraftStats draft={draft} />);
+        render(<NftGalleryDraftStats draft={draft} />);
 
-        expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("€400.00");
+        expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("€400.00");
     });
 
     it("should display USD as currency if no currency is set", () => {
         resetAuthContextMock = mockAuthContext({
             user: null,
         });
-        render(<NftDraftStats draft={draft} />);
+        render(<NftGalleryDraftStats draft={draft} />);
 
-        expect(screen.getByTestId("NftDraftStats__value")).toHaveTextContent("$400.00");
+        expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("$400.00");
     });
 });
 
-describe("NftDraftImageContainer", () => {
+describe("NftGalleryDraftImageContainer", () => {
     const nft: DraftNft = {
         nftId: 1,
         image: "https://example.com/image.png",
@@ -140,19 +140,19 @@ describe("NftDraftImageContainer", () => {
     };
 
     it("should render", () => {
-        render(<NftDraftImageContainer nft={nft} />);
+        render(<NftGalleryDraftImageContainer nft={nft} />);
 
-        expect(screen.getByTestId("NftDraftImageGrid__container--1")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid__container--1")).toBeInTheDocument();
     });
 
     it("should render the image", () => {
-        render(<NftDraftImageContainer nft={nft} />);
+        render(<NftGalleryDraftImageContainer nft={nft} />);
 
-        expect(screen.getByTestId("NftDraftImageGrid__image--1")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid__image--1")).toBeInTheDocument();
     });
 });
 
-describe("NftDraftImageGrid", () => {
+describe("NftGalleryDraftImageGrid", () => {
     const nfts = [
         {
             nftId: 1,
@@ -167,50 +167,50 @@ describe("NftDraftImageGrid", () => {
     ];
 
     it("should render", () => {
-        render(<NftDraftImageGrid nfts={nfts} />);
+        render(<NftGalleryDraftImageGrid nfts={nfts} />);
 
-        expect(screen.getByTestId("NftDraftImageGrid")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid")).toBeInTheDocument();
     });
 
     it("should render placeholders if there are no nfts", () => {
-        render(<NftDraftImageGrid nfts={[]} />);
+        render(<NftGalleryDraftImageGrid nfts={[]} />);
 
-        expect(screen.getByTestId("NftDraftImageGrid__placeholder--1")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid__placeholder--1")).toBeInTheDocument();
     });
 
     it("should render nfts if there are nfts", () => {
-        render(<NftDraftImageGrid nfts={nfts} />);
+        render(<NftGalleryDraftImageGrid nfts={nfts} />);
 
-        expect(screen.getByTestId("NftDraftImageGrid__container--1")).toBeInTheDocument();
-        expect(screen.getByTestId("NftDraftImageGrid__container--2")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid__container--1")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid__container--2")).toBeInTheDocument();
     });
 
     it("should ony display the minimum number of nfts", () => {
         render(
-            <NftDraftImageGrid
+            <NftGalleryDraftImageGrid
                 nfts={nfts}
                 minimumToShow={1}
             />,
         );
 
-        expect(screen.getByTestId("NftDraftImageGrid__container--1")).toBeInTheDocument();
-        expect(screen.queryByTestId("NftDraftImageGrid__container--2")).not.toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid__container--1")).toBeInTheDocument();
+        expect(screen.queryByTestId("NftGalleryDraftImageGrid__container--2")).not.toBeInTheDocument();
     });
 
     it("should render the difference between the amount of nfts and the minimum to show as placeholders", () => {
         render(
-            <NftDraftImageGrid
+            <NftGalleryDraftImageGrid
                 nfts={nfts}
                 minimumToShow={3}
             />,
         );
 
-        expect(screen.getByTestId("NftDraftImageGrid__placeholder--0")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid__placeholder--0")).toBeInTheDocument();
     });
 
     it("should render skeleton elements if skeletonCount is provided", () => {
         render(
-            <NftDraftImageGrid
+            <NftGalleryDraftImageGrid
                 nfts={[]}
                 skeletonCount={3}
             />,
