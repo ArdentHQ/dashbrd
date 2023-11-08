@@ -191,7 +191,11 @@ describe("useGalleryDrafts", () => {
     it("should not add new draft if reached to the limit", async () => {
         const addMock = vi.fn();
 
-        mocks.useIndexedDB().getAll.mockReturnValue(Array.from({ length: 6 }).fill({ walletAddress: "mockedAddress" }));
+        mocks
+            .useIndexedDB()
+            .getAll.mockReturnValue(
+                Array.from({ length: 6 }).fill({ walletAddress: "mockedAddress", updatedAt: new Date().toString() }),
+            );
         mocks.useIndexedDB().add.mockImplementation(addMock);
 
         const { result } = renderHook(() => useGalleryDrafts());
@@ -200,11 +204,13 @@ describe("useGalleryDrafts", () => {
             result.current.setDraftTitle("hello");
         });
 
+        expect(addMock).not.toHaveBeenCalled();
+
         await waitFor(() => {
-            expect(addMock).not.toHaveBeenCalled();
             expect(result.current.reachedLimit).toBe(true);
-            expect(result.current.isSaving).toBe(false);
         });
+
+        expect(result.current.isSaving).toBe(false);
     });
 
     it("should delete the draft if id is present", async () => {
