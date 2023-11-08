@@ -1,16 +1,24 @@
 import React from "react";
 import { Img } from "./Image";
 import * as ImageLoaderHook from "./useImageLoader";
-import DarkModeContextProvider from "@/Contexts/DarkModeContext";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { act, render, screen, waitFor } from "@/Tests/testing-library";
+import { SpyInstance } from "vitest";
 
+let useDarkModeContextSpy: SpyInstance;
 describe("Image", () => {
     const image = new Image();
 
     beforeAll(() => {
         process.env.REACT_APP_IS_UNIT = "false";
         vi.spyOn(window, "Image").mockImplementation(() => image);
+    });
+
+    beforeEach(() => {
+        useDarkModeContextSpy = vi
+            .spyOn(useDarkModeContext, "useDarkModeContext")
+            .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
     });
 
     afterAll(() => {
@@ -94,11 +102,7 @@ describe("Image", () => {
 
         const useImageLoaderMock = vi.spyOn(ImageLoaderHook, "useImageLoader").mockImplementation(() => mockData);
 
-        render(
-            <DarkModeContextProvider>
-                <Img src="skdfj jfa sfkj@#$##%##%" />
-            </DarkModeContextProvider>,
-        );
+        render(<Img src="skdfj jfa sfkj@#$##%##%" />);
 
         expect(mockData.loadImage).toHaveBeenCalledTimes(0);
         expect(mockData.isLoaded).toBe(false);
@@ -112,13 +116,11 @@ describe("Image", () => {
         const onErrorMock = vi.fn();
 
         render(
-            <DarkModeContextProvider>
-                <Img
-                    src="@!##$%%%%$@#"
-                    data-testid="Img"
-                    onError={onErrorMock}
-                />
-            </DarkModeContextProvider>,
+            <Img
+                src="@!##$%%%%$@#"
+                data-testid="Img"
+                onError={onErrorMock}
+            />,
         );
 
         // Trigger error event
@@ -136,16 +138,45 @@ describe("Image", () => {
         expect(onErrorMock).toHaveBeenCalled();
     });
 
+    it("should render error placeholder if image fails to load in dark mode", async () => {
+        const onErrorMock = vi.fn();
+
+        useDarkModeContextSpy = vi
+            .spyOn(useDarkModeContext, "useDarkModeContext")
+            .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        render(
+            <Img
+                src="@!##$%%%%$@#"
+                data-testid="Img"
+                onError={onErrorMock}
+            />,
+        );
+
+        // Trigger error event
+        act(() => {
+            image.onerror?.(new Event(""));
+        });
+
+        expect(screen.queryByTestId("Img")).not.toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(screen.queryByTestId("Skeleton")).not.toBeInTheDocument();
+        });
+
+        expect(screen.getByTestId("ImageErrorPlaceholer"));
+
+        expect(onErrorMock).toHaveBeenCalled();
+    });
+
     it("should render error placeholder if image src is undefined", async () => {
         const onErrorMock = vi.fn();
 
         render(
-            <DarkModeContextProvider>
-                <Img
-                    data-testid="Img"
-                    onError={onErrorMock}
-                />
-            </DarkModeContextProvider>,
+            <Img
+                data-testid="Img"
+                onError={onErrorMock}
+            />,
         );
 
         // Trigger error event
@@ -165,13 +196,11 @@ describe("Image", () => {
 
     it("should render error placeholder with custom error message", async () => {
         render(
-            <DarkModeContextProvider>
-                <Img
-                    src="skdfj jfa sfkj@#$##%##%"
-                    data-testid="Img"
-                    errorMessage="Failed to load"
-                />
-            </DarkModeContextProvider>,
+            <Img
+                src="skdfj jfa sfkj@#$##%##%"
+                data-testid="Img"
+                errorMessage="Failed to load"
+            />,
         );
 
         // Trigger error event

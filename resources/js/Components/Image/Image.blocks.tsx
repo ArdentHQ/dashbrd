@@ -11,6 +11,7 @@ export const ImageErrorPlaceholder = ({
     errorMessage?: string;
 }): JSX.Element => {
     const { isDark } = useDarkModeContext();
+
     return (
         <div
             data-testid="ImageErrorPlaceholer"
