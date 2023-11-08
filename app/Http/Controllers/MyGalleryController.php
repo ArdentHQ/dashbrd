@@ -6,14 +6,10 @@ namespace App\Http\Controllers;
 
 use App\Data\Gallery\GalleriesCardData;
 use App\Data\Gallery\GalleryCardData;
-use App\Data\Gallery\GalleryCollectionData;
-use App\Data\Gallery\GalleryCollectionsData;
 use App\Data\Gallery\GalleryData;
-use App\Data\Gallery\GalleryNftData;
 use App\Enums\ToastType;
 use App\Http\Controllers\Concerns\StoresGalleries;
 use App\Models\Gallery;
-use App\Models\Nft;
 use App\Models\User;
 use App\Repositories\GalleryRepository;
 use Illuminate\Http\RedirectResponse;
