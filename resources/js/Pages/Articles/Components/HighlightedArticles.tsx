@@ -82,7 +82,7 @@ const useArticlesSlidesPerPage = (): number => {
 
     if (isXs || is2Xs || isSm || isMd) return 1;
 
-    if (isMdLg || isLg ) return 2;
+    if (isMdLg || isLg) return 2;
 
     return 3;
 };
