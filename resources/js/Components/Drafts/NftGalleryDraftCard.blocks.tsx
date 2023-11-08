@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import DeleteGalleryButton from "../Galleries/DeleteGalleryButton";
 import { Avatar } from "@/Components/Avatar";
 import { DynamicBalance } from "@/Components/DynamicBalance";
+import DeleteGalleryButton from "@/Components/Galleries/DeleteGalleryButton";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
