@@ -3,6 +3,7 @@ import { Img } from "./Image";
 import * as ImageLoaderHook from "./useImageLoader";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { act, render, screen, waitFor } from "@/Tests/testing-library";
+import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 
 describe("Image", () => {
     const image = new Image();
@@ -93,7 +94,11 @@ describe("Image", () => {
 
         const useImageLoaderMock = vi.spyOn(ImageLoaderHook, "useImageLoader").mockImplementation(() => mockData);
 
-        render(<Img src="skdfj jfa sfkj@#$##%##%" />);
+        render(
+            <DarkModeContextProvider>
+                <Img src="skdfj jfa sfkj@#$##%##%" />
+            </DarkModeContextProvider>,
+        );
 
         expect(mockData.loadImage).toHaveBeenCalledTimes(0);
         expect(mockData.isLoaded).toBe(false);
@@ -107,11 +112,13 @@ describe("Image", () => {
         const onErrorMock = vi.fn();
 
         render(
-            <Img
-                src="@!##$%%%%$@#"
-                data-testid="Img"
-                onError={onErrorMock}
-            />,
+            <DarkModeContextProvider>
+                <Img
+                    src="@!##$%%%%$@#"
+                    data-testid="Img"
+                    onError={onErrorMock}
+                />
+            </DarkModeContextProvider>,
         );
 
         // Trigger error event
@@ -133,10 +140,12 @@ describe("Image", () => {
         const onErrorMock = vi.fn();
 
         render(
-            <Img
-                data-testid="Img"
-                onError={onErrorMock}
-            />,
+            <DarkModeContextProvider>
+                <Img
+                    data-testid="Img"
+                    onError={onErrorMock}
+                />
+            </DarkModeContextProvider>,
         );
 
         // Trigger error event
@@ -156,11 +165,13 @@ describe("Image", () => {
 
     it("should render error placeholder with custom error message", async () => {
         render(
-            <Img
-                src="skdfj jfa sfkj@#$##%##%"
-                data-testid="Img"
-                errorMessage="Failed to load"
-            />,
+            <DarkModeContextProvider>
+                <Img
+                    src="skdfj jfa sfkj@#$##%##%"
+                    data-testid="Img"
+                    errorMessage="Failed to load"
+                />
+            </DarkModeContextProvider>,
         );
 
         // Trigger error event

@@ -7,6 +7,7 @@ import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 
 const collection = new CollectionDetailDataFactory().create({
     description: "This is a test collection",
@@ -238,7 +239,11 @@ describe("CollectionHeaderTop", () => {
             image: null,
         });
 
-        render(<CollectionHeaderTop collection={collection} />);
+        render(
+            <DarkModeContextProvider>
+                <CollectionHeaderTop collection={collection} />
+            </DarkModeContextProvider>,
+        );
 
         expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
         expect(screen.getByTestId("ImageErrorPlaceholer")).toBeInTheDocument();
