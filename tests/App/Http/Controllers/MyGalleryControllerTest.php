@@ -32,7 +32,14 @@ it('should include nft count when rendering the "my galleries" page', function (
 
     expect($user->nfts()->count())->toBe(0);
 
+    $this->actingAs($user)
+        ->get(route('my-galleries'))
+        ->assertStatus(200)
+        ->assertInertia(fn (AssertableInertia $page) => $page->where('nftCount', 0));
+
     Nft::factory(10)->create(['wallet_id' => $user->wallet->id]);
+
+    expect($user->nfts()->count())->toBe(10);
 
     $this->actingAs($user->fresh())
         ->get(route('my-galleries'))
