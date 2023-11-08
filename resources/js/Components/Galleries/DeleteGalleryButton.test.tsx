@@ -38,6 +38,7 @@ describe("DeleteGalleryButton", () => {
 
     it("deletes the gallery when submitted", async () => {
         const submitFunction = vi.fn().mockImplementation((_, options) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             options?.onFinish?.();
         });
 
