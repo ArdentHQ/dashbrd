@@ -192,6 +192,7 @@ const CollectionsView = ({
 
     const tabChangeHandler = (tab: TabName): void => {
         setSelectedTab(tab);
+        setFilterIsDirty(true);
         replaceUrlQuery({
             tab,
         });
