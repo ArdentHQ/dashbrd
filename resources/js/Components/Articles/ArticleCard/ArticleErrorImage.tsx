@@ -7,7 +7,7 @@ export const ArticleErrorImage = ({ className }: { className?: string; errorMess
     return (
         <div
             data-testid="ArticleErrorImage"
-            className={cn("bg-theme-secondary-100 p-4 dark:bg-theme-primary-800 h-full w-full", className)}
+            className={cn("h-full w-full bg-theme-secondary-100 p-4 dark:bg-theme-primary-800", className)}
         >
             <div className="flex h-full flex-col items-center justify-center">
                 {!isDark && <ImageLoadError className="mx-auto max-w-23" />}
