@@ -19,7 +19,7 @@ export const ArticleMeta = ({ article }: Properties): JSX.Element => (
                 </div>
             </div>
 
-            <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 md:hidden">
+            <div className="mt-4 flex justify-between border-t border-dashed border-theme-secondary-400 pt-4 dark:border-theme-dark-700 md:hidden">
                 <div>
                     <ArticleShare
                         article={article}
