@@ -2,7 +2,8 @@ import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
-import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
+import { NftGalleryDraftCard } from "@/Components/Drafts/NftGalleryDraftCard";
+import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
@@ -18,12 +19,6 @@ interface Properties {
     galleryCount: number;
 }
 
-const NoGalleries = ({ text }: { text: string }): JSX.Element => (
-    <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
-        <span className="text-center font-medium text-theme-secondary-700">{text}</span>
-    </div>
-);
-
 const Drafts = (): JSX.Element => {
     const { t } = useTranslation();
 
@@ -36,13 +31,13 @@ const Drafts = (): JSX.Element => {
     }
 
     if (drafts.length === 0) {
-        return <NoGalleries text={t("pages.galleries.my_galleries.no_draft_galleries").toString()} />;
+        return <EmptyBlock>{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
     }
 
     return (
         <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
             {drafts.map((draft, index) => (
-                <NftDraftCard
+                <NftGalleryDraftCard
                     key={index}
                     draft={draft}
                     onDelete={() => {
@@ -72,7 +67,7 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
     const userGalleries = galleries.paginated;
 
     if (userGalleries.meta.total === 0) {
-        return <NoGalleries text={t("pages.galleries.my_galleries.no_galleries").toString()} />;
+        return <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
     }
 
     return (

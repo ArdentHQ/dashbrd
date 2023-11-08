@@ -1,6 +1,6 @@
 import React from "react";
 import { type SpyInstance } from "vitest";
-import { NftDraftCard } from "./NftDraftCard";
+import { NftGalleryDraftCard } from "./NftGalleryDraftCard";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
@@ -11,7 +11,7 @@ const user = new UserDataFactory().create();
 let resetAuthContextMock: () => void;
 let useMetaMaskContextSpy: SpyInstance;
 
-describe("NftDraftCard", () => {
+describe("NftGalleryDraftCard", () => {
     const draft: GalleryDraft = {
         id: 1,
         title: "Test draft",
@@ -40,13 +40,13 @@ describe("NftDraftCard", () => {
 
     it("renders", () => {
         render(
-            <NftDraftCard
+            <NftGalleryDraftCard
                 draft={draft}
                 onDelete={vi.fn()}
             />,
         );
 
-        expect(screen.getByTestId("NftDraftCard")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftCard")).toBeInTheDocument();
     });
 
     it("handles on delete", async () => {
@@ -65,14 +65,14 @@ describe("NftDraftCard", () => {
 
     it("shows an NFT gallery card for the user when no cover image is set", () => {
         render(
-            <NftDraftCard
+            <NftGalleryDraftCard
                 draft={draft}
                 onDelete={vi.fn()}
             />,
         );
 
         expect(screen.queryByTestId("GalleryCoverImage")).not.toBeInTheDocument();
-        expect(screen.getByTestId("NftDraftImageGrid")).toBeInTheDocument();
+        expect(screen.getByTestId("NftGalleryDraftImageGrid")).toBeInTheDocument();
     });
 
     it("shows an NFT gallery card for the user with cover", () => {
@@ -89,14 +89,14 @@ describe("NftDraftCard", () => {
         };
 
         render(
-            <NftDraftCard
+            <NftGalleryDraftCard
                 draft={draftWithCover}
                 onDelete={vi.fn()}
             />,
         );
 
         expect(screen.getByTestId("GalleryCoverImage")).toBeInTheDocument();
-        expect(screen.queryByTestId("NftDraftImageGrid")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("NftGalleryDraftImageGrid")).not.toBeInTheDocument();
     });
 
     it("should send not render address if it is not defined", () => {
@@ -106,12 +106,12 @@ describe("NftDraftCard", () => {
         };
 
         render(
-            <NftDraftCard
+            <NftGalleryDraftCard
                 draft={draftWithoutWalletAddress}
                 onDelete={vi.fn()}
             />,
         );
 
-        expect(screen.queryByTestId("NftDraftHeading__address")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("NftGalleryDraftHeading__address")).not.toBeInTheDocument();
     });
 });

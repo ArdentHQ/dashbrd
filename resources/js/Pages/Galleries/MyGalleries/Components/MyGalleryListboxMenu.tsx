@@ -1,4 +1,5 @@
 import { router } from "@inertiajs/react";
+import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./CreateGalleryButton";
 import { Listbox } from "@/Components/Form/Listbox";
@@ -13,7 +14,7 @@ export const MyGalleryListboxMenu = ({
 }: {
     nftCount: number;
     publishedCount: number;
-    draftsCount: number | undefined;
+    draftsCount?: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -52,7 +53,7 @@ export const MyGalleryListboxMenu = ({
                             {showPublished ? (
                                 <div className="flex w-full justify-between">
                                     <span>{t("common.published")}</span>
-                                    <span>{nftCount}</span>
+                                    <span>{publishedCount}</span>
                                 </div>
                             ) : (
                                 <div className="flex w-full justify-between">
@@ -76,13 +77,18 @@ export const MyGalleryListboxMenu = ({
 
                     <Listbox.Option
                         value={draftRoute}
+                        isDisabled={draftsCount === undefined || draftsCount === 0}
                         classNames={{
                             optionLabel: "flex w-full justify-between",
                             iconContainer: "flex flex-1 justify-between",
                         }}
                     >
                         <span>{t("common.drafts")}</span>
-                        <span className="text-theme-secondary-700">{draftsCount}</span>
+                        <span
+                            className={cn(draftsCount !== undefined && draftsCount > 0 && "text-theme-secondary-700")}
+                        >
+                            {draftsCount}
+                        </span>
                     </Listbox.Option>
                 </Listbox>
             </div>

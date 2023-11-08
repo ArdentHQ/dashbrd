@@ -111,7 +111,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     const getWalletDrafts = async (): Promise<GalleryDraft[]> => {
         const allDrafts: GalleryDraft[] = await database.getAll();
 
-        return allDrafts.filter((draft) => draft.walletAddress === wallet?.address);
+        return allDrafts.filter((draft) => draft.walletAddress === wallet?.address && !isExpired(draft));
     };
 
     const setDraftCover = (image: ArrayBuffer | null, type: string | null): void => {
@@ -144,12 +144,16 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setReachedLimit(false);
     };
 
-    const deleteExpiredDrafts = async (): Promise<void> => {
+    const isExpired = (draft: GalleryDraft): boolean => {
         const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
+        return (draft.updatedAt ?? 0) < thresholdDaysAgo;
+    };
+
+    const deleteExpiredDrafts = async (): Promise<void> => {
         const drafts: GalleryDraft[] = await database.getAll();
 
         for (const draft of drafts) {
-            if ((draft.updatedAt ?? 0) < thresholdDaysAgo) {
+            if (isExpired(draft)) {
                 void database.deleteRecord(Number(draft.id));
             }
         }
