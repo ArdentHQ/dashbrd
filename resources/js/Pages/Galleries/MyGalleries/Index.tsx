@@ -1,6 +1,5 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useIndexedDB } from "react-indexed-db-hook";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
 import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
@@ -24,28 +23,20 @@ const Index = ({
     galleryCount: number;
 }): JSX.Element => {
     const { t } = useTranslation();
-    //! NOTE: Remove lines 26-38 after useGalleryDrafts hook has been implemented
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
-    const database = useIndexedDB("gallery-drafts");
 
-    const loadDrafts = async (): Promise<void> => {
-        const { getAll } = database;
-
-        const records = await getAll();
-        setDrafts(records);
-    };
+    const { getDrafts, deleteExpiredDrafts } = useGalleryDrafts();
 
     useEffect(() => {
+        const loadDrafts = async (): Promise<void> => {
+            setDrafts(await getDrafts());
+        };
+
         void loadDrafts();
-    }, [database]);
-
-    const userGalleries = galleries.paginated;
-
-    const { deleteExpiredDrafts } = useGalleryDrafts(undefined, true);
-
-    useEffect(() => {
         void deleteExpiredDrafts();
     }, []);
+
+    const userGalleries = galleries.paginated;
 
     return (
         <Layout
