@@ -52,7 +52,7 @@ describe("NftGalleryDraftCard", () => {
     it("handles on delete", async () => {
         const onDelete = vi.fn();
         render(
-            <NftDraftCard
+            <NftGalleryDraftCard
                 draft={draft}
                 onDelete={onDelete}
             />,
