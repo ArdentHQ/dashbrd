@@ -2,7 +2,7 @@ import cn from "classnames";
 import { type HTMLAttributes, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Placement, type ReferenceElement } from "tippy.js";
+import { type Placement, type ReferenceElement } from "tippy.js";
 import { Icon } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
