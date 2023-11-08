@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface ImageProperties {
     className?: string;
     wrapperClassName?: string;
@@ -10,4 +12,5 @@ export interface ImageProperties {
     errorMessage?: string;
     onError?: () => void;
     "data-testid"?: string;
+    errorPlaceholder?: ReactNode;
 }

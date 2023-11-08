@@ -16,6 +16,7 @@ import { ReactComponent as RightMiddleGrid } from "@images/grid-right-middle.svg
 import { ReactComponent as RightGridSm } from "@images/grid-right-small.svg";
 import { ReactComponent as RightGrid } from "@images/grid-right.svg";
 import { ReactComponent as ImageLoadErrorDark } from "@images/image-load-error-dark.svg";
+import { ReactComponent as ImageLoadErrorBlue } from "@images/image-load-error-blue.svg";
 import { ReactComponent as ImageLoadError } from "@images/image-load-error.svg";
 import { ReactComponent as Monkey } from "@images/monkey.svg";
 import { ReactComponent as Ethereum } from "@images/networks/ethereum.svg";
@@ -33,6 +34,7 @@ export {
     WarningExclamation,
     WarningExclamationDark,
     ImageLoadError,
+    ImageLoadErrorBlue,
     ImageLoadErrorDark,
     DeleteModal,
     Polygon,

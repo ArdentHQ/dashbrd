@@ -5,6 +5,7 @@ import { Img } from "@/Components/Image";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
+import { ArticleErrorImage } from "./ArticleErrorImage";
 
 export type ArticleCardVariant = "normal" | "large";
 
@@ -50,6 +51,7 @@ export const ArticleCard = ({
                     alt={article.title}
                     srcSet={`${article.image.medium} 1x, ${article.image.medium2x} 2x`}
                     src={article.image.medium}
+                    errorPlaceholder={isLargeVariant ? <ArticleErrorImage /> : undefined}
                 />
             </div>
 

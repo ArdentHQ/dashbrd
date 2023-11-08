@@ -1,0 +1,18 @@
+import cn from "classnames";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
+import { ImageLoadError, ImageLoadErrorBlue } from "@/images";
+
+export const ArticleErrorImage = ({ className }: { className?: string; errorMessage?: string }): JSX.Element => {
+    const { isDark } = useDarkModeContext();
+    return (
+        <div
+            data-testid="ArticleErrorImage"
+            className={cn("bg-theme-secondary-100 p-4 dark:bg-theme-primary-800 h-full w-full", className)}
+        >
+            <div className="flex h-full flex-col items-center justify-center">
+                {!isDark && <ImageLoadError className="mx-auto max-w-23" />}
+                {isDark && <ImageLoadErrorBlue className="mx-auto max-w-23" />}
+            </div>
+        </div>
+    );
+};
