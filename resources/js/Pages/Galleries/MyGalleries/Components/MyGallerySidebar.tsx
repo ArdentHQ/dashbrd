@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Icon } from "@/Components/Icon";
 import { Sidebar, SidebarItem } from "@/Components/Sidebar";
+import { isTruthy } from "@/Utils/is-truthy";
 
 const routeName = "my-galleries";
 
@@ -29,6 +30,7 @@ export const MyGallerySidebar = ({
             <SidebarItem
                 icon="Document"
                 title={t("common.drafts")}
+                isDisabled={!isTruthy(draftsCount) || draftsCount === 0}
                 isSelected={route().current(routeName, { draft: true })}
                 href={route(routeName, { draft: true })}
                 rightText={
