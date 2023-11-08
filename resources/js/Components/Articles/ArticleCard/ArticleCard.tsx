@@ -68,11 +68,14 @@ export const ArticleCard = ({
                 </div>
 
                 <h4
-                    className={cn("transition-default mt-1 line-clamp-2 max-h-[3.5rem] text-lg font-medium leading-7", {
-                        "text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400":
-                            !isLargeVariant,
-                        "text-theme-secondary-300": isLargeVariant,
-                    })}
+                    className={cn(
+                        "transition-default mt-1 line-clamp-2 max-h-[3.5rem] break-words text-lg font-medium leading-7",
+                        {
+                            "text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400":
+                                !isLargeVariant,
+                            "text-theme-secondary-300": isLargeVariant,
+                        },
+                    )}
                 >
                     {article.title}
                 </h4>

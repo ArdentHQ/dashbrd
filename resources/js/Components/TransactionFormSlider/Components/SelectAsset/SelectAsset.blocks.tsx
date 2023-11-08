@@ -11,6 +11,7 @@ export const AssetAvatar = ({ asset }: { asset?: App.Data.TokenListItemData }): 
                 className="-mt-1 h-8 w-8"
                 chainId={asset.chain_id}
                 networkIconSize="sm"
+                badgeClassname="dark:border-theme-dark-900 dark:group-hover:border-theme-dark-900"
             />
         );
     }
