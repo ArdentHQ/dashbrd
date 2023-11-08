@@ -53,7 +53,7 @@ export const MyGalleryListboxMenu = ({
                             {showPublished ? (
                                 <div className="flex w-full justify-between">
                                     <span>{t("common.published")}</span>
-                                    <span>{nftCount}</span>
+                                    <span>{publishedCount}</span>
                                 </div>
                             ) : (
                                 <div className="flex w-full justify-between">
