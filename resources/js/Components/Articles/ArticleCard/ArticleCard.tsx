@@ -1,11 +1,11 @@
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
+import { ArticleErrorImage } from "./ArticleErrorImage";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
-import { ArticleErrorImage } from "./ArticleErrorImage";
 
 export type ArticleCardVariant = "normal" | "large";
 
