@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type ButtonVariant } from "./Buttons";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
@@ -35,14 +35,16 @@ export const ConfirmDeletionDialog = ({
         [confirmationValue, requiresConfirmation],
     );
 
-    const close = (): void => {
-        onClose();
+    useEffect(() => {
+        if (isOpen) {
+            return;
+        }
 
         // Reset after transition ends...
         setTimeout(() => {
             setConfirmationValue("");
         }, 200);
-    };
+    }, [isOpen]);
 
     return (
         <ConfirmationDialog
@@ -51,7 +53,7 @@ export const ConfirmDeletionDialog = ({
             confirmLabel={t("common.confirm")}
             onConfirm={onConfirm}
             isDisabled={isDisabled || !valid}
-            onClose={close}
+            onClose={onClose}
             focus={input}
             confirmationButtonVariant={confirmationButtonVariant}
         >

@@ -310,47 +310,59 @@ const GalleryStatsLikeButton = ({ gallery }: { gallery: App.Data.Gallery.Gallery
 export const GalleryFooter = ({
     gallery,
     showDeleteButton = false,
+    onDelete,
 }: {
     gallery: App.Data.Gallery.GalleryData;
     showDeleteButton?: boolean;
-}): JSX.Element => (
-    <div
-        className="flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200"
-        data-testid="GalleryFooter"
-    >
-        <GalleryStatsLikeButton gallery={gallery} />
+    onDelete?: () => void;
+}): JSX.Element => {
+    const deleteHandler: React.MouseEventHandler<HTMLButtonElement> = (event): void => {
+        event.preventDefault();
 
-        <div className="flex items-center">
-            <div className="flex items-center space-x-2">
-                <Icon
-                    name="Eye"
-                    size="lg"
-                />
-                <span
-                    className="text-sm"
-                    data-testid="GalleryStats__views"
-                >
-                    {gallery.views}
-                </span>
+        onDelete?.();
+    };
+
+    return (
+        <div
+            className="flex items-center justify-between text-theme-secondary-700 dark:text-theme-dark-200"
+            data-testid="GalleryFooter"
+        >
+            <GalleryStatsLikeButton gallery={gallery} />
+
+            <div className="flex items-center">
+                <div className="flex items-center space-x-2">
+                    <Icon
+                        name="Eye"
+                        size="lg"
+                    />
+                    <span
+                        className="text-sm"
+                        data-testid="GalleryStats__views"
+                    >
+                        {gallery.views}
+                    </span>
+                </div>
+
+                {showDeleteButton && (
+                    <>
+                        <span className="ml-3 mr-1 flex h-1.25 w-1.25 rounded-full bg-theme-secondary-400 dark:bg-theme-dark-700"></span>
+
+                        <DeleteGalleryButton onDelete={deleteHandler} />
+                    </>
+                )}
             </div>
-
-            {showDeleteButton && (
-                <>
-                    <span className="ml-3 mr-1 flex h-1.25 w-1.25 rounded-full bg-theme-secondary-400 dark:bg-theme-dark-700"></span>
-
-                    <DeleteGalleryButton gallery={gallery} />
-                </>
-            )}
         </div>
-    </div>
-);
+    );
+};
 
 export const GalleryStats = ({
     gallery,
     showDeleteButton = false,
+    onDelete,
 }: {
     gallery: App.Data.Gallery.GalleryData;
     showDeleteButton?: boolean;
+    onDelete?: () => void;
 }): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
@@ -406,6 +418,7 @@ export const GalleryStats = ({
             <GalleryFooter
                 gallery={gallery}
                 showDeleteButton={showDeleteButton}
+                onDelete={onDelete}
             />
         </div>
     );

@@ -1,7 +1,9 @@
+import { useForm } from "@inertiajs/react";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
+import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { NftGalleryDraftCard } from "@/Components/Drafts/NftGalleryDraftCard";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
@@ -64,7 +66,29 @@ const Drafts = (): JSX.Element => {
 const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Element => {
     const { t } = useTranslation();
 
+    const [galleryToDelete, setGalleryToDelete] = useState<App.Data.Gallery.GalleryData | null>(null);
+
     const userGalleries = galleries.paginated;
+
+    const { processing, delete: remove } = useForm({});
+
+    const submit = (): void => {
+        if (galleryToDelete === null) {
+            // Unreachable
+            return;
+        }
+
+        remove(
+            route("my-galleries.destroy", {
+                slug: galleryToDelete.slug,
+            }),
+            {
+                onFinish: () => {
+                    setGalleryToDelete(null);
+                },
+            },
+        );
+    };
 
     if (userGalleries.meta.total === 0) {
         return <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
@@ -77,6 +101,10 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
                     <NftGalleryCard
                         key={index}
                         gallery={gallery}
+                        showDeleteButton
+                        onDelete={() => {
+                            setGalleryToDelete(gallery);
+                        }}
                     />
                 ))}
             </div>
@@ -87,6 +115,18 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
                     data={userGalleries}
                 />
             )}
+
+            <ConfirmDeletionDialog
+                title={t("pages.galleries.delete_modal.title")}
+                isOpen={galleryToDelete !== null}
+                onClose={() => {
+                    setGalleryToDelete(null);
+                }}
+                onConfirm={submit}
+                isDisabled={processing}
+            >
+                {t("pages.galleries.delete_modal.confirmation_text")}
+            </ConfirmDeletionDialog>
         </>
     );
 };

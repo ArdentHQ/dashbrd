@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import DeleteGalleryButton from "../Galleries/DeleteGalleryButton";
 import { Avatar } from "@/Components/Avatar";
-import { IconButton } from "@/Components/Buttons/IconButton";
 import { DynamicBalance } from "@/Components/DynamicBalance";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
@@ -40,14 +40,7 @@ export const NftGalleryDraftFooter = ({ onDelete }: { onDelete: () => void }): J
 
             <Tooltip content={t("common.delete_draft")}>
                 <div>
-                    <IconButton
-                        data-testid="NftDraftCard__delete-button"
-                        icon="Trash"
-                        iconClass="text-theme-primary-900 dark:text-theme-dark-200"
-                        iconSize="md"
-                        className="h-8 w-8 border-transparent bg-transparent dark:border-transparent"
-                        onClick={deleteHandler}
-                    />
+                    <DeleteGalleryButton onDelete={deleteHandler} />
                 </div>
             </Tooltip>
         </div>
