@@ -1,5 +1,6 @@
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
+import { ArticleErrorImage } from "./ArticleErrorImage";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
 import { useAuth } from "@/Contexts/AuthContext";
@@ -50,6 +51,9 @@ export const ArticleCard = ({
                     alt={article.title}
                     srcSet={`${article.image.medium} 1x, ${article.image.medium2x} 2x`}
                     src={article.image.medium}
+                    errorPlaceholder={
+                        isLargeVariant ? <ArticleErrorImage isLargeVariant={isLargeVariant} /> : undefined
+                    }
                 />
             </div>
 

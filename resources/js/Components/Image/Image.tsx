@@ -6,6 +6,7 @@ import { ImageErrorPlaceholder } from "./Image.blocks";
 import { type ImageProperties } from "./Image.contracts";
 import { useImageLoader } from "./useImageLoader";
 import { Skeleton } from "@/Components/Skeleton";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const Img = ({
     src,
@@ -18,6 +19,7 @@ export const Img = ({
     errorMessage,
     onError,
     isCircle,
+    errorPlaceholder,
     ...properties
 }: ImageProperties): JSX.Element => {
     const { isLoaded, isErrored, loadImage, isLoading } = useImageLoader({ src, onError });
@@ -78,10 +80,16 @@ export const Img = ({
                 )}
 
                 {isErrored && (
-                    <ImageErrorPlaceholder
-                        errorMessage={errorMessage}
-                        className={cn(className, errorClassName, "h-full w-full")}
-                    />
+                    <>
+                        {!isTruthy(errorPlaceholder) && (
+                            <ImageErrorPlaceholder
+                                errorMessage={errorMessage}
+                                className={cn(className, errorClassName, "h-full w-full")}
+                            />
+                        )}
+
+                        {isTruthy(errorPlaceholder) && errorPlaceholder}
+                    </>
                 )}
             </div>
         </div>
