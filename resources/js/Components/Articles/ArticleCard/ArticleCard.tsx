@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ArticleErrorImage } from "./ArticleErrorImage";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
+import { Link } from "@/Components/Link";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
@@ -24,7 +25,7 @@ export const ArticleCard = ({
     const isLargeVariant = variant === "large";
 
     return (
-        <a
+        <Link
             data-testid="ArticleCard"
             href={route("articles.view", article.slug)}
             className={cn(
@@ -106,6 +107,6 @@ export const ArticleCard = ({
                     variant={variant}
                 />
             </div>
-        </a>
+        </Link>
     );
 };
