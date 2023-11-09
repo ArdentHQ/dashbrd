@@ -7,7 +7,7 @@ import { ParseIcon } from "@/Utils/ParseIcon";
 
 type IconPosition = "left" | "right";
 
-type ButtonVariant =
+export type ButtonVariant =
     | "primary"
     | "secondary"
     | "icon"

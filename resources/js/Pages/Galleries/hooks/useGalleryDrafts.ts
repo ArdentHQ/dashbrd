@@ -31,7 +31,7 @@ interface GalleryDraftsState {
     setDraftCover: (image: ArrayBuffer | null, type: string | null) => void;
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
-    deleteDraft: () => Promise<void>;
+    deleteDraft: (draftId: number | null) => Promise<void>;
     deleteExpiredDrafts: () => Promise<void>;
 }
 
@@ -58,7 +58,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-
     const [reachedLimit, setReachedLimit] = useState(false);
 
     // populate `draft` state if `givenDraftId` is present
@@ -95,6 +94,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
             }
 
             const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
+
             delete draftToCreate.id;
 
             const id = await database.add(draftToCreate);
@@ -136,9 +136,10 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         setSave(true);
     };
 
-    const deleteDraft = async (): Promise<void> => {
-        if (draft.id === null) return;
-        await database.deleteRecord(draft.id);
+    const deleteDraft = async (draftId: number | null): Promise<void> => {
+        if (draftId === null) return;
+
+        await database.deleteRecord(draftId);
 
         setReachedLimit(false);
     };

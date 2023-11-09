@@ -228,7 +228,7 @@ describe("useGalleryDrafts", () => {
         });
 
         await act(async () => {
-            await result.current.deleteDraft();
+            await result.current.deleteDraft(result.current.draft.id);
         });
 
         await waitFor(() => {
@@ -245,7 +245,7 @@ describe("useGalleryDrafts", () => {
         const { result } = renderHook(() => useGalleryDrafts());
 
         await act(async () => {
-            await result.current.deleteDraft();
+            await result.current.deleteDraft(null);
         });
 
         expect(deleteMock).not.toHaveBeenCalled();

@@ -598,6 +598,21 @@ describe("GalleryFooter", () => {
 
         expect(screen.getByTestId("GalleryFooter")).toBeInTheDocument();
     });
+    it("should handle onDelete", async () => {
+        const onDelete = vi.fn();
+
+        render(
+            <GalleryFooter
+                gallery={gallery}
+                onDelete={onDelete}
+                showDeleteButton
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
+
+        expect(onDelete).toHaveBeenCalled();
+    });
 
     it("should display the amount of views", () => {
         render(<GalleryFooter gallery={gallery} />);

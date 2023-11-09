@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Avatar } from "@/Components/Avatar";
-import { IconButton } from "@/Components/Buttons/IconButton";
 import { DynamicBalance } from "@/Components/DynamicBalance";
+import DeleteGalleryButton from "@/Components/Galleries/DeleteGalleryButton";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
@@ -15,8 +15,14 @@ import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
-export const NftGalleryDraftFooter = (): JSX.Element => {
+export const NftGalleryDraftFooter = ({ onDelete }: { onDelete: () => void }): JSX.Element => {
     const { t } = useTranslation();
+
+    const deleteHandler: React.MouseEventHandler<HTMLButtonElement> = (event): void => {
+        event.preventDefault();
+
+        onDelete();
+    };
 
     return (
         <div
@@ -31,16 +37,12 @@ export const NftGalleryDraftFooter = (): JSX.Element => {
                 />
                 <span className="text-sm text-theme-secondary-700 dark:text-theme-dark-200">{t("common.draft")}</span>
             </div>
-            <div className="flex items-center space-x-2">
-                <Tooltip content={t("common.delete_draft")}>
-                    <IconButton
-                        icon="Trash"
-                        iconClass="text-theme-primary-900 dark:text-theme-dark-200"
-                        iconSize="md"
-                        className="h-8 w-8 border-transparent bg-transparent dark:border-transparent"
-                    />
-                </Tooltip>
-            </div>
+
+            <Tooltip content={t("common.delete_draft")}>
+                <div>
+                    <DeleteGalleryButton onDelete={deleteHandler} />
+                </div>
+            </Tooltip>
         </div>
     );
 };
@@ -98,7 +100,13 @@ export const NftGalleryDraftHeading = ({
     );
 };
 
-export const NftGalleryDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.Element => {
+export const NftGalleryDraftStats = ({
+    draft,
+    onDelete,
+}: {
+    draft: GalleryDraft;
+    onDelete: () => void;
+}): JSX.Element => {
     const { user } = useAuth();
     const { t } = useTranslation();
 
@@ -150,7 +158,7 @@ export const NftGalleryDraftStats = ({ draft }: { draft: GalleryDraft }): JSX.El
                 </div>
             </div>
             <hr className="my-3 text-theme-secondary-300 dark:text-theme-dark-700" />
-            <NftGalleryDraftFooter />
+            <NftGalleryDraftFooter onDelete={onDelete} />
         </div>
     );
 };

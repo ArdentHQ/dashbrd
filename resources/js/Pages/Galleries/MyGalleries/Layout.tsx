@@ -1,8 +1,8 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode } from "react";
 import { MyGalleryListboxMenu } from "./Components/MyGalleryListboxMenu";
 import { MyGallerySidebar } from "./Components/MyGallerySidebar";
+import { useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
 import LeftMenuLayout from "@/Layouts/LeftMenuLayout";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const Layout = ({
     title,
@@ -15,17 +15,7 @@ const Layout = ({
     nftCount: number;
     galleryCount: number;
 }): JSX.Element => {
-    const { getDrafts } = useGalleryDrafts();
-
-    const [drafts, setDrafts] = useState<number>();
-
-    useEffect(() => {
-        void (async () => {
-            const allDrafts = await getDrafts();
-
-            setDrafts(allDrafts.length);
-        })();
-    }, []);
+    const { drafts } = useDraftGalleriesContext();
 
     return (
         <LeftMenuLayout
@@ -33,13 +23,13 @@ const Layout = ({
                 <MyGalleryListboxMenu
                     nftCount={nftCount}
                     publishedCount={galleryCount}
-                    draftsCount={drafts}
+                    draftsCount={drafts?.length ?? 0}
                 />
             }
             sidebarMenu={
                 <MyGallerySidebar
                     publishedCount={galleryCount}
-                    draftsCount={drafts}
+                    draftsCount={drafts?.length ?? 0}
                 />
             }
             title={title}
