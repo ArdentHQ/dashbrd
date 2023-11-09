@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Filament;
 
 use Filament\Facades\Filament;
 use Filament\Http\Controllers\Auth\LogoutController as FilamentLogoutController;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class LogoutController extends FilamentLogoutController
 {
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Filament::auth()->logout();
         $request->session()->invalidate();
