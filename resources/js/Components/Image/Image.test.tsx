@@ -1,12 +1,13 @@
 import React from "react";
+import { type SpyInstance } from "vitest";
 import { Img } from "./Image";
 import * as ImageLoaderHook from "./useImageLoader";
 import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { act, render, screen, waitFor } from "@/Tests/testing-library";
-import { SpyInstance } from "vitest";
 
 let useDarkModeContextSpy: SpyInstance;
+
 describe("Image", () => {
     const image = new Image();
 
