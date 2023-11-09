@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
+import { Link } from "@/Components/Link";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
-import { Link } from "@/Components/Link"
 
 export const ArticleListItem = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
     const { t } = useTranslation();
