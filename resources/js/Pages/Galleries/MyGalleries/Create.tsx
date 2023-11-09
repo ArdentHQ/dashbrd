@@ -19,7 +19,9 @@ import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
+import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { assertUser, assertWallet } from "@/Utils/assertions";
+import { fileToImageDataURI } from "@/Utils/file-to-image-data-uri";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
@@ -59,7 +61,6 @@ const Create = ({
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
-
     const { draftId } = getQueryParameters();
 
     const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
@@ -73,8 +74,11 @@ const Create = ({
         }
     }, [draft.id]);
 
+    const isEditingDraft = draft.id !== null && gallery === undefined;
+
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
+        draft: isEditingDraft ? draft : undefined,
         setDraftNfts,
         deleteDraft: (): void => {
             void deleteDraft(draft.id);
@@ -116,6 +120,31 @@ const Create = ({
         },
         [gallery],
     );
+
+    useEffect(() => {
+        if (draft.id == null) {
+            return;
+        }
+
+        const loadDraftCover = async (): Promise<void> => {
+            const file = arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType);
+
+            if (file === null) {
+                setGalleryCoverImageUrl("");
+
+                return;
+            }
+
+            try {
+                const imageDataURI = await fileToImageDataURI(file);
+                setGalleryCoverImageUrl(imageDataURI);
+            } catch {
+                setGalleryCoverImageUrl("");
+            }
+        };
+
+        void loadDraftCover();
+    }, [draft]);
 
     const publishHandler = (event: FormEvent<Element>): void => {
         void signedAction(() => {
@@ -225,12 +254,12 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
-                        setDraftCover(null, null);
+                        setDraftCover(null, null, null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
                         // eslint-disable-next-line promise/prefer-await-to-then
                         void blob.arrayBuffer().then((buf) => {
-                            setDraftCover(buf, blob.type);
+                            setDraftCover(buf, blob.name, blob.type);
                         });
                     }
                     setIsGalleryFormSliderOpen(false);

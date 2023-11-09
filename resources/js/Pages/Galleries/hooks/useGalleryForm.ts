@@ -1,7 +1,9 @@
 import { useForm } from "@inertiajs/react";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { type GalleryDraft } from "./useGalleryDrafts";
 import { useToasts } from "@/Hooks/useToasts";
+import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { isTruthy } from "@/Utils/is-truthy";
 
 interface UseGalleryFormProperties extends Record<string, unknown> {
@@ -13,10 +15,12 @@ interface UseGalleryFormProperties extends Record<string, unknown> {
 
 export const useGalleryForm = ({
     gallery,
+    draft,
     setDraftNfts,
     deleteDraft,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
+    draft?: GalleryDraft;
     setDraftNfts?: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     deleteDraft?: () => void;
 }): {
@@ -109,6 +113,19 @@ export const useGalleryForm = ({
 
         setDraftNfts?.(nfts);
     };
+
+    useEffect(() => {
+        if (draft?.id == null) {
+            return;
+        }
+
+        setData({
+            id: null,
+            name: draft.title,
+            nfts: [],
+            coverImage: arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType),
+        });
+    }, [draft]);
 
     return {
         data,
