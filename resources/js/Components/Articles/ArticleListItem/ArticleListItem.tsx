@@ -25,8 +25,8 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                 />
             </div>
 
-            <div className="flex flex-1 flex-col space-y-2">
-                <h4 className="transition-default line-clamp-2 text-sm font-medium leading-[22px] text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400 sm:line-clamp-1 sm:text-lg sm:leading-7">
+            <div className="flex min-w-0 flex-1 flex-col space-y-2">
+                <h4 className="transition-default line-clamp-2 break-words text-sm font-medium leading-[22px] text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400 sm:line-clamp-1 sm:text-lg sm:leading-7">
                     {article.title}
                 </h4>
 
