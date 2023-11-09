@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 it('should redirect the admin user to homepage on logout', function () {
     $user = User::factory()->create();
 
-    # insert into model_has_roles (role_id, model_type, model_id) values (1, 'App\\Models\\User', 1); in the following line
+    // insert into model_has_roles (role_id, model_type, model_id) values (1, 'App\\Models\\User', 1); in the following line
     DB::insert(
         'insert into model_has_roles (role_id, model_type, model_id) values (?, ?, ?)',
         [1, 'App\\Models\\User', $user->id]
