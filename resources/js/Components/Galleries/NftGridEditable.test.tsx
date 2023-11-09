@@ -41,15 +41,7 @@ describe("NftGridEditable", () => {
                     selectedNfts={[nft]}
                     nftLimit={16}
                 >
-                    <GalleryNfts
-                        nfts={[nft]}
-                        pageMeta={{
-                            ...SamplePageMeta.paginated.meta,
-                            next_page_url: undefined,
-                            per_page: undefined,
-                            total: undefined,
-                        }}
-                    >
+                    <GalleryNfts>
                         <NftGridEditable />
                     </GalleryNfts>
                 </EditableGalleryHook>
@@ -69,15 +61,7 @@ describe("NftGridEditable", () => {
                     selectedNfts={[]}
                     nftLimit={16}
                 >
-                    <GalleryNfts
-                        nfts={[]}
-                        pageMeta={{
-                            ...SamplePageMeta.paginated.meta,
-                            next_page_url: undefined,
-                            per_page: undefined,
-                            total: undefined,
-                        }}
-                    >
+                    <GalleryNfts>
                         <NftGridEditable error="some error" />
                     </GalleryNfts>
                 </EditableGalleryHook>
@@ -107,10 +91,7 @@ describe("NftGridEditable", () => {
                         nftLimit: 16,
                     }}
                 >
-                    <GalleryNfts
-                        nfts={[]}
-                        pageMeta={SamplePageMeta.paginated.meta}
-                    >
+                    <GalleryNfts>
                         <NftGridEditable />
                     </GalleryNfts>
                 </GalleryContext.Provider>
@@ -144,10 +125,7 @@ describe("NftGridEditable", () => {
                         nftLimit: 16,
                     }}
                 >
-                    <GalleryNfts
-                        nfts={[]}
-                        pageMeta={SamplePageMeta.paginated.meta}
-                    >
+                    <GalleryNfts>
                         <NftGridEditable />
                     </GalleryNfts>
                 </GalleryContext.Provider>
@@ -180,10 +158,7 @@ describe("NftGridEditable", () => {
                         nftLimit: 16,
                     }}
                 >
-                    <GalleryNfts
-                        nfts={[]}
-                        pageMeta={SamplePageMeta.paginated.meta}
-                    >
+                    <GalleryNfts>
                         <NftGridEditable />
                     </GalleryNfts>
                 </GalleryContext.Provider>
