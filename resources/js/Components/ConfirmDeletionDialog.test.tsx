@@ -121,7 +121,7 @@ describe("ConfirmDeletionDialog", () => {
                 Test children
             </ConfirmDeletionDialog>,
         );
-
+        vi.runAllTimersAsync();
         rerender(
             <ConfirmDeletionDialog
                 isOpen={true}
