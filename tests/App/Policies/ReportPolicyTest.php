@@ -8,7 +8,6 @@ use App\Models\Role as RoleModel;
 use App\Models\User;
 use App\Policies\ReportPolicy;
 
-
 beforeEach(function () {
     $this->instance = new ReportPolicy();
     $this->user = User::factory()->create();
