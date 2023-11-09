@@ -12,7 +12,7 @@ export const ArticleErrorImage = ({
     if (isTruthy(isLargeVariant)) {
         return (
             <div
-                data-testid="ArticleErrorImage"
+                data-testid="ArticleErrorImageLargeVariant"
                 className={cn(
                     "h-full w-full bg-theme-dark-800 p-4 hover:bg-theme-primary-800 dark:bg-theme-primary-800",
                     className,

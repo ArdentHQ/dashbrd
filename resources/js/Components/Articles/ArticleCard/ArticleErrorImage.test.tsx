@@ -7,4 +7,10 @@ describe("ArticleErrorImage", () => {
 
         expect(screen.getByTestId("ArticleErrorImage")).toBeInTheDocument();
     });
+
+    it("should render for large article variant", () => {
+        render(<ArticleErrorImage isLargeVariant />);
+
+        expect(screen.getByTestId("ArticleErrorImageLargeVariant")).toBeInTheDocument();
+    });
 });
