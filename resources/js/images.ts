@@ -15,7 +15,7 @@ import { ReactComponent as LeftGrid } from "@images/grid-left.svg";
 import { ReactComponent as RightMiddleGrid } from "@images/grid-right-middle.svg";
 import { ReactComponent as RightGridSm } from "@images/grid-right-small.svg";
 import { ReactComponent as RightGrid } from "@images/grid-right.svg";
-import { ReactComponent as ImageLoadErrorBlue } from "@images/image-load-error-blue.svg";
+import { ReactComponent as ImageLoadErrorPrimary } from "@images/image-load-error-primary.svg";
 import { ReactComponent as ImageLoadErrorDark } from "@images/image-load-error-dark.svg";
 import { ReactComponent as ImageLoadError } from "@images/image-load-error.svg";
 import { ReactComponent as Monkey } from "@images/monkey.svg";
@@ -34,7 +34,7 @@ export {
     WarningExclamation,
     WarningExclamationDark,
     ImageLoadError,
-    ImageLoadErrorBlue,
+    ImageLoadErrorPrimary,
     ImageLoadErrorDark,
     DeleteModal,
     Polygon,
