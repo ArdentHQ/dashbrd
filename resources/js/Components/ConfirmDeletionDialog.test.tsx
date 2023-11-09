@@ -123,7 +123,7 @@ describe("ConfirmDeletionDialog", () => {
             </ConfirmDeletionDialog>,
         );
 
-        vi.runAllTimersAsync();
+        void vi.runAllTimersAsync();
 
         rerender(
             <ConfirmDeletionDialog
