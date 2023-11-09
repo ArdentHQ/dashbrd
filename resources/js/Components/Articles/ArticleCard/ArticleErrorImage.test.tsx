@@ -1,5 +1,5 @@
-import { render, screen } from "@/Tests/testing-library";
 import { ArticleErrorImage } from "./ArticleErrorImage";
+import { render, screen } from "@/Tests/testing-library";
 
 describe("ArticleErrorImage", () => {
     it("should render", () => {
