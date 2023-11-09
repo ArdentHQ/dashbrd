@@ -6,6 +6,7 @@ import { Img } from "@/Components/Image";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
+import { Link } from "@/Components/Link"
 
 export type ArticleCardVariant = "normal" | "large";
 
@@ -24,7 +25,7 @@ export const ArticleCard = ({
     const isLargeVariant = variant === "large";
 
     return (
-        <a
+        <Link
             data-testid="ArticleCard"
             href={route("articles.view", article.slug)}
             className={cn(
@@ -106,6 +107,6 @@ export const ArticleCard = ({
                     variant={variant}
                 />
             </div>
-        </a>
+        </Link>
     );
 };

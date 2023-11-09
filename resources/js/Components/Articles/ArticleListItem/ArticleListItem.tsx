@@ -4,13 +4,14 @@ import { Img } from "@/Components/Image";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
+import { Link } from "@/Components/Link"
 
 export const ArticleListItem = ({ article }: { article: App.Data.Articles.ArticleData }): JSX.Element => {
     const { t } = useTranslation();
     const { user } = useAuth();
 
     return (
-        <a
+        <Link
             data-testid="ArticleListItem"
             href={route("articles.view", article.slug)}
             className="transition-default group flex space-x-3  bg-white p-6 ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500 lg:rounded-lg lg:border lg:border-theme-secondary-300 "
@@ -47,6 +48,6 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                     </div>
                 </div>
             </div>
-        </a>
+        </Link>
     );
 };
