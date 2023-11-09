@@ -76,15 +76,15 @@ void createInertiaApp({
                 >
                     <I18nextProvider i18n={i18n}>
                         <AuthContextProvider initialAuth={props.initialPage.props.auth}>
-                            <MetaMaskContextProvider>
-                                <TransactionSliderProvider>
-                                    <DarkModeContextProvider>
-                                        <DraftGalleriesContextProvider>
+                            <DraftGalleriesContextProvider>
+                                <MetaMaskContextProvider>
+                                    <TransactionSliderProvider>
+                                        <DarkModeContextProvider>
                                             <App {...props} />
-                                        </DraftGalleriesContextProvider>
-                                    </DarkModeContextProvider>
-                                </TransactionSliderProvider>
-                            </MetaMaskContextProvider>
+                                        </DarkModeContextProvider>
+                                    </TransactionSliderProvider>
+                                </MetaMaskContextProvider>
+                            </DraftGalleriesContextProvider>
                         </AuthContextProvider>
                     </I18nextProvider>
                 </EnvironmentContextProvider>
