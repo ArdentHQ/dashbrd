@@ -6,9 +6,9 @@ import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { act, render, screen, waitFor } from "@/Tests/testing-library";
 
-let useDarkModeContextSpy: SpyInstance;
-
 describe("Image", () => {
+    let useDarkModeContextSpy: SpyInstance;
+
     const image = new Image();
 
     beforeAll(() => {
@@ -20,6 +20,10 @@ describe("Image", () => {
         useDarkModeContextSpy = vi
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+    });
+
+    afterEach(() => {
+        useDarkModeContextSpy.mockRestore();
     });
 
     afterAll(() => {
