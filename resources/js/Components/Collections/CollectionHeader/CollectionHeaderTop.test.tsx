@@ -2,6 +2,7 @@ import { router } from "@inertiajs/react";
 import React from "react";
 import { CollectionHeaderTop } from "./CollectionHeaderTop";
 import { MarkdownImage } from "@/Components/Collections/CollectionDescription";
+import DarkModeContextProvider from "@/Contexts/DarkModeContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
@@ -238,7 +239,11 @@ describe("CollectionHeaderTop", () => {
             image: null,
         });
 
-        render(<CollectionHeaderTop collection={collection} />);
+        render(
+            <DarkModeContextProvider>
+                <CollectionHeaderTop collection={collection} />
+            </DarkModeContextProvider>,
+        );
 
         expect(screen.getByTestId("CollectionHeaderTop")).toBeInTheDocument();
         expect(screen.getByTestId("ImageErrorPlaceholer")).toBeInTheDocument();
