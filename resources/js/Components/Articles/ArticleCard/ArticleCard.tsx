@@ -31,6 +31,8 @@ export const ArticleCard = ({
             className={cn(
                 "transition-default group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
+                    "outline outline-3 outline-transparent hover:outline-theme-primary-100 group-focus-visible:outline-theme-primary-300 dark:hover:outline-theme-dark-500":
+                        !isLargeVariant,
                     "bg-white ring-theme-primary-100 dark:border-theme-dark-700 dark:bg-theme-dark-900 ":
                         !isLargeVariant,
                     "bg-theme-dark-900 hover:bg-theme-primary-700 dark:border-none dark:bg-theme-primary-700 dark:hover:bg-theme-primary-600":
