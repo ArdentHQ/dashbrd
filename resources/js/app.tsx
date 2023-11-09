@@ -24,6 +24,7 @@ import { I18nextProvider } from "react-i18next";
 import { initDB } from "react-indexed-db-hook";
 import { AuthContextProvider } from "./Contexts/AuthContext";
 import DarkModeContextProvider from "./Contexts/DarkModeContext";
+import { DraftGalleriesContextProvider } from "./Contexts/DraftGalleriesContext";
 import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
 import { CookieConsent } from "./cookieConsent";
 import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
@@ -78,7 +79,9 @@ void createInertiaApp({
                             <MetaMaskContextProvider>
                                 <TransactionSliderProvider>
                                     <DarkModeContextProvider>
-                                        <App {...props} />
+                                        <DraftGalleriesContextProvider>
+                                            <App {...props} />
+                                        </DraftGalleriesContextProvider>
                                     </DarkModeContextProvider>
                                 </TransactionSliderProvider>
                             </MetaMaskContextProvider>
