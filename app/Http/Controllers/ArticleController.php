@@ -73,6 +73,7 @@ class ArticleController extends Controller
         $popularArticles = ArticleData::collection(
             Article::sortByPopularity()
                 ->isPublished()
+                ->with('media', 'user.media')
                 ->withFeaturedCollections()
                 ->where('id', '!=', $article->id)
                 ->limit(4)
