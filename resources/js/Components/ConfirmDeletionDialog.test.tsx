@@ -92,7 +92,7 @@ describe("ConfirmDeletionDialog", () => {
         expect(onConfirmMock).toHaveBeenCalled();
     });
 
-     vi.useFakeTimers({ shouldAdvanceTime: true });
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     it("removes the confirmation input text when modal is closed", async () => {
         const { getByTestId, rerender } = render(
             <ConfirmDeletionDialog
