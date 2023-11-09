@@ -44,7 +44,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                                     className="absolute -ml-[68px] flex flex-col space-y-2"
                                 />
                             </div>
-                            <div className="max-w-full">
+                            <div className="w-full">
                                 {isTruthy(article.audioSrc) && (
                                     <div className="mb-4 border-theme-secondary-300 dark:border-theme-dark-700 sm:border-b sm:pb-4">
                                         <WaveSurferPlayer url={article.audioSrc} />
