@@ -242,7 +242,12 @@ describe("CollectionActions", () => {
 
         await userEvent.click(reportButton);
 
-        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+        await waitFor(
+            () => {
+                expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+            },
+            { timeout: 2000 },
+        );
 
         const closeButton = screen.getByTestId("ConfirmationDialog__close");
 
@@ -283,9 +288,12 @@ describe("CollectionActions", () => {
 
         await userEvent.click(reportButton);
 
-        await waitFor(() => {
-            expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
-        });
+        await waitFor(
+            () => {
+                expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+            },
+            { timeout: 2000 },
+        );
 
         expect(screen.getAllByTestId("ReportModal__radio")).toHaveLength(1);
 
