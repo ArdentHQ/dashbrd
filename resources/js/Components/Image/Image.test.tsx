@@ -221,6 +221,30 @@ describe("Image", () => {
         });
     });
 
+    it("should render custom error placeholder if provided", async () => {
+        render(
+            <Img
+                src="skdfj jfa sfkj@#$##%##%"
+                data-testid="Img"
+                errorMessage="Failed to load"
+                errorPlaceholder={<div data-testid="CustomPlaceholder"></div>}
+            />,
+        );
+
+        // Trigger error event.
+        act(() => {
+            image.onerror?.(new Event(""));
+        });
+
+        expect(screen.queryByTestId("Img")).not.toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(screen.queryByTestId("Skeleton")).not.toBeInTheDocument();
+        });
+
+        expect(screen.getByTestId("CustomPlaceholder")).toBeInTheDocument();
+    });
+
     it("should not load image if it is not in viewport", async () => {
         vi.restoreAllMocks();
 
