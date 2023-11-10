@@ -84,7 +84,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
 
         setIsSaving(false);
 
-        return findByIdOrThrow(savedId);
+        return await findByIdOrThrow(savedId);
     };
 
     /**
@@ -107,7 +107,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
 
         setIsSaving(false);
 
-        return findByIdOrThrow(draft.id);
+        return await findByIdOrThrow(draft.id);
     };
 
     /**
@@ -190,7 +190,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     };
 
     /**
-     * Find draft or throw. Used in add/remove.
+     * Find draft or throw. Used internally for add/remove.
      *
      * @param {number | string} id
      * @returns {Promise<GalleryDraft>}
