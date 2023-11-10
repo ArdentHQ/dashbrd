@@ -84,7 +84,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
 
         setIsSaving(false);
 
-        return findById(savedId);
+        return findByIdOrThrow(savedId);
     };
 
     /**
@@ -107,7 +107,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
 
         setIsSaving(false);
 
-        return findById(draft.id);
+        return findByIdOrThrow(draft.id);
     };
 
     /**
@@ -187,6 +187,22 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     const isExpired = (draft: GalleryDraft): boolean => {
         const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
         return (draft.updatedAt ?? 0) < thresholdDaysAgo;
+    };
+
+    /**
+     * Find draft or throw. Used in add/remove.
+     *
+     * @param {number | string} id
+     * @returns {Promise<GalleryDraft>}
+     */
+    const findByIdOrThrow = async (id: number | string): Promise<GalleryDraft> => {
+        const draft = await findById(id);
+
+        if (!isTruthy(draft)) {
+            throw new Error(`[useWalletDraftGalleries:findByIdOrThrow] Draft ${id} was not found.`);
+        }
+
+        return draft;
     };
 
     return {
