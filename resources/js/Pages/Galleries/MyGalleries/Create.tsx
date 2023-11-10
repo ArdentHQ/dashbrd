@@ -94,8 +94,7 @@ const Create = ({
 
     const totalValue = 0;
 
-    useEffect(() => {
-    }, [selectedNfts]);
+    useEffect(() => {}, [selectedNfts]);
 
     assertUser(auth.user);
 
