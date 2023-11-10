@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode } from "react";
 import { MyGalleryListboxMenu } from "./Components/MyGalleryListboxMenu";
 import { MyGallerySidebar } from "./Components/MyGallerySidebar";
 import { useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
