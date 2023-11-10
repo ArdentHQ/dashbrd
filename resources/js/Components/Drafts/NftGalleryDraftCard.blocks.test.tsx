@@ -24,7 +24,7 @@ describe("NftGalleryDraftFooter", () => {
 
         render(<NftGalleryDraftFooter onDelete={onDelete} />);
 
-        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
+        await userEvent.click(screen.getByTestId("NftDraftCard__delete-button"));
 
         expect(onDelete).toHaveBeenCalled();
     });
@@ -61,6 +61,7 @@ describe("NftGalleryDraftStats", () => {
         title: "Test draft",
         cover: null,
         coverType: null,
+        coverFileName: null,
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
         nfts: [],
         value: "400",
@@ -118,7 +119,7 @@ describe("NftGalleryDraftStats", () => {
             />,
         );
 
-        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
+        await userEvent.click(screen.getByTestId("NftDraftCard__delete-button"));
 
         expect(onDelete).toHaveBeenCalled();
     });
