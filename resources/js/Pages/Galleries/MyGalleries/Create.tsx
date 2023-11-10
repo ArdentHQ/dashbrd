@@ -5,6 +5,7 @@ import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useSt
 import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
+import { DraftsLimitDialog } from "@/Components/Galleries/DraftsLimitDialog";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
 import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
 import { GalleryFormSlider, GalleryFormSliderTabs } from "@/Components/Galleries/GalleryPage/GalleryFormSlider";
@@ -82,6 +83,10 @@ const Create = ({
             replaceUrlQuery({ draftId: "" });
         },
     });
+
+    const reachedDraftsLimit = true;
+
+    const [showDraftsLimitModal, setShowDraftsLimitModal] = useState(reachedDraftsLimit);
 
     const totalValue = 0;
 
@@ -252,6 +257,22 @@ const Create = ({
                     {t("pages.galleries.delete_modal.confirmation_text")}
                 </ConfirmDeletionDialog>
             )}
+
+            <DraftsLimitDialog
+                title={t("pages.galleries.create.drafts_limit_modal_title")}
+                isOpen={showDraftsLimitModal}
+                onClose={() => {
+                    setShowDraftsLimitModal(false);
+                }}
+                onCancel={() => {
+                    router.visit(route("my-galleries", { drafts: 1 }));
+                }}
+                onConfirm={() => {
+                    setShowDraftsLimitModal(false);
+                }}
+            >
+                {t("pages.galleries.create.drafts_limit_modal_message")}
+            </DraftsLimitDialog>
         </LayoutWrapper>
     );
 };
