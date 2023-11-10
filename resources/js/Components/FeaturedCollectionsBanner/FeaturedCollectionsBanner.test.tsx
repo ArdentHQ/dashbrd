@@ -62,20 +62,17 @@ describe("FeaturedCollectionsBanner", () => {
     });
 
     describe.each([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])("multiple collections", (collectionsCount) => {
-        it.each(allBreakpoints)(
-            "should render multiple collections in %s screen without image urls",
-            async (breakpoint) => {
-                const collections = new NFTCollectionFactory().withoutImage().createMany(collectionsCount);
+        it.each(allBreakpoints)("should render multiple collections in %s screen without image urls", (breakpoint) => {
+            const collections = new NFTCollectionFactory().withoutImage().createMany(collectionsCount);
 
-                render(<FeaturedCollectionsBanner collections={collections} />, { breakpoint });
+            render(<FeaturedCollectionsBanner collections={collections} />, { breakpoint });
 
-                for (let index = 0; index < collectionsCount; index++) {
-                    expect(
-                        screen.getByText(`This gallery consists of ${collectionsCount} collections`),
-                    ).toBeInTheDocument();
-                }
-            },
-        );
+            for (let index = 0; index < collectionsCount; index++) {
+                expect(
+                    screen.getByText(`This gallery consists of ${collectionsCount} collections`),
+                ).toBeInTheDocument();
+            }
+        });
     });
 });
 
