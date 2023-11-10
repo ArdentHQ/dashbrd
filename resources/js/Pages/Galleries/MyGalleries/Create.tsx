@@ -100,7 +100,6 @@ const Create = ({
                 setDraftTitle(data.name);
             });
         } else if (isTruthy(data.name)) {
-            console.log(12312);
             setDraftTitle(data.name);
         }
     }, [auth.wallet.address]);

@@ -85,13 +85,11 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     }, [givenDraftId, wallet?.address]);
 
     useEffect(() => {
-        console.log(disabled, save, isSaving);
         if (disabled === true || !save || isSaving) return;
         void saveDraft();
     }, [save]);
 
     const saveDraft = async (): Promise<void> => {
-        console.log("saving");
         setIsSaving(true);
 
         const updatedAt = new Date().getTime();
