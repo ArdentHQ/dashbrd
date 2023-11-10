@@ -58,7 +58,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
 
     const [save, setSave] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [reachedLimit, setReachedLimit] = useState(false);
+    const [reachedLimit, _] = useState(false);
 
     // if wallet changed reset state
     useEffect(() => {
@@ -68,7 +68,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
             ...initialGalleryDraft,
             walletAddress: wallet?.address,
         });
-        setReachedLimit(false);
     }, [wallet?.address]);
 
     // populate `draft` state if `givenDraftId` is present
@@ -86,30 +85,27 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     }, [givenDraftId, wallet?.address]);
 
     useEffect(() => {
-        if (disabled === true || !save || isSaving || reachedLimit) return;
+        console.log(disabled, save, isSaving);
+        if (disabled === true || !save || isSaving) return;
         void saveDraft();
     }, [save]);
 
     const saveDraft = async (): Promise<void> => {
+        console.log("saving");
         setIsSaving(true);
 
         const updatedAt = new Date().getTime();
 
         if (draft.id === null) {
             const walletDrafts = await getWalletDrafts();
+            if (walletDrafts.length < MAX_DRAFT_LIMIT_PER_WALLET) {
+                const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
 
-            if (walletDrafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
-                setIsSaving(false);
-                setReachedLimit(true);
-                return;
+                delete draftToCreate.id;
+
+                const id = await database.add(draftToCreate);
+                setDraft({ ...draft, id, updatedAt });
             }
-
-            const draftToCreate: Partial<GalleryDraft> = { ...draft, updatedAt };
-
-            delete draftToCreate.id;
-
-            const id = await database.add(draftToCreate);
-            setDraft({ ...draft, id, updatedAt });
         } else {
             await database.update(draft);
             setDraft({ ...draft, updatedAt });
@@ -143,6 +139,7 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const setDraftTitle = (title: string): void => {
+        console.log("set draft title");
         setDraft((previousDraft) => ({ ...previousDraft, title }));
         setSave(true);
     };
@@ -151,8 +148,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         if (draftId === null) return;
 
         await database.deleteRecord(draftId);
-
-        setReachedLimit(false);
     };
 
     const isExpired = (draft: GalleryDraft): boolean => {
