@@ -137,7 +137,6 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
     };
 
     const setDraftTitle = (title: string): void => {
-        console.log("set draft title");
         setDraft((previousDraft) => ({ ...previousDraft, title }));
         setSave(true);
     };
