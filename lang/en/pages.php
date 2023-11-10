@@ -159,7 +159,7 @@ return [
         'search' => [
             'loading_results' => 'Loading results...',
             'no_results' => 'We could not find anything matching your search criteria, please try again!',
-            'placeholder' => 'Search by Galleries',
+            'placeholder' => 'Search by name or curator address',
             'placeholder_nfts' => 'Search by NFTs',
             'error' => 'Could not load search results. Please try again later.',
         ],
