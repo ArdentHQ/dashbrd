@@ -157,8 +157,8 @@ export const useWalletDraftGalleries = ({ address }: Properties) => {
      * @param {number} id
      * @returns {Promise<GalleryDraft>}
      */
-    const findById = async (id: number): Promise<GalleryDraft | undefined> => {
-        const draft = await database.getByID(id);
+    const findById = async (id: number | string): Promise<GalleryDraft | undefined> => {
+        const draft = await database.getByID(Number(id));
 
         if (draft.walletAddress !== address) {
             return undefined;

@@ -23,6 +23,9 @@ import { assertUser, assertWallet } from "@/Utils/assertions";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
+import { useWalletDraftGalleries } from "../hooks/useWalletDraftGalleries";
+import { useAuth } from "@/Contexts/AuthContext";
+import { useWalletDraftGallery } from "../hooks/useWalletDraftGallery";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -62,22 +65,27 @@ const Create = ({
 
     const { draftId } = getQueryParameters();
 
-    const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
-        isTruthy(draftId) ? Number(draftId) : undefined,
-        isTruthy(gallery?.slug),
-    );
+    const { wallet } = useAuth();
+    assertWallet(wallet);
+
+    const { remove } = useWalletDraftGalleries({ address: wallet.address });
+    const { setCover, setNfts, setTitle, draft, isSaving } = useWalletDraftGallery({
+        draftId,
+        address: wallet.address,
+        isDisabled: isTruthy(gallery?.slug),
+    });
 
     useEffect(() => {
-        if (draft.id !== null) {
+        if (isTruthy(draft.id)) {
             replaceUrlQuery({ draftId: draft.id.toString() });
         }
     }, [draft.id]);
 
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
-        setDraftNfts,
+        setDraftNfts: setNfts,
         deleteDraft: (): void => {
-            void deleteDraft(draft.id);
+            void remove(draft.id);
 
             replaceUrlQuery({ draftId: "" });
         },
@@ -142,7 +150,7 @@ const Create = ({
                         setData("name", name);
                     }}
                     onBlur={() => {
-                        setDraftTitle(data.name);
+                        setTitle(data.name);
                     }}
                 />
 
@@ -225,12 +233,12 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
-                        setDraftCover(null, null);
+                        setCover(null, null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
                         // eslint-disable-next-line promise/prefer-await-to-then
                         void blob.arrayBuffer().then((buf) => {
-                            setDraftCover(buf, blob.type);
+                            setCover(buf, blob.type);
                         });
                     }
                     setIsGalleryFormSliderOpen(false);
