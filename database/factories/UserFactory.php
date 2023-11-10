@@ -34,7 +34,7 @@ class UserFactory extends Factory
         ];
     }
 
-    public function withWallet(?string $address = null)
+    public function withWallet(string $address = null)
     {
         if ($address !== null) {
             return $this->state(fn () => [
