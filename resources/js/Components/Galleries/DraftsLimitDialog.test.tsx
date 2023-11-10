@@ -1,7 +1,7 @@
 import { DraftsLimitDialog } from "./DraftsLimitDialog";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
-describe("ConfirmDeletionDialog", () => {
+describe("DraftsLimitDialog", () => {
     it("should render correctly", () => {
         render(
             <DraftsLimitDialog
