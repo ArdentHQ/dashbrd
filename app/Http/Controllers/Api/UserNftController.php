@@ -24,7 +24,7 @@ class UserNftController extends Controller
             $user->nfts()
                 ->whereIn('nfts.id', $ids)
                 ->get()
-                ->sortBy(fn (Nft $nft) => array_search($nft->id, $ids))
+                ->sortBy(fn (Nft $nft) => array_search($nft->id, $ids, true))
                 ->values()
         );
     }
