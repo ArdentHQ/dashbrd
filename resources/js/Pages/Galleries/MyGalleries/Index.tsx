@@ -1,5 +1,6 @@
+import { router } from "@inertiajs/core";
 import { useForm } from "@inertiajs/react";
-import { type ReactNode, useState, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
@@ -14,7 +15,6 @@ import { useAuth } from "@/Contexts/AuthContext";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
-import { router } from "@inertiajs/core";
 
 interface Properties {
     title: string;
