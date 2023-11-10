@@ -17,7 +17,6 @@ import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
