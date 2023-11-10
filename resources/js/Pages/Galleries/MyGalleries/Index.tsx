@@ -10,7 +10,7 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { DraftGalleriesContextProvider, useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
+import { useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
 
 interface Properties {
     title: string;
@@ -135,27 +135,25 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Pro
     const { t } = useTranslation();
 
     return (
-        <DraftGalleriesContextProvider>
-            <Layout
-                title={title}
-                nftCount={nftCount}
-                galleryCount={galleryCount}
-            >
-                <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
-                    <div className="mb-6 hidden w-full items-center justify-between xl:flex">
-                        <Heading level={1}>
-                            <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
-                                {showDrafts ? t("common.drafts") : t("common.published")}
-                            </span>
-                        </Heading>
+        <Layout
+            title={title}
+            nftCount={nftCount}
+            galleryCount={galleryCount}
+        >
+            <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
+                <div className="mb-6 hidden w-full items-center justify-between xl:flex">
+                    <Heading level={1}>
+                        <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
+                            {showDrafts ? t("common.drafts") : t("common.published")}
+                        </span>
+                    </Heading>
 
-                        <CreateGalleryButton nftCount={nftCount} />
-                    </div>
+                    <CreateGalleryButton nftCount={nftCount} />
                 </div>
+            </div>
 
-                {showDrafts ? <Drafts /> : <StoredGalleries galleries={galleries} />}
-            </Layout>
-        </DraftGalleriesContextProvider>
+            {showDrafts ? <Drafts /> : <StoredGalleries galleries={galleries} />}
+        </Layout>
     );
 };
 
