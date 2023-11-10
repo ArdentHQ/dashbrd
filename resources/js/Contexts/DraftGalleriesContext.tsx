@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
 import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 interface ContextProperties {
@@ -17,6 +18,8 @@ export const DraftGalleriesContextProvider = ({ children }: ProviderProperties):
 
     const { deleteExpiredDrafts, deleteDraft, getDrafts } = useGalleryDrafts(undefined, true);
 
+    const { wallet } = useAuth();
+
     const loadWalletDrafts = async (): Promise<void> => {
         const drafts = await getDrafts();
 
@@ -24,10 +27,14 @@ export const DraftGalleriesContextProvider = ({ children }: ProviderProperties):
     };
 
     useEffect(() => {
+        if (wallet === null) {
+            return;
+        }
+
         void deleteExpiredDrafts();
 
         void loadWalletDrafts();
-    }, []);
+    }, [wallet]);
 
     const deleteDraftAndReload = async (draftId: number | null): Promise<void> => {
         if (draftId === null) {
