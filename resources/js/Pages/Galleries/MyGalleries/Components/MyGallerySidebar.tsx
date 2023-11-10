@@ -7,9 +7,11 @@ const routeName = "my-galleries";
 export const MyGallerySidebar = ({
     publishedCount,
     draftsCount,
+    isLoadingDrafts,
 }: {
     publishedCount: number;
     draftsCount?: number;
+    isLoadingDrafts: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -33,12 +35,16 @@ export const MyGallerySidebar = ({
                 isDisabled={draftsCount === undefined || draftsCount === 0}
                 href={route(routeName, { draft: true })}
                 rightText={
-                    draftsCount?.toString() ?? (
-                        <Icon
-                            name="Spinner"
-                            className="animate-spin"
-                        />
-                    )
+                    <>
+                        {isLoadingDrafts && (
+                            <Icon
+                                name="Spinner"
+                                className="animate-spin"
+                            />
+                        )}
+
+                        {!isLoadingDrafts && draftsCount}
+                    </>
                 }
             />
         </Sidebar>

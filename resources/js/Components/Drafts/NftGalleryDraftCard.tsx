@@ -2,8 +2,8 @@ import { Link } from "@inertiajs/react";
 import cn from "classnames";
 import { NftGalleryDraftHeading, NftGalleryDraftImageGrid, NftGalleryDraftStats } from "./NftGalleryDraftCard.blocks";
 import { GalleryCoverImage } from "@/Components/Galleries/GalleryPage/GalleryCoverImage";
-import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { isTruthy } from "@/Utils/is-truthy";
+import { GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 
 export const NftGalleryDraftCard = ({
     draft,
