@@ -187,7 +187,8 @@ describe("useGalleryDrafts", () => {
 
         await waitFor(() => {
             expect(result.current.draft.cover).not.toBeNull();
-            expect(result.current.draft.coverType).toBe("png");
+            expect(result.current.draft.coverType).toBe("image/png");
+            expect(result.current.draft.coverFileName).toBe("file.png");
         });
     });
 
