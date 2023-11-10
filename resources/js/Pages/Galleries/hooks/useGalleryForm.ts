@@ -125,7 +125,7 @@ export const useGalleryForm = ({
             nfts: [],
             coverImage: arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType),
         });
-    }, [draft]);
+    }, [draft?.id ?? null]);
 
     return {
         data,
