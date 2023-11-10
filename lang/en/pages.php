@@ -177,6 +177,7 @@ return [
                 'title' => 'Delete Draft',
                 'text' => 'Are you sure you want to delete the draft? Everything you\'ve done will be deleted and you won\'t be able to get it back.',
             ],
+            'nfts_no_longer_owned' => 'NFTs no longer owned by this wallet have been removed from the draft”',
         ],
         'copy_gallery_link' => 'Copy Gallery Link',
         'my_nfts' => 'My NFTs',

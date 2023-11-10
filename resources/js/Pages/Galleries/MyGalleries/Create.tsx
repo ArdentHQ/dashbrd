@@ -17,6 +17,7 @@ import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useToasts } from "@/Hooks/useToasts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
@@ -50,6 +51,7 @@ const Create = ({
     assertWallet(auth.wallet);
 
     const { t } = useTranslation();
+    const { showToast } = useToasts();
     const { props } = usePage();
 
     const { signedAction } = useAuthorizedAction();
@@ -155,6 +157,13 @@ const Create = ({
                     ids: draft.nfts.map((nft) => nft.nftId).join(","),
                 }),
             );
+
+            if (nfts.length < draft.nfts.length) {
+                showToast({
+                    message: t("pages.galleries.my_galleries.nfts_no_longer_owned"),
+                    type: "warning",
+                });
+            }
 
             setInitialNfts(nfts);
         };
