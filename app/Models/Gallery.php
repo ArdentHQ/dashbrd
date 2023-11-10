@@ -130,7 +130,11 @@ class Gallery extends Model implements Viewable
             return $query;
         }
 
-        return $query->where('galleries.name', 'ilike', sprintf('%%%s%%', $searchQuery));
+        return $query->where(function ($query) use ($searchQuery) {
+            return $query
+                ->where('name', 'ilike', sprintf('%%%s%%', $searchQuery))
+                ->orWhereHas('user.wallet', fn ($q) => $q->where('address', $searchQuery));
+        });
     }
 
     /**
