@@ -156,7 +156,7 @@ export const CollectionNavigation = ({
                                     <Button
                                         icon="Refresh"
                                         variant="secondary"
-                                        className="hidden h-10 bg-theme-secondary-200 text-theme-primary-900 sm:block"
+                                        className="hidden bg-theme-secondary-200 dark:bg-theme-dark-700 text-theme-primary-900 sm:flex"
                                         disabled={!canUpdate(collection)}
                                         onClick={onRefreshActivity}
                                     >
