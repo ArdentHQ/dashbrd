@@ -30,6 +30,7 @@ export const MyGallerySidebar = ({
                 icon="Document"
                 title={t("common.drafts")}
                 isSelected={route().current(routeName, { draft: true })}
+                isDisabled={draftsCount === undefined || draftsCount === 0}
                 href={route(routeName, { draft: true })}
                 rightText={
                     draftsCount?.toString() ?? (

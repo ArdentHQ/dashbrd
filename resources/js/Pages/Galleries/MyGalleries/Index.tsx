@@ -1,99 +1,161 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { useForm } from "@inertiajs/react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
-import { NftDraftCard } from "@/Components/Drafts/NftDraftCard";
+import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
+import { NftGalleryDraftCard } from "@/Components/Drafts/NftGalleryDraftCard";
+import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
+import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { DraftGalleriesContextProvider, useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
 
-const Index = ({
-    title,
-    galleries,
-    nftCount = 0,
-    galleryCount,
-    showDrafts,
-}: {
+interface Properties {
     title: string;
     children: ReactNode;
     galleries: App.Data.Gallery.GalleriesData;
     nftCount?: number;
     showDrafts: boolean;
     galleryCount: number;
-}): JSX.Element => {
+}
+
+const Drafts = (): JSX.Element => {
     const { t } = useTranslation();
-    const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
 
-    const { getDrafts, deleteExpiredDrafts } = useGalleryDrafts();
+    const { drafts, deleteDraft } = useDraftGalleriesContext();
 
-    useEffect(() => {
-        const loadDrafts = async (): Promise<void> => {
-            setDrafts(await getDrafts());
-        };
+    const [draftToDelete, setDraftToDelete] = useState<number | null>(null);
 
-        void loadDrafts();
-        void deleteExpiredDrafts();
-    }, []);
+    if (drafts === undefined) {
+        return <></>;
+    }
+
+    if (drafts.length === 0) {
+        return <EmptyBlock>{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
+    }
+
+    return (
+        <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+            {drafts.map((draft, index) => (
+                <NftGalleryDraftCard
+                    key={index}
+                    draft={draft}
+                    onDelete={() => {
+                        setDraftToDelete(draft.id);
+                    }}
+                />
+            ))}
+
+            <DraftGalleryDeleteModal
+                open={draftToDelete !== null}
+                onClose={() => {
+                    setDraftToDelete(null);
+                }}
+                onConfirm={() => {
+                    void deleteDraft(draftToDelete);
+
+                    setDraftToDelete(null);
+                }}
+            />
+        </div>
+    );
+};
+
+const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Element => {
+    const { t } = useTranslation();
+
+    const [galleryToDelete, setGalleryToDelete] = useState<App.Data.Gallery.GalleryData | null>(null);
 
     const userGalleries = galleries.paginated;
 
-    return (
-        <Layout
-            title={title}
-            nftCount={nftCount}
-            galleryCount={galleryCount}
-        >
-            <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
-                <div className="mb-6 hidden w-full items-center justify-between xl:flex">
-                    <Heading level={1}>
-                        <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
-                            {showDrafts ? t("common.drafts") : t("common.published")}
-                        </span>
-                    </Heading>
+    const { processing, delete: remove } = useForm({});
 
-                    <CreateGalleryButton nftCount={nftCount} />
+    const submit = (): void => {
+        if (galleryToDelete === null) {
+            // Unreachable
+            return;
+        }
+
+        remove(
+            route("my-galleries.destroy", {
+                slug: galleryToDelete.slug,
+            }),
+            {
+                onFinish: () => {
+                    setGalleryToDelete(null);
+                },
+            },
+        );
+    };
+
+    if (userGalleries.meta.total === 0) {
+        return <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
+    }
+
+    return (
+        <>
+            <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+                {userGalleries.data.map((gallery, index) => (
+                    <NftGalleryCard
+                        key={index}
+                        gallery={gallery}
+                        showDeleteButton
+                        onDelete={() => {
+                            setGalleryToDelete(gallery);
+                        }}
+                    />
+                ))}
+            </div>
+
+            {userGalleries.meta.last_page > 1 && (
+                <Pagination
+                    className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
+                    data={userGalleries}
+                />
+            )}
+
+            <ConfirmDeletionDialog
+                title={t("pages.galleries.delete_modal.title")}
+                isOpen={galleryToDelete !== null}
+                onClose={() => {
+                    setGalleryToDelete(null);
+                }}
+                onConfirm={submit}
+                isDisabled={processing}
+            >
+                {t("pages.galleries.delete_modal.confirmation_text")}
+            </ConfirmDeletionDialog>
+        </>
+    );
+};
+
+const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Properties): JSX.Element => {
+    const { t } = useTranslation();
+
+    return (
+        <DraftGalleriesContextProvider>
+            <Layout
+                title={title}
+                nftCount={nftCount}
+                galleryCount={galleryCount}
+            >
+                <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
+                    <div className="mb-6 hidden w-full items-center justify-between xl:flex">
+                        <Heading level={1}>
+                            <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
+                                {showDrafts ? t("common.drafts") : t("common.published")}
+                            </span>
+                        </Heading>
+
+                        <CreateGalleryButton nftCount={nftCount} />
+                    </div>
                 </div>
 
-                {userGalleries.meta.total === 0 && (
-                    <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
-                        <span className="text-center font-medium text-theme-secondary-700">
-                            {t("pages.galleries.my_galleries.no_galleries")}
-                        </span>
-                    </div>
-                )}
-
-                {!showDrafts && userGalleries.meta.total > 0 && (
-                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
-                        {userGalleries.data.map((gallery, index) => (
-                            <NftGalleryCard
-                                key={index}
-                                gallery={gallery}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {showDrafts && drafts.length > 0 && (
-                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
-                        {drafts.length > 0 &&
-                            drafts.map((draft, index) => (
-                                <NftDraftCard
-                                    key={index}
-                                    draft={draft}
-                                />
-                            ))}
-                    </div>
-                )}
-
-                {!showDrafts && userGalleries.meta.last_page > 1 && (
-                    <Pagination
-                        className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
-                        data={userGalleries}
-                    />
-                )}
-            </div>
-        </Layout>
+                {showDrafts ? <Drafts /> : <StoredGalleries galleries={galleries} />}
+            </Layout>
+        </DraftGalleriesContextProvider>
     );
 };
 

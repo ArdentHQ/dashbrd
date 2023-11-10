@@ -496,6 +496,17 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
+    it("should render gallery stats when delete button is enabled", () => {
+        render(
+            <GalleryStats
+                gallery={gallery}
+                showDeleteButton
+            />,
+        );
+
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+    });
+
     it("should force like if user was not authenticated", async () => {
         signedActionMock.mockImplementation((action) => {
             action({ authenticated: false, signed: false });
@@ -587,10 +598,36 @@ describe("GalleryFooter", () => {
 
         expect(screen.getByTestId("GalleryFooter")).toBeInTheDocument();
     });
+    it("should handle onDelete", async () => {
+        const onDelete = vi.fn();
+
+        render(
+            <GalleryFooter
+                gallery={gallery}
+                onDelete={onDelete}
+                showDeleteButton
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
+
+        expect(onDelete).toHaveBeenCalled();
+    });
 
     it("should display the amount of views", () => {
         render(<GalleryFooter gallery={gallery} />);
 
         expect(screen.getByTestId("GalleryStats__views")).toHaveTextContent(gallery.views.toString());
+    });
+
+    it("shows delete button when enabled", () => {
+        render(
+            <GalleryFooter
+                gallery={gallery}
+                showDeleteButton
+            />,
+        );
+
+        expect(screen.getByTestId("DeleteGalleryButton")).toBeInTheDocument();
     });
 });

@@ -3,11 +3,16 @@ import cn from "classnames";
 import { GalleryCoverImage } from "@/Components/Galleries/GalleryPage/GalleryCoverImage";
 import { GalleryHeading, GalleryStats, NftImageGrid } from "@/Components/Galleries/NftGalleryCard.blocks";
 
-export const NftGalleryCard = ({ gallery }: { gallery: App.Data.Gallery.GalleryData }): JSX.Element => (
-    <Link
-        href={route("galleries.view", gallery.slug)}
-        className="group focus-visible:outline-none focus-visible:ring-0"
-    >
+export const NftGalleryCard = ({
+    gallery,
+    showDeleteButton = false,
+    onDelete,
+}: {
+    gallery: App.Data.Gallery.GalleryData;
+    showDeleteButton?: boolean;
+    onDelete?: () => void;
+}): JSX.Element => (
+    <div className="group focus-visible:outline-none focus-visible:ring-0">
         <div
             className={cn(
                 "transition-default m-1 box-content flex flex-col rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700",
@@ -22,13 +27,19 @@ export const NftGalleryCard = ({ gallery }: { gallery: App.Data.Gallery.GalleryD
 
                 {gallery.coverImage === null && <NftImageGrid nfts={gallery.nfts} />}
 
-                <GalleryHeading
-                    name={gallery.name}
-                    wallet={gallery.wallet}
-                />
+                <Link href={route("galleries.view", gallery.slug)}>
+                    <GalleryHeading
+                        name={gallery.name}
+                        wallet={gallery.wallet}
+                    />
+                </Link>
             </div>
 
-            <GalleryStats gallery={gallery} />
+            <GalleryStats
+                showDeleteButton={showDeleteButton}
+                gallery={gallery}
+                onDelete={onDelete}
+            />
         </div>
-    </Link>
+    </div>
 );
