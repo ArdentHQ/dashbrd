@@ -1,8 +1,9 @@
 import { expect, type SpyInstance } from "vitest";
-import { useGalleryDrafts } from "./useGalleryDrafts";
 import * as AuthContextMock from "@/Contexts/AuthContext";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
 import { act, renderHook, waitFor } from "@/Tests/testing-library";
+import { useWalletDraftGallery } from "./useWalletDraftGallery";
+import { useWalletDraftGalleries } from "./useWalletDraftGalleries";
 
 let useAuthSpy: SpyInstance;
 
@@ -39,7 +40,7 @@ vi.mock("react-indexed-db-hook", () => ({
     useIndexedDB: mocks.useIndexedDB,
 }));
 
-describe("useGalleryDrafts", () => {
+describe("useWalletDraftGalleries", () => {
     beforeAll(() => {
         useAuthSpy = vi.spyOn(AuthContextMock, "useAuth").mockReturnValue({
             user: null,
@@ -74,13 +75,13 @@ describe("useGalleryDrafts", () => {
         useAuthSpy.mockRestore();
     });
 
-    it("should set", async () => {
+    it("should add to galleries", async () => {
         const givenDraftId = 1;
 
-        const { result } = renderHook(() => useGalleryDrafts(givenDraftId));
+        const { result } = renderHook(() => useWalletDraftGalleries({ address: "mockedAddress" }));
 
         await waitFor(() => {
-            expect(result.current.draft.id).toBe(givenDraftId);
+            expect(result.current.drafts).toHaveLength(0);
         });
     });
 });
