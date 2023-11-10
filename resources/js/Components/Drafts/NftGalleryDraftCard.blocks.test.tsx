@@ -1,3 +1,4 @@
+import userEvent from "@testing-library/user-event";
 import { type SpyInstance } from "vitest";
 import {
     NftGalleryDraftFooter,
@@ -13,9 +14,19 @@ import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
 describe("NftGalleryDraftFooter", () => {
     it("should render", () => {
-        render(<NftGalleryDraftFooter />);
+        render(<NftGalleryDraftFooter onDelete={vi.fn()} />);
 
         expect(screen.getByTestId("NftGalleryDraftCard__Footer")).toBeInTheDocument();
+    });
+
+    it("should handle on delete", async () => {
+        const onDelete = vi.fn();
+
+        render(<NftGalleryDraftFooter onDelete={onDelete} />);
+
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
+
+        expect(onDelete).toHaveBeenCalled();
     });
 });
 
@@ -87,37 +98,82 @@ describe("NftGalleryDraftStats", () => {
     });
 
     it("should render", () => {
-        render(<NftGalleryDraftStats draft={draft} />);
+        render(
+            <NftGalleryDraftStats
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftGalleryDraftStats")).toBeInTheDocument();
     });
 
+    it("should handle on delete", async () => {
+        const onDelete = vi.fn();
+
+        render(
+            <NftGalleryDraftStats
+                draft={draft}
+                onDelete={onDelete}
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
+
+        expect(onDelete).toHaveBeenCalled();
+    });
+
     it("should render the draft value", () => {
-        render(<NftGalleryDraftStats draft={draft} />);
+        render(
+            <NftGalleryDraftStats
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("400");
     });
 
     it("should render the draft collections count", () => {
-        render(<NftGalleryDraftStats draft={draft} />);
+        render(
+            <NftGalleryDraftStats
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftGalleryDraftStats__collectionsCount")).toHaveTextContent("0");
     });
 
     it("should render the nft count", () => {
-        render(<NftGalleryDraftStats draft={draft} />);
+        render(
+            <NftGalleryDraftStats
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftGalleryDraftStats__nftCount")).toHaveTextContent("0");
     });
 
     it("shoud display - if value is not set", () => {
-        render(<NftGalleryDraftStats draft={{ ...draft, value: null }} />);
+        render(
+            <NftGalleryDraftStats
+                draft={{ ...draft, value: null }}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("-");
     });
 
     it("should display the currency set by the user", () => {
-        render(<NftGalleryDraftStats draft={draft} />);
+        render(
+            <NftGalleryDraftStats
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("€400.00");
     });
@@ -126,7 +182,12 @@ describe("NftGalleryDraftStats", () => {
         resetAuthContextMock = mockAuthContext({
             user: null,
         });
-        render(<NftGalleryDraftStats draft={draft} />);
+        render(
+            <NftGalleryDraftStats
+                draft={draft}
+                onDelete={vi.fn()}
+            />,
+        );
 
         expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("$400.00");
     });

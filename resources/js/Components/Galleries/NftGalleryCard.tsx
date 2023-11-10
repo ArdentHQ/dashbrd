@@ -6,9 +6,11 @@ import { GalleryHeading, GalleryStats, NftImageGrid } from "@/Components/Galleri
 export const NftGalleryCard = ({
     gallery,
     showDeleteButton = false,
+    onDelete,
 }: {
     gallery: App.Data.Gallery.GalleryData;
     showDeleteButton?: boolean;
+    onDelete?: () => void;
 }): JSX.Element => (
     <div className="group focus-visible:outline-none focus-visible:ring-0">
         <div
@@ -36,6 +38,7 @@ export const NftGalleryCard = ({
             <GalleryStats
                 showDeleteButton={showDeleteButton}
                 gallery={gallery}
+                onDelete={onDelete}
             />
         </div>
     </div>

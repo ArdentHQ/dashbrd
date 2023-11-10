@@ -2,8 +2,8 @@ import { router } from "@inertiajs/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { MyGalleryListboxMenu } from "./Components/MyGalleryListboxMenu";
 import { MyGallerySidebar } from "./Components/MyGallerySidebar";
+import { useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
 import LeftMenuLayout from "@/Layouts/LeftMenuLayout";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 
 const Layout = ({
     title,
@@ -18,17 +18,7 @@ const Layout = ({
     galleryCount: number;
     showDrafts: boolean;
 }): JSX.Element => {
-    const { getDrafts } = useGalleryDrafts();
-
-    const [drafts, setDrafts] = useState<number>();
-
-    useEffect(() => {
-        void (async () => {
-            const allDrafts = await getDrafts();
-
-            setDrafts(allDrafts.length);
-        })();
-    }, []);
+    const { drafts } = useDraftGalleriesContext();
 
     if (showDrafts && drafts === 0) {
         router.visit(
@@ -44,13 +34,13 @@ const Layout = ({
                 <MyGalleryListboxMenu
                     nftCount={nftCount}
                     publishedCount={galleryCount}
-                    draftsCount={drafts}
+                    draftsCount={drafts?.length ?? 0}
                 />
             }
             sidebarMenu={
                 <MyGallerySidebar
                     publishedCount={galleryCount}
-                    draftsCount={drafts}
+                    draftsCount={drafts?.length ?? 0}
                 />
             }
             title={title}
