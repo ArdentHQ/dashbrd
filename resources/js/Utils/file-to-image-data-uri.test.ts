@@ -11,7 +11,7 @@ describe("fileToImageDataURI", () => {
         expect(result.startsWith("data:text/plain;base64,")).toBe(true);
     });
 
-    it("should reject with an error when provided with an invalid File", async () => {
+    it("should reject when provided with an invalid File", async () => {
         const invalidFile = null as unknown as File;
 
         try {
@@ -19,5 +19,20 @@ describe("fileToImageDataURI", () => {
         } catch (error) {
             expect(error).not.toBeNull();
         }
+    });
+    it("should reject with an error if invalid result", async () => {
+        const file = new File(["Hello, World!"], "example.txt", { type: "text/plain" });
+
+        const readAsBinaryStringSpy = vi.spyOn(FileReader.prototype, "result", "get").mockReturnValueOnce(null);
+
+        try {
+            await fileToImageDataURI(file);
+        } catch (error) {
+            expect(error).toBeInstanceOf(Error);
+
+            expect((error as Error).message).toBe("Failed to convert file to data URI");
+        }
+
+        readAsBinaryStringSpy.mockRestore();
     });
 });
