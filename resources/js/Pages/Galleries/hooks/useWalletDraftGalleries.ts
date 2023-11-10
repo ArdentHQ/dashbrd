@@ -1,6 +1,6 @@
-import { isTruthy } from "@/Utils/is-truthy";
 import { useCallback, useEffect, useState } from "react";
 import { useIndexedDB } from "react-indexed-db-hook";
+import { isTruthy } from "@/Utils/is-truthy";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 const DRAFT_TTL_DAYS = 30;
@@ -28,7 +28,18 @@ export interface GalleryDraft {
     updatedAt: number | null;
 }
 
-export const useWalletDraftGalleries = ({ address }: Properties) => {
+interface WalletDraftGalleriesState {
+    upsert: (draft: GalleryDraft) => Promise<GalleryDraft>;
+    remove: (id?: number | null) => Promise<void>;
+    removeExpired: () => Promise<void>;
+    drafts: GalleryDraft[];
+    findById: (id: number | string) => void;
+    isLoading: boolean;
+    isSaving: boolean;
+    hasReachedLimit: boolean;
+}
+
+export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGalleriesState => {
     const database = useIndexedDB("gallery-drafts");
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -105,12 +116,12 @@ export const useWalletDraftGalleries = ({ address }: Properties) => {
      * @param {GalleryDraft} draft
      * @returns {Promise<GalleryDraft>}
      */
-    const upsert = (draft: GalleryDraft): Promise<GalleryDraft> => {
+    const upsert = async (draft: GalleryDraft): Promise<GalleryDraft> => {
         if (isTruthy(draft.id)) {
-            return update(draft);
+            return await update(draft);
         }
 
-        return add(draft);
+        return await add(draft);
     };
 
     /**
@@ -122,7 +133,7 @@ export const useWalletDraftGalleries = ({ address }: Properties) => {
     const remove = async (id?: number | null): Promise<void> => {
         if (isTruthy(id)) {
             await database.deleteRecord(id);
-            setDrafts(await allDrafts());
+            await updateDraftState();
         }
     };
 
@@ -184,7 +195,6 @@ export const useWalletDraftGalleries = ({ address }: Properties) => {
         removeExpired,
         drafts,
         findById,
-        allDrafts,
         isLoading,
         isSaving,
         hasReachedLimit,

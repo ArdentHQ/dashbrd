@@ -3,6 +3,8 @@ import { Head, router, usePage } from "@inertiajs/react";
 import uniqBy from "lodash/uniqBy";
 import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useWalletDraftGalleries } from "../hooks/useWalletDraftGalleries";
+import { useWalletDraftGallery } from "../hooks/useWalletDraftGallery";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
@@ -14,6 +16,7 @@ import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext"
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
@@ -22,9 +25,6 @@ import { assertUser, assertWallet } from "@/Utils/assertions";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
-import { useWalletDraftGalleries } from "../hooks/useWalletDraftGalleries";
-import { useAuth } from "@/Contexts/AuthContext";
-import { useWalletDraftGallery } from "../hooks/useWalletDraftGallery";
 
 interface Properties {
     auth: PageProps["auth"];

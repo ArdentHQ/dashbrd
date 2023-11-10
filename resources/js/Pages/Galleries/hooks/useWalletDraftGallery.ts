@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "@/Contexts/AuthContext";
-import { useWalletDraftGalleries, GalleryDraft } from "./useWalletDraftGalleries";
-import { assertWallet } from "@/Utils/assertions";
+import { type GalleryDraft, useWalletDraftGalleries } from "./useWalletDraftGalleries";
 
 interface WalletDraftGalleryState {
     isSaving: boolean;
@@ -61,15 +59,15 @@ export const useWalletDraftGallery = ({
     };
 
     const setCover = (image: ArrayBuffer | null, type: string | null): void => {
-        saveDraft({ ...draft, cover: image, coverType: type });
+        void saveDraft({ ...draft, cover: image, coverType: type });
     };
 
     const setTitle = (title: string): void => {
-        saveDraft({ ...draft, title });
+        void saveDraft({ ...draft, title });
     };
 
     const setNfts = (nfts: App.Data.Gallery.GalleryNftData[]): void => {
-        saveDraft({
+        void saveDraft({
             ...draft,
             nfts: nfts.map((nft) => ({
                 nftId: nft.id,

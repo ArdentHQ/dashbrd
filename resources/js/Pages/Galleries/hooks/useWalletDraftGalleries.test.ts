@@ -1,9 +1,7 @@
 import { expect, type SpyInstance } from "vitest";
-import * as AuthContextMock from "@/Contexts/AuthContext";
-import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
-import { act, renderHook, waitFor } from "@/Tests/testing-library";
-import { useWalletDraftGallery } from "./useWalletDraftGallery";
 import { useWalletDraftGalleries } from "./useWalletDraftGalleries";
+import * as AuthContextMock from "@/Contexts/AuthContext";
+import { renderHook, waitFor } from "@/Tests/testing-library";
 
 let useAuthSpy: SpyInstance;
 
