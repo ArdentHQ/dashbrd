@@ -52,11 +52,7 @@ export const DraftGalleriesContextProvider = ({ children }: ProviderProperties):
         const isMyGalleryDraftPage = route().current("my-galleries", { draft: true });
 
         if (isTruthy(drafts) && drafts.length === 0 && isMyGalleryDraftPage) {
-            router.visit(
-                route("my-galleries", {
-                    draft: false,
-                }),
-            );
+            router.visit(route("my-galleries"));
         }
     }, [drafts]);
 
