@@ -229,7 +229,7 @@ return [
             'draft_saved' => 'Draft Saved',
             'saving_to_draft' => 'Saving to draft',
             'drafts_limit_modal_title' => 'Draft Gallery Limit',
-            'drafts_limit_modal_message' => "You’ve hit your limit for draft galleries. While you can still make new galleries and publih them, they won’t be saved as drafts. To Free up space, you can either delete existing drafts or publish them.",
+            'drafts_limit_modal_message' => "You’ve hit your limit for draft galleries. While you can still make new galleries and publish them, they won’t be saved as drafts. To Free up space, you can either delete existing drafts or publish them.",
             'drafts_limit_modal_cancel' => 'Go to Drafts'
         ],
         'delete_modal' => [
