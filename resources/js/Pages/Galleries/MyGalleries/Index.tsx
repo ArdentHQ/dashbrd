@@ -1,5 +1,5 @@
 import { useForm } from "@inertiajs/react";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
@@ -14,6 +14,7 @@ import { useAuth } from "@/Contexts/AuthContext";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
+import { router } from "@inertiajs/core";
 
 interface Properties {
     title: string;
@@ -150,6 +151,12 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Pro
     assertWallet(wallet);
 
     const { remove, drafts, isLoading } = useWalletDraftGalleries({ address: wallet.address });
+
+    useEffect(() => {
+        if (showDrafts && !isLoading && drafts.length === 0) {
+            router.visit(route("my-galleries"));
+        }
+    }, [drafts, isLoading]);
 
     return (
         <Layout
