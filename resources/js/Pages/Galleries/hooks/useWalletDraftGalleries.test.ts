@@ -74,8 +74,6 @@ describe("useWalletDraftGalleries", () => {
     });
 
     it("should add to galleries", async () => {
-        const givenDraftId = 1;
-
         const { result } = renderHook(() => useWalletDraftGalleries({ address: "mockedAddress" }));
 
         await waitFor(() => {

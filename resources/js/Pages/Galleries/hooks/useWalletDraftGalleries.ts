@@ -33,7 +33,7 @@ interface WalletDraftGalleriesState {
     remove: (id?: number | null) => Promise<void>;
     removeExpired: () => Promise<void>;
     drafts: GalleryDraft[];
-    findById: (id: number | string) => void;
+    findById: (id: number | string) => Promise<GalleryDraft | undefined>;
     isLoading: boolean;
     isSaving: boolean;
     hasReachedLimit: boolean;
@@ -58,7 +58,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     }, [address]);
 
     useEffect(() => {
-        updateDraftState();
+        void updateDraftState();
     }, [address]);
 
     /**
@@ -68,7 +68,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @returns {Promise<GalleryDraft>}
      */
     const add = async (draft: GalleryDraft): Promise<GalleryDraft> => {
-        const { id, ...draftToSave } = draft;
+        const { id: _, ...draftToSave } = draft;
         const drafts = await allDrafts();
 
         if (drafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
@@ -77,14 +77,14 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
 
         setIsSaving(true);
 
-        const savedId = await database.add({
+        const id = await database.add({
             ...draftToSave,
             updatedAt: new Date().getTime(),
         });
 
         setIsSaving(false);
 
-        return await findByIdOrThrow(savedId);
+        return await findByIdOrThrow(id);
     };
 
     /**
@@ -153,7 +153,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     };
 
     /**
-     * Get all drafts
+     * Get all drafts.
      *
      * @returns {Promise<GalleryDraft[]>}
      */
@@ -163,15 +163,15 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     };
 
     /**
-     * Find gallery
+     * Find gallery.
      *
      * @param {number} id
      * @returns {Promise<GalleryDraft>}
      */
     const findById = async (id: number | string): Promise<GalleryDraft | undefined> => {
-        const draft = await database.getByID(Number(id));
+        const draft: GalleryDraft | undefined = await database.getByID(Number(id));
 
-        if (draft.walletAddress !== address) {
+        if (draft?.walletAddress !== address) {
             return undefined;
         }
 

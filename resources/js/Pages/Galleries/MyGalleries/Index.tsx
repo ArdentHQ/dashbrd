@@ -3,7 +3,6 @@ import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
-import { type GalleryDraft, useWalletDraftGalleries } from "../hooks/useWalletDraftGalleries";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { NftGalleryDraftCard } from "@/Components/Drafts/NftGalleryDraftCard";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
@@ -12,6 +11,7 @@ import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/Draf
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 import { useAuth } from "@/Contexts/AuthContext";
+import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -174,7 +174,9 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Pro
             {showDrafts && (
                 <Drafts
                     isLoading={isLoading}
-                    onRemove={remove}
+                    onRemove={(draftId) => {
+                        void remove(draftId);
+                    }}
                     drafts={drafts}
                 />
             )}
