@@ -206,7 +206,9 @@ describe("useGalleryDrafts", () => {
 
         expect(addMock).not.toHaveBeenCalled();
 
-        expect(result.current.isSaving).toBe(false);
+        await waitFor(() => {
+            expect(result.current.isSaving).toBe(false);
+        });
     });
 
     it("should delete the draft if id is present", async () => {
