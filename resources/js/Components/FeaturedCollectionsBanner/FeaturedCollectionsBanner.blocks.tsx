@@ -93,25 +93,14 @@ export const CollectionCarousel = ({
                                 content={collection.name}
                                 offset={[0, 12]}
                             >
-                                <div>
-                                    {collection.image !== null && (
-                                        <div
-                                            className="h-15 w-15 shrink-0 rounded-full bg-white"
-                                            data-testid={`CollectionCarousel__entry--${index}`}
-                                        >
-                                            <Img
-                                                wrapperClassName="h-15 w-15 rounded-full overflow-hidden"
-                                                src={collection.image}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {collection.image === null && (
-                                        <div
-                                            data-testid={`CollectionCarousel__entry__no_image--${index}`}
-                                            className="h-15 w-15 rounded-full border border-theme-secondary-300 bg-white"
-                                        />
-                                    )}
+                                <div
+                                    className="h-15 w-15 shrink-0 rounded-full bg-white"
+                                    data-testid={`CollectionCarousel__entry--${index}`}
+                                >
+                                    <Img
+                                        wrapperClassName="h-15 w-15 rounded-full overflow-hidden"
+                                        src={collection.image}
+                                    />
                                 </div>
                             </Tooltip>
                         </Link>
