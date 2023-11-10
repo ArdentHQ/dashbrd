@@ -13,6 +13,9 @@ use Spatie\LaravelData\DataCollection;
 
 class UserNftController extends Controller
 {
+    /**
+     * @return DataCollection<int, GalleryNftData>
+     */
     public function __invoke(Request $request): DataCollection
     {
         $ids = array_map(fn ($item) => intval($item), explode(',', $request->get('ids', '') ?? ''));
