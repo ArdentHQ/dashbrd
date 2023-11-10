@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Filament\LogoutController;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Session;
-use Filament\Facades\Filament;
 use App\Models\User;
+use Filament\Facades\Filament;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 it('should redirect the admin user to homepage on logout', function () {
     $user = User::factory()->editor()->create();
