@@ -1,4 +1,3 @@
-import { router } from "@inertiajs/react";
 import { type ReactNode } from "react";
 import { MyGalleryListboxMenu } from "./Components/MyGalleryListboxMenu";
 import { MyGallerySidebar } from "./Components/MyGallerySidebar";
@@ -10,23 +9,13 @@ const Layout = ({
     children,
     nftCount,
     galleryCount,
-    showDrafts,
 }: {
     title: string;
     children: ReactNode;
     nftCount: number;
     galleryCount: number;
-    showDrafts: boolean;
 }): JSX.Element => {
     const { drafts } = useDraftGalleriesContext();
-
-    if (showDrafts && drafts === 0) {
-        router.visit(
-            route("my-galleries", {
-                draft: false,
-            }),
-        );
-    }
 
     return (
         <LeftMenuLayout
