@@ -1,5 +1,6 @@
 import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
+import axios from "axios";
 import uniqBy from "lodash/uniqBy";
 import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -63,6 +64,10 @@ const Create = ({
     const [busy, setBusy] = useState(false);
     const { draftId } = getQueryParameters();
 
+    const [initialNfts, setInitialNfts] = useState<App.Data.Gallery.GalleryNftData[] | undefined>(
+        gallery?.nfts.paginated.data,
+    );
+
     const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
         isTruthy(draftId) ? Number(draftId) : undefined,
         isTruthy(gallery?.slug),
@@ -88,6 +93,9 @@ const Create = ({
     });
 
     const totalValue = 0;
+
+    useEffect(() => {
+    }, [selectedNfts]);
 
     assertUser(auth.user);
 
@@ -143,7 +151,19 @@ const Create = ({
             }
         };
 
+        const loadDraftNts = async (): Promise<void> => {
+            const { data: nfts } = await axios.get<App.Data.Gallery.GalleryNftData[]>(
+                route("user.nfts", {
+                    ids: draft.nfts.map((nft) => nft.nftId).join(","),
+                }),
+            );
+
+            setInitialNfts(nfts);
+        };
+
         void loadDraftCover();
+
+        void loadDraftNts();
     }, [draft]);
 
     const publishHandler = (event: FormEvent<Element>): void => {
@@ -151,6 +171,12 @@ const Create = ({
             submit(event);
         });
     };
+
+    if (initialNfts === undefined) {
+        return <></>;
+    }
+
+    console.log({ initialNfts });
 
     return (
         <LayoutWrapper
@@ -176,7 +202,7 @@ const Create = ({
                 />
 
                 <EditableGalleryHook
-                    selectedNfts={gallery?.nfts.paginated.data}
+                    selectedNfts={initialNfts}
                     nftLimit={nftLimit}
                 >
                     <GalleryHeading

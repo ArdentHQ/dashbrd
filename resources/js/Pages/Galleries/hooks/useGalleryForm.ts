@@ -1,5 +1,4 @@
 import { useForm } from "@inertiajs/react";
-import axios from "axios";
 import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type GalleryDraft } from "./useGalleryDrafts";
@@ -100,36 +99,16 @@ export const useGalleryForm = ({
         // Convert them to strings to compare ordering too.
         const selectedNftsOrder = data.nfts.join();
         const nftsOrder = nfts.map((nft) => nft.id).join();
-
         // Avoid setting if values are the same as it causes infinite re-renders.
         if (selectedNftsOrder === nftsOrder) {
             return;
         }
-
         setSelectedNfts(nfts);
         setData(
             "nfts",
             nfts.map((nft) => nft.id),
         );
-
         setDraftNfts?.(nfts);
-    };
-
-    const populateDraft = async (draft: GalleryDraft): Promise<void> => {
-        const { data: nfts } = await axios.get<App.Data.Gallery.GalleryNftData[]>(
-            route("user.nfts", {
-                ids: draft.nfts.map((nft) => nft.nftId).join(","),
-            }),
-        );
-
-        setSelectedNfts(nfts);
-
-        setData({
-            id: null,
-            name: draft.title,
-            nfts: nfts.map((nft) => nft.id),
-            coverImage: arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType),
-        });
     };
 
     useEffect(() => {
@@ -137,7 +116,12 @@ export const useGalleryForm = ({
             return;
         }
 
-        void populateDraft(draft);
+        setData({
+            id: null,
+            name: draft.title,
+            nfts: [],
+            coverImage: arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType),
+        });
     }, [draft?.id ?? null]);
 
     return {
