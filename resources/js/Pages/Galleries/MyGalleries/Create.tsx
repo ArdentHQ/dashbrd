@@ -62,14 +62,15 @@ const Create = ({
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
-    const { draftId } = getQueryParameters();
+    const { draftId: queryDraftId } = getQueryParameters();
+    const draftId: number | undefined = isTruthy(queryDraftId) ? Number(queryDraftId) : undefined;
 
     const [initialNfts, setInitialNfts] = useState<App.Data.Gallery.GalleryNftData[] | undefined>(
         gallery?.nfts.paginated.data,
     );
 
     const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
-        isTruthy(draftId) ? Number(draftId) : undefined,
+        draftId,
         isTruthy(gallery?.slug),
     );
 
@@ -93,9 +94,6 @@ const Create = ({
     });
 
     const totalValue = 0;
-
-    useEffect(() => {
-    }, [selectedNfts]);
 
     assertUser(auth.user);
 
@@ -172,12 +170,6 @@ const Create = ({
         });
     };
 
-    if (initialNfts === undefined) {
-        return <></>;
-    }
-
-    console.log({ initialNfts });
-
     return (
         <LayoutWrapper
             withSlider
@@ -239,6 +231,7 @@ const Create = ({
                                 error={errors.nfts}
                             />
                         </GalleryNfts>
+
                         <FeaturedCollectionsBanner collections={collections} />
                     </div>
                 </EditableGalleryHook>
