@@ -1,4 +1,5 @@
 import { useForm } from "@inertiajs/react";
+import axios from "axios";
 import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type GalleryDraft } from "./useGalleryDrafts";
@@ -114,17 +115,29 @@ export const useGalleryForm = ({
         setDraftNfts?.(nfts);
     };
 
+    const populateDraft = async (draft: GalleryDraft): Promise<void> => {
+        const { data: nfts } = await axios.get<App.Data.Gallery.GalleryNftData[]>(
+            route("user.nfts", {
+                ids: draft.nfts.map((nft) => nft.nftId).join(","),
+            }),
+        );
+
+        setSelectedNfts(nfts);
+
+        setData({
+            id: null,
+            name: draft.title,
+            nfts: nfts.map((nft) => nft.id),
+            coverImage: arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType),
+        });
+    };
+
     useEffect(() => {
         if (draft?.id == null) {
             return;
         }
 
-        setData({
-            id: null,
-            name: draft.title,
-            nfts: [],
-            coverImage: arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType),
-        });
+        void populateDraft(draft);
     }, [draft?.id ?? null]);
 
     return {
