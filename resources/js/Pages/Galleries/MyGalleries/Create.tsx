@@ -63,12 +63,14 @@ const Create = ({
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
 
+    const [showDraftsLimitModal, setShowDraftsLimitModal] = useState(false);
+
     const { draftId } = getQueryParameters();
 
     const { wallet } = useAuth();
     assertWallet(wallet);
 
-    const { remove } = useWalletDraftGalleries({ address: wallet.address });
+    const { remove, hasReachedLimit } = useWalletDraftGalleries({ address: wallet.address });
     const { setCover, setNfts, setTitle, draft, isSaving } = useWalletDraftGallery({
         draftId,
         address: wallet.address,
@@ -81,6 +83,10 @@ const Create = ({
         }
     }, [draft.id]);
 
+    useEffect(() => {
+        setShowDraftsLimitModal(hasReachedLimit);
+    }, [hasReachedLimit]);
+
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
         setDraftNfts: setNfts,
@@ -90,10 +96,6 @@ const Create = ({
             replaceUrlQuery({ draftId: "" });
         },
     });
-
-    const reachedDraftsLimit = true;
-
-    const [showDraftsLimitModal, setShowDraftsLimitModal] = useState(reachedDraftsLimit);
 
     const totalValue = 0;
 
