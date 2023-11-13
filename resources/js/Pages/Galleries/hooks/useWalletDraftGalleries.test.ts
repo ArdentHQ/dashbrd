@@ -94,6 +94,7 @@ describe("useWalletDraftGalleries", () => {
                 title: "Second Test",
                 cover: null,
                 coverType: null,
+                coverFileName: null,
                 nfts: [],
                 walletAddress: "mockedAddress",
                 value: "test",
