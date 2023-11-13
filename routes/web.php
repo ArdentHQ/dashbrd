@@ -6,6 +6,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Filament\LogoutController;
 use App\Http\Controllers\FilteredGalleryController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\GalleryReportController;
@@ -105,5 +106,7 @@ Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], fu
 
     Route::get('{gallery:slug}/meta-image.png', MetaImageController::class)->name('galleries.meta-image');
 });
+
+Route::post('/auth/logout', [LogoutController::class, 'logout'])->name('filament.admin.auth.logout');
 
 require __DIR__.'/auth.php';
