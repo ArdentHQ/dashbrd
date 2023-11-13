@@ -103,11 +103,11 @@ const Create = ({
         if (cover instanceof File) {
             // eslint-disable-next-line promise/prefer-await-to-then
             void cover.arrayBuffer().then((buf) => {
-                setDraftCover(buf, cover.type);
-                setDraftTitle(data.name);
+                setCover(buf, cover.type);
+                setTitle(data.name);
             });
         } else if (isTruthy(data.name)) {
-            setDraftTitle(data.name);
+            setTitle(data.name);
         }
     }, [auth.wallet.address]);
 
