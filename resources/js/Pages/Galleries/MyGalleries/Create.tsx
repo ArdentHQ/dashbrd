@@ -1,5 +1,6 @@
 import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
+import axios from "axios";
 import uniqBy from "lodash/uniqBy";
 import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,10 +17,13 @@ import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useToasts } from "@/Hooks/useToasts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
+import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { assertUser, assertWallet } from "@/Utils/assertions";
+import { fileToImageDataURI } from "@/Utils/file-to-image-data-uri";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
@@ -47,6 +51,7 @@ const Create = ({
     assertWallet(auth.wallet);
 
     const { t } = useTranslation();
+    const { showToast } = useToasts();
     const { props } = usePage();
 
     const { signedAction } = useAuthorizedAction();
@@ -59,11 +64,15 @@ const Create = ({
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
+    const { draftId: queryDraftId } = getQueryParameters();
+    const draftId: number | undefined = isTruthy(queryDraftId) ? Number(queryDraftId) : undefined;
 
-    const { draftId } = getQueryParameters();
+    const [initialNfts, setInitialNfts] = useState<App.Data.Gallery.GalleryNftData[] | undefined>(
+        gallery?.nfts.paginated.data,
+    );
 
     const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
-        isTruthy(draftId) ? Number(draftId) : undefined,
+        draftId,
         isTruthy(gallery?.slug),
     );
 
@@ -73,8 +82,11 @@ const Create = ({
         }
     }, [draft.id]);
 
+    const isEditingDraft = draft.id !== null && gallery === undefined;
+
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
+        draft: isEditingDraft ? draft : undefined,
         setDraftNfts,
         deleteDraft: (): void => {
             void deleteDraft(draft.id);
@@ -117,6 +129,50 @@ const Create = ({
         [gallery],
     );
 
+    useEffect(() => {
+        if (draft.id == null) {
+            return;
+        }
+
+        const loadDraftCover = async (): Promise<void> => {
+            const file = arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType);
+
+            if (file === null) {
+                setGalleryCoverImageUrl("");
+
+                return;
+            }
+
+            try {
+                const imageDataURI = await fileToImageDataURI(file);
+                setGalleryCoverImageUrl(imageDataURI);
+            } catch {
+                setGalleryCoverImageUrl("");
+            }
+        };
+
+        const loadDraftNts = async (): Promise<void> => {
+            const { data: nfts } = await axios.get<App.Data.Gallery.GalleryNftData[]>(
+                route("user.nfts", {
+                    ids: draft.nfts.map((nft) => nft.nftId).join(","),
+                }),
+            );
+
+            if (nfts.length < draft.nfts.length) {
+                showToast({
+                    message: t("pages.galleries.my_galleries.nfts_no_longer_owned"),
+                    type: "warning",
+                });
+            }
+
+            setInitialNfts(nfts);
+        };
+
+        void loadDraftCover();
+
+        void loadDraftNts();
+    }, [draft]);
+
     const publishHandler = (event: FormEvent<Element>): void => {
         void signedAction(() => {
             submit(event);
@@ -147,7 +203,7 @@ const Create = ({
                 />
 
                 <EditableGalleryHook
-                    selectedNfts={gallery?.nfts.paginated.data}
+                    selectedNfts={initialNfts}
                     nftLimit={nftLimit}
                 >
                     <GalleryHeading
@@ -184,6 +240,7 @@ const Create = ({
                                 error={errors.nfts}
                             />
                         </GalleryNfts>
+
                         <FeaturedCollectionsBanner collections={collections} />
                     </div>
                 </EditableGalleryHook>
@@ -225,12 +282,12 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
-                        setDraftCover(null, null);
+                        setDraftCover(null, null, null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
                         // eslint-disable-next-line promise/prefer-await-to-then
                         void blob.arrayBuffer().then((buf) => {
-                            setDraftCover(buf, blob.type);
+                            setDraftCover(buf, blob.name, blob.type);
                         });
                     }
                     setIsGalleryFormSliderOpen(false);

@@ -1,5 +1,5 @@
 import { expect, type SpyInstance } from "vitest";
-import { useGalleryDrafts } from "./useGalleryDrafts";
+import { type GalleryDraft, useGalleryDrafts } from "./useGalleryDrafts";
 import * as AuthContextMock from "@/Contexts/AuthContext";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
 import { act, renderHook, waitFor } from "@/Tests/testing-library";
@@ -10,13 +10,16 @@ vi.mock("@/Contexts/AuthContext", () => ({
     useAuth: () => ({ wallet: { address: "mockedWalletAddress" } }),
 }));
 
-const defaultGalleryDraft = {
+const defaultGalleryDraft: GalleryDraft = {
     id: 1,
     walletAddress: "mockedAddress",
     nfts: [],
     title: "",
     cover: null,
-    coverTye: null,
+    coverType: null,
+    coverFileName: null,
+    value: "400",
+    collectionsCount: 0,
     updatedAt: 169901639000,
 };
 
@@ -179,12 +182,13 @@ describe("useGalleryDrafts", () => {
         const { result } = renderHook(() => useGalleryDrafts(1));
 
         act(() => {
-            result.current.setDraftCover(new ArrayBuffer(8), "png");
+            result.current.setDraftCover(new ArrayBuffer(8), "file.png", "image/png");
         });
 
         await waitFor(() => {
             expect(result.current.draft.cover).not.toBeNull();
-            expect(result.current.draft.coverType).toBe("png");
+            expect(result.current.draft.coverType).toBe("image/png");
+            expect(result.current.draft.coverFileName).toBe("file.png");
         });
     });
 

@@ -15,6 +15,7 @@ export interface GalleryDraft {
     title: string;
     cover: ArrayBuffer | null;
     coverType: string | null;
+    coverFileName: string | null;
     nfts: DraftNft[];
     walletAddress?: string;
     id: number | null;
@@ -28,7 +29,7 @@ interface GalleryDraftsState {
     reachedLimit: boolean;
     isSaving: boolean;
     draft: GalleryDraft;
-    setDraftCover: (image: ArrayBuffer | null, type: string | null) => void;
+    setDraftCover: (image: ArrayBuffer | null, name: string | null, type: string | null) => void;
     setDraftNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setDraftTitle: (title: string) => void;
     deleteDraft: (draftId: number | null) => Promise<void>;
@@ -36,11 +37,12 @@ interface GalleryDraftsState {
 }
 
 const initialGalleryDraft: GalleryDraft = {
+    id: null,
     title: "",
     cover: null,
     coverType: null,
+    coverFileName: null,
     nfts: [],
-    id: null,
     value: null,
     collectionsCount: 0,
     updatedAt: null,
@@ -114,8 +116,8 @@ export const useGalleryDrafts = (givenDraftId?: number, disabled?: boolean): Gal
         return allDrafts.filter((draft) => draft.walletAddress === wallet?.address && !isExpired(draft));
     };
 
-    const setDraftCover = (image: ArrayBuffer | null, type: string | null): void => {
-        setDraft({ ...draft, cover: image, coverType: type });
+    const setDraftCover = (image: ArrayBuffer | null, name: string | null, type: string | null): void => {
+        setDraft({ ...draft, cover: image, coverType: type, coverFileName: name });
         setSave(true);
     };
 
