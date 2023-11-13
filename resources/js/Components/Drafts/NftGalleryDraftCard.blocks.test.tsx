@@ -8,7 +8,7 @@ import {
     NftGalleryDraftStats,
 } from "./NftGalleryDraftCard.blocks";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
-import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
