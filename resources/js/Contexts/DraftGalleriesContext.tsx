@@ -1,6 +1,8 @@
+import { router } from "@inertiajs/react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { type GalleryDraft, useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface ContextProperties {
     drafts?: GalleryDraft[];
@@ -45,6 +47,14 @@ export const DraftGalleriesContextProvider = ({ children }: ProviderProperties):
 
         await loadWalletDrafts();
     };
+
+    useEffect(() => {
+        const isMyGalleryDraftPage = route().current("my-galleries", { draft: true });
+
+        if (isTruthy(drafts) && drafts.length === 0 && isMyGalleryDraftPage) {
+            router.visit(route("my-galleries"));
+        }
+    }, [drafts]);
 
     return (
         <DraftGalleriesContext.Provider
