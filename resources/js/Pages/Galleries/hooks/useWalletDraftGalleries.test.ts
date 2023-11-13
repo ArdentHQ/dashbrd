@@ -3,8 +3,6 @@ import { useWalletDraftGalleries } from "./useWalletDraftGalleries";
 import * as AuthContextMock from "@/Contexts/AuthContext";
 import { renderHook, waitFor } from "@/Tests/testing-library";
 
-let useAuthSpy: SpyInstance;
-
 vi.mock("@/Contexts/AuthContext", () => ({
     useAuth: () => ({ wallet: { address: "mockedWalletAddress" } }),
 }));
