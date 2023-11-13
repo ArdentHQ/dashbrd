@@ -13,8 +13,6 @@ use App\Models\User;
 use App\Models\Wallet;
 use Filament\Panel;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Spatie\Permission\PermissionRegistrar;
 
 it('can create a basic user', function () {
