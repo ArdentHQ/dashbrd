@@ -7,6 +7,7 @@ interface WalletDraftGalleryState {
     setCover: (image: ArrayBuffer | null, name: string | null, type: string | null) => void;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setTitle: (title: string) => void;
+    reset: (draft: GalleryDraft) => void;
     isLoading: boolean;
 }
 
@@ -67,6 +68,10 @@ export const useWalletDraftGallery = ({
         void saveDraft({ ...draft, title });
     };
 
+    const reset = (draft: GalleryDraft) => {
+        void saveDraft(draft);
+    };
+
     const setNfts = (nfts: App.Data.Gallery.GalleryNftData[]): void => {
         void saveDraft({
             ...draft,
@@ -85,5 +90,6 @@ export const useWalletDraftGallery = ({
         isSaving,
         draft,
         isLoading,
+        reset,
     };
 };
