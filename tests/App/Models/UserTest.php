@@ -7,6 +7,7 @@ use App\Enums\Role;
 use App\Models\Collection;
 use App\Models\Gallery;
 use App\Models\Nft;
+use App\Models\Permission;
 use App\Models\Role as RoleModel;
 use App\Models\User;
 use App\Models\Wallet;
@@ -295,6 +296,18 @@ it('can get filament access', function () {
     app()['env'] = 'local';
 
     expect($user->canAccessPanel(new Panel))->toBeTrue();
+});
+
+it('handles missing filament access permission', function () {
+    $user = new User([
+        //
+    ]);
+
+    expect($user->canAccessPanel(new Panel))->toBeFalse();
+
+    Permission::where('name', 'admin:access')->delete();
+
+    expect($user->canAccessPanel(new Panel))->toBeFalse();
 });
 
 it('filters managers', function () {
