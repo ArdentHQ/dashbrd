@@ -1,6 +1,5 @@
-import { expect, type SpyInstance } from "vitest";
+import { expect } from "vitest";
 import { useWalletDraftGalleries } from "./useWalletDraftGalleries";
-import * as AuthContextMock from "@/Contexts/AuthContext";
 import { renderHook, waitFor } from "@/Tests/testing-library";
 
 vi.mock("@/Contexts/AuthContext", () => ({
