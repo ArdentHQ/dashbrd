@@ -30,14 +30,16 @@ return [
             'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny', 'user:assignPermissions',
             'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
             'role:assignPermissions',
-            'admin:access', 'report:viewAny', 'report:view', 'report:update',
+            'admin:access',
+            'report:viewAny', 'report:view', 'report:update',
         ],
 
         Role::Admin->value => [
             'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny', 'user:assignPermissions',
             'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
             'role:assignPermissions',
-            'admin:access', 'report:viewAny', 'report:view', 'report:update',
+            'admin:access',
+            'report:viewAny', 'report:view', 'report:update',
         ],
 
         Role::Editor->value => [
