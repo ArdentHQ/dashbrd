@@ -13,6 +13,9 @@ use App\Models\User;
 use App\Models\Wallet;
 use Filament\Panel;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\PermissionRegistrar;
 
 it('can create a basic user', function () {
     $user = User::factory()->create();
@@ -299,13 +302,13 @@ it('can get filament access', function () {
 });
 
 it('handles missing filament access permission', function () {
-    $user = new User([
-        //
-    ]);
+    $user = User::factory()->editor()->create();
 
-    expect($user->canAccessPanel(new Panel))->toBeFalse();
+    expect($user->canAccessPanel(new Panel))->toBeTrue();
 
     Permission::where('name', 'admin:access')->delete();
+
+    app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
     expect($user->canAccessPanel(new Panel))->toBeFalse();
 });
