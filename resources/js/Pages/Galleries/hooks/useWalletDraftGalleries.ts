@@ -70,11 +70,6 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      */
     const add = async (draft: GalleryDraft): Promise<GalleryDraft> => {
         const { id: _, ...draftToSave } = draft;
-        const drafts = await allDrafts();
-
-        if (drafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
-            throw new Error("[useWalletDraftGalleries:add] Limit Reached");
-        }
 
         setIsSaving(true);
 
