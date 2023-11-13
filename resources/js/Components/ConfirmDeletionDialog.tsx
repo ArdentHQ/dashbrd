@@ -45,7 +45,7 @@ export const ConfirmDeletionDialog = ({
             isDisabled={isDisabled || !valid}
             onClose={() => {
                 setConfirmationValue("");
-                onClose?.();
+                onClose();
             }}
             focus={input}
             confirmationButtonVariant={confirmationButtonVariant}
