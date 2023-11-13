@@ -15,37 +15,53 @@ const defaultGalleryDraft = {
     updatedAt: new Date().getTime(),
 };
 
-const drafts: GalleryDraft[] = [defaultGalleryDraft];
+const expiredGalleryDraft = {
+    id: null,
+    title: "",
+    cover: null,
+    coverType: null,
+    nfts: [],
+    walletAddress: "mockedAddress",
+    value: "test",
+    collectionsCount: 1,
+    updatedAt: 169901639000,
+};
 
-const indexedDBMocks = {
-    add: (draft: GalleryDraft) => {
-        const id = drafts.length + 1;
-        drafts.push({ ...draft, id });
-        return Promise.resolve(id);
-    },
-    getAll: async () => {
-        return Promise.resolve(drafts);
-    },
-    update: async (draft: GalleryDraft) => {
-        const index = drafts.findIndex((savedDraft) => savedDraft.id === draft.id);
-        drafts.splice(index, 1, draft);
+const useIndexedDBMock = () => {
+    const drafts: GalleryDraft[] = [defaultGalleryDraft, expiredGalleryDraft];
 
-        return Promise.resolve(draft);
-    },
-    deleteRecord: async (id: number) => {
-        const index = drafts.findIndex((savedDraft) => savedDraft.id === id);
-        delete drafts[index];
-    },
-    getByID: async (id: number | null) => {
-        return Promise.resolve(drafts.find((draft) => draft.id === id));
-    },
-    openCursor: vi.fn(),
-    getByIndex: vi.fn(),
-    clear: vi.fn(),
+    return {
+        add: (draft: GalleryDraft) => {
+            const id = drafts.length + 1;
+            drafts.push({ ...draft, id });
+            return Promise.resolve(id);
+        },
+        getAll: async () => {
+            return Promise.resolve(drafts);
+        },
+        update: async (draft: GalleryDraft) => {
+            const index = drafts.findIndex((savedDraft) => savedDraft.id === draft.id);
+            drafts.splice(index, 1, draft);
+
+            return Promise.resolve(draft);
+        },
+        deleteRecord: async (id: number) => {
+            const index = drafts.findIndex((savedDraft) => savedDraft.id === id);
+            delete drafts[index];
+        },
+        getByID: async (id: number | null) => {
+            return Promise.resolve(drafts.find((draft) => draft.id === id));
+        },
+        openCursor: vi.fn(),
+        getByIndex: vi.fn(),
+        clear: vi.fn(),
+    };
 };
 
 const mocks = vi.hoisted(() => ({
-    useIndexedDB: () => indexedDBMocks,
+    useIndexedDB: () => {
+        return useIndexedDBMock();
+    },
 }));
 
 vi.mock("react-indexed-db-hook", () => ({
@@ -79,7 +95,7 @@ describe("useWalletDraftGalleries", () => {
 
         expect(result.current.isSaving).toBe(false);
 
-        expect(result.current.findById(2)).resolves.toMatchObject(expect.objectContaining({ title: "Second Test" }));
+        expect(result.current.findById(3)).resolves.toMatchObject(expect.objectContaining({ title: "Second Test" }));
     });
 
     it("should update existing draft gallery if id is provided", async () => {
@@ -90,7 +106,7 @@ describe("useWalletDraftGalleries", () => {
         });
 
         await waitFor(() => {
-            expect(result.current.drafts).toHaveLength(2);
+            expect(result.current.drafts).toHaveLength(1);
         });
 
         await act(async () => {
@@ -108,7 +124,7 @@ describe("useWalletDraftGalleries", () => {
         });
 
         expect(result.current.isSaving).toBe(false);
-        expect(result.current.drafts).toHaveLength(2);
+        expect(result.current.drafts).toHaveLength(1);
 
         expect(result.current.findById(1)).resolves.toMatchObject(expect.objectContaining({ title: "Test" }));
     });
@@ -121,11 +137,30 @@ describe("useWalletDraftGalleries", () => {
         });
 
         await waitFor(() => {
-            expect(result.current.drafts).toHaveLength(2);
+            expect(result.current.drafts).toHaveLength(1);
         });
 
         await act(async () => {
-            await result.current.remove(2);
+            await result.current.remove(1);
+        });
+
+        expect(result.current.isSaving).toBe(false);
+        expect(result.current.drafts).toHaveLength(1);
+    });
+
+    it("should remove expired galleries", async () => {
+        const { result } = renderHook(() => useWalletDraftGalleries({ address: "mockedAddress" }));
+
+        await waitFor(() => {
+            expect(result.current.isLoading).toBe(false);
+        });
+
+        await waitFor(() => {
+            expect(result.current.drafts).toHaveLength(1);
+        });
+
+        await act(async () => {
+            await result.current.removeExpired(1);
         });
 
         expect(result.current.isSaving).toBe(false);
