@@ -20,7 +20,7 @@ export const useWalletDraftGallery = ({
     isDisabled?: boolean;
 }): WalletDraftGalleryState => {
     const [isLoading, setIsLoading] = useState(true);
-    const { upsert, findById, isSaving } = useWalletDraftGalleries({ address });
+    const { upsert, findWalletDraftById, isSaving } = useWalletDraftGalleries({ address });
 
     const [draft, setDraft] = useState<GalleryDraft>({
         title: "",
@@ -42,7 +42,7 @@ export const useWalletDraftGallery = ({
 
         const getDraft = async (): Promise<void> => {
             setIsLoading(true);
-            const draft = await findById(draftId);
+            const draft = await findWalletDraftById(draftId);
 
             if (draft !== undefined) {
                 setDraft(draft);

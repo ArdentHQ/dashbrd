@@ -105,7 +105,7 @@ describe("useWalletDraftGalleries", () => {
 
         expect(result.current.isSaving).toBe(false);
 
-        await expect(result.current.findById(3)).resolves.toMatchObject(
+        await expect(result.current.findWalletDraftById(3)).resolves.toMatchObject(
             expect.objectContaining({ title: "Second Test" }) as GalleryDraft,
         );
     });
@@ -139,7 +139,7 @@ describe("useWalletDraftGalleries", () => {
         expect(result.current.isSaving).toBe(false);
         expect(result.current.drafts).toHaveLength(1);
 
-        await expect(result.current.findById(1)).resolves.toMatchObject(
+        await expect(result.current.findWalletDraftById(1)).resolves.toMatchObject(
             expect.objectContaining({ title: "Test" }) as GalleryDraft,
         );
     });
@@ -170,7 +170,7 @@ describe("useWalletDraftGalleries", () => {
             expect(result.current.isLoading).toBe(false);
         });
 
-        await expect(result.current.findById(1)).resolves.toMatchObject(
+        await expect(result.current.findWalletDraftById(1)).resolves.toMatchObject(
             expect.objectContaining({ title: "" }) as GalleryDraft,
         );
 
