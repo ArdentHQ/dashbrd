@@ -4,7 +4,7 @@ import { type GalleryDraft, useWalletDraftGalleries } from "./useWalletDraftGall
 interface WalletDraftGalleryState {
     isSaving: boolean;
     draft: GalleryDraft;
-    setCover: (image: ArrayBuffer | null, type: string | null) => void;
+    setCover: (image: ArrayBuffer | null, name: string | null, type: string | null) => void;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setTitle: (title: string) => void;
     isLoading: boolean;
@@ -26,6 +26,7 @@ export const useWalletDraftGallery = ({
         title: "",
         cover: null,
         coverType: null,
+        coverFileName: null,
         nfts: [],
         value: null,
         collectionsCount: 0,
@@ -58,8 +59,8 @@ export const useWalletDraftGallery = ({
         setDraft(savedDraft);
     };
 
-    const setCover = (image: ArrayBuffer | null, type: string | null): void => {
-        void saveDraft({ ...draft, cover: image, coverType: type });
+    const setCover = (image: ArrayBuffer | null, name: string | null, type: string | null): void => {
+        void saveDraft({ ...draft, cover: image, coverType: type, coverFileName: name });
     };
 
     const setTitle = (title: string): void => {

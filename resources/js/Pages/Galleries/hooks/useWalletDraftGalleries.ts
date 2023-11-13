@@ -26,6 +26,7 @@ export interface GalleryDraft {
     value: string | null;
     collectionsCount: number;
     updatedAt: number | null;
+    coverFileName: string | null;
 }
 
 interface WalletDraftGalleriesState {
