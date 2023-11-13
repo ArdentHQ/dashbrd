@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import tippy, { inlinePositioning } from "tippy.js";
 import { extractDomain } from "@/Utils/extract-domain";
 import { remarkFigurePlugin } from "@/Utils/Remark/remarkFigurePlugin";
@@ -20,6 +21,7 @@ const externalIcon = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none
 
 export const ArticleContent = ({ article }: Properties): JSX.Element => {
     const { t } = useTranslation();
+    console.log({ article });
     useEffect(() => {
         const links = document.querySelectorAll<HTMLAnchorElement>(".article-content a[target=_blank]");
 
@@ -56,7 +58,7 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => {
         <div className="article-content">
             <Markdown
                 rehypePlugins={[rehypeRaw, [rehypeExternalLinks, { target: "_blank" }]]}
-                remarkPlugins={[remarkFigurePlugin]}
+                remarkPlugins={[remarkFigurePlugin, remarkGfm]}
                 skipHtml
             >
                 {article.content}
