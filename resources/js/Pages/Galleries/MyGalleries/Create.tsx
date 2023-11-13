@@ -14,11 +14,13 @@ import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext"
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
+import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
+import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { useWalletDraftGallery } from "@/Pages/Galleries/hooks/useWalletDraftGallery";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -62,22 +64,27 @@ const Create = ({
 
     const { draftId } = getQueryParameters();
 
-    const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
-        isTruthy(draftId) ? Number(draftId) : undefined,
-        isTruthy(gallery?.slug),
-    );
+    const { wallet } = useAuth();
+    assertWallet(wallet);
+
+    const { remove } = useWalletDraftGalleries({ address: wallet.address });
+    const { setCover, setNfts, setTitle, draft, isSaving } = useWalletDraftGallery({
+        draftId,
+        address: wallet.address,
+        isDisabled: isTruthy(gallery?.slug),
+    });
 
     useEffect(() => {
-        if (draft.id !== null) {
+        if (isTruthy(draft.id)) {
             replaceUrlQuery({ draftId: draft.id.toString() });
         }
     }, [draft.id]);
 
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
-        setDraftNfts,
+        setDraftNfts: setNfts,
         deleteDraft: (): void => {
-            void deleteDraft(draft.id);
+            void remove(draft.id);
 
             replaceUrlQuery({ draftId: "" });
         },
@@ -163,7 +170,7 @@ const Create = ({
                         setData("name", name);
                     }}
                     onBlur={() => {
-                        setDraftTitle(data.name);
+                        setTitle(data.name);
                     }}
                 />
 
@@ -247,12 +254,12 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
-                        setDraftCover(null, null);
+                        setCover(null, null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
                         // eslint-disable-next-line promise/prefer-await-to-then
                         void blob.arrayBuffer().then((buf) => {
-                            setDraftCover(buf, blob.type);
+                            setCover(buf, blob.type);
                         });
                     }
                     setIsGalleryFormSliderOpen(false);
