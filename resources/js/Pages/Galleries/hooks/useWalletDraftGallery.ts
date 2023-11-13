@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { type GalleryDraft, useWalletDraftGalleries } from "./useWalletDraftGalleries";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface WalletDraftGalleryState {
     isSaving: boolean;
@@ -9,6 +10,16 @@ interface WalletDraftGalleryState {
     setTitle: (title: string) => void;
     isLoading: boolean;
 }
+
+const initialDraftState = {
+    title: "",
+    cover: null,
+    coverType: null,
+    nfts: [],
+    value: null,
+    collectionsCount: 0,
+    updatedAt: null,
+};
 
 export const useWalletDraftGallery = ({
     address,
@@ -23,15 +34,19 @@ export const useWalletDraftGallery = ({
     const { upsert, findById, isSaving } = useWalletDraftGalleries({ address });
 
     const [draft, setDraft] = useState<GalleryDraft>({
-        title: "",
-        cover: null,
-        coverType: null,
-        nfts: [],
-        value: null,
-        collectionsCount: 0,
-        updatedAt: null,
+        ...initialDraftState,
         walletAddress: address,
     });
+
+    // if wallet changed reset state
+    useEffect(() => {
+        if (isDisabled === true || !isTruthy(draft.id)) return;
+
+        setDraft({
+            ...initialDraftState,
+            walletAddress: address,
+        });
+    }, [address]);
 
     // populate `draft` state if `draftId` is present
     useEffect(() => {

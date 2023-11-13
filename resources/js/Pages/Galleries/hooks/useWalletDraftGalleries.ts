@@ -159,7 +159,9 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      */
     const allDrafts = async (): Promise<GalleryDraft[]> => {
         const allDrafts: GalleryDraft[] = await database.getAll();
-        return allDrafts.filter((draft) => draft.walletAddress === address && !isExpired(draft));
+        return allDrafts.filter(
+            (draft) => draft.walletAddress?.toLowerCase() === address.toLowerCase() && !isExpired(draft),
+        );
     };
 
     /**
@@ -171,7 +173,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     const findById = async (id: number | string): Promise<GalleryDraft | undefined> => {
         const draft: GalleryDraft | undefined = await database.getByID(Number(id));
 
-        if (draft?.walletAddress !== address) {
+        if (draft?.walletAddress?.toLowerCase() !== address.toLowerCase()) {
             return undefined;
         }
 
