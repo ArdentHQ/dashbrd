@@ -150,7 +150,9 @@ describe("CollectionActions", () => {
 
         await userEvent.click(hideButton);
 
-        expect(routerSpy).toHaveBeenCalled();
+        await waitFor(() => {
+            expect(routerSpy).toHaveBeenCalled();
+        });
     });
 
     it("can show a collection", async () => {
