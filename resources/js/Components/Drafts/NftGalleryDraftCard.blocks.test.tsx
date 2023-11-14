@@ -61,6 +61,7 @@ describe("NftGalleryDraftStats", () => {
         title: "Test draft",
         cover: null,
         coverType: null,
+        coverFileName: null,
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
         nfts: [],
         value: "400",

@@ -26,6 +26,7 @@ export interface GalleryDraft {
     value: string | null;
     collectionsCount: number;
     updatedAt: number | null;
+    coverFileName: string | null;
 }
 
 interface WalletDraftGalleriesState {
@@ -33,7 +34,7 @@ interface WalletDraftGalleriesState {
     remove: (id?: number | null) => Promise<void>;
     removeExpired: () => Promise<void>;
     drafts: GalleryDraft[];
-    findById: (id: number | string) => Promise<GalleryDraft | undefined>;
+    findWalletDraftById: (id: number | string) => Promise<GalleryDraft | undefined>;
     isLoading: boolean;
     isSaving: boolean;
     hasReachedLimit: boolean;
@@ -69,11 +70,6 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      */
     const add = async (draft: GalleryDraft): Promise<GalleryDraft> => {
         const { id: _, ...draftToSave } = draft;
-        const drafts = await allDrafts();
-
-        if (drafts.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
-            throw new Error("[useWalletDraftGalleries:add] Limit Reached");
-        }
 
         setIsSaving(true);
 
@@ -170,7 +166,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {number} id
      * @returns {Promise<GalleryDraft>}
      */
-    const findById = async (id: number | string): Promise<GalleryDraft | undefined> => {
+    const findWalletDraftById = async (id: number | string): Promise<GalleryDraft | undefined> => {
         const draft: GalleryDraft | undefined = await database.getByID(Number(id));
 
         if (draft?.walletAddress?.toLowerCase() !== address.toLowerCase()) {
@@ -198,7 +194,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @returns {Promise<GalleryDraft>}
      */
     const findByIdOrThrow = async (id: number | string): Promise<GalleryDraft> => {
-        const draft = await findById(id);
+        const draft = await findWalletDraftById(id);
 
         if (!isTruthy(draft)) {
             throw new Error(`[useWalletDraftGalleries:findByIdOrThrow] Draft ${id} was not found.`);
@@ -212,7 +208,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
         remove,
         removeExpired,
         drafts,
-        findById,
+        findWalletDraftById,
         isLoading,
         isSaving,
         hasReachedLimit,
