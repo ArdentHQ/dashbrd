@@ -2,6 +2,7 @@ import { Head, router } from "@inertiajs/react";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
+import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
@@ -101,11 +102,7 @@ const Index = ({
                 </div>
 
                 {userGalleries.meta.total === 0 && (
-                    <div className="flex items-center justify-center rounded-xl border border-theme-secondary-300 p-4">
-                        <span className="text-center font-medium text-theme-secondary-700">
-                            {t("pages.galleries.my_galleries.no_galleries")}
-                        </span>
-                    </div>
+                    <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>
                 )}
 
                 {userGalleries.meta.total > 0 && (

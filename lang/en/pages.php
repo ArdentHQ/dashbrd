@@ -159,7 +159,7 @@ return [
         'search' => [
             'loading_results' => 'Loading results...',
             'no_results' => 'We could not find anything matching your search criteria, please try again!',
-            'placeholder' => 'Search by Galleries',
+            'placeholder' => 'Search by name or curator address',
             'placeholder_nfts' => 'Search by NFTs',
             'error' => 'Could not load search results. Please try again later.',
         ],
@@ -300,7 +300,7 @@ return [
             ],
             'search_dropdown' => [
                 'placeholder' => 'Search token',
-                'no_results' => 'No results',
+                'no_results' => 'No Results',
                 'error' => 'Error occurred while searching tokens.',
             ],
             'transaction_time' => 'Transaction Time: ~{{ time }} minutes',
