@@ -23,7 +23,7 @@ const externalIcon = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none
 export const ArticleContent = ({ article }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { isDark } = useDarkModeContext();
-  
+
     useEffect(() => {
         const links = document.querySelectorAll<HTMLAnchorElement>(".article-content a[target=_blank]");
 
