@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons/Button";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
-import { WarningExclamation } from "@/images";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
+import { WarningExclamation, WarningExclamationDark } from "@/images";
 
 interface Properties {
     onConfirm: (closeModal: () => void) => void;
@@ -12,6 +13,7 @@ interface Properties {
 export const SetDefaultsButton = ({ onConfirm, isDisabled }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [modalShown, setModalShown] = useState(false);
+    const { isDark } = useDarkModeContext();
 
     return (
         <>
@@ -42,10 +44,10 @@ export const SetDefaultsButton = ({ onConfirm, isDisabled }: Properties): JSX.El
                 }}
             >
                 <div className="flex items-center justify-center">
-                    <WarningExclamation />
+                    {isDark ? <WarningExclamationDark /> : <WarningExclamation />}
                 </div>
 
-                <p className="mt-3 leading-6 text-theme-secondary-700">
+                <p className="mt-3 leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
                     {t("pages.settings.general.set_defaults_content")}
                 </p>
             </ConfirmationDialog>

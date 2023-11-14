@@ -150,7 +150,7 @@ const SliderContainer = ({
                             className={cn(
                                 "hidden sm:block",
                                 {
-                                    "fixed top-3  xs:top-5 sm:left-auto sm:right-8 sm:translate-x-0": isFullScreen,
+                                    "fixed top-3 xs:top-5 sm:left-auto sm:right-8 sm:translate-x-0": isFullScreen,
                                 },
                                 externalCloseButtonClassName,
                             )}

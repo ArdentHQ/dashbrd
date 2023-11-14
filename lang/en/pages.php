@@ -159,7 +159,7 @@ return [
         'search' => [
             'loading_results' => 'Loading results...',
             'no_results' => 'We could not find anything matching your search criteria, please try again!',
-            'placeholder' => 'Search by Galleries',
+            'placeholder' => 'Search by name or curator address',
             'placeholder_nfts' => 'Search by NFTs',
             'error' => 'Could not load search results. Please try again later.',
         ],
@@ -210,6 +210,7 @@ return [
             'title_too_long' => 'Gallery name must not exceed :max characters.',
             'already_selected_nft' => 'NFT already exists in this gallery',
             'nft_missing_image' => 'Only NFTs with images can be added to galleries',
+            'nft_gallery_limit' => 'You can only add 16 NFTs per gallery',
             'gallery_cover' => 'Gallery Cover',
             'gallery_cover_description' => 'The cover is used for the card on the gallery list page. While the cover is not a requirement it will allow you to add personality and stand out from the crowd.',
             'gallery_cover_information' => 'Image dimensions must be at least 287px x 190px, with a max size of 2 MB (JPG, PNG or GIF)',
@@ -308,7 +309,7 @@ return [
             ],
             'search_dropdown' => [
                 'placeholder' => 'Search token',
-                'no_results' => 'No results',
+                'no_results' => 'No Results',
                 'error' => 'Error occurred while searching tokens.',
             ],
             'transaction_time' => 'Transaction Time: ~{{ time }} minutes',

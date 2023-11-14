@@ -51,5 +51,5 @@ export const listboxButtonClassnames = ({
                           !isOpen,
                   },
               ],
-        "disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700 dark:bg-theme-primary-600 dark:text-white",
+        "disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700 dark:bg-theme-primary-600 dark:text-white dark:disabled:bg-theme-dark-900 dark:disabled:text-theme-dark-400",
     );

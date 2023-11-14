@@ -80,10 +80,11 @@ export const AppMenuItem = ({
                         "group-hover:text-theme-secondary-900 dark:group-hover:text-theme-dark-50": !dark,
                         "text-theme-secondary-900 dark:text-theme-dark-50 dark:hover:text-theme-dark-50":
                             isActive && !dark,
-                        "text-theme-secondary-700 dark:hover:text-theme-dark-50": !isActive && !dark,
+                        "text-theme-secondary-700 dark:text-theme-dark-200 dark:hover:text-theme-secondary-50":
+                            !isActive && !dark,
                     })}
                 >
-                    <>{title}</>
+                    {title}
                 </span>
             </div>
         </Link>

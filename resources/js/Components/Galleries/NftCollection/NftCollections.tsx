@@ -80,7 +80,7 @@ export const NftCollections = ({
     getLoadingNftsCount,
 }: NftCollectionsProperties): JSX.Element => {
     const { selected, addToSelection, removeFromSelection } = useNftSelectableContext();
-    const { nfts: addedNfts } = useEditableGalleryContext();
+    const { nfts: addedNfts, nftLimit } = useEditableGalleryContext();
 
     const items = Object.entries(
         groupBy(nfts, (nft: App.Data.Gallery.GalleryNftData) => `${nft.chainId}-${nft.tokenAddress}`),
@@ -111,6 +111,8 @@ export const NftCollections = ({
                                 onDeselectNft={removeFromSelection}
                                 onSelectNft={addToSelection}
                                 validateImage={true}
+                                storedNfts={addedNfts.selected}
+                                nftLimit={nftLimit}
                             />
 
                             {!allNftsLoaded(nfts[0]) && (

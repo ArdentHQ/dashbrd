@@ -68,6 +68,7 @@ export const GalleryNameInput = ({
                     visible
                     variant="danger"
                     offset={[0, 50]}
+                    zIndex={1}
                 >
                     <span />
                 </Tooltip>

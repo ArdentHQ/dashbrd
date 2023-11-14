@@ -12,6 +12,7 @@ export const ArticleCopy = ({ article }: Properties): JSX.Element => {
         <Clipboard
             text={url}
             copiedIconClass="group button-icon"
+            tooltipPlacement="left"
         >
             <IconButton icon="Copy" />
         </Clipboard>

@@ -74,9 +74,10 @@ export const FeaturedCollections = ({
                 >
                     <div className={cn("mb-1 flex items-center", { "-ml-1": index > 0 })}>
                         <Img
+                            wrapperClassName="h-6 w-6 aspect-square"
                             src={collection.image}
                             isCircle
-                            className={cn("h-6 w-6 rounded-full ring-2", {
+                            className={cn("rounded-full ring-2", {
                                 "bg-white ring-white dark:bg-theme-dark-800 dark:ring-theme-dark-800": !isLargeVariant,
                                 "skeleton-primary bg-theme-dark-900 ring-theme-dark-900 dark:bg-theme-primary-800 dark:ring-theme-primary-800":
                                     isLargeVariant,
