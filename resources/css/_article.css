@@ -180,10 +180,10 @@
 }
 
 .article-content input[type="checkbox"] {
-    @apply dark:form-checkbox-dark form-checkbox box-border h-5 w-5 rounded border-2 text-theme-primary-600 transition duration-100 ease-in border-theme-secondary-300 dark:enabled:border-theme-dark-200 dark:enabled:bg-theme-dark-900 dark:enabled:checked:border-theme-primary-400 dark:enabled:checked:bg-theme-primary-400
+    @apply dark:form-checkbox-dark form-checkbox box-border h-5 w-5 rounded border-2 border-theme-secondary-300 text-theme-primary-600 transition duration-100 ease-in dark:enabled:border-theme-dark-200 dark:enabled:bg-theme-dark-900 dark:enabled:checked:border-theme-primary-400 dark:enabled:checked:bg-theme-primary-400;
 }
 
-.article-content input[type="checkbox"]:checked{
+.article-content input[type="checkbox"]:checked {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='%23191D22' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
 }
 
