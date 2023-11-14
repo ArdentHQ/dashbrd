@@ -191,18 +191,26 @@
     background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 16 16" fill="%2323272D" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"/%3E%3C/svg%3E');
 }
 
-.article-content thead {
-    @apply border-b-2 border-theme-secondary-300 dark:border-theme-dark-700;
+.article-content table {
+    @apply border rounded-xl border-separate border-spacing-0 overflow-hidden border-theme-secondary-300 dark:border-theme-dark-700
 }
 
-.article-content thead tr th, .article-content tbody tr td {
-    @apply px-2;
+.article-content table thead {
+    @apply bg-theme-secondary-50 dark:bg-theme-dark-950
 }
 
-.article-content tbody tr:nth-child(odd) {
-    @apply bg-theme-secondary-50 dark:bg-theme-dark-800;
+.article-content table thead tr th {
+    @apply px-4 py-2 text-sm font-medium border-b border-theme-secondary-300 text-theme-secondary-700 dark:border-theme-dark-700 dark:text-theme-dark-200
 }
 
-.article-content tbody tr:nth-child(even) {
-    @apply bg-theme-secondary-100 dark:bg-theme-dark-900;
+.article-content table tbody td {
+    @apply p-4 text-base
+}
+
+.article-content table tbody tr:not(:last-child) td {
+    @apply border-b border-dashed border-theme-secondary-300 text-theme-secondary-700 dark:border-theme-dark-700 dark:text-theme-dark-200
+}
+
+.article-content table tbody tr:last-child td {
+    @apply pb-8
 }
