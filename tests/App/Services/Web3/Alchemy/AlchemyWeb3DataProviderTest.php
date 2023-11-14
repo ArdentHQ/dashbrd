@@ -149,7 +149,7 @@ it('should getWalletNfts', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(94)
+        ->and($tokens)->toHaveCount(100)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
         ->and($tokens[0]->tokenAddress)->toBe('0x0631cc561618ee4fa142e502c5f5ab9fcc2aa90c')
         ->and($tokens[2]->floorPrice)
@@ -196,7 +196,7 @@ it('should extract nft images', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(2)
+        ->and($tokens)->toHaveCount(3)
         ->and($tokens)->every(fn ($token) => expect($token->extraAttributes['images'])->toHaveKeys(['thumb', 'small', 'large', 'original', 'originalRaw']));
 });
 

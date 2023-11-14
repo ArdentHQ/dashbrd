@@ -49,7 +49,7 @@ it('should getWalletNfts', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(47)
+        ->and($tokens)->toHaveCount(100)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
         ->and($tokens[0]->tokenAddress)->toBe('0x5d666f215a85b87cb042d59662a7ecd2c8cc44e6');
 });
