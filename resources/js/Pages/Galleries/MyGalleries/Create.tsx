@@ -73,13 +73,10 @@ const Create = ({
         gallery?.nfts.paginated.data,
     );
 
-    const { wallet } = useAuth();
-    assertWallet(wallet);
-
-    const { remove } = useWalletDraftGalleries({ address: wallet.address });
+    const { remove } = useWalletDraftGalleries({ address: auth.wallet.address });
     const { setCover, setNfts, setTitle, draft, isSaving, isLoading } = useWalletDraftGallery({
         draftId,
-        address: wallet.address,
+        address: auth.wallet.address,
         isDisabled: isTruthy(gallery?.slug),
     });
 
@@ -111,8 +108,6 @@ const Create = ({
     });
 
     const totalValue = 0;
-
-    assertUser(auth.user);
 
     const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>>(
         () =>
