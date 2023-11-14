@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\NftTransferType;
+use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Models\Traits\BelongsToWallet;
 use App\Models\Traits\Reportable;
@@ -44,6 +45,7 @@ class Nft extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'type' => TokenType::class,
         'last_viewed_at' => 'datetime',
         'last_activity_fetched_at' => 'datetime',
         'extra_attributes' => SchemalessAttributes::class,

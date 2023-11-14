@@ -146,6 +146,7 @@ class Web3NftHandler
                     'deleted_at' => null,
                     'metadata_fetched_at' => $now,
                     'info' => $nft->hasError ? $nft->info : null,
+                    'type' => $nft->type->value,
                 ];
 
                 return $values;
@@ -154,7 +155,7 @@ class Web3NftHandler
             $uniqueBy = ['collection_id', 'token_number'];
 
             $valuesToUpdateIfExists = ['deleted_at', 'info'];
-            $valuesToCheck = ['name', 'description', 'extra_attributes', 'metadata_fetched_at', 'wallet_id'];
+            $valuesToCheck = ['name', 'description', 'extra_attributes', 'type', 'metadata_fetched_at', 'wallet_id'];
 
             foreach ($valuesToCheck as $value) {
                 if (array_filter($valuesToUpsert, fn ($v) => $v[$value] !== null)) {
