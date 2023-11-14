@@ -80,7 +80,7 @@ it('should fetch nfts for wallet and dispatch floor price job', function () {
     $this->assertDatabaseCount('collections', 47);
     $this->assertDatabaseCount('nfts', 100);
 
-    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 42);
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 47);
 });
 
 it('should fetch nfts for wallet and skip floor price job if already present', function () {
