@@ -31,6 +31,7 @@ export interface GalleryDraft {
 
 interface WalletDraftGalleriesState {
     upsert: (draft: GalleryDraft) => Promise<GalleryDraft>;
+    add: (draft: GalleryDraft) => Promise<GalleryDraft>;
     remove: (id?: number | null) => Promise<void>;
     removeExpired: () => Promise<void>;
     drafts: GalleryDraft[];
@@ -204,6 +205,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     };
 
     return {
+        add,
         upsert,
         remove,
         removeExpired,

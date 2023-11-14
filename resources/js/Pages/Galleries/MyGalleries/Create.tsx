@@ -15,13 +15,12 @@ import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext"
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
-import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
-import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { UseGalleryFormProperties, useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
+import { GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { useWalletDraftGallery } from "@/Pages/Galleries/hooks/useWalletDraftGallery";
 import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { assertUser, assertWallet } from "@/Utils/assertions";
@@ -29,6 +28,7 @@ import { fileToImageDataURI } from "@/Utils/file-to-image-data-uri";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
+import { usePrevious } from "@/Hooks/usePrevious";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -58,7 +58,7 @@ const Create = ({
 
     const { signedAction } = useAuthorizedAction();
 
-    const { initialized, switching } = useMetaMaskContext();
+    const { initialized } = useMetaMaskContext();
 
     const [isGalleryFormSliderOpen, setIsGalleryFormSliderOpen] = useState(false);
     const [gallerySliderActiveTab, setGallerySliderActiveTab] = useState<GalleryFormSliderTabs>();
@@ -66,74 +66,65 @@ const Create = ({
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
-    const { draftId: queryDraftId } = getQueryParameters();
-    const draftId: number | undefined = isTruthy(queryDraftId) ? Number(queryDraftId) : undefined;
+    const { draftId } = getQueryParameters();
 
     const [initialNfts, setInitialNfts] = useState<App.Data.Gallery.GalleryNftData[] | undefined>(
         gallery?.nfts.paginated.data,
     );
 
-    const { wallet } = useAuth();
-    assertWallet(wallet);
-
-    const { remove } = useWalletDraftGalleries({ address: wallet.address });
-    const { setCover, setNfts, setTitle, draft, isSaving, isLoading } = useWalletDraftGallery({
+    const { remove, add } = useWalletDraftGalleries({ address: auth.wallet.address });
+    const { setCover, setNfts, setTitle, draft, isSaving, isLoading, reset } = useWalletDraftGallery({
         draftId,
-        address: wallet.address,
+        address: auth.wallet.address,
         isDisabled: isTruthy(gallery?.slug),
     });
+
+    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
+        gallery,
+        setDraftNfts: setNfts,
+        draft,
+        deleteDraft: (): void => {
+            void remove(draft.id);
+            void reset();
+
+            replaceUrlQuery({ draftId: "" });
+        },
+    });
+
+    const previousWallet = usePrevious(auth.wallet.address);
 
     useEffect(() => {
         if (isLoading || isSaving) {
             return;
         }
 
-        if (isTruthy(draft.id)) {
-            replaceUrlQuery({ draftId: draft.id.toString() });
+        const redirectToNewDraft = async (existingDraft: GalleryDraft) => {
+            const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address });
+            reset(newDraft);
+            replaceUrlQuery({ draftId: newDraft.id?.toString() });
+        };
+
+        // Wallet is changed while editing.
+        // Create a new draft, copy title & cover from the existin, add redirect to the new.
+        if (isTruthy(previousWallet) && previousWallet !== auth.wallet?.address) {
+            redirectToNewDraft(draft);
+            return;
         }
 
+        // Update url to reflect editing draft id.
+        if (isTruthy(draft.id) && !isTruthy(draftId)) {
+            replaceUrlQuery({ draftId: draft.id.toString() });
+            return;
+        }
+
+        // Clean url if draft is empty.
         if (!isTruthy(draft.id) && isTruthy(draftId)) {
             replaceUrlQuery({ draftId: "" });
+            return;
         }
-    }, [draft.id, isLoading, isSaving]);
-
-    const isEditingDraft = draft.id !== null && gallery === undefined;
-
-    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
-        gallery,
-        setDraftNfts: setNfts,
-        draft: isEditingDraft ? draft : undefined,
-        deleteDraft: (): void => {
-            void remove(draft.id);
-
-            replaceUrlQuery({ draftId: "" });
-        },
-    });
-
-    useEffect(() => {
-        if (!switching) return;
-
-        updateSelectedNfts([], true);
-        replaceUrlQuery({ draftId: "" });
-    }, [switching]);
-
-    useEffect(() => {
-        const cover = data.coverImage;
-
-        if (cover instanceof File) {
-            // eslint-disable-next-line promise/prefer-await-to-then
-            void cover.arrayBuffer().then((buf) => {
-                setCover(buf, cover.type);
-                setTitle(data.name);
-            });
-        } else if (isTruthy(data.name)) {
-            setTitle(data.name);
-        }
-    }, [auth.wallet.address]);
+    }, [draft.id, isLoading, isSaving, auth.wallet.address, previousWallet, data]);
 
     const totalValue = 0;
-
-    assertUser(auth.user);
 
     const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>>(
         () =>
@@ -232,9 +223,7 @@ const Create = ({
                     name={data.name}
                     onChange={(name) => {
                         setData("name", name);
-                    }}
-                    onBlur={() => {
-                        setTitle(data.name);
+                        setTitle(name);
                     }}
                 />
 

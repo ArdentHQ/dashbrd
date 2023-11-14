@@ -6,7 +6,7 @@ import { useToasts } from "@/Hooks/useToasts";
 import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { isTruthy } from "@/Utils/is-truthy";
 
-interface UseGalleryFormProperties extends Record<string, unknown> {
+export interface UseGalleryFormProperties extends Record<string, unknown> {
     id: number | null;
     name: string;
     nfts: number[];
