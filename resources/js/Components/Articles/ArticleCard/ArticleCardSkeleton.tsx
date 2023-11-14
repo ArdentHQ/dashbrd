@@ -12,7 +12,7 @@ export const ArticleCardSkeleton = ({ isLoading = true }: { isLoading?: boolean 
         >
             <div
                 className={cn("mx-2 mt-2 aspect-video items-center justify-center overflow-hidden rounded-lg", {
-                    "flex bg-theme-secondary-100": !isLoading,
+                    "flex bg-theme-secondary-100 dark:bg-theme-dark-800 ": !isLoading,
                 })}
             >
                 {isLoading ? (
@@ -20,7 +20,9 @@ export const ArticleCardSkeleton = ({ isLoading = true }: { isLoading?: boolean 
                         <Skeleton className="h-full w-full bg-theme-secondary-100" />
                     </div>
                 ) : (
-                    <p className="font-medium text-theme-secondary-500">{t("pages.articles.placeholder_more_soon")}</p>
+                    <p className="font-medium text-theme-secondary-500 dark:text-theme-dark-200">
+                        {t("pages.articles.placeholder_more_soon")}
+                    </p>
                 )}
             </div>
 

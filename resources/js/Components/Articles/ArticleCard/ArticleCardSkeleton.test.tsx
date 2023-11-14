@@ -1,4 +1,3 @@
-import { expect } from "vitest";
 import { ArticleCardSkeleton } from "@/Components/Articles/ArticleCard/ArticleCardSkeleton";
 import { render, screen } from "@/Tests/testing-library";
 

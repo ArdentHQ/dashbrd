@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
+import { Link } from "@/Components/Link";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
@@ -10,10 +11,10 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
     const { user } = useAuth();
 
     return (
-        <a
+        <Link
             data-testid="ArticleListItem"
             href={route("articles.view", article.slug)}
-            className="flex space-x-3 border-b-4  border-theme-secondary-100 bg-white p-6 dark:border-theme-dark-700 dark:bg-theme-dark-900 lg:rounded-lg lg:border lg:border-theme-secondary-300"
+            className="transition-default group flex space-x-3  bg-white p-6 ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500 lg:rounded-lg lg:border lg:border-theme-secondary-300 "
         >
             <div className="aspect-video h-11 flex-shrink-0 overflow-hidden rounded bg-theme-secondary-300 dark:bg-theme-dark-900 sm:h-16">
                 <Img
@@ -25,8 +26,8 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                 />
             </div>
 
-            <div className="flex flex-1 flex-col space-y-2">
-                <h4 className="line-clamp-2 text-sm font-medium leading-[22px] text-theme-secondary-900 dark:text-theme-dark-50 sm:line-clamp-1 sm:text-lg sm:leading-7">
+            <div className="flex min-w-0 flex-1 flex-col space-y-2">
+                <h4 className="transition-default line-clamp-2 break-words text-sm font-medium leading-[22px] text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400 sm:line-clamp-1 sm:text-lg sm:leading-7">
                     {article.title}
                 </h4>
 
@@ -47,6 +48,6 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                     </div>
                 </div>
             </div>
-        </a>
+        </Link>
     );
 };
