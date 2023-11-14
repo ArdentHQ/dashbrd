@@ -447,6 +447,7 @@ class AlchemyPendingRequest extends PendingRequest
             mintedAt: $mintTimestamp !== null ? Carbon::createFromTimestampMs($mintTimestamp) : null,
             hasError: ! empty($error),
             info: $nftInfo,
+            type: $this->getTokenType($nft['id']['tokenMetadata']['tokenType'] ?? ''),
         );
     }
 
@@ -707,6 +708,16 @@ class AlchemyPendingRequest extends PendingRequest
         return 'https://'.self::$apiUrlPlaceholder.'.g.alchemy.com/nft/v2/';
     }
 
+    private function getTokenType(string $type): TokenType
+    {
+        return match ($type) {
+            'ERC20' => TokenType::Erc20,
+            'ERC721' => TokenType::Erc721,
+            'ERC1155' => TokenType::Erc1155,
+            default => TokenType::Unknown,
+        };
+    }
+
     private function filterNft(mixed $nft, bool $filterError = true): bool
     {
         if (Arr::get($nft, 'spamInfo.isSpam', false)) {
@@ -714,10 +725,6 @@ class AlchemyPendingRequest extends PendingRequest
         }
 
         if (Arr::has($nft, 'error') && $filterError) {
-            return false;
-        }
-
-        if (! TokenType::compare(TokenType::Erc721, Arr::get($nft, 'id.tokenMetadata.tokenType', ''))) {
             return false;
         }
 

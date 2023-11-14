@@ -175,6 +175,7 @@ class MoralisPendingRequest extends PendingRequest
                 mintedAt: null,
                 hasError: false,
                 info: null,
+                type: $this->getTokenType($nft['contract_type'] ?? ''),
             );
         })->values();
 
@@ -336,13 +337,19 @@ class MoralisPendingRequest extends PendingRequest
         return null;
     }
 
+    private function getTokenType(string $type): TokenType
+    {
+        return match ($type) {
+            'ERC20' => TokenType::Erc20,
+            'ERC721' => TokenType::Erc721,
+            'ERC1155' => TokenType::Erc1155,
+            default => TokenType::Unknown,
+        };
+    }
+
     private function filterNft(mixed $nft): bool
     {
         if (Arr::get($nft, 'possible_spam', false)) {
-            return false;
-        }
-
-        if (! TokenType::compare(TokenType::Erc721, Arr::get($nft, 'contract_type', ''))) {
             return false;
         }
 

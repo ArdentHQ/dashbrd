@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
+use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
@@ -56,6 +57,7 @@ class Collection extends Model
      */
     protected $casts = [
         'description' => StrippedHtml::class,
+        'type' => TokenType::class,
         'floor_price_retrieved_at' => 'datetime',
         'extra_attributes' => SchemalessAttributes::class,
         'fiat_value' => 'json',

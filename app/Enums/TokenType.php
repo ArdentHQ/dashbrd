@@ -10,9 +10,4 @@ enum TokenType: string
     case Erc721 = 'ERC721';
     case Erc1155 = 'ERC1155';
     case Unknown = 'UNKNOWN';
-
-    public static function compare(TokenType $type, string $value): bool
-    {
-        return strcasecmp($type->value, $value) == 0;
-    }
 }

@@ -86,13 +86,14 @@ class Web3NftHandler
                 json_encode($attributes),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
+                $nftData->type->value,
                 $this->lastRetrievedTokenNumber($nftsInCollection->get($nftData->tokenAddress)),
                 $now,
                 $now,
             ];
         });
 
-        $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
+        $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
 
         $ids = DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $dispatchJobs, $now) {
             // upsert nfts/collections (if any)
@@ -104,7 +105,7 @@ class Web3NftHandler
                 // language=postgresql
                 "
     insert into collections
-        (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, last_indexed_token_number, created_at, updated_at)
+        (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, type, last_indexed_token_number, created_at, updated_at)
     values {$valuesPlaceholders}
     on conflict (address, network_id) do update
         set name = trim(coalesce(excluded.name, collections.name)),
@@ -116,6 +117,7 @@ class Web3NftHandler
             extra_attributes = coalesce(collections.extra_attributes::jsonb, '{}') || excluded.extra_attributes::jsonb,
             minted_block = excluded.minted_block,
             minted_at = excluded.minted_at,
+            type = coalesce(excluded.type, collections.type),
             last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
     returning id, address, floor_price, supply
      ",

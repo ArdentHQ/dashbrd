@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Web3;
 
+use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Models\Token;
 use Carbon\Carbon;
@@ -38,6 +39,7 @@ class Web3NftData
         public ?Carbon $mintedAt,
         public ?bool $hasError,
         public ?string $info,
+        public TokenType $type = TokenType::Unknown,
     ) {
     }
 
