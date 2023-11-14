@@ -68,7 +68,7 @@ export const useWalletDraftGallery = ({
         void saveDraft({ ...draft, title });
     };
 
-    const reset = (draft: GalleryDraft) => {
+    const reset = (draft: GalleryDraft): void => {
         void saveDraft(draft);
     };
 
