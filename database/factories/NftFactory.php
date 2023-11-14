@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\TokenType;
 use App\Models\Collection;
 use App\Models\Wallet;
 use Brick\Math\BigInteger;
@@ -29,6 +30,7 @@ class NftFactory extends Factory
             'collection_id' => fn () => Collection::factory(),
             'name' => fn () => fake()->name(),
             'token_number' => fn () => (string) BigInteger::of(fake()->unique()->numberBetween(50, 1000) * 1e18),
+            'type' => TokenType::Erc721,
             'extra_attributes' => [
                 'images' => [
                     'thumb' => fake()->imageUrl(360, 360, 'animals', true),
