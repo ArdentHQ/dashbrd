@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\CurrencyCode;
+use App\Enums\TokenType;
 use App\Models\Collection as CollectionModel;
 use App\Models\Traits\BelongsToUser;
 use App\Models\Traits\CanBeLiked;
@@ -79,8 +80,9 @@ class Gallery extends Model implements Viewable
     public function nfts(): BelongsToMany
     {
         return $this->belongsToMany(Nft::class, 'nft_gallery')
-            ->whereNull('nft_gallery.deleted_at')
-            ->withPivot('order_index');
+                    ->where('type', TokenType::Erc721)
+                    ->whereNull('nft_gallery.deleted_at')
+                    ->withPivot('order_index');
     }
 
     public function value(CurrencyCode $currency): ?float
@@ -95,7 +97,7 @@ class Gallery extends Model implements Viewable
      */
     public function collections(): Collection
     {
-        return CollectionModel::whereIn('id', function ($query) {
+        return CollectionModel::where('type', TokenType::Erc721)->whereIn('id', function ($query) {
             return $query->select('collection_id')->from('nfts')->whereIn('nfts.id', function ($query) {
                 return $query->select('nft_id')->from('nft_gallery')->where('gallery_id', $this->id);
             });

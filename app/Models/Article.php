@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\ArticleCategoryEnum;
+use App\Enums\TokenType;
 use App\Models\Traits\BelongsToUser;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
@@ -82,7 +83,9 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function collections(): BelongsToMany
     {
-        return $this->belongsToMany(Collection::class, 'article_collection')->withPivot('order_index');
+        return $this->belongsToMany(Collection::class, 'article_collection')
+                    ->where('type', TokenType::Erc721)
+                    ->withPivot('order_index');
     }
 
     /**

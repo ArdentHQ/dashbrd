@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Enums\TokenType;
 use App\Models\Collection;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,7 @@ trait InteractsWithCollections
                 ->select('collections.*')
                 ->where('collections.id', '=', $this->option('collection-id'))
                 ->withoutSpamContracts()
+                ->where('type', TokenType::Erc721)
                 ->first();
 
             $collection && $callback($collection, 0);
@@ -34,6 +36,7 @@ trait InteractsWithCollections
             ->when($queryCallback !== null, $queryCallback)
             ->select('collections.*')
             ->withoutSpamContracts()
+            ->where('type', TokenType::Erc721)
             ->when($limit !== null, fn ($query) => $query
                 ->limit($limit)
                 ->get()
