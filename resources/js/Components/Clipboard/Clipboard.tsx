@@ -2,7 +2,7 @@ import cn from "classnames";
 import { type HTMLAttributes, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { type ReferenceElement } from "tippy.js";
+import { type Placement, type ReferenceElement } from "tippy.js";
 import { Icon } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
@@ -14,6 +14,7 @@ export interface ClipboardProperties extends HTMLAttributes<HTMLDivElement> {
     copiedIconClass?: string;
     copiedIcon?: React.ReactNode;
     zIndex?: number;
+    tooltipPlacement?: Placement;
 }
 
 export const Clipboard = ({
@@ -24,6 +25,7 @@ export const Clipboard = ({
     copiedIconClass,
     copiedIcon,
     zIndex,
+    tooltipPlacement,
 }: ClipboardProperties): JSX.Element => {
     const { t } = useTranslation();
     const reference = useRef<(ReferenceElement & HTMLDivElement) | null>(null);
@@ -44,6 +46,7 @@ export const Clipboard = ({
             trigger={!isLgAndAbove ? "click" : "mouseenter focus"}
             hideAfter={!isLgAndAbove ? 1000 : undefined}
             zIndex={zIndex}
+            placement={tooltipPlacement}
             touch
         >
             <div

@@ -181,7 +181,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName
         }
 
         try {
-            return $this->hasPermissionTo('admin:access');
+            return $this->hasPermissionTo('admin:access', 'admin');
         } catch (PermissionDoesNotExist $e) {
             return false;
         }

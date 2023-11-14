@@ -41,7 +41,7 @@ export const Overlay = ({
             ref={reference}
             {...properties}
             className={cn(
-                "fixed inset-0 z-40 mt-14 flex h-screen w-screen flex-col items-center justify-start overflow-auto bg-white dark:bg-theme-dark-950/90 xs:mt-18 sm:mt-0 sm:justify-center",
+                "fixed inset-0 z-40 mt-14 flex h-screen w-screen flex-col items-center justify-start overflow-auto bg-white dark:bg-theme-dark-900/90 xs:mt-18 sm:mt-0 sm:justify-center",
                 className,
                 {
                     "bg-opacity-60": !showCloseButton,
@@ -49,7 +49,7 @@ export const Overlay = ({
                 },
             )}
         >
-            <div className="auth-overlay-shadow w-full rounded-none bg-white dark:bg-theme-dark-950 sm:w-[29rem] sm:rounded-3xl">
+            <div className="auth-overlay-shadow w-full rounded-none bg-white dark:bg-theme-dark-900 sm:w-[29rem] sm:rounded-3xl">
                 <div className="mt-8 flex flex-col items-center space-y-6">{children}</div>
             </div>
             {belowContent}

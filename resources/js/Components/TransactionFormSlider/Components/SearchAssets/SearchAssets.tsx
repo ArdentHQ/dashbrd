@@ -36,6 +36,7 @@ const AssetList = ({
                             })}
                             isSelected={isTruthy(asset) && asset.symbol === optionAsset.symbol}
                             chainId={optionAsset.chain_id}
+                            badgeClassname="dark:border-theme-dark-800 dark:group-hover:border-theme-dark-700"
                         />
                     }
                     classNames={{
@@ -86,12 +87,12 @@ export const SearchAssets = ({
                     }}
                     placeholder={t("pages.send_receive_panel.send.search_dropdown.placeholder")}
                     data-testid="InitiationToken__SearchInput"
-                    className="flex w-full border-0 text-theme-secondary-900 transition placeholder:text-theme-secondary-500 focus:border-0 focus:outline-none focus:ring-0 dark:bg-theme-dark-800 dark:text-theme-dark-50"
+                    className="flex w-full border-0 text-theme-secondary-900 transition placeholder:text-theme-secondary-500 focus:border-0 focus:outline-none focus:ring-0 dark:bg-theme-dark-800 dark:text-theme-dark-50 dark:placeholder:text-theme-dark-400"
                 />
                 <Icon
                     name="MagnifyingGlass"
                     size="md"
-                    className="flex-shrink-0"
+                    className="flex-shrink-0 dark:text-theme-dark-300"
                 />
             </div>
             {isSearching && (
@@ -105,7 +106,7 @@ export const SearchAssets = ({
             )}
             {!isSearching && assets.length === 0 && (
                 <div className="px-6 pb-2.5 pt-2 text-center">
-                    <span className="font-medium text-theme-secondary-700">
+                    <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                         {t("pages.send_receive_panel.send.search_dropdown.no_results")}
                     </span>
                 </div>
