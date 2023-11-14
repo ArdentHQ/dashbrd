@@ -103,9 +103,9 @@ export const UserDetails = ({
                                         <div>
                                             <PortfolioBreakdownLine assets={assets} />
                                             <div className="mt-2 flex items-center justify-between">
-                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-600">
+                                                <p className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200">
                                                     {t("common.tokens")}:{" "}
-                                                    <span className="text-theme-secondary-900 dark:text-theme-dark-200">
+                                                    <span className="text-theme-secondary-900 dark:text-theme-dark-50">
                                                         {Math.max(wallet.totalTokens, 1)}
                                                     </span>
                                                 </p>
