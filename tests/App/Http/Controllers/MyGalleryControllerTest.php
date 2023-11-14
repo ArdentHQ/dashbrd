@@ -12,7 +12,6 @@ use App\Support\Cache\GalleryCache;
 use App\Support\Cache\UserCache;
 use App\Support\Facades\Signature;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 
@@ -31,18 +30,16 @@ it('can render the "my galleries" page', function () {
 it('should include nft count when rendering the "my galleries" page', function () {
     $user = createUser();
 
-    expect($user->nfts->count())->toBe(0);
-
-    Nft::factory(10)->create(['wallet_id' => $user->wallet->id]);
+    expect($user->nfts()->count())->toBe(0);
 
     $this->actingAs($user)
         ->get(route('my-galleries'))
         ->assertStatus(200)
         ->assertInertia(fn (AssertableInertia $page) => $page->where('nftCount', 0));
 
-    $user->refresh();
+    Nft::factory(10)->create(['wallet_id' => $user->wallet->id]);
 
-    expect($user->nfts->count())->toBe(10);
+    expect($user->nfts()->count())->toBe(10);
 
     $this->actingAs($user->fresh())
         ->get(route('my-galleries'))
@@ -66,67 +63,6 @@ describe('user is signed', function () {
             ->assertStatus(200);
     });
 
-    it('should render the "create" page with paginated collections and NFTs', function () {
-        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-        Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
-
-        $user = createUser();
-
-        $userCollections = Collection::factory()->count(5)->create();
-
-        $userCollections->each(function (Collection $collection) use ($user) {
-            // create fewer NFTs for the last two collections
-
-            Nft::factory()->count(4)->create([
-                'wallet_id' => $user->wallet_id,
-                'collection_id' => $collection->id,
-            ]);
-        });
-
-        $this->actingAs($user)
-            ->get(route('my-galleries.create'))
-            ->assertStatus(200)
-            ->assertInertia(
-                fn (AssertableInertia $page) => $page
-                    ->has('collections.paginated.data', 4)
-                    ->where('collections.paginated.data.0.name', $userCollections[0]->name)
-                    ->has('nfts', 12)
-            );
-    });
-
-    it('should exclude unowned NFTs in the "create" page', function () {
-        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-        Config::set('dashbrd.gallery.pagination.nfts_per_page', 5);
-
-        $user = createUser();
-
-        $userCollections = Collection::factory()->count(5)->create();
-
-        $secondUser = createUser();
-
-        Nft::factory()->count(2)->create([
-            'wallet_id' => $secondUser->wallet_id,
-            'collection_id' => $userCollections->first()->id,
-        ]);
-
-        $userCollections->each(function (Collection $collection) use ($user) {
-            Nft::factory()->count(3)->create([
-                'wallet_id' => $user->wallet_id,
-                'collection_id' => $collection->id,
-            ]);
-        });
-
-        $this->actingAs($user)
-            ->get(route('my-galleries.create'))
-            ->assertStatus(200)
-            ->assertInertia(
-                fn (AssertableInertia $page) => $page
-                    ->has('collections.paginated.data', 4)
-                    ->where('collections.paginated.data.0.name', $userCollections[0]->name)
-                    ->has('nfts', 12)
-            );
-    });
-
     it('can render the "edit" page if owns the gallery', function () {
         $user = createUser();
 
@@ -137,64 +73,6 @@ describe('user is signed', function () {
         $this->actingAs($user)
             ->get(route('my-galleries.edit', $gallery))
             ->assertStatus(200);
-    });
-
-    it('should render the "edit" page with paginated collections and NFTs', function () {
-        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-        Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
-
-        $user = createUser();
-
-        $userCollections = Collection::factory()->count(2)->create();
-
-        $userCollections->each(function (Collection $collection) use ($user) {
-            Nft::factory()->count(3)->create([
-                'wallet_id' => $user->wallet_id,
-                'collection_id' => $collection->id,
-            ]);
-        });
-
-        $this->actingAs($user)
-            ->get(route('my-galleries.create'))
-            ->assertStatus(200)
-            ->assertInertia(
-                fn (AssertableInertia $page) => $page
-                    ->has('collections.paginated.data', 2)
-                    ->has('nfts', 6)
-            );
-    });
-
-    it('should exclude unowned NFTs in the "edit" page', function () {
-        Config::set('dashbrd.gallery.pagination.collections_per_page', 4);
-        Config::set('dashbrd.gallery.pagination.nfts_per_page', 5);
-
-        $user = createUser();
-
-        $userCollections = Collection::factory()->count(5)->create();
-
-        $secondUser = createUser();
-
-        Nft::factory()->count(2)->create([
-            'wallet_id' => $secondUser->wallet_id,
-            'collection_id' => $userCollections->first()->id,
-        ]);
-
-        $userCollections->each(function (Collection $collection) use ($user) {
-            Nft::factory()->count(3)->create([
-                'wallet_id' => $user->wallet_id,
-                'collection_id' => $collection->id,
-            ]);
-        });
-
-        $this->actingAs($user)
-            ->get(route('my-galleries.create'))
-            ->assertStatus(200)
-            ->assertInertia(
-                fn (AssertableInertia $page) => $page
-                    ->has('collections.paginated.data', 4)
-                    ->where('collections.paginated.data.0.name', $userCollections[0]->name)
-                    ->has('nfts', 12)
-            );
     });
 
     it('cannot open the "edit" page if does not owns the gallery', function () {

@@ -30,22 +30,22 @@ import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 interface Properties {
     auth: PageProps["auth"];
-    nfts: App.Data.Gallery.GalleryNftData[];
-    collections: App.Data.Gallery.GalleryCollectionsData;
     title: string;
     gallery?: App.Data.Gallery.GalleryData;
     nftsPerPage: number;
+    collectionsPerPage: number;
     nftLimit: number;
+    nftsCount: number;
 }
 
 const Create = ({
     auth,
     title,
-    nfts: paginatedNfts,
-    collections: paginatedCollections,
     gallery,
     nftsPerPage,
     nftLimit,
+    nftsCount,
+    collectionsPerPage,
 }: Properties): JSX.Element => {
     assertUser(auth.user);
     assertWallet(auth.wallet);
@@ -183,8 +183,8 @@ const Create = ({
         <LayoutWrapper
             withSlider
             toastMessage={props.toast}
-            belowHeader={<NoNftsOverlay show={paginatedNfts.length === 0} />}
-            displayAuthOverlay={paginatedNfts.length > 0 && initialized}
+            belowHeader={<NoNftsOverlay show={nftsCount === 0} />}
+            displayAuthOverlay={nftsCount > 0 && initialized}
             mustBeSigned={gallery !== undefined}
         >
             <Head title={title} />
@@ -226,14 +226,8 @@ const Create = ({
 
                     <div className="space-y-4">
                         <GalleryNfts
-                            nfts={paginatedNfts}
                             nftsPerPage={nftsPerPage}
-                            pageMeta={{
-                                first_page_url: paginatedCollections.paginated.meta.first_page_url,
-                                total: paginatedCollections.paginated.meta.total,
-                                next_page_url: paginatedCollections.paginated.meta.next_page_url,
-                                per_page: paginatedCollections.paginated.meta.per_page,
-                            }}
+                            collectionsPerPage={collectionsPerPage}
                         >
                             <NftGridEditable
                                 onChange={updateSelectedNfts}

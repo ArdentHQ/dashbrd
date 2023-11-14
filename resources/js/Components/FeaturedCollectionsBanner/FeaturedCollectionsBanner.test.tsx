@@ -68,7 +68,6 @@ describe("FeaturedCollectionsBanner", () => {
             render(<FeaturedCollectionsBanner collections={collections} />, { breakpoint });
 
             for (let index = 0; index < collectionsCount; index++) {
-                expect(screen.getByTestId(`CollectionCarousel__entry__no_image--${index}`)).toBeInTheDocument();
                 expect(
                     screen.getByText(`This gallery consists of ${collectionsCount} collections`),
                 ).toBeInTheDocument();

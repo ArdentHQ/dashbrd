@@ -19,9 +19,8 @@ interface NftsResponse {
 }
 
 interface GalleryNftsProperties {
-    nfts: App.Data.Gallery.GalleryNftData[];
-    pageMeta?: Partial<CollectionsPageMeta>;
     nftsPerPage?: number;
+    collectionsPerPage?: number;
 }
 
 interface NftsPageMetaState {
@@ -42,17 +41,13 @@ const makeNftPageMeta = (collectionSlugs: string[]): NftsPageMeta => {
 
     return meta;
 };
-export const useGalleryNtfs = ({
-    nfts: loadedNfts,
-    pageMeta: collectionMeta,
-    nftsPerPage: nftCountPerPage,
-}: GalleryNftsProperties): GalleryNftsState => {
+export const useGalleryNtfs = ({ nftsPerPage, collectionsPerPage }: GalleryNftsProperties): GalleryNftsState => {
     const [loadingCollections, setLoadingCollections] = useState(false);
     const [isSearchingCollections, setIsSearchingCollections] = useState(false);
     const { newAbortSignal, cancelPreviousRequest, isCancel } = useAbortController();
     const { authenticatedAction } = useAuthorizedAction();
 
-    const [nfts, setNfts] = useState<GalleryNftData[]>(loadedNfts);
+    const [nfts, setNfts] = useState<GalleryNftData[]>([]);
 
     const collections = useMemo(
         () => groupBy(nfts, (nft: App.Data.Gallery.GalleryNftData) => nft.collectionSlug),
@@ -60,13 +55,11 @@ export const useGalleryNtfs = ({
     ) as Record<string, NftData[]>;
 
     const [pageMeta, setPageMeta] = useState<CollectionsPageMeta>({
-        first_page_url: collectionMeta?.first_page_url,
-        per_page: collectionMeta?.per_page ?? 10,
-        next_page_url: collectionMeta?.next_page_url ?? null,
-        total: collectionMeta?.total ?? 0,
+        total: 0,
+        per_page: collectionsPerPage ?? 20,
+        next_page_url: route("my-galleries.collections", { page: 1 }),
+        first_page_url: route("my-galleries.collections", { page: 1 }),
     });
-
-    const nftsPerPage = nftCountPerPage ?? 10;
 
     const [nftsPageMeta, setNftsPageMeta] = useState<NftsPageMeta>(() => makeNftPageMeta(Object.keys(collections)));
 
@@ -128,7 +121,9 @@ export const useGalleryNtfs = ({
 
         const remainingNfts = getRemainingNftCount(nft);
 
-        return remainingNfts > nftsPerPage ? nftsPerPage : remainingNfts;
+        const nftCountPerPage = nftsPerPage ?? 10;
+
+        return remainingNfts > nftCountPerPage ? nftCountPerPage : remainingNfts;
     };
 
     const loadingNfts = (nft: GalleryNftData): boolean => nftsPageMeta[nft.collectionSlug].isLoading;
@@ -158,7 +153,6 @@ export const useGalleryNtfs = ({
 
         setLoadingCollections(true);
 
-        // let url = new URLSearchParams(nextPageUrl);
         const url = new URL(nextPageUrl);
 
         if (query !== undefined) {
@@ -204,10 +198,6 @@ export const useGalleryNtfs = ({
     };
 
     const searchNfts = async (query?: string): Promise<void> => {
-        if (!isTruthy(pageMeta.first_page_url)) {
-            throw new Error("[searchNfts] First page url is not defined.");
-        }
-
         setIsSearchingCollections(true);
         await fetchCollections(pageMeta.first_page_url, query);
         setIsSearchingCollections(false);

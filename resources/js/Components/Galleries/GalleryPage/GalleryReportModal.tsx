@@ -138,7 +138,9 @@ export const GalleryReportModal = ({
                 focus={radioButtonReference}
                 isDisabled={processing || data.reason === ""}
             >
-                <p className="leading-6 text-theme-secondary-700">{t("pages.reports.description")}</p>
+                <p className="leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
+                    {t("pages.reports.description")}
+                </p>
 
                 <div
                     className="mt-3 space-y-3"
@@ -158,7 +160,9 @@ export const GalleryReportModal = ({
                                     setData("reason", event.target.value);
                                 }}
                             />
-                            <span className="text-theme-secondary-700">{reportReasons[reason]}</span>
+                            <span className="text-theme-secondary-700 dark:text-theme-dark-200">
+                                {reportReasons[reason]}
+                            </span>
                         </label>
                     ))}
                 </div>

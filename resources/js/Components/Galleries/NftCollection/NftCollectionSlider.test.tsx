@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { expect } from "vitest";
 import { GalleryContext } from "@/Components/Galleries/Hooks/useEditableGalleryContext";
-import { type CollectionsPageMeta, GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
+import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
 import { NftSelectionHook } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { NftCollectionSlider } from "@/Components/Galleries/NftCollection/NftCollectionSlider";
 import { SliderContext, useSliderContext } from "@/Components/Slider";
@@ -19,15 +19,7 @@ describe("NftCollectionSlider", () => {
 
     let TestButton: () => JSX.Element;
 
-    let Component: ({
-        collectionsOverride,
-        collectionCount,
-        meta,
-    }: {
-        collectionsOverride?: App.Data.Gallery.GalleryNftData[];
-        collectionCount?: number;
-        meta?: Partial<CollectionsPageMeta>;
-    }) => JSX.Element;
+    let Component: () => JSX.Element;
 
     const addToGalleryMock = vi.fn();
     const removeFromGalleryMock = vi.fn();
@@ -62,11 +54,9 @@ describe("NftCollectionSlider", () => {
     const firstNft = `NftImageGrid__element--${nfts[0].tokenNumber}`;
     const secondNft = `NftImageGrid__element--${nfts[1].tokenNumber}`;
 
-    const collectionsOverride = [...nfts] as App.Data.Gallery.GalleryNftData[];
-
     beforeEach(() => {
         server.use(
-            requestMock(`${baseUrl}/collections`, {
+            requestMock(`${baseUrl}/my-galleries/collections`, {
                 nfts,
                 collections: {
                     paginated: {
@@ -92,15 +82,7 @@ describe("NftCollectionSlider", () => {
         };
 
         // eslint-disable-next-line react/display-name
-        Component = ({
-            collectionsOverride,
-            collectionCount,
-            meta,
-        }: {
-            collectionsOverride?: App.Data.Gallery.GalleryNftData[];
-            collectionCount?: number;
-            meta?: Partial<CollectionsPageMeta>;
-        }): JSX.Element => {
+        Component = (): JSX.Element => {
             const [isSliderOpen, setSliderOpen] = useState(false);
 
             return (
@@ -116,16 +98,7 @@ describe("NftCollectionSlider", () => {
                             nftLimit: 16,
                         }}
                     >
-                        <GalleryNfts
-                            nfts={collectionsOverride ?? nfts}
-                            pageMeta={{
-                                first_page_url: `${baseUrl}/collections?page=1`,
-                                next_page_url: `${baseUrl}/collections?page=1`,
-                                total: collectionCount ?? 7,
-                                per_page: 5,
-                                ...meta,
-                            }}
-                        >
+                        <GalleryNfts>
                             <NftSelectionHook>
                                 <NftCollectionSlider />
                                 <TestButton />
@@ -197,7 +170,7 @@ describe("NftCollectionSlider", () => {
     });
 
     it("should allow deselecting nfts", async () => {
-        render(<Component collectionsOverride={nfts} />);
+        render(<Component />);
 
         await userEvent.click(screen.getByTestId("TestButton"));
         await userEvent.click(screen.getAllByTestId(accordionHeader)[0]);
@@ -227,7 +200,7 @@ describe("NftCollectionSlider", () => {
         server.resetHandlers();
 
         server.use(
-            requestMockOnce(`${baseUrl}/collections`, {
+            requestMockOnce(`${baseUrl}/my-galleries/collections`, {
                 nfts,
                 collections: {
                     paginated: {
@@ -238,7 +211,7 @@ describe("NftCollectionSlider", () => {
             }),
         );
 
-        const component = render(<Component collectionsOverride={collectionsOverride} />);
+        const component = render(<Component />);
 
         await userEvent.click(screen.getByTestId("TestButton"));
 
@@ -263,14 +236,14 @@ describe("NftCollectionSlider", () => {
             }),
         );
 
-        component.rerender(<Component collectionsOverride={[nfts[1]]} />);
+        component.rerender(<Component />);
         await userEvent.type(searchInput, "alpha");
 
         expect(screen.queryByText(collectionName)).not.toBeInTheDocument();
     });
 
     it("should clear the query with the clear button", async () => {
-        render(<Component collectionsOverride={collectionsOverride} />);
+        render(<Component />);
 
         await userEvent.click(screen.getByTestId("TestButton"));
 
@@ -293,7 +266,7 @@ describe("NftCollectionSlider", () => {
         server.resetHandlers();
 
         server.use(
-            requestMock(`${baseUrl}/collections`, {
+            requestMock(`${baseUrl}/my-galleries/collections`, {
                 nfts,
                 collections: {
                     paginated: {
@@ -311,7 +284,7 @@ describe("NftCollectionSlider", () => {
         expect(screen.queryByTestId("NftCollectionSlider__loadMoreCollections")).not.toBeInTheDocument();
 
         server.use(
-            requestMock(`${baseUrl}/collections`, {
+            requestMock(`${baseUrl}/my-galleries/collections`, {
                 nfts,
                 collections: {
                     paginated: {
@@ -322,13 +295,7 @@ describe("NftCollectionSlider", () => {
             }),
         );
 
-        rerender(
-            <Component
-                meta={{ next_page_url: "https:/test?page=2" }}
-                collectionsOverride={collectionsOverride}
-                collectionCount={15}
-            />,
-        );
+        rerender(<Component />);
 
         await userEvent.click(screen.getByTestId("TestButton"));
 
@@ -344,7 +311,7 @@ describe("NftCollectionSlider", () => {
         server.resetHandlers();
         server.use(
             requestMock(
-                `${baseUrl}/collections`,
+                `${baseUrl}/my-galleries/collections`,
                 {
                     nfts: newNfts,
                     collections: {
@@ -375,12 +342,7 @@ describe("NftCollectionSlider", () => {
             ),
         );
 
-        render(
-            <Component
-                collectionsOverride={[nfts[0]]}
-                collectionCount={10}
-            />,
-        );
+        render(<Component />);
 
         await userEvent.click(screen.getByTestId("TestButton"));
 

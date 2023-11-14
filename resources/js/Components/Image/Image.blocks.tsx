@@ -1,5 +1,6 @@
 import cn from "classnames";
-import { ImageLoadError } from "@/images";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
+import { ImageLoadError, ImageLoadErrorDark } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const ImageErrorPlaceholder = ({
@@ -8,19 +9,24 @@ export const ImageErrorPlaceholder = ({
 }: {
     className?: string;
     errorMessage?: string;
-}): JSX.Element => (
-    <div
-        data-testid="ImageErrorPlaceholer"
-        className={cn("bg-theme-secondary-100 p-4", className)}
-    >
-        <div className="flex h-full flex-col items-center justify-center">
-            <ImageLoadError className="mx-auto max-w-23" />
+}): JSX.Element => {
+    const { isDark } = useDarkModeContext();
 
-            {isTruthy(errorMessage) && (
-                <div className="mx-auto mt-[0.625rem] max-w-[12rem] text-center text-sm font-medium text-theme-secondary-700">
-                    {errorMessage}
-                </div>
-            )}
+    return (
+        <div
+            data-testid="ImageErrorPlaceholer"
+            className={cn("bg-theme-secondary-100 p-4 dark:bg-theme-dark-800", className)}
+        >
+            <div className="flex h-full flex-col items-center justify-center">
+                {!isDark && <ImageLoadError className="mx-auto max-w-23" />}
+                {isDark && <ImageLoadErrorDark className="mx-auto max-w-23" />}
+
+                {isTruthy(errorMessage) && (
+                    <div className="mx-auto mt-[0.625rem] max-w-[12rem] text-center text-sm font-medium text-theme-secondary-700">
+                        {errorMessage}
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
