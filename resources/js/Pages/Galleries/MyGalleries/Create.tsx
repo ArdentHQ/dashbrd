@@ -17,10 +17,11 @@ import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { usePrevious } from "@/Hooks/usePrevious";
 import { useToasts } from "@/Hooks/useToasts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { UseGalleryFormProperties, useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
-import { GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
+import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { useWalletDraftGallery } from "@/Pages/Galleries/hooks/useWalletDraftGallery";
 import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { assertUser, assertWallet } from "@/Utils/assertions";
@@ -28,7 +29,6 @@ import { fileToImageDataURI } from "@/Utils/file-to-image-data-uri";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
-import { usePrevious } from "@/Hooks/usePrevious";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -85,7 +85,6 @@ const Create = ({
         draft,
         deleteDraft: (): void => {
             void remove(draft.id);
-            void reset();
 
             replaceUrlQuery({ draftId: "" });
         },
@@ -98,16 +97,16 @@ const Create = ({
             return;
         }
 
-        const redirectToNewDraft = async (existingDraft: GalleryDraft) => {
+        const redirectToNewDraft = async (existingDraft: GalleryDraft): Promise<void> => {
             const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address });
             reset(newDraft);
-            replaceUrlQuery({ draftId: newDraft.id?.toString() });
+            replaceUrlQuery({ draftId: newDraft.id.toString() });
         };
 
         // Wallet is changed while editing.
         // Create a new draft, copy title & cover from the existin, add redirect to the new.
         if (isTruthy(previousWallet) && previousWallet !== auth.wallet?.address) {
-            redirectToNewDraft(draft);
+            void redirectToNewDraft(draft);
             return;
         }
 
@@ -120,7 +119,6 @@ const Create = ({
         // Clean url if draft is empty.
         if (!isTruthy(draft.id) && isTruthy(draftId)) {
             replaceUrlQuery({ draftId: "" });
-            return;
         }
     }, [draft.id, isLoading, isSaving, auth.wallet.address, previousWallet, data]);
 
