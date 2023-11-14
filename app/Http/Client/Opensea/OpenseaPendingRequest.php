@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Client\Opensea;
 
 use App\Data\Web3\Web3NftCollectionFloorPrice;
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\OpenseaChain;
 use App\Exceptions\ConnectionException;
@@ -71,10 +71,10 @@ class OpenseaPendingRequest extends PendingRequest
         }
     }
 
-    public function nft(Chains $chains, string $address, string $identifier): ?OpenseaNftDetails
+    public function nft(Chain $chain, string $address, string $identifier): ?OpenseaNftDetails
     {
         try {
-            $chain = OpenseaChain::fromChainId($chains->value)->value;
+            $chain = OpenseaChain::fromChainId($chain->value)->value;
 
             $response = self::get(
                 url: sprintf('chain/%s/contract/%s/nfts/%s', $chain, $address, $identifier),

@@ -29,6 +29,17 @@ return [
         ],
     ],
 
+    'articles' => [
+        'title' => 'Articles',
+        'featured_collections' => 'Featured Collections',
+        'placeholder_more_soon' => 'More Soon',
+        'no_articles' => 'No articles have been published yet. Please check back later!',
+        'header_title' => 'Explore our collection of',
+        'header_suffix_one' => 'published article',
+        'header_suffix_other' => 'published articles',
+        'audio_version' => 'Audio version',
+        'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
+    ],
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
@@ -62,6 +73,13 @@ return [
                 'LABEL_SALE' => 'Sale',
             ],
         ],
+        'articles' => [
+            'no_articles' => 'No articles have been linked to this collection as of now.',
+            'no_articles_with_filters' => 'We could not find any articles matching your search criteria, please try again!',
+            'search_placeholder' => 'Search in Articles',
+            'sort_latest' => 'Latest',
+            'sort_popularity' => 'Most Popular',
+        ],
         'search' => [
             'loading_results' => 'Loading results...',
             'no_results' => 'We could not find anything matching your search criteria, please try again!',
@@ -81,6 +99,7 @@ return [
         ],
         'menu' => [
             'collection' => 'Collection',
+            'articles' => 'Articles',
             'activity' => 'Activity',
         ],
         'hidden_modal' => [
@@ -140,7 +159,7 @@ return [
         'search' => [
             'loading_results' => 'Loading results...',
             'no_results' => 'We could not find anything matching your search criteria, please try again!',
-            'placeholder' => 'Search by Galleries',
+            'placeholder' => 'Search by name or curator address',
             'placeholder_nfts' => 'Search by NFTs',
             'error' => 'Could not load search results. Please try again later.',
         ],
@@ -280,7 +299,7 @@ return [
             ],
             'search_dropdown' => [
                 'placeholder' => 'Search token',
-                'no_results' => 'No results',
+                'no_results' => 'No Results',
                 'error' => 'Error occurred while searching tokens.',
             ],
             'transaction_time' => 'Transaction Time: ~{{ time }} minutes',

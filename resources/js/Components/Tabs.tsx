@@ -1,8 +1,10 @@
 import cn from "classnames";
 import { type AnchorHTMLAttributes, type ButtonHTMLAttributes, forwardRef, type HTMLAttributes } from "react";
 import { Icon, type IconName } from "./Icon";
+import { Link as InertiaLink } from "@/Components/Link";
 
-interface TabAnchorProperties extends AnchorHTMLAttributes<HTMLAnchorElement> {
+interface TabAnchorProperties extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
+    href: string;
     disabled?: boolean;
     selected?: boolean;
 }
@@ -52,7 +54,7 @@ const getTabClasses = ({
             {
                 "border-transparent bg-white text-theme-secondary-900 shadow-sm dark:bg-theme-dark-800 dark:text-theme-dark-50":
                     selected,
-                "active:bg-theme-secondary-200 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-900":
+                "active:bg-theme-secondary-200 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-900 dark:text-theme-dark-200":
                     !selected && !disabled,
                 "cursor-not-allowed focus:bg-transparent active:bg-transparent dark:text-theme-dark-400": disabled,
             },
@@ -75,7 +77,7 @@ const getTabClasses = ({
 
 const Link = forwardRef<HTMLAnchorElement, TabAnchorProperties>(
     ({ className, disabled = false, selected = false, ...properties }, reference): JSX.Element => (
-        <a
+        <InertiaLink
             ref={reference}
             {...properties}
             className={getTabClasses({ variant: "vertical", disabled, selected, className })}
@@ -83,6 +85,17 @@ const Link = forwardRef<HTMLAnchorElement, TabAnchorProperties>(
     ),
 );
 Link.displayName = "Tabs.Link";
+
+const DisabledLink = forwardRef<HTMLAnchorElement, Omit<TabAnchorProperties, "href">>(
+    ({ className, disabled = false, selected = false, ...properties }, reference): JSX.Element => (
+        <span
+            ref={reference}
+            {...properties}
+            className={getTabClasses({ variant: "vertical", disabled, selected, className })}
+        />
+    ),
+);
+DisabledLink.displayName = "Tabs.DisabledLink";
 
 const Button = forwardRef<HTMLButtonElement, TabButtonProperties>(
     ({ className, disabled, selected = false, children, icon, ...properties }, reference): JSX.Element => (
@@ -105,12 +118,13 @@ const Button = forwardRef<HTMLButtonElement, TabButtonProperties>(
 Button.displayName = "Tabs.Button";
 
 interface WrapperProperties extends HTMLAttributes<HTMLDivElement> {
+    wrapperClassName?: string;
     selected?: boolean;
     disabled?: boolean;
 }
 
-export const List = ({ className, ...properties }: WrapperProperties): JSX.Element => (
-    <div className="overflow-x-auto">
+export const List = ({ wrapperClassName, className, ...properties }: WrapperProperties): JSX.Element => (
+    <div className={cn("overflow-x-auto", wrapperClassName)}>
         <div
             className={cn(
                 "inline-flex w-full max-w-full rounded-full bg-theme-secondary-100 p-1 dark:bg-theme-dark-950 sm:w-auto",
@@ -121,4 +135,4 @@ export const List = ({ className, ...properties }: WrapperProperties): JSX.Eleme
     </div>
 );
 
-export const Tabs = Object.assign(List, { Button, Link });
+export const Tabs = Object.assign(List, { Button, Link, DisabledLink });

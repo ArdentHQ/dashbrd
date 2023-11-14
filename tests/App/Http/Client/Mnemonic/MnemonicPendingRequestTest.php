@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Enums\Chains;
+use App\Enums\Chain;
 use App\Enums\NftTransferType;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
@@ -36,7 +36,7 @@ it('should throw a custom exception on connection failures', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chains::Polygon, $collection->address);
+    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(ConnectionException::class);
 
 it('should throw on 401', function () {
@@ -50,7 +50,7 @@ it('should throw on 401', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chains::Polygon, $collection->address);
+    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(Exception::class);
 
 it('should throw a custom exception on rate limits', function () {
@@ -66,7 +66,7 @@ it('should throw a custom exception on rate limits', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chains::Polygon, $collection->address);
+    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(RateLimitException::class);
 
 it('should not retry request on 400', function () {
@@ -85,7 +85,7 @@ it('should not retry request on 400', function () {
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
     ]);
 
-    expect(fn () => Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100, $from))->toThrow('400 Bad Request');
+    expect(fn () => Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100, $from))->toThrow('400 Bad Request');
 });
 
 it('should get owners', function () {
@@ -100,7 +100,7 @@ it('should get owners', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionOwners(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionOwners(Chain::Polygon, $collection->address);
 
     expect($data)->toBe(789);
 });
@@ -121,7 +121,7 @@ it('should get volume', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionVolume(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
 
     expect($data)->toBe('12300000000000000000');
 });
@@ -138,7 +138,7 @@ it('should handle no volume', function ($request) {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionVolume(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
 
     expect($data)->toBe(null);
 })->with([
@@ -171,7 +171,7 @@ it('should fetch nft collection traits', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(25);
 });
@@ -198,7 +198,7 @@ it('should fetch nft collection traits with pagination', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(500 + 500 + 0 + 0);
 });
@@ -219,7 +219,7 @@ it('should fetch nft collection traits and deduplicate', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(1);
 });
@@ -240,7 +240,7 @@ it('should circuit break when fetching nft collection traits', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chains::Polygon, $collection->address);
+    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(1);
 });
@@ -258,7 +258,7 @@ it('should fetch the collection activity', function () {
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 
@@ -289,7 +289,7 @@ it('should convert total to native currency by using historical price for the gi
     ]);
 
     $ethToken = Token::whereHas('network', fn ($query) => $query
-        ->where('chain_id', Chains::ETH->value)
+        ->where('chain_id', Chain::ETH->value)
         ->where('is_mainnet', true)
     )->firstOrFail();
 
@@ -301,7 +301,7 @@ it('should convert total to native currency by using historical price for the gi
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 
@@ -333,7 +333,7 @@ it('should convert total to native currency by using historical price for the pe
     ]);
 
     $ethToken = Token::whereHas('network', fn ($query) => $query
-        ->where('chain_id', Chains::ETH->value)
+        ->where('chain_id', Chain::ETH->value)
         ->where('is_mainnet', true)
     )->firstOrFail();
 
@@ -353,7 +353,7 @@ it('should convert total to native currency by using historical price for the pe
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 
@@ -388,7 +388,7 @@ it('should ignore activity with unexpected label', function () {
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 
@@ -410,7 +410,7 @@ it('should fetch activity from date', function () {
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
     ]);
 
-    $data = Mnemonic::getCollectionActivity(Chains::Polygon, $collection->address, 100, $from);
+    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100, $from);
 
     expect($data)->toHaveCount(18);
 
@@ -440,5 +440,5 @@ it('should return null floor price on 400', function () {
         'network_id' => $network->id,
     ]);
 
-    expect(Mnemonic::getNftCollectionFloorPrice(Chains::ETH, $collection->address))->toBeNull();
+    expect(Mnemonic::getNftCollectionFloorPrice(Chain::ETH, $collection->address))->toBeNull();
 });

@@ -14,30 +14,26 @@ final class RolePolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('user:assignPermissions', 'admin');
+        return $user->hasPermissionTo('role:assignPermissions', 'admin');
     }
 
     public function view(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('user:assignPermissions', 'admin');
+        return $user->hasPermissionTo('role:assignPermissions', 'admin');
     }
 
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('user:assignPermissions', 'admin');
+        return false;
     }
 
     public function update(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('user:assignPermissions', 'admin');
+        return $user->hasPermissionTo('role:assignPermissions', 'admin');
     }
 
     public function delete(User $user, Role $role): bool
     {
-        if (! $user->hasPermissionTo('user:assignPermissions', 'admin')) {
-            return false;
-        }
-
-        return $role->users->isEmpty();
+        return false;
     }
 }

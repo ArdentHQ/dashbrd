@@ -22,7 +22,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import { AuthContextProvider } from "./Contexts/AuthContext";
-import DarkModeContextProvider from "./Contexts/DarkModeContex";
+import DarkModeContextProvider from "./Contexts/DarkModeContext";
 import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
 import { CookieConsent } from "./cookieConsent";
 import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
@@ -85,6 +85,6 @@ void createInertiaApp({
         );
     },
     progress: {
-        color: "#4B5563",
+        color: "#3d4cd3", // primary-700
     },
 });

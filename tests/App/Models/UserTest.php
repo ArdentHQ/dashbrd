@@ -3,12 +3,17 @@
 declare(strict_types=1);
 
 use App\Enums\CurrencyCode;
+use App\Enums\Role;
 use App\Models\Collection;
 use App\Models\Gallery;
 use App\Models\Nft;
+use App\Models\Permission;
+use App\Models\Role as RoleModel;
 use App\Models\User;
 use App\Models\Wallet;
 use Filament\Panel;
+use Illuminate\Http\UploadedFile;
+use Spatie\Permission\PermissionRegistrar;
 
 it('can create a basic user', function () {
     $user = User::factory()->create();
@@ -292,4 +297,55 @@ it('can get filament access', function () {
     app()['env'] = 'local';
 
     expect($user->canAccessPanel(new Panel))->toBeTrue();
+});
+
+it('handles missing filament access permission', function () {
+    $user = User::factory()->editor()->create();
+
+    expect($user->canAccessPanel(new Panel))->toBeTrue();
+
+    Permission::where('name', 'admin:access')->delete();
+
+    app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+    expect($user->canAccessPanel(new Panel))->toBeFalse();
+});
+
+it('filters managers', function () {
+    $user = User::factory()->create();
+    $superadmin = User::factory()->create();
+    $admin = User::factory()->create();
+    $editor = User::factory()->create();
+
+    $editor->assignRole([
+        RoleModel::where('name', Role::Editor->value)->where('guard_name', 'admin')->firstOrFail(),
+    ])->save();
+
+    $admin->assignRole([
+        RoleModel::where('name', Role::Admin->value)->where('guard_name', 'admin')->firstOrFail(),
+    ])->save();
+
+    $superadmin->assignRole([
+        RoleModel::where('name', Role::Superadmin->value)->where('guard_name', 'admin')->firstOrFail(),
+    ])->save();
+
+    $managers = User::managers()->get();
+
+    expect($managers)->toHaveCount(3);
+
+    expect($managers->pluck('id')->toArray())->toEqualCanonicalizing([
+        $superadmin->id,
+        $admin->id,
+        $editor->id,
+    ]);
+});
+
+it('has avatar', function () {
+    $user = User::factory()->create();
+
+    $file = UploadedFile::fake()->image('avatar.png');
+
+    $user->addMedia($file)->toMediaCollection('avatar');
+
+    expect($user->getFirstMediaUrl('avatar'))->toBeString();
 });

@@ -8,19 +8,43 @@ return [
     'permissions' => [
         'user:viewAny' => 'View any User',
         'user:view' => 'View User',
-        'user:assignRole' => 'Assign User Role',
-        'user:assignPermissions' => 'Assign User Permissions',
+        'user:create' => 'Create User',
+        'user:updateAny' => 'Update any User',
+        'user:deleteAny' => 'Delete any User',
+        'user:assignPermissions' => 'Assign Permissions to User',
+        'article:create' => 'Create Article',
+        'article:viewAny' => 'View Article',
+        'article:updateAny' => 'Update any Article',
+        'article:deleteAny' => 'Delete any Article',
+        'article:restore' => 'Restore Deleted Article',
+        'article:forceDelete' => 'Force Delete Article',
         'admin:access' => 'Allow access to Admin panel',
+        'role:assignPermissions' => 'Assign Permissions to Role',
+        'report:viewAny' => 'View any Report',
+        'report:view' => 'View Report',
+        'report:update' => 'Update Report',
     ],
 
     'roles' => [
         Role::Superadmin->value => [
-            'user:viewAny', 'user:view', 'user:restore', 'user:assignRole', 'user:assignPermissions',
+            'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny', 'user:assignPermissions',
+            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
+            'role:assignPermissions',
             'admin:access',
+            'report:viewAny', 'report:view', 'report:update',
         ],
 
         Role::Admin->value => [
-            'user:viewAny', 'user:view', 'user:assignRole',
+            'user:viewAny', 'user:view', 'user:create', 'user:updateAny', 'user:deleteAny', 'user:assignPermissions',
+            'article:viewAny', 'article:create', 'article:updateAny', 'article:deleteAny', 'article:restore', 'article:forceDelete',
+            'role:assignPermissions',
+            'admin:access',
+            'report:viewAny', 'report:view', 'report:update',
+        ],
+
+        Role::Editor->value => [
+            // For the moment `article:create` also allows to update and delete own articles
+            'article:viewAny', 'article:create',
             'admin:access',
         ],
     ],

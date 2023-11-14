@@ -33,16 +33,24 @@ export const RefreshButton = ({ wallet }: { wallet: App.Data.Wallet.WalletData |
         if (isTruthy(wallet?.canRefreshCollections)) {
             return (
                 <>
-                    <p className="text-sm font-medium text-white">{t("pages.collections.refresh.title")}</p>
-                    <p className="mt-0.5 text-xs text-theme-secondary-500">{t("pages.collections.refresh.notice")}</p>
+                    <p className="text-sm font-medium text-white dark:text-theme-dark-800">
+                        {t("pages.collections.refresh.title")}
+                    </p>
+                    <p className="mt-0.5 text-xs text-theme-secondary-500 dark:text-theme-dark-300">
+                        {t("pages.collections.refresh.notice")}
+                    </p>
                 </>
             );
         }
 
         return (
             <>
-                <p className="text-sm font-medium text-white">{t("pages.collections.refresh.title")}</p>
-                <p className="mt-0.5 text-xs text-theme-secondary-500">{t("pages.collections.refresh.notice_wait")}</p>
+                <p className="text-sm font-medium text-white dark:text-theme-dark-800">
+                    {t("pages.collections.refresh.title")}
+                </p>
+                <p className="mt-0.5 text-xs text-theme-secondary-500 dark:text-theme-dark-300">
+                    {t("pages.collections.refresh.notice_wait")}
+                </p>
             </>
         );
     };

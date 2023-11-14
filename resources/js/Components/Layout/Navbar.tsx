@@ -6,6 +6,7 @@ import { Icon } from "@/Components/Icon";
 import { AppMenu } from "@/Components/Navbar/AppMenu";
 import { MobileMenu } from "@/Components/Navbar/MobileMenu";
 import { UserDetails } from "@/Components/Navbar/UserDetails";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -34,6 +35,8 @@ export const Navbar = ({
     const { t } = useTranslation();
 
     const isAuthenticated = authenticated && isTruthy(wallet) && isTruthy(user);
+
+    const { isDark, toggleDarkMode } = useDarkModeContext();
 
     const renderAddress = (): JSX.Element => {
         if (isAuthenticated) {
@@ -65,31 +68,60 @@ export const Navbar = ({
         );
     };
 
+    const renderDarkModeToggle = (): JSX.Element =>
+        isDark ? (
+            <Button
+                variant="icon"
+                icon="Moon"
+                onClick={toggleDarkMode}
+                data-testid="Navbar__darkMode__dark"
+                className="border-0 sm:border"
+                iconClass="w-5 h-5 sm:w-4 sm:h-4"
+            />
+        ) : (
+            <Button
+                variant="icon"
+                icon="Sun"
+                onClick={toggleDarkMode}
+                data-testid="Navbar__darkMode__light"
+                className="border-0 sm:border"
+                iconClass="w-5 h-5 sm:w-4 sm:h-4"
+            />
+        );
+
     return (
         <nav
             data-testid="Navbar"
             className={cn(
-                "transition-default mx-auto flex h-14 max-w-content items-center justify-between bg-white px-6 py-2 dark:bg-theme-dark-900 xs:h-18 sm:px-8 sm:py-0 2xl:px-0",
+                "transition-default mx-auto flex h-14 max-w-content items-center justify-between px-6 py-2 sm:h-18 sm:px-8 sm:py-0 2xl:px-0",
                 className,
             )}
             {...properties}
         >
-            <div className="flex items-center">
-                <MobileMenu
-                    wallet={wallet}
-                    connectWallet={connectWallet}
-                    onLogout={onLogout}
-                    currency={user?.attributes.currency}
-                    isConnectButtonDisabled={isTruthy(isMaintenanceModeActive) || connecting || !initialized}
-                />
-                <div className="flex items-center sm:space-x-4">
-                    <Logo />
+            <div className="flex flex-1 items-center justify-between">
+                <div className="flex items-center">
+                    <MobileMenu
+                        wallet={wallet}
+                        connectWallet={connectWallet}
+                        onLogout={onLogout}
+                        currency={user?.attributes.currency}
+                        isConnectButtonDisabled={isTruthy(isMaintenanceModeActive) || connecting || !initialized}
+                    />
+                    <div className="flex items-center sm:space-x-4">
+                        <Logo />
 
-                    <AppMenu />
+                        <AppMenu />
+                    </div>
                 </div>
+
+                <div className="md-lg:hidden">{renderDarkModeToggle()}</div>
             </div>
 
-            <div className="hidden items-center sm:space-x-3 md-lg:flex">{renderAddress()}</div>
+            <div className="hidden items-center sm:space-x-3 md-lg:flex">
+                {renderAddress()}
+
+                <div>{renderDarkModeToggle()}</div>
+            </div>
         </nav>
     );
 };

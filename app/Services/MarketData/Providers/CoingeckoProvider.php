@@ -8,7 +8,7 @@ use App\Contracts\MarketDataProvider;
 use App\Data\PriceHistoryData;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
-use App\Enums\Platforms;
+use App\Enums\Platform;
 use App\Enums\Service;
 use App\Http\Client\MarketData\Data\CoingeckoTokenData;
 use App\Http\Client\MarketData\Data\CoingeckoTokens;
@@ -305,7 +305,7 @@ class CoingeckoProvider implements MarketDataProvider
 
         foreach ($tokens->list() as $token) {
             $tokenPlatforms = json_decode($token['platforms'], true);
-            $filteredPlatforms = json_encode(array_intersect_key($tokenPlatforms, array_flip(Platforms::platforms())));
+            $filteredPlatforms = json_encode(array_intersect_key($tokenPlatforms, array_flip(Platform::all())));
 
             $filteredData[] = [
                 'id' => $token['coingecko_id'],

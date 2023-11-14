@@ -412,3 +412,78 @@ it('can get reporting throttle duration', function () {
 
     expect($method->invoke(new Collection))->toBeInt();
 });
+
+it('prevents reserved keywords to be used for slugs', function () {
+    $gallery = Gallery::factory()->create([
+        'name' => 'Most Valuable',
+    ]);
+
+    expect($gallery->slug)->toBe('most-valuable-1');
+
+    $gallery = Gallery::factory()->create([
+        'name' => 'Most Popular',
+    ]);
+
+    expect($gallery->slug)->toBe('most-popular-1');
+
+    $gallery = Gallery::factory()->create([
+        'name' => 'Newest',
+    ]);
+
+    expect($gallery->slug)->toBe('newest-1');
+
+    $gallery = Gallery::factory()->create([
+        'name' => 'Newest',
+    ]);
+
+    expect($gallery->slug)->toBe('newest-2');
+});
+
+it('can search galleries by name and owner address', function () {
+    $first = Gallery::factory()->create([
+        'name' => 'Super Cool',
+        'user_id' => User::factory()->withWallet('0x79e7b19926376c001a7e5acf084d7d61c0e22ba9')->create()->id,
+    ]);
+
+    $second = Gallery::factory()->create([
+        'name' => 'Not super',
+        'user_id' => User::factory()->withWallet('0x9e9be7d273c595821e8b38505b0eee2c3a84494f')->create()->id,
+    ]);
+
+    $third = Gallery::factory()->create([
+        'name' => 'Some random name',
+        'user_id' => User::factory()->withWallet('0x80715be84f1b213c1d60f8ee3bc7b1aff64e16c3')->create()->id,
+    ]);
+
+    // Search by name...
+    $galleries = Gallery::search('supe')->get();
+
+    expect($galleries->count())->toBe(2);
+    expect($galleries->contains($first))->toBeTrue();
+    expect($galleries->contains($second))->toBeTrue();
+    expect($galleries->contains($third))->toBeFalse();
+
+    // Search by address...
+    $galleries = Gallery::search('0x80715be84f1b213c1d60f8ee3bc7b1aff64e16c3')->get();
+
+    expect($galleries->count())->toBe(1);
+    expect($galleries->contains($first))->toBeFalse();
+    expect($galleries->contains($second))->toBeFalse();
+    expect($galleries->contains($third))->toBeTrue();
+
+    // Search by address case-insensitive...
+    $galleries = Gallery::search('0x80715BE84F1B213C1d60f8ee3bc7b1aff64e16c3')->get();
+
+    expect($galleries->count())->toBe(1);
+    expect($galleries->contains($first))->toBeFalse();
+    expect($galleries->contains($second))->toBeFalse();
+    expect($galleries->contains($third))->toBeTrue();
+
+    // Search by partial address is not supported...
+    $galleries = Gallery::search('0x80715be84f1b213c1d60f8')->get();
+
+    expect($galleries->count())->toBe(0);
+    expect($galleries->contains($first))->toBeFalse();
+    expect($galleries->contains($second))->toBeFalse();
+    expect($galleries->contains($third))->toBeFalse();
+});

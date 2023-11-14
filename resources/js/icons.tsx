@@ -1,6 +1,8 @@
 import { ReactComponent as ArrowDownWithLine } from "@icons/arrow-down-with-line.svg";
 import { ReactComponent as ArrowRight } from "@icons/arrow-right.svg";
 import { ReactComponent as ArrowUpArrowDown } from "@icons/arrow-up-arrow-down.svg";
+import { ReactComponent as AudioPause } from "@icons/audio-pause.svg";
+import { ReactComponent as AudioPlay } from "@icons/audio-play.svg";
 import { ReactComponent as Bars } from "@icons/bars.svg";
 import { ReactComponent as Bell } from "@icons/bell.svg";
 import { ReactComponent as BookmarkOutline } from "@icons/bookmark-outline.svg";
@@ -8,9 +10,11 @@ import { ReactComponent as Bookmark } from "@icons/bookmark.svg";
 import { ReactComponent as Alchemy } from "@icons/brands/alchemy.svg";
 import { ReactComponent as Blur } from "@icons/brands/blur.svg";
 import { ReactComponent as Coingecko } from "@icons/brands/coingecko.svg";
+import { ReactComponent as Dashbrd } from "@icons/brands/dashbrd.svg";
 import { ReactComponent as DiscordLg } from "@icons/brands/discord-lg.svg";
 import { ReactComponent as Discord } from "@icons/brands/discord.svg";
 import { ReactComponent as Etherscan } from "@icons/brands/etherscan.svg";
+import { ReactComponent as Facebook } from "@icons/brands/facebook.svg";
 import { ReactComponent as GitHubOutline } from "@icons/brands/github-outline.svg";
 import { ReactComponent as GitHub } from "@icons/brands/github.svg";
 import { ReactComponent as Mnemonic } from "@icons/brands/mnemonic.svg";
@@ -18,6 +22,7 @@ import { ReactComponent as Moralis } from "@icons/brands/moralis.svg";
 import { ReactComponent as OpenseaCircle } from "@icons/brands/opensea-circle.svg";
 import { ReactComponent as Opensea } from "@icons/brands/opensea.svg";
 import { ReactComponent as Polygonscan } from "@icons/brands/polygonscan.svg";
+import { ReactComponent as Reddit } from "@icons/brands/reddit.svg";
 import { ReactComponent as TwitterLg } from "@icons/brands/twitter-lg.svg";
 import { ReactComponent as Twitter } from "@icons/brands/twitter.svg";
 import { ReactComponent as Uniswap } from "@icons/brands/uniswap.svg";
@@ -69,6 +74,8 @@ import { ReactComponent as Menu } from "@icons/menu.svg";
 import { ReactComponent as MetamaskColored } from "@icons/metamask-colored.svg";
 import { ReactComponent as Metamask } from "@icons/metamask.svg";
 import { ReactComponent as Minus } from "@icons/minus.svg";
+import { ReactComponent as Moon } from "@icons/moon.svg";
+import { ReactComponent as Newspaper } from "@icons/newspaper.svg";
 import { ReactComponent as DiamondOpacity } from "@icons/opacity/diamond.svg";
 import { ReactComponent as ImageOpacity } from "@icons/opacity/image.svg";
 import { ReactComponent as UserTeamOpacity } from "@icons/opacity/user-team.svg";
@@ -94,6 +101,7 @@ import { ReactComponent as SpeechBalloon } from "@icons/speech-balloon.svg";
 import { ReactComponent as SpinnerNarrow } from "@icons/spinner-narrow.svg";
 import { ReactComponent as Spinner } from "@icons/spinner.svg";
 import { ReactComponent as SquareWithPencil } from "@icons/square-with-pencil.svg";
+import { ReactComponent as Sun } from "@icons/sun.svg";
 import { ReactComponent as Trash } from "@icons/trash.svg";
 import { ReactComponent as Upload } from "@icons/upload.svg";
 import { ReactComponent as UserTeam } from "@icons/user-team.svg";
@@ -103,6 +111,7 @@ import { ReactComponent as XInCircle } from "@icons/x-in-circle.svg";
 import { ReactComponent as X } from "@icons/x.svg";
 
 export const SvgCollection = {
+    Dashbrd,
     RaribleColor,
     BlurColor,
     LooksRareColor,
@@ -119,6 +128,8 @@ export const SvgCollection = {
     Trash,
     Twitter,
     TwitterLg,
+    Reddit,
+    Facebook,
     Uniswap,
     Opensea,
     OpenseaCircle,
@@ -168,6 +179,7 @@ export const SvgCollection = {
     MetamaskColored,
     Megaphone,
     Minus,
+    Moon,
     Pencil,
     Plus,
     FatPlus,
@@ -178,6 +190,7 @@ export const SvgCollection = {
     SpeechBalloon,
     SpinnerNarrow,
     Spinner,
+    Sun,
     SquareWithPencil,
     HeartbeatInCircle,
     Upload,
@@ -186,6 +199,7 @@ export const SvgCollection = {
     UserWithSpeechBalloon,
     Wallet,
     WalletOpacity,
+    Newspaper,
     XInCircle,
     X,
     FatXInCircle,
@@ -206,4 +220,6 @@ export const SvgCollection = {
     Moralis,
     Mnemonic,
     Menu,
+    AudioPause,
+    AudioPlay,
 };

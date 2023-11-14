@@ -10,7 +10,7 @@ import { PageLink } from "@/Components/Pagination/PageLink";
 import { type PaginationProperties } from "@/Components/Pagination/Pagination.contracts";
 import { PreviousPageLink } from "@/Components/Pagination/PreviousPageLink";
 
-export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>): JSX.Element => {
+export const Pagination = <T,>({ data, onPageChange, ...properties }: PaginationProperties<T>): JSX.Element => {
     const [showInput, setShowInput] = useState(false);
     const [page, setPage] = useState(data.meta.current_page.toString());
 
@@ -30,7 +30,7 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
         event.preventDefault();
 
         if (pageAsNumber <= totalPages) {
-            router.get(buildPageLink(page));
+            onPageChange !== undefined ? onPageChange(Number(page)) : router.get(buildPageLink(page));
         }
     };
 
@@ -73,6 +73,17 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
         setPage(data.meta.current_page.toString());
     };
 
+    const handlePageChange = (
+        event: React.MouseEvent<HTMLAnchorElement> | React.KeyboardEvent<HTMLAnchorElement>,
+        page: number,
+    ): void => {
+        /* istanbul ignore next -- @preserve */
+        if (onPageChange !== undefined) {
+            event.preventDefault();
+            onPageChange(page);
+        }
+    };
+
     return (
         <nav
             aria-label="Pagination"
@@ -103,6 +114,9 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                     <div className="mt-3 hidden items-center space-x-3 xs:flex xs:space-x-1 sm:w-fit  md:mt-0 ">
                         {data.meta.current_page > 1 && (
                             <ButtonLink
+                                onClick={(event) => {
+                                    handlePageChange(event, 1);
+                                }}
                                 href={data.meta.first_page_url}
                                 variant="icon"
                                 icon="DoubleChevronLeftSmall"
@@ -110,7 +124,14 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                 iconSize="xs"
                             />
                         )}
-                        {data.meta.prev_page_url !== null && <PreviousPageLink href={data.meta.prev_page_url} />}
+                        {data.meta.prev_page_url !== null && (
+                            <PreviousPageLink
+                                onClick={(event) => {
+                                    handlePageChange(event, data.meta.current_page - 1);
+                                }}
+                                href={data.meta.prev_page_url}
+                            />
+                        )}
                         <div className="flex items-center space-x-0.5">
                             {showBeforeEllipsis && (
                                 <button
@@ -127,6 +148,9 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
 
                             {pages.map((page, index) => (
                                 <PageLink
+                                    onClick={(event) => {
+                                        handlePageChange(event, page);
+                                    }}
                                     key={index}
                                     page={page}
                                     isActive={data.meta.current_page === page}
@@ -147,9 +171,19 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                 </button>
                             )}
                         </div>
-                        {data.meta.next_page_url !== null && <NextPageLink href={data.meta.next_page_url} />}
+                        {data.meta.next_page_url !== null && (
+                            <NextPageLink
+                                onClick={(event) => {
+                                    handlePageChange(event, data.meta.current_page + 1);
+                                }}
+                                href={data.meta.next_page_url}
+                            />
+                        )}
                         {data.meta.current_page !== data.meta.last_page && (
                             <ButtonLink
+                                onClick={(event) => {
+                                    handlePageChange(event, data.meta.last_page);
+                                }}
                                 href={data.meta.last_page_url}
                                 variant="icon"
                                 icon="DoubleChevronRightSmall"
@@ -163,6 +197,9 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                         <div className="flex w-full flex-col items-center gap-3">
                             <div className="flex w-full flex-row items-center justify-between">
                                 <ButtonLink
+                                    onClick={(event) => {
+                                        handlePageChange(event, 1);
+                                    }}
                                     href={data.meta.first_page_url}
                                     variant="icon"
                                     icon="DoubleChevronLeftSmall"
@@ -171,7 +208,12 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                     iconSize="xs"
                                 />
 
-                                <PreviousPageLink href={data.meta.prev_page_url} />
+                                <PreviousPageLink
+                                    onClick={(event) => {
+                                        handlePageChange(event, data.meta.current_page - 1);
+                                    }}
+                                    href={data.meta.prev_page_url}
+                                />
 
                                 <IconButton
                                     icon="MagnifyingGlass"
@@ -179,9 +221,17 @@ export const Pagination = <T,>({ data, ...properties }: PaginationProperties<T>)
                                     onClick={handleClick}
                                 />
 
-                                <NextPageLink href={data.meta.next_page_url} />
+                                <NextPageLink
+                                    onClick={(event) => {
+                                        handlePageChange(event, data.meta.current_page + 1);
+                                    }}
+                                    href={data.meta.next_page_url}
+                                />
 
                                 <ButtonLink
+                                    onClick={(event) => {
+                                        handlePageChange(event, data.meta.last_page);
+                                    }}
                                     href={data.meta.last_page_url}
                                     variant="icon"
                                     icon="DoubleChevronRightSmall"

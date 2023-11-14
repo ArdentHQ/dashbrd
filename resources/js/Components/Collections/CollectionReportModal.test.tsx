@@ -1,5 +1,6 @@
 import React from "react";
 import { CollectionReportModal } from "@/Components/Collections/CollectionReportModal";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import { fireEvent, mockInertiaUseForm, render, screen } from "@/Tests/testing-library";
 
@@ -18,6 +19,26 @@ describe("CollectionActions", () => {
         );
 
         expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+    });
+
+    it("should render when opened on dark mode", () => {
+        const useDarkModeContextSpy = vi
+            .spyOn(useDarkModeContext, "useDarkModeContext")
+            .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        const function_ = vi.fn();
+
+        render(
+            <CollectionReportModal
+                isOpen={true}
+                onClose={function_}
+                collection={collection}
+            />,
+        );
+
+        expect(screen.getByTestId("ReportModal")).toBeInTheDocument();
+
+        useDarkModeContextSpy.mockRestore();
     });
 
     it("can be closed", () => {

@@ -8,6 +8,8 @@
 @import "./_carousel.css";
 @import "./_collection.css";
 @import "./_gallery.css";
+@import "./_article.css";
+@import "./_tooltips.css";
 
 @tailwind base;
 @tailwind components;
@@ -38,6 +40,10 @@
         0 116px 70px 0 rgba(33, 42, 131, 0.02),
         0 207px 83px 0 rgba(33, 42, 131, 0.01),
         0 323px 90px 0 rgba(33, 42, 131, 0);
+}
+
+.latest-articles-carousel .swiper-pagination-bullets {
+    @apply bottom-0 flex justify-center;
 }
 
 .dark .auth-overlay-shadow {

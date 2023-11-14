@@ -23,13 +23,17 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 /**
  * @property int $views_count
  */
 class Gallery extends Model implements Viewable
 {
-    use BelongsToUser, CanBeLiked, HasFactory, HasSlug, InteractsWithViews, Reportable, SoftDeletes;
+    use BelongsToUser, CanBeLiked, HasEagerLimit, HasFactory, InteractsWithViews, Reportable, SoftDeletes;
+    use HasSlug {
+        otherRecordExistsWithSlug as baseOtherRecordExistsWithSlug;
+    }
 
     /**
      * @var array<string>
@@ -126,7 +130,11 @@ class Gallery extends Model implements Viewable
             return $query;
         }
 
-        return $query->where('galleries.name', 'ilike', sprintf('%%%s%%', $searchQuery));
+        return $query->where(function ($query) use ($searchQuery) {
+            return $query
+                ->where('name', 'ilike', sprintf('%%%s%%', $searchQuery))
+                ->orWhereHas('user.wallet', fn ($q) => $q->where('address', $searchQuery));
+        });
     }
 
     /**
@@ -183,5 +191,14 @@ class Gallery extends Model implements Viewable
     protected function reportingThrottleDuration(): int
     {
         return (int) config('dashbrd.reports.throttle.gallery.same_gallery_per_hours');
+    }
+
+    protected function otherRecordExistsWithSlug(string $slug): bool
+    {
+        if (in_array($slug, ['newest', 'most-popular', 'most-valuable'])) {
+            return true;
+        }
+
+        return $this->baseOtherRecordExistsWithSlug($slug);
     }
 }

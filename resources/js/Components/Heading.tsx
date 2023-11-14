@@ -28,7 +28,7 @@ const Heading = forwardRef<HTMLHeadingElement, HeadingProperties>(
                 <h1
                     ref={reference}
                     className={cn(
-                        "text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]",
+                        "break-words text-xl leading-[1.875rem] text-theme-secondary-900 dark:text-theme-dark-50 md:text-2xl md:leading-8 lg:text-[2rem] lg:leading-[2.75rem]",
                         weightClass(weight),
                         className,
                     )}

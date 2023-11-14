@@ -6,9 +6,11 @@ import { ImageErrorPlaceholder } from "./Image.blocks";
 import { type ImageProperties } from "./Image.contracts";
 import { useImageLoader } from "./useImageLoader";
 import { Skeleton } from "@/Components/Skeleton";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const Img = ({
     src,
+    srcSet,
     alt,
     className,
     wrapperClassName,
@@ -17,6 +19,7 @@ export const Img = ({
     errorMessage,
     onError,
     isCircle,
+    errorPlaceholder,
     ...properties
 }: ImageProperties): JSX.Element => {
     const { isLoaded, isErrored, loadImage, isLoading } = useImageLoader({ src, onError });
@@ -69,6 +72,7 @@ export const Img = ({
                     <img
                         data-testid="Img"
                         src={src ?? undefined}
+                        srcSet={srcSet}
                         alt={alt}
                         className={twMerge(className, "h-full w-full object-cover ")}
                         {...properties}
@@ -76,10 +80,16 @@ export const Img = ({
                 )}
 
                 {isErrored && (
-                    <ImageErrorPlaceholder
-                        errorMessage={errorMessage}
-                        className={cn(className, errorClassName, "aspect-square")}
-                    />
+                    <>
+                        {!isTruthy(errorPlaceholder) && (
+                            <ImageErrorPlaceholder
+                                errorMessage={errorMessage}
+                                className={cn(className, errorClassName, "h-full w-full")}
+                            />
+                        )}
+
+                        {isTruthy(errorPlaceholder) && errorPlaceholder}
+                    </>
                 )}
             </div>
         </div>

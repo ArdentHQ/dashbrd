@@ -1,3 +1,7 @@
 .collection-banner {
     background-image: url("../images/collections/header-placeholder.svg");
 }
+
+.dark .collection-banner {
+    background-image: url("../images/collections/header-placeholder-dark.svg");
+}

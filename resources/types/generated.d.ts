@@ -45,7 +45,7 @@ declare namespace App.Data {
         is_native_token: boolean;
         balance: string;
         decimals: number;
-        chain_id: App.Enums.Chains;
+        chain_id: App.Enums.Chain;
         network_id: number;
         minted_supply: string | null;
         total_market_cap: string | null;
@@ -87,17 +87,58 @@ declare namespace App.Data {
         attributes: Attributes;
     };
 }
+declare namespace App.Data.Articles {
+    export type ArticleData = {
+        id: number;
+        title: string;
+        slug: string;
+        category: App.Enums.ArticleCategoryEnum;
+        audioSrc: string | null;
+        content: string;
+        image: { small: string; small2x: string; medium: string; medium2x: string; large: string; large2x: string };
+        publishedAt: number;
+        userId: number;
+        authorName: string;
+        authorAvatar: { thumb: string | null; thumb2x: string | null };
+        featuredCollections: Array<App.Data.Articles.FeaturedCollectionData>;
+        metaDescription: string | null;
+    };
+    export type ArticlesData = {
+        paginated: {
+            data: Array<App.Data.Articles.ArticleData>;
+            links: Array<{ url: string | null; label: string; active: boolean }>;
+            meta: {
+                current_page: number;
+                first_page_url: string;
+                from: number | null;
+                last_page: number;
+                last_page_url: string;
+                next_page_url: string | null;
+                path: string;
+                per_page: number;
+                prev_page_url: string | null;
+                to: number | null;
+                total: number;
+            };
+        };
+    };
+    export type FeaturedCollectionData = {
+        name: string;
+        slug: string;
+        image: string | null;
+    };
+}
 declare namespace App.Data.Collections {
     export type CollectionBasicDetailsData = {
         slug: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
     };
     export type CollectionData = {
         id: number;
         name: string;
         slug: string;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
@@ -114,7 +155,7 @@ declare namespace App.Data.Collections {
         slug: string;
         description: string | null;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
@@ -170,6 +211,25 @@ declare namespace App.Data.Collections {
     };
 }
 declare namespace App.Data.Gallery {
+    export type GalleriesCardData = {
+        paginated: {
+            data: Array<App.Data.Gallery.GalleryCardData>;
+            links: Array<{ url: string | null; label: string; active: boolean }>;
+            meta: {
+                current_page: number;
+                first_page_url: string;
+                from: number | null;
+                last_page: number;
+                last_page_url: string;
+                next_page_url: string | null;
+                path: string;
+                per_page: number;
+                prev_page_url: string | null;
+                to: number | null;
+                total: number;
+            };
+        };
+    };
     export type GalleriesData = {
         paginated: {
             data: Array<App.Data.Gallery.GalleryData>;
@@ -195,11 +255,26 @@ declare namespace App.Data.Gallery {
         collections: number;
         nfts: number;
     };
+    export type GalleryCardData = {
+        id: number;
+        name: string;
+        slug: string;
+        likes: number;
+        views: number;
+        nftsCount: number;
+        collectionsCount: number;
+        value: number | null;
+        coverImage: string | null;
+        wallet: App.Data.SimpleWalletData;
+        nfts: Array<App.Data.Collections.SimpleNftData>;
+        isOwner: boolean;
+        hasLiked: boolean;
+    };
     export type GalleryCollectionData = {
         name: string;
         slug: string;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
@@ -294,7 +369,7 @@ declare namespace App.Data.Network {
         id: number;
         name: string;
         isMainnet: boolean;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         publicRpcProvider: string;
         explorerUrl: string;
         collectionsCount: number;
@@ -335,7 +410,7 @@ declare namespace App.Data.Nfts {
         slug: string;
         description: string | null;
         address: string;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         floorPrice: string | null;
         website: string;
         image: string | null;
@@ -365,7 +440,7 @@ declare namespace App.Data.Token {
         address: string;
         isNativeToken: boolean;
         isDefaultToken: boolean;
-        chainId: App.Enums.Chains;
+        chainId: App.Enums.Chain;
         guid: number | null;
         name: string;
         symbol: string;
@@ -433,8 +508,6 @@ declare namespace App.Data.Wallet {
     };
 }
 declare namespace App.Enums {
-    export type Chains = 1 | 5 | 137 | 80001;
+    export type Chain = 1 | 5 | 137 | 80001;
     export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER";
-    export type Platforms = "ethereum" | "polygon-pos";
-    export type TokenGuid = "ethereum" | "matic-network";
 }

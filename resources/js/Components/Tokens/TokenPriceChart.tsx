@@ -17,7 +17,7 @@ import {
 } from "@/Components/Tokens/TokenPriceChart.helpers";
 import { type Period } from "@/Components/Tokens/Tokens.contracts";
 import { useAuth } from "@/Contexts/AuthContext";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { type DateFormat } from "@/Types/enums";
 import { getPriceHistory } from "@/Utils/api";
 import { assertUser } from "@/Utils/assertions";
@@ -113,8 +113,10 @@ export const TokenPriceChart = ({ token, period, ...properties }: Properties): J
                 timeFormat: user.attributes.time_format,
             }),
             getTooltipLabel: buildGetTooltipLabel({ t, currency: user.attributes.currency }),
+            gridColor: isDark ? "#3D444D" : "rgba(226, 227, 241, 1)",
+            tickColor: isDark ? "#788A98" : "rgba(178, 181, 204, 1)",
         });
-    }, [periodData, formattedTimeLabels]);
+    }, [periodData, formattedTimeLabels, isDark]);
 
     useEffect(() => {
         if (periodData === undefined) {

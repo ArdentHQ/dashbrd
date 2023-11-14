@@ -67,7 +67,8 @@ const NftImage = ({
                 data-testid={`NftImageGrid__selected--${nft.tokenNumber}`}
                 className={cn("transition-default pointer-events-none absolute inset-0 rounded-xl", {
                     "border-2 border-theme-primary-600 dark:border-theme-primary-400": isSelected,
-                    "border-theme-primary-100 group-hover:border-3": !isSelected,
+                    "border-theme-primary-100 group-hover:border-3 dark:group-hover:border-theme-primary-400":
+                        !isSelected,
                 })}
             >
                 <div

@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthOverlay } from "@/Components/Layout/AuthOverlay";
-import * as useDarkModeContext from "@/Contexts/DarkModeContex";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { fireEvent, render, screen, userEvent } from "@/Tests/testing-library";
@@ -195,6 +195,30 @@ describe("AuthOverlay", () => {
     });
 
     it("should require metamask", () => {
+        const needsMetamaskMessage = "Install MetaMask";
+
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            needsMetaMask: true,
+        });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
+        expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
+        expect(screen.getByText(needsMetamaskMessage)).toBeInTheDocument();
+    });
+
+    it("should require metamask on dark mode", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
         const needsMetamaskMessage = "Install MetaMask";
 
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({

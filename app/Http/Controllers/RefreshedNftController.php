@@ -28,7 +28,9 @@ class RefreshedNftController extends Controller
         $nft->touch('metadata_requested_at');
         RefreshNftMetadata::dispatch()->onQueue(Queues::NFTS);
 
-        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+        if ($collection->indexesActivities()) {
+            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+        }
 
         return response()->json([
             'success' => true,

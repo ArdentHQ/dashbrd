@@ -5,7 +5,7 @@ import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionHeading } from "./Components/CollectionHeading";
-import { CollectionNavigation } from "./Components/CollectionNavigation";
+import { CollectionNavigation, type TabName } from "./Components/CollectionNavigation";
 import { CollectionNftsGrid } from "./Components/CollectionNftsGrid";
 import { NftsSorting } from "./Components/CollectionNftsGrid/NftsSorting";
 import { CollectionOwnedToggle } from "./Components/CollectionOwnedToggle";
@@ -20,8 +20,10 @@ import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { useWalletActivity } from "@/Hooks/useWalletActivity";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { ArticlesTab } from "@/Pages/Collections/Components/Articles/ArticlesTab";
 import { CollectionFilterSlider } from "@/Pages/Collections/Components/CollectionFilterSlider/CollectionFilterSlider";
 import { isTruthy } from "@/Utils/is-truthy";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 export type TraitsFilters = Record<string, Array<{ value: string; displayType: string }> | undefined> | null;
 
@@ -70,7 +72,7 @@ const CollectionsView = ({
     const { t } = useTranslation();
     const { props } = usePage();
 
-    const [selectedTab, setSelectedTab] = useState<"collection" | "activity">(appliedFilters.tab);
+    const [selectedTab, setSelectedTab] = useState<TabName>(appliedFilters.tab);
     const [activityPageLimit, setActivityPageLimit] = useState<number>(appliedFilters.pageLimit);
     const [nftPageLimit, setNftPageLimit] = useState<number>(appliedFilters.nftPageLimit);
     const [selectedTraits, setSelectedTraits] = useState<TraitsFilters>(appliedFilters.traits);
@@ -96,6 +98,13 @@ const CollectionsView = ({
     );
 
     const filters = useMemo(() => {
+        if (selectedTab === "articles") {
+            return {
+                tab: selectedTab,
+                activityPageLimit: activityPageLimit === 10 ? undefined : activityPageLimit,
+            };
+        }
+
         if (selectedTab === "activity") {
             return {
                 tab: selectedTab,
@@ -181,10 +190,12 @@ const CollectionsView = ({
         setFilterIsDirty(true);
     };
 
-    const tabChangeHandler = (tab: "collection" | "activity"): void => {
+    const tabChangeHandler = (tab: TabName): void => {
         setSelectedTab(tab);
-
         setFilterIsDirty(true);
+        replaceUrlQuery({
+            tab,
+        });
     };
 
     const activityPageLimitChangeHandler = (pageLimit: number): void => {
@@ -294,7 +305,6 @@ const CollectionsView = ({
                         collection={collection}
                     />
                 )}
-
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     <CollectionHeading
                         reportReasons={props.reportReasons}
@@ -377,11 +387,14 @@ const CollectionsView = ({
                         </Tab.Panel>
 
                         <Tab.Panel>
+                            <ArticlesTab collection={collection} />
+                        </Tab.Panel>
+
+                        <Tab.Panel>
                             <div className="mt-6">{renderActivities()}</div>
                         </Tab.Panel>
                     </CollectionNavigation>
                 </div>
-
                 <CollectionFilterSlider
                     open={showCollectionFilterSlider}
                     traits={collectionTraits}

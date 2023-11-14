@@ -20,22 +20,27 @@ export const ImageEditActions = ({ src, onRemove, onUpload }: ImageEditActionsPr
         data-testid="ImageEditActions"
         className="group md:backdrop-blur-md"
     >
-        <div className="transition-default absolute inset-0 z-10 flex items-center justify-center rounded-xl opacity-100 group-hover:opacity-100 md:bg-white/30 md:opacity-0 md:backdrop-blur-md">
+        <div className="transition-default absolute inset-0 z-10 flex items-center justify-center rounded-xl opacity-100 group-hover:opacity-100 md:bg-theme-primary-50/75 md:opacity-0 md:backdrop-blur-md md:dark:bg-theme-dark-900/75">
             <div className="flex h-full items-end justify-center pb-4 md:items-center md:pb-0">
-                <div className="flex items-center space-x-3 rounded-full bg-theme-primary-50/50 p-1 backdrop-blur-lg backdrop-filter dark:bg-transparent dark:backdrop-blur-none md:bg-white/30">
-                    <IconButton
-                        data-testid="ImageEditActions__upload"
-                        icon="Upload"
-                        onClick={onUpload}
-                        className="dark:border-none dark:bg-theme-dark-900 dark:text-theme-dark-100 dark:hover:border-theme-primary-400 dark:hover:bg-theme-primary-400 dark:hover:text-white"
-                    />
+                <div className="flex items-center space-x-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md dark:bg-theme-dark-900/30 dark:backdrop-blur-none">
+                        <IconButton
+                            data-testid="ImageEditActions__upload"
+                            icon="Upload"
+                            onClick={onUpload}
+                            className="border-white outline-offset-4 dark:border-none dark:bg-theme-dark-900 dark:hover:border-theme-primary-400 dark:hover:bg-theme-primary-400 dark:hover:text-white"
+                        />
+                    </div>
 
-                    <IconButton
-                        data-testid="ImageEditActions__remove"
-                        variant="danger"
-                        icon="Trash"
-                        onClick={onRemove}
-                    />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 p-1 backdrop-blur-md dark:bg-theme-dark-900/30 dark:backdrop-blur-none">
+                        <IconButton
+                            data-testid="ImageEditActions__remove"
+                            variant="danger"
+                            className="outline-offset-4"
+                            icon="Trash"
+                            onClick={onRemove}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

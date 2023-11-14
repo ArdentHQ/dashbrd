@@ -12,9 +12,9 @@ import { Heading } from "@/Components/Heading";
 import { Overlay } from "@/Components/Layout/Overlay/Overlay";
 import { Toast } from "@/Components/Toast";
 import { useAuth } from "@/Contexts/AuthContext";
-import { useDarkModeContext } from "@/Contexts/DarkModeContex";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
-import { AuthConnectWallet, AuthConnectWalletDark, AuthInstallWallet } from "@/images";
+import { AuthConnectWallet, AuthConnectWalletDark, AuthInstallWallet, AuthInstallWalletDark } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const AuthOverlay = ({
@@ -79,7 +79,7 @@ export const AuthOverlay = ({
                     )}
                 </p>
             </div>
-            {needsMetaMask && <AuthInstallWallet />}
+            {needsMetaMask && <>{isDark ? <AuthInstallWalletDark /> : <AuthInstallWallet />}</>}
             {!needsMetaMask && (
                 <>
                     {isDark ? (

@@ -26,7 +26,7 @@ class TokenData extends Data
         public string $address,
         public bool $isNativeToken,
         public bool $isDefaultToken,
-        #[LiteralTypeScriptType('App.Enums.Chains')]
+        #[LiteralTypeScriptType('App.Enums.Chain')]
         public int $chainId,
         public ?int $guid,
         public string $name,
