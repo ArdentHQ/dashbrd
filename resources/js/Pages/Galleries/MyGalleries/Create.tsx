@@ -77,17 +77,25 @@ const Create = ({
     assertWallet(wallet);
 
     const { remove } = useWalletDraftGalleries({ address: wallet.address });
-    const { setCover, setNfts, setTitle, draft, isSaving } = useWalletDraftGallery({
+    const { setCover, setNfts, setTitle, draft, isSaving, isLoading } = useWalletDraftGallery({
         draftId,
         address: wallet.address,
         isDisabled: isTruthy(gallery?.slug),
     });
 
     useEffect(() => {
+        if (isLoading || isSaving) {
+            return;
+        }
+
         if (isTruthy(draft.id)) {
             replaceUrlQuery({ draftId: draft.id.toString() });
         }
-    }, [draft.id]);
+
+        if (!isTruthy(draft.id) && isTruthy(draftId)) {
+            replaceUrlQuery({ draftId: "" });
+        }
+    }, [draft.id, isLoading, isSaving]);
 
     const isEditingDraft = draft.id !== null && gallery === undefined;
 
@@ -190,7 +198,6 @@ const Create = ({
         <LayoutWrapper
             withSlider
             toastMessage={props.toast}
-            belowHeader={<NoNftsOverlay show={paginatedNfts.length === 0} />}
             displayAuthOverlay={paginatedNfts.length > 0 && initialized}
             mustBeSigned={gallery !== undefined}
         >
