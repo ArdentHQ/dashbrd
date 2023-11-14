@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enums\TokenType;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
@@ -47,6 +48,10 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
         ]);
 
         if ($this->skipIfPotentiallyFull && $this->collection->isPotentiallyFull()) {
+            return;
+        }
+
+        if ($this->collection->type !== TokenType::Erc721) {
             return;
         }
 
