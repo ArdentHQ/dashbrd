@@ -92,7 +92,7 @@ export const BalanceHeader = ({
                     </div>
                 </div>
 
-                <div className="mt-4 space-y-4 border-t border-dotted border-theme-secondary-300 pt-4 xl:ml-20 xl:mt-0 xl:w-full xl:border-t-0 xl:pt-0 2xl:ml-28">
+                <div className="mt-4 space-y-4 border-t border-dotted border-theme-secondary-300 pt-4 dark:border-theme-dark-700 xl:ml-20 xl:mt-0 xl:w-full xl:border-t-0 xl:pt-0 2xl:ml-28">
                     <div className="flex items-center justify-between xl:justify-end">
                         <div className="hidden sm:block md:hidden"></div>
 

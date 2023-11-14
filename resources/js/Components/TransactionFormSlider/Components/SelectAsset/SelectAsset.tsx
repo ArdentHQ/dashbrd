@@ -46,6 +46,7 @@ export const SelectAsset = ({
                         : t("pages.send_receive_panel.send.hints.token_price"),
                     isTruthy(asset) ? `${t("common.balance")}: ${balance}` : t("common.balance"),
                 ]}
+                erroredFeedbackClass="-mr-px"
             >
                 <Listbox
                     data-testid="TransactionSendForm_Token_Amount_Select"

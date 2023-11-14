@@ -34,10 +34,18 @@ class UserFactory extends Factory
         ];
     }
 
-    public function withWallet()
+    public function withWallet(string $address = null)
     {
+        if ($address !== null) {
+            return $this->state(fn () => [
+                'wallet_id' => fn () => Wallet::factory()->create([
+                    'address' => $address,
+                ])->id,
+            ]);
+        }
+
         return $this->state(fn () => [
-            'wallet_id' => fn () => Wallet::factory(),
+            'wallet_id' => Wallet::factory(),
         ]);
     }
 

@@ -11,4 +11,15 @@ describe("ArticleCard", () => {
 
         expect(screen.getByTestId("ArticleCard")).toBeInTheDocument();
     });
+
+    it("should render large variant", () => {
+        render(
+            <ArticleCard
+                article={article}
+                variant="large"
+            />,
+        );
+
+        expect(screen.getByTestId("ArticleCard")).toBeInTheDocument();
+    });
 });

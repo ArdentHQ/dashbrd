@@ -15,7 +15,7 @@ export const TextInputAvatar = ({ children, className, ...properties }: TextInpu
     <div
         data-testid="TextInput__avatar"
         className={cn(
-            "flex h-8 w-8 flex-shrink-0 flex-grow-0 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100",
+            "flex h-8 w-8 flex-shrink-0 flex-grow-0 items-center justify-center overflow-hidden rounded-full bg-theme-secondary-100 dark:bg-theme-dark-800",
             className,
         )}
         {...properties}
