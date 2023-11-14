@@ -223,7 +223,9 @@ const Create = ({
                     name={data.name}
                     onChange={(name) => {
                         setData("name", name);
-                        setTitle(name);
+                    }}
+                    onBlur={() => {
+                        setTitle(data.name);
                     }}
                 />
 
