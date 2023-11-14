@@ -8,7 +8,7 @@ interface WalletDraftGalleryState {
     setCover: (image: ArrayBuffer | null, name: string | null, type: string | null) => void;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setTitle: (title: string) => void;
-    reset: (draft: GalleryDraft) => void;
+    reset: (draft?: Partial<GalleryDraft>) => void;
     isLoading: boolean;
 }
 
@@ -41,20 +41,16 @@ export const useWalletDraftGallery = ({
     useEffect(() => {
         if (draftId === undefined || isDisabled === true) {
             setIsLoading(false);
-            return reset();
+            return;
         }
 
         const getDraft = async (): Promise<void> => {
             setIsLoading(true);
 
-            const draft = await findWalletDraftById(draftId);
+            const existingDraft = await findWalletDraftById(draftId);
 
-            if (draft !== undefined) {
-                setDraft(draft);
-            }
-
-            if (draft === undefined) {
-                reset();
+            if (existingDraft !== undefined) {
+                setDraft(existingDraft);
             }
 
             setIsLoading(false);
@@ -81,8 +77,8 @@ export const useWalletDraftGallery = ({
         void saveDraft({ ...draft, title });
     };
 
-    const reset = (draft?: GalleryDraft): void => {
-        setDraft(defaultDraft);
+    const reset = (draft?: Partial<GalleryDraft>): void => {
+        setDraft({ ...defaultDraft, ...draft });
     };
 
     const setNfts = (nfts: App.Data.Gallery.GalleryNftData[]): void => {
