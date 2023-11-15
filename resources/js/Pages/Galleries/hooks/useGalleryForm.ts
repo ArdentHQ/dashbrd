@@ -30,7 +30,7 @@ export const useGalleryForm = ({
     setData: (field: keyof UseGalleryFormProperties, value: string | number | number[] | null | File) => void;
     submit: (event: FormEvent) => void;
     errors: Partial<Record<keyof UseGalleryFormProperties, string>>;
-    updateSelectedNfts: (nfts: App.Data.Gallery.GalleryNftData[], disableDraft?: boolean) => void;
+    updateSelectedNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     processing: boolean;
 } => {
     const { t } = useTranslation();
@@ -95,7 +95,7 @@ export const useGalleryForm = ({
         });
     };
 
-    const updateSelectedNfts = (nfts: App.Data.Gallery.GalleryNftData[], disableDraft = false): void => {
+    const updateSelectedNfts = (nfts: App.Data.Gallery.GalleryNftData[]): void => {
         // Convert them to strings to compare ordering too.
         const selectedNftsOrder = data.nfts.join();
         const nftsOrder = nfts.map((nft) => nft.id).join();
@@ -109,9 +109,7 @@ export const useGalleryForm = ({
             nfts.map((nft) => nft.id),
         );
 
-        if (!disableDraft) {
-            setDraftNfts?.(nfts);
-        }
+        setDraftNfts?.(nfts);
     };
 
     useEffect(() => {
