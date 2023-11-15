@@ -31,7 +31,7 @@ export const NftCollectionSlider = (): JSX.Element => {
                     <NftHiddenCollectionsToggle
                         setShowHidden={setShowHidden}
                         showHidden={showHidden}
-                        className="hidden md:block"
+                        className="hidden md:flex"
                     />
                 </div>
             </Slider.Header>
