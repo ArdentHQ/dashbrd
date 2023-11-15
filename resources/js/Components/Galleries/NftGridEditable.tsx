@@ -20,9 +20,11 @@ export const NftGridEditable = ({
 
     const [selectedNft, setSelectedNft] = useState<string | undefined>();
 
+    const selectedNftIds = galleryNfts.selected.map((nft) => nft.id).join();
+
     useEffect(() => {
         onChange?.(galleryNfts.selected);
-    }, [galleryNfts]);
+    }, [selectedNftIds]);
 
     const handleAdd = (): void => {
         setNftSliderOpen(true);
