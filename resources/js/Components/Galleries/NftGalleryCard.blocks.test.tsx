@@ -1,6 +1,7 @@
 import React from "react";
 import { type SpyInstance } from "vitest";
 import {
+    GalleryFooter,
     GalleryHeading,
     GalleryHeadingPlaceholder,
     GalleryStats,
@@ -541,6 +542,17 @@ describe("GalleryStats", () => {
         expect(screen.getByTestId("GalleryHeadingPlaceholder")).toBeInTheDocument();
     });
 
+    it("should render gallery stats when delete button is enabled", () => {
+        render(
+            <GalleryStats
+                gallery={gallery}
+                showDeleteButton
+            />,
+        );
+
+        expect(screen.getByTestId("GalleryStats")).toBeInTheDocument();
+    });
+
     it("should force like if user was not authenticated", async () => {
         signedActionMock.mockImplementation((action) => {
             action({ authenticated: false, signed: false });
@@ -589,5 +601,79 @@ describe("GalleryStats", () => {
         await userEvent.click(screen.getByTestId("GalleryStats__like-button"));
 
         expect(likeMock).toHaveBeenCalledWith(gallery.slug, undefined);
+    });
+});
+
+describe("GalleryFooter", () => {
+    const gallery = new GalleryDataFactory().create({
+        likes: 12,
+        views: 45,
+        hasLiked: false,
+    });
+
+    const user = new UserDataFactory().withUSDCurrency().create();
+
+    let resetAuthContextMock: () => void;
+
+    let useAuthorizedActionSpy: SpyInstance;
+    const signedActionMock = vi.fn();
+
+    beforeEach(() => {
+        resetAuthContextMock = mockAuthContext({
+            user,
+        });
+
+        signedActionMock.mockImplementation((action) => {
+            action({ authenticated: true, signed: true });
+        });
+
+        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
+            signedAction: signedActionMock,
+            authenticatedAction: vi.fn(),
+        });
+    });
+
+    afterEach(() => {
+        resetAuthContextMock();
+
+        useAuthorizedActionSpy.mockRestore();
+    });
+
+    it("should render", () => {
+        render(<GalleryFooter gallery={gallery} />);
+
+        expect(screen.getByTestId("GalleryFooter")).toBeInTheDocument();
+    });
+    it("should handle onDelete", async () => {
+        const onDelete = vi.fn();
+
+        render(
+            <GalleryFooter
+                gallery={gallery}
+                onDelete={onDelete}
+                showDeleteButton
+            />,
+        );
+
+        await userEvent.click(screen.getByTestId("DeleteGalleryButton"));
+
+        expect(onDelete).toHaveBeenCalled();
+    });
+
+    it("should display the amount of views", () => {
+        render(<GalleryFooter gallery={gallery} />);
+
+        expect(screen.getByTestId("GalleryStats__views")).toHaveTextContent(gallery.views.toString());
+    });
+
+    it("shows delete button when enabled", () => {
+        render(
+            <GalleryFooter
+                gallery={gallery}
+                showDeleteButton
+            />,
+        );
+
+        expect(screen.getByTestId("DeleteGalleryButton")).toBeInTheDocument();
     });
 });

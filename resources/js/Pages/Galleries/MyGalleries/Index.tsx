@@ -1,129 +1,159 @@
-import { Head, router } from "@inertiajs/react";
-import { type ReactNode } from "react";
+import { useForm } from "@inertiajs/react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/Components/Buttons";
+import { CreateGalleryButton } from "./Components/CreateGalleryButton";
+import Layout from "./Layout";
+import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
+import { NftGalleryDraftCard } from "@/Components/Drafts/NftGalleryDraftCard";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { NftGalleryCard } from "@/Components/Galleries";
+import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
-import { Icon } from "@/Components/Icon";
-import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { Pagination } from "@/Components/Pagination";
-import { Tooltip } from "@/Components/Tooltip";
+import { useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
 
-const Index = ({
-    title,
-    galleries,
-    nftCount = 0,
-}: {
+interface Properties {
     title: string;
     children: ReactNode;
     galleries: App.Data.Gallery.GalleriesData;
     nftCount?: number;
-}): JSX.Element => {
+    showDrafts: boolean;
+    galleryCount: number;
+}
+
+const Drafts = (): JSX.Element => {
     const { t } = useTranslation();
+
+    const { drafts, deleteDraft } = useDraftGalleriesContext();
+
+    const [draftToDelete, setDraftToDelete] = useState<number | null>(null);
+
+    if (drafts === undefined) {
+        return <></>;
+    }
+
+    if (drafts.length === 0) {
+        return <EmptyBlock>{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
+    }
+
+    return (
+        <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+            {drafts.map((draft, index) => (
+                <NftGalleryDraftCard
+                    key={index}
+                    draft={draft}
+                    onDelete={() => {
+                        setDraftToDelete(draft.id);
+                    }}
+                />
+            ))}
+
+            <DraftGalleryDeleteModal
+                open={draftToDelete !== null}
+                onClose={() => {
+                    setDraftToDelete(null);
+                }}
+                onConfirm={() => {
+                    void deleteDraft(draftToDelete);
+
+                    setDraftToDelete(null);
+                }}
+            />
+        </div>
+    );
+};
+
+const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Element => {
+    const { t } = useTranslation();
+
+    const [galleryToDelete, setGalleryToDelete] = useState<App.Data.Gallery.GalleryData | null>(null);
 
     const userGalleries = galleries.paginated;
 
-    const createGalleryUrl = route("my-galleries.create");
+    const { processing, delete: remove } = useForm({});
+
+    const submit = (): void => {
+        if (galleryToDelete === null) {
+            // Unreachable
+            return;
+        }
+
+        remove(
+            route("my-galleries.destroy", {
+                slug: galleryToDelete.slug,
+            }),
+            {
+                onFinish: () => {
+                    setGalleryToDelete(null);
+                },
+            },
+        );
+    };
+
+    if (userGalleries.meta.total === 0) {
+        return <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
+    }
 
     return (
-        <LayoutWrapper>
-            <Head title={title} />
+        <>
+            <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+                {userGalleries.data.map((gallery, index) => (
+                    <NftGalleryCard
+                        key={index}
+                        gallery={gallery}
+                        showDeleteButton
+                        onDelete={() => {
+                            setGalleryToDelete(gallery);
+                        }}
+                    />
+                ))}
+            </div>
 
-            <div className="mx-6 sm:mx-8 2xl:mx-0">
-                <div className="mb-6 flex w-full items-center justify-between">
+            {userGalleries.meta.last_page > 1 && (
+                <Pagination
+                    className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
+                    data={userGalleries}
+                />
+            )}
+
+            <ConfirmDeletionDialog
+                title={t("pages.galleries.delete_modal.title")}
+                isOpen={galleryToDelete !== null}
+                onClose={() => {
+                    setGalleryToDelete(null);
+                }}
+                onConfirm={submit}
+                isDisabled={processing}
+            >
+                {t("pages.galleries.delete_modal.confirmation_text")}
+            </ConfirmDeletionDialog>
+        </>
+    );
+};
+
+const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Properties): JSX.Element => {
+    const { t } = useTranslation();
+
+    return (
+        <Layout
+            title={title}
+            nftCount={nftCount}
+            galleryCount={galleryCount}
+        >
+            <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
+                <div className="mb-6 hidden w-full items-center justify-between xl:flex">
                     <Heading level={1}>
                         <span className="leading-tight text-theme-secondary-800 dark:text-theme-dark-50">
-                            {t("pages.galleries.my_galleries.title")}
+                            {showDrafts ? t("common.drafts") : t("common.published")}
                         </span>
                     </Heading>
 
-                    {nftCount === 0 && (
-                        <>
-                            <Tooltip
-                                content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}
-                                touch
-                            >
-                                <div className="sm:hidden">
-                                    <Button
-                                        icon="Plus"
-                                        variant="icon-primary"
-                                        disabled={true}
-                                    />
-                                </div>
-                            </Tooltip>
-
-                            <Tooltip
-                                content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}
-                                touch
-                            >
-                                <div className="hidden sm:block">
-                                    <Button disabled={true}>
-                                        <span className="flex items-center space-x-2">
-                                            <Icon
-                                                name="Plus"
-                                                size="md"
-                                            />
-                                            <span>{t("common.create_gallery")}</span>
-                                        </span>
-                                    </Button>
-                                </div>
-                            </Tooltip>
-                        </>
-                    )}
-
-                    {nftCount > 0 && (
-                        <>
-                            <Button
-                                onClick={() => {
-                                    router.visit(createGalleryUrl);
-                                }}
-                                className="sm:hidden"
-                                icon="Plus"
-                                variant="icon-primary"
-                            ></Button>
-
-                            <Button
-                                onClick={() => {
-                                    router.visit(createGalleryUrl);
-                                }}
-                                className="hidden sm:block"
-                            >
-                                <span className="flex items-center space-x-2">
-                                    <Icon
-                                        name="Plus"
-                                        size="md"
-                                    />
-                                    <span>{t("common.create_gallery")}</span>
-                                </span>
-                            </Button>
-                        </>
-                    )}
+                    <CreateGalleryButton nftCount={nftCount} />
                 </div>
-
-                {userGalleries.meta.total === 0 && (
-                    <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>
-                )}
-
-                {userGalleries.meta.total > 0 && (
-                    <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3 xl:grid-cols-4">
-                        {userGalleries.data.map((gallery, index) => (
-                            <NftGalleryCard
-                                key={index}
-                                gallery={gallery}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {userGalleries.meta.last_page > 1 && (
-                    <Pagination
-                        className="my-6 flex w-full flex-col justify-center px-6 xs:items-center sm:px-8  lg:mb-0"
-                        data={userGalleries}
-                    />
-                )}
             </div>
-        </LayoutWrapper>
+
+            {showDrafts ? <Drafts /> : <StoredGalleries galleries={galleries} />}
+        </Layout>
     );
 };
 

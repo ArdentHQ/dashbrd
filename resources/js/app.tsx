@@ -21,12 +21,15 @@ import {
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
+import { initDB } from "react-indexed-db-hook";
 import { AuthContextProvider } from "./Contexts/AuthContext";
 import DarkModeContextProvider from "./Contexts/DarkModeContext";
+import { DraftGalleriesContextProvider } from "./Contexts/DraftGalleriesContext";
 import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
 import { CookieConsent } from "./cookieConsent";
 import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
 import { TransactionSliderProvider } from "@/Contexts/TransactionSliderContext";
+import { databaseConfig } from "@/databaseConfig";
 import { i18n } from "@/I18n";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
@@ -55,6 +58,8 @@ const appName = window.document.querySelector("title")?.innerText ?? "Dashbrd";
 
 const queryClient = new QueryClient();
 
+initDB(databaseConfig);
+
 void createInertiaApp({
     title: (title) => (title !== "" ? title : appName),
 
@@ -71,13 +76,15 @@ void createInertiaApp({
                 >
                     <I18nextProvider i18n={i18n}>
                         <AuthContextProvider initialAuth={props.initialPage.props.auth}>
-                            <MetaMaskContextProvider>
-                                <TransactionSliderProvider>
-                                    <DarkModeContextProvider>
-                                        <App {...props} />
-                                    </DarkModeContextProvider>
-                                </TransactionSliderProvider>
-                            </MetaMaskContextProvider>
+                            <DraftGalleriesContextProvider>
+                                <MetaMaskContextProvider>
+                                    <TransactionSliderProvider>
+                                        <DarkModeContextProvider>
+                                            <App {...props} />
+                                        </DarkModeContextProvider>
+                                    </TransactionSliderProvider>
+                                </MetaMaskContextProvider>
+                            </DraftGalleriesContextProvider>
                         </AuthContextProvider>
                     </I18nextProvider>
                 </EnvironmentContextProvider>

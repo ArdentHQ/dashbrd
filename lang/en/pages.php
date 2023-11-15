@@ -165,12 +165,19 @@ return [
         ],
         'my_galleries' => [
             'title' => 'My Galleries',
+            'subtitle' => 'Manage your galleries',
             'new_gallery' => 'New Gallery',
             'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
+            'no_draft_galleries' => 'You have no draft galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'succesfully_deleted' => 'Gallery successfully deleted',
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',
             'new_gallery_no_nfts' => 'Creating a Gallery requires you to own an NFT.',
+            'delete_modal' => [
+                'title' => 'Delete Draft',
+                'text' => 'Are you sure you want to delete the draft? Everything you\'ve done will be deleted and you won\'t be able to get it back.',
+            ],
+            'nfts_no_longer_owned' => 'NFTs no longer owned by this wallet have been removed from the draft”',
         ],
         'copy_gallery_link' => 'Copy Gallery Link',
         'my_nfts' => 'My NFTs',
@@ -221,10 +228,12 @@ return [
             'can_purchase' => 'You can purchase NFTs with these top NFT Marketplaces:',
             'must_own_one_nft' => 'You must own at least one (1) NFT in order to create a gallery.',
             'back_to_galleries' => 'Back to Galleries',
+            'draft_saved' => 'Draft Saved',
+            'saving_to_draft' => 'Saving to draft',
         ],
         'delete_modal' => [
             'title' => 'Delete Gallery',
-            'confirmation_text' => "Are you sure you want to delete the gallery? Everything you've done will be deleted and you won't be able to get it back.",
+            'confirmation_text' => "Are you sure you want to delete the gallery? Deleting a Gallery is permanent, all associated views and likes will be lost.",
         ],
         'consists_of_collections' => '{0} This gallery consists of :count collections|{1} This gallery consists of :count collection|[2,*] This gallery consists of :count collections',
         'guest_banner' => [

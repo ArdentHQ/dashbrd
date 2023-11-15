@@ -1,7 +1,9 @@
 import { useForm } from "@inertiajs/react";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { type GalleryDraft } from "./useGalleryDrafts";
 import { useToasts } from "@/Hooks/useToasts";
+import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { isTruthy } from "@/Utils/is-truthy";
 
 interface UseGalleryFormProperties extends Record<string, unknown> {
@@ -13,8 +15,14 @@ interface UseGalleryFormProperties extends Record<string, unknown> {
 
 export const useGalleryForm = ({
     gallery,
+    draft,
+    setDraftNfts,
+    deleteDraft,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
+    draft?: GalleryDraft;
+    setDraftNfts?: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
+    deleteDraft?: () => void;
 }): {
     selectedNfts: App.Data.Gallery.GalleryNftData[];
     gallery?: App.Data.Gallery.GalleryData;
@@ -81,6 +89,9 @@ export const useGalleryForm = ({
                     type: "error",
                 });
             },
+            onSuccess: () => {
+                deleteDraft?.();
+            },
         });
     };
 
@@ -88,18 +99,30 @@ export const useGalleryForm = ({
         // Convert them to strings to compare ordering too.
         const selectedNftsOrder = data.nfts.join();
         const nftsOrder = nfts.map((nft) => nft.id).join();
-
         // Avoid setting if values are the same as it causes infinite re-renders.
         if (selectedNftsOrder === nftsOrder) {
             return;
         }
-
         setSelectedNfts(nfts);
         setData(
             "nfts",
             nfts.map((nft) => nft.id),
         );
+        setDraftNfts?.(nfts);
     };
+
+    useEffect(() => {
+        if (draft?.id == null) {
+            return;
+        }
+
+        setData({
+            id: null,
+            name: draft.title,
+            nfts: [],
+            coverImage: arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType),
+        });
+    }, [draft?.id ?? null]);
 
     return {
         data,
