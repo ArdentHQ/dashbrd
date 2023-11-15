@@ -82,7 +82,7 @@ const Create = ({
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
         setDraftNfts: setNfts,
-        draft,
+        draft: isEditingDraft ? draft : undefined,
         deleteDraft: (): void => {
             void remove(draft.id);
 
@@ -104,7 +104,7 @@ const Create = ({
         };
 
         // Wallet is changed while editing.
-        // Create a new draft, copy title & cover from the existin, add redirect to the new.
+        // Create a new draft, copy the title & cover from the existing one, add redirect to the new one.
         if (isTruthy(previousWallet) && previousWallet !== auth.wallet?.address) {
             void redirectToNewDraft(draft);
             return;
