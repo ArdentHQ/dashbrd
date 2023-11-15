@@ -14,6 +14,10 @@ const showToast = (toastMessage?: ToastMessage): void => {
                 toastMessage={toastMessage}
                 onClose={() => {
                     toastService.dismiss(toast.id);
+
+                    if (toastMessage.onClose !== undefined) {
+                        toastMessage.onClose();
+                    }
                 }}
             />
         ),

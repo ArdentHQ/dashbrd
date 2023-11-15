@@ -24,6 +24,7 @@ import { I18nextProvider } from "react-i18next";
 import { AuthContextProvider } from "./Contexts/AuthContext";
 import DarkModeContextProvider from "./Contexts/DarkModeContext";
 import EnvironmentContextProvider from "./Contexts/EnvironmentContext";
+import Erc1155ContextProvider from "./Contexts/Erc1155Context";
 import { CookieConsent } from "./cookieConsent";
 import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
 import { TransactionSliderProvider } from "@/Contexts/TransactionSliderContext";
@@ -74,7 +75,9 @@ void createInertiaApp({
                             <MetaMaskContextProvider>
                                 <TransactionSliderProvider>
                                     <DarkModeContextProvider>
-                                        <App {...props} />
+                                        <Erc1155ContextProvider>
+                                            <App {...props} />
+                                        </Erc1155ContextProvider>
                                     </DarkModeContextProvider>
                                 </TransactionSliderProvider>
                             </MetaMaskContextProvider>

@@ -7,6 +7,7 @@ export interface ToastMessage {
     isExpanded?: boolean;
     isStatic?: boolean;
     isLoading?: boolean;
+    onClose?: () => void;
 }
 
 export type ToastType = "pending" | "success" | "warning" | "error" | "info";
