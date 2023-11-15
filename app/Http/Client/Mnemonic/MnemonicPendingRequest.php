@@ -372,6 +372,7 @@ class MnemonicPendingRequest extends PendingRequest
             'LABEL_MINT',
             'LABEL_SALE',
             'LABEL_TRANSFER',
+            'LABEL_BURN',
         ]));
 
         if ($from !== null) {
@@ -458,7 +459,7 @@ class MnemonicPendingRequest extends PendingRequest
      */
     private function extractNftTransferType(array $labels): ?NftTransferType
     {
-        $validLabels = ['LABEL_MINT', 'LABEL_TRANSFER', 'LABEL_SALE'];
+        $validLabels = ['LABEL_MINT', 'LABEL_BURN', 'LABEL_TRANSFER', 'LABEL_SALE'];
 
         $label = collect($validLabels)->first(function ($label) use ($labels) {
             return in_array($label, $labels);

@@ -10,6 +10,7 @@ it('should return the enum from value', function ($value, $expected) {
     ['LABEL_MINT', NftTransferType::Mint],
     ['LABEL_SALE', NftTransferType::Sale],
     ['LABEL_TRANSFER', NftTransferType::Transfer],
+    ['LABEL_BURN', NftTransferType::Burn],
 ]);
 
 it('should throw an exception when trying to get the enum from an invalid value', function () {

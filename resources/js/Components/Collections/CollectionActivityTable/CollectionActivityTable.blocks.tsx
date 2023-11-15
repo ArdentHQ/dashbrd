@@ -164,6 +164,7 @@ export const Type = ({
         LABEL_MINT: "LayeredCards",
         LABEL_TRANSFER: "ArrowUpArrowDown",
         LABEL_SALE: "Cart",
+        LABEL_BURN: "Cart", // TODO: handle icon for burn...
     };
 
     // This will need to be adjusted if more types are added

@@ -19,6 +19,7 @@ enum NftTransferType: string
     case Mint = 'LABEL_MINT';
     case Sale = 'LABEL_SALE';
     case Transfer = 'LABEL_TRANSFER';
+    case Burn = 'LABEL_BURN';
 
     public static function getEnumFromValue(string $value): self
     {
@@ -26,6 +27,7 @@ enum NftTransferType: string
             'LABEL_MINT' => self::Mint,
             'LABEL_SALE' => self::Sale,
             'LABEL_TRANSFER' => self::Transfer,
+            'LABEL_BURN' => self::Burn,
             default => throw new InvalidArgumentException(sprintf('Invalid value: %s', $value)),
         };
     }
