@@ -174,6 +174,7 @@ return [
         ],
         'copy_gallery_link' => 'Copy Gallery Link',
         'my_nfts' => 'My NFTs',
+        'show_hidden_collections' => 'Show hidden collections',
         'value' => 'Value',
         'floor_price' => 'Floor Price',
         'nfts' => 'NFTs',
