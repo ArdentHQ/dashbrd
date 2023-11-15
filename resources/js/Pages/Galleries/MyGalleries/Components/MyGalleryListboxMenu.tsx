@@ -24,6 +24,8 @@ export const MyGalleryListboxMenu = ({
 
     const draftRoute = route(routeName, { draft: true });
 
+    const isDraftsLinkDisabled = draftsCount === undefined || draftsCount === 0;
+
     return (
         <>
             <div
@@ -52,13 +54,13 @@ export const MyGalleryListboxMenu = ({
                         <>
                             {showPublished ? (
                                 <div className="flex w-full justify-between">
-                                    <span>{t("common.published")}</span>
-                                    <span>{publishedCount}</span>
+                                    <span className="dark:text-theme-dark-50">{t("common.published")}</span>
+                                    <span className="dark:text-theme-dark-100">{publishedCount}</span>
                                 </div>
                             ) : (
                                 <div className="flex w-full justify-between">
-                                    <span>{t("common.drafts")}</span>
-                                    <span>{draftsCount}</span>
+                                    <span className="dark:text-theme-dark-50">{t("common.drafts")}</span>
+                                    <span className="dark:text-theme-dark-100">{draftsCount}</span>
                                 </div>
                             )}
                         </>
@@ -72,23 +74,21 @@ export const MyGalleryListboxMenu = ({
                         }}
                     >
                         <span>{t("common.published")}</span>
-                        <span className="text-theme-secondary-700">{publishedCount}</span>
+                        <span>{publishedCount}</span>
                     </Listbox.Option>
 
                     <Listbox.Option
                         value={draftRoute}
-                        isDisabled={draftsCount === undefined || draftsCount === 0}
+                        isDisabled={isDraftsLinkDisabled}
                         classNames={{
                             optionLabel: "flex w-full justify-between",
                             iconContainer: "flex flex-1 justify-between",
                         }}
                     >
-                        <span>{t("common.drafts")}</span>
-                        <span
-                            className={cn(draftsCount !== undefined && draftsCount > 0 && "text-theme-secondary-700")}
-                        >
-                            {draftsCount}
+                        <span className={cn(isDraftsLinkDisabled && "dark:text-theme-dark-500")}>
+                            {t("common.drafts")}
                         </span>
+                        <span className={cn(isDraftsLinkDisabled && "dark:text-theme-dark-500")}>{draftsCount}</span>
                     </Listbox.Option>
                 </Listbox>
             </div>
