@@ -10,7 +10,7 @@ import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
 import { useAuth } from "@/Contexts/AuthContext";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
-import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
