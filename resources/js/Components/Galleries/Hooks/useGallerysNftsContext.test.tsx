@@ -48,11 +48,11 @@ describe("useGalleryNftsContext", () => {
         >;
 
         useEffect(() => {
-            void searchNfts();
+            void searchNfts(showHidden);
         }, []);
 
         useEffect(() => {
-            void searchNfts(undefined, showHidden);
+            void searchNfts(showHidden);
         }, [showHidden]);
 
         const collections = Object.entries(collectionGroups);
@@ -103,7 +103,7 @@ describe("useGalleryNftsContext", () => {
                 {remainingCollectionCount() > 0 && (
                     <button
                         onClick={() => {
-                            loadMoreCollections();
+                            loadMoreCollections(showHidden);
                         }}
                         data-testid="TestGallery__loadCollections"
                     >

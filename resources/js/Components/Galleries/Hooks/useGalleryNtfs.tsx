@@ -140,19 +140,15 @@ export const useGalleryNtfs = ({ nftsPerPage, collectionsPerPage }: GalleryNftsP
             : pageMeta.total - collectionsLength;
     };
 
-    const loadMoreCollections = (query?: string, showHidden: boolean = false): void => {
+    const loadMoreCollections = (showHidden: boolean, query?: string): void => {
         const nextPageUrl = pageMeta.next_page_url;
 
         if (!loadingCollections && nextPageUrl !== null) {
-            void fetchCollections(nextPageUrl, query, showHidden);
+            void fetchCollections(nextPageUrl, showHidden, query);
         }
     };
 
-    const fetchCollections = async (
-        nextPageUrl: string,
-        query?: string,
-        showHidden: boolean = false,
-    ): Promise<void> => {
+    const fetchCollections = async (nextPageUrl: string, showHidden: boolean, query?: string): Promise<void> => {
         cancelPreviousRequest();
 
         setLoadingCollections(true);
@@ -205,9 +201,9 @@ export const useGalleryNtfs = ({ nftsPerPage, collectionsPerPage }: GalleryNftsP
         });
     };
 
-    const searchNfts = async (query?: string, showHidden: boolean = false): Promise<void> => {
+    const searchNfts = async (showHidden: boolean, query?: string): Promise<void> => {
         setIsSearchingCollections(true);
-        await fetchCollections(pageMeta.first_page_url, query, showHidden);
+        await fetchCollections(pageMeta.first_page_url, showHidden, query);
         setIsSearchingCollections(false);
     };
 

@@ -40,7 +40,7 @@ export const NftCollectionSearch = ({ showHidden }: { showHidden: boolean }): JS
     const remainingCollections = remainingCollectionCount();
 
     useEffect(() => {
-        void searchNfts(debouncedQuery, showHidden);
+        void searchNfts(showHidden, debouncedQuery);
     }, [debouncedQuery, showHidden]);
 
     return (
@@ -79,7 +79,7 @@ export const NftCollectionSearch = ({ showHidden }: { showHidden: boolean }): JS
                                 variant="secondary"
                                 className="inline-flex w-full flex-1 justify-center sm:flex-none"
                                 onClick={() => {
-                                    loadMoreCollections(debouncedQuery, showHidden);
+                                    loadMoreCollections(showHidden, debouncedQuery);
                                 }}
                             >
                                 {t("pages.galleries.create.load_more_collections", {
