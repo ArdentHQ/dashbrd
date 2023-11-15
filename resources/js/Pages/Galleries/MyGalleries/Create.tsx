@@ -98,7 +98,7 @@ const Create = ({
         }
 
         const redirectToNewDraft = async (existingDraft: GalleryDraft): Promise<void> => {
-            const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address });
+            const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address, nfts: [] });
             reset(newDraft);
             replaceUrlQuery({ draftId: newDraft.id.toString() });
         };
