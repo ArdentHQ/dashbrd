@@ -60,7 +60,7 @@ export const useWalletDraftGallery = ({
     }, [draftId, address]);
 
     const saveDraft = async (draft: GalleryDraft): Promise<void> => {
-        if (isDisabled) {
+        if (isTruthy(isDisabled)) {
             setIsLoading(false);
             return;
         }
