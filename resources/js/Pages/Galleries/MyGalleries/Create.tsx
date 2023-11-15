@@ -1,5 +1,6 @@
 import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
+import axios from "axios";
 import uniqBy from "lodash/uniqBy";
 import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -74,7 +75,7 @@ const Create = ({
         gallery?.nfts.paginated.data,
     );
 
-    const { remove } = useWalletDraftGalleries({ address: auth.wallet.address });
+    const { remove, hasReachedLimit } = useWalletDraftGalleries({ address: auth.wallet.address });
     const { setCover, setNfts, setTitle, draft, isSaving, isLoading } = useWalletDraftGallery({
         draftId,
         address: auth.wallet.address,
