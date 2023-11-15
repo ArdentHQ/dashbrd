@@ -101,3 +101,38 @@ it('should return correct NFTs for the given page', function () {
 
     expect($pulledNfts)->toEqual($nfts->pluck('id'));
 });
+
+
+it("should return hidden collections if 'showHidden' is true", function () {
+    Config::set('dashbrd.gallery.pagination.collections_per_page', 8);
+    Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
+
+    $user = createUser();
+
+    $userCollections = Collection::factory()->count(12)->create();
+
+    $userCollections->each(function (Collection $collection) use ($user) {
+        Nft::factory()->count(2)->create([
+            'wallet_id' => $user->wallet_id,
+            'collection_id' => $collection->id,
+        ]);
+    });
+
+    $firstCollection = $userCollections->first();
+
+    $secondUser = createUser();
+
+    $unownedNfts = Nft::factory()->count(2)->create([
+        'wallet_id' => $secondUser->wallet_id,
+        'collection_id' => $firstCollection->id,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->getJson(route('my-galleries.collections', ['showHidden' => 'true']))
+        ->assertStatus(200)
+        ->assertJsonCount(2)
+        ->json();
+
+    expect(count($response['collections']['paginated']['data']))->toEqual(0)
+        ->and(count($response['nfts']))->toEqual(0);
+});
