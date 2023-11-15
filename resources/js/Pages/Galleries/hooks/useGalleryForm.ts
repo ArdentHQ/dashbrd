@@ -6,7 +6,7 @@ import { useToasts } from "@/Hooks/useToasts";
 import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export interface UseGalleryFormProperties extends Record<string, unknown> {
+interface UseGalleryFormProperties extends Record<string, unknown> {
     id: number | null;
     name: string;
     nfts: number[];
@@ -108,7 +108,6 @@ export const useGalleryForm = ({
             "nfts",
             nfts.map((nft) => nft.id),
         );
-
         setDraftNfts?.(nfts);
     };
 
