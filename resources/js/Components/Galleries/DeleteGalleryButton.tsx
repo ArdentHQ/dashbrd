@@ -8,7 +8,7 @@ const DeleteGalleryButton = ({ onDelete }: { onDelete: React.MouseEventHandler<H
         }}
         variant="secondary"
         iconSize="md"
-        className="bg-transparent dark:text-theme-dark-200 p-2"
+        className="bg-transparent p-2 dark:text-theme-dark-200"
         data-testid="DeleteGalleryButton"
     />
 );
