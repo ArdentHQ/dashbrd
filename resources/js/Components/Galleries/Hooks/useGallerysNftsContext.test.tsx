@@ -1,7 +1,7 @@
 import { groupBy } from "@ardenthq/sdk-helpers";
 import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { beforeEach, expect } from "vitest";
 import GalleryNftData = App.Data.Gallery.GalleryNftData;
 import { GalleryNfts, useGalleryNftsContext } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
@@ -28,6 +28,8 @@ describe("useGalleryNftsContext", () => {
     const nfts = [...firstCollectionNfts, ...secondCollectionNfts].flat();
 
     const HookTestComponent = (): JSX.Element => {
+        const [showHidden, setShowHidden] = useState<boolean>(false);
+
         const {
             nfts,
             remainingCollectionCount,
@@ -48,6 +50,10 @@ describe("useGalleryNftsContext", () => {
         useEffect(() => {
             void searchNfts();
         }, []);
+
+        useEffect(() => {
+            void searchNfts(undefined, showHidden);
+        }, [showHidden]);
 
         const collections = Object.entries(collectionGroups);
 
@@ -104,6 +110,15 @@ describe("useGalleryNftsContext", () => {
                         load {remainingCollectionCount()} more collections
                     </button>
                 )}
+
+                <button
+                    onClick={() => {
+                        setShowHidden(!showHidden);
+                    }}
+                    data-testid="TestGallery__toggleHidden"
+                >
+                    toggle hidden
+                </button>
             </div>
         );
     };
@@ -432,5 +447,27 @@ describe("useGalleryNftsContext", () => {
         await waitFor(() => {
             expect(screen.queryAllByTestId(`NFT_Skeleton--${newNftSlug}`).length).toBe(0);
         });
+    });
+
+    it("should append showHidden to the collections endpoint when toggled", async () => {
+        const axiosSpy = vi.spyOn(axios, "get");
+
+        const { container } = render(
+            <Component
+                collectionsPerPage={10}
+                nftsPerPage={10}
+            />,
+        );
+
+        await waitFor(() => {
+            expect(container.getElementsByClassName("TestGallery_Collection").length).toBe(2);
+        });
+
+        act(() => {
+            fireEvent.click(screen.getByTestId("TestGallery__toggleHidden"));
+        });
+
+        expect(axiosSpy).toHaveBeenCalled();
+        expect(axiosSpy).toHaveBeenCalledWith(`${BASE_URL}/my-galleries/collections`, expect.objectContaining({}));
     });
 });
