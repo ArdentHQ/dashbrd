@@ -6,6 +6,7 @@ import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useSt
 import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
+import { DraftsLimitDialog } from "@/Components/Galleries/DraftsLimitDialog";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
 import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
 import { GalleryFormSlider, GalleryFormSliderTabs } from "@/Components/Galleries/GalleryPage/GalleryFormSlider";
