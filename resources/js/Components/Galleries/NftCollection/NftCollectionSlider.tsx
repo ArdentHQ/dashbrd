@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NftCollectionSearch } from "./NftCollectionSearch";
+import { NftHiddenCollectionsToggle } from "./NftHiddenCollectionsToggle";
 import { Button } from "@/Components/Buttons";
-import { Toggle } from "@/Components/Form/Toggle";
 import { useEditableGalleryContext } from "@/Components/Galleries/Hooks/useEditableGalleryContext";
 import { useNftSelectableContext } from "@/Components/Galleries/Hooks/useNftSelectableContext";
 import { Slider, useSliderContext } from "@/Components/Slider";
@@ -28,21 +28,19 @@ export const NftCollectionSlider = (): JSX.Element => {
             <Slider.Header>
                 <div className="flex w-full items-center justify-between">
                     <span className="text-lg font-medium leading-8">{t("pages.galleries.my_nfts")}</span>
-                    <div className="flex items-center gap-3">
-                        <span className="text-base font-medium text-theme-secondary-700">
-                            {t("pages.galleries.show_hidden_collections")}
-                        </span>
-
-                        <Toggle
-                            checked={showHidden}
-                            onChange={() => {
-                                setShowHidden(!showHidden);
-                            }}
-                        />
-                    </div>
+                    <NftHiddenCollectionsToggle
+                        setShowHidden={setShowHidden}
+                        showHidden={showHidden}
+                        className="hidden md:block"
+                    />
                 </div>
             </Slider.Header>
             <Slider.Content className="relative pb-28">
+                <NftHiddenCollectionsToggle
+                    setShowHidden={setShowHidden}
+                    showHidden={showHidden}
+                    className="mb-4 flex w-full items-center justify-between border-b border-theme-secondary-300 pb-4 dark:border-theme-dark-700 md:hidden"
+                />
                 <NftCollectionSearch showHidden={showHidden} />
 
                 <div className="fixed inset-x-0 bottom-0 flex w-full items-center justify-end space-x-3 border-t border-theme-secondary-300 bg-white px-8 py-4 dark:border-theme-dark-700 dark:bg-theme-dark-900">
