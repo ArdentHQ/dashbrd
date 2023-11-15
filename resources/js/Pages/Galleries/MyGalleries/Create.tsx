@@ -82,10 +82,9 @@ const Create = ({
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
         setDraftNfts: setNfts,
-        draft: isEditingDraft ? draft : undefined,
+        draft,
         deleteDraft: (): void => {
             void remove(draft.id);
-
             replaceUrlQuery({ draftId: "" });
         },
     });
