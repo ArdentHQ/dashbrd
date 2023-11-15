@@ -4,14 +4,14 @@ import { useGalleryNtfs } from "@/Components/Galleries/Hooks/useGalleryNtfs";
 export interface GalleryNftsState {
     nfts: App.Data.Gallery.GalleryNftData[];
     remainingCollectionCount: () => number;
-    loadMoreCollections: (query?: string) => void;
+    loadMoreCollections: (query?: string, showHidden?: boolean) => void;
     loadingCollections: boolean;
     isSearchingCollections: boolean;
     allNftsLoaded: (nft: App.Data.Gallery.GalleryNftData) => boolean;
     loadMoreNfts: (nft: App.Data.Gallery.GalleryNftData) => void;
     loadingNfts: (nft: App.Data.Gallery.GalleryNftData) => boolean;
     getLoadingNftsCount: (nft: App.Data.Gallery.GalleryNftData) => number;
-    searchNfts: (query?: string) => Promise<void>;
+    searchNfts: (query?: string, showHidden?: boolean) => Promise<void>;
 }
 
 interface GalleryNftsProperties {
