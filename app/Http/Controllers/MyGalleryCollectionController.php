@@ -20,12 +20,19 @@ class MyGalleryCollectionController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $collections = $user
-            ->collections()
+        $showHidden = $request->get('showHidden')  === "true";
+
+        $collectionsQuery = $showHidden
+            ? $user->hiddenCollections()
+            : $user->collections()->whereNotIn('collections.id', $user->hiddenCollections()->pluck('id')->toArray());
+
+        $collections = $collectionsQuery
             ->where('collections.name', 'ilike', sprintf('%%%s%%', $request->get('query')))
             ->withUserNftsCount($user)
             ->orderBy('id')
             ->paginate(config('dashbrd.gallery.pagination.collections_per_page'));
+
+
 
         $nfts = Nft::paginatedCollectionNfts(
             $collections,
