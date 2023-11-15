@@ -1,9 +1,9 @@
 import { router } from "@inertiajs/react";
+import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { Button, ButtonVariant } from "@/Components/Buttons";
+import { Button, type ButtonVariant } from "@/Components/Buttons";
 import { Icon } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
-import cn from "classnames";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const CreateGalleryButton = ({
