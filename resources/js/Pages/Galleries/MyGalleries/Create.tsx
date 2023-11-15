@@ -19,8 +19,9 @@ import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useToasts } from "@/Hooks/useToasts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { useGalleryDrafts } from "@/Pages/Galleries/hooks/useGalleryDrafts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
+import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { useWalletDraftGallery } from "@/Pages/Galleries/hooks/useWalletDraftGallery";
 import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { fileToImageDataURI } from "@/Utils/file-to-image-data-uri";
@@ -71,33 +72,41 @@ const Create = ({
         gallery?.nfts.paginated.data,
     );
 
-    const { setDraftCover, setDraftNfts, setDraftTitle, draft, isSaving, deleteDraft } = useGalleryDrafts(
+    const { remove } = useWalletDraftGalleries({ address: auth.wallet.address });
+    const { setCover, setNfts, setTitle, draft, isSaving, isLoading } = useWalletDraftGallery({
         draftId,
-        isTruthy(gallery?.slug),
-    );
+        address: auth.wallet.address,
+        isDisabled: isTruthy(gallery?.slug),
+    });
 
     useEffect(() => {
-        if (draft.id !== null) {
+        if (isLoading || isSaving) {
+            return;
+        }
+
+        if (isTruthy(draft.id)) {
             replaceUrlQuery({ draftId: draft.id.toString() });
         }
-    }, [draft.id]);
+
+        if (!isTruthy(draft.id) && isTruthy(draftId)) {
+            replaceUrlQuery({ draftId: "" });
+        }
+    }, [draft.id, isLoading, isSaving]);
 
     const isEditingDraft = draft.id !== null && gallery === undefined;
 
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
+        setDraftNfts: setNfts,
         draft: isEditingDraft ? draft : undefined,
-        setDraftNfts,
         deleteDraft: (): void => {
-            void deleteDraft(draft.id);
+            void remove(draft.id);
 
             replaceUrlQuery({ draftId: "" });
         },
     });
 
     const totalValue = 0;
-
-    assertUser(auth.user);
 
     const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>>(
         () =>
@@ -198,7 +207,7 @@ const Create = ({
                         setData("name", name);
                     }}
                     onBlur={() => {
-                        setDraftTitle(data.name);
+                        setTitle(data.name);
                     }}
                 />
 
@@ -276,12 +285,12 @@ const Create = ({
                     setGalleryCoverImageUrl(imageDataURI);
                     if (blob === undefined) {
                         setData("coverImage", null);
-                        setDraftCover(null, null, null);
+                        setCover(null, null, null);
                     } else {
                         setData("coverImage", new File([blob], blob.name, { type: blob.type }));
                         // eslint-disable-next-line promise/prefer-await-to-then
                         void blob.arrayBuffer().then((buf) => {
-                            setDraftCover(buf, blob.name, blob.type);
+                            setCover(buf, blob.name, blob.type);
                         });
                     }
                     setIsGalleryFormSliderOpen(false);

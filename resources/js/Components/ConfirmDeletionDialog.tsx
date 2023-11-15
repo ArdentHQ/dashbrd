@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type ButtonVariant } from "./Buttons";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
@@ -27,6 +27,7 @@ export const ConfirmDeletionDialog = ({
     confirmationButtonVariant,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
+
     const input = useRef<HTMLInputElement>(null);
     const [confirmationValue, setConfirmationValue] = useState("");
 
@@ -35,16 +36,6 @@ export const ConfirmDeletionDialog = ({
         [confirmationValue, requiresConfirmation],
     );
 
-    useEffect(() => {
-        if (isOpen) {
-            return;
-        }
-        // Reset after transition ends...
-        setTimeout(() => {
-            setConfirmationValue("");
-        }, 200);
-    }, [isOpen]);
-
     return (
         <ConfirmationDialog
             title={title}
@@ -52,7 +43,10 @@ export const ConfirmDeletionDialog = ({
             confirmLabel={t("common.confirm")}
             onConfirm={onConfirm}
             isDisabled={isDisabled || !valid}
-            onClose={onClose}
+            onClose={() => {
+                setConfirmationValue("");
+                onClose();
+            }}
             focus={input}
             confirmationButtonVariant={confirmationButtonVariant}
         >
@@ -64,7 +58,6 @@ export const ConfirmDeletionDialog = ({
                 {requiresConfirmation && (
                     <TextInput
                         ref={input}
-                        value={confirmationValue}
                         onChange={(event) => {
                             setConfirmationValue(event.target.value);
                         }}

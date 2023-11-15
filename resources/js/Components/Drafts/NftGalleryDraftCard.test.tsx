@@ -2,7 +2,7 @@ import React from "react";
 import { type SpyInstance } from "vitest";
 import { NftGalleryDraftCard } from "./NftGalleryDraftCard";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import { type GalleryDraft } from "@/Pages/Galleries/hooks/useGalleryDrafts";
+import { type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";

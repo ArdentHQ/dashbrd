@@ -1,5 +1,6 @@
+import { router } from "@inertiajs/core";
 import { useForm } from "@inertiajs/react";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CreateGalleryButton } from "./Components/CreateGalleryButton";
 import Layout from "./Layout";
@@ -10,7 +11,10 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useDraftGalleriesContext } from "@/Contexts/DraftGalleriesContext";
+import { useAuth } from "@/Contexts/AuthContext";
+import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { assertWallet } from "@/Utils/assertions";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface Properties {
     title: string;
@@ -21,14 +25,20 @@ interface Properties {
     galleryCount: number;
 }
 
-const Drafts = (): JSX.Element => {
+const Drafts = ({
+    drafts,
+    isLoading = false,
+    onRemove,
+}: {
+    isLoading: boolean;
+    drafts: GalleryDraft[];
+    onRemove?: (id: number) => void;
+}): JSX.Element => {
     const { t } = useTranslation();
 
-    const { drafts, deleteDraft } = useDraftGalleriesContext();
+    const [draftToDelete, setDraftToDelete] = useState<number | null>();
 
-    const [draftToDelete, setDraftToDelete] = useState<number | null>(null);
-
-    if (drafts === undefined) {
+    if (isLoading) {
         return <></>;
     }
 
@@ -49,13 +59,16 @@ const Drafts = (): JSX.Element => {
             ))}
 
             <DraftGalleryDeleteModal
-                open={draftToDelete !== null}
+                open={isTruthy(draftToDelete)}
                 onClose={() => {
                     setDraftToDelete(null);
                 }}
                 onConfirm={() => {
-                    void deleteDraft(draftToDelete);
+                    if (!isTruthy(draftToDelete)) {
+                        return;
+                    }
 
+                    onRemove?.(draftToDelete);
                     setDraftToDelete(null);
                 }}
             />
@@ -134,11 +147,24 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
 const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
+    const { wallet } = useAuth();
+    assertWallet(wallet);
+
+    const { remove, drafts, isLoading } = useWalletDraftGalleries({ address: wallet.address });
+
+    useEffect(() => {
+        if (showDrafts && !isLoading && drafts.length === 0) {
+            router.visit(route("my-galleries"));
+        }
+    }, [drafts, isLoading]);
+
     return (
         <Layout
             title={title}
             nftCount={nftCount}
             galleryCount={galleryCount}
+            draftsCount={drafts.length}
+            isLoadingDrafts={isLoading}
         >
             <div className="mx-6 pt-6 sm:mx-0 sm:pt-0">
                 <div className="mb-6 hidden w-full items-center justify-between xl:flex">
@@ -152,7 +178,17 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Pro
                 </div>
             </div>
 
-            {showDrafts ? <Drafts /> : <StoredGalleries galleries={galleries} />}
+            {showDrafts && (
+                <Drafts
+                    isLoading={isLoading}
+                    onRemove={(draftId) => {
+                        void remove(draftId);
+                    }}
+                    drafts={drafts}
+                />
+            )}
+
+            {!showDrafts && <StoredGalleries galleries={galleries} />}
         </Layout>
     );
 };
