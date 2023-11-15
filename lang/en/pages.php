@@ -131,6 +131,10 @@ return [
             'properties' => 'Properties',
             'activity' => 'Activity',
         ],
+        'erc1155_support' => [
+            'title' => 'No ERC1155 Support',
+            'description' => "We noticed you own some ERC1155 NFTs. Unfortunately, we don't s upport them yet.",
+        ],
     ],
 
     'reports' => [
