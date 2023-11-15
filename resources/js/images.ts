@@ -15,12 +15,15 @@ import { ReactComponent as LeftGrid } from "@images/grid-left.svg";
 import { ReactComponent as RightMiddleGrid } from "@images/grid-right-middle.svg";
 import { ReactComponent as RightGridSm } from "@images/grid-right-small.svg";
 import { ReactComponent as RightGrid } from "@images/grid-right.svg";
+import { ReactComponent as ImageLoadErrorDark } from "@images/image-load-error-dark.svg";
+import { ReactComponent as ImageLoadErrorPrimary } from "@images/image-load-error-primary.svg";
 import { ReactComponent as ImageLoadError } from "@images/image-load-error.svg";
 import { ReactComponent as Monkey } from "@images/monkey.svg";
 import { ReactComponent as Ethereum } from "@images/networks/ethereum.svg";
 import { ReactComponent as Polygon } from "@images/networks/polygon.svg";
 import { ReactComponent as SocialLeftGrid } from "@images/social-grid-left.svg";
 import { ReactComponent as SocialRightGrid } from "@images/social-grid-right.svg";
+import { ReactComponent as WarningExclamationDark } from "@images/warning-exclamation-dark.svg";
 import { ReactComponent as WarningExclamation } from "@images/warning-exclamation.svg";
 
 export {
@@ -29,7 +32,10 @@ export {
     AuthInstallWallet,
     AuthInstallWalletDark,
     WarningExclamation,
+    WarningExclamationDark,
     ImageLoadError,
+    ImageLoadErrorPrimary,
+    ImageLoadErrorDark,
     DeleteModal,
     Polygon,
     Ethereum,

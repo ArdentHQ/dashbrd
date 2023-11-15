@@ -2,7 +2,8 @@ import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ConfirmationDialog } from "@/Components/ConfirmationDialog";
-import { WarningExclamation } from "@/images";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
+import { WarningExclamation, WarningExclamationDark } from "@/images";
 
 interface Properties {
     collection: App.Data.Collections.CollectionDetailData;
@@ -12,6 +13,7 @@ interface Properties {
 export const CollectionHiddenModal = ({ collection, previousUrl }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
+    const { isDark } = useDarkModeContext();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(true);
     const [error, setError] = useState("");
@@ -46,12 +48,12 @@ export const CollectionHiddenModal = ({ collection, previousUrl }: Properties): 
             hasBlurryOverlay
         >
             <div className="flex items-center justify-center">
-                <WarningExclamation />
+                {isDark ? <WarningExclamationDark /> : <WarningExclamation />}
             </div>
 
             <p
                 data-testid="CollectionHiddenModal__description"
-                className="mt-3 leading-6 text-theme-secondary-700"
+                className="mt-3 leading-6 text-theme-secondary-700 dark:text-theme-dark-200"
             >
                 {t("pages.collections.hidden_modal.description")}
             </p>

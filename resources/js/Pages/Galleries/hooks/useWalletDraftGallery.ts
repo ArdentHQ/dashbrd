@@ -1,14 +1,28 @@
 import { useEffect, useState } from "react";
 import { type GalleryDraft, useWalletDraftGalleries } from "./useWalletDraftGalleries";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface WalletDraftGalleryState {
     isSaving: boolean;
     draft: GalleryDraft;
-    setCover: (image: ArrayBuffer | null, type: string | null) => void;
+    setCover: (image: ArrayBuffer | null, name: string | null, type: string | null) => void;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setTitle: (title: string) => void;
+    reset: (draft?: Partial<GalleryDraft>) => void;
     isLoading: boolean;
 }
+
+const defaultDraft = {
+    title: "",
+    cover: null,
+    coverType: null,
+    coverFileName: null,
+    nfts: [],
+    value: null,
+    collectionsCount: 0,
+    updatedAt: null,
+    walletAddress: undefined,
+};
 
 export const useWalletDraftGallery = ({
     address,
@@ -20,31 +34,23 @@ export const useWalletDraftGallery = ({
     isDisabled?: boolean;
 }): WalletDraftGalleryState => {
     const [isLoading, setIsLoading] = useState(true);
-    const { upsert, findById, isSaving } = useWalletDraftGalleries({ address });
+    const { upsert, findWalletDraftById, isSaving } = useWalletDraftGalleries({ address });
 
-    const [draft, setDraft] = useState<GalleryDraft>({
-        title: "",
-        cover: null,
-        coverType: null,
-        nfts: [],
-        value: null,
-        collectionsCount: 0,
-        updatedAt: null,
-        walletAddress: address,
-    });
+    const [draft, setDraft] = useState<GalleryDraft>(defaultDraft);
 
-    // populate `draft` state if `draftId` is present
     useEffect(() => {
         if (draftId === undefined || isDisabled === true) {
+            setIsLoading(false);
             return;
         }
 
         const getDraft = async (): Promise<void> => {
             setIsLoading(true);
-            const draft = await findById(draftId);
 
-            if (draft !== undefined) {
-                setDraft(draft);
+            const existingDraft = await findWalletDraftById(draftId);
+
+            if (existingDraft !== undefined) {
+                setDraft(existingDraft);
             }
 
             setIsLoading(false);
@@ -54,16 +60,25 @@ export const useWalletDraftGallery = ({
     }, [draftId, address]);
 
     const saveDraft = async (draft: GalleryDraft): Promise<void> => {
-        const savedDraft = await upsert(draft);
+        if (isTruthy(draft.walletAddress) && draft.walletAddress !== address) {
+            throw new Error("[useWalletDraftGallery:saveDraft] Trying to save draft that belongs to another wallet.");
+        }
+
+        const savedDraft = await upsert({ ...draft, walletAddress: address });
+
         setDraft(savedDraft);
     };
 
-    const setCover = (image: ArrayBuffer | null, type: string | null): void => {
-        void saveDraft({ ...draft, cover: image, coverType: type });
+    const setCover = (image: ArrayBuffer | null, name: string | null, type: string | null): void => {
+        void saveDraft({ ...draft, cover: image, coverType: type, coverFileName: name });
     };
 
     const setTitle = (title: string): void => {
         void saveDraft({ ...draft, title });
+    };
+
+    const reset = (draft?: Partial<GalleryDraft>): void => {
+        setDraft({ ...defaultDraft, ...draft });
     };
 
     const setNfts = (nfts: App.Data.Gallery.GalleryNftData[]): void => {
@@ -84,5 +99,6 @@ export const useWalletDraftGallery = ({
         isSaving,
         draft,
         isLoading,
+        reset,
     };
 };

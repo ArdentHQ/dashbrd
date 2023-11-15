@@ -93,6 +93,15 @@ describe("LayoutWrapper", () => {
                     },
                 },
             }),
+            requestMock(`${BASE_URL}/my-galleries/collections`, {
+                nfts: [],
+                collections: {
+                    paginated: {
+                        data: [],
+                        ...SamplePageMeta.paginated,
+                    },
+                },
+            }),
         );
 
         const TestButton = (): JSX.Element => {
@@ -111,10 +120,7 @@ describe("LayoutWrapper", () => {
         render(
             <LayoutWrapper withSlider>
                 <EditableGalleryHook nftLimit={16}>
-                    <GalleryNfts
-                        nfts={[]}
-                        pageMeta={SamplePageMeta.paginated.meta}
-                    >
+                    <GalleryNfts>
                         <NftSelectionHook>
                             <NftCollectionSlider />
                         </NftSelectionHook>

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Jobs\FetchCollectionActivity;
 use App\Jobs\RefreshNftMetadata;
 use App\Models\Collection;
 use App\Models\Network;
@@ -60,4 +61,28 @@ it('should not refresh if spam contract', function () {
         ->assertJson([]);
 
     Bus::assertDispatchedTimes(RefreshNftMetadata::class, 0);
+});
+
+it('should not dispatch the job to refresh the activity if collection does not index activity', function () {
+    Bus::fake();
+
+    $user = createUser();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'supply' => null,
+    ]);
+
+    $nft = Nft::factory()->create([
+        'wallet_id' => $user->wallet_id,
+        'collection_id' => $collection->id,
+    ]);
+
+    $this->actingAs($user)
+        ->post(route('nft.refresh', [$collection->slug, $nft->token_number]))
+        ->assertStatus(200);
+
+    Bus::assertNotDispatched(FetchCollectionActivity::class);
 });

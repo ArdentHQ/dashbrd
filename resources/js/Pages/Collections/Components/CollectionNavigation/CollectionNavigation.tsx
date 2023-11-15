@@ -152,11 +152,11 @@ export const CollectionNavigation = ({
                                 content={updateDisabledReason()}
                                 disabled={!isTruthy(updateDisabledReason())}
                             >
-                                <div className="py-1">
+                                <div className="flex items-center sm:pr-8 lg:pr-6">
                                     <Button
                                         icon="Refresh"
                                         variant="secondary"
-                                        className="hidden bg-theme-secondary-200 text-theme-primary-900 sm:block"
+                                        className="hidden bg-theme-secondary-200 text-theme-primary-900 dark:bg-theme-dark-700 sm:flex"
                                         disabled={!canUpdate(collection)}
                                         onClick={onRefreshActivity}
                                     >
