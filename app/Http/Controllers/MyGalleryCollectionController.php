@@ -20,7 +20,7 @@ class MyGalleryCollectionController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $collectionsQuery = $request->get('showHidden')  === "true"
+        $collectionsQuery = $request->get('showHidden') === 'true'
             ? $user->hiddenCollections()
             : $user->collections()->whereNotIn('collections.id', $user->hiddenCollections()->pluck('id')->toArray());
 
