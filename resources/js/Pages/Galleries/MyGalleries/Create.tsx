@@ -104,7 +104,7 @@ const Create = ({
         };
 
         // Wallet is changed while editing.
-        // Create a new draft, copy title & cover from the existin, add redirect to the new.
+        // Create a new draft, copy the title & cover from the existing one, add redirect to the new one.
         if (isTruthy(previousWallet) && previousWallet !== auth.wallet?.address) {
             void redirectToNewDraft(draft);
             return;
