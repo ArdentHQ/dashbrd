@@ -327,7 +327,7 @@ const Create = ({
                     setShowDraftsLimitModal(false);
                 }}
                 onCancel={() => {
-                    router.visit(route("my-galleries", { drafts: 1 }));
+                    router.visit(route("my-galleries", { draft: 1 }));
                 }}
                 onConfirm={() => {
                     setShowDraftsLimitModal(false);
