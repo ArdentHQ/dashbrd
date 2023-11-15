@@ -8,6 +8,7 @@ const DRAFT_TTL_DAYS = 30;
 interface Properties {
     address: string;
     limit?: number;
+    isDisabled?: boolean;
 }
 
 export interface DraftNft {
@@ -45,7 +46,7 @@ interface WalletDraftGalleriesState {
     hasReachedLimit: boolean;
 }
 
-export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGalleriesState => {
+export const useWalletDraftGalleries = ({ address, isDisabled = false }: Properties): WalletDraftGalleriesState => {
     const database = useIndexedDB("gallery-drafts");
     const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -64,8 +65,12 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     }, [address]);
 
     useEffect(() => {
+        if (isDisabled) {
+            return;
+        }
+
         void updateDraftState();
-    }, [address]);
+    }, [address, isDisabled]);
 
     /**
      * Add new draft gallery.

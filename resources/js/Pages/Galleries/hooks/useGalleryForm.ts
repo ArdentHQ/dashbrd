@@ -108,7 +108,10 @@ export const useGalleryForm = ({
             "nfts",
             nfts.map((nft) => nft.id),
         );
-        setDraftNfts?.(nfts);
+
+        if (draft?.id != null) {
+            setDraftNfts?.(nfts);
+        }
     };
 
     useEffect(() => {

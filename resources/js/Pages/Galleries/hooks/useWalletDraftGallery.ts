@@ -34,7 +34,7 @@ export const useWalletDraftGallery = ({
     isDisabled?: boolean;
 }): WalletDraftGalleryState => {
     const [isLoading, setIsLoading] = useState(true);
-    const { upsert, findWalletDraftById, isSaving } = useWalletDraftGalleries({ address });
+    const { upsert, findWalletDraftById, isSaving } = useWalletDraftGalleries({ address, isDisabled });
 
     const [draft, setDraft] = useState<GalleryDraft>(defaultDraft);
 

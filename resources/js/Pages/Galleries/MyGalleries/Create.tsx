@@ -72,17 +72,22 @@ const Create = ({
         gallery?.nfts.paginated.data,
     );
 
-    const { remove, add } = useWalletDraftGalleries({ address: auth.wallet.address });
+    const hasGallery = isTruthy(gallery?.slug);
+
+    const { remove, add } = useWalletDraftGalleries({ address: auth.wallet.address, isDisabled: hasGallery });
+
     const { setCover, setNfts, setTitle, draft, isSaving, isLoading, reset } = useWalletDraftGallery({
         draftId,
         address: auth.wallet.address,
-        isDisabled: isTruthy(gallery?.slug),
+        isDisabled: hasGallery,
     });
+
+    const isEditingDraft = isTruthy(draft.id) && !hasGallery;
 
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
         setDraftNfts: setNfts,
-        draft,
+        draft: isEditingDraft ? draft : undefined,
         deleteDraft: (): void => {
             void remove(draft.id);
             replaceUrlQuery({ draftId: "" });
@@ -92,11 +97,12 @@ const Create = ({
     const previousWallet = usePrevious(auth.wallet.address);
 
     useEffect(() => {
-        if (isLoading || isSaving) {
+        if (isLoading || isSaving || !isEditingDraft) {
             return;
         }
 
         const redirectToNewDraft = async (existingDraft: GalleryDraft): Promise<void> => {
+            console.log("FFF");
             const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address, nfts: [] });
             reset(newDraft);
             replaceUrlQuery({ draftId: newDraft.id.toString() });
@@ -119,7 +125,7 @@ const Create = ({
         if (!isTruthy(draft.id) && isTruthy(draftId)) {
             replaceUrlQuery({ draftId: "" });
         }
-    }, [draft.id, isLoading, isSaving, auth.wallet.address, previousWallet, data]);
+    }, [draft.id, isEditingDraft, isLoading, isSaving, auth.wallet.address, previousWallet, data]);
 
     const totalValue = 0;
 
@@ -154,7 +160,7 @@ const Create = ({
     );
 
     useEffect(() => {
-        if (draft.id == null) {
+        if (!isEditingDraft) {
             return;
         }
 
@@ -195,7 +201,7 @@ const Create = ({
         void loadDraftCover();
 
         void loadDraftNts();
-    }, [draft]);
+    }, [isEditingDraft]);
 
     const publishHandler = (event: FormEvent<Element>): void => {
         void signedAction(() => {
