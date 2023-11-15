@@ -72,7 +72,7 @@ const Create = ({
         gallery?.nfts.paginated.data,
     );
 
-    const { remove } = useWalletDraftGalleries({ address: auth.wallet.address });
+    const { remove, allDrafts } = useWalletDraftGalleries({ address: auth.wallet.address });
     const { setCover, setNfts, setTitle, draft, isSaving, isLoading } = useWalletDraftGallery({
         draftId,
         address: auth.wallet.address,
@@ -188,6 +188,28 @@ const Create = ({
         });
     };
 
+    const handleDraftCancel = async () => {
+        const isDraft = isTruthy(draftId);
+
+        if (!isDraft) {
+            router.visit(route("my-galleries"));
+            return;
+        }
+
+        const savedDrafts = await allDrafts();
+
+        if (savedDrafts.length === 0) {
+            router.visit(route("my-galleries"));
+            return;
+        }
+
+        router.visit(route("my-galleries"), {
+            data: {
+                draft: 1,
+            },
+        });
+    };
+
     return (
         <LayoutWrapper
             withSlider
@@ -269,7 +291,7 @@ const Create = ({
                     setShowDeleteModal(true);
                 }}
                 onCancel={() => {
-                    router.visit(route("my-galleries"));
+                    void handleDraftCancel();
                 }}
                 onPublish={publishHandler}
             />

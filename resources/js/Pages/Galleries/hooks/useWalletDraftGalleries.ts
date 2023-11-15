@@ -43,6 +43,7 @@ interface WalletDraftGalleriesState {
     isLoading: boolean;
     isSaving: boolean;
     hasReachedLimit: boolean;
+    allDrafts: () => Promise<GallerySavedDraft[]>;
 }
 
 export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGalleriesState => {
@@ -158,8 +159,8 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      *
      * @returns {Promise<GalleryDraft[]>}
      */
-    const allDrafts = async (): Promise<GalleryDraft[]> => {
-        const allDrafts: GalleryDraft[] = await database.getAll();
+    const allDrafts = async (): Promise<GallerySavedDraft[]> => {
+        const allDrafts: GallerySavedDraft[] = await database.getAll();
         return allDrafts.filter(
             (draft) => draft.walletAddress?.toLowerCase() === address.toLowerCase() && !isExpired(draft),
         );
@@ -218,5 +219,6 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
         isLoading,
         isSaving,
         hasReachedLimit,
+        allDrafts,
     };
 };
