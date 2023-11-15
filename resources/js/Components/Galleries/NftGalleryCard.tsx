@@ -12,7 +12,10 @@ export const NftGalleryCard = ({
     showDeleteButton?: boolean;
     onDelete?: () => void;
 }): JSX.Element => (
-    <div className="group focus-visible:outline-none focus-visible:ring-0">
+    <Link
+        href={route("galleries.view", gallery.slug)}
+        className="group focus-visible:outline-none focus-visible:ring-0"
+    >
         <div
             className={cn(
                 "transition-default m-1 box-content flex flex-col rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700",
@@ -27,12 +30,10 @@ export const NftGalleryCard = ({
 
                 {gallery.coverImage === null && <NftImageGrid nfts={gallery.nfts} />}
 
-                <Link href={route("galleries.view", gallery.slug)}>
-                    <GalleryHeading
-                        name={gallery.name}
-                        wallet={gallery.wallet}
-                    />
-                </Link>
+                <GalleryHeading
+                    name={gallery.name}
+                    wallet={gallery.wallet}
+                />
             </div>
 
             <GalleryStats
@@ -41,5 +42,5 @@ export const NftGalleryCard = ({
                 onDelete={onDelete}
             />
         </div>
-    </div>
+    </Link>
 );
