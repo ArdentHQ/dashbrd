@@ -102,7 +102,6 @@ it('should return correct NFTs for the given page', function () {
     expect($pulledNfts)->toEqual($nfts->pluck('id'));
 });
 
-
 it("should return hidden collections if 'showHidden' is true", function () {
     Config::set('dashbrd.gallery.pagination.collections_per_page', 8);
     Config::set('dashbrd.gallery.pagination.nfts_per_page', 3);
