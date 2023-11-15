@@ -11,7 +11,7 @@ import { useDebounce } from "@/Hooks/useDebounce";
 
 const debounceTimeout = 400;
 
-export const NftCollectionSearch = (): JSX.Element => {
+export const NftCollectionSearch = ({ showHidden }: { showHidden: boolean }): JSX.Element => {
     const { t } = useTranslation();
     const { clearSelection } = useNftSelectableContext();
     const [searchQuery, setSearchQuery] = useState<string>("");
@@ -40,8 +40,8 @@ export const NftCollectionSearch = (): JSX.Element => {
     const remainingCollections = remainingCollectionCount();
 
     useEffect(() => {
-        void searchNfts(debouncedQuery);
-    }, [debouncedQuery]);
+        void searchNfts(debouncedQuery, showHidden);
+    }, [debouncedQuery, showHidden]);
 
     return (
         <>
@@ -79,7 +79,7 @@ export const NftCollectionSearch = (): JSX.Element => {
                                 variant="secondary"
                                 className="inline-flex w-full flex-1 justify-center sm:flex-none"
                                 onClick={() => {
-                                    loadMoreCollections(debouncedQuery);
+                                    loadMoreCollections(debouncedQuery, showHidden);
                                 }}
                             >
                                 {t("pages.galleries.create.load_more_collections", {
