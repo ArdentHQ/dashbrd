@@ -123,7 +123,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
         }
 
         const allDraftsCount = await allDrafts();
-        if (allDraftsCount.length > MAX_DRAFT_LIMIT_PER_WALLET) {
+        if (allDraftsCount.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
             throw new Error("[useWalletDraftGalleries:upsert] Reached limit");
         }
 
