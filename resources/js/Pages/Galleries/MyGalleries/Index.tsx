@@ -12,10 +12,10 @@ import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/Draf
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
+import { useToasts } from "@/Hooks/useToasts";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useToasts } from "@/Hooks/useToasts";
 
 interface Properties extends PageProps {
     title: string;
@@ -169,7 +169,7 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
         }
     }, [drafts, isLoading]);
 
-    const handleDraftDelete = async (draftId: number) => {
+    const handleDraftDelete = async (draftId: number): Promise<void> => {
         await remove(draftId);
 
         showToast({
