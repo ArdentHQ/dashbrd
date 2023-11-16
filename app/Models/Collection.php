@@ -203,6 +203,15 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeOnlyErc721(Builder $query): Builder
+    {
+        return $query->where('type', TokenType::Erc721);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeOrderByValue(Builder $query, Wallet $wallet, string $direction, CurrencyCode $currency = CurrencyCode::USD): Builder
     {
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';

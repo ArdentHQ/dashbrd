@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Data\Wallet\WalletData;
-use App\Enums\TokenType;
 use App\Jobs\FetchEnsDetails;
 use App\Jobs\FetchNativeBalances;
 use App\Jobs\FetchTokens;
@@ -76,7 +75,7 @@ class Wallet extends Model
      */
     public function nfts(): HasMany
     {
-        return $this->hasMany(Nft::class)->where('type', TokenType::Erc721);
+        return $this->hasMany(Nft::class)->onlyErc721();
     }
 
     /**
