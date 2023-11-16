@@ -19,9 +19,9 @@ describe("NftGalleryDraftCard", () => {
         coverType: null,
         coverFileName: null,
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
+        collectionsCount: 1,
         nfts: [],
         value: "0",
-        collectionsCount: 0,
         updatedAt: 123,
     };
 
