@@ -1,7 +1,7 @@
+import uniqBy from "lodash/uniqBy";
 import { useCallback, useEffect, useState } from "react";
 import { useIndexedDB } from "react-indexed-db-hook";
 import { isTruthy } from "@/Utils/is-truthy";
-import uniqBy from "lodash/uniqBy";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 const DRAFT_TTL_DAYS = 30;
@@ -75,9 +75,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {number}
      */
-    const calculateCollectionsCount = (draft: GalleryDraft): number => {
-        return uniqBy(draft.nfts, "collectionSlug").length;
-    };
+    const calculateCollectionsCount = (draft: GalleryDraft): number => uniqBy(draft.nfts, "collectionSlug").length;
 
     /**
      * Add new draft gallery.
