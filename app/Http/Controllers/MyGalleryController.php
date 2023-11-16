@@ -35,12 +35,17 @@ class MyGalleryController extends Controller
         /** @var PaginatedDataCollection<int, GalleryCardData> */
         $collection = GalleryCardData::collection($galleries);
 
+        $userCollectionsCount = $user->collections()->count();
+        $hiddenCollectionsCount = $user->hiddenCollections()->count();
+        $areAllCollectionsHidden = $userCollectionsCount > 0 && $hiddenCollectionsCount == $userCollectionsCount;
+
         return Inertia::render('Galleries/MyGalleries/Index', [
             'title' => $showDrafts ? trans('metatags.my_galleries.title_draft') : trans('metatags.my_galleries.title'),
             'galleries' => $showDrafts ? null : new GalleriesCardData($collection),
             'nftCount' => $user->nfts()->count(),
             'galleryCount' => $user->galleries()->count(),
             'showDrafts' => $showDrafts,
+            'areAllCollectionsHidden' => $areAllCollectionsHidden,
         ]);
     }
 
