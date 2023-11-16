@@ -1,7 +1,9 @@
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
+import { ArticleErrorImage } from "./ArticleErrorImage";
 import { FeaturedCollections } from "@/Components/Articles/Article.blocks";
 import { Img } from "@/Components/Image";
+import { Link } from "@/Components/Link";
 import { useAuth } from "@/Contexts/AuthContext";
 import { type DateFormat } from "@/Types/enums";
 import { formatTimestamp } from "@/Utils/dates";
@@ -23,13 +25,15 @@ export const ArticleCard = ({
     const isLargeVariant = variant === "large";
 
     return (
-        <a
+        <Link
             data-testid="ArticleCard"
             href={route("articles.view", article.slug)}
             className={cn(
                 "transition-default group flex h-full w-full flex-col overflow-hidden rounded-xl border border-theme-secondary-300",
                 {
-                    "bg-white ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500":
+                    "outline outline-3 outline-transparent hover:outline-theme-primary-100 group-focus-visible:outline-theme-primary-300 dark:hover:outline-theme-dark-500":
+                        !isLargeVariant,
+                    "bg-white ring-theme-primary-100 dark:border-theme-dark-700 dark:bg-theme-dark-900 ":
                         !isLargeVariant,
                     "bg-theme-dark-900 hover:bg-theme-primary-700 dark:border-none dark:bg-theme-primary-700 dark:hover:bg-theme-primary-600":
                         isLargeVariant,
@@ -50,6 +54,9 @@ export const ArticleCard = ({
                     alt={article.title}
                     srcSet={`${article.image.medium} 1x, ${article.image.medium2x} 2x`}
                     src={article.image.medium}
+                    errorPlaceholder={
+                        isLargeVariant ? <ArticleErrorImage isLargeVariant={isLargeVariant} /> : undefined
+                    }
                 />
             </div>
 
@@ -68,11 +75,14 @@ export const ArticleCard = ({
                 </div>
 
                 <h4
-                    className={cn("transition-default mt-1 line-clamp-2 max-h-[3.5rem] text-lg font-medium leading-7", {
-                        "text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400":
-                            !isLargeVariant,
-                        "text-theme-secondary-300": isLargeVariant,
-                    })}
+                    className={cn(
+                        "transition-default mt-1 line-clamp-2 max-h-[3.5rem] break-words text-lg font-medium leading-7",
+                        {
+                            "text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400":
+                                !isLargeVariant,
+                            "text-theme-secondary-300": isLargeVariant,
+                        },
+                    )}
                 >
                     {article.title}
                 </h4>
@@ -99,6 +109,6 @@ export const ArticleCard = ({
                     variant={variant}
                 />
             </div>
-        </a>
+        </Link>
     );
 };

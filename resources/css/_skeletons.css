@@ -12,12 +12,13 @@
         rgb(var(--theme-color-secondary-200))
     );
 }
+
 .dark .react-loading-skeleton::after {
     background-image: linear-gradient(
         90deg,
-        rgb(var(--theme-color-dark-700)),
         rgb(var(--theme-color-dark-800)),
-        rgb(var(--theme-color-dark-700))
+        rgb(var(--theme-color-dark-900)),
+        rgb(var(--theme-color-dark-800))
     );
 }
 

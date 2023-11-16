@@ -1,13 +1,37 @@
 import { router } from "@inertiajs/core";
 import React from "react";
+import { type SpyInstance } from "vitest";
 import { CollectionHiddenModal } from "./CollectionHiddenModal";
+import * as useDarkModeContext from "@/Contexts/DarkModeContext";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 const collection = new CollectionDetailDataFactory().create();
 
+let useDarkModeContextSpy: SpyInstance;
+
 describe("CollectionHiddenModal", () => {
+    beforeEach(() => {
+        useDarkModeContextSpy = vi
+            .spyOn(useDarkModeContext, "useDarkModeContext")
+            .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
+    });
+
+    afterEach(() => {
+        useDarkModeContextSpy.mockRestore();
+    });
+
     it("should render", () => {
+        render(<CollectionHiddenModal collection={collection} />);
+
+        expect(screen.getByTestId("CollectionHiddenModal__description")).toBeInTheDocument();
+    });
+
+    it("should render in dark mode", () => {
+        useDarkModeContextSpy = vi
+            .spyOn(useDarkModeContext, "useDarkModeContext")
+            .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
         render(<CollectionHiddenModal collection={collection} />);
 
         expect(screen.getByTestId("CollectionHiddenModal__description")).toBeInTheDocument();

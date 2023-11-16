@@ -216,6 +216,30 @@ describe("AuthOverlay", () => {
         expect(screen.getByText(needsMetamaskMessage)).toBeInTheDocument();
     });
 
+    it("should require metamask on dark mode", () => {
+        vi.spyOn(useDarkModeContext, "useDarkModeContext").mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
+
+        const needsMetamaskMessage = "Install MetaMask";
+
+        vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
+            ...defaultMetamaskConfig,
+            needsMetaMask: true,
+        });
+
+        render(
+            <AuthOverlay
+                show={true}
+                showCloseButton={false}
+                showBackButton={false}
+                closeOverlay={vi.fn()}
+            />,
+        );
+
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
+        expect(screen.getByTestId("AuthOverlay")).toBeInTheDocument();
+        expect(screen.getByText(needsMetamaskMessage)).toBeInTheDocument();
+    });
+
     it("should require metamask and show close button", () => {
         const needsMetamaskMessage = "Install MetaMask";
 
@@ -341,7 +365,7 @@ describe("AuthOverlay", () => {
         expect(screen.queryByTestId("AuthOverlay")).not.toBeInTheDocument();
     });
 
-    it("should render without back button if showBackButton is false", () => {
+    it("should render without close button if showBackButton is false", () => {
         render(
             <AuthOverlay
                 show={true}
@@ -351,10 +375,10 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        expect(screen.queryByTestId("AuthOverlay__back-button")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
     });
 
-    it("should render back button if showBackButton is true", () => {
+    it("should render close button if showBackButton is true", () => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
             ...defaultMetamaskConfig,
             requiresSignature: true,
@@ -369,7 +393,7 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        expect(screen.getByTestId("AuthOverlay__back-button")).toBeInTheDocument();
+        expect(screen.getByTestId("AuthOverlay__close-button")).toBeInTheDocument();
     });
 
     it("should redirect to page if referrer is null", () => {
@@ -388,7 +412,7 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
+        fireEvent.click(screen.getByTestId("AuthOverlay__close-button"));
         expect(window.location.href).toContain("/");
     });
 
@@ -409,7 +433,7 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
+        fireEvent.click(screen.getByTestId("AuthOverlay__close-button"));
         expect(backSpy).toHaveBeenCalled();
     });
 

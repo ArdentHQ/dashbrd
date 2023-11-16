@@ -1,0 +1,11 @@
+.tippy-box[data-theme="dark"] {
+    @apply bg-theme-primary-50 text-theme-dark-800;
+}
+
+.tippy-box[data-theme="dark"] .tippy-arrow::before {
+    @apply text-theme-primary-50;
+}
+
+.tippy-box[data-theme="dark"] svg {
+    @apply text-theme-secondary-700;
+}
