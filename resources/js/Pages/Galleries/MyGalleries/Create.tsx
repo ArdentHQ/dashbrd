@@ -110,7 +110,7 @@ const Create = ({
                 const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address, nfts: [] });
                 reset(newDraft);
                 replaceUrlQuery({ draftId: newDraft.id.toString() });
-            } catch (e) {
+            } catch (_error) {
                 replaceUrlQuery({ draftId: "" });
             }
         };
