@@ -2,7 +2,7 @@ import React from "react";
 import { GalleryActionToolbar } from "./GalleryActionToolbar";
 import { render, screen } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
-import { GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries"
+import { GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;

@@ -1,6 +1,6 @@
-import { render, screen, userEvent } from "@/Tests/testing-library"
-import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton"
-import { GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries"
+import { render, screen, userEvent } from "@/Tests/testing-library";
+import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
+import { GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;
@@ -78,9 +78,7 @@ vi.mock("react-indexed-db-hook", () => ({
 
 describe("GalleryDraftDeleteButton", () => {
     it("opens the confirmation dialog when delete button is pressed", async () => {
-        render(
-            <GalleryDraftDeleteButton draftId={1} />
-        );
+        render(<GalleryDraftDeleteButton draftId={1} />);
 
         expect(screen.getByTestId("GalleryActionToolbar__draftDelete")).toBeInTheDocument();
 
