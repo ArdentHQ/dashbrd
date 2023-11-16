@@ -37,7 +37,7 @@ interface Properties {
     nftsPerPage: number;
     collectionsPerPage: number;
     nftLimit: number;
-    nftsCount: number;
+    nftCount: number;
 }
 
 const Create = ({
@@ -46,7 +46,7 @@ const Create = ({
     gallery,
     nftsPerPage,
     nftLimit,
-    nftsCount,
+    nftCount,
     collectionsPerPage,
 }: Properties): JSX.Element => {
     assertUser(auth.user);
@@ -213,8 +213,8 @@ const Create = ({
         <LayoutWrapper
             withSlider
             toastMessage={props.toast}
-            belowHeader={<NoNftsOverlay show={nftsCount === 0} />}
-            displayAuthOverlay={nftsCount > 0 && initialized}
+            belowHeader={<NoNftsOverlay show={nftCount === 0} />}
+            displayAuthOverlay={nftCount > 0 && initialized}
             mustBeSigned={gallery !== undefined}
         >
             <Head title={title} />
