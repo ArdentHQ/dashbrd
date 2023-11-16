@@ -192,7 +192,7 @@
 }
 
 .article-content table {
-    @apply border-separate border-spacing-0 overflow-hidden w-full;
+    @apply w-full border-separate border-spacing-0 overflow-hidden;
 }
 
 .article-content table thead {
@@ -200,11 +200,11 @@
 }
 
 .article-content table thead tr th {
-    @apply border-b border-theme-secondary-300 px-4 py-2 text-sm font-medium text-theme-secondary-700 dark:border-theme-dark-700 dark:text-theme-dark-200 whitespace-nowrap;
+    @apply whitespace-nowrap border-b border-theme-secondary-300 px-4 py-2 text-sm font-medium text-theme-secondary-700 dark:border-theme-dark-700 dark:text-theme-dark-200;
 }
 
 .article-content table tbody td {
-    @apply p-4 text-base whitespace-nowrap;
+    @apply whitespace-nowrap p-4 text-base;
 }
 
 .article-content table tbody tr:not(:last-child) td {
