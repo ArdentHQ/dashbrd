@@ -456,6 +456,7 @@ class MnemonicPendingRequest extends PendingRequest
 
     /**
      * @param  string[]  $labels
+     *
      * @see https://docs.mnemonichq.com/references/uniform/rest/reference/#operation/FoundationalService_GetNftTransfers
      */
     private function extractNftTransferType(array $labels): ?NftTransferType
