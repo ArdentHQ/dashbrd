@@ -62,6 +62,17 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => {
             <Markdown
                 rehypePlugins={[rehypeRaw, [rehypeExternalLinks, { target: "_blank" }]]}
                 remarkPlugins={[remarkFigurePlugin, remarkGfm]}
+                components={{
+                    table: ({ children }) => (
+                        <div className="w-fit overflow-hidden rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700">
+                            <div className="w-full border-b-4 border-theme-secondary-300 pb-0.5 dark:border-theme-dark-700">
+                                <div className="custom-scroll w-full overflow-x-auto">
+                                    <table>{children}</table>
+                                </div>
+                            </div>
+                        </div>
+                    ),
+                }}
                 skipHtml
             >
                 {article.content}
