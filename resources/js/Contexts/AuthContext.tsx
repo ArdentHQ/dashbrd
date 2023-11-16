@@ -1,6 +1,8 @@
 import { router } from "@inertiajs/react";
 import axios from "axios";
-import { createContext, type SetStateAction, useContext, useState } from "react";
+import { createContext, type SetStateAction, useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useToasts } from "@/Hooks/useToasts";
 
 type ContextProperties = App.Data.AuthData & {
     setAuthData: (data: SetStateAction<App.Data.AuthData>) => void;
@@ -15,6 +17,9 @@ interface ProviderProperties {
 const AuthContext = createContext<ContextProperties | undefined>(undefined);
 
 export const AuthContextProvider = ({ children, initialAuth }: ProviderProperties): JSX.Element => {
+    const { showToast, clear } = useToasts();
+    const { t } = useTranslation();
+
     const [auth, setAuthData] = useState<App.Data.AuthData>(initialAuth);
 
     router.on("navigate", (event) => {
@@ -34,6 +39,27 @@ export const AuthContextProvider = ({ children, initialAuth }: ProviderPropertie
         const redirectTo = response.data.redirectTo;
         redirectTo === null ? router.reload() : router.get(route(redirectTo));
     };
+
+    useEffect(() => {
+        if ((auth.wallet?.hasErc1155Nfts ?? false) && localStorage.getItem("hide-erc115-message") !== "true") {
+            showToast({
+                title: t("pages.nfts.erc1155_support.title"),
+                message: t("pages.nfts.erc1155_support.description"),
+                type: "warning",
+                isExpanded: true,
+                isStatic: true,
+                onClose: () => {
+                    localStorage.setItem("hide-erc115-message", "true");
+                },
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        if (auth.wallet === null) {
+            clear();
+        }
+    }, [auth]);
 
     return (
         <AuthContext.Provider
