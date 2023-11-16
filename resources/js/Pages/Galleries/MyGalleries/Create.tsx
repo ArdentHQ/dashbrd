@@ -203,7 +203,7 @@ const Create = ({
         });
     };
 
-    const handleDraftCancel = async () => {
+    const handleDraftCancel = async (): Promise<void> => {
         const isDraft = isTruthy(draftId);
 
         if (!isDraft) {
