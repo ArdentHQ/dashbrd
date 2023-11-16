@@ -12,7 +12,7 @@ import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/Draf
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
-import { type GallerySavedDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -31,7 +31,7 @@ const Drafts = ({
     onRemove,
 }: {
     isLoading: boolean;
-    drafts: GallerySavedDraft[];
+    drafts: GalleryDraft[];
     onRemove?: (id: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();

@@ -1,6 +1,6 @@
 import { act } from "react-dom/test-utils";
 import { expect } from "vitest";
-import { type GalleryDraft, useWalletDraftGalleries } from "./useWalletDraftGalleries";
+import { type GalleryDraft, type GalleryDraftUnsaved, useWalletDraftGalleries } from "./useWalletDraftGalleries";
 import { renderHook, waitFor } from "@/Tests/testing-library";
 
 const defaultGalleryDraft = {
@@ -13,10 +13,11 @@ const defaultGalleryDraft = {
     walletAddress: "mockedAddress",
     value: "test",
     updatedAt: new Date().getTime(),
+    collectionsCount: 1,
 };
 
 const expiredGalleryDraft = {
-    id: null,
+    id: undefined,
     title: "",
     cover: null,
     coverType: null,
@@ -25,6 +26,7 @@ const expiredGalleryDraft = {
     walletAddress: "mockedAddress",
     value: "test",
     updatedAt: 169901639000,
+    collectionsCount: 1,
 };
 
 interface IndexedDBMockResponse {
@@ -39,15 +41,15 @@ interface IndexedDBMockResponse {
 }
 
 const useIndexedDBMock = (): IndexedDBMockResponse => {
-    const drafts: GalleryDraft[] = [defaultGalleryDraft, expiredGalleryDraft];
+    const drafts: GalleryDraft | GalleryDraftUnsaved[] = [defaultGalleryDraft, expiredGalleryDraft];
 
     return {
-        add: async (draft: GalleryDraft): Promise<number> => {
+        add: async (draft: GalleryDraftUnsaved): Promise<number> => {
             const id = drafts.length + 1;
             drafts.push({ ...draft, id });
             return await Promise.resolve(id);
         },
-        getAll: async (): Promise<GalleryDraft[]> => await Promise.resolve(drafts),
+        getAll: async (): Promise<GalleryDraft[]> => (await Promise.resolve(drafts)) as GalleryDraft[],
         update: async (draft: GalleryDraft): Promise<GalleryDraft> => {
             const index = drafts.findIndex((savedDraft) => savedDraft.id === draft.id);
             drafts.splice(index, 1, draft);
@@ -60,7 +62,8 @@ const useIndexedDBMock = (): IndexedDBMockResponse => {
 
             await Promise.resolve();
         },
-        getByID: async (id: number | null) => await Promise.resolve(drafts.find((draft) => draft.id === id)),
+        getByID: async (id: number | null) =>
+            (await Promise.resolve(drafts.find((draft) => draft.id === id))) as GalleryDraft,
         openCursor: vi.fn(),
         getByIndex: vi.fn(),
         clear: vi.fn(),

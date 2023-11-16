@@ -17,7 +17,7 @@ export interface DraftNft {
     collectionSlug: string;
 }
 
-export interface GalleryDraft {
+export interface GalleryDraftUnsaved {
     title: string;
     cover: ArrayBuffer | null;
     coverType: string | null;
@@ -29,22 +29,22 @@ export interface GalleryDraft {
     coverFileName: string | null;
 }
 
-export interface GallerySavedDraft extends GalleryDraft {
+export interface GalleryDraft extends GalleryDraftUnsaved {
     id: number;
     collectionsCount: number;
 }
 
 interface WalletDraftGalleriesState {
-    upsert: (draft: GalleryDraft) => Promise<GallerySavedDraft>;
-    add: (draft: GalleryDraft) => Promise<GallerySavedDraft>;
+    upsert: (draft: GalleryDraftUnsaved) => Promise<GalleryDraft>;
+    add: (draft: GalleryDraftUnsaved) => Promise<GalleryDraft>;
     remove: (id?: number | null) => Promise<void>;
     removeExpired: () => Promise<void>;
-    drafts: GallerySavedDraft[];
-    findWalletDraftById: (id: number | string) => Promise<GallerySavedDraft | undefined>;
+    drafts: GalleryDraft[];
+    findWalletDraftById: (id: number | string) => Promise<GalleryDraft | undefined>;
     isLoading: boolean;
     isSaving: boolean;
     hasReachedLimit: boolean;
-    allDrafts: () => Promise<GallerySavedDraft[]>;
+    allDrafts: () => Promise<GalleryDraft[]>;
 }
 
 /**
@@ -53,7 +53,7 @@ interface WalletDraftGalleriesState {
  * @param {GalleryDraft} draft
  * @returns {number}
  */
-const calculateCollectionsCount = (draft: GalleryDraft): number => uniqBy(draft.nfts, "collectionSlug").length;
+const calculateCollectionsCount = (draft: GalleryDraftUnsaved): number => uniqBy(draft.nfts, "collectionSlug").length;
 
 /**
  * Determine if gallery is expired.
@@ -78,7 +78,7 @@ const isExpired = (draft: GalleryDraft): boolean => {
  */
 export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGalleriesState => {
     const database = useIndexedDB("gallery-drafts");
-    const [drafts, setDrafts] = useState<GallerySavedDraft[]>([]);
+    const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [hasReachedLimit, setHasReachedLimit] = useState(false);
@@ -104,7 +104,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {Promise<GalleryDraft>}
      */
-    const add = async (draft: GalleryDraft): Promise<GallerySavedDraft> => {
+    const add = async (draft: GalleryDraftUnsaved): Promise<GalleryDraft> => {
         const allDraftsCount = await allDrafts();
 
         if (allDraftsCount.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
@@ -132,7 +132,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {Promise<GalleryDraft>}
      */
-    const update = async (draft: GalleryDraft): Promise<GallerySavedDraft> => {
+    const update = async (draft: GalleryDraftUnsaved): Promise<GalleryDraft> => {
         if (!isTruthy(draft.id)) {
             throw new Error("[useWalletDraftGalleries:update] Missing Id");
         }
@@ -156,7 +156,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {Promise<GalleryDraft>}
      */
-    const upsert = async (draft: GalleryDraft): Promise<GallerySavedDraft> => {
+    const upsert = async (draft: GalleryDraftUnsaved): Promise<GalleryDraft> => {
         if (isTruthy(draft.id)) {
             return await update(draft);
         }
@@ -197,8 +197,8 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      *
      * @returns {Promise<GalleryDraft[]>}
      */
-    const allDrafts = async (): Promise<GallerySavedDraft[]> => {
-        const allDrafts: GallerySavedDraft[] = await database.getAll();
+    const allDrafts = async (): Promise<GalleryDraft[]> => {
+        const allDrafts: GalleryDraft[] = await database.getAll();
         return allDrafts.filter(
             (draft) => draft.walletAddress?.toLowerCase() === address.toLowerCase() && !isExpired(draft),
         );
@@ -210,8 +210,8 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {number} id
      * @returns {Promise<GalleryDraft>}
      */
-    const findWalletDraftById = async (id: number | string): Promise<GallerySavedDraft | undefined> => {
-        const draft: GallerySavedDraft | undefined = await database.getByID(Number(id));
+    const findWalletDraftById = async (id: number | string): Promise<GalleryDraft | undefined> => {
+        const draft: GalleryDraft | undefined = await database.getByID(Number(id));
 
         if (draft?.walletAddress?.toLowerCase() !== address.toLowerCase()) {
             return undefined;
@@ -226,7 +226,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {number | string} id
      * @returns {Promise<GalleryDraft>}
      */
-    const findByIdOrThrow = async (id: number | string): Promise<GallerySavedDraft> => {
+    const findByIdOrThrow = async (id: number | string): Promise<GalleryDraft> => {
         const draft = await findWalletDraftById(id);
 
         if (!isTruthy(draft)) {
