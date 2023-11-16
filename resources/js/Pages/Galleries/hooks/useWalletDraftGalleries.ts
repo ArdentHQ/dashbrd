@@ -49,8 +49,8 @@ interface WalletDraftGalleriesState {
 /**
  * Note: The react-indexed-db-hook  that is used under the hood in this component
  *       is not reactive. That means that if this hook is used in multiple components,
- *       the `drafts` state won't re-render on changes happening in indexedDB. `allDrafts` need to be
- *       explicitly to update the state (applies, for isLoading, isSaving, hasReachedLimit, and `drafts`).
+ *       the state won't re-render on changes happening in indexedDB. `allDrafts` need to be
+ *       explicitly to update the state (applies for isLoading, isSaving, hasReachedLimit, and `drafts`).
  *
  * @param {Properties}
  * @returns {WalletDraftGalleriesState}
