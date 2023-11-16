@@ -22,7 +22,7 @@ class MyGalleryCollectionController extends Controller
 
         $collectionsQuery = $request->get('showHidden') === 'true'
             ? $user->hiddenCollections()
-            : $user->collections()->whereNotIn('collections.id', $user->hiddenCollections()->pluck('id')->toArray());
+            : $user->collections()->notHidden($user);
 
         $collections = $collectionsQuery
             ->where('collections.name', 'ilike', sprintf('%%%s%%', $request->get('query')))
