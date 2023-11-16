@@ -79,7 +79,7 @@ const Create = ({
     const { setCover, setNfts, setTitle, draft, isSaving, isLoading, reset } = useWalletDraftGallery({
         draftId,
         address: auth.wallet.address,
-        isDisabled: isTruthy(gallery?.slug),
+        isDisabled: isTruthy(gallery?.slug) || hasReachedLimit,
     });
 
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
