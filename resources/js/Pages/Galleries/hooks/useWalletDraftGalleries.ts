@@ -66,6 +66,16 @@ const isExpired = (draft: GalleryDraft): boolean => {
     return (draft.updatedAt ?? 0) < thresholdDaysAgo;
 };
 
+/**
+ * Note: The react-indexed-db-hook package that is used under the hood in this hook
+ *       is not reactive. That means that if this hook is used in multiple components,
+ *       the state won't re-render on changes happening in indexedDB. `allDrafts` need to be
+ *       explicitly to update the state (applies for isLoading, isSaving, hasReachedLimit, and `drafts`).
+ *
+ *       For a reactive hook, see https://dexie.org/docs/dexie-react-hooks/useLiveQuery()
+ * @param {Properties}
+ * @returns {WalletDraftGalleriesState}
+ */
 export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGalleriesState => {
     const database = useIndexedDB("gallery-drafts");
     const [drafts, setDrafts] = useState<GallerySavedDraft[]>([]);
