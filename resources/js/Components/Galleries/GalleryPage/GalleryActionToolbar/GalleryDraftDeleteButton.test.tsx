@@ -106,9 +106,6 @@ describe("GalleryDraftDeleteButton", () => {
 
         await userEvent.click(screen.getByTestId("GalleryActionToolbar__draftDelete"));
 
-        await userEvent.clear(screen.getByTestId("ConfirmDeletionDialog__input"));
-        await userEvent.type(screen.getByTestId("ConfirmDeletionDialog__input"), "DELETE");
-
         await userEvent.click(screen.getByTestId("ConfirmationDialog__confirm"));
 
         expect(routerSpy).toBeCalledTimes(1);
