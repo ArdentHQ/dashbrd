@@ -1,7 +1,7 @@
 import { useForm } from "@inertiajs/react";
 import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { type GalleryDraft } from "./useWalletDraftGalleries";
+import { type GalleryDraftUnsaved } from "./useWalletDraftGalleries";
 import { useToasts } from "@/Hooks/useToasts";
 import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -20,7 +20,7 @@ export const useGalleryForm = ({
     deleteDraft,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
-    draft?: GalleryDraft;
+    draft?: GalleryDraftUnsaved;
     setDraftNfts?: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     deleteDraft?: () => void;
 }): {

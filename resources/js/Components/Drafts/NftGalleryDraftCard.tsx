@@ -21,8 +21,7 @@ export const NftGalleryDraftCard = ({
     return (
         <Link
             href={route("my-galleries.create", {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                draftId: draft.id!,
+                draftId: draft.id,
                 editDraft: 1,
             })}
             className="group focus-visible:outline-none focus-visible:ring-0"
