@@ -85,5 +85,9 @@ describe("GalleryDraftDeleteButton", () => {
         await userEvent.click(screen.getByTestId("GalleryActionToolbar__draftDelete"));
 
         expect(screen.getByTestId("ConfirmationDialog__confirm")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("ConfirmationDialog__close"));
+
+        expect(screen.queryByTestId("ConfirmationDialog__confirm")).not.toBeInTheDocument();
     });
 });
