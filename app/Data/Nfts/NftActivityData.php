@@ -10,7 +10,6 @@ use App\Models\NftActivity;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
-use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -23,7 +22,6 @@ class NftActivityData extends Data
         public string $recipient,
         public int $timestamp,
         public CollectionNftData $nft,
-        #[LiteralTypeScriptType('App.Enums.NftTransferType')]
         public NftTransferType $type,
         public ?string $totalNative,
         public ?string $totalUsd
