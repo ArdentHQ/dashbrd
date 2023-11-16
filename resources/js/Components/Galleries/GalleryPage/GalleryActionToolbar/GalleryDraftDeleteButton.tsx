@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { useAuth } from "@/Contexts/AuthContext";
+import { useToasts } from "@/Hooks/useToasts";
 import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
-import { useToasts } from "@/Hooks/useToasts";
 
 export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.Element => {
     const { t } = useTranslation();
