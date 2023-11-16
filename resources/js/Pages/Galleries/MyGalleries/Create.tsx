@@ -75,7 +75,7 @@ const Create = ({
         gallery?.nfts.paginated.data,
     );
 
-    const { remove, add, hasReachedLimit } = useWalletDraftGalleries({ address: auth.wallet.address });
+    const { remove, add, hasReachedLimit, allDrafts } = useWalletDraftGalleries({ address: auth.wallet.address });
     const { setCover, setNfts, setTitle, draft, isSaving, isLoading, reset } = useWalletDraftGallery({
         draftId,
         address: auth.wallet.address,
@@ -216,6 +216,28 @@ const Create = ({
         });
     };
 
+    const handleDraftCancel = async (): Promise<void> => {
+        const isDraft = isTruthy(draftId);
+
+        if (!isDraft) {
+            router.visit(route("my-galleries"));
+            return;
+        }
+
+        const savedDrafts = await allDrafts();
+
+        if (savedDrafts.length === 0) {
+            router.visit(route("my-galleries"));
+            return;
+        }
+
+        router.visit(route("my-galleries"), {
+            data: {
+                draft: 1,
+            },
+        });
+    };
+
     const deleteHandler = (): void => {
         void signedAction(() => {
             setShowDeleteModal(true);
@@ -302,7 +324,7 @@ const Create = ({
                 }}
                 onDelete={deleteHandler}
                 onCancel={() => {
-                    router.visit(route("my-galleries"));
+                    void handleDraftCancel();
                 }}
                 onPublish={publishHandler}
             />
