@@ -168,11 +168,13 @@ return [
             'subtitle' => 'Manage your galleries',
             'new_gallery' => 'New Gallery',
             'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
+            'no_available_collections' => 'You have hidden all your collections. If you want to create a gallery, make sure you have at least 1 collection available.',
             'no_draft_galleries' => 'You have no draft galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'succesfully_deleted' => 'Gallery successfully deleted',
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',
             'new_gallery_no_nfts' => 'Creating a Gallery requires you to own an NFT.',
+            'new_gallery_all_collections_hidden' => 'Creating a Gallery requires you to have at least 1 collection available.',
             'delete_modal' => [
                 'title' => 'Delete Draft',
                 'text' => 'Are you sure you want to delete the draft? Everything you\'ve done will be deleted and you won\'t be able to get it back.',
