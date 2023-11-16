@@ -11,6 +11,7 @@ interface Properties {
     isDisabled?: boolean;
     isStatic?: boolean;
     onClose: () => void;
+    onCancel?: () => void;
     onConfirm: () => void;
     children: React.ReactNode;
     focus?: RefObject<HTMLElement>;
@@ -28,6 +29,7 @@ export const ConfirmationDialog = ({
     isStatic = false,
     onClose,
     onConfirm,
+    onCancel,
     children,
     focus,
     hasBlurryOverlay = false,
@@ -66,7 +68,7 @@ export const ConfirmationDialog = ({
                             data-testid="ConfirmationDialog__close"
                             variant="secondary"
                             className="w-full justify-center sm:w-auto"
-                            onClick={onClose}
+                            onClick={onCancel ?? onClose}
                         >
                             {cancelLabel}
                         </Button>

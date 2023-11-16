@@ -46,7 +46,7 @@ export const AuthOverlay = ({
 
     const requiresSignature = (mustBeSigned && !signed) || metaMaskRequiresSignature;
 
-    const showSignMessage = metaMaskRequiresSignature && !waitingSignature && errorMessage === undefined && !connecting;
+    const showSignMessage = requiresSignature && !waitingSignature && errorMessage === undefined && !connecting;
 
     return (
         <Overlay

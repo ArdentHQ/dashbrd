@@ -130,25 +130,14 @@ export const ConnectWallet = ({
 
     return (
         <OverlayButtonsWrapper>
-            {showCloseButton && (
+            {(showCloseButton || showBackButton) && (
                 <Button
                     data-testid="AuthOverlay__close-button"
                     variant="secondary"
-                    onClick={closeOverlay}
+                    onClick={showBackButton ? handleBackClick : closeOverlay}
                     className="w-full justify-center whitespace-nowrap"
                 >
                     {t("common.close")}
-                </Button>
-            )}
-
-            {isTruthy(showBackButton) && !showCloseButton && (
-                <Button
-                    variant="secondary"
-                    onClick={handleBackClick}
-                    className="w-full justify-center xs:w-fit xs:px-8"
-                    data-testid="AuthOverlay__back-button"
-                >
-                    {t("common.back")}
                 </Button>
             )}
 
@@ -156,8 +145,8 @@ export const ConnectWallet = ({
                 disabled={!isWalletInitialized}
                 onClick={requiresSignature ? onSign : onConnect}
                 className={classNames("justify-center", {
-                    "w-full whitespace-nowrap": showCloseButton,
-                    "w-full xs:w-auto": !showCloseButton,
+                    "w-full whitespace-nowrap": showCloseButton || showBackButton,
+                    "w-full xs:w-auto": !showCloseButton && !showBackButton,
                 })}
             >
                 {requiresSignature ? t("auth.wallet.sign") : t("auth.wallet.connect")}

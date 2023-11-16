@@ -230,10 +230,13 @@ return [
             'back_to_galleries' => 'Back to Galleries',
             'draft_saved' => 'Draft Saved',
             'saving_to_draft' => 'Saving to draft',
+            'drafts_limit_modal_title' => 'Draft Gallery Limit',
+            'drafts_limit_modal_message' => 'You’ve hit your limit for draft galleries. While you can still make new galleries and publish them, they won’t be saved as drafts. To Free up space, you can either delete existing drafts or publish them.',
+            'drafts_limit_modal_cancel' => 'Go to Drafts',
         ],
         'delete_modal' => [
             'title' => 'Delete Gallery',
-            'confirmation_text' => "Are you sure you want to delete the gallery? Everything you've done will be deleted and you won't be able to get it back.",
+            'confirmation_text' => 'Are you sure you want to delete the gallery? Deleting a Gallery is permanent, all associated views and likes will be lost.',
         ],
         'consists_of_collections' => '{0} This gallery consists of :count collections|{1} This gallery consists of :count collection|[2,*] This gallery consists of :count collections',
         'guest_banner' => [
