@@ -11,6 +11,8 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
+import { useAuth } from "@/Contexts/AuthContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -80,9 +82,17 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
 
     const [galleryToDelete, setGalleryToDelete] = useState<App.Data.Gallery.GalleryData | null>(null);
 
+    const { signedAction } = useAuthorizedAction();
+
     const userGalleries = galleries.paginated;
 
     const { processing, delete: remove } = useForm({});
+
+    const deleteHandler = (gallery: App.Data.Gallery.GalleryData): void => {
+        void signedAction(() => {
+            setGalleryToDelete(gallery);
+        });
+    };
 
     const submit = (): void => {
         if (galleryToDelete === null) {
@@ -115,7 +125,7 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
                         gallery={gallery}
                         showDeleteButton
                         onDelete={() => {
-                            setGalleryToDelete(gallery);
+                            deleteHandler(gallery);
                         }}
                     />
                 ))}

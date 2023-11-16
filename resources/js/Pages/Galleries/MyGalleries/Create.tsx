@@ -203,6 +203,12 @@ const Create = ({
         });
     };
 
+    const deleteHandler = (): void => {
+        void signedAction(() => {
+            setShowDeleteModal(true);
+        });
+    };
+
     return (
         <LayoutWrapper
             withSlider
@@ -281,9 +287,7 @@ const Create = ({
                     setGallerySliderActiveTab(GalleryFormSliderTabs.Template);
                     setIsGalleryFormSliderOpen(true);
                 }}
-                onDelete={() => {
-                    setShowDeleteModal(true);
-                }}
+                onDelete={deleteHandler}
                 onCancel={() => {
                     router.visit(route("my-galleries"));
                 }}
