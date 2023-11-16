@@ -1,10 +1,10 @@
 import { router } from "@inertiajs/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { useAuth } from "@/Contexts/AuthContext";
-import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 
 export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.Element => {
@@ -15,15 +15,7 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
 
     assertWallet(wallet);
 
-    const [draft, setDraft] = useState<GalleryDraft>();
-
-    const { remove, findWalletDraftById } = useWalletDraftGalleries({ address: wallet.address });
-
-    useEffect(() => {
-        void (async () => {
-            setDraft(await findWalletDraftById(draftId));
-        })();
-    }, [draftId]);
+    const { remove } = useWalletDraftGalleries({ address: wallet.address });
 
     const deleteDraft = (): void => {
         void remove(draftId);
@@ -42,17 +34,8 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
                 icon="Trash"
                 className="flex sm:hidden lg:flex"
                 onClick={() => {
-                    if (draft === undefined) {
-                        return;
-                    }
-
-                    if (draft.title.length === 0 && draft.nfts.length === 0) {
-                        deleteDraft();
-                    } else {
-                        setOpen(true);
-                    }
+                    setOpen(true);
                 }}
-                disabled={draft === undefined}
             />
 
             <ConfirmDeletionDialog
