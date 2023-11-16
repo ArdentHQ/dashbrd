@@ -169,7 +169,7 @@ return [
             'new_gallery' => 'New Gallery',
             'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'no_draft_galleries' => 'You have no draft galleries yet. To create a gallery, click on the "Create Gallery" button.',
-            'succesfully_deleted' => 'Gallery successfully deleted',
+            'succesfully_deleted' => 'Gallery has been successfully removed',
             'draft_succesfully_deleted' => 'Draft has been successfully removed',
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',
