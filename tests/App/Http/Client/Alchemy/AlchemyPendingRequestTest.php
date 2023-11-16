@@ -223,7 +223,7 @@ it('should fetch spam contracts', function () {
                 '0x123',
                 '0x124',
                 '0x125',
-            ]
+            ],
         ]), 200),
     ]);
 
