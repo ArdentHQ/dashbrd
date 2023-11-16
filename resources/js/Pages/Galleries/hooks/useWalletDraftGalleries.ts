@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useIndexedDB } from "react-indexed-db-hook";
 import { isTruthy } from "@/Utils/is-truthy";
+import uniqBy from "lodash/uniqBy";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 const DRAFT_TTL_DAYS = 30;
@@ -24,13 +25,13 @@ export interface GalleryDraft {
     walletAddress?: string;
     id?: number | null;
     value: string | null;
-    collectionsCount: number;
     updatedAt: number | null;
     coverFileName: string | null;
 }
 
 interface GallerySavedDraft extends GalleryDraft {
     id: number;
+    collectionsCount: number;
 }
 
 interface WalletDraftGalleriesState {
@@ -69,6 +70,16 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     }, [address]);
 
     /**
+     * Calculate collections count based on saved nfts.
+     *
+     * @param {GalleryDraft} draft
+     * @returns {number}
+     */
+    const calculateCollectionsCount = (draft: GalleryDraft): number => {
+        return uniqBy(draft.nfts, "collectionSlug").length;
+    };
+
+    /**
      * Add new draft gallery.
      *
      * @param {GalleryDraft} draft
@@ -76,6 +87,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      */
     const add = async (draft: GalleryDraft): Promise<GallerySavedDraft> => {
         const allDraftsCount = await allDrafts();
+
         if (allDraftsCount.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
             throw new Error("[useWalletDraftGalleries:upsert] Reached limit");
         }
@@ -87,6 +99,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
         const id = await database.add({
             ...draftToSave,
             updatedAt: new Date().getTime(),
+            collectionsCount: calculateCollectionsCount(draft),
         });
 
         setIsSaving(false);
@@ -110,6 +123,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
         await database.update({
             ...draft,
             updatedAt: new Date().getTime(),
+            collectionsCount: calculateCollectionsCount(draft),
         });
 
         setIsSaving(false);
