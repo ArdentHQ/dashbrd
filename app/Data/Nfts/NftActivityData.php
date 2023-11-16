@@ -28,17 +28,17 @@ class NftActivityData extends Data
     ) {
     }
 
-    public static function fromModel(NftActivity $nftActivity): self
+    public static function fromModel(NftActivity $activity): self
     {
         return new self(
-            id: $nftActivity->tx_hash,
-            sender: $nftActivity->sender,
-            recipient: $nftActivity->recipient,
-            timestamp: (int) $nftActivity->timestamp->timestamp,
-            nft: CollectionNftData::fromModel($nftActivity->nft),
-            type: $nftActivity->type,
-            totalNative: $nftActivity->total_native ?? null,
-            totalUsd: $nftActivity->total_usd ?? null,
+            id: $activity->tx_hash,
+            sender: $activity->sender,
+            recipient: $activity->recipient,
+            timestamp: (int) $activity->timestamp->timestamp,
+            nft: CollectionNftData::fromModel($activity->nft),
+            type: $activity->type,
+            totalNative: $activity->total_native ?? null,
+            totalUsd: $activity->total_usd ?? null,
         );
     }
 }
