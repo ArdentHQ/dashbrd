@@ -11,7 +11,6 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useAuth } from "@/Contexts/AuthContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
