@@ -2,6 +2,7 @@ import { router } from "@inertiajs/react";
 import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { render, renderHook, screen, userEvent, waitFor } from "@/Tests/testing-library";
+import * as ToastsHook from "@/Hooks/useToasts";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;
@@ -100,7 +101,17 @@ describe("GalleryDraftDeleteButton", () => {
         });
 
         const function_ = vi.fn();
-        const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
+        const routerSpy = vi.spyOn(router, "visit").mockImplementation((_, options) => {
+            // @ts-ignore
+            options?.onFinish()
+        });
+
+        const showToastMock = vi.fn();
+
+        vi.spyOn(ToastsHook, "useToasts").mockImplementation(() => ({
+            showToast: showToastMock,
+            clear: vi.fn(),
+        }));
 
         render(<GalleryDraftDeleteButton draftId={1} />);
 
@@ -109,5 +120,6 @@ describe("GalleryDraftDeleteButton", () => {
         await userEvent.click(screen.getByTestId("ConfirmationDialog__confirm"));
 
         expect(routerSpy).toBeCalledTimes(1);
+        expect(showToastMock).toBeCalledTimes(1);
     });
 });
