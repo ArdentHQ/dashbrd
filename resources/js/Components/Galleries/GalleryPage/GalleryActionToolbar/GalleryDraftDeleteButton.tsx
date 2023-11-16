@@ -1,10 +1,10 @@
 import { router } from "@inertiajs/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { useAuth } from "@/Contexts/AuthContext";
-import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 
 export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.Element => {
@@ -15,7 +15,25 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
 
     assertWallet(wallet);
 
-    const { remove } = useWalletDraftGalleries({ address: wallet.address });
+    const [draft, setDraft] = useState<GalleryDraft>();
+
+    const { remove, findWalletDraftById } = useWalletDraftGalleries({ address: wallet.address });
+
+    useEffect(() => {
+        void (async () => {
+            setDraft(await findWalletDraftById(draftId));
+        })();
+    }, [draftId]);
+
+    const deleteDraft = (): void => {
+        void remove(draftId);
+
+        router.visit(
+            route("my-galleries", {
+                draft: true,
+            }),
+        );
+    };
 
     return (
         <>
@@ -24,8 +42,17 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
                 icon="Trash"
                 className="flex sm:hidden lg:flex"
                 onClick={() => {
-                    setOpen(true);
+                    if (draft === undefined) {
+                        return;
+                    }
+
+                    if (draft.title.length === 0 && draft.nfts.length === 0) {
+                        deleteDraft();
+                    } else {
+                        setOpen(true);
+                    }
                 }}
+                disabled={draft === undefined}
             />
 
             <ConfirmDeletionDialog
@@ -34,15 +61,7 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
                 onClose={() => {
                     setOpen(false);
                 }}
-                onConfirm={() => {
-                    void remove(draftId);
-
-                    router.visit(
-                        route("my-galleries", {
-                            draft: true,
-                        }),
-                    );
-                }}
+                onConfirm={deleteDraft}
                 isDisabled={false}
             >
                 {t("pages.galleries.delete_modal.confirmation_text")}
