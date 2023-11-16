@@ -60,6 +60,11 @@ export const useWalletDraftGallery = ({
     }, [draftId, address]);
 
     const saveDraft = async (draft: GalleryDraft): Promise<void> => {
+        if (isTruthy(isDisabled)) {
+            setIsLoading(false);
+            return;
+        }
+
         if (isTruthy(draft.walletAddress) && draft.walletAddress !== address) {
             throw new Error("[useWalletDraftGallery:saveDraft] Trying to save draft that belongs to another wallet.");
         }

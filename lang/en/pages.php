@@ -233,7 +233,7 @@ return [
         ],
         'delete_modal' => [
             'title' => 'Delete Gallery',
-            'confirmation_text' => "Are you sure you want to delete the gallery? Everything you've done will be deleted and you won't be able to get it back.",
+            'confirmation_text' => 'Are you sure you want to delete the gallery? Deleting a Gallery is permanent, all associated views and likes will be lost.',
         ],
         'consists_of_collections' => '{0} This gallery consists of :count collections|{1} This gallery consists of :count collection|[2,*] This gallery consists of :count collections',
         'guest_banner' => [

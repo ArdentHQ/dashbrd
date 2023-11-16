@@ -38,7 +38,9 @@ export const SidebarItem = ({
 
                 <span>{title}</span>
 
-                {rightText !== undefined && <span className={cn("ml-auto text-theme-secondary-500")}>{rightText}</span>}
+                {rightText !== undefined && (
+                    <span className={cn("ml-auto text-theme-secondary-500 dark:text-theme-dark-500")}>{rightText}</span>
+                )}
             </Tabs.DisabledLink>
         ) : (
             <Tabs.Link

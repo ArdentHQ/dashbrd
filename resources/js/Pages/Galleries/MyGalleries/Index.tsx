@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/core";
+import { type PageProps, router } from "@inertiajs/core";
 import { useForm } from "@inertiajs/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,12 +11,12 @@ import { NftGalleryCard } from "@/Components/Galleries";
 import { DraftGalleryDeleteModal } from "@/Components/Galleries/GalleryPage/DraftGalleryDeleteModal";
 import { Heading } from "@/Components/Heading";
 import { Pagination } from "@/Components/Pagination";
-import { useAuth } from "@/Contexts/AuthContext";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
 
-interface Properties {
+interface Properties extends PageProps {
     title: string;
     children: ReactNode;
     galleries: App.Data.Gallery.GalleriesData;
@@ -81,9 +81,17 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
 
     const [galleryToDelete, setGalleryToDelete] = useState<App.Data.Gallery.GalleryData | null>(null);
 
+    const { signedAction } = useAuthorizedAction();
+
     const userGalleries = galleries.paginated;
 
     const { processing, delete: remove } = useForm({});
+
+    const deleteHandler = (gallery: App.Data.Gallery.GalleryData): void => {
+        void signedAction(() => {
+            setGalleryToDelete(gallery);
+        });
+    };
 
     const submit = (): void => {
         if (galleryToDelete === null) {
@@ -116,7 +124,7 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
                         gallery={gallery}
                         showDeleteButton
                         onDelete={() => {
-                            setGalleryToDelete(gallery);
+                            deleteHandler(gallery);
                         }}
                     />
                 ))}
@@ -144,11 +152,12 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
     );
 };
 
-const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts }: Properties): JSX.Element => {
+const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    const { wallet } = useAuth();
-    assertWallet(wallet);
+    assertWallet(auth.wallet);
+
+    const { wallet } = auth;
 
     const { remove, drafts, isLoading } = useWalletDraftGalleries({ address: wallet.address });
 
