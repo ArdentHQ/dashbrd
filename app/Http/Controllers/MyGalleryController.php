@@ -54,12 +54,15 @@ class MyGalleryController extends Controller
         /** @var User $user */
         $user = $request->user();
 
+        $hiddenCollectionsCount = $user->hiddenCollections()->count();
+
         return Inertia::render('Galleries/MyGalleries/Create', [
             'title' => trans('metatags.my_galleries.create.title'),
             'nftsPerPage' => (int) config('dashbrd.gallery.pagination.nfts_per_page'),
             'collectionsPerPage' => (int) config('dashbrd.gallery.pagination.collections_per_page'),
             'nftLimit' => config('dashbrd.gallery.nft_limit'),
             'nftCount' => $user->nfts()->count(),
+            'hiddenCollectionsCount' => $hiddenCollectionsCount,
         ]);
     }
 
