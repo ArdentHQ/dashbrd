@@ -2,7 +2,7 @@ import React from "react";
 import { type SpyInstance } from "vitest";
 import { NftGalleryDraftCard } from "./NftGalleryDraftCard";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
-import { type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type GallerySavedDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
@@ -12,16 +12,16 @@ let resetAuthContextMock: () => void;
 let useMetaMaskContextSpy: SpyInstance;
 
 describe("NftGalleryDraftCard", () => {
-    const draft: GalleryDraft = {
+    const draft: GallerySavedDraft = {
         id: 1,
         title: "Test draft",
         cover: null,
         coverType: null,
         coverFileName: null,
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
+        collectionsCount: 1,
         nfts: [],
         value: "0",
-        collectionsCount: 0,
         updatedAt: 123,
     };
 

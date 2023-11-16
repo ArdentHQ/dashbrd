@@ -2,14 +2,14 @@ import { Link } from "@inertiajs/react";
 import cn from "classnames";
 import { NftGalleryDraftHeading, NftGalleryDraftImageGrid, NftGalleryDraftStats } from "./NftGalleryDraftCard.blocks";
 import { GalleryCoverImage } from "@/Components/Galleries/GalleryPage/GalleryCoverImage";
-import { type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type GallerySavedDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { isTruthy } from "@/Utils/is-truthy";
 
 export const NftGalleryDraftCard = ({
     draft,
     onDelete,
 }: {
-    draft: GalleryDraft;
+    draft: GallerySavedDraft;
     onDelete: () => void;
 }): JSX.Element => {
     let coverImage: string | null = null;
@@ -21,8 +21,7 @@ export const NftGalleryDraftCard = ({
     return (
         <Link
             href={route("my-galleries.create", {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                draftId: draft.id!,
+                draftId: draft.id,
                 editDraft: 1,
             })}
             className="group focus-visible:outline-none focus-visible:ring-0"

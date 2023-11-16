@@ -10,7 +10,7 @@ import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
 import { useAuth } from "@/Contexts/AuthContext";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
-import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type DraftNft, type GallerySavedDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { formatAddress } from "@/Utils/format-address";
 import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
@@ -104,7 +104,7 @@ export const NftGalleryDraftStats = ({
     draft,
     onDelete,
 }: {
-    draft: GalleryDraft;
+    draft: GallerySavedDraft;
     onDelete: () => void;
 }): JSX.Element => {
     const { user } = useAuth();
@@ -184,7 +184,7 @@ export const NftGalleryDraftImageGrid = ({
     minimumToShow = 6,
     skeletonCount,
 }: {
-    nfts: GalleryDraft["nfts"];
+    nfts: GallerySavedDraft["nfts"];
     minimumToShow?: number;
     skeletonCount?: number;
 }): JSX.Element => {

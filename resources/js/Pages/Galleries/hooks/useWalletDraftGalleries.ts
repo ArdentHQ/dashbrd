@@ -29,7 +29,7 @@ export interface GalleryDraft {
     coverFileName: string | null;
 }
 
-interface GallerySavedDraft extends GalleryDraft {
+export interface GallerySavedDraft extends GalleryDraft {
     id: number;
     collectionsCount: number;
 }
@@ -39,7 +39,7 @@ interface WalletDraftGalleriesState {
     add: (draft: GalleryDraft) => Promise<GallerySavedDraft>;
     remove: (id?: number | null) => Promise<void>;
     removeExpired: () => Promise<void>;
-    drafts: GalleryDraft[];
+    drafts: GallerySavedDraft[];
     findWalletDraftById: (id: number | string) => Promise<GallerySavedDraft | undefined>;
     isLoading: boolean;
     isSaving: boolean;
@@ -49,7 +49,7 @@ interface WalletDraftGalleriesState {
 
 export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGalleriesState => {
     const database = useIndexedDB("gallery-drafts");
-    const [drafts, setDrafts] = useState<GalleryDraft[]>([]);
+    const [drafts, setDrafts] = useState<GallerySavedDraft[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [hasReachedLimit, setHasReachedLimit] = useState(false);

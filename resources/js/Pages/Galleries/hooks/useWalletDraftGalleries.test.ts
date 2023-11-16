@@ -12,7 +12,6 @@ const defaultGalleryDraft = {
     nfts: [],
     walletAddress: "mockedAddress",
     value: "test",
-    collectionsCount: 1,
     updatedAt: new Date().getTime(),
 };
 
@@ -25,7 +24,6 @@ const expiredGalleryDraft = {
     nfts: [],
     walletAddress: "mockedAddress",
     value: "test",
-    collectionsCount: 1,
     updatedAt: 169901639000,
 };
 
@@ -98,7 +96,6 @@ describe("useWalletDraftGalleries", () => {
                 nfts: [],
                 walletAddress: "mockedAddress",
                 value: "test",
-                collectionsCount: 1,
                 updatedAt: new Date().getTime(),
             });
         });
@@ -131,7 +128,6 @@ describe("useWalletDraftGalleries", () => {
                 nfts: [],
                 walletAddress: "mockedAddress",
                 value: "test",
-                collectionsCount: 1,
                 updatedAt: new Date().getTime(),
             });
         });

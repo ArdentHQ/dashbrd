@@ -8,7 +8,7 @@ import {
     NftGalleryDraftStats,
 } from "./NftGalleryDraftCard.blocks";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
-import { type DraftNft, type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type DraftNft, type GallerySavedDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockAuthContext, render, screen } from "@/Tests/testing-library";
 
@@ -56,7 +56,7 @@ describe("NftGalleryDraftHeading", () => {
 });
 
 describe("NftGalleryDraftStats", () => {
-    const draft: GalleryDraft = {
+    const draft: GallerySavedDraft = {
         id: 1,
         title: "Test draft",
         cover: null,
@@ -65,7 +65,7 @@ describe("NftGalleryDraftStats", () => {
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
         nfts: [],
         value: "400",
-        collectionsCount: 0,
+        collectionsCount: 1,
         updatedAt: 123,
     };
 
