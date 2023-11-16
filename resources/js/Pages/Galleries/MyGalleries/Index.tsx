@@ -15,6 +15,7 @@ import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
+import { useToasts } from "@/Hooks/useToasts";
 
 interface Properties extends PageProps {
     title: string;
@@ -159,6 +160,7 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
 
     const { wallet } = auth;
 
+    const { showToast } = useToasts();
     const { remove, drafts, isLoading } = useWalletDraftGalleries({ address: wallet.address });
 
     useEffect(() => {
@@ -166,6 +168,14 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
             router.visit(route("my-galleries"));
         }
     }, [drafts, isLoading]);
+
+    const handleDraftDelete = async (draftId: number) => {
+        await remove(draftId);
+
+        showToast({
+            message: t("pages.galleries.my_galleries.draft_succesfully_deleted"),
+        });
+    };
 
     return (
         <Layout
@@ -191,7 +201,7 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
                 <Drafts
                     isLoading={isLoading}
                     onRemove={(draftId) => {
-                        void remove(draftId);
+                        void handleDraftDelete(draftId);
                     }}
                     drafts={drafts}
                 />

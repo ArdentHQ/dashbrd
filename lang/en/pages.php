@@ -170,6 +170,7 @@ return [
             'no_galleries' => 'You have not created any galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'no_draft_galleries' => 'You have no draft galleries yet. To create a gallery, click on the "Create Gallery" button.',
             'succesfully_deleted' => 'Gallery successfully deleted',
+            'draft_succesfully_deleted' => 'Draft has been successfully removed',
             'successfully_created' => 'Gallery has been successfully created',
             'successfully_updated' => 'Gallery has been successfully updated',
             'new_gallery_no_nfts' => 'Creating a Gallery requires you to own an NFT.',
