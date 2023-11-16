@@ -65,7 +65,7 @@ describe("NftGalleryDraftStats", () => {
         walletAddress: "0x22Fd644149ea87ca26237183ad6A66f91dfcFB87",
         nfts: [],
         value: "400",
-        collectionsCount: 1,
+        collectionsCount: 0,
         updatedAt: 123,
     };
 
