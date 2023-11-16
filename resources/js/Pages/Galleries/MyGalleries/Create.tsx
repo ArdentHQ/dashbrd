@@ -83,7 +83,9 @@ const Create = ({
     });
 
     useEffect(() => {
-        setShowDraftsLimitModal(hasReachedLimit);
+        if (!draftId) {
+            setShowDraftsLimitModal(hasReachedLimit);
+        }
     }, [hasReachedLimit]);
 
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
