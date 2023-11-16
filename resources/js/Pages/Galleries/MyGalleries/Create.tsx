@@ -82,12 +82,6 @@ const Create = ({
         isDisabled: isTruthy(gallery?.slug),
     });
 
-    useEffect(() => {
-        if (!isTruthy(draftId)) {
-            setShowDraftsLimitModal(hasReachedLimit);
-        }
-    }, [hasReachedLimit]);
-
     const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
         gallery,
         setDraftNfts: setNfts,
@@ -133,6 +127,12 @@ const Create = ({
             replaceUrlQuery({ draftId: "" });
         }
     }, [draft.id, isLoading, isSaving, auth.wallet.address, previousWallet, data]);
+
+    useEffect(() => {
+        if (!isLoading && !isTruthy(draftId) && hasReachedLimit) {
+            setShowDraftsLimitModal(hasReachedLimit);
+        }
+    }, [hasReachedLimit, isLoading, draftId]);
 
     const totalValue = 0;
 
