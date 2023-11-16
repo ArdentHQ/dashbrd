@@ -1,7 +1,7 @@
-import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
-import { useWalletDraftGalleries, type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
-import { render, renderHook, screen, userEvent, waitFor } from "@/Tests/testing-library";
 import { router } from "@inertiajs/react";
+import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
+import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { render, renderHook, screen, userEvent, waitFor } from "@/Tests/testing-library";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;
