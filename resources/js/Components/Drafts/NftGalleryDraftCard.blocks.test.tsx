@@ -157,7 +157,7 @@ describe("NftGalleryDraftStats", () => {
         expect(screen.getByTestId("NftGalleryDraftStats__nftCount")).toHaveTextContent("0");
     });
 
-    it("shoud display - if value is not set", () => {
+    it("shoud display N/A if value is not set", () => {
         render(
             <NftGalleryDraftStats
                 draft={{ ...draft, value: null }}
@@ -165,7 +165,7 @@ describe("NftGalleryDraftStats", () => {
             />,
         );
 
-        expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("-");
+        expect(screen.getByTestId("NftGalleryDraftStats__value")).toHaveTextContent("N/A");
     });
 
     it("should display the currency set by the user", () => {
