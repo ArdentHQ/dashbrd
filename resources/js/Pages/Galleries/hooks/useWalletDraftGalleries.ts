@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useIndexedDB } from "react-indexed-db-hook";
 import { isTruthy } from "@/Utils/is-truthy";
+import { useTranslation } from "react-i18next";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 const DRAFT_TTL_DAYS = 30;
@@ -52,7 +53,8 @@ interface WalletDraftGalleriesState {
  *       the state won't re-render on changes happening in indexedDB. `allDrafts` need to be
  *       explicitly to update the state (applies for isLoading, isSaving, hasReachedLimit, and `drafts`).
  *
- *       For a reactive hook, see https://dexie.org/docs/dexie-react-hooks/useLiveQuery()
+ *       For a reactive indexedDB hook,see https://dexie.org/docs/dexie-react-hooks/useLiveQuery()
+ *
  * @param {Properties}
  * @returns {WalletDraftGalleriesState}
  */
@@ -62,6 +64,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [hasReachedLimit, setHasReachedLimit] = useState(false);
+    const { t } = useTranslation();
 
     const updateDraftState = useCallback(async () => {
         setIsLoading(true);
@@ -82,15 +85,21 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * Add new draft gallery.
      *
      * @param {GalleryDraft} draft
-     * @returns {Promise<GalleryDraft>}
+     * @returns {Promise<GallerySavedDraft>}
      */
     const add = async (draft: GalleryDraft): Promise<GallerySavedDraft> => {
+        const { id: _, ...draftToSave } = draft;
         const allDraftsCount = await allDrafts();
+
         if (allDraftsCount.length >= MAX_DRAFT_LIMIT_PER_WALLET) {
             throw new Error("[useWalletDraftGalleries:upsert] Reached limit");
         }
 
-        const { id: _, ...draftToSave } = draft;
+        const error = validateDraft(draft);
+
+        if (error) {
+            throw new Error(error);
+        }
 
         setIsSaving(true);
 
@@ -105,14 +114,36 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     };
 
     /**
+     * Validate draft before saving.
+     *
+     * @param {GalleryDraft} draft
+     * @returns {string | undefined}
+     */
+    const validateDraft = (draft: GalleryDraft): string | undefined => {
+        if (!isTruthy(draft.title.trim())) {
+            return `[useWalletDraftGalleries:validateDraft] ${t("validation.gallery_title_required")}`;
+        }
+
+        if (draft.title.trim().length > 50) {
+            return `[useWalletDraftGalleries:validateDraft] ${t("pages.galleries.create.title_too_long", { max: 50 })}`;
+        }
+    };
+
+    /**
      * Update existing gallery.
      *
      * @param {GalleryDraft} draft
-     * @returns {Promise<GalleryDraft>}
+     * @returns {Promise<GallerySavedDraft>}
      */
     const update = async (draft: GalleryDraft): Promise<GallerySavedDraft> => {
         if (!isTruthy(draft.id)) {
             throw new Error("[useWalletDraftGalleries:update] Missing Id");
+        }
+
+        const error = validateDraft(draft);
+
+        if (error) {
+            throw new Error(error);
         }
 
         setIsSaving(true);

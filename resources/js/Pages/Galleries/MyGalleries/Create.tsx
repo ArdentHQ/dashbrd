@@ -263,7 +263,11 @@ const Create = ({
                         setData("name", name);
                     }}
                     onBlur={() => {
-                        setTitle(data.name);
+                        try {
+                            setTitle(data.name);
+                        } catch (error) {
+                            console.log({ error });
+                        }
                     }}
                 />
 
