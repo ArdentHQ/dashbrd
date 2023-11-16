@@ -33,7 +33,7 @@ export const CreateGalleryButton = ({
                     <Button
                         disabled={true}
                         variant={variant}
-                        className="sm:w-fit sm:px-6"
+                        className="w-full sm:px-6"
                     >
                         <span className="flex flex-1 items-center justify-center space-x-2">
                             <Icon
@@ -61,7 +61,7 @@ export const CreateGalleryButton = ({
 
                     router.visit(createGalleryUrl);
                 }}
-                className={cn("sm:w-fit sm:px-6", className)}
+                className={cn("sm:px-6", className)}
             >
                 <span className="flex flex-1 items-center justify-center space-x-2">
                     <Icon
