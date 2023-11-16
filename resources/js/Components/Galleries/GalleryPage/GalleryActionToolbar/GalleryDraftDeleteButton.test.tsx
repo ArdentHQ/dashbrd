@@ -103,7 +103,7 @@ describe("GalleryDraftDeleteButton", () => {
         const function_ = vi.fn();
         const routerSpy = vi.spyOn(router, "visit").mockImplementation((_, options) => {
             // @ts-ignore
-            options?.onFinish()
+            options?.onFinish();
         });
 
         const showToastMock = vi.fn();
