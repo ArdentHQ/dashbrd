@@ -130,7 +130,9 @@ export const NftGalleryDraftStats = ({
                                 currency={user?.attributes.currency ?? "USD"}
                             />
                         ) : (
-                            "-"
+                            <span className="font-medium text-theme-secondary-500 dark:text-theme-dark-300">
+                                {t("common.na")}
+                            </span>
                         )}
                     </span>
                 </div>
