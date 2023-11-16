@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { type GalleryDraft, useWalletDraftGalleries } from "./useWalletDraftGalleries";
+import { type GalleryDraftUnsaved, useWalletDraftGalleries } from "./useWalletDraftGalleries";
 import { isTruthy } from "@/Utils/is-truthy";
 
 interface WalletDraftGalleryState {
     isSaving: boolean;
-    draft: GalleryDraft;
+    draft: GalleryDraftUnsaved;
     setCover: (image: ArrayBuffer | null, name: string | null, type: string | null) => void;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setTitle: (title: string) => void;
-    reset: (draft?: Partial<GalleryDraft>) => void;
+    reset: (draft?: Partial<GalleryDraftUnsaved>) => void;
     isLoading: boolean;
 }
 
@@ -36,7 +36,7 @@ export const useWalletDraftGallery = ({
     const [isLoading, setIsLoading] = useState(true);
     const { upsert, findWalletDraftById, isSaving } = useWalletDraftGalleries({ address });
 
-    const [draft, setDraft] = useState<GalleryDraft>(defaultDraft);
+    const [draft, setDraft] = useState<GalleryDraftUnsaved>(defaultDraft);
 
     useEffect(() => {
         if (draftId === undefined || isDisabled === true) {
@@ -59,7 +59,7 @@ export const useWalletDraftGallery = ({
         void getDraft();
     }, [draftId, address]);
 
-    const saveDraft = async (draft: GalleryDraft): Promise<void> => {
+    const saveDraft = async (draft: GalleryDraftUnsaved): Promise<void> => {
         if (isTruthy(isDisabled)) {
             setIsLoading(false);
             return;
@@ -82,7 +82,7 @@ export const useWalletDraftGallery = ({
         void saveDraft({ ...draft, title });
     };
 
-    const reset = (draft?: Partial<GalleryDraft>): void => {
+    const reset = (draft?: Partial<GalleryDraftUnsaved>): void => {
         setDraft({ ...defaultDraft, ...draft });
     };
 
