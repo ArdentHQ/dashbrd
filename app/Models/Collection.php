@@ -344,9 +344,9 @@ class Collection extends Model
     }
 
     /**
-    * @param  Builder<self>  $query
-    * @return Builder<self>
-    */
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeNotHidden($query, User $user)
     {
         return $query->whereNotIn('collections.id', $user->hiddenCollections()->pluck('id')->toArray());
