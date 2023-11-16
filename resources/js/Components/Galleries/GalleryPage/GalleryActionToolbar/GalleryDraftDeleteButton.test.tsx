@@ -1,6 +1,7 @@
 import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
-import { type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
-import { render, screen, userEvent } from "@/Tests/testing-library";
+import { useWalletDraftGalleries, type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { render, renderHook, screen, userEvent, waitFor } from "@/Tests/testing-library";
+import { router } from "@inertiajs/react";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;
@@ -89,5 +90,27 @@ describe("GalleryDraftDeleteButton", () => {
         await userEvent.click(screen.getByTestId("ConfirmationDialog__close"));
 
         expect(screen.queryByTestId("ConfirmationDialog__confirm")).not.toBeInTheDocument();
+    });
+
+    it("removes from draft when submitted", async () => {
+        const { result } = renderHook(() => useWalletDraftGalleries({ address: "mockedAddress" }));
+
+        await waitFor(() => {
+            expect(result.current.drafts).toHaveLength(1);
+        });
+
+        const function_ = vi.fn();
+        const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
+
+        render(<GalleryDraftDeleteButton draftId={1} />);
+
+        await userEvent.click(screen.getByTestId("GalleryActionToolbar__draftDelete"));
+
+        await userEvent.clear(screen.getByTestId("ConfirmDeletionDialog__input"));
+        await userEvent.type(screen.getByTestId("ConfirmDeletionDialog__input"), "DELETE");
+
+        await userEvent.click(screen.getByTestId("ConfirmationDialog__confirm"));
+
+        expect(routerSpy).toBeCalledTimes(1);
     });
 });

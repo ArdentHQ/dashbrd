@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/core";
+import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
