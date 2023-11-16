@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface ContextNfts {
     selected: App.Data.Gallery.GalleryNftData[];
@@ -40,6 +40,9 @@ const getSelectedNftsHook = ({
     nftLimit: number;
 }): ContextNfts => {
     const [selected, setSelected] = useState<App.Data.Gallery.GalleryNftData[]>(selectedNfts ?? []);
+    useEffect(() => {
+        setSelected(selectedNfts ?? []);
+    }, [selectedNfts]);
 
     const add = (...nfts: App.Data.Gallery.GalleryNftData[]): void => {
         if (selected.length === nftLimit) {

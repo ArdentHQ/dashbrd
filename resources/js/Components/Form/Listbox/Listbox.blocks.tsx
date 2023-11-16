@@ -84,7 +84,7 @@ export const ListboxOption = ({
                     {icon}
                 </div>
             )}
-            <span className="block truncate font-medium">{children}</span>
+            <span className={cn("block truncate font-medium", classNames?.optionLabel)}>{children}</span>
         </div>
     </HeadlessListbox.Option>
 );

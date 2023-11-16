@@ -26,6 +26,8 @@ class MyGalleryController extends Controller
     {
         $user = $request->user();
 
+        $showDrafts = $request->boolean('draft');
+
         $galleries = $galleries->forUser($user)->through(
             fn ($gallery) => GalleryCardData::fromModel($gallery, $user)
         );
@@ -34,9 +36,11 @@ class MyGalleryController extends Controller
         $collection = GalleryCardData::collection($galleries);
 
         return Inertia::render('Galleries/MyGalleries/Index', [
-            'title' => trans('metatags.my_galleries.title'),
-            'galleries' => new GalleriesCardData($collection),
+            'title' => $showDrafts ? trans('metatags.my_galleries.title_draft') : trans('metatags.my_galleries.title'),
+            'galleries' => $showDrafts ? null : new GalleriesCardData($collection),
             'nftCount' => $user->nfts()->count(),
+            'galleryCount' => $user->galleries()->count(),
+            'showDrafts' => $showDrafts,
         ]);
     }
 
