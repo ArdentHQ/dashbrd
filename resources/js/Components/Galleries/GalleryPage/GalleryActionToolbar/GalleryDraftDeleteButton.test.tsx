@@ -1,6 +1,6 @@
-import { render, screen, userEvent } from "@/Tests/testing-library";
 import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
-import { GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { render, screen, userEvent } from "@/Tests/testing-library";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;
