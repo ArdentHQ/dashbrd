@@ -6,6 +6,7 @@ import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useSt
 import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
+import { DraftsLimitDialog } from "@/Components/Galleries/DraftsLimitDialog";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
 import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
 import { GalleryFormSlider, GalleryFormSliderTabs } from "@/Components/Galleries/GalleryPage/GalleryFormSlider";
@@ -66,13 +67,15 @@ const Create = ({
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
-    const { draftId } = getQueryParameters();
+    const { draftId, editDraft } = getQueryParameters();
+
+    const [showDraftsLimitModal, setShowDraftsLimitModal] = useState(false);
 
     const [initialNfts, setInitialNfts] = useState<App.Data.Gallery.GalleryNftData[] | undefined>(
         gallery?.nfts.paginated.data,
     );
 
-    const { remove, allDrafts, add } = useWalletDraftGalleries({ address: auth.wallet.address });
+    const { remove, add, hasReachedLimit, allDrafts } = useWalletDraftGalleries({ address: auth.wallet.address });
     const { setCover, setNfts, setTitle, draft, isSaving, isLoading, reset } = useWalletDraftGallery({
         draftId,
         address: auth.wallet.address,
@@ -92,14 +95,24 @@ const Create = ({
     const previousWallet = usePrevious(auth.wallet.address);
 
     useEffect(() => {
+        if (!isLoading && !isTruthy(editDraft) && hasReachedLimit) {
+            setShowDraftsLimitModal(hasReachedLimit);
+        }
+    }, [hasReachedLimit, isLoading]);
+
+    useEffect(() => {
         if (isLoading || isSaving) {
             return;
         }
 
         const redirectToNewDraft = async (existingDraft: GalleryDraft): Promise<void> => {
-            const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address, nfts: [] });
-            reset(newDraft);
-            replaceUrlQuery({ draftId: newDraft.id.toString() });
+            try {
+                const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address, nfts: [] });
+                reset(newDraft);
+                replaceUrlQuery({ draftId: newDraft.id.toString() });
+            } catch (_error) {
+                replaceUrlQuery({ draftId: "" });
+            }
         };
 
         // Wallet is changed while editing.
@@ -354,6 +367,22 @@ const Create = ({
                     {t("pages.galleries.delete_modal.confirmation_text")}
                 </ConfirmDeletionDialog>
             )}
+
+            <DraftsLimitDialog
+                title={t("pages.galleries.create.drafts_limit_modal_title")}
+                isOpen={showDraftsLimitModal}
+                onClose={() => {
+                    setShowDraftsLimitModal(false);
+                }}
+                onCancel={() => {
+                    router.visit(route("my-galleries", { draft: 1 }));
+                }}
+                onConfirm={() => {
+                    setShowDraftsLimitModal(false);
+                }}
+            >
+                {t("pages.galleries.create.drafts_limit_modal_message")}
+            </DraftsLimitDialog>
         </LayoutWrapper>
     );
 };
