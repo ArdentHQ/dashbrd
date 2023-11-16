@@ -459,16 +459,16 @@ class MnemonicPendingRequest extends PendingRequest
      */
     private function extractNftTransferType(array $labels): ?NftTransferType
     {
-        $validLabels = ['LABEL_MINT', 'LABEL_BURN', 'LABEL_TRANSFER', 'LABEL_SALE'];
+        $label = collect($labels)->intersect([
+            'LABEL_MINT', 'LABEL_BURN', 'LABEL_TRANSFER', 'LABEL_SALE',
+        ])->first();
 
-        $label = collect($validLabels)->first(function ($label) use ($labels) {
-            return in_array($label, $labels);
-        });
-
-        if ($label === null) {
-            return null;
-        }
-
-        return NftTransferType::getEnumFromValue($label);
+        return match ($label) {
+            'LABEL_MINT' => NftTransferType::Mint,
+            'LABEL_SALE' => NftTransferType::Sale,
+            'LABEL_TRANSFER' => NftTransferType::Transfer,
+            'LABEL_BURN' => NftTransferType::Burn,
+            default => null,
+        };
     }
 }

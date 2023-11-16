@@ -8,14 +8,11 @@ use InvalidArgumentException;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 /**
- * @see https://docs.mnemonichq.com/references/uniform/rest/reference/#operation/FoundationalService_GetNftTransfers for
- * type referecnes
+ * @see https://docs.mnemonichq.com/references/uniform/rest/reference/#operation/FoundationalService_GetNftTransfers
  */
 #[TypeScript]
 enum NftTransferType: string
 {
-    // Note: there are more labels but currently we only care about the following
-    // ones
     case Mint = 'LABEL_MINT';
     case Sale = 'LABEL_SALE';
     case Transfer = 'LABEL_TRANSFER';
