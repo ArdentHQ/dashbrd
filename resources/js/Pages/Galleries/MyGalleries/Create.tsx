@@ -106,11 +106,29 @@ const Create = ({
         }
 
         const redirectToNewDraft = async (existingDraft: GalleryDraft): Promise<void> => {
+            const coverImage = data.coverImage;
             try {
-                const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address, nfts: [] });
+                const isCoverImageAFile = coverImage instanceof File;
+
+                let cover: ArrayBuffer | null = null;
+
+                if (isCoverImageAFile) {
+                    cover = await coverImage.arrayBuffer();
+                }
+
+                const newDraft = await add({
+                    ...existingDraft,
+                    walletAddress: auth.wallet?.address,
+                    nfts: [],
+                    title: data.name,
+                    cover,
+                    coverFileName: isCoverImageAFile ? coverImage.name : null,
+                    coverType: isCoverImageAFile ? coverImage.type : null,
+                });
                 reset(newDraft);
                 replaceUrlQuery({ draftId: newDraft.id.toString() });
             } catch (_error) {
+                reset();
                 replaceUrlQuery({ draftId: "" });
             }
         };
