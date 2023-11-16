@@ -83,7 +83,6 @@ describe("NftCollectionSlider", () => {
 
         // eslint-disable-next-line react/display-name
         Component = ({ hiddenCollectionsCount = 0 }: { hiddenCollectionsCount?: number }): JSX.Element => {
-            console.log({ hiddenCollectionsCount });
             const [isSliderOpen, setSliderOpen] = useState(false);
 
             return (
