@@ -67,7 +67,7 @@ const Create = ({
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [busy, setBusy] = useState(false);
-    const { draftId } = getQueryParameters();
+    const { draftId, editDraft } = getQueryParameters();
 
     const [showDraftsLimitModal, setShowDraftsLimitModal] = useState(false);
 
@@ -93,6 +93,12 @@ const Create = ({
     });
 
     const previousWallet = usePrevious(auth.wallet.address);
+
+    useEffect(() => {
+        if (!isLoading && !isTruthy(editDraft) && hasReachedLimit) {
+            setShowDraftsLimitModal(hasReachedLimit);
+        }
+    }, [hasReachedLimit, isLoading]);
 
     useEffect(() => {
         if (isLoading || isSaving) {
@@ -127,12 +133,6 @@ const Create = ({
             replaceUrlQuery({ draftId: "" });
         }
     }, [draft.id, isLoading, isSaving, auth.wallet.address, previousWallet, data]);
-
-    useEffect(() => {
-        if (!isLoading && !isTruthy(draftId) && hasReachedLimit) {
-            setShowDraftsLimitModal(hasReachedLimit);
-        }
-    }, [hasReachedLimit, isLoading, draftId]);
 
     const totalValue = 0;
 
