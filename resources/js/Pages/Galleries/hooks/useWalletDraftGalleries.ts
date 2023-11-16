@@ -47,6 +47,25 @@ interface WalletDraftGalleriesState {
     allDrafts: () => Promise<GallerySavedDraft[]>;
 }
 
+/**
+ * Calculate collections count based on saved nfts.
+ *
+ * @param {GalleryDraft} draft
+ * @returns {number}
+ */
+const calculateCollectionsCount = (draft: GalleryDraft): number => uniqBy(draft.nfts, "collectionSlug").length;
+
+/**
+ * Determine if gallery is expired.
+ *
+ * @param {GalleryDraft} draft
+ * @returns {boolean}
+ */
+const isExpired = (draft: GalleryDraft): boolean => {
+    const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
+    return (draft.updatedAt ?? 0) < thresholdDaysAgo;
+};
+
 export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGalleriesState => {
     const database = useIndexedDB("gallery-drafts");
     const [drafts, setDrafts] = useState<GallerySavedDraft[]>([]);
@@ -68,14 +87,6 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     useEffect(() => {
         void updateDraftState();
     }, [address]);
-
-    /**
-     * Calculate collections count based on saved nfts.
-     *
-     * @param {GalleryDraft} draft
-     * @returns {number}
-     */
-    const calculateCollectionsCount = (draft: GalleryDraft): number => uniqBy(draft.nfts, "collectionSlug").length;
 
     /**
      * Add new draft gallery.
@@ -197,17 +208,6 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
         }
 
         return draft;
-    };
-
-    /**
-     * Determine if gallery is expired.
-     *
-     * @param {GalleryDraft} draft
-     * @returns {boolean}
-     */
-    const isExpired = (draft: GalleryDraft): boolean => {
-        const thresholdDaysAgo = new Date().getTime() - DRAFT_TTL_DAYS * 86400 * 1000;
-        return (draft.updatedAt ?? 0) < thresholdDaysAgo;
     };
 
     /**
