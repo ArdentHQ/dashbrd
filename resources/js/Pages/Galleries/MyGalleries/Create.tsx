@@ -83,7 +83,7 @@ const Create = ({
     });
 
     useEffect(() => {
-        if (!draftId) {
+        if (!isTruthy(draftId)) {
             setShowDraftsLimitModal(hasReachedLimit);
         }
     }, [hasReachedLimit]);
