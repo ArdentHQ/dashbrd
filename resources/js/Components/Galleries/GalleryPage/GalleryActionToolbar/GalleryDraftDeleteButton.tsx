@@ -45,7 +45,6 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
                     setOpen(false);
                 }}
                 onConfirm={deleteDraft}
-                isDisabled={false}
             >
                 {t("pages.galleries.delete_modal.confirmation_text")}
             </ConfirmDeletionDialog>
