@@ -6,10 +6,12 @@ import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { useAuth } from "@/Contexts/AuthContext";
 import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
+import { useToasts } from "@/Hooks/useToasts";
 
 export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.Element => {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
+    const { showToast } = useToasts();
 
     const { wallet } = useAuth();
 
@@ -24,6 +26,13 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
             route("my-galleries", {
                 draft: true,
             }),
+            {
+                onFinish: () => {
+                    showToast({
+                        message: t("pages.galleries.my_galleries.draft_succesfully_deleted"),
+                    });
+                },
+            },
         );
     };
 
