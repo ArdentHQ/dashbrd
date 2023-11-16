@@ -29,6 +29,31 @@ describe("GalleryActionToolbar", () => {
         expect(screen.getByTestId("GalleryActionToolbar__publish")).toBeDisabled();
     });
 
+    it("should show saving to draft icon", () => {
+        render(
+            <GalleryActionToolbar
+                galleryCoverUrl="/test"
+                isProcessing
+                isSavingDraft={true}
+            />,
+        );
+
+        expect(screen.getByTestId("Icon_SavingDraft")).toBeInTheDocument();
+    });
+
+    it("should show draft saved icon", () => {
+        render(
+            <GalleryActionToolbar
+                galleryCoverUrl="/test"
+                isProcessing
+                draftId={1}
+                isSavingDraft={false}
+            />,
+        );
+
+        expect(screen.getByTestId("Icon_DraftSaved")).toBeInTheDocument();
+    });
+
     it.each(allBreakpoints)("should render without delete button in %s screen", (breakpoint) => {
         render(<GalleryActionToolbar showDelete={false} />, { breakpoint });
 
