@@ -265,7 +265,7 @@ class AlchemyPendingRequest extends PendingRequest
         string $startToken = null,
         int $limit = null
     ): Web3NftsChunk {
-        $this->apiUrl = $this->getNftV2ApiUrl();
+        $this->apiUrl = $this->getNftV3ApiUrl();
 
         $this->chain = AlchemyChain::fromChainId($collection->network->chain_id);
 
@@ -280,18 +280,18 @@ class AlchemyPendingRequest extends PendingRequest
             'limit' => $limit,
         ]);
 
-        $data = self::get('getNFTsForCollection', $query)->json();
+        $data = self::get('getNFTsForContract', $query)->json();
 
         /**
          * @var array<int, mixed> $nfts
          */
         $nfts = Arr::get($data, 'nfts', []);
 
-        $nextToken = Arr::get($data, 'nextToken');
+        $nextToken = Arr::get($data, 'pageKey');
 
         $nfts = collect($nfts)
-            ->filter(fn ($nft) => $this->filterNft($nft))
-            ->map(fn ($nft) => $this->parseNft($nft, $collection->network_id))
+            ->filter(fn ($nft) => $this->filterNftV3($nft))
+            ->map(fn ($nft) => $this->parseNftV3($nft, $collection->network_id))
             ->values();
 
         return new Web3NftsChunk(
@@ -358,6 +358,97 @@ class AlchemyPendingRequest extends PendingRequest
                 description: Arr::get($collectionMeta, 'contractMetadata.openSea.description'),
             );
         });
+    }
+
+    /**
+     * @param  array<mixed>  $nft
+     */
+    public function parseNftV3(array $nft, int $networkId, bool $convertTokenNumber = true): Web3NftData
+    {
+        $extractedFloorPrice = $this->tryExtractFloorPriceV3($nft);
+        $collectionName = $this->collectionNameV3($nft);
+        $description = $nft['description'] ?? null;
+        $supply = Arr::get($nft, 'contract.totalSupply');
+
+        if (is_numeric($supply)) {
+            $supply = intval($supply);
+        }
+
+        if ($description === null) {
+            $description = Arr::get($nft, 'raw.metadata.description');
+        }
+
+        if (is_array($description)) {
+            $description = Arr::get($nft, 'description.0');
+        }
+
+        $socials = [
+            'twitter' => Arr::get($nft, 'contract.openSeaMetadata.twitterUsername'),
+            'discord' => Arr::get($nft, 'contract.openSeaMetadata.discordUrl'),
+        ];
+
+        if ($socials['discord'] && preg_match('/https:\/\/discord.gg\/(\w+)/', $socials['discord'], $matches)) {
+            $socials['discord'] = $matches[1];
+        }
+
+        $mintTimestamp = $this->getNftMintingDatePropertyV3($nft);
+
+        $bannerImageUrl = Arr::get($nft, 'contract.openSeaMetadata.bannerImageUrl');
+        if (! empty($bannerImageUrl)) {
+            $bannerImageUrl = NftImageUrl::get($bannerImageUrl, ImageSize::Banner);
+        } else {
+            $bannerImageUrl = null;
+        }
+
+        $tokenNumber = $convertTokenNumber === true ? CryptoUtils::hexToBigIntStr($nft['tokenId']) : $nft['tokenId'];
+
+        $error = Arr::get($nft, 'raw.error');
+        $nftInfo = null;
+        $collectionAddress = Arr::get($nft, 'contract.address');
+
+        if (! empty($error)) {
+            Log::info('AlchemyPendingRequest: Filter NFT', [
+                'error' => $error,
+                'collection_name' => $collectionName,
+                'collection_address' => $collectionAddress,
+                'nft_id' => $tokenNumber,
+            ]);
+
+            // if metadata stuff is empty, is empty object or empty array
+            if (empty(Arr::get($nft, 'raw.metadata')) || empty(Arr::get($nft, 'raw.metadata.metadata'))) {
+                $nftInfo = NftInfo::MetadataOutdated->value;
+            }
+        }
+
+        return new Web3NftData(
+            tokenAddress: $nft['contract']['address'],
+            tokenNumber: $tokenNumber,
+            networkId: $networkId,
+            collectionName: $collectionName,
+            collectionSymbol: Arr::get($nft, 'contract.symbol') ?? $collectionName,
+            collectionImage: Arr::get($nft, 'contract.openSeaMetadata.imageUrl') ?? Arr::get($nft, 'image.thumbnail') ?? Arr::get($nft, 'image.cachedUrl'),
+            collectionWebsite: Arr::get($nft, 'contract.openSeaMetadata.externalUrl') ?? Arr::get($nft, 'raw.metadata.external_url'),
+            collectionDescription: Arr::get($nft, 'contract.openSeaMetadata.description'),
+            collectionBannerImageUrl: $bannerImageUrl,
+            collectionBannerUpdatedAt: Arr::get($nft, 'contract.openSeaMetadata.bannerImageUrl') ? Carbon::now() : null,
+            collectionOpenSeaSlug: Arr::get($nft, 'contract.openSeaMetadata.collectionSlug'),
+            collectionSocials: $socials,
+            collectionSupply: $supply,
+            name: $this->getNftNameV3($nft),
+            description: $description,
+            extraAttributes: $this->getNftExtraAttributesV3($nft),
+            floorPrice: $extractedFloorPrice ?
+                new Web3NftCollectionFloorPrice(
+                    $extractedFloorPrice,
+                    'eth', // always eth here
+                    Carbon::now(),
+                ) : null,
+            traits: $this->extractTraitsV3($nft),
+            mintedBlock: $nft['contract']['deployedBlockNumber'],
+            mintedAt: $mintTimestamp !== null ? Carbon::createFromTimestampMs($mintTimestamp) : null,
+            hasError: ! empty($error),
+            info: $nftInfo,
+        );
     }
 
     /**
@@ -579,6 +670,22 @@ class AlchemyPendingRequest extends PendingRequest
      * @param  array<string, mixed>  $nft
      * @return array{images: array{thumb: string | null, small: string | null, large: string | null, original: string | null, originalRaw: string | null}}
      */
+    private function getNftExtraAttributesV3(array $nft): array
+    {
+        $imageUrl = $this->tryExtractImageV3($nft);
+
+        $images = array_merge(
+            NftImageUrl::getAllSizes($imageUrl),
+            $this->tryExtractAssetUrlsV3($nft)
+        );
+
+        return ['images' => $images];
+    }
+
+    /**
+     * @param  array<string, mixed>  $nft
+     * @return array{images: array{thumb: string | null, small: string | null, large: string | null, original: string | null, originalRaw: string | null}}
+     */
     private function getNftExtraAttributes(array $nft): array
     {
         $imageUrl = $this->tryExtractImage($nft);
@@ -612,6 +719,45 @@ class AlchemyPendingRequest extends PendingRequest
         ];
     }
 
+
+    /**
+     * @param  array<string, mixed>  $nft
+     * @return array{originalRaw: string | null, original: string | null}
+     */
+    private function tryExtractAssetUrlsV3(array $nft): array
+    {
+        $originalRaw = Arr::get($nft, 'image.originalUrl');
+        $original = Arr::get($nft, 'image.cachedUrl');
+
+        return [
+            'originalRaw' => empty($originalRaw) || isBase64EncodedImage($originalRaw) ? null : $originalRaw,
+            'original' => empty($original) || isBase64EncodedImage($original) ? null : $original,
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $nft
+     */
+    private function tryExtractImageV3(array $nft): ?string
+    {
+        $imageKeys = [
+            'image.thumbnail',
+            'image.cachedUrl',
+            'raw.metadata.image',
+            'contract.openSeaMetadata.imageUrl',
+        ];
+
+        foreach ($imageKeys as $imageKey) {
+            $imageUrl = Arr::get($nft, $imageKey);
+
+            if (! empty($imageUrl) && ! isBase64EncodedImage($imageUrl)) {
+                return $imageUrl;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @param  array<string, mixed>  $nft
      */
@@ -632,6 +778,22 @@ class AlchemyPendingRequest extends PendingRequest
             }
         }
 
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $nft
+     */
+    private function getNftNameV3(array $nft): ?string
+    {
+        // Intrinsic name has priority over any other name
+        $name = Arr::get($nft, 'name');
+        if (! empty($name)) {
+            return $name;
+        }
+
+        // when the name is missing, marketplaces typically show "#tokenId" or similar.
+        // Instead of forcing a specific name, we let the frontend decide.
         return null;
     }
 
@@ -665,6 +827,30 @@ class AlchemyPendingRequest extends PendingRequest
         return CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::ETH->value);
     }
 
+    private function tryExtractFloorPriceV3(array $nft): ?string
+    {
+        $floorPrice = Arr::get($nft, 'contract.openSeaMetadata.floorPrice');
+        if (empty($floorPrice)) {
+            return null;
+        }
+
+        // Alchemy returns floor price in ETH (e.g. 0.003) but we store it internally in WEI to be consistent
+        return CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::ETH->value);
+    }
+
+    /**
+     * @param  array<string, mixed>  $nft
+     */
+    private function getNftMintingDatePropertyV3(array $nft): ?string
+    {
+        /** @var array<array{trait_type: string | null, value: string | null, display_type: string | null}> $props */
+        $props = Arr::get($nft, 'raw.metadata.attributes', Arr::get($nft, 'raw.metadata.properties', []));
+
+        return collect($props)->first(
+            fn ($item) => ($item['trait_type'] ?? null) === 'date'
+        )['value'] ?? null;
+    }
+
     /**
      * @param  array<string, mixed>  $nft
      */
@@ -676,6 +862,32 @@ class AlchemyPendingRequest extends PendingRequest
         return collect($props)->first(
             fn ($item) => ($item['trait_type'] ?? null) === 'date'
         )['value'] ?? null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $nft
+     * @return array<array{name: string, value: string, displayType: TraitDisplayType}>
+     */
+    private function extractTraitsV3(array $nft): array
+    {
+        /** @var array<array{trait_type: string | null, value: string | null, display_type: string | null}> $props */
+        $props = Arr::get($nft, 'raw.metadata.attributes', Arr::get($nft, 'raw.metadata.properties', []));
+
+        return collect($props)
+            ->filter(function ($item) {
+                return ! empty(Arr::get($item, 'trait_type')) && ! empty(Arr::get($item, 'value')) && ! is_array(Arr::get($item, 'value'));
+            })
+            ->map(function ($item) {
+                $value = strval($item['value']);
+                $displayType = TraitDisplayType::fromAlchemyDisplayType(Arr::get($item, 'display_type'), $value);
+
+                return [
+                    'name' => $item['trait_type'],
+                    'value' => $value,
+                    'displayType' => $displayType,
+                ];
+            })
+            ->toArray();
     }
 
     /**
@@ -737,6 +949,36 @@ class AlchemyPendingRequest extends PendingRequest
         }
 
         return true;
+    }
+
+    private function filterNftV3(mixed $nft, bool $filterError = true): bool
+    {
+        if (Arr::get($nft, 'contract.isSpam', false)) {
+            return false;
+        }
+
+        if (Arr::has($nft, 'raw.error') && $filterError) {
+            return false;
+        }
+
+        if (! TokenType::compare(TokenType::Erc721, Arr::get($nft, 'contract.tokenType', ''))) {
+            return false;
+        }
+
+        // Only one has to exist, the missing one gets substituted
+        $hasCollectionName = ! empty($this->collectionNameV3($nft));
+        $hasCollectionSymbol = ! empty(Arr::get($nft, 'contract.symbol'));
+
+        if (! $hasCollectionName && ! $hasCollectionSymbol) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function collectionNameV3(mixed $nft): ?string
+    {
+        return Arr::get($nft, 'contract.name') ?? Arr::get($nft, 'contract.openSeaMetadata.collectionName');
     }
 
     private function collectionName(mixed $nft): ?string
