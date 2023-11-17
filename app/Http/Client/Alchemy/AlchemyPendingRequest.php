@@ -498,7 +498,7 @@ class AlchemyPendingRequest extends PendingRequest
             return null;
         }
 
-        $this->apiUrl = $this->getNftV2ApiUrl();
+        $this->apiUrl = $this->getNftV3ApiUrl();
         $this->chain = AlchemyChain::fromChainId($chain->value);
 
         /** @var array<string, mixed> $data */
@@ -520,13 +520,15 @@ class AlchemyPendingRequest extends PendingRequest
         //     "floorPrice": 1.235,
         //     "priceCurrency": "ETH",
         //     "retrievedAt": "2023-03-30T04:08:09.791Z",
-        //     "collectionUrl": "https://opensea.io/collection/world-of-women-nft"
+        //     "collectionUrl": "https://opensea.io/collection/world-of-women-nft",
+        //     "error": null
         //   },
         //   "looksRare": {
         //     "floorPrice": 1.2472,
         //     "priceCurrency": "ETH",
         //     "retrievedAt": "2023-03-30T03:59:09.707Z",
         //     "collectionUrl": "https://looksrare.org/collections/0xe785e82358879f061bc3dcac6f0444462d4b5330"
+        //     "error": null
         //   }
         // }
         /** @var array<string, mixed> | null $priceInfo */
