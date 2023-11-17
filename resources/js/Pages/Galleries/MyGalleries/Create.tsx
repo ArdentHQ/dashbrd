@@ -263,7 +263,7 @@ const Create = ({
                         setData("name", name);
                     }}
                     onBlur={() => {
-                        if (isTruthy(errors.name)) {
+                        if (!isTruthy(errors.name)) {
                             setTitle(data.name);
                         }
                     }}
