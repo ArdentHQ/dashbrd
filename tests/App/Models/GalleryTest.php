@@ -233,8 +233,8 @@ it('should get the collections for a gallery', function () {
 
     $gallery->nfts()->attach($nft, ['order_index' => 0]);
 
-    expect(count($gallery->collections()))->toBe(1);
-    expect($gallery->collections()->get(0))->toEqual($nft->collection);
+    expect($gallery->collections()->count())->toBe(1);
+    expect($gallery->collections()->first()->is($nft->collection))->toBeTrue();
 });
 
 it('should get the counts for a gallery', function () {
