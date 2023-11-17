@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIndexedDB } from "react-indexed-db-hook";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useTranslation } from "react-i18next";
 
 const MAX_DRAFT_LIMIT_PER_WALLET = 6;
 const DRAFT_TTL_DAYS = 30;
@@ -95,9 +95,9 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
             throw new Error("[useWalletDraftGalleries:upsert] Reached limit");
         }
 
-        const error = validateDraft(draft);
+        const error = validate(draft);
 
-        if (error) {
+        if (isTruthy(error)) {
             throw new Error(error);
         }
 
@@ -119,13 +119,13 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {string | undefined}
      */
-    const validateDraft = (draft: GalleryDraft): string | undefined => {
+    const validate = (draft: GalleryDraft): string | undefined => {
         if (!isTruthy(draft.title.trim())) {
-            return `[useWalletDraftGalleries:validateDraft] ${t("validation.gallery_title_required")}`;
+            return `[useWalletDraftGalleries:validate] ${t("validation.gallery_title_required")}`;
         }
 
         if (draft.title.trim().length > 50) {
-            return `[useWalletDraftGalleries:validateDraft] ${t("pages.galleries.create.title_too_long", { max: 50 })}`;
+            return `[useWalletDraftGalleries:validate] ${t("pages.galleries.create.title_too_long", { max: 50 })}`;
         }
     };
 
@@ -140,9 +140,9 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
             throw new Error("[useWalletDraftGalleries:update] Missing Id");
         }
 
-        const error = validateDraft(draft);
+        const error = validate(draft);
 
-        if (error) {
+        if (isTruthy(error)) {
             throw new Error(error);
         }
 
