@@ -142,8 +142,8 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @returns {string | undefined}
      */
     const validate = (draft: GalleryDraftUnsaved): string[] => {
-        let titleError: string | undefined = undefined;
-        let nftsError: string | undefined = undefined;
+        let titleError: string | undefined;
+        let nftsError: string | undefined;
 
         if (!isTruthy(draft.title.trim())) {
             titleError = `[useWalletDraftGalleries:validate] ${t("validation.gallery_title_required")}`;
