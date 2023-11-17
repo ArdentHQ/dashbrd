@@ -719,7 +719,6 @@ class AlchemyPendingRequest extends PendingRequest
         ];
     }
 
-
     /**
      * @param  array<string, mixed>  $nft
      * @return array{originalRaw: string | null, original: string | null}
