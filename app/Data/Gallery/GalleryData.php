@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
+use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -53,6 +54,14 @@ class GalleryData extends Data
 
         $galleryCache = new GalleryCache($gallery);
 
+        /** @var PaginatedDataCollection<int, GalleryNftData> */
+        $nfts = GalleryNftData::collection(
+                $gallery->nfts()
+                    ->with('collection.network', 'collection.floorPriceToken')
+                    ->orderByPivot('order_index', 'asc')
+                    ->paginate($limit, page: 1)
+            );
+
         return new self(
             id: $gallery->id,
             name: $gallery->name,
@@ -63,7 +72,7 @@ class GalleryData extends Data
             collectionsCount: $galleryCache->collectionsCount(),
             value: $gallery->value($currency),
             coverImage: $gallery->cover_image,
-            nfts: new GalleryNftsData(GalleryNftData::collection($gallery->nfts()->orderByPivot('order_index', 'asc')->paginate($limit, ['*'], 'page', 1))),
+            nfts: new GalleryNftsData($nfts),
             wallet: SimpleWalletData::fromModel($gallery->user->wallet),
             isOwner: $isOwner,
             hasLiked: $hasLiked,
