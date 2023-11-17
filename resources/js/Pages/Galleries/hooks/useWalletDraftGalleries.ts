@@ -182,6 +182,12 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
             throw new Error("[useWalletDraftGalleries:update] Missing Id");
         }
 
+        const errors = validate(draft);
+
+        if (errors.length > 0) {
+            throw new Error(`[useWalletDraftGalleries:update] Validation failed. Reason ${errors.join(",")}`);
+        }
+
         setIsSaving(true);
 
         await database.update({
