@@ -115,10 +115,10 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
             throw new Error("[useWalletDraftGalleries:upsert] Reached limit");
         }
 
-        const error = validate(draft);
+        const errors = validate(draft);
 
-        if (isTruthy(error)) {
-            throw new Error(error);
+        if (errors.length > 0) {
+            throw new Error(`[useWalletDraftGalleries:update] Validation failed. Reason ${errors.join(",")}`);
         }
 
         setIsSaving(true);
@@ -135,19 +135,35 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
     };
 
     /**
-     * Validate draft before saving.
+     * Validate draft before saving. Return errors if all fail.
+     * Drafts can be saved if either title or nfts are set. Otherwise both are required.
      *
      * @param {GalleryDraftUnsaved} draft
      * @returns {string | undefined}
      */
-    const validate = (draft: GalleryDraftUnsaved): string | undefined => {
+    const validate = (draft: GalleryDraftUnsaved): string[] => {
+        let titleError: string | undefined = undefined;
+        let nftsError: string | undefined = undefined;
+
         if (!isTruthy(draft.title.trim())) {
-            return `[useWalletDraftGalleries:validate] ${t("validation.gallery_title_required")}`;
+            titleError = `[useWalletDraftGalleries:validate] ${t("validation.gallery_title_required")}`;
         }
 
         if (draft.title.trim().length > 50) {
-            return `[useWalletDraftGalleries:validate] ${t("pages.galleries.create.title_too_long", { max: 50 })}`;
+            titleError = `[useWalletDraftGalleries:validate] ${t("pages.galleries.create.title_too_long", {
+                max: 50,
+            })}`;
         }
+
+        if (draft.nfts.length === 0) {
+            nftsError = `[useWalletDraftGalleries:validate] ${t("validation.nfts_required")}`;
+        }
+
+        if (isTruthy(titleError) && isTruthy(nftsError)) {
+            return [titleError, nftsError];
+        }
+
+        return [];
     };
 
     /**
@@ -161,10 +177,10 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
             throw new Error("[useWalletDraftGalleries:update] Missing Id");
         }
 
-        const error = validate(draft);
+        const errors = validate(draft);
 
-        if (isTruthy(error)) {
-            throw new Error(error);
+        if (errors.length > 0) {
+            throw new Error(`[useWalletDraftGalleries:update] Validation failed. Reason ${errors.join(",")}`);
         }
 
         setIsSaving(true);
