@@ -72,7 +72,7 @@ export const useWalletDraftGallery = ({
         try {
             const savedDraft = await upsert({ ...draft, walletAddress: address });
             setDraft(savedDraft);
-        } catch (error) {
+        } catch {
             // Ignore any errors that occur on validation when saving.
         }
     };
