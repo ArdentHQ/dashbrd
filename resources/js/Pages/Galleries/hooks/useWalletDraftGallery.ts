@@ -70,7 +70,6 @@ export const useWalletDraftGallery = ({
         }
 
         const savedDraft = await upsert({ ...draft, walletAddress: address });
-        console.log("saved draft", saveDraft);
 
         setDraft(savedDraft);
     };

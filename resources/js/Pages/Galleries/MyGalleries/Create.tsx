@@ -263,10 +263,8 @@ const Create = ({
                         setData("name", name);
                     }}
                     onBlur={() => {
-                        try {
+                        if (errors.name) {
                             setTitle(data.name);
-                        } catch (error) {
-                            console.log({ error });
                         }
                     }}
                 />

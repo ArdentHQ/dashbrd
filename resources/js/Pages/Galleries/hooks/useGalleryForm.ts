@@ -134,7 +134,7 @@ export const useGalleryForm = ({
         setData: (field, value) => {
             setData(field, value);
 
-            if (field === "name" && validateName(field)) {
+            if (field === "name" && validateName(String(value))) {
                 form.setError("name", "");
             }
         },
