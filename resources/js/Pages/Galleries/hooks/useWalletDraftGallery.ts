@@ -69,9 +69,12 @@ export const useWalletDraftGallery = ({
             throw new Error("[useWalletDraftGallery:saveDraft] Trying to save draft that belongs to another wallet.");
         }
 
-        const savedDraft = await upsert({ ...draft, walletAddress: address });
-
-        setDraft(savedDraft);
+        try {
+            const savedDraft = await upsert({ ...draft, walletAddress: address });
+            setDraft(savedDraft);
+        } catch {
+            // Ignore any errors that occur on validation when saving.
+        }
     };
 
     const setCover = (image: ArrayBuffer | null, name: string | null, type: string | null): void => {

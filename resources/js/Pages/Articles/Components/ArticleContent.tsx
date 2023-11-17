@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import tippy, { inlinePositioning } from "tippy.js";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { extractDomain } from "@/Utils/extract-domain";
@@ -60,7 +61,18 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => {
         <div className="article-content">
             <Markdown
                 rehypePlugins={[rehypeRaw, [rehypeExternalLinks, { target: "_blank" }]]}
-                remarkPlugins={[remarkFigurePlugin]}
+                remarkPlugins={[remarkFigurePlugin, remarkGfm]}
+                components={{
+                    table: ({ children }) => (
+                        <div className="w-fit overflow-hidden rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700">
+                            <div className="w-full border-b-4 border-theme-secondary-300 pb-0.5 dark:border-theme-dark-700">
+                                <div className="custom-scroll w-full overflow-x-auto">
+                                    <table>{children}</table>
+                                </div>
+                            </div>
+                        </div>
+                    ),
+                }}
                 skipHtml
             >
                 {article.content}
