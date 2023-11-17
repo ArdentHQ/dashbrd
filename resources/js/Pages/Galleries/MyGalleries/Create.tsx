@@ -241,7 +241,7 @@ const Create = ({
     };
 
     /**
-     * Remove empty draft when navigating await.
+     * Remove empty draft when navigating away.
      */
     useEffect(() => {
         const abortListener = router.on("before", () => {
