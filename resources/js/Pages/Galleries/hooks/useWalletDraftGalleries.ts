@@ -139,7 +139,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * Drafts can be saved if either title or nfts are set. Otherwise both are required.
      *
      * @param {GalleryDraftUnsaved} draft
-     * @returns {string | undefined}
+     * @returns {string[]}
      */
     const validate = (draft: GalleryDraftUnsaved): string[] => {
         let titleError: string | undefined;
