@@ -533,7 +533,7 @@ class AlchemyPendingRequest extends PendingRequest
         // }
         /** @var array<string, mixed> | null $priceInfo */
         $priceInfo = collect($data)->first(function ($k, $v) {
-            return ! Arr::has($k, 'error');
+            return Arr::get($k, 'error', 1) === null;
         });
 
         if (empty($priceInfo)) {
