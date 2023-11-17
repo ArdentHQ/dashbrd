@@ -22,7 +22,7 @@ import { usePrevious } from "@/Hooks/usePrevious";
 import { useToasts } from "@/Hooks/useToasts";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
-import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type GalleryDraftUnsaved, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { useWalletDraftGallery } from "@/Pages/Galleries/hooks/useWalletDraftGallery";
 import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { assertUser, assertWallet } from "@/Utils/assertions";
@@ -105,7 +105,7 @@ const Create = ({
             return;
         }
 
-        const redirectToNewDraft = async (existingDraft: GalleryDraft): Promise<void> => {
+        const redirectToNewDraft = async (existingDraft: GalleryDraftUnsaved): Promise<void> => {
             try {
                 const newDraft = await add({ ...existingDraft, walletAddress: auth.wallet?.address, nfts: [] });
                 reset(newDraft);
