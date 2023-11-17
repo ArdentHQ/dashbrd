@@ -60,11 +60,15 @@ body {
     }
 
     .custom-scroll::-webkit-scrollbar-thumb {
-        @apply rounded-lg bg-theme-primary-200;
+        @apply rounded-lg bg-theme-primary-200 dark:bg-theme-dark-700;
     }
 
     .custom-scroll {
         scrollbar-color: rgb(var(--theme-color-primary-200)) transparent;
+    }
+
+    .dark .custom-scroll {
+        scrollbar-color: rgb(var(--theme-color-dark-700)) transparent;
     }
 }
 
