@@ -193,10 +193,7 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
                         </span>
                     </Heading>
 
-                    <CreateGalleryButton
-                        nftCount={nftCount}
-                        disableIfNoNfts
-                    />
+                    <CreateGalleryButton nftCount={nftCount} />
                 </div>
             </div>
 
