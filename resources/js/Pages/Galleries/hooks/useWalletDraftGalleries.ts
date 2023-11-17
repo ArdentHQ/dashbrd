@@ -118,7 +118,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
         const errors = validate(draft);
 
         if (errors.length > 0) {
-            throw new Error(`[useWalletDraftGalleries:update] Validation failed. Reason ${errors.join(",")}`);
+            throw new Error(`[useWalletDraftGalleries:add] Validation failed. Reason ${errors.join(",")}`);
         }
 
         setIsSaving(true);
@@ -142,8 +142,8 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @returns {string | undefined}
      */
     const validate = (draft: GalleryDraftUnsaved): string[] => {
-        let titleError: string | undefined = undefined;
-        let nftsError: string | undefined = undefined;
+        let titleError: string | undefined;
+        let nftsError: string | undefined;
 
         if (!isTruthy(draft.title.trim())) {
             titleError = `[useWalletDraftGalleries:validate] ${t("validation.gallery_title_required")}`;
