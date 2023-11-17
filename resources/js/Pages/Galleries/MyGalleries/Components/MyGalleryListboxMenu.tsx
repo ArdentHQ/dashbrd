@@ -37,7 +37,10 @@ export const MyGalleryListboxMenu = ({
                     subtitle={t("pages.galleries.my_galleries.subtitle").toString()}
                 />
 
-                <CreateGalleryButton nftCount={nftCount} />
+                <CreateGalleryButton
+                    nftCount={nftCount}
+                    disableIfNoNfts
+                />
             </div>
 
             <div
