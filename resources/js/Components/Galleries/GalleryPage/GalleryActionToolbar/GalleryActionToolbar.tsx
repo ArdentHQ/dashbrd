@@ -1,5 +1,6 @@
 import { type FormEvent, type MouseEvent, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
 import { Button, IconButton } from "@/Components/Buttons";
 import { GalleryDraftStatus } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar/GalleryDraftStatus";
 import { Icon } from "@/Components/Icon";
@@ -200,6 +201,8 @@ export const GalleryActionToolbar = ({
                                         isSavingDraft={isSavingDraft}
                                         draftId={draftId}
                                     />
+
+                                    {draftId !== undefined && <GalleryDraftDeleteButton draftId={draftId} />}
 
                                     {showDelete && (
                                         <IconButton
