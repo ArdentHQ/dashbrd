@@ -1,6 +1,6 @@
 import cn from "classnames";
 import { type FormEvent, type RefObject, useRef } from "react";
-import { Button } from "./Buttons/Button";
+import { Button, type ButtonVariant } from "./Buttons/Button";
 import { Dialog } from "@/Components/Dialog";
 
 interface Properties {
@@ -11,11 +11,13 @@ interface Properties {
     isDisabled?: boolean;
     isStatic?: boolean;
     onClose: () => void;
+    onCancel?: () => void;
     onConfirm: () => void;
     children: React.ReactNode;
     focus?: RefObject<HTMLElement>;
     hasBlurryOverlay?: boolean;
     childrenClassName?: string;
+    confirmationButtonVariant?: ButtonVariant;
 }
 
 export const ConfirmationDialog = ({
@@ -27,10 +29,12 @@ export const ConfirmationDialog = ({
     isStatic = false,
     onClose,
     onConfirm,
+    onCancel,
     children,
     focus,
     hasBlurryOverlay = false,
     childrenClassName,
+    confirmationButtonVariant = "primary",
 }: Properties): JSX.Element => {
     const submitButton = useRef<HTMLButtonElement>(null);
 
@@ -64,7 +68,7 @@ export const ConfirmationDialog = ({
                             data-testid="ConfirmationDialog__close"
                             variant="secondary"
                             className="w-full justify-center sm:w-auto"
-                            onClick={onClose}
+                            onClick={onCancel ?? onClose}
                         >
                             {cancelLabel}
                         </Button>
@@ -77,7 +81,7 @@ export const ConfirmationDialog = ({
                         processing={isDisabled}
                         disabled={isDisabled}
                         className="w-full justify-center sm:w-auto"
-                        variant="primary"
+                        variant={confirmationButtonVariant}
                     >
                         {confirmLabel}
                     </Button>
