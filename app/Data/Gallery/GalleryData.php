@@ -56,11 +56,11 @@ class GalleryData extends Data
 
         /** @var PaginatedDataCollection<int, GalleryNftData> */
         $nfts = GalleryNftData::collection(
-                $gallery->nfts()
-                    ->with('collection.network', 'collection.floorPriceToken')
-                    ->orderByPivot('order_index', 'asc')
-                    ->paginate($limit, page: 1)
-            );
+            $gallery->nfts()
+                ->with('collection.network', 'collection.floorPriceToken')
+                ->orderByPivot('order_index', 'asc')
+                ->paginate($limit, page: 1)
+        );
 
         return new self(
             id: $gallery->id,
