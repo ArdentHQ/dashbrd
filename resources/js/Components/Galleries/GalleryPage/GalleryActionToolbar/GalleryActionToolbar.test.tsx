@@ -29,7 +29,7 @@ const defaultGalleryDraft = {
 };
 
 const expiredGalleryDraft = {
-    id: null,
+    id: 10,
     title: "",
     cover: null,
     coverType: null,

@@ -1,8 +1,8 @@
 import { router } from "@inertiajs/react";
 import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
+import * as ToastsHook from "@/Hooks/useToasts";
 import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { render, renderHook, screen, userEvent, waitFor } from "@/Tests/testing-library";
-import * as ToastsHook from "@/Hooks/useToasts";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;
@@ -29,7 +29,7 @@ const defaultGalleryDraft = {
 };
 
 const expiredGalleryDraft = {
-    id: null,
+    id: 10,
     title: "",
     cover: null,
     coverType: null,
@@ -100,10 +100,8 @@ describe("GalleryDraftDeleteButton", () => {
             expect(result.current.drafts).toHaveLength(1);
         });
 
-        const function_ = vi.fn();
         const routerSpy = vi.spyOn(router, "visit").mockImplementation((_, options) => {
-            // @ts-ignore
-            options?.onFinish();
+            (options as { onFinish: () => void }).onFinish();
         });
 
         const showToastMock = vi.fn();
