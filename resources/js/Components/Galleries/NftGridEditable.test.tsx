@@ -42,7 +42,7 @@ describe("NftGridEditable", () => {
                     nftLimit={16}
                 >
                     <GalleryNfts>
-                        <NftGridEditable />
+                        <NftGridEditable hiddenCollectionsCount={0} />
                     </GalleryNfts>
                 </EditableGalleryHook>
             </SliderContext.Provider>,
@@ -62,7 +62,10 @@ describe("NftGridEditable", () => {
                     nftLimit={16}
                 >
                     <GalleryNfts>
-                        <NftGridEditable error="some error" />
+                        <NftGridEditable
+                            error="some error"
+                            hiddenCollectionsCount={0}
+                        />
                     </GalleryNfts>
                 </EditableGalleryHook>
             </SliderContext.Provider>,
@@ -92,7 +95,7 @@ describe("NftGridEditable", () => {
                     }}
                 >
                     <GalleryNfts>
-                        <NftGridEditable />
+                        <NftGridEditable hiddenCollectionsCount={0} />
                     </GalleryNfts>
                 </GalleryContext.Provider>
             </SliderContext.Provider>,
@@ -126,7 +129,7 @@ describe("NftGridEditable", () => {
                     }}
                 >
                     <GalleryNfts>
-                        <NftGridEditable />
+                        <NftGridEditable hiddenCollectionsCount={0} />
                     </GalleryNfts>
                 </GalleryContext.Provider>
             </SliderContext.Provider>,
@@ -159,7 +162,7 @@ describe("NftGridEditable", () => {
                     }}
                 >
                     <GalleryNfts>
-                        <NftGridEditable />
+                        <NftGridEditable hiddenCollectionsCount={0} />
                     </GalleryNfts>
                 </GalleryContext.Provider>
             </SliderContext.Provider>,
