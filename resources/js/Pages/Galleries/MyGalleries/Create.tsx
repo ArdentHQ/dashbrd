@@ -245,7 +245,7 @@ const Create = ({
      */
     useEffect(() => {
         const abortListener = router.on("before", () => {
-            const isEmpty = !isTruthy(data.name.trim()) && data.nfts.length === 0 && !isTruthy(data.coverImage);
+            const isEmpty = !isTruthy(data.name.trim()) && draft.nfts.length === 0 && !isTruthy(data.coverImage);
 
             if (isEmpty) {
                 void remove(draft.id);
