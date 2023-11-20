@@ -1,18 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
-use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Actions\EditAction;
+use App\Filament\Resources\CollectionResource\Pages\EditCollection;
 use App\Filament\Resources\CollectionResource\Pages\ListCollections;
 use App\Filament\Resources\CollectionResource\Pages\ViewCollection;
-use App\Filament\Resources\CollectionResource\Pages\EditCollection;
-use App\Filament\Resources\CollectionResource\Pages;
 use App\Models\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -80,7 +80,7 @@ class CollectionResource extends Resource
                 ViewAction::make(),
                 EditAction::make(),
             ])
-            ->defaultSort('name', 'asc');;
+            ->defaultSort('name', 'asc');
     }
 
     public static function getRelations(): array
