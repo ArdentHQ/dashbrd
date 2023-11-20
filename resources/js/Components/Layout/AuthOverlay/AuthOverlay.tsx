@@ -73,8 +73,8 @@ export const AuthOverlay = ({
                             {requiresSignature
                                 ? t("auth.wallet.sign_subtitle")
                                 : needsMetaMask
-                                  ? t("auth.wallet.install_long")
-                                  : t("auth.wallet.connect_long")}
+                                ? t("auth.wallet.install_long")
+                                : t("auth.wallet.connect_long")}
                         </>
                     )}
                 </p>
