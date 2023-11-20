@@ -469,7 +469,7 @@ it('should filter out nfts', function () {
 });
 
 it('should getCollectionsNfts', function () {
-    $original = fixtureData('alchemy.get_nfts_for_collection');
+    $original = fixtureData('alchemy.get_nfts_for_contract');
 
     $altered = $original;
     // 12345 in hex
@@ -489,7 +489,7 @@ it('should getCollectionsNfts', function () {
     $result = $provider->getCollectionsNfts($collection);
 
     expect($result)->toBeInstanceOf(Web3NftsChunk::class)
-        ->and($result->nfts)->toHaveCount(100)
+        ->and($result->nfts)->toHaveCount(3)
         ->and($result->nfts[0])->toBeInstanceOf(Web3NftData::class)
         ->and($result->nextToken)->toBe('0x0000000000000000000000000000000000000000000000000000000000000064');
 });
