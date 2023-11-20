@@ -16,7 +16,7 @@ final class CollectionPolicy
 
     public function view(User $user, Collection $collection): bool
     {
-        return $user->hasPermissionTo('user:view', 'admin');
+        return $user->hasPermissionTo('collection:view', 'admin');
     }
 
     public function create(User $user): bool
@@ -26,7 +26,7 @@ final class CollectionPolicy
 
     public function update(User $user, Collection $collection): bool
     {
-        return false;
+        return $user->hasPermissionTo('collection:update', 'admin');
     }
 
     public function delete(User $user, Collection $collection): bool
