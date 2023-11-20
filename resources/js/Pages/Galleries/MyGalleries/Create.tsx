@@ -251,6 +251,7 @@ const Create = ({
                 reportReasons={props.reportReasons}
                 nftsPerPage={nftsPerPage}
                 collectionsPerPage={collectionsPerPage}
+                hiddenCollectionsCount={hiddenCollectionsCount}
             />
 
             <GalleryActionToolbar

@@ -25,6 +25,7 @@ const CreateGalleryForm = ({
     reportReasons,
     nftsPerPage,
     collectionsPerPage,
+    hiddenCollectionsCount,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
@@ -37,6 +38,7 @@ const CreateGalleryForm = ({
     reportReasons: Record<string, string>;
     nftsPerPage: number;
     collectionsPerPage: number;
+    hiddenCollectionsCount: number;
 }): JSX.Element => {
     assertUser(auth.user);
     assertWallet(auth.wallet);
@@ -105,6 +107,7 @@ const CreateGalleryForm = ({
                         <NftGridEditable
                             onChange={updateSelectedNfts}
                             error={errors.nfts}
+                            hiddenCollectionsCount={hiddenCollectionsCount}
                         />
                     </GalleryNfts>
 
