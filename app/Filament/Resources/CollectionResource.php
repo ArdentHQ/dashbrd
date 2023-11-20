@@ -66,7 +66,7 @@ class CollectionResource extends Resource
 
                 TextColumn::make('is_featured')
                             ->label('Is featured?')
-                            ->getStateUsing(fn (Collection $collection) => $collection->featured ? 'Yes' : 'No'),
+                            ->getStateUsing(fn (Collection $collection) => $collection->is_featured ? 'Yes' : 'No'),
             ])
             ->filters([
                 //
