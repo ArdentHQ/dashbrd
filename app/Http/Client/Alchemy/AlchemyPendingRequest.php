@@ -959,7 +959,7 @@ class AlchemyPendingRequest extends PendingRequest
             return false;
         }
 
-        if (Arr::has($nft, 'raw.error') && $filterError) {
+        if (Arr::get($nft, 'raw.error', null) && $filterError) {
             return false;
         }
 

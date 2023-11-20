@@ -1,0 +1,293 @@
+{
+    "nfts": [
+        {
+            "contract": {
+                "address": "0xe785E82358879F061BC3dcAC6f0444462D4b5330",
+                "name": "World Of Women",
+                "symbol": "WOW",
+                "totalSupply": "10000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xc9b6321dc216D91E626E9BAA61b06B0E4d55bdb1",
+                "deployedBlockNumber": 12907782,
+                "openSeaMetadata": {
+                    "floorPrice": 0.749999,
+                    "collectionName": "World of Women",
+                    "collectionSlug": "world-of-women-nft",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gcs/files/8604de2d9aaec98dd389e3af1b1a14b6.gif?w=500&auto=format",
+                    "description": "World of Women is a collection of 10,000 NFTs that gives you full access to our network of artists, creators, entrepreneurs, and executives who are championing diversity and equal opportunity on the blockchain.\n\nCreated and illustrated by Yam Karkai (@ykarkai), World of Women has made prominent appearances at Christie's, The New Yorker and Billboard.\n\nJoin us to receive exclusive access to NFT drops, experiences, and much more.\n\nThe Time is WoW.",
+                    "externalUrl": "http://worldofwomen.art",
+                    "twitterUsername": "worldofwomennft",
+                    "discordUrl": "https://discord.gg/worldofwomen",
+                    "bannerImageUrl": "https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-26T14:28:31.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "0",
+            "tokenType": "ERC721",
+            "name": "WoW #0",
+            "description": null,
+            "tokenUri": "https://ipfs.io/ipfs/QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/0",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/fe477c7ef3ce8940cbf650198751e9e7",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/fe477c7ef3ce8940cbf650198751e9e7",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/fe477c7ef3ce8940cbf650198751e9e7",
+                "contentType": "image/png",
+                "size": 93654,
+                "originalUrl": "https://ipfs.io/ipfs/QmYPznMvizE4BxrYaXM8dpRrzgN6Pg2rtTczjzNn13More"
+            },
+            "raw": {
+                "tokenUri": "ipfs://QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/0",
+                "metadata": {
+                    "name": "WoW #0",
+                    "image": "ipfs://QmYPznMvizE4BxrYaXM8dpRrzgN6Pg2rtTczjzNn13More",
+                    "attributes": [
+                        {
+                            "value": "Soft Purple",
+                            "trait_type": "Background"
+                        },
+                        {
+                            "value": "Light Warm Yellow",
+                            "trait_type": "Skin Tone"
+                        },
+                        {
+                            "value": "Brown Straight",
+                            "trait_type": "Eyes"
+                        },
+                        {
+                            "value": "Heart Tattoo",
+                            "trait_type": "Facial Features"
+                        },
+                        {
+                            "value": "Platinum Pixie",
+                            "trait_type": "Hairstyle"
+                        },
+                        {
+                            "value": "Freedom Is Power Tee",
+                            "trait_type": "Clothes"
+                        },
+                        {
+                            "value": "Malka",
+                            "trait_type": "Necklace"
+                        },
+                        {
+                            "value": "Ocean Hoops",
+                            "trait_type": "Earrings"
+                        },
+                        {
+                            "value": "Bubble Gum",
+                            "trait_type": "Mouth"
+                        },
+                        {
+                            "value": "Flashy Blue",
+                            "trait_type": "Lips Color"
+                        }
+                    ]
+                },
+                "error": null
+            },
+            "collection": {
+                "name": "World of Women",
+                "openSeaSlug": "world-of-women-nft",
+                "externalUrl": "http://worldofwomen.art",
+                "bannerImageUrl": "https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-26T14:52:28.751Z"
+        },
+        {
+            "contract": {
+                "address": "0xe785E82358879F061BC3dcAC6f0444462D4b5330",
+                "name": "World Of Women",
+                "symbol": "WOW",
+                "totalSupply": "10000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xc9b6321dc216D91E626E9BAA61b06B0E4d55bdb1",
+                "deployedBlockNumber": 12907782,
+                "openSeaMetadata": {
+                    "floorPrice": 0.749999,
+                    "collectionName": "World of Women",
+                    "collectionSlug": "world-of-women-nft",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gcs/files/8604de2d9aaec98dd389e3af1b1a14b6.gif?w=500&auto=format",
+                    "description": "World of Women is a collection of 10,000 NFTs that gives you full access to our network of artists, creators, entrepreneurs, and executives who are championing diversity and equal opportunity on the blockchain.\n\nCreated and illustrated by Yam Karkai (@ykarkai), World of Women has made prominent appearances at Christie's, The New Yorker and Billboard.\n\nJoin us to receive exclusive access to NFT drops, experiences, and much more.\n\nThe Time is WoW.",
+                    "externalUrl": "http://worldofwomen.art",
+                    "twitterUsername": "worldofwomennft",
+                    "discordUrl": "https://discord.gg/worldofwomen",
+                    "bannerImageUrl": "https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-26T14:28:31.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "1",
+            "tokenType": "ERC721",
+            "name": "WoW #1",
+            "description": null,
+            "tokenUri": "https://ipfs.io/ipfs/QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/1",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/55986d2833b3ab988ed5d8abe0d78c7c",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/55986d2833b3ab988ed5d8abe0d78c7c",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/55986d2833b3ab988ed5d8abe0d78c7c",
+                "contentType": "image/png",
+                "size": 135093,
+                "originalUrl": "https://ipfs.io/ipfs/QmSdv72GwEDFoCspXJN7Bki9UzDyTsmbAd8zoRtMHjW3qT"
+            },
+            "raw": {
+                "tokenUri": "ipfs://QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/1",
+                "metadata": {
+                    "name": "WoW #1",
+                    "image": "ipfs://QmSdv72GwEDFoCspXJN7Bki9UzDyTsmbAd8zoRtMHjW3qT",
+                    "attributes": [
+                        {
+                            "value": "Pink Pastel",
+                            "trait_type": "Background"
+                        },
+                        {
+                            "value": "Light Warm Yellow",
+                            "trait_type": "Skin Tone"
+                        },
+                        {
+                            "value": "Yellow To The Right",
+                            "trait_type": "Eyes"
+                        },
+                        {
+                            "value": "Sunset",
+                            "trait_type": "Facial Features"
+                        },
+                        {
+                            "value": "Bob",
+                            "trait_type": "Hairstyle"
+                        },
+                        {
+                            "value": "Red Round Sunglasses",
+                            "trait_type": "Face Accessories"
+                        },
+                        {
+                            "value": "Futuristic Dress",
+                            "trait_type": "Clothes"
+                        },
+                        {
+                            "value": "Lightning Bolts",
+                            "trait_type": "Earrings"
+                        },
+                        {
+                            "value": "Slightly Open",
+                            "trait_type": "Mouth"
+                        },
+                        {
+                            "value": "Passion Red",
+                            "trait_type": "Lips Color"
+                        }
+                    ]
+                },
+                "error": null
+            },
+            "collection": {
+                "name": "World of Women",
+                "openSeaSlug": "world-of-women-nft",
+                "externalUrl": "http://worldofwomen.art",
+                "bannerImageUrl": "https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-27T19:36:38.662Z"
+        },
+        {
+            "contract": {
+                "address": "0xe785E82358879F061BC3dcAC6f0444462D4b5330",
+                "name": "World Of Women",
+                "symbol": "WOW",
+                "totalSupply": "10000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xc9b6321dc216D91E626E9BAA61b06B0E4d55bdb1",
+                "deployedBlockNumber": 12907782,
+                "openSeaMetadata": {
+                    "floorPrice": 0.749999,
+                    "collectionName": "World of Women",
+                    "collectionSlug": "world-of-women-nft",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gcs/files/8604de2d9aaec98dd389e3af1b1a14b6.gif?w=500&auto=format",
+                    "description": "World of Women is a collection of 10,000 NFTs that gives you full access to our network of artists, creators, entrepreneurs, and executives who are championing diversity and equal opportunity on the blockchain.\n\nCreated and illustrated by Yam Karkai (@ykarkai), World of Women has made prominent appearances at Christie's, The New Yorker and Billboard.\n\nJoin us to receive exclusive access to NFT drops, experiences, and much more.\n\nThe Time is WoW.",
+                    "externalUrl": "http://worldofwomen.art",
+                    "twitterUsername": "worldofwomennft",
+                    "discordUrl": "https://discord.gg/worldofwomen",
+                    "bannerImageUrl": "https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-26T14:28:31.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "2",
+            "tokenType": "ERC721",
+            "name": "WoW #2",
+            "description": null,
+            "tokenUri": "https://ipfs.io/ipfs/QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/2",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/4d6f68252d08e3383e627f8ddd80a1ea",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/4d6f68252d08e3383e627f8ddd80a1ea",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/4d6f68252d08e3383e627f8ddd80a1ea",
+                "contentType": "image/png",
+                "size": 192785,
+                "originalUrl": "https://ipfs.io/ipfs/QmSTBRrNGPvQssSWenMiBQj7ZYue7DEwajAF4z5HDrLFV6"
+            },
+            "raw": {
+                "tokenUri": "ipfs://QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/2",
+                "metadata": {
+                    "name": "WoW #2",
+                    "image": "ipfs://QmSTBRrNGPvQssSWenMiBQj7ZYue7DEwajAF4z5HDrLFV6",
+                    "attributes": [
+                        {
+                            "value": "Purple Pink",
+                            "trait_type": "Background"
+                        },
+                        {
+                            "value": "Deep Bronze",
+                            "trait_type": "Skin Tone"
+                        },
+                        {
+                            "value": "Green Straight",
+                            "trait_type": "Eyes"
+                        },
+                        {
+                            "value": "Cyber Warrior",
+                            "trait_type": "Facial Features"
+                        },
+                        {
+                            "value": "Curly Ponytail",
+                            "trait_type": "Hairstyle"
+                        },
+                        {
+                            "value": "Psychedelic Sunglasses",
+                            "trait_type": "Face Accessories"
+                        },
+                        {
+                            "value": "Sun Keeper",
+                            "trait_type": "Necklace"
+                        },
+                        {
+                            "value": "Striped Tee",
+                            "trait_type": "Clothes"
+                        },
+                        {
+                            "value": "Stern",
+                            "trait_type": "Mouth"
+                        },
+                        {
+                            "value": "Burgundy",
+                            "trait_type": "Lips Color"
+                        }
+                    ]
+                },
+                "error": null
+            },
+            "collection": {
+                "name": "World of Women",
+                "openSeaSlug": "world-of-women-nft",
+                "externalUrl": "http://worldofwomen.art",
+                "bannerImageUrl": "https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-27T06:00:40.157Z"
+        }
+    ],
+    "pageKey": "0x0000000000000000000000000000000000000000000000000000000000000064"
+}
