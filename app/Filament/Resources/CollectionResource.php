@@ -56,7 +56,7 @@ class CollectionResource extends Resource
 
                 TextColumn::make('nft_count')
                             ->label('Nft count (indexed)')
-                            ->getStateUsing(fn (Collection $collection) => $collection->nfts()->count() ?? 0)
+                            ->getStateUsing(fn (Collection $collection) => $collection->nfts()->count())
                             ->default(0),
 
                 TextColumn::make('address')
