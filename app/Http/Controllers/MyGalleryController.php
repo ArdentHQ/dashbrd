@@ -26,6 +26,8 @@ class MyGalleryController extends Controller
     {
         $user = $request->user();
 
+        $showDrafts = $request->boolean('draft');
+
         $galleries = $galleries->forUser($user)->through(
             fn ($gallery) => GalleryCardData::fromModel($gallery, $user)
         );
@@ -33,10 +35,17 @@ class MyGalleryController extends Controller
         /** @var PaginatedDataCollection<int, GalleryCardData> */
         $collection = GalleryCardData::collection($galleries);
 
+        $userCollectionsCount = $user->collections()->count();
+        $hiddenCollectionsCount = $user->hiddenCollections()->count();
+        $areAllCollectionsHidden = $userCollectionsCount > 0 && $hiddenCollectionsCount == $userCollectionsCount;
+
         return Inertia::render('Galleries/MyGalleries/Index', [
-            'title' => trans('metatags.my_galleries.title'),
-            'galleries' => new GalleriesCardData($collection),
+            'title' => $showDrafts ? trans('metatags.my_galleries.title_draft') : trans('metatags.my_galleries.title'),
+            'galleries' => $showDrafts ? null : new GalleriesCardData($collection),
             'nftCount' => $user->nfts()->count(),
+            'galleryCount' => $user->galleries()->count(),
+            'showDrafts' => $showDrafts,
+            'areAllCollectionsHidden' => $areAllCollectionsHidden,
         ]);
     }
 
@@ -45,12 +54,15 @@ class MyGalleryController extends Controller
         /** @var User $user */
         $user = $request->user();
 
+        $hiddenCollectionsCount = $user->hiddenCollections()->count();
+
         return Inertia::render('Galleries/MyGalleries/Create', [
             'title' => trans('metatags.my_galleries.create.title'),
             'nftsPerPage' => (int) config('dashbrd.gallery.pagination.nfts_per_page'),
             'collectionsPerPage' => (int) config('dashbrd.gallery.pagination.collections_per_page'),
             'nftLimit' => config('dashbrd.gallery.nft_limit'),
             'nftCount' => $user->nfts()->count(),
+            'hiddenCollectionsCount' => $hiddenCollectionsCount,
         ]);
     }
 
