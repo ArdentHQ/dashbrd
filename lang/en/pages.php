@@ -71,6 +71,7 @@ return [
                 'LABEL_MINT' => 'Mint',
                 'LABEL_TRANSFER' => 'Transfer',
                 'LABEL_SALE' => 'Sale',
+                'LABEL_BURN' => 'Burn',
             ],
         ],
         'articles' => [
