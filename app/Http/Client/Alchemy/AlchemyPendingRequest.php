@@ -426,7 +426,7 @@ class AlchemyPendingRequest extends PendingRequest
             networkId: $networkId,
             collectionName: $collectionName,
             collectionSymbol: Arr::get($nft, 'contract.symbol') ?? $collectionName,
-            collectionImage: Arr::get($nft, 'contract.openSeaMetadata.imageUrl') ?? Arr::get($nft, 'image.thumbnail') ?? Arr::get($nft, 'image.cachedUrl'),
+            collectionImage: Arr::get($nft, 'contract.openSeaMetadata.imageUrl') ?? Arr::get($nft, 'image.thumbnailUrl') ?? Arr::get($nft, 'image.cachedUrl'),
             collectionWebsite: Arr::get($nft, 'contract.openSeaMetadata.externalUrl') ?? Arr::get($nft, 'raw.metadata.external_url'),
             collectionDescription: Arr::get($nft, 'contract.openSeaMetadata.description'),
             collectionBannerImageUrl: $bannerImageUrl,
