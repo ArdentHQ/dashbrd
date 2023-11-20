@@ -185,7 +185,7 @@ class Nft extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeOnlyErc721(Builder $query): Builder
+    public function scopeErc721(Builder $query): Builder
     {
         return $query->where('type', TokenType::Erc721);
     }

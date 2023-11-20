@@ -75,7 +75,7 @@ class Wallet extends Model
      */
     public function nfts(): HasMany
     {
-        return $this->hasMany(Nft::class)->onlyErc721();
+        return $this->hasMany(Nft::class)->erc721();
     }
 
     /**
