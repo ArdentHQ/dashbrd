@@ -2,6 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\EditAction;
+use App\Filament\Resources\CollectionResource\Pages\ListCollections;
+use App\Filament\Resources\CollectionResource\Pages\ViewCollection;
+use App\Filament\Resources\CollectionResource\Pages\EditCollection;
 use App\Filament\Resources\CollectionResource\Pages;
 use App\Models\Collection;
 use Filament\Forms\Components\Select;
@@ -72,8 +77,8 @@ class CollectionResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
             ])
             ->defaultSort('name', 'asc');;
     }
@@ -88,9 +93,9 @@ class CollectionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCollections::route('/'),
-            'view' => Pages\ViewCollection::route('/{record}'),
-            'edit' => Pages\EditCollection::route('/{record}/edit'),
+            'index' => ListCollections::route('/'),
+            'view' => ViewCollection::route('/{record}'),
+            'edit' => EditCollection::route('/{record}/edit'),
         ];
     }
 }
