@@ -1,13 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CollectionResource\Pages;
+use App\Filament\Resources\CollectionResource\Pages\EditCollection;
+use App\Filament\Resources\CollectionResource\Pages\ListCollections;
+use App\Filament\Resources\CollectionResource\Pages\ViewCollection;
 use App\Models\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -72,10 +77,10 @@ class CollectionResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->defaultSort('name', 'asc');;
+            ->defaultSort('name', 'asc');
     }
 
     public static function getRelations(): array
@@ -88,9 +93,9 @@ class CollectionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCollections::route('/'),
-            'view' => Pages\ViewCollection::route('/{record}'),
-            'edit' => Pages\EditCollection::route('/{record}/edit'),
+            'index' => ListCollections::route('/'),
+            'view' => ViewCollection::route('/{record}'),
+            'edit' => EditCollection::route('/{record}/edit'),
         ];
     }
 }
