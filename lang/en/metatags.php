@@ -63,6 +63,10 @@ return [
         ],
     ],
 
+    'my-collections' => [
+        'title' => 'My Collections | Dashbrd',
+    ],
+
     'nfts' => [
         'view' => [
             'title' => ':nft NFT | Dashbrd',
