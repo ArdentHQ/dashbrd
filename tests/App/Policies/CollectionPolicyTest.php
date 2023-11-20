@@ -26,8 +26,8 @@ it('should be able to view collections', function () {
 it('should be able to view a single collection', function () {
     $collection = Collection::factory()->create();
 
-    expect($this->user->hasPermissionTo('user:view', 'admin', $collection))->toBeFalse();
-    expect($this->admin->hasPermissionTo('user:view', 'admin', $collection))->toBeTrue();
+    expect($this->user->hasPermissionTo('collection:view', 'admin', $collection))->toBeFalse();
+    expect($this->admin->hasPermissionTo('collection:view', 'admin', $collection))->toBeTrue();
     expect($this->instance->view($this->user, $collection))->toBeFalse();
     expect($this->instance->view($this->admin, $collection))->toBeTrue();
 });
@@ -37,11 +37,11 @@ it('should not be able to create collections', function () {
     expect($this->instance->create($this->admin))->toBeFalse();
 });
 
-it('should not be able to update a single collection', function () {
+it('should be able to update a single collection', function () {
     $collection = Collection::factory()->create();
 
     expect($this->instance->update($this->user, $collection))->toBeFalse();
-    expect($this->instance->update($this->admin, $collection))->toBeFalse();
+    expect($this->instance->update($this->admin, $collection))->toBeTrue();
 });
 
 it('should not be able to delete a single collection', function () {
