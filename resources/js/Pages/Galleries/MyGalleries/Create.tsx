@@ -32,6 +32,7 @@ interface Properties {
     collectionsPerPage: number;
     nftLimit: number;
     nftCount: number;
+    hiddenCollectionsCount: number;
 }
 
 const Create = ({
@@ -42,6 +43,7 @@ const Create = ({
     nftLimit,
     nftCount,
     collectionsPerPage,
+    hiddenCollectionsCount,
 }: Properties): JSX.Element => {
     assertUser(auth.user);
     assertWallet(auth.wallet);
