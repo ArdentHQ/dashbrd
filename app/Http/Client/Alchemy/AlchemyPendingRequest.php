@@ -826,6 +826,9 @@ class AlchemyPendingRequest extends PendingRequest
         return CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::ETH->value);
     }
 
+    /**
+     * @param  array<string, mixed>  $nft
+     */
     private function tryExtractFloorPriceV3(array $nft): ?string
     {
         $floorPrice = Arr::get($nft, 'contract.openSeaMetadata.floorPrice');
