@@ -1,4 +1,5 @@
 import type React from "react";
+import { type ReactNode } from "react";
 import { type IconName } from "@/Components/Icon";
 
 export interface SidebarHeadProperties {
@@ -18,4 +19,5 @@ export interface SidebarItemProperties {
     icon?: IconName;
     href?: string;
     tooltip?: string;
+    rightText?: ReactNode;
 }

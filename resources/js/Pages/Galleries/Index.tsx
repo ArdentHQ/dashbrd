@@ -70,6 +70,7 @@ const GalleriesIndex = ({ stats, title }: Properties): JSX.Element => {
                     onClick={guestBannerClickHandler}
                     initialized={initialized}
                     connecting={connecting}
+                    nftsCount={stats.nfts}
                 />
 
                 {galleries === undefined ? (
