@@ -160,10 +160,10 @@ export const Type = ({
     };
 
     const icons: Record<App.Enums.NftTransferType, IconName> = {
-        // @TODO: define the icon for mint
         LABEL_MINT: "LayeredCards",
         LABEL_TRANSFER: "ArrowUpArrowDown",
         LABEL_SALE: "Cart",
+        LABEL_BURN: "Fire",
     };
 
     // This will need to be adjusted if more types are added
