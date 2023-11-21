@@ -81,7 +81,7 @@ class CollectionResource extends Resource
             ->filters([
                 Filter::make('is_featured')
                     ->label('Currently Featured')
-                    ->query(fn (Builder $query): Builder => $query->where('is_featured', true))
+                    ->query(fn (Builder $query): Builder => $query->where('is_featured', true)),
             ])
             ->actions([
                 ActionGroup::make([
