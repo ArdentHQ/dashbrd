@@ -65,7 +65,7 @@ class CollectionResource extends Resource
                             ->default(0),
 
                 TextColumn::make('address')
-                            ->label('Contract address')
+                            ->label('Address')
                             ->searchable()
                             ->url(fn (Collection $collection) => $collection->website())
                             ->default('Unknown'),
