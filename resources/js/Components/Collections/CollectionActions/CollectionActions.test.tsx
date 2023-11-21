@@ -89,8 +89,6 @@ describe("CollectionActions", () => {
             action({ authenticated: true, signed: true });
         });
 
-        const routerSpy = vi.spyOn(router, "reload").mockImplementation(() => vi.fn());
-
         render(
             <CollectionActions
                 collection={collection}
