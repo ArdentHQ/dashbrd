@@ -202,6 +202,7 @@ const Create = ({
                 });
 
                 setNfts(nfts);
+                return;
             }
 
             setInitialNfts(nfts);

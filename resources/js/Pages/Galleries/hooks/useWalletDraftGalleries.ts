@@ -12,6 +12,10 @@ interface Properties {
     limit?: number;
 }
 
+interface SaveOptions {
+    validate?: boolean;
+}
+
 export interface DraftNft {
     nftId: number;
     image: string;
@@ -107,7 +111,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {Promise<GallerySavedDraft>}
      */
-    const add = async (draft: GalleryDraftUnsaved): Promise<GalleryDraft> => {
+    const add = async (draft: GalleryDraftUnsaved, options?: SaveOptions): Promise<GalleryDraft> => {
         const { id: _, ...draftToSave } = draft;
         const allDraftsCount = await allDrafts();
 
@@ -117,7 +121,7 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
 
         const errors = validate(draft);
 
-        if (errors.length > 0) {
+        if (isTruthy(options?.validate) && errors.length > 0) {
             throw new Error(`[useWalletDraftGalleries:add] Validation failed. Reason ${errors.join(",")}`);
         }
 
@@ -177,14 +181,14 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {Promise<GallerySavedDraft>}
      */
-    const update = async (draft: GalleryDraftUnsaved): Promise<GalleryDraft> => {
+    const update = async (draft: GalleryDraftUnsaved, options?: SaveOptions): Promise<GalleryDraft> => {
         if (!isTruthy(draft.id)) {
             throw new Error("[useWalletDraftGalleries:update] Missing Id");
         }
 
         const errors = validate(draft);
 
-        if (errors.length > 0) {
+        if (isTruthy(options?.validate) && errors.length > 0) {
             throw new Error(`[useWalletDraftGalleries:update] Validation failed. Reason ${errors.join(",")}`);
         }
 
