@@ -1,16 +1,21 @@
+import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
+import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
+interface CollectionsIndexProperties extends PageProps {
+    title: string;
+    collections: PaginationData<App.Data.Collections.PopularCollectionData>;
+}
+
 const CollectionsIndex = ({
     title,
     collections: { data: collections },
-}: {
-    title: string;
-    collections: PaginationData<App.Data.Collections.PopularCollectionData>;
-}): JSX.Element => {
+    auth,
+}: CollectionsIndexProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const { props } = usePage();
@@ -25,6 +30,18 @@ const CollectionsIndex = ({
 
             <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
+
+                <div className="flex space-x-6">
+                    <PopularCollectionsTable
+                        collections={collectionsColumn1}
+                        user={auth.user}
+                    />
+
+                    <PopularCollectionsTable
+                        collections={collectionsColumn2}
+                        user={auth.user}
+                    />
+                </div>
             </div>
         </DefaultLayout>
     );
