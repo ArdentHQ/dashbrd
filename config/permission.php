@@ -25,7 +25,7 @@ return [
         'report:update' => 'Update Report',
         'collection:viewAny' => 'View any Collection',
         'collection:view' => 'View Collection',
-        'collection:update' => 'Create Collection',
+        'collection:update' => 'Update Collection',
     ],
 
     'roles' => [

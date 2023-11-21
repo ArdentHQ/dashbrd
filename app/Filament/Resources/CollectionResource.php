@@ -11,9 +11,8 @@ use App\Models\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -85,8 +84,12 @@ class CollectionResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make(),
+                    Action::make('updateIsFeatured')
+                        ->action(function (Collection $collection) {
+                            $collection->toggleFeatured();
+                        })
+                        ->label(fn (Collection $collection) => $collection->is_featured ? 'Unmark as featured' : 'Mark as featured')
+                        ->icon('heroicon-s-star'),
                 ]),
             ])
             ->defaultSort('name', 'asc');
