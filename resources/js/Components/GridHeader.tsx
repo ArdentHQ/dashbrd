@@ -5,6 +5,7 @@ interface GridHeaderProperties {
     title: string;
     value: string | number | JSX.Element | null;
     className?: string;
+    wrapperClassName?: string;
     emptyValue?: string | null;
 }
 
@@ -12,6 +13,7 @@ export const GridHeader = ({
     title,
     value,
     className,
+    wrapperClassName,
     emptyValue = null,
     ...properties
 }: GridHeaderProperties): JSX.Element => {
@@ -29,7 +31,12 @@ export const GridHeader = ({
             )}
             {...properties}
         >
-            <div className="mr-auto flex w-[100px] flex-col space-y-0.5 font-medium md:w-[110px] lg:w-auto">
+            <div
+                className={cn(
+                    "mr-auto flex w-[100px] flex-col space-y-0.5 font-medium md:w-[110px] lg:w-auto",
+                    wrapperClassName,
+                )}
+            >
                 <span
                     data-testid="GridHeader__title"
                     className="text-sm leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 md:leading-5.5"
