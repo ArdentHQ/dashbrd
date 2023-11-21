@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Data\Articles\ArticleData;
 use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionDetailData;
+use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
@@ -27,6 +28,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -35,9 +37,23 @@ class CollectionController extends Controller
 {
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
+        $user = $request->user();
+
+        $featuredCollections = Collection::where('is_featured', true)
+            ->withCount(['nfts'])
+            ->get();
+
+        $featuredCollections->each(function (Collection $collection) {
+            $collection->nfts = Cache::remember('featuredNftsForCollection'.$collection->id, 60 * 12, function () use ($collection) {
+                return $collection->nfts()->inRandomOrder()->take(3)->get();
+            });
+        });
 
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
+            'featuredCollections' => $featuredCollections->map(function (Collection $collection) use ($user) {
+                return CollectionFeaturedData::fromModel($collection, $user ? $user->currency() : CurrencyCode::USD);
+            }),
         ]);
     }
 
