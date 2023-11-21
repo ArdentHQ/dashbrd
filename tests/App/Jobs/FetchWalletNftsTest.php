@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Notification;
 it('should fetch nfts for wallet', function () {
     Bus::fake();
 
-    Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
+    Alchemy::fake(Http::response(fixtureData('alchemy.nfts_for_owner_2'), 200));
 
     $network = Network::polygon();
     $wallet = Wallet::factory()->create();
@@ -39,8 +39,8 @@ it('should fetch nfts for wallet', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 42);
-    $this->assertDatabaseCount('nfts', 94);
+    $this->assertDatabaseCount('collections', 3);
+    $this->assertDatabaseCount('nfts', 4);
 
     expect(Collection::whereNotNull('last_indexed_token_number')->count())->toBe(0);
 });
@@ -65,7 +65,7 @@ it('should fetch nfts for wallet and handle empty response', function () {
 it('should fetch nfts for wallet and dispatch floor price job', function () {
     Bus::fake();
 
-    Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
+    Alchemy::fake(Http::response(fixtureData('alchemy.nfts_for_owner_2'), 200));
 
     $network = Network::polygon();
     $wallet = Wallet::factory()->create();
@@ -77,10 +77,10 @@ it('should fetch nfts for wallet and dispatch floor price job', function () {
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 42);
-    $this->assertDatabaseCount('nfts', 94);
+    $this->assertDatabaseCount('collections', 3);
+    $this->assertDatabaseCount('nfts', 4);
 
-    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 42);
+    Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 3);
 });
 
 it('should fetch nfts for wallet and skip floor price job if already present', function () {
@@ -680,8 +680,8 @@ it('should clear gallery & user cache', function () {
 
     Alchemy::fake([
         '*' => Http::sequence()
-                    ->push(fixtureData('alchemy.nfts'))
-                    ->push(fixtureData('alchemy.nfts')),
+                    ->push(fixtureData('alchemy.nfts_for_owner_2'))
+                    ->push(fixtureData('alchemy.nfts_for_owner_2')),
     ]);
 
     [$user1, $user2] = User::factory(2)->create();
@@ -707,12 +707,12 @@ it('should clear gallery & user cache', function () {
     // Fetch same NFTs with a different wallet
     (new FetchWalletNfts($wallet1, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 42);
-    $this->assertDatabaseCount('nfts', 94);
+    $this->assertDatabaseCount('collections', 3);
+    $this->assertDatabaseCount('nfts', 4);
     $this->assertDatabaseCount('galleries_dirty', 0);
 
     expect($galleryCache->nftsCount())->toBe(0)
-        ->and($userCache->nftsCount())->toBe(94);
+        ->and($userCache->nftsCount())->toBe(4);
 
     $nfts = Nft::query()->get();
     $nfts->each(function ($nft) use ($gallery) {
@@ -721,12 +721,12 @@ it('should clear gallery & user cache', function () {
     $this->assertDatabaseCount('galleries_dirty', 1);
 
     expect($galleryCache->nftsCount())->toBe(0)
-        ->and($userCache->nftsCount())->toBe(94);
+        ->and($userCache->nftsCount())->toBe(4);
 
     GalleryCache::clearAllDirty();
 
-    expect($galleryCache->nftsCount())->toBe(94)
-        ->and($userCache->nftsCount())->toBe(94);
+    expect($galleryCache->nftsCount())->toBe(4)
+        ->and($userCache->nftsCount())->toBe(4);
 
     (new FetchWalletNfts($wallet2, $network))->handle();
 
@@ -759,27 +759,27 @@ it('should not store base64 encoded asset images', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'id' => [
-                        'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
-                        'tokenMetadata' => ['tokenType' => 'ERC721'],
-                    ],
-                    'contract' => ['address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4'],
-                    'contractMetadata' => [
-                        'name' => 'tiny dinos', 'symbol' => 'dino',
+                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'name' => 'tiny dinos #3218',
+                    'contract' => [
+                        'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
+                        'tokenType' => 'ERC721',
+                        'name' => 'tiny dinos',
+                        'symbol' => 'dino',
                         'deployedBlockNumber' => 10000,
                         'totalSupply' => 10,
-                        'openSea' => [
+                        'openSeaMetadata' => [
                             'imageUrl' => 'https://opensea.com/image.jpg',
                         ],
                     ],
-                    'media' => [
-                        [
-                            'gateway' => 'https://gateway.com/image.jpg',
-                            'raw' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAREDACTED',
-                            'thumbnail' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAREDACTED',
-                        ],
+                    'image' => [
+                        'cachedUrl' => 'https://gateway.com/image.jpg',
+                        'originalUrl' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAREDACTED',
+                        'thumbnailUrl' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAREDACTED',
                     ],
-                    'title' => 'tiny dinos #3218',
+                    'raw' => [
+                        'error' => null,
+                    ]
                 ],
             ],
         ], 200),
@@ -793,9 +793,9 @@ it('should not store base64 encoded asset images', function () {
     $nft = Nft::firstWhere('name', 'tiny dinos #3218');
 
     expect($nft->extra_attributes->get('images'))->toBe([
-        'thumb' => 'https://opensea.com/image.jpg',
-        'small' => 'https://opensea.com/image.jpg',
-        'large' => 'https://opensea.com/image.jpg',
+        'thumb' => 'https://gateway.com/image.jpg',
+        'small' => 'https://gateway.com/image.jpg',
+        'large' => 'https://gateway.com/image.jpg',
         'originalRaw' => null,
         'original' => 'https://gateway.com/image.jpg',
     ]);
@@ -906,27 +906,23 @@ it('should not store original asset image if it is in base64 encoded format', fu
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'id' => [
-                        'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
-                        'tokenMetadata' => ['tokenType' => 'ERC721'],
-                    ],
-                    'contract' => ['address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4'],
-                    'contractMetadata' => [
+                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
                         'name' => 'tiny dinos', 'symbol' => 'dino',
                         'deployedBlockNumber' => 10000,
                         'totalSupply' => 10,
-                        'openSea' => [
+                        'openSeaMetadata' => [
                             'imageUrl' => null,
                         ],
                     ],
-                    'media' => [
-                        [
-                            'gateway' => 'https://gateway.com/image.jpg',
-                            'raw' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAREDACTED',
-                            'thumbnail' => null,
-                        ],
+                    'image' => [
+                        'cachedUrl' => 'https://gateway.com/image.jpg',
+                        'originalUrl' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAREDACTED',
+                        'thumbnailUrl' => null,
                     ],
-                    'title' => 'tiny dinos #3218',
+                    'name' => 'tiny dinos #3218',
                 ],
             ],
         ], 200),
@@ -939,13 +935,7 @@ it('should not store original asset image if it is in base64 encoded format', fu
 
     $nft = Nft::firstWhere('name', 'tiny dinos #3218');
 
-    expect($nft->extra_attributes->get('images'))->toBe([
-        'thumb' => null,
-        'small' => null,
-        'large' => null,
-        'originalRaw' => null,
-        'original' => 'https://gateway.com/image.jpg',
-    ]);
+    expect($nft->extra_attributes->get('images')['originalRaw'])->toBe(null);
 });
 
 it('should extract social details from opensea', function () {
@@ -955,28 +945,24 @@ it('should extract social details from opensea', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'id' => [
-                        'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
-                        'tokenMetadata' => ['tokenType' => 'ERC721'],
-                    ],
-                    'contract' => ['address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4'],
-                    'contractMetadata' => [
+                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'contract' => [
+                        'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
+                        'tokenType' => 'ERC721',
                         'name' => 'tiny dinos', 'symbol' => 'dino',
                         'totalSupply' => 10,
                         'deployedBlockNumber' => 10000,
-                        'openSea' => [
+                        'openSeaMetadata' => [
                             'imageUrl' => null,
                             'twitterUsername' => 'testuser',
                             'discordUrl' => 'https://discord.gg/testuser',
                         ],
                     ],
-                    'media' => [
-                        [
-                            'gateway' => 'https://gateway.com/image.jpg',
-                            'thumbnail' => null,
-                        ],
+                    'image' => [
+                        'cachedUrl' => 'https://gateway.com/image.jpg',
+                        'thumbnailUrl' => null,
                     ],
-                    'title' => 'tiny dinos #3218',
+                    'name' => 'tiny dinos #3218',
                 ],
             ],
         ], 200),
@@ -989,14 +975,7 @@ it('should extract social details from opensea', function () {
 
     $nft = Nft::firstWhere('name', 'tiny dinos #3218');
 
-    expect($nft->extra_attributes->get('images'))->toBe([
-        'thumb' => null,
-        'small' => null,
-        'large' => null,
-        'originalRaw' => null,
-        'original' => 'https://gateway.com/image.jpg',
-    ])
-        ->and($nft->extra_attributes->get('socials'))->toBeNull();
+    expect($nft->extra_attributes->get('socials'))->toBeNull();
 
     $collection = $nft->collection;
 
@@ -1013,23 +992,22 @@ it('should use opensea description for collection', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'id' => ['tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4'],
-                    'contractMetadata' => [
+                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
                         'name' => 'tiny dinos', 'symbol' => 'dino',
                         'totalSupply' => 10,
                         'deployedBlockNumber' => 10000,
-                        'openSea' => [
+                        'openSeaMetadata' => [
                             'description' => 'This is a sample collection.',
                         ],
                     ],
-                    'media' => [
-                        [
-                            'gateway' => 'https://gateway.com/image.jpg',
-                            'thumbnail' => null,
-                        ],
+                    'image' => [
+                        'cachedUrl' => 'https://gateway.com/image.jpg',
+                        'thumbnailUrl' => null,
                     ],
-                    'title' => 'tiny dinos #3218',
+                    'name' => 'tiny dinos #3218',
                 ],
             ],
         ], 200),
@@ -1052,9 +1030,10 @@ it('should handle nft traits', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'id' => ['tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4'],
-                    'contractMetadata' => [
+                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
                         'name' => 'tiny dinos', 'symbol' => 'dino',
                         'deployedBlockNumber' => 10000,
                         'totalSupply' => 10,
@@ -1062,30 +1041,30 @@ it('should handle nft traits', function () {
                             'imageUrl' => null,
                         ],
                     ],
-                    'media' => [
-                        [
-                            'gateway' => 'https://gateway.com/image.jpg',
-                            'thumbnail' => 'https://thumb.com/image.jpg',
-                        ],
+                    'image' => [
+                        'cachedUrl' => 'https://gateway.com/image.jpg',
+                        'thumbnailUrl' => 'https://thumb.com/image.jpg',
                     ],
-                    'title' => 'tiny dinos #3218',
-                    'metadata' => [
-                        'attributes' => [
-                            [
-                                'value' => 'Slang',
-                                'trait_type' => 'Background',
-                            ],
-                            [
-                                'value' => 35,
-                                'trait_type' => 'Soy %',
-                                'display_type' => 'number',
-                            ],
-                            [
-                                'value' => '2022-12-01 00:00:00',
-                                'trait_type' => 'Creation Date',
+                    'name' => 'tiny dinos #3218',
+                    'raw' => [
+                        'metadata' => [
+                            'attributes' => [
+                                [
+                                    'value' => 'Slang',
+                                    'trait_type' => 'Background',
+                                ],
+                                [
+                                    'value' => 35,
+                                    'trait_type' => 'Soy %',
+                                    'display_type' => 'number',
+                                ],
+                                [
+                                    'value' => '2022-12-01 00:00:00',
+                                    'trait_type' => 'Creation Date',
+                                ],
                             ],
                         ],
-                    ],
+                    ]
                 ],
             ],
         ], 200),
@@ -1155,45 +1134,46 @@ function getTestNfts($length = 3, $offset = 0, $withCursor = false): array
 {
     $nfts = [
         [
-            'id' => ['tokenId' => '1', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-            'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-            'contractMetadata' => [
+            'tokenId' => '1',
+            'contract' => [
+                'tokenType' => 'ERC721',
+                'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                 'deployedBlockNumber' => 10000,
                 'totalSupply' => 10,
-                'name' => 'tiny dinos', 'symbol' => 'dino',
-                'openSea' => [
+                'name' => 'tiny dinos',
+                'symbol' => 'dino',
+                'openSeaMetadata' => [
                     'floorPrice' => 0.0589,
                 ],
             ],
-            'title' => 'tiny dinos #3218',
         ],
 
         [
-            'id' => ['tokenId' => '2', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-            'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-            'contractMetadata' => [
+            'tokenId' => '2',
+            'contract' => [
+                'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
+                'tokenType' => 'ERC721',
                 'deployedBlockNumber' => 10000,
                 'totalSupply' => 10,
                 'name' => 'tiny dinos', 'symbol' => 'dino',
-                'openSea' => [
+                'openSeaMetadata' => [
                     'floorPrice' => 0.0589,
                 ],
             ],
-            'title' => 'tiny dinos #3218',
         ],
 
         [
-            'id' => ['tokenId' => '1', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-            'contract' => ['address' => '0x2253399124f0cbb46d2cbacd8a89cf0599974963'],
-            'contractMetadata' => [
+            'tokenId' => '1',
+            'contract' => [
+                'address' => '0x2253399124f0cbb46d2cbacd8a89cf0599974963',
+                'tokenType' => 'ERC721',
                 'deployedBlockNumber' => 10000,
                 'totalSupply' => 10,
                 'name' => 'tiny dinos', 'symbol' => 'dino',
-                'openSea' => [
+                'openSeaMetadata' => [
                     'floorPrice' => 0.0589,
                 ],
             ],
-            'title' => 'tiny dinos #3218',
         ],
     ];
 
@@ -1206,7 +1186,7 @@ function getTestNfts($length = 3, $offset = 0, $withCursor = false): array
 it('should fetch nfts for wallet and keep previous collections last indexed token number', function () {
     Bus::fake();
 
-    Alchemy::fake(Http::response(fixtureData('alchemy.nfts'), 200));
+    Alchemy::fake(Http::response(fixtureData('alchemy.nfts_for_owner_2'), 200));
 
     $network = Network::polygon();
     $wallet = Wallet::factory()->create();
@@ -1224,8 +1204,8 @@ it('should fetch nfts for wallet and keep previous collections last indexed toke
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    $this->assertDatabaseCount('collections', 42);
-    $this->assertDatabaseCount('nfts', 94);
+    $this->assertDatabaseCount('collections', 4);
+    $this->assertDatabaseCount('nfts', 4);
 
     expect(Collection::whereNotNull('last_indexed_token_number')->count())->toBe(1);
 

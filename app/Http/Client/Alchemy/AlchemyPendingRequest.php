@@ -740,7 +740,7 @@ class AlchemyPendingRequest extends PendingRequest
     private function tryExtractImageV3(array $nft): ?string
     {
         $imageKeys = [
-            'image.thumbnail',
+            'image.thumbnailUrl',
             'image.cachedUrl',
             'raw.metadata.image',
             'contract.openSeaMetadata.imageUrl',
