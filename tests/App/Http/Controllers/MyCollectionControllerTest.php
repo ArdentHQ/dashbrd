@@ -2,18 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Enums\TraitDisplayType;
-use App\Jobs\FetchCollectionActivity;
-use App\Jobs\FetchCollectionBanner;
-use App\Jobs\SyncCollection;
-use App\Models\Article;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\Nft;
-use App\Models\Token;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Bus;
-use Inertia\Testing\AssertableInertia as Assert;
 
 it('can render the my collections overview page', function () {
     $user = createUser();
@@ -22,7 +13,6 @@ it('can render the my collections overview page', function () {
         ->get(route('my-collections'))
         ->assertStatus(200);
 });
-
 
 it('can render the collections for guests', function () {
     $this->get(route('my-collections'))
@@ -47,7 +37,6 @@ it('should render collections overview page with collections and NFTs', function
 
     expect(count($response['collections']['data']))->toEqual(1);
 });
-
 
 it('filters the collections by a search query', function () {
     $user = createUser();
