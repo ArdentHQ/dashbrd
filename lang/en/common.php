@@ -112,6 +112,7 @@ return [
     'n_hours' => '{0} :count hour|{1} :count hour|[2,*] :count hours',
     'n_minutes' => '{0} :count minute|{1} :count minute|[2,*] :count minutes',
     'report' => 'Report',
+    'nfts' => 'NFTs',
     'n_nfts' => '{0}NFTs|{1}NFT|[2,*]NFTs',
     'n_collections' => '{0}collections|{1}collection|[2,*]collections',
     'back' => 'Back',
