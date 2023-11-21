@@ -211,12 +211,12 @@ export const useWalletDraftGalleries = ({ address }: Properties): WalletDraftGal
      * @param {GalleryDraft} draft
      * @returns {Promise<GalleryDraft>}
      */
-    const upsert = async (draft: GalleryDraftUnsaved): Promise<GalleryDraft> => {
+    const upsert = async (draft: GalleryDraftUnsaved, options?: SaveOptions): Promise<GalleryDraft> => {
         if (isTruthy(draft.id)) {
-            return await update(draft);
+            return await update(draft, options);
         }
 
-        return await add(draft);
+        return await add(draft, options);
     };
 
     /**
