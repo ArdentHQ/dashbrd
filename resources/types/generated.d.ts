@@ -510,5 +510,5 @@ declare namespace App.Data.Wallet {
 }
 declare namespace App.Enums {
     export type Chain = 1 | 5 | 137 | 80001;
-    export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER";
+    export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER" | "LABEL_BURN";
 }
