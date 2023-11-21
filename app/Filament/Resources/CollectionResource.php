@@ -62,9 +62,9 @@ class CollectionResource extends Resource
                             ->openUrlInNewTab()
                             ->sortable(),
 
-                TextColumn::make('nft_count')
+                TextColumn::make('nfts_count')
                             ->label('Number of NFTs')
-                            ->getStateUsing(fn (Collection $collection) => $collection->nfts()->count())
+                            ->counts('nfts')
                             ->default(0),
 
                 TextColumn::make('address')
