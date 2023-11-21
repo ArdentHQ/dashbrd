@@ -120,6 +120,10 @@ return [
             'notice_wait' => 'Please wait. You can refresh data every 15 minutes.',
             'toast' => "We're updating information for your collection.",
         ],
+        'featured' => [
+            'title' => 'Featured Collections',
+            'button' => 'Explore Collection',
+        ]
     ],
 
     'nfts' => [
