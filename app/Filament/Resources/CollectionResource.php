@@ -11,6 +11,7 @@ use App\Models\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
@@ -83,8 +84,10 @@ class CollectionResource extends Resource
                     ->query(fn (Builder $query): Builder => $query->where('is_featured', true))
             ])
             ->actions([
-                ViewAction::make(),
-                EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                ]),
             ])
             ->defaultSort('name', 'asc');
     }
