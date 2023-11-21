@@ -67,6 +67,7 @@ class CollectionResource extends Resource
                 TextColumn::make('address')
                             ->label('Contract address')
                             ->searchable()
+                            ->url(fn (Collection $collection) => $collection->website())
                             ->default('Unknown'),
 
                 TextColumn::make('is_featured')
