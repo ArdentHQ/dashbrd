@@ -386,7 +386,7 @@ it('should filter out nfts', function () {
                         'symbol' => 'SPAM',
                         'deployedBlockNumber' => 10000,
                         'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
-                        'isSpam' => true
+                        'isSpam' => true,
                     ],
                     'name' => 'SPAM',
                 ],
@@ -466,7 +466,7 @@ it('should filter out nfts', function () {
                         'deployedBlockNumber' => 10000,
                         'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                         'openSeaMetadata' => [
-                            'collectionName' => 'BEST'
+                            'collectionName' => 'BEST',
                         ],
                     ],
                     'name' => 'OK OpenSea fallback',
