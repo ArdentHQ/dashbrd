@@ -18,7 +18,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class MyCollectionsController extends Controller
 {
     public function index(Request $request): Response|JsonResponse|RedirectResponse
