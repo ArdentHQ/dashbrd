@@ -176,6 +176,26 @@ declare namespace App.Data.Collections {
         activityUpdateRequestedAt: string | null;
         isFetchingActivity: boolean | null;
     };
+    export type CollectionFeaturedData = {
+        id: number;
+        name: string;
+        slug: string;
+        address: string;
+        chainId: App.Enums.Chain;
+        floorPrice: string | null;
+        floorPriceFiat: number | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        image: string | null;
+        banner: string | null;
+        openSeaSlug: string | null;
+        website: string;
+        nftsCount: number;
+        nfts: Array<App.Data.Gallery.GalleryNftData>;
+        isFeatured: boolean;
+        description: string | null;
+        volume: string | null;
+    };
     export type CollectionNftData = {
         id: number;
         collectionId: number;
