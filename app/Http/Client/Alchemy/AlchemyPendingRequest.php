@@ -187,7 +187,7 @@ class AlchemyPendingRequest extends PendingRequest
      */
     public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null, int $limit = null): Web3NftsChunk
     {
-        $this->apiUrl = $this->getNftV2ApiUrl();
+        $this->apiUrl = $this->getNftV3ApiUrl();
 
         $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
@@ -204,14 +204,14 @@ class AlchemyPendingRequest extends PendingRequest
             'excludeFilters' => ['SPAM'],
         ])));
 
-        $data = self::get('getNFTs', $query)->json();
+        $data = self::get('getNFTsForOwner', $query)->json();
 
         /** @var array<int, mixed> $ownedNfts */
         $ownedNfts = Arr::get($data, 'ownedNfts', []);
 
         $nfts = collect($ownedNfts)
-            ->filter(fn ($nft) => $this->filterNft($nft, false))
-            ->map(fn ($nft) => $this->parseNft($nft, $network->id))
+            ->filter(fn ($nft) => $this->filterNftV3($nft, false))
+            ->map(fn ($nft) => $this->parseNftV3($nft, $network->id))
             ->values();
 
         return new Web3NftsChunk(
