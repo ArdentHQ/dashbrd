@@ -204,6 +204,17 @@ declare namespace App.Data.Collections {
         displayType: string;
         nftsCount: number;
     };
+    export type PopularCollectionData = {
+        id: number;
+        name: string;
+        slug: string;
+        chainId: App.Enums.Chain;
+        floorPrice: string | null;
+        floorPriceFiat: number | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        image: string | null;
+    };
     export type SimpleNftData = {
         id: number;
         tokenNumber: string;

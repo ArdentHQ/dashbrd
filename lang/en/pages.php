@@ -43,6 +43,7 @@ return [
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
+        'popular_collections' => 'Popular Collections',
         'collection_value' => 'Collection Value',
         'nfts_owned' => 'NFTs Owned',
         'header_title' => 'You own <0>:nftsCount</0> :nfts across <0>:collectionsCount</0> :collections, worth about <0><1>:worth</1></0>',

@@ -8,6 +8,7 @@ use App\Data\Articles\ArticleData;
 use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionTraitFilterData;
+use App\Data\Collections\PopularCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
@@ -35,9 +36,26 @@ class CollectionController extends Controller
 {
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
+        $user = $request->user();
+
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
+
+        $collectionQuery = $user ? $user->collections() : Collection::query();
+
+        /** @var LengthAwarePaginator<Collection> $collections */
+        $collections = $collectionQuery
+            ->orderByFloorPrice('desc', $currency)
+            ->with([
+                'network',
+                'floorPriceToken',
+            ])
+            ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
+            'collections' => PopularCollectionData::collection(
+                $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
+            ),
         ]);
     }
 
