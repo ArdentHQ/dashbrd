@@ -531,11 +531,4 @@ class Collection extends Model
     {
         return SpamContract::isSpam($this->address, $this->network);
     }
-
-    public function toggleFeatured(): void
-    {
-        $this->update([
-            'is_featured' => ! $this->is_featured,
-        ]);
-    }
 }

@@ -86,7 +86,9 @@ class CollectionResource extends Resource
                 ActionGroup::make([
                     Action::make('updateIsFeatured')
                         ->action(function (Collection $collection) {
-                            $collection->toggleFeatured();
+                            $collection->update([
+                                'is_featured' => ! $collection->is_featured,
+                            ]);;
                         })
                         ->label(fn (Collection $collection) => $collection->is_featured ? 'Unmark as featured' : 'Mark as featured')
                         ->icon('heroicon-s-star'),
