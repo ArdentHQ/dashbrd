@@ -36,7 +36,7 @@ class Article extends Model implements HasMedia, Viewable
 
     public function resolveRouteBinding($value, $field = null)
     {
-        return Article::query()->withFeaturedCollections()->where('articles.slug', $value)->first();
+        return Article::query()->with('collections')->where('articles.slug', $value)->first();
     }
 
     public function registerMediaCollections(): void
@@ -136,21 +136,6 @@ class Article extends Model implements HasMedia, Viewable
         $nullsPosition = Str::lower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
         return $query->orderByRaw("articles.published_at {$direction} {$nullsPosition}");
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeWithFeaturedCollections(Builder $query): Builder
-    {
-        return $query->with(['collections' => function ($query) {
-            $query->select([
-                'collections.name',
-                'collections.slug',
-                'collections.extra_attributes->image as image',
-            ]);
-        }]);
     }
 
     public function metaDescription(): string

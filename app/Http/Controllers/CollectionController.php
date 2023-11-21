@@ -270,7 +270,7 @@ class CollectionController extends Controller
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
             ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
             ->orderByPivot('order_index', 'asc')
-            ->withFeaturedCollections()
+            ->with('collections')
             ->paginate($pageLimit);
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */

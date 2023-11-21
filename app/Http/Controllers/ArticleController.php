@@ -26,8 +26,7 @@ class ArticleController extends Controller
             $highlightedArticles = Article::query()
                 ->isPublished()
                 ->sortByPublishedDate()
-                ->with('media', 'user.media')
-                ->withFeaturedCollections()
+                ->with('media', 'user.media', 'collections')
                 ->limit(3)
                 ->get();
         }
@@ -36,11 +35,10 @@ class ArticleController extends Controller
         $articles = Article::query()
             ->isPublished()
             ->search($request->get('search'))
-            ->with('media', 'user.media')
+            ->with('media', 'user.media', 'collections')
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
             ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
             ->whereNotIn('articles.id', $highlightedArticles->pluck('id'))
-            ->withFeaturedCollections()
             ->paginate($pageLimit)
             ->withQueryString();
 
@@ -73,8 +71,7 @@ class ArticleController extends Controller
         $popularArticles = ArticleData::collection(
             Article::sortByPopularity()
                 ->isPublished()
-                ->with('media', 'user.media')
-                ->withFeaturedCollections()
+                ->with('media', 'user.media', 'collections')
                 ->where('id', '!=', $article->id)
                 ->limit(4)
                 ->get()
