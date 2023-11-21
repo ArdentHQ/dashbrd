@@ -7,7 +7,13 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export const CollectionNft = ({ nft }: { nft: App.Data.Gallery.GalleryNftData }): JSX.Element => {
+export const CollectionNft = ({
+    nft,
+    classNames,
+}: {
+    nft: App.Data.Gallery.GalleryNftData;
+    classNames?: string;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     const nftTokenNumberReference = useRef<HTMLDivElement>(null);
@@ -22,7 +28,10 @@ export const CollectionNft = ({ nft }: { nft: App.Data.Gallery.GalleryNftData })
                 collection: nft.collectionSlug,
                 nft: nft.tokenNumber,
             })}
-            className="transition-default group cursor-pointer rounded-xl border border-theme-secondary-300 p-2 ring-theme-primary-100 hover:ring-2 dark:border-theme-dark-700 dark:ring-theme-dark-700"
+            className={cn(
+                "transition-default group cursor-pointer rounded-xl border border-theme-secondary-300 p-2 ring-theme-primary-100 hover:ring-2 dark:border-theme-dark-700 dark:ring-theme-dark-700",
+                classNames,
+            )}
         >
             <span className="relative block">
                 <Img
