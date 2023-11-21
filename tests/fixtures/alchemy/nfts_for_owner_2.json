@@ -53,30 +53,6 @@
                         {
                             "value": "Flamingo Pink",
                             "trait_type": "Background"
-                        },
-                        {
-                            "value": "Focused",
-                            "trait_type": "Eyes"
-                        },
-                        {
-                            "value": "Lemon Ginger",
-                            "trait_type": "Iris"
-                        },
-                        {
-                            "value": "Tracksuit",
-                            "trait_type": "Outfit"
-                        },
-                        {
-                            "value": "Semi Quiff Cut",
-                            "trait_type": "Hair"
-                        },
-                        {
-                            "value": "Kote Shinai",
-                            "trait_type": "Item"
-                        },
-                        {
-                            "value": "Sparkles",
-                            "trait_type": "Effect"
                         }
                     ]
                 },
@@ -202,7 +178,7 @@
                 "contractDeployer": "0x36C0583590cbb739750aa6f6d975A2D229266982",
                 "deployedBlockNumber": 12903458,
                 "openSeaMetadata": {
-                    "floorPrice": 0.022949,
+                    "floorPrice": 0.003,
                     "collectionName": "The Vogu Collective",
                     "collectionSlug": "vogu",
                     "safelistRequestStatus": "verified",
@@ -241,28 +217,8 @@
                             "trait_type": "Color"
                         },
                         {
-                            "value": "EMP Shields",
-                            "trait_type": "Power Unit"
-                        },
-                        {
-                            "value": "Kouwei",
-                            "trait_type": "Quantum Core"
-                        },
-                        {
-                            "value": "Acoustic Array",
-                            "trait_type": "Right Sensor"
-                        },
-                        {
                             "value": "Core",
                             "trait_type": "Face"
-                        },
-                        {
-                            "value": "Industrial Sensor",
-                            "trait_type": "Apex"
-                        },
-                        {
-                            "value": "Core",
-                            "trait_type": "Sense Emulator"
                         },
                         {
                             "value": "Patrician",
@@ -271,14 +227,6 @@
                         {
                             "value": "Kimono",
                             "trait_type": "Torso"
-                        },
-                        {
-                            "value": "Pink Gradient",
-                            "trait_type": "BG"
-                        },
-                        {
-                            "value": "Centurion",
-                            "trait_type": "Left Sensor"
                         }
                     ]
                 },
@@ -350,14 +298,6 @@
                     "name": "Cool Cat #5920",
                     "description": "Cool Cats is a collection of 9,999 randomly generated and stylistically curated NFTs that exist on the Ethereum Blockchain. Cool Cat holders can participate in exclusive events such as NFT claims, raffles, community giveaways, and more. Remember, all cats are cool, but some are cooler than others. Visit [www.coolcatsnft.com](https://www.coolcatsnft.com/) to learn more.",
                     "attributes": [
-                        {
-                            "value": "blue cat skin",
-                            "trait_type": "body"
-                        },
-                        {
-                            "value": "beret green",
-                            "trait_type": "hats"
-                        },
                         {
                             "value": "hoodie purple",
                             "trait_type": "shirt"
