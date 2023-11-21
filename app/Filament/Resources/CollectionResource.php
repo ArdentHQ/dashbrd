@@ -60,7 +60,7 @@ class CollectionResource extends Resource
                             ->sortable(),
 
                 TextColumn::make('nft_count')
-                            ->label('Nft count (indexed)')
+                            ->label('Number of NFTs')
                             ->getStateUsing(fn (Collection $collection) => $collection->nfts()->count())
                             ->default(0),
 
