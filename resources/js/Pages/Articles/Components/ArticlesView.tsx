@@ -132,7 +132,7 @@ export const ArticlesView = ({
 
                 {isLoading && displayType === DisplayTypes.List && <ArticlesLoadingList />}
 
-                {!isLoading && articlesToShow.length === 0 && query === "" && (
+                {!isLoading && articlesToShow.length === 0 && highlightedArticles?.length === 0 && query === "" && (
                     <EmptyBlock className="w-full">
                         {mode === "articles"
                             ? t("pages.articles.no_articles")
@@ -140,7 +140,7 @@ export const ArticlesView = ({
                     </EmptyBlock>
                 )}
 
-                {!isLoading && articlesToShow.length === 0 && query !== "" && (
+                {!isLoading && articlesToShow.length === 0 && highlightedArticles?.length === 0 && query !== "" && (
                     <EmptyBlock className="w-full">
                         {t("pages.collections.articles.no_articles_with_filters")}
                     </EmptyBlock>
