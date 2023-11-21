@@ -741,7 +741,7 @@ class AlchemyPendingRequest extends PendingRequest
     {
         $imageKeys = [
             'image.thumbnailUrl',
-            'image.cachedUrl',
+            'image.originalUrl',
             'raw.metadata.image',
             'contract.openSeaMetadata.imageUrl',
         ];

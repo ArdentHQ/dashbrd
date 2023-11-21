@@ -793,9 +793,9 @@ it('should not store base64 encoded asset images', function () {
     $nft = Nft::firstWhere('name', 'tiny dinos #3218');
 
     expect($nft->extra_attributes->get('images'))->toBe([
-        'thumb' => 'https://gateway.com/image.jpg',
-        'small' => 'https://gateway.com/image.jpg',
-        'large' => 'https://gateway.com/image.jpg',
+        'thumb' => 'https://opensea.com/image.jpg',
+        'small' => 'https://opensea.com/image.jpg',
+        'large' => 'https://opensea.com/image.jpg',
         'originalRaw' => null,
         'original' => 'https://gateway.com/image.jpg',
     ]);
@@ -808,27 +808,24 @@ it('should use media thumbnail for collection image if no opensea image url', fu
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'id' => [
-                        'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
-                        'tokenMetadata' => ['tokenType' => 'ERC721'],
-                    ],
-                    'contract' => ['address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4'],
-                    'contractMetadata' => [
-                        'name' => 'tiny dinos', 'symbol' => 'dino',
+                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'contract' => [
+                        'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
+                        'tokenType' => 'ERC721',
+                        'name' => 'tiny dinos',
+                        'symbol' => 'dino',
                         'deployedBlockNumber' => 10000,
                         'totalSupply' => 10,
-                        'openSea' => [
+                        'openSeaMetadata' => [
                             'imageUrl' => null,
                         ],
                     ],
-                    'media' => [
-                        [
-                            'gateway' => 'https://gateway.com/image.jpg',
-                            'raw' => 'https://raw.com/image.jpg',
-                            'thumbnail' => 'https://thumb.com/image.jpg',
-                        ],
+                    'image' => [
+                        'cachedUrl' => 'https://gateway.com/image.jpg',
+                        'originalUrl' => 'https://raw.com/image.jpg',
+                        'thumbnailUrl' => 'https://thumb.com/image.jpg',
                     ],
-                    'title' => 'tiny dinos #3218',
+                    'name' => 'tiny dinos #3218',
                 ],
             ],
         ], 200),
@@ -859,23 +856,23 @@ it('should use media gateway for collection image if no opensea image url', func
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'id' => ['tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4'],
-                    'contractMetadata' => [
-                        'name' => 'tiny dinos', 'symbol' => 'dino',
+                    'tokenId' => '0x000000000000000000000000000000000000000000000000000000000000092',
+                    'contract' => [
+                        'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
+                        'tokenType' => 'ERC721',
+                        'name' => 'tiny dinos',
+                        'symbol' => 'dino',
                         'deployedBlockNumber' => 10000,
                         'totalSupply' => 10,
-                        'openSea' => [
+                        'openSeaMetadata' => [
                             'imageUrl' => null,
                         ],
                     ],
-                    'media' => [
-                        [
-                            'gateway' => 'https://gateway.com/image.jpg',
-                            'thumbnail' => null,
-                        ],
+                    'image' => [
+                        'cachedUrl' => 'https://gateway.com/image.jpg',
+                        'thumbnailUrl' => null,
                     ],
-                    'title' => 'tiny dinos #3218',
+                    'name' => 'tiny dinos #3218',
                 ],
             ],
         ], 200),
