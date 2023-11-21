@@ -15,7 +15,9 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CollectionResource extends Resource
 {
@@ -72,10 +74,13 @@ class CollectionResource extends Resource
 
                 TextColumn::make('is_featured')
                             ->label('Currently Featured')
-                            ->getStateUsing(fn (Collection $collection) => $collection->is_featured ? 'Yes' : 'No'),
+                            ->getStateUsing(fn (Collection $collection) => $collection->is_featured ? 'Yes' : 'No')
+                            ->sortable(),
             ])
             ->filters([
-                //
+                Filter::make('is_featured')
+                    ->label('Currently Featured')
+                    ->query(fn (Builder $query): Builder => $query->where('is_featured', true))
             ])
             ->actions([
                 ViewAction::make(),
