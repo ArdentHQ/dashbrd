@@ -38,6 +38,7 @@ return [
     'warning' => 'Warning',
     'my_address' => 'My Address',
     'my_wallet' => 'My Wallet',
+    'my_collections' => 'My Collections',
     'my_balance' => 'My Balance',
     'na' => 'N/A',
     'simple_plural_without_data' => 'One comment|Many comments',
