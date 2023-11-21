@@ -779,7 +779,7 @@ it('should not store base64 encoded asset images', function () {
                     ],
                     'raw' => [
                         'error' => null,
-                    ]
+                    ],
                 ],
             ],
         ], 200),
@@ -1064,7 +1064,7 @@ it('should handle nft traits', function () {
                                 ],
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ],
         ], 200),
