@@ -36,6 +36,7 @@ export const GridHeader = ({
                     "mr-auto flex w-[100px] flex-col space-y-0.5 font-medium md:w-[110px] lg:w-auto",
                     wrapperClassName,
                 )}
+                data-testid="GridHeader__wrapper"
             >
                 <span
                     data-testid="GridHeader__title"
