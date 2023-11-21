@@ -88,7 +88,7 @@ class CollectionResource extends Resource
                         ->action(function (Collection $collection) {
                             $collection->update([
                                 'is_featured' => ! $collection->is_featured,
-                            ]);;
+                            ]);
                         })
                         ->label(fn (Collection $collection) => $collection->is_featured ? 'Unmark as featured' : 'Mark as featured')
                         ->icon('heroicon-s-star'),
