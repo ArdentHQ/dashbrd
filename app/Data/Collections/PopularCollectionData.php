@@ -28,9 +28,16 @@ class PopularCollectionData extends Data
         public int $chainId,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $floorPrice,
+        // @TODO: remove price fiat
         public ?float $floorPriceFiat,
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
+
+        public ?string $volume,
+        public ?float $volumeFiat,
+        public ?string $volumeCurrency,
+        public ?int $volumeDecimals,
+
         public ?string $image,
     ) {
     }
@@ -46,6 +53,13 @@ class PopularCollectionData extends Data
             floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
+
+            // @TODO: makey this dynamic
+            volume: '19000000000000000000',
+            volumeFiat: 35380.4,
+            volumeCurrency: 'eth',
+            volumeDecimals: 18,
+
             image: $collection->extra_attributes->get('image'),
         );
     }
