@@ -122,7 +122,7 @@ describe("LayoutWrapper", () => {
                 <EditableGalleryHook nftLimit={16}>
                     <GalleryNfts>
                         <NftSelectionHook>
-                            <NftCollectionSlider />
+                            <NftCollectionSlider hiddenCollectionsCount={0} />
                         </NftSelectionHook>
                     </GalleryNfts>
                 </EditableGalleryHook>
