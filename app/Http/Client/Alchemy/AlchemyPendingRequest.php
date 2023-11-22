@@ -719,7 +719,7 @@ class AlchemyPendingRequest extends PendingRequest
             default => TokenType::Unknown,
         };
     }
-  
+
     private function getNftV3ApiUrl(): string
     {
         return 'https://'.self::$apiUrlPlaceholder.'.g.alchemy.com/nft/v3/';
