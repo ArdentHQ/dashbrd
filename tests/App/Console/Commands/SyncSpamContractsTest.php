@@ -14,11 +14,14 @@ beforeEach(function () {
         if ($request->method() == 'GET') {
             $path = $request->toPsrRequest()->getUri()->getPath();
             if (Str::contains($path, 'getSpamContracts')) {
-                return Http::response([
-                    '0x000000000a42c2791eec307fff43fa5c640e3ef7',
-                    '0x000294f162dc337cf060ac6e2cb7db8c8f544004',
-                    '0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3',
-                ], 200);
+                return Http::response(json_encode(
+                    [
+                        'contractAddresses' => [
+                            '0x000000000a42c2791eec307fff43fa5c640e3ef7',
+                            '0x000294f162dc337cf060ac6e2cb7db8c8f544004',
+                            '0x000386e3f7559d9b6a2f5c46b4ad1a9587d59dc3',
+                        ],
+                    ]), 200);
             }
         }
 
