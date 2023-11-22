@@ -707,6 +707,11 @@ class AlchemyPendingRequest extends PendingRequest
         return 'https://'.self::$apiUrlPlaceholder.'.g.alchemy.com/nft/v2/';
     }
 
+    private function getNftV3ApiUrl(): string
+    {
+        return 'https://'.self::$apiUrlPlaceholder.'.g.alchemy.com/nft/v3/';
+    }
+
     private function filterNft(mixed $nft, bool $filterError = true): bool
     {
         if (Arr::get($nft, 'spamInfo.isSpam', false)) {
@@ -742,10 +747,10 @@ class AlchemyPendingRequest extends PendingRequest
      */
     public function getSpamContracts(Network $network): array
     {
-        $this->apiUrl = $this->getNftV2ApiUrl();
+        $this->apiUrl = $this->getNftV3ApiUrl();
 
         $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
-        return self::get('getSpamContracts')->json();
+        return self::get('getSpamContracts')->json('contractAddresses');
     }
 }
