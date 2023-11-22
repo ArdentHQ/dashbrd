@@ -31,16 +31,20 @@ const CollectionsIndex = ({
             <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
-                <div className="flex space-x-6">
-                    <PopularCollectionsTable
-                        collections={collectionsColumn1}
-                        user={auth.user}
-                    />
+                <div className="flex sm:space-x-2 md:space-x-3 lg:space-x-6">
+                    <div className="flex-1">
+                        <PopularCollectionsTable
+                            collections={collectionsColumn1}
+                            user={auth.user}
+                        />
+                    </div>
 
-                    <PopularCollectionsTable
-                        collections={collectionsColumn2}
-                        user={auth.user}
-                    />
+                    <div className="hidden flex-1 sm:block">
+                        <PopularCollectionsTable
+                            collections={collectionsColumn2}
+                            user={auth.user}
+                        />
+                    </div>
                 </div>
             </div>
         </DefaultLayout>
