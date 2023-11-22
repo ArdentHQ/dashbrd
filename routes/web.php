@@ -13,6 +13,7 @@ use App\Http\Controllers\GalleryReportController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\HiddenCollectionController;
 use App\Http\Controllers\MetaImageController;
+use App\Http\Controllers\MyCollectionsController;
 use App\Http\Controllers\MyGalleryCollectionController;
 use App\Http\Controllers\MyGalleryController;
 use App\Http\Controllers\NftController;
@@ -86,11 +87,17 @@ Route::group(['prefix' => 'articles', 'middleware' => 'features:articles'], func
     Route::get('{article:slug}', [ArticleController::class, 'show'])->name('articles.view');
 });
 
-Route::group(['prefix' => 'collections', 'middleware' => 'features:collections'], function () {
-    Route::get('', [CollectionController::class, 'index'])->name('collections')->middleware(EnsureOnboarded::class);
-    Route::get('{collection:slug}', [CollectionController::class, 'show'])->name('collections.view');
-    Route::get('{collection:slug}/articles', [CollectionController::class, 'articles'])->name('collections.articles');
-    Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
+Route::group(['middleware' => 'features:collections'], function () {
+    Route::group(['prefix' => 'my-collections'], function () {
+        Route::get('', [MyCollectionsController::class, 'index'])->name('my-collections')->middleware(EnsureOnboarded::class);
+    });
+
+    Route::group(['prefix' => 'collections'], function () {
+        Route::get('', [CollectionController::class, 'index'])->name('collections');
+        Route::get('{collection:slug}', [CollectionController::class, 'show'])->name('collections.view');
+        Route::get('{collection:slug}/articles', [CollectionController::class, 'articles'])->name('collections.articles');
+        Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');
+    });
 });
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {

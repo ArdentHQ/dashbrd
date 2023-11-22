@@ -147,11 +147,11 @@ export const UserDetails = ({
                                             {features.collections && (
                                                 <li data-testid="AccountNavigation__collections">
                                                     <DropdownNavigationLink
-                                                        href={route("collections")}
+                                                        href={route("my-collections")}
                                                         icon="Diamond"
                                                         label={
                                                             <>
-                                                                {t("pages.collections.title")}{" "}
+                                                                {t("common.my_collections")}{" "}
                                                                 <span className="text-theme-secondary-500 dark:text-theme-dark-400">
                                                                     ({collectionCount})
                                                                 </span>

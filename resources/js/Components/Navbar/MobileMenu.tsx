@@ -138,7 +138,7 @@ const Nav = ({
         {
             isVisible: features.collections,
             title: t("pages.collections.title"),
-            suffix: isAuthenticated ? collectionCount : null,
+            suffix: null,
             route: "collections",
             icon: "Diamond",
         },
@@ -165,6 +165,13 @@ const Nav = ({
             suffix: galleryCount,
             route: "my-galleries",
             icon: "Grid",
+        },
+        {
+            isVisible: features.collections,
+            title: t("common.my_collections"),
+            suffix: isAuthenticated ? collectionCount : null,
+            route: "my-collections",
+            icon: "Cards",
         },
         {
             isVisible: isAuthenticated,

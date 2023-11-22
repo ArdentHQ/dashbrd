@@ -22,7 +22,7 @@ export const CollectionsHeading = ({
                     level={1}
                     className="dark:text-theme-dark-50"
                 >
-                    {t("common.my_collection")}
+                    {t("common.my_collections")}
                 </Heading>
 
                 <RefreshButton wallet={wallet} />
