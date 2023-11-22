@@ -26,7 +26,7 @@ describe("PopularCollectionsTable", () => {
         useAuthorizedActionSpy.mockRestore();
     });
 
-    const collections = new PopularCollectionFactory().withPrices().withVolume().createMany(3);
+    const collections = new PopularCollectionFactory().createMany(3);
 
     const user = new UserDataFactory().create();
 
@@ -53,8 +53,21 @@ describe("PopularCollectionsTable", () => {
         expect(queryByTestId("PopularCollectionsTable")).not.toBeInTheDocument();
     });
 
+    it("renders with floor price and volume", () => {
+        const collections = [new PopularCollectionFactory().withPrices().withVolume().create()];
+
+        const { getByTestId } = render(
+            <PopularCollectionsTable
+                collections={collections}
+                user={user}
+            />,
+        );
+
+        expect(getByTestId("PopularCollectionsTable")).toBeInTheDocument();
+    });
+
     it("renders without floor price and volume", () => {
-        const collections = new PopularCollectionFactory().withoutPrices().withoutVolume().createMany(3);
+        const collections = [new PopularCollectionFactory().withoutPrices().withoutVolume().create()];
 
         const { getByTestId } = render(
             <PopularCollectionsTable
