@@ -44,7 +44,7 @@ export const PopularCollectionName = ({
                         <p
                             ref={collectionNameReference}
                             data-testid="CollectionName__name"
-                            className="group-hover truncate text-base font-medium text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400 md-lg:text-lg "
+                            className="truncate text-base font-medium text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400 md-lg:text-lg "
                         >
                             {collection.name}
                         </p>
