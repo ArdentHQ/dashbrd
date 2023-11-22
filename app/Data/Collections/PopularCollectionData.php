@@ -28,8 +28,6 @@ class PopularCollectionData extends Data
         public int $chainId,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $floorPrice,
-        // @TODO: remove price fiat
-        public ?float $floorPriceFiat,
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
 
@@ -50,7 +48,6 @@ class PopularCollectionData extends Data
             slug: $collection->slug,
             chainId: $collection->network->chain_id,
             floorPrice: $collection->floor_price,
-            floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
 

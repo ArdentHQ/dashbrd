@@ -2,9 +2,11 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Img } from "@/Components/Image";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
+import { PriceChange } from "@/Components/PriceChange/PriceChange";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
-import { FormatCrypto } from "@/Utils/Currency";
+import { FormatCrypto, FormatFiat } from "@/Utils/Currency";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const PopularCollectionName = ({
     collection,
@@ -65,3 +67,79 @@ export const PopularCollectionName = ({
         </div>
     );
 };
+
+export const PopularCollectionFloorPrice = ({
+    collection,
+}: {
+    collection: App.Data.Collections.PopularCollectionData;
+}): JSX.Element => (
+    <div
+        data-testid="PopularCollectionFloorPrice"
+        className="inline-block"
+    >
+        <div className="flex flex-col items-end space-y-0.5 whitespace-nowrap font-medium">
+            <div
+                data-testid="CollectionFloorPrice__crypto"
+                className="text-sm leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6"
+            >
+                <FormatCrypto
+                    value={collection.floorPrice ?? "0"}
+                    token={{
+                        symbol: collection.floorPriceCurrency ?? "ETH",
+                        name: collection.floorPriceCurrency ?? "ETH",
+                        decimals: collection.floorPriceDecimals ?? 18,
+                    }}
+                />
+            </div>
+
+            <span
+                data-testid="PopularCollectionFloorPrice__price-change"
+                className="text-sm"
+            >
+                {/* @TODO: Make dynamic */}
+                <PriceChange change={24.5678} />
+            </span>
+        </div>
+    </div>
+);
+
+export const PopularCollectionVolume = ({
+    collection,
+    user,
+}: {
+    collection: App.Data.Collections.PopularCollectionData;
+    user: App.Data.UserData | null;
+}): JSX.Element => (
+    <div
+        data-testid="PopularCollectionFloorPrice"
+        className="inline-block"
+    >
+        <div className="flex flex-col items-end space-y-0.5 whitespace-nowrap font-medium">
+            <div
+                data-testid="PopularCollectionVolume__crypto"
+                className="text-theme-secondary-900 dark:text-theme-dark-50"
+            >
+                <FormatCrypto
+                    value={collection.volume ?? "0"}
+                    token={{
+                        symbol: collection.volumeCurrency ?? "ETH",
+                        name: collection.volumeCurrency ?? "ETH",
+                        decimals: collection.volumeDecimals ?? 18,
+                    }}
+                />
+            </div>
+
+            <div
+                data-testid="PopularCollectionVolume__fiat"
+                className="text-sm text-theme-secondary-500 dark:text-theme-dark-300"
+            >
+                {collection.volumeFiat != null && isTruthy(user) && (
+                    <FormatFiat
+                        user={user}
+                        value={collection.volumeFiat.toString()}
+                    />
+                )}
+            </div>
+        </div>
+    </div>
+);
