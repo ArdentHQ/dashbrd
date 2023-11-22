@@ -1,6 +1,5 @@
 import { router } from "@inertiajs/react";
 import React, { useRef } from "react";
-import { useTranslation } from "react-i18next";
 import {
     PopularCollectionFloorPrice,
     PopularCollectionName,
@@ -14,8 +13,6 @@ export const PopularCollectionsTableItem = ({
     uniqueKey,
     user,
 }: PopularCollectionTableItemProperties): JSX.Element => {
-    const { t } = useTranslation();
-
     const reference = useRef(null);
 
     return (
