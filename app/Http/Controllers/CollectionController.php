@@ -44,14 +44,16 @@ class CollectionController extends Controller
 
         /** @var LengthAwarePaginator<Collection> $collections */
         $collections = $collectionQuery
-            ->orderByFloorPrice('desc', $currency)
-            ->with([
-                'network',
-                'floorPriceToken',
-            ])
-            ->simplePaginate(12);
+                    ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                    ->orderByFloorPrice('desc', $currency)
+                    ->with([
+                        'network',
+                        'floorPriceToken',
+                    ])
+                    ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
+            'activeSort' => $request->query('sort') === 'floor-price' ? 'floor-price' : 'top',
             'title' => trans('metatags.collections.title'),
             'collections' => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
