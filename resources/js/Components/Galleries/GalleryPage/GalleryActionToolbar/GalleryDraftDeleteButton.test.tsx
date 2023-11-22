@@ -1,8 +1,8 @@
-import React from "react";
-import { GalleryActionToolbar } from "./GalleryActionToolbar";
-import { type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
-import { render, screen } from "@/Tests/testing-library";
-import { allBreakpoints } from "@/Tests/utils";
+import { router } from "@inertiajs/react";
+import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
+import * as ToastsHook from "@/Hooks/useToasts";
+import { type GalleryDraft, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { render, renderHook, screen, userEvent, waitFor } from "@/Tests/testing-library";
 
 interface IndexedDBMockResponse {
     add: (draft: GalleryDraft) => Promise<number>;
@@ -78,60 +78,46 @@ vi.mock("react-indexed-db-hook", () => ({
     useIndexedDB: mocks.useIndexedDB,
 }));
 
-describe("GalleryActionToolbar", () => {
-    it.each(allBreakpoints)("should render in %s screen", (breakpoint) => {
-        render(<GalleryActionToolbar />, { breakpoint });
+describe("GalleryDraftDeleteButton", () => {
+    it("opens the confirmation dialog when delete button is pressed", async () => {
+        render(<GalleryDraftDeleteButton draftId={1} />);
 
-        expect(screen.getByTestId("GalleryActionToolbar")).toBeInTheDocument();
+        expect(screen.getByTestId("GalleryActionToolbar__draftDelete")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("GalleryActionToolbar__draftDelete"));
+
+        expect(screen.getByTestId("ConfirmationDialog__confirm")).toBeInTheDocument();
+
+        await userEvent.click(screen.getByTestId("ConfirmationDialog__close"));
+
+        expect(screen.queryByTestId("ConfirmationDialog__confirm")).not.toBeInTheDocument();
     });
 
-    it("should render with gallery cover image url", () => {
-        render(<GalleryActionToolbar galleryCoverUrl="/test" />);
+    it("removes from draft when submitted", async () => {
+        const { result } = renderHook(() => useWalletDraftGalleries({ address: "mockedAddress" }));
 
-        expect(screen.getByTestId("Img")).toBeInTheDocument();
-        expect(screen.getByTestId("Img")).toHaveAttribute("src", "/test");
-    });
+        await waitFor(() => {
+            expect(result.current.drafts).toHaveLength(1);
+        });
 
-    it("should render as processing", () => {
-        render(
-            <GalleryActionToolbar
-                galleryCoverUrl="/test"
-                isProcessing
-            />,
-        );
+        const routerSpy = vi.spyOn(router, "visit").mockImplementation((_, options) => {
+            (options as { onFinish: () => void }).onFinish();
+        });
 
-        expect(screen.getByTestId("GalleryActionToolbar__publish")).toBeInTheDocument();
-        expect(screen.getByTestId("GalleryActionToolbar__publish")).toBeDisabled();
-    });
+        const showToastMock = vi.fn();
 
-    it("should show saving to draft icon", () => {
-        render(
-            <GalleryActionToolbar
-                galleryCoverUrl="/test"
-                isProcessing
-                isSavingDraft={true}
-            />,
-        );
+        vi.spyOn(ToastsHook, "useToasts").mockImplementation(() => ({
+            showToast: showToastMock,
+            clear: vi.fn(),
+        }));
 
-        expect(screen.getByTestId("Icon_SavingDraft")).toBeInTheDocument();
-    });
+        render(<GalleryDraftDeleteButton draftId={1} />);
 
-    it("should show draft saved icon", () => {
-        render(
-            <GalleryActionToolbar
-                galleryCoverUrl="/test"
-                isProcessing
-                draftId={1}
-                isSavingDraft={false}
-            />,
-        );
+        await userEvent.click(screen.getByTestId("GalleryActionToolbar__draftDelete"));
 
-        expect(screen.getByTestId("Icon_DraftSaved")).toBeInTheDocument();
-    });
+        await userEvent.click(screen.getByTestId("ConfirmationDialog__confirm"));
 
-    it.each(allBreakpoints)("should render without delete button in %s screen", (breakpoint) => {
-        render(<GalleryActionToolbar showDelete={false} />, { breakpoint });
-
-        expect(screen.queryByTestId("GalleryActionToolbar__delete")).not.toBeInTheDocument();
+        expect(routerSpy).toBeCalledTimes(1);
+        expect(showToastMock).toBeCalledTimes(1);
     });
 });
