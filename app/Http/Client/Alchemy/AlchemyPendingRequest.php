@@ -928,31 +928,6 @@ class AlchemyPendingRequest extends PendingRequest
         return 'https://'.self::$apiUrlPlaceholder.'.g.alchemy.com/nft/v3/';
     }
 
-    private function filterNft(mixed $nft, bool $filterError = true): bool
-    {
-        if (Arr::get($nft, 'spamInfo.isSpam', false)) {
-            return false;
-        }
-
-        if (Arr::has($nft, 'error') && $filterError) {
-            return false;
-        }
-
-        if (! TokenType::compare(TokenType::Erc721, Arr::get($nft, 'id.tokenMetadata.tokenType', ''))) {
-            return false;
-        }
-
-        // Only one has to exist, the missing one gets substituted
-        $hasCollectionName = ! empty($this->collectionName($nft));
-        $hasCollectionSymbol = ! empty(Arr::get($nft, 'contractMetadata.symbol'));
-
-        if (! $hasCollectionName && ! $hasCollectionSymbol) {
-            return false;
-        }
-
-        return true;
-    }
-
     private function filterNftV3(mixed $nft, bool $filterError = true): bool
     {
         if (Arr::get($nft, 'contract.isSpam', false)) {
