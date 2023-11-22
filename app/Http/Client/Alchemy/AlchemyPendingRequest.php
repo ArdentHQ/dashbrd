@@ -227,7 +227,7 @@ class AlchemyPendingRequest extends PendingRequest
      */
     public function nftMetadataBatch(Collection $nfts, Network $network): Web3NftsChunk
     {
-        $this->apiUrl = $this->getNftV2ApiUrl();
+        $this->apiUrl = $this->getNftV3ApiUrl();
 
         // All the requests need to have chain id defined.
         $this->chain = AlchemyChain::fromChainId($network->chain_id);
@@ -245,12 +245,12 @@ class AlchemyPendingRequest extends PendingRequest
 
         /** @var Collection<int, Nft>  $response */
         $nftItems = collect($response)
-            ->filter(fn ($nft) => $this->filterNft($nft))
+            ->filter(fn ($nft) => $this->filterNftV3($nft))
             ->map(function ($nft) use ($network) {
                 // With getNFTMetadataBatch, alchemy returns tokens numbers (`tokenId` field) as number instead of hex,
-                // thus the `convertTokenNumber flag to save it as is withouth attempting to convert from hex.
+                // thus the `convertTokenNumber flag to save it as is without attempting to convert from hex.
                 // See https://docs.alchemy.com/reference/sdk-getnftmetadatabatch#response-1
-                return $this->parseNft($nft, $network->id, convertTokenNumber: false);
+                return $this->parseNftV3($nft, $network->id, convertTokenNumber: false);
             })
             ->values();
 
