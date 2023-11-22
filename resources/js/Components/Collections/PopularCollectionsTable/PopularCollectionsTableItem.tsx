@@ -48,16 +48,7 @@ export const PopularCollectionsTableItem = ({
                 paddingClassName="px-2 md:px-5 "
                 hoverClassName=""
             >
-                {collection.floorPrice === null ? (
-                    <span
-                        data-testid="PopularCollectionsTableItem__unknown-floor-price"
-                        className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
-                    >
-                        {t("common.na")}
-                    </span>
-                ) : (
-                    <PopularCollectionFloorPrice collection={collection} />
-                )}
+                <PopularCollectionFloorPrice collection={collection} />
             </TableCell>
 
             <TableCell
