@@ -335,27 +335,27 @@ class AlchemyPendingRequest extends PendingRequest
      */
     public function getContractMetadataBatch(array $contactAddresses, Network $network): Collection
     {
-        $this->apiUrl = $this->getNftV2ApiUrl();
+        $this->apiUrl = $this->getNftV3ApiUrl();
 
         $this->chain = AlchemyChain::fromChainId($network->chain_id);
 
         /** @var array<int, mixed> $collections */
-        $collections = self::post('getContractMetadataBatch', ['contractAddresses' => $contactAddresses])->json();
+        $collections = self::post('getContractMetadataBatch', ['contractAddresses' => $contactAddresses])->json('contracts');
 
         return collect($collections)->map(function ($collectionMeta) {
-            $supply = Arr::get($collectionMeta, 'contractMetadata.totalSupply');
-            $mintedBlock = Arr::get($collectionMeta, 'contractMetadata.deployedBlockNumber');
+            $supply = Arr::get($collectionMeta, 'totalSupply');
+            $mintedBlock = Arr::get($collectionMeta, 'deployedBlockNumber');
 
             return new Web3ContractMetadata(
                 contractAddress: $collectionMeta['address'],
-                collectionName: Arr::get($collectionMeta, 'contractMetadata.name'),
+                collectionName: Arr::get($collectionMeta, 'name'),
                 totalSupply: $supply ? (int) $supply : null,
                 mintedBlock: $mintedBlock ? (int) $mintedBlock : null,
-                collectionSlug: Arr::get($collectionMeta, 'contractMetadata.openSea.collectionSlug'),
-                imageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.imageUrl'),
-                floorPrice: Arr::get($collectionMeta, 'contractMetadata.openSea.floorPrice'),
-                bannerImageUrl: Arr::get($collectionMeta, 'contractMetadata.openSea.bannerImageUrl'),
-                description: Arr::get($collectionMeta, 'contractMetadata.openSea.description'),
+                collectionSlug: Arr::get($collectionMeta, 'openSeaMetadata.collectionSlug'),
+                imageUrl: Arr::get($collectionMeta, 'openSeaMetadata.imageUrl'),
+                floorPrice: Arr::get($collectionMeta, 'openSeaMetadata.floorPrice'),
+                bannerImageUrl: Arr::get($collectionMeta, 'openSeaMetadata.bannerImageUrl'),
+                description: Arr::get($collectionMeta, 'openSeaMetadata.description'),
             );
         });
     }
