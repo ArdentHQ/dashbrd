@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { PopularCollectionName } from "./PopularCollectionsTable.blocks";
 import { type PopularCollectionTableItemProperties } from "./PopularCollectionsTable.contract";
 import { CollectionFloorPrice } from "@/Components/Collections/CollectionFloorPrice";
-import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { TableCell, TableRow } from "@/Components/Table";
 
 export const PopularCollectionsTableItem = ({
@@ -41,13 +40,15 @@ export const PopularCollectionsTableItem = ({
                 innerClassName="py-4"
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
+                className="unique-cell-until-md-lg"
             >
                 <PopularCollectionName collection={collection} />
             </TableCell>
 
             <TableCell
+                className="hidden xl:table-cell"
                 innerClassName="justify-end"
-                paddingClassName="px-2 md:px-5"
+                paddingClassName="px-2 md:px-5 "
                 hoverClassName=""
             >
                 {collection.floorPrice === null || user === null ? (
@@ -69,14 +70,12 @@ export const PopularCollectionsTableItem = ({
             </TableCell>
 
             <TableCell
-                className="end-cell-until-md"
+                className="hidden md-lg:table-cell"
                 innerClassName="justify-end"
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
-                <div className="mr-2 h-5 w-5">
-                    <NetworkIcon networkId={collection.chainId} />
-                </div>
+                VOLUME
             </TableCell>
         </TableRow>
     );

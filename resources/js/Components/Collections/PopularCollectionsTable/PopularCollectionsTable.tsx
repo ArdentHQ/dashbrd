@@ -24,9 +24,11 @@ export const PopularCollectionsTable = ({ collections, user }: PopularCollection
             {
                 Header: t("common.floor_price").toString(),
                 id: "floor-price",
+                headerClassName: "hidden xl:table-cell",
                 className: "justify-end whitespace-nowrap",
             },
             {
+                headerClassName: "hidden md-lg:table-cell",
                 Header: t("common.volume").toString(),
                 id: "volume",
             },
@@ -42,6 +44,7 @@ export const PopularCollectionsTable = ({ collections, user }: PopularCollection
     return (
         <Table
             data-testid="PopularCollectionsTable"
+            headerClassName="hidden md-lg:table-header-group"
             variant="list"
             columns={columns}
             activeSort={activeSort}
