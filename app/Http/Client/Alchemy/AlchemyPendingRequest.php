@@ -241,7 +241,7 @@ class AlchemyPendingRequest extends PendingRequest
 
         $response = self::post('getNFTMetadataBatch', [
             'tokens' => $tokens,
-        ])->json();
+        ])->json('nfts');
 
         /** @var Collection<int, Nft>  $response */
         $nftItems = collect($response)

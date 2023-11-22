@@ -160,7 +160,7 @@ it('should getWalletNfts', function () {
 
 it('should getNftMetadata', function () {
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     $user = createUser();
@@ -181,7 +181,7 @@ it('should getNftMetadata', function () {
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(1)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
-        ->and($tokens[0]->tokenAddress)->toBe('0x0e33fd2db4f140dca8f65671c40e36f8fd648fff');
+        ->and($tokens[0]->tokenAddress)->toBe('0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D');
 });
 
 it('should extract nft images', function () {

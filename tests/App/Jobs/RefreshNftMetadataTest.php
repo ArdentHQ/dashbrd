@@ -33,7 +33,7 @@ it('should refresh NFT metadata', function () {
     expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(0);
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
