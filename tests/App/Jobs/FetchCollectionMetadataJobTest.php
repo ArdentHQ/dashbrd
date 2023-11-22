@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 
 it('should update nft collection metadata', function () {
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getContractMetadataBatch' => Http::response(fixtureData('alchemy.contract-metadata-batch'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getContractMetadataBatch' => Http::response(fixtureData('alchemy.contract_metadata_batch'), 200),
     ]);
 
     $now = Carbon::now();
@@ -48,7 +48,7 @@ it('should update nft collection metadata', function () {
 
 it('should skip updating column if metadata is null', function () {
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getContractMetadataBatch' => Http::response(fixtureData('alchemy.contract-metadata-batch'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getContractMetadataBatch' => Http::response(fixtureData('alchemy.contract_metadata_batch'), 200),
     ]);
 
     $network = Network::polygon()->firstOrFail();
