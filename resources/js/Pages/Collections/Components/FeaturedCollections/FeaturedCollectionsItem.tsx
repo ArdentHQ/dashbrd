@@ -18,30 +18,28 @@ const truncateDescription = (
     return description;
 };
 
-export const FeaturedCollectionsSlider = ({
-    featuredCollections,
+export const FeaturedCollectionsItem = ({
+    data,
 }: {
-    featuredCollections: App.Data.Collections.CollectionFeaturedData[];
+    data: App.Data.Collections.CollectionFeaturedData;
 }): JSX.Element => {
     const { t } = useTranslation();
-    const testCollection = featuredCollections[3];
 
     const token: Pick<App.Data.Token.TokenData, "symbol" | "name" | "decimals"> = {
         name: "",
-        symbol: testCollection.floorPriceCurrency ?? "",
-        decimals: testCollection.floorPriceDecimals ?? 18,
+        symbol: data.floorPriceCurrency ?? "",
+        decimals: data.floorPriceDecimals ?? 18,
     };
-    console.log({ testCollection });
 
     return (
         <div className="relative">
             {/* Featured Collections Background */}
-            <div className="collection-banner relative h-[700px] w-full">
+            <div className="collection-banner absolute left-0 top-0 -z-10 h-full w-full ">
                 <Img
                     className="h-full w-full object-cover"
                     wrapperClassName="h-full"
-                    alt={testCollection.name}
-                    src={testCollection.banner}
+                    alt={data.name}
+                    src={data.banner}
                     errorPlaceholder={<div className="bg-white" />}
                 />
 
@@ -49,22 +47,22 @@ export const FeaturedCollectionsSlider = ({
             </div>
 
             {/* Featured Collections Content */}
-            <div className="absolute left-0 top-0 w-full p-6">
-                <div className="flex flex-col gap-6">
+            <div className=" left-0 top-0 z-10 w-full p-6 md-lg:p-8">
+                <div className="flex flex-col gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
                     {/* Featured Collections Data */}
-                    <div className="flex flex-col">
+                    <div className="flex flex-col md-lg:max-w-[448px] md-lg:py-2 xl:w-[460px] 2xl:max-w-[600px]">
                         {/* Featured Collections Header */}
                         <div className="flex flex-row gap-4">
                             <div className="relative h-12 w-12 shrink-0">
                                 <Img
                                     wrapperClassName="aspect-square"
                                     className="h-full w-full rounded-full object-cover"
-                                    src={testCollection.image}
+                                    src={data.image}
                                     isCircle
                                 />
 
-                                <div className="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-4 ring-theme-secondary-50 dark:ring-theme-dark-950 md:hidden">
-                                    <NetworkIcon networkId={testCollection.chainId} />
+                                <div className="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-4 ring-theme-secondary-50 dark:ring-theme-dark-950">
+                                    <NetworkIcon networkId={data.chainId} />
                                 </div>
                             </div>
 
@@ -76,45 +74,45 @@ export const FeaturedCollectionsSlider = ({
                                     className="text-xl"
                                     level={3}
                                 >
-                                    {testCollection.name}
+                                    {data.name}
                                 </Heading>
                             </div>
                         </div>
 
                         {/* Featured Collections Body */}
                         <div className="my-3 line-clamp-4 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
-                            {truncateDescription(testCollection.description)}
+                            {truncateDescription(data.description)}
                         </div>
 
                         {/* Featured Collections Footer */}
-                        <div className="flex flex-col gap-6 ">
+                        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between md-lg:flex-col md-lg:items-start">
                             <div className="flex flex-row items-center justify-start">
                                 <GridHeader
                                     className="!px-0"
                                     wrapperClassName="w-fit"
                                     title={t("common.nfts")}
-                                    value={testCollection.nftsCount}
+                                    value={data.nftsCount}
                                 />
-                                <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700" />
+                                <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700 sm:mx-6" />
                                 <GridHeader
                                     className="!px-0"
                                     wrapperClassName="w-fit"
                                     title={t("common.floor_price")}
                                     value={
                                         <FormatCrypto
-                                            value={testCollection.floorPrice ?? "0"}
+                                            value={data.floorPrice ?? "0"}
                                             token={token}
                                         />
                                     }
                                 />
-                                <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700" />
+                                <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700 sm:mx-6" />
                                 <GridHeader
                                     className="!px-0"
                                     wrapperClassName="w-fit"
                                     title={t("common.volume", { frequency: "" })}
                                     value={
                                         <FormatCrypto
-                                            value={testCollection.volume ?? "0"}
+                                            value={data.volume ?? "0"}
                                             token={token}
                                             maximumFractionDigits={2}
                                         />
@@ -123,10 +121,10 @@ export const FeaturedCollectionsSlider = ({
                             </div>
 
                             <ButtonLink
-                                className="w-full justify-center sm:w-auto"
+                                className="w-full justify-center sm:h-fit sm:w-auto"
                                 variant="primary"
                                 href={route("collections.view", {
-                                    slug: testCollection.slug,
+                                    slug: data.slug,
                                 })}
                             >
                                 {t("pages.collections.featured.button")}
@@ -135,11 +133,23 @@ export const FeaturedCollectionsSlider = ({
                     </div>
 
                     {/* Featured Collections Nfts */}
-                    <div className="block">
+                    <div className="grid w-full grid-flow-col items-center gap-3 lg:w-fit">
                         <CollectionNft
-                            nft={testCollection.nfts[0]}
-                            classNames="bg-white dark:bg-theme-dark-900 grid"
+                            nft={data.nfts[0]}
+                            classNames="bg-white dark:bg-theme-dark-900 grid w-full h-full min-w-full lg:min-w-fit lg:w-60"
                         />
+                        {data.nfts.length > 1 && (
+                            <CollectionNft
+                                nft={data.nfts[1]}
+                                classNames="bg-white dark:bg-theme-dark-900 sm:grid hidden w-full h-full min-w-full lg:min-w-fit lg:w-60"
+                            />
+                        )}
+                        {data.nfts.length > 2 && (
+                            <CollectionNft
+                                nft={data.nfts[2]}
+                                classNames="bg-white dark:bg-theme-dark-900 md:grid md-lg:hidden hidden w-full h-full min-w-full lg:min-w-fit lg:w-60 xl:grid"
+                            />
+                        )}
                     </div>
                 </div>
             </div>
