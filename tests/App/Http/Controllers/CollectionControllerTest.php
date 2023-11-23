@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Enums\CurrencyCode;
 use App\Enums\TraitDisplayType;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
@@ -12,7 +11,6 @@ use App\Models\Collection;
 use App\Models\Network;
 use App\Models\Nft;
 use App\Models\Token;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
@@ -26,7 +24,7 @@ it('can render the collections overview page', function () {
         ->assertStatus(200);
 });
 
-it('can return featured collections', function() {
+it('can return featured collections', function () {
     $user = createUser();
 
     Collection::factory(8)->create([
@@ -46,13 +44,12 @@ it('can return featured collections', function() {
                 ->has(
                     'featuredCollections'
                 ),
-            fn (Assert $page) =>
-                $page->where('featuredCollections', 2)
+            fn (Assert $page) => $page->where('featuredCollections', 2)
 
         );
 });
 
-it('can cache 3 random nfts from a featured collection', function() {
+it('can cache 3 random nfts from a featured collection', function () {
     $user = createUser();
 
     $collection = Collection::factory()->create([
@@ -67,7 +64,7 @@ it('can cache 3 random nfts from a featured collection', function() {
         ->get(route('collections'))
         ->assertStatus(200);
 
-    $cachedNfts = Cache::get('featuredNftsForCollection' . $collection->id);
+    $cachedNfts = Cache::get('featuredNftsForCollection'.$collection->id);
 
     expect(count($cachedNfts))->toEqual(3);
 });
