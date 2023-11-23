@@ -8,10 +8,6 @@ import { Table } from "@/Components/Table";
 export const PopularCollectionsTable = ({ collections, user }: PopularCollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const activeSort = "floor-price";
-
-    const sortDirection = "desc";
-
     const columns = useMemo(() => {
         const columns: Array<Column<App.Data.Collections.PopularCollectionData>> = [
             {
@@ -24,11 +20,14 @@ export const PopularCollectionsTable = ({ collections, user }: PopularCollection
             {
                 Header: t("common.floor_price").toString(),
                 id: "floor-price",
+                headerClassName: "hidden xl:table-cell",
                 className: "justify-end whitespace-nowrap",
             },
             {
+                headerClassName: "hidden md-lg:table-cell",
                 Header: t("common.volume").toString(),
                 id: "volume",
+                className: "justify-end [&_div]:w-full [&_div]:flex [&_div]:justify-end px-2",
             },
         ];
 
@@ -42,10 +41,9 @@ export const PopularCollectionsTable = ({ collections, user }: PopularCollection
     return (
         <Table
             data-testid="PopularCollectionsTable"
+            headerClassName="hidden md-lg:table-header-group"
             variant="list"
             columns={columns}
-            activeSort={activeSort}
-            sortDirection={sortDirection}
             manualSortBy={true}
             data={collections}
             row={(collection: App.Data.Collections.PopularCollectionData) => (

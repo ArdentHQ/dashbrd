@@ -12,12 +12,14 @@ export const TableHeader = <RowDataType extends Record<never, unknown>>({
     onSort,
     activeSort,
     sortDirection,
+    className,
 }: {
     onSort?: (column: HeaderGroup<RowDataType>) => void;
     headerGroups: Array<HeaderGroup<RowDataType>>;
     variant?: TableHeaderVariant;
     activeSort?: string;
     sortDirection?: "asc" | "desc";
+    className?: string;
 }): JSX.Element => {
     const renderColumn = (column: HeaderGroup<RowDataType>, thIndex: number): JSX.Element => {
         const isSorted = activeSort != null ? column.id === activeSort : column.isSorted;
@@ -94,7 +96,7 @@ export const TableHeader = <RowDataType extends Record<never, unknown>>({
     };
 
     return (
-        <thead>
+        <thead className={className}>
             {headerGroups.map((headerGroup, index) => (
                 <tr
                     className="border-b border-theme-secondary-300 dark:border-theme-dark-700"

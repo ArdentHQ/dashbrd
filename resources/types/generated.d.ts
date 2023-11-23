@@ -210,9 +210,12 @@ declare namespace App.Data.Collections {
         slug: string;
         chainId: App.Enums.Chain;
         floorPrice: string | null;
-        floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        volume: string | null;
+        volumeFiat: number | null;
+        volumeCurrency: string | null;
+        volumeDecimals: number | null;
         image: string | null;
     };
     export type SimpleNftData = {
