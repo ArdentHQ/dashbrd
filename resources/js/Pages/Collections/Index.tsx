@@ -1,5 +1,5 @@
 import { Head, usePage } from "@inertiajs/react";
-import { FeaturedCollectionsSlider } from "./Components/FeaturedCollections";
+import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 const CollectionsIndex = ({
@@ -15,7 +15,7 @@ const CollectionsIndex = ({
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
             <div>
-                <FeaturedCollectionsSlider featuredCollections={featuredCollections} />
+                <FeaturedCollectionsCarousel featuredCollections={featuredCollections} />
             </div>
         </DefaultLayout>
     );
