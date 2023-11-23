@@ -64,7 +64,7 @@ class CollectionFeaturedData extends Data
             openSeaSlug: $collection->extra_attributes->get('opensea_slug'),
             website: $collection->website(),
             nftsCount: $collection->nfts_count,
-            nfts: GalleryNftData::collection($collection->nfts),
+            nfts: GalleryNftData::collection($collection->cachedNfts),
             isFeatured: $collection->is_featured,
             description: $collection->description,
             volume: $collection->volume,

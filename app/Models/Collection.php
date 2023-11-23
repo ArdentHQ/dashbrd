@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
+use App\Models\Nft;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
@@ -33,6 +34,7 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  * @property ?string $floor_price
  * @property ?string $last_indexed_token_number
  * @property ?string $image
+ * @property \Illuminate\Database\Eloquent\Collection<int,Nft>|null $cachedNfts
  *
  * @method BelongsToMany<Article> articlesWithCollections()
  */
@@ -43,6 +45,11 @@ class Collection extends Model
     const TWITTER_URL = 'https://x.com/';
 
     const DISCORD_URL = 'https://discord.gg/';
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection<int, Nft>|null
+     */
+    public $cachedNfts = null;
 
     /**
      * @var array<string>
