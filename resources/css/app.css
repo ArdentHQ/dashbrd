@@ -51,32 +51,19 @@
 }
 
 .featured-collections-overlay {
-    background-image: linear-gradient(
-        180deg,
-        rgb(var(--theme-color-primary-50)) 47.38%,
-        transparent 216.53%
-    );
+    background-image: linear-gradient(180deg, rgb(var(--theme-color-primary-50)) 47.38%, transparent 216.53%);
 }
 
 .dark .featured-collections-overlay {
-    background-image: linear-gradient(
-        181deg,
-        rgb(var(--theme-color-dark-800)) 41.03%,
-        transparent 208.87%);
+    background-image: linear-gradient(181deg, rgb(var(--theme-color-dark-800)) 41.03%, transparent 208.87%);
 }
 
 @media (min-width: 960px) {
     .featured-collections-overlay {
-        background-image: linear-gradient(
-            90deg,
-            rgb(var(--theme-color-primary-50)) 55.67%,
-            transparent 151.85%);
+        background-image: linear-gradient(90deg, rgb(var(--theme-color-primary-50)) 55.67%, transparent 151.85%);
     }
 
     .dark .featured-collections-overlay {
-        background-image: linear-gradient(
-            90deg,
-            rgb(var(--theme-color-dark-800)) 55.67%,
-            transparent 151.85%);
+        background-image: linear-gradient(90deg, rgb(var(--theme-color-dark-800)) 55.67%, transparent 151.85%);
     }
 }
