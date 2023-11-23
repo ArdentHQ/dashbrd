@@ -44,6 +44,7 @@ class Nft extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'burned_at' => 'datetime',
         'last_viewed_at' => 'datetime',
         'last_activity_fetched_at' => 'datetime',
         'extra_attributes' => SchemalessAttributes::class,
@@ -292,5 +293,10 @@ class Nft extends Model
                 'collection',
                 $collections->firstWhere('id', $nft->collection_id)
             ));
+    }
+
+    public function isBurned(): bool
+    {
+        return $this->burned_at !== null;
     }
 }

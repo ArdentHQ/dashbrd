@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Data\Web3\CollectionActivity;
+use App\Enums\NftTransferType;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
 use App\Models\NftActivity;
@@ -89,8 +90,6 @@ class FetchCollectionActivity implements ShouldQueue
         }
 
         $formattedActivities = $activities
-            // Sometimes the request is returning transfers that are not labeled as any of the values we expect.
-            // There were times when Mnemonic returned `LABEL_BURN` transfers, so we're filtering them here.
             ->reject(fn ($activity) => $activity->type === null)
             ->unique->key()
             ->map(fn (CollectionActivity $activity) => [
@@ -114,6 +113,12 @@ class FetchCollectionActivity implements ShouldQueue
             ]);
 
             return;
+        }
+
+        $burnActivities = $activities->filter(fn ($activity) => $activity->type === NftTransferType::Burn);
+
+        if ($burnActivities->isNotEmpty()) {
+            SyncBurnedNfts::dispatch($burnActivities);
         }
 
         DB::transaction(function () use ($formattedActivities, $activities) {
