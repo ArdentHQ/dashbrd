@@ -29,6 +29,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -45,9 +46,9 @@ class CollectionController extends Controller
             ->get();
 
         $featuredCollections->each(function (Collection $collection) {
-            $collection->nfts = Cache::remember('featuredNftsForCollection'.$collection->id, 60 * 12, function () use ($collection) {
+            $collection->setNfts(Cache::remember('featuredNftsForCollection'.$collection->id, 60 * 12, function () use ($collection) {
                 return $collection->nfts()->inRandomOrder()->take(3)->get();
-            });
+            }));
         });
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
