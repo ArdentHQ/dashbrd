@@ -36,6 +36,7 @@ class Nft extends Model
         'name',
         'extra_attributes',
         'token_number',
+        'burned_at',
     ];
 
     /**
