@@ -33,7 +33,7 @@ const CollectionsIndex = ({
 
             <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
-              
+
                 <div className="mt-4">
                     <PopularCollectionsSorting active={activeSort} />
                 </div>
