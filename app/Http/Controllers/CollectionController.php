@@ -29,6 +29,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -43,9 +44,16 @@ class CollectionController extends Controller
 
         $collectionQuery = $user ? $user->collections() : Collection::query();
 
+        $networkFilter = match ($request->query('chain')) {
+            'polygon' => 1, // Polygon network ID
+            'ethereum' => 3, // Ethereum network ID
+            default => null,
+        };
+
         /** @var LengthAwarePaginator<Collection> $collections */
         $collections = $collectionQuery
                     ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                    ->when($networkFilter, fn ($q) => $q->where('collections.network_id', $networkFilter))
                     ->orderByFloorPrice('desc', $currency)
                     ->with([
                         'network',
@@ -55,6 +63,9 @@ class CollectionController extends Controller
 
         return Inertia::render('Collections/Index', [
             'activeSort' => $request->query('sort') === 'floor-price' ? 'floor-price' : 'top',
+            'filters' => [
+                'chain' => $request->query('chain') ?? null,
+            ],
             'title' => trans('metatags.collections.title'),
             'collections' => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
