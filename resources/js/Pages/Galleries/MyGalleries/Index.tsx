@@ -174,6 +174,7 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
 
         showToast({
             message: t("pages.galleries.my_galleries.draft_succesfully_deleted"),
+            type: "success",
         });
     };
 

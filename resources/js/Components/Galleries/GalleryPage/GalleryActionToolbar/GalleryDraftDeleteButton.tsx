@@ -36,6 +36,7 @@ export const GalleryDraftDeleteButton = ({
                 onFinish: () => {
                     showToast({
                         message: t("pages.galleries.my_galleries.draft_succesfully_deleted"),
+                        type: "success",
                     });
                 },
             },
