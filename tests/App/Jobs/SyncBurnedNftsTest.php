@@ -44,7 +44,7 @@ it('does not run if collection is marked as spam', function () {
             totalNative: 0,
             totalUsd: 0,
             extraAttributes: [],
-        )
+        ),
     ]);
 
     (new SyncBurnedNfts($collection, $activity))->handle();
@@ -77,7 +77,7 @@ it('does not run if activity indexing is disabled', function () {
             totalNative: 0,
             totalUsd: 0,
             extraAttributes: [],
-        )
+        ),
     ]);
 
     (new SyncBurnedNfts($collection, $activity))->handle();
@@ -112,7 +112,7 @@ it('does not run if collection is blacklisted from indexing activity', function 
             totalNative: 0,
             totalUsd: 0,
             extraAttributes: [],
-        )
+        ),
     ]);
 
     (new SyncBurnedNfts($collection, $activity))->handle();
@@ -159,7 +159,7 @@ it('updates burn timestamp for nfts', function () {
             totalNative: 0,
             totalUsd: 0,
             extraAttributes: [],
-        )
+        ),
     ]);
 
     (new SyncBurnedNfts($collection, $activity))->handle();
@@ -209,7 +209,7 @@ it('logs an error if there are some NFTs that have previously been burned', func
             totalNative: 0,
             totalUsd: 0,
             extraAttributes: [],
-        )
+        ),
     ]);
 
     (new SyncBurnedNfts($collection, $activity))->handle();
