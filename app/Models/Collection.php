@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
-use App\Models\Nft;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
