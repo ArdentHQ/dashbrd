@@ -49,7 +49,7 @@ class CollectionController extends Controller
                 return $collection->nfts()->inRandomOrder()->take(3)->get();
             });
         });
-      
+
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
         $collectionQuery = $user ? $user->collections() : Collection::query();

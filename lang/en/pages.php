@@ -124,7 +124,7 @@ return [
         'featured' => [
             'title' => 'Featured Collections',
             'button' => 'Explore Collection',
-        ]
+        ],
     ],
 
     'nfts' => [

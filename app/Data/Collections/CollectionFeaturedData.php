@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Data\Collections;
 
 use App\Data\Gallery\GalleryNftData;
-use App\Data\Nfts\NftData;
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
