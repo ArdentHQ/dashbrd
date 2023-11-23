@@ -1,4 +1,5 @@
-import { type NodeWithChildren, remarkFigurePlugin } from "./remarkFigurePlugin";
+import { remarkFigurePlugin } from "./remarkFigurePlugin";
+import { type NodeWithChildren } from "./remarkPlugins.contract";
 
 describe("remarkFigurePlugin", () => {
     it("should transform tree correctly", () => {
