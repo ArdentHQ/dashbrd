@@ -439,7 +439,7 @@ it('has activity', function () {
     expect($third->activities->modelKeys())->toContain($activity4->id);
 });
 
-it("can determine whether the NFT was burned", function () {
+it('can determine whether the NFT was burned', function () {
     expect((new Nft([
         'burned_at' => null,
     ]))->isBurned())->toBeFalse();

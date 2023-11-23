@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Data\Web3\CollectionActivity;
 use App\Models\Collection;
 use App\Support\Queues;
 use DateTime;
@@ -21,7 +22,7 @@ class SyncBurnedNfts implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Create a new job instance.
+     * @param  LaravelCollection<int, CollectionActivity>  $activity
      */
     public function __construct(
         public Collection $collection,
@@ -46,7 +47,7 @@ class SyncBurnedNfts implements ShouldQueue
 
         if ($nfts->contains->isBurned()) {
             report(new RuntimeException(
-                "There are some NFTs that have been previously burned, yet we got another LABEL_BURN event for them. IDs: ".$nfts->filter->isBurned()->pluck('id')->join(',')
+                'There are some NFTs that have been previously burned, yet we got another LABEL_BURN event for them. IDs: '.$nfts->filter->isBurned()->pluck('id')->join(',')
             ));
         }
 
