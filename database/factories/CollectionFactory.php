@@ -38,6 +38,7 @@ class CollectionFactory extends Factory
                 'image' => fake()->imageUrl(360, 360, 'animals', true),
                 'website' => fake()->url(),
             ]),
+            'is_featured' => fn () => random_int(0, 1),
         ];
     }
 }
