@@ -141,7 +141,7 @@ it('should get featured collections for an article', function () {
 
     $response = $this->getJson(route('articles'))->json('articles');
 
-    expect(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(2);
+    expect(count($response['paginated']['data'][0]['collections']))->toEqual(2);
 });
 
 it('should keep highlighted articles regardless of the sorting', function () {
