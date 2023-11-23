@@ -36,7 +36,7 @@ class Article extends Model implements HasMedia, Viewable
 
     public function resolveRouteBinding($value, $field = null)
     {
-        return Article::query()->withFeaturedCollections()->where('articles.slug', $value)->first();
+        return Article::query()->withRelatedCollections()->where('articles.slug', $value)->first();
     }
 
     public function registerMediaCollections(): void
@@ -142,15 +142,9 @@ class Article extends Model implements HasMedia, Viewable
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeWithFeaturedCollections(Builder $query): Builder
+    public function scopeWithRelatedCollections(Builder $query): Builder
     {
-        return $query->with(['collections' => function ($query) {
-            $query->select([
-                'collections.name',
-                'collections.slug',
-                'collections.extra_attributes->image as image',
-            ]);
-        }]);
+        return $query->with('collections:name,slug,extra_attributes');
     }
 
     public function metaDescription(): string
