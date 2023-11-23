@@ -20,7 +20,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class CollectionFeaturedData extends Data
 {
     /**
-     * @param  DataCollection<int, SimpleNftData>  $nfts
+     * @param  DataCollection<int, GalleryNftData>  $nfts
      */
     public function __construct(
         public int $id,
