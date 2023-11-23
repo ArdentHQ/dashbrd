@@ -46,9 +46,9 @@ class CollectionController extends Controller
             ->get();
 
         $featuredCollections->each(function (Collection $collection) {
-            $collection->setNfts(Cache::remember('featuredNftsForCollection'.$collection->id, 60 * 12, function () use ($collection) {
+            $collection->nfts = Cache::remember('featuredNftsForCollection'.$collection->id, 60 * 12, function () use ($collection) {
                 return $collection->nfts()->inRandomOrder()->take(3)->get();
-            }));
+            });
         });
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;

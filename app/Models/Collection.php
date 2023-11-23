@@ -531,9 +531,4 @@ class Collection extends Model
     {
         return SpamContract::isSpam($this->address, $this->network);
     }
-
-    public function setNfts(array $nfts): void
-    {
-        $this->nfts = $nfts;
-    }
 }
