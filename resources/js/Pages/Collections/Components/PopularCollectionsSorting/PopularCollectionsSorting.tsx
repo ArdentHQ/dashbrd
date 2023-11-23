@@ -4,11 +4,11 @@ import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@/Components/Tabs";
 
-interface Properties {
+export interface PopularCollectionsSortingProperties {
     active: "top" | "floor-price";
 }
 
-export const PopularCollectionsSorting = ({ active }: Properties): JSX.Element => {
+export const PopularCollectionsSorting = ({ active }: PopularCollectionsSortingProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const sortBy = (sort: "top" | "floor-price"): void => {
@@ -30,9 +30,10 @@ export const PopularCollectionsSorting = ({ active }: Properties): JSX.Element =
     return (
         <Tab.Group as="div">
             <Tab.List>
-                <Tabs>
+                <Tabs widthClassName="w-full md-lg:w-auto">
                     <Tab as={Fragment}>
                         <Tabs.Button
+                            className="w-1/2 md-lg:w-auto"
                             selected={active === "top"}
                             onClick={() => {
                                 sortBy("top");
@@ -44,6 +45,7 @@ export const PopularCollectionsSorting = ({ active }: Properties): JSX.Element =
 
                     <Tab as={Fragment}>
                         <Tabs.Button
+                            className="w-1/2 md-lg:w-auto"
                             selected={active === "floor-price"}
                             onClick={() => {
                                 sortBy("floor-price");

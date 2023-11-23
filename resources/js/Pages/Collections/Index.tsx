@@ -1,6 +1,7 @@
 import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
+import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
@@ -32,9 +33,13 @@ const CollectionsIndex = ({
             <Head title={title} />
 
             <div className="mx-6 sm:mx-8 2xl:mx-0">
-                <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
+                <div className="flex items-center">
+                    <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
-                <div className="mt-4">
+                    <PopularCollectionsFilterPopover active={activeSort} />
+                </div>
+
+                <div className="mt-4 hidden md-lg:block">
                     <PopularCollectionsSorting active={activeSort} />
                 </div>
 
