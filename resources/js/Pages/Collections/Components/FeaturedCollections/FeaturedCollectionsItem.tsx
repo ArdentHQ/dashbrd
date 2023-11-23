@@ -33,7 +33,6 @@ export const FeaturedCollectionsItem = ({
 
     return (
         <div className="relative">
-            {/* Featured Collections Background */}
             <div className="collection-banner absolute left-0 top-0 -z-10 h-full w-full ">
                 <Img
                     className="h-full w-full object-cover"
@@ -46,12 +45,9 @@ export const FeaturedCollectionsItem = ({
                 <div className="featured-collections-overlay absolute left-0 top-0 h-full w-full" />
             </div>
 
-            {/* Featured Collections Content */}
             <div className=" left-0 top-0 z-10 w-full p-6 md-lg:p-8">
                 <div className="flex flex-col gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
-                    {/* Featured Collections Data */}
                     <div className="flex flex-col md-lg:max-w-[448px] md-lg:py-2 xl:w-[460px] 2xl:max-w-[600px]">
-                        {/* Featured Collections Header */}
                         <div className="flex flex-row gap-4">
                             <div className="relative h-12 w-12 shrink-0">
                                 <Img
@@ -79,12 +75,10 @@ export const FeaturedCollectionsItem = ({
                             </div>
                         </div>
 
-                        {/* Featured Collections Body */}
                         <div className="my-3 line-clamp-4 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
                             {truncateDescription(data.description)}
                         </div>
 
-                        {/* Featured Collections Footer */}
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between md-lg:flex-col md-lg:items-start">
                             <div className="flex flex-row items-center justify-start">
                                 <GridHeader
@@ -132,7 +126,6 @@ export const FeaturedCollectionsItem = ({
                         </div>
                     </div>
 
-                    {/* Featured Collections Nfts */}
                     <div className="grid w-full grid-flow-col items-center gap-3 lg:w-fit">
                         <CollectionNft
                             nft={data.nfts[0]}
