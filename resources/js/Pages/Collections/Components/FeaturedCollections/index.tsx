@@ -1,1 +1,2 @@
-export * from "./FeaturedCollectionsSlider";
+export * from "./FeaturedCollectionsCarousel";
+export * from "./FeaturedCollectionsItem";
