@@ -118,7 +118,7 @@ class FetchCollectionActivity implements ShouldQueue
         $burnActivities = $activities->filter(fn ($activity) => $activity->type === NftTransferType::Burn);
 
         if ($burnActivities->isNotEmpty()) {
-            SyncBurnedNfts::dispatch($burnActivities);
+            SyncBurnedNfts::dispatch($this->collection, $burnActivities);
         }
 
         DB::transaction(function () use ($formattedActivities, $activities) {

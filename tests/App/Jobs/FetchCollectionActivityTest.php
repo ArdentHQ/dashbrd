@@ -6,6 +6,7 @@ use App\Data\Web3\CollectionActivity;
 use App\Enums\Chain;
 use App\Enums\NftTransferType;
 use App\Jobs\FetchCollectionActivity;
+use App\Jobs\SyncBurnedNfts;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\NftActivity;
@@ -138,6 +139,100 @@ it('does not dispatch another job in the chain if there are no activities with t
 
     expect($collection->is_fetching_activity)->toBeFalse();
     expect($collection->activity_updated_at)->not->toBeNull();
+});
+
+it('dispatches the job to sync burned NFTs if there are some burn events', function () {
+    $collection = Collection::factory()->create([
+        'is_fetching_activity' => false,
+        'network_id' => Network::polygon()->first()->id,
+        'activity_updated_at' => null,
+    ]);
+
+    Bus::fake();
+
+    $mock = $this->mock(
+        MnemonicWeb3DataProvider::class,
+        fn ($mock) => $mock->shouldReceive('getCollectionActivity')->once()->andReturn(collect([
+            new CollectionActivity(
+                contractAddress: 'test-address',
+                tokenId: '1',
+                sender: 'test-sender',
+                recipient: 'test-recipient',
+                txHash: 'test-tx-hash',
+                logIndex: '1',
+                type: NftTransferType::Mint,
+                timestamp: now(),
+                totalNative: 0,
+                totalUsd: 0,
+                extraAttributes: [],
+            ),
+            new CollectionActivity(
+                contractAddress: 'test-address',
+                tokenId: '2',
+                sender: 'test-sender',
+                recipient: 'test-recipient',
+                txHash: 'test-tx-hash',
+                logIndex: '1',
+                type: NftTransferType::Burn,
+                timestamp: now(),
+                totalNative: 0,
+                totalUsd: 0,
+                extraAttributes: [],
+            ),
+        ]))
+    );
+
+    (new FetchCollectionActivity($collection))->handle($mock);
+
+    Bus::assertDispatched(SyncBurnedNfts::class, function ($job) use ($collection) {
+        return $job->collection->is($collection);
+    });
+});
+
+it('does not the job to sync burned NFTs if there are no burn events', function () {
+    $collection = Collection::factory()->create([
+        'is_fetching_activity' => false,
+        'network_id' => Network::polygon()->first()->id,
+        'activity_updated_at' => null,
+    ]);
+
+    Bus::fake();
+
+    $mock = $this->mock(
+        MnemonicWeb3DataProvider::class,
+        fn ($mock) => $mock->shouldReceive('getCollectionActivity')->once()->andReturn(collect([
+            new CollectionActivity(
+                contractAddress: 'test-address',
+                tokenId: '1',
+                sender: 'test-sender',
+                recipient: 'test-recipient',
+                txHash: 'test-tx-hash',
+                logIndex: '1',
+                type: NftTransferType::Mint,
+                timestamp: now(),
+                totalNative: 0,
+                totalUsd: 0,
+                extraAttributes: [],
+            ),
+            new CollectionActivity(
+                contractAddress: 'test-address',
+                tokenId: '2',
+                sender: 'test-sender',
+                recipient: 'test-recipient',
+                txHash: 'test-tx-hash',
+                logIndex: '1',
+                type: NftTransferType::Mint,
+                timestamp: now(),
+                totalNative: 0,
+                totalUsd: 0,
+                extraAttributes: [],
+            ),
+        ]))
+    );
+
+    (new FetchCollectionActivity($collection))->handle($mock);
+
+    Bus::assertNothingDispatched();
 });
 
 it('does not dispatch another job in the chain if there are less than 500 activities returned from the provider', function () {
