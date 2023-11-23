@@ -2,11 +2,11 @@ import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
+import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 
 interface CollectionsIndexProperties extends PageProps {
     activeSort: "top" | "floor-price";
