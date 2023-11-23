@@ -13,6 +13,7 @@ export const Table = <RowDataType extends Record<never, unknown>>({
     columns,
     hideHeader = false,
     className,
+    headerClassName,
     initialState,
     rowsPerPage,
     currentPage = 1,
@@ -91,6 +92,7 @@ export const Table = <RowDataType extends Record<never, unknown>>({
                             onSort={onSort}
                             activeSort={activeSort}
                             sortDirection={sortDirection}
+                            className={headerClassName}
                         />
                     )}
 
