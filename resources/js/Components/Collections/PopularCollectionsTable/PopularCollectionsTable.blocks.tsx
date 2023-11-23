@@ -51,8 +51,7 @@ export const PopularCollectionName = ({
                     </Tooltip>
 
                     <p className="block truncate text-xs font-medium leading-4.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-sm md:leading-5.5 md-lg:hidden">
-                        {t("common.volume")}
-
+                        {t("common.volume")}{" "}
                         <FormatCrypto
                             value={collection.volume ?? "0"}
                             token={{

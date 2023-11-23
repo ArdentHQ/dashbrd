@@ -42,7 +42,7 @@ export const PopularCollectionsTableItem = ({
             <TableCell
                 className="hidden xl:table-cell"
                 innerClassName="justify-end"
-                paddingClassName="px-2 md:px-5 "
+                paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
                 <PopularCollectionFloorPrice collection={collection} />

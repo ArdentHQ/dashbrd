@@ -27,6 +27,7 @@ export const PopularCollectionsTable = ({ collections, user }: PopularCollection
                 headerClassName: "hidden md-lg:table-cell",
                 Header: t("common.volume").toString(),
                 id: "volume",
+                className: "justify-end [&_div]:w-full [&_div]:flex [&_div]:justify-end px-2",
             },
         ];
 
