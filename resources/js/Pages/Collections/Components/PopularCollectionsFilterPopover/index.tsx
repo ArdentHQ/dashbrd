@@ -1,1 +1,1 @@
-export * from "./PopularCollectionsFilterDropdown";
+export * from "./PopularCollectionsFilterPopover";

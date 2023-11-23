@@ -7,7 +7,7 @@ import {
     type PopularCollectionsSortingProperties,
 } from "@/Pages/Collections/Components/PopularCollectionsSorting/PopularCollectionsSorting";
 
-export const PopularCollectionsFilterDropdown = ({ active }: PopularCollectionsSortingProperties): JSX.Element => {
+export const PopularCollectionsFilterPopover = ({ active }: PopularCollectionsSortingProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
