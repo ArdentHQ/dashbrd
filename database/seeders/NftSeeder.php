@@ -40,6 +40,7 @@ class NftSeeder extends Seeder
                     'website' => $collectionArray['website'],
                 ]),
                 'created_at' => fake()->dateTimeBetween('-2 months'),
+                'is_featured' => $collectionArray['is_featured'] ?? false,
             ]);
 
             if (Feature::active(Features::Collections->value)) {
@@ -122,6 +123,7 @@ class NftSeeder extends Seeder
                     ['Background', 'Cosmic Purple', TraitDisplayType::Property, 6, 0.06],
                     ['Beak', 'Small', TraitDisplayType::Property, 4125, 42.15],
                 ],
+                'is_featured' => true,
             ],
             [
                 // https://opensea.io/collection/timelessnfts
@@ -158,6 +160,7 @@ class NftSeeder extends Seeder
                 'traits' => [
                     ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
                 ],
+                'is_featured' => true,
             ],
             [
                 // https://opensea.io/collection/alphadogs
@@ -176,6 +179,7 @@ class NftSeeder extends Seeder
                 'traits' => [
                     ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
                 ],
+                'is_featured' => true,
             ],
             [
                 // https://opensea.io/collection/devilvalley
