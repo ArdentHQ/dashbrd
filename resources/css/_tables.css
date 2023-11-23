@@ -85,6 +85,13 @@
     @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl border-y border-r border-theme-secondary-300 dark:border-theme-dark-700;
 }
 
+@media (max-width: 959px) {
+    .table-list tbody tr td.unique-cell-until-md-lg::before {
+        content: "";
+        @apply pointer-events-none absolute inset-0 z-10 -mx-3 block h-full w-auto rounded-xl border-y border-r border-theme-secondary-300 dark:border-theme-dark-700;
+    }
+}
+
 .table-list tbody > tr,
 .table-list tbody > tr > td {
     @apply relative z-0;

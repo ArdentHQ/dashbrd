@@ -9,6 +9,7 @@ use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionTraitFilterData;
+use App\Data\Collections\PopularCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
@@ -48,9 +49,25 @@ class CollectionController extends Controller
                 return $collection->nfts()->inRandomOrder()->take(3)->get();
             });
         });
+      
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
+
+        $collectionQuery = $user ? $user->collections() : Collection::query();
+
+        /** @var LengthAwarePaginator<Collection> $collections */
+        $collections = $collectionQuery
+            ->orderByFloorPrice('desc', $currency)
+            ->with([
+                'network',
+                'floorPriceToken',
+            ])
+            ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
             'title' => trans('metatags.collections.title'),
+            'collections' => PopularCollectionData::collection(
+                $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
+            ),
             'featuredCollections' => $featuredCollections->map(function (Collection $collection) use ($user) {
                 return CollectionFeaturedData::fromModel($collection, $user ? $user->currency() : CurrencyCode::USD);
             }),

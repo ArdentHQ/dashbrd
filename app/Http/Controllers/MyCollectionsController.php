@@ -18,7 +18,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class MyCollectionsController extends Controller
 {
     public function index(Request $request): Response|JsonResponse|RedirectResponse
@@ -47,7 +46,7 @@ class MyCollectionsController extends Controller
         $selectedChainIds = array_filter($selectedChainIds, fn ($id) => is_numeric($id));
 
         if ($showHidden && $hiddenCollections->isEmpty()) {
-            return redirect()->route('collections', $request->except('showHidden'));
+            return redirect()->route('my-collections', $request->except('showHidden'));
         }
 
         $cache = new UserCache($user);

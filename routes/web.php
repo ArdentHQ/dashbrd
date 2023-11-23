@@ -87,7 +87,6 @@ Route::group(['prefix' => 'articles', 'middleware' => 'features:articles'], func
     Route::get('{article:slug}', [ArticleController::class, 'show'])->name('articles.view');
 });
 
-
 Route::group(['middleware' => 'features:collections'], function () {
     Route::group(['prefix' => 'my-collections'], function() {
         Route::get('', [MyCollectionsController::class, 'index'])->name('my-collections')->middleware(EnsureOnboarded::class);
