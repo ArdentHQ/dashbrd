@@ -1,19 +1,7 @@
 import html from "rehype-stringify";
 import remark2rehype from "remark-rehype";
 import { unified } from "unified";
-import { type Node } from "unist";
-
-export interface NodeWithChildren extends Node {
-    children: NodeWithChildren[];
-    alt?: string;
-    url?: string;
-    value?: string;
-}
-
-interface NodeOptionalChildren extends Omit<Node, "children"> {
-    children?: NodeWithChildren[];
-    value?: string;
-}
+import { type NodeOptionalChildren, type NodeWithChildren } from "./remarkPlugins.contract";
 
 const transformTree = (tree: NodeWithChildren): void => {
     const nodesToReplace: Array<{
