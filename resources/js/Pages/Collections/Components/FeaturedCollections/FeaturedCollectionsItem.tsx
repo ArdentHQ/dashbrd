@@ -1,3 +1,4 @@
+import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
@@ -20,6 +21,9 @@ const truncateDescription = (
 
 const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.CollectionFeaturedData }): JSX.Element => {
     const { t } = useTranslation();
+
+    const defaultNftCardStyles =
+        "bg-white dark:bg-theme-dark-900 grid w-full h-full min-w-full lg:min-w-fit lg:w-52 lg:h-fit";
 
     const token: Pick<App.Data.Token.TokenData, "symbol" | "name" | "decimals"> = {
         name: "",
@@ -57,7 +61,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                         </div>
                     </div>
 
-                    <div className="my-3 line-clamp-4 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
+                    <div className="my-3 line-clamp-4 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200 lg:line-clamp-2 lg:h-12">
                         {truncateDescription(data.description)}
                     </div>
 
@@ -111,18 +115,18 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                 <div className="grid w-full grid-flow-col items-center gap-3 lg:w-fit">
                     <CollectionNft
                         nft={data.nfts[0]}
-                        classNames="bg-white dark:bg-theme-dark-900 grid w-full h-full min-w-full lg:min-w-fit lg:w-60"
+                        classNames={cn(defaultNftCardStyles, "grid")}
                     />
                     {data.nfts.length > 1 && (
                         <CollectionNft
                             nft={data.nfts[1]}
-                            classNames="bg-white dark:bg-theme-dark-900 sm:grid hidden w-full h-full min-w-full lg:min-w-fit lg:w-60"
+                            classNames={cn(defaultNftCardStyles, "sm:grid hidden")}
                         />
                     )}
                     {data.nfts.length > 2 && (
                         <CollectionNft
                             nft={data.nfts[2]}
-                            classNames="bg-white dark:bg-theme-dark-900 md:grid md-lg:hidden hidden w-full h-full min-w-full lg:min-w-fit lg:w-60 xl:grid"
+                            classNames={cn(defaultNftCardStyles, "md:grid md-lg:hidden hidden xl:grid")}
                         />
                     )}
                 </div>
