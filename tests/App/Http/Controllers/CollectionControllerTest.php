@@ -71,7 +71,7 @@ it('can cache 3 random nfts from a featured collection', function() {
 
     expect(count($cachedNfts))->toEqual(3);
 });
-/*
+
 it('can render the collections view page', function () {
     $user = createUser();
 
@@ -894,4 +894,3 @@ it('should not refresh collection activity if already requested', function () {
 
     Bus::assertNotDispatched(FetchCollectionActivity::class);
 });
- */
