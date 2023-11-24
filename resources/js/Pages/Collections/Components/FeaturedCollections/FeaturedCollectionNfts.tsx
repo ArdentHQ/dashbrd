@@ -8,8 +8,9 @@ export const FeaturedCollectionNfts = ({ nfts }: { nfts: App.Data.Gallery.Galler
 
     return (
         <div
-            className={cn("grid w-full max-w-[280px] grid-flow-col items-center gap-3 sm:max-w-none lg:w-fit", {
-                "sm:max-w-[320px]": nfts.length === 1,
+            className={cn("grid w-full max-w-[280px] grid-flow-col items-center gap-3 lg:w-fit", {
+                "sm:max-w-[320px] md:max-w-[240px]": nfts.length === 1,
+                "sm:max-w-none": nfts.length > 1,
             })}
         >
             <CollectionNft
