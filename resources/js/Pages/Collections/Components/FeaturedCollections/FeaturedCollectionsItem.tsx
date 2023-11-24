@@ -1,13 +1,12 @@
 import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { FeaturedCollectionStats } from "./FeaturedCollectionStats";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
-import { GridHeader } from "@/Components/GridHeader";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
-import { FormatCrypto } from "@/Utils/Currency";
 
 const truncateDescription = (
     description: App.Data.Collections.CollectionFeaturedData["description"],
@@ -24,12 +23,6 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
 
     const defaultNftCardStyles =
         "bg-white dark:bg-theme-dark-900 grid w-full h-full min-w-full lg:min-w-fit lg:w-52 lg:h-fit";
-
-    const token: Pick<App.Data.Token.TokenData, "symbol" | "name" | "decimals"> = {
-        name: "",
-        symbol: data.floorPriceCurrency ?? "",
-        decimals: data.floorPriceDecimals ?? 18,
-    };
     return (
         <div className="left-0 top-0 z-10 w-full p-6 md-lg:p-8">
             <div className="flex flex-col gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
@@ -66,40 +59,13 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                     </div>
 
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between md-lg:flex-col md-lg:items-start">
-                        <div className="flex flex-row items-center justify-start">
-                            <GridHeader
-                                className="!px-0"
-                                wrapperClassName="w-fit"
-                                title={t("common.nfts")}
-                                value={data.nftsCount}
-                            />
-                            <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700 sm:mx-6" />
-                            <GridHeader
-                                className="!px-0"
-                                wrapperClassName="w-fit"
-                                title={t("common.floor_price")}
-                                value={
-                                    <FormatCrypto
-                                        value={data.floorPrice ?? "0"}
-                                        token={token}
-                                    />
-                                }
-                            />
-                            <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700 sm:mx-6" />
-                            <GridHeader
-                                className="!px-0"
-                                wrapperClassName="w-fit"
-                                title={t("common.volume", { frequency: "" })}
-                                value={
-                                    <FormatCrypto
-                                        value={data.volume ?? "0"}
-                                        token={token}
-                                        maximumFractionDigits={2}
-                                    />
-                                }
-                            />
-                        </div>
-
+                        <FeaturedCollectionStats
+                            floorPrice={data.floorPrice}
+                            floorPriceCurrency={data.floorPriceCurrency}
+                            floorPriceDecimals={data.floorPriceDecimals}
+                            nftsCount={data.nftsCount}
+                            volume={data.volume}
+                        />
                         <ButtonLink
                             className="w-full justify-center sm:h-fit sm:w-auto"
                             variant="primary"
