@@ -41,7 +41,6 @@ const CollectionsIndex = ({
             route("collections"),
             { chain },
             {
-                only: ["collections", "activeSort"],
                 preserveScroll: true,
                 preserveState: true,
             },

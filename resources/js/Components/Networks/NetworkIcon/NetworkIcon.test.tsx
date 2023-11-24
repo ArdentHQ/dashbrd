@@ -27,6 +27,20 @@ describe("NetworkIcon", () => {
         expect(screen.getByTestId("Polygon__text")).toHaveTextContent("Polygon");
     });
 
+    it.each([
+        [1, "Ethereum"],
+        [137, "Polygon"],
+    ])("should render network with a simple icon", (networkId, iconName) => {
+        render(
+            <NetworkIcon
+                networkId={networkId as 1 | 137}
+                simpleIcon={true}
+            />,
+        );
+
+        expect(screen.getByTestId(`icon-${iconName}`)).toBeInTheDocument();
+    });
+
     it("should render ethereum logo for ethereum networks", () => {
         render(
             <NetworkIcon
