@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Popover } from "@/Components/Popover";
 import { Tooltip } from "@/Components/Tooltip";
-import { type ChainFiltersProperties } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { ChainFilters, type ChainFiltersProperties } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import {
     PopularCollectionsSorting,
     type PopularCollectionsSortingProperties,
@@ -37,10 +37,15 @@ export const PopularCollectionsFilterPopover = ({ sortBy, setSortBy, chain, setC
                                         {t("common.filter")}
                                     </div>
 
-                                    <div className="px-6 py-3">
+                                    <div className="space-y-3 px-6 py-3">
                                         <PopularCollectionsSorting
                                             sortBy={sortBy}
                                             setSortBy={setSortBy}
+                                        />
+
+                                        <ChainFilters
+                                            chain={chain}
+                                            setChain={setChain}
                                         />
                                     </div>
                                 </div>
