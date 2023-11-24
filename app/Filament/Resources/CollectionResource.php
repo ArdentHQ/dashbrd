@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -72,14 +73,14 @@ class CollectionResource extends Resource
                             ->url(fn (Collection $collection) => $collection->website())
                             ->default('Unknown'),
 
-                TextColumn::make('is_featured')
-                            ->label('Currently Featured')
-                            ->getStateUsing(fn (Collection $collection) => $collection->is_featured ? 'Yes' : 'No')
+                IconColumn::make('is_featured')
+                            ->label('Featured')
+                            ->boolean()
                             ->sortable(),
             ])
             ->filters([
                 Filter::make('is_featured')
-                    ->label('Currently Featured')
+                    ->label('Featured')
                     ->query(fn (Builder $query): Builder => $query->where('is_featured', true)),
             ])
             ->actions([
