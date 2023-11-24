@@ -162,4 +162,6 @@ return [
     'draft' => 'Draft',
     'delete_draft' => 'Delete Draft',
     'share_on' => 'Share on {{platform}}',
+    'top' => 'Top',
+    'all_chains' => 'All chains',
 ];

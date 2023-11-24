@@ -312,6 +312,25 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeFilterByChainId(Builder $query, ?int $chainId): Builder
+    {
+        if (empty($chainId)) {
+            return $query;
+        }
+
+        /** @var Network $network */
+        $network = Network::query()
+            ->select('id')
+            ->where('networks.chain_id', $chainId)
+            ->first();
+
+        return $query->where('collections.network_id', $network->id);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeSearch(Builder $query, User $user, ?string $searchQuery): Builder
     {
         if ($searchQuery === null || $searchQuery === '') {
