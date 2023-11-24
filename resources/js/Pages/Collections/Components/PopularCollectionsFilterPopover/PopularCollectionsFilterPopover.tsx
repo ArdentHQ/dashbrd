@@ -2,15 +2,15 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Popover } from "@/Components/Popover";
 import { Tooltip } from "@/Components/Tooltip";
+import { type ChainFiltersProperties } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import {
     PopularCollectionsSorting,
     type PopularCollectionsSortingProperties,
 } from "@/Pages/Collections/Components/PopularCollectionsSorting/PopularCollectionsSorting";
 
-export const PopularCollectionsFilterPopover = ({
-    sortBy,
-    setSortBy,
-}: PopularCollectionsSortingProperties): JSX.Element => {
+type Properties = PopularCollectionsSortingProperties & ChainFiltersProperties;
+
+export const PopularCollectionsFilterPopover = ({ sortBy, setSortBy, chain, setChain }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     return (

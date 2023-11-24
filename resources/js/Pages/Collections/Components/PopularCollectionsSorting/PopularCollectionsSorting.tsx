@@ -3,10 +3,11 @@ import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@/Components/Tabs";
 
-export type PopularCollectionsSortBy = "top" | "floor-price";
+// null means "top"
+export type PopularCollectionsSortBy = "floor-price";
 export interface PopularCollectionsSortingProperties {
-    sortBy: PopularCollectionsSortBy;
-    setSortBy: (sortBy: PopularCollectionsSortBy) => void;
+    sortBy: PopularCollectionsSortBy | null;
+    setSortBy: (sortBy: PopularCollectionsSortBy | null) => void;
 }
 
 export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollectionsSortingProperties): JSX.Element => {
@@ -19,9 +20,9 @@ export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollecti
                     <Tab as={Fragment}>
                         <Tabs.Button
                             className="w-1/2 md-lg:w-auto"
-                            selected={sortBy === "top"}
+                            selected={sortBy === null}
                             onClick={() => {
-                                setSortBy("top");
+                                setSortBy(null);
                             }}
                         >
                             {t("common.top")}

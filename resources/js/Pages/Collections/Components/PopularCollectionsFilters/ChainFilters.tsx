@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Tabs } from "@/Components/Tabs";
 
-interface Properties {
-    chain?: ChainFilter;
-    setChain: (chain?: ChainFilter) => void;
+export interface ChainFiltersProperties {
+    chain: ChainFilter | null;
+    setChain: (chain: ChainFilter | null) => void;
 }
 
 export enum ChainFilter {
@@ -14,7 +14,7 @@ export enum ChainFilter {
     ethereum = "ethereum",
 }
 
-export const ChainFilters = ({ chain, setChain }: Properties): JSX.Element => {
+export const ChainFilters = ({ chain, setChain }: ChainFiltersProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -23,9 +23,9 @@ export const ChainFilters = ({ chain, setChain }: Properties): JSX.Element => {
                 <Tabs>
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            selected={chain === undefined}
+                            selected={chain === null}
                             onClick={() => {
-                                setChain(undefined);
+                                setChain(null);
                             }}
                         >
                             {t("common.all_chains")}

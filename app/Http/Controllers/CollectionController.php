@@ -60,9 +60,9 @@ class CollectionController extends Controller
                                 ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
-            'activeSort' => $request->query('sort') === 'floor-price' ? 'floor-price' : 'top',
             'filters' => [
                 'chain' => $request->query('chain') ?? null,
+                'sort' => $request->query('sort') === 'floor-price' ? 'floor-price' : null,
             ],
             'title' => trans('metatags.collections.title'),
             'collections' => PopularCollectionData::collection(
