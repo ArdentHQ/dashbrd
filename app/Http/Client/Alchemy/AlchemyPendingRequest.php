@@ -210,8 +210,8 @@ class AlchemyPendingRequest extends PendingRequest
         $ownedNfts = Arr::get($data, 'ownedNfts', []);
 
         $nfts = collect($ownedNfts)
-            ->filter(fn ($nft) => $this->filterNftV3($nft, false))
-            ->map(fn ($nft) => $this->parseNftV3($nft, $network->id))
+            ->filter(fn ($nft) => $this->filterNft($nft, false))
+            ->map(fn ($nft) => $this->parseNft($nft, $network->id))
             ->values();
 
         return new Web3NftsChunk(
@@ -245,12 +245,12 @@ class AlchemyPendingRequest extends PendingRequest
 
         /** @var Collection<int, Nft>  $response */
         $nftItems = collect($response)
-            ->filter(fn ($nft) => $this->filterNftV3($nft))
+            ->filter(fn ($nft) => $this->filterNft($nft))
             ->map(function ($nft) use ($network) {
                 // With getNFTMetadataBatch, alchemy returns tokens numbers (`tokenId` field) as number instead of hex,
                 // thus the `convertTokenNumber flag to save it as is without attempting to convert from hex.
                 // See https://docs.alchemy.com/reference/sdk-getnftmetadatabatch#response-1
-                return $this->parseNftV3($nft, $network->id, convertTokenNumber: false);
+                return $this->parseNft($nft, $network->id, convertTokenNumber: false);
             })
             ->values();
 
@@ -290,8 +290,8 @@ class AlchemyPendingRequest extends PendingRequest
         $nextToken = Arr::get($data, 'pageKey');
 
         $nfts = collect($nfts)
-            ->filter(fn ($nft) => $this->filterNftV3($nft))
-            ->map(fn ($nft) => $this->parseNftV3($nft, $collection->network_id))
+            ->filter(fn ($nft) => $this->filterNft($nft))
+            ->map(fn ($nft) => $this->parseNft($nft, $collection->network_id))
             ->values();
 
         return new Web3NftsChunk(
@@ -582,11 +582,11 @@ class AlchemyPendingRequest extends PendingRequest
      */
     private function getNftExtraAttributes(array $nft): array
     {
-        $imageUrl = $this->tryExtractImageV3($nft);
+        $imageUrl = $this->tryExtractImage($nft);
 
         $images = array_merge(
             NftImageUrl::getAllSizes($imageUrl),
-            $this->tryExtractAssetUrlsV3($nft)
+            $this->tryExtractAssetUrls($nft)
         );
 
         return ['images' => $images];
