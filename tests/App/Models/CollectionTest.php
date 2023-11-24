@@ -255,8 +255,8 @@ it('filters the collections by nft token number', function () {
 });
 
 it('should filter collections by chainId', function () {
-    $ethNetwork = Network::query()->where('chain_id', 1)->get('id');
-    $polygonNetwork = Network::query()->where('chain_id', 137)->get('id');
+    $ethNetwork = Network::query()->where('chain_id', 1)->get();
+    $polygonNetwork = Network::query()->where('chain_id', 137)->get();
 
     $collection1 = Collection::factory()->create([
         'name' => 'Collection 1',
