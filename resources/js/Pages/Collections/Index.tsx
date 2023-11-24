@@ -54,7 +54,7 @@ const CollectionsIndex = ({
     return (
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
-                <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
+            <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
             <div className="mx-6 mt-8 sm:mx-8 lg:mt-12 2xl:mx-0">
                 <FeaturedCollectionsCarousel featuredCollections={featuredCollections} />
                 <div className="flex items-center justify-between">
