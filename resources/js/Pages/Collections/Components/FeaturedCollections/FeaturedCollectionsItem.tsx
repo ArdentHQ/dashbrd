@@ -1,12 +1,11 @@
-import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { FeaturedCollectionNfts } from "./FeaturedCollectionNfts";
 import { FeaturedCollectionStats } from "./FeaturedCollectionStats";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
-import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
 
 const truncateDescription = (
     description: App.Data.Collections.CollectionFeaturedData["description"],
@@ -21,8 +20,6 @@ const truncateDescription = (
 const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.CollectionFeaturedData }): JSX.Element => {
     const { t } = useTranslation();
 
-    const defaultNftCardStyles =
-        "bg-white dark:bg-theme-dark-900 grid w-full h-full min-w-full lg:min-w-fit lg:w-52 lg:h-fit";
     return (
         <div className="left-0 top-0 z-10 w-full p-6 md-lg:p-8">
             <div className="flex flex-col gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
@@ -78,24 +75,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                     </div>
                 </div>
 
-                <div className="grid w-full grid-flow-col items-center gap-3 lg:w-fit">
-                    <CollectionNft
-                        nft={data.nfts[0]}
-                        classNames={cn(defaultNftCardStyles, "grid")}
-                    />
-                    {data.nfts.length > 1 && (
-                        <CollectionNft
-                            nft={data.nfts[1]}
-                            classNames={cn(defaultNftCardStyles, "sm:grid hidden")}
-                        />
-                    )}
-                    {data.nfts.length > 2 && (
-                        <CollectionNft
-                            nft={data.nfts[2]}
-                            classNames={cn(defaultNftCardStyles, "md:grid md-lg:hidden hidden xl:grid")}
-                        />
-                    )}
-                </div>
+                <FeaturedCollectionNfts nfts={data.nfts} />
             </div>
         </div>
     );
