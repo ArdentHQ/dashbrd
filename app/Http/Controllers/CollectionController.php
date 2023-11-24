@@ -22,7 +22,6 @@ use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
-use App\Models\Network;
 use App\Models\User;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;

@@ -302,11 +302,6 @@ class Collection extends Model
         return $query->orderBy($select, $direction);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  string|null  $chainId
-     * @return Builder
-     */
     public function scopeFilterByChainId(Builder $query, ?string $chainId): Builder
     {
         if (empty($chainId)) {
@@ -321,7 +316,6 @@ class Collection extends Model
 
         return $query->where('collections.network_id', $network->id);
     }
-
 
     /**
      * @param  Builder<self>  $query
