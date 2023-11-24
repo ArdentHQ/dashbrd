@@ -13,7 +13,7 @@ const truncateDescription = (
     description: App.Data.Collections.CollectionFeaturedData["description"],
 ): string | null => {
     if (description !== null && description.length > 120) {
-        return description.slice(0, 120) + "...";
+        return description.slice(0, 117) + "...";
     }
 
     return description;
