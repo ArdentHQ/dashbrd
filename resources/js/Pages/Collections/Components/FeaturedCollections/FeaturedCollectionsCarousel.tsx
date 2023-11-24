@@ -11,7 +11,7 @@ export const FeaturedCollectionsCarousel = ({
     <Carousel
         shouldShowHeader={false}
         loop={true}
-        className="overflow-hidden lg:mx-8 lg:rounded-xl 2xl:mx-0"
+        className="overflow-hidden lg:mx-8 lg:rounded-xl lg:border lg:border-theme-secondary-300 dark:lg:border-theme-dark-700 2xl:mx-0"
         navigation={true}
         autoplay={{
             delay: 5000,
