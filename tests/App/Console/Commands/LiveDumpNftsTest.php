@@ -131,7 +131,7 @@ it('should return error if the given start index chunk does not exist', function
         ->assertExitCode(Command::INVALID);
 });
 
-it('should continue continue from the given chunk', function () {
+it('should continue from the given chunk', function () {
     $this->fakeFileSystem->put(
         'collection-nfts/eth_0x4e1f41613c9084fdb9e34e11fae9412427480e56/nft-chunks/1.json',
         json_encode(fixtureData('alchemy.get_nfts_for_contract'))
