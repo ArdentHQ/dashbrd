@@ -7,11 +7,14 @@ import {
     type PopularCollectionsSortingProperties,
 } from "@/Pages/Collections/Components/PopularCollectionsSorting/PopularCollectionsSorting";
 
-export const PopularCollectionsFilterPopover = ({ active }: PopularCollectionsSortingProperties): JSX.Element => {
+export const PopularCollectionsFilterPopover = ({
+    sortBy,
+    setSortBy,
+}: PopularCollectionsSortingProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <Popover className="ml-auto sm:relative md-lg:hidden">
+        <Popover>
             {({ open }) => (
                 <>
                     <div className="sm:relative">
@@ -35,7 +38,10 @@ export const PopularCollectionsFilterPopover = ({ active }: PopularCollectionsSo
                                     </div>
 
                                     <div className="px-6 py-3">
-                                        <PopularCollectionsSorting active={active} />
+                                        <PopularCollectionsSorting
+                                            sortBy={sortBy}
+                                            setSortBy={setSortBy}
+                                        />
                                     </div>
                                 </div>
                             </Popover.Panel>

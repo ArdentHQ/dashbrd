@@ -35,6 +35,8 @@ const CollectionsIndex = ({
 
     const [chain, setChain] = useState<ChainFilter | undefined>(filters.chain ?? undefined);
 
+    const [sortBy, setSortBy] = useState<"top" | "floor-price">(activeSort);
+
     const isFirstRender = useIsFirstRender();
 
     useEffect(() => {
@@ -42,13 +44,17 @@ const CollectionsIndex = ({
 
         router.get(
             route("collections"),
-            { chain },
             {
+                chain,
+                sort: sortBy === "floor-price" ? sortBy : undefined,
+            },
+            {
+                only: ["collections", "activeSort", "filters"],
                 preserveScroll: true,
                 preserveState: true,
             },
         );
-    }, [chain]);
+    }, [chain, sortBy]);
 
     return (
         <DefaultLayout toastMessage={props.toast}>
@@ -59,7 +65,10 @@ const CollectionsIndex = ({
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
                     <div className=" flex space-x-3 sm:relative md-lg:hidden">
-                        <PopularCollectionsFilterPopover active={activeSort} />
+                        <PopularCollectionsFilterPopover
+                            sortBy={sortBy}
+                            setSortBy={setSortBy}
+                        />
 
                         <ViewAllButton className="hidden sm:inline" />
                     </div>
@@ -67,7 +76,10 @@ const CollectionsIndex = ({
 
                 <div className="mt-4 hidden items-center justify-between md-lg:flex">
                     <div className="flex space-x-3">
-                        <PopularCollectionsSorting active={activeSort} />
+                        <PopularCollectionsSorting
+                            sortBy={sortBy}
+                            setSortBy={setSortBy}
+                        />
 
                         <ChainFilters
                             chain={chain}
