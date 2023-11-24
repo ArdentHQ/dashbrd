@@ -36,13 +36,8 @@
 .article-content > img,
 .article-content > figure,
 .article-content > pre,
-.article-content > code,
-.article-content iframe {
+.article-content > code {
     @apply my-4;
-}
-
-.article-content iframe {
-    @apply aspect-video h-auto w-full;
 }
 
 .article-content > blockquote {
@@ -61,8 +56,7 @@
     @apply mb-3 mt-6;
 }
 
-.article-content img,
-.article-content iframe {
+.article-content img {
     @apply mx-auto rounded-lg;
 }
 
