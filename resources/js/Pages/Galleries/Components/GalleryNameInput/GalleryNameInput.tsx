@@ -8,12 +8,14 @@ import { isTruthy } from "@/Utils/is-truthy";
 export const GalleryNameInput = ({
     name,
     onChange,
+    onBlur,
     error,
     maxLength = 50,
 }: {
     maxLength?: number;
     name: string;
     onChange?: (name: string) => void;
+    onBlur?: () => void;
     error?: string;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -48,6 +50,9 @@ export const GalleryNameInput = ({
                         type="text"
                         maxLength={maxLength + 1}
                         value={name}
+                        onBlur={() => {
+                            onBlur?.();
+                        }}
                         onChange={(event) => {
                             onChange?.(event.target.value);
                         }}

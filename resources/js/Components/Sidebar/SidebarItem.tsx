@@ -12,6 +12,7 @@ export const SidebarItem = ({
     isDisabled = false,
     href,
     tooltip,
+    rightText,
 }: SidebarItemProperties): JSX.Element => (
     <Tooltip
         content={tooltip}
@@ -27,7 +28,7 @@ export const SidebarItem = ({
             >
                 {isTruthy(icon) && (
                     <Icon
-                        className={cn("transition-default ml-0 mr-2", {
+                        className={cn("ml-0 mr-2", {
                             "border-transparent text-theme-primary-600 dark:text-theme-dark-50": isSelected,
                         })}
                         name={icon}
@@ -36,6 +37,10 @@ export const SidebarItem = ({
                 )}
 
                 <span>{title}</span>
+
+                {rightText !== undefined && (
+                    <span className={cn("ml-auto text-theme-secondary-500 dark:text-theme-dark-500")}>{rightText}</span>
+                )}
             </Tabs.DisabledLink>
         ) : (
             <Tabs.Link
@@ -48,7 +53,7 @@ export const SidebarItem = ({
             >
                 {isTruthy(icon) && (
                     <Icon
-                        className={cn("transition-default ml-0 mr-2", {
+                        className={cn("ml-0 mr-2", {
                             "border-transparent text-theme-primary-600 dark:text-theme-dark-50": isSelected,
                         })}
                         name={icon}
@@ -57,6 +62,17 @@ export const SidebarItem = ({
                 )}
 
                 <span>{title}</span>
+
+                {rightText !== undefined && (
+                    <span
+                        className={cn("ml-auto text-theme-secondary-700", {
+                            "dark:text-theme-dark-100": isSelected,
+                            "dark:text-theme-dark-200": !isSelected,
+                        })}
+                    >
+                        {rightText}
+                    </span>
+                )}
             </Tabs.Link>
         )}
     </Tooltip>

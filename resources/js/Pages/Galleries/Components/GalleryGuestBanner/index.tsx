@@ -1,9 +1,9 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/Components/Buttons";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 import { type MetaMaskState } from "@/Hooks/useMetaMask";
+import { CreateGalleryButton } from "@/Pages/Galleries/MyGalleries/Components/CreateGalleryButton";
 
 interface Properties extends Pick<MetaMaskState, "connecting" | "initialized"> {
     onClick?: () => void;
@@ -28,15 +28,12 @@ const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): J
             </div>
 
             <div className="flex h-fit justify-center">
-                <Button
-                    icon="Plus"
-                    className="md:button-light justify-center py-2 sm:w-fit sm:px-6"
-                    disabled={connecting || !initialized}
+                <CreateGalleryButton
                     onClick={onClick}
                     variant={isMdAndAbove ? "secondary" : "primary"}
-                >
-                    {t("common.create_gallery")}
-                </Button>
+                    isDisabled={connecting || !initialized}
+                    className="md:button-light"
+                />
             </div>
         </div>
     );
