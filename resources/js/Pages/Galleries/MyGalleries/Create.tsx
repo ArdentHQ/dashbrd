@@ -82,7 +82,7 @@ const Create = ({
         replaceUrlQuery({ draftId: "" });
     };
 
-    const { data, setData, submit, processing } = useGalleryForm({
+    const { data, setData, submit, processing, selectedNfts, errors, updateSelectedNfts } = useGalleryForm({
         gallery,
         setDraftNfts: setNfts,
         draft,
@@ -241,9 +241,6 @@ const Create = ({
 
             <CreateGalleryForm
                 gallery={gallery}
-                setNfts={setNfts}
-                draft={draft}
-                deleteDraft={deleteDraft}
                 setTitle={setTitle}
                 initialNfts={initialNfts}
                 nftLimit={nftLimit}
@@ -252,6 +249,11 @@ const Create = ({
                 nftsPerPage={nftsPerPage}
                 collectionsPerPage={collectionsPerPage}
                 hiddenCollectionsCount={hiddenCollectionsCount}
+                data={data}
+                setData={setData}
+                selectedNfts={selectedNfts}
+                updateSelectedNfts={updateSelectedNfts}
+                errors={errors}
             />
 
             <GalleryActionToolbar

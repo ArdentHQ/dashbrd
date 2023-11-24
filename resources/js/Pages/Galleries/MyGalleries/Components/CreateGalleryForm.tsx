@@ -8,16 +8,12 @@ import { EditableGalleryHook } from "@/Components/Galleries/Hooks/useEditableGal
 import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
 import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
-import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
-import { type GalleryDraftUnsaved } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
+import { type UseGalleryFormProperties } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { assertUser, assertWallet } from "@/Utils/assertions";
 import { isTruthy } from "@/Utils/is-truthy";
 
 const CreateGalleryForm = ({
     gallery,
-    setNfts,
-    draft,
-    deleteDraft,
     setTitle,
     initialNfts,
     nftLimit,
@@ -26,11 +22,13 @@ const CreateGalleryForm = ({
     nftsPerPage,
     collectionsPerPage,
     hiddenCollectionsCount,
+    data,
+    setData,
+    selectedNfts,
+    updateSelectedNfts,
+    errors,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
-    setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
-    draft: GalleryDraftUnsaved;
-    deleteDraft: () => void;
     setTitle: (title: string) => void;
     initialNfts?: App.Data.Gallery.GalleryNftData[];
     nftLimit: number;
@@ -39,16 +37,14 @@ const CreateGalleryForm = ({
     nftsPerPage: number;
     collectionsPerPage: number;
     hiddenCollectionsCount: number;
+    data: UseGalleryFormProperties;
+    setData: (field: keyof UseGalleryFormProperties, value: string | number | File | number[] | null) => void;
+    selectedNfts: App.Data.Gallery.GalleryNftData[];
+    updateSelectedNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
+    errors: Partial<Record<keyof UseGalleryFormProperties, string>>;
 }): JSX.Element => {
     assertUser(auth.user);
     assertWallet(auth.wallet);
-
-    const { selectedNfts, data, setData, errors, updateSelectedNfts } = useGalleryForm({
-        gallery,
-        setDraftNfts: setNfts,
-        draft,
-        deleteDraft,
-    });
 
     const totalValue = 0;
 
