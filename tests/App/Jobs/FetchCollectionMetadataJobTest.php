@@ -43,6 +43,7 @@ it('should update nft collection metadata', function () {
         ->and($collection->description)->toBe('World of Women is a collection of 10,000 NFTs.')
         ->and($updatedAt->timestamp)->toBe($now->timestamp)
         ->and($collection->image())->toBe('image-url')
+        ->and($collection->openSeaSlug())->toBe('world-of-women-nft')
         ->and($collection->banner())->toBe('https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format');
 });
 
