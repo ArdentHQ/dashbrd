@@ -7,7 +7,11 @@ export const FeaturedCollectionNfts = ({ nfts }: { nfts: App.Data.Gallery.Galler
         "bg-white dark:bg-theme-dark-900 grid sm:w-full sm:h-full min-w-full lg:min-w-fit lg:w-52 lg:h-fit";
 
     return (
-        <div className="grid w-full max-w-[280px] grid-flow-col items-center gap-3 sm:max-w-none lg:w-fit">
+        <div
+            className={cn("grid w-full max-w-[280px] grid-flow-col items-center gap-3 sm:max-w-none lg:w-fit", {
+                "sm:max-w-[320px]": nfts.length === 1,
+            })}
+        >
             <CollectionNft
                 nft={nfts[0]}
                 classNames={cn(defaultNftCardStyles, "grid ")}
