@@ -21,7 +21,7 @@ it('should update nft collection metadata', function () {
 
     /** @var Collection $collection */
     $collection = Collection::factory()->create([
-        'address' => '0xe785e82358879f061bc3dcac6f0444462d4b5330',
+        'address' => '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
         'network_id' => $network->id,
         'supply' => 8000,
         'minted_block' => 12907765,
