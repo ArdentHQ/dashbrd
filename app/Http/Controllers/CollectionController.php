@@ -14,6 +14,7 @@ use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
+use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
@@ -21,6 +22,7 @@ use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Collection;
+use App\Models\Network;
 use App\Models\User;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
@@ -43,16 +45,16 @@ class CollectionController extends Controller
 
         $collectionQuery = $user ? $user->collections() : Collection::query();
 
-        $networkFilter = match ($request->query('chain')) {
-            'polygon' => 1, // Polygon network ID
-            'ethereum' => 3, // Ethereum network ID
+        $chainId = match ($request->query('chain')) {
+            'polygon' => Chain::Polygon->value,
+            'ethereum' => Chain::ETH->value,
             default => null,
         };
 
         /** @var LengthAwarePaginator<Collection> $collections */
         $collections = $collectionQuery
                     ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
-                    ->when($networkFilter, fn ($q) => $q->where('collections.network_id', $networkFilter))
+                    ->filterByChainId($chainId)
                     ->orderByFloorPrice('desc', $currency)
                     ->with([
                         'network',
