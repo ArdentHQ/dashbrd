@@ -56,19 +56,18 @@ const CollectionsIndex = ({
                 <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
-                    <PopularCollectionsSorting active={activeSort} />
-                    <ChainFilters
-                        chain={chain}
-                        setChain={setChain}
-                    />
                     <div className="hidden sm:block lg:hidden">
                         <ViewAllButton />
                     </div>
                 </div>
 
                 <div className="mt-4 hidden items-center justify-between lg:flex">
-                    <div>
+                    <div className="flex space-x-3">
                         <PopularCollectionsSorting active={activeSort} />
+                        <ChainFilters
+                            chain={chain}
+                            setChain={setChain}
+                        />
                     </div>
 
                     <div>
