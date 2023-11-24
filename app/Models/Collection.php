@@ -306,7 +306,7 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeFilterByChainId(Builder $query, ?string $chainId): Builder
+    public function scopeFilterByChainId(Builder $query, ?int $chainId): Builder
     {
         if (empty($chainId)) {
             return $query;
