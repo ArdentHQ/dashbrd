@@ -56,7 +56,7 @@ class LiveDumpNfts extends Command
             'deployedBlockNumber',
         ],
         'image' => [
-            'thumbnailUrl', 'cachedUrl', 'originalUrl'
+            'thumbnailUrl', 'cachedUrl', 'originalUrl',
         ],
         'raw' => [
             'metadata' => [
@@ -65,7 +65,7 @@ class LiveDumpNfts extends Command
                 'properties',
                 'external_url',
             ],
-        ]
+        ],
     ];
 
     /**
