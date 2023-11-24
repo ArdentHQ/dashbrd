@@ -48,6 +48,12 @@ class CollectionController extends Controller
             default => null,
         };
 
+        $sort = match ($request->query('chain')) {
+            'polygon' => Chain::Polygon->value,
+            'ethereum' => Chain::ETH->value,
+            default => null,
+        };
+
         /** @var LengthAwarePaginator<Collection> $collections */
         $collections = Collection::query()
                                 ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
@@ -61,8 +67,8 @@ class CollectionController extends Controller
 
         return Inertia::render('Collections/Index', [
             'filters' => [
-                'chain' => $request->query('chain') ?? null,
-                'sort' => $request->query('sort') === 'floor-price' ? 'floor-price' : null,
+                'chain' => in_array($request->query('chain'), ['polygon', 'ethereum']) ? $request->query('chain') : null,
+                'sort' => in_array($request->query('sort'), ['floor-price']) ? $request->query('sort') : null,
             ],
             'title' => trans('metatags.collections.title'),
             'collections' => PopularCollectionData::collection(
