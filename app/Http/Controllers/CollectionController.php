@@ -48,12 +48,6 @@ class CollectionController extends Controller
             default => null,
         };
 
-        $sort = match ($request->query('chain')) {
-            'polygon' => Chain::Polygon->value,
-            'ethereum' => Chain::ETH->value,
-            default => null,
-        };
-
         /** @var LengthAwarePaginator<Collection> $collections */
         $collections = Collection::query()
                                 ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
