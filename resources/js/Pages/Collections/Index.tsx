@@ -56,7 +56,6 @@ const CollectionsIndex = ({
                 <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
-                <div className="mt-4 flex space-x-3">
                     <PopularCollectionsSorting active={activeSort} />
                     <ChainFilters
                         chain={chain}
@@ -81,14 +80,14 @@ const CollectionsIndex = ({
                     <div className="flex sm:space-x-2 md:space-x-3 lg:space-x-6">
                         <div className="flex-1">
                             <PopularCollectionsTable
-                                collections={collectionsColumn1}
+                                collections={collections.slice(0, 6)}
                                 user={auth.user}
                             />
                         </div>
 
                         <div className="hidden flex-1 sm:block">
                             <PopularCollectionsTable
-                                collections={collectionsColumn2}
+                                collections={collections.slice(6, 12)}
                                 user={auth.user}
                             />
                         </div>
