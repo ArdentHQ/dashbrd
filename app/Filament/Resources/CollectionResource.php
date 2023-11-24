@@ -90,7 +90,7 @@ class CollectionResource extends Resource
                         ->action(function (Collection $collection) {
                             if (!$collection->is_featured && Collection::where('is_featured', true)->count() >= 4) {
                                 Notification::make()
-                                ->title('There are already 4 collections marked as featured. Please remove one before selecting a new one')
+                                ->title('There are already 4 collections marked as featured. Please remove one before selecting a new one.')
                                 ->warning()
                                 ->send();
                             } else {
