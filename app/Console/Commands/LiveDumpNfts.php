@@ -43,7 +43,7 @@ class LiveDumpNfts extends Command
     /**
      * @var array<mixed>
      */
-    protected $requiredAttributes = [
+    protected array $requiredAttributes = [
         'name',
         'description',
         'tokenId',

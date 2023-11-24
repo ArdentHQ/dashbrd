@@ -10,6 +10,7 @@ use App\Support\Facades\Alchemy;
 use App\Support\Facades\Mnemonic;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -101,6 +102,9 @@ it('should fetch NFTs', function () {
     $this->artisan('nfts:live-dump --collection-index=0 --chain-id=1');
 
     $liveDumps->each(fn ($liveDump) => expect($this->fakeFileSystem->exists($liveDump))->toBeTrue());
+
+    $dump = json_decode($this->fakeFileSystem->get($liveDumps[0]));
+    expect(Arr::get($dump,'raw.metadata.image'))->toBe(null);
 });
 
 it('should run only in non-production environments', function () {
