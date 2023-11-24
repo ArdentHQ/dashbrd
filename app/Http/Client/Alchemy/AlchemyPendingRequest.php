@@ -719,7 +719,7 @@ class AlchemyPendingRequest extends PendingRequest
         }
 
         // Only one has to exist, the missing one gets substituted
-        $hasCollectionName = ! empty($this->collectionNameV3($nft));
+        $hasCollectionName = ! empty($this->collectionName($nft));
         $hasCollectionSymbol = ! empty(Arr::get($nft, 'contract.symbol'));
 
         if (! $hasCollectionName && ! $hasCollectionSymbol) {
