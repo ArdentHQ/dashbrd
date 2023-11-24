@@ -1,4 +1,5 @@
 import React from "react";
+import { expect } from "vitest";
 import { NetworkIcon } from "./NetworkIcon";
 import { render, screen } from "@/Tests/testing-library";
 
@@ -77,10 +78,11 @@ describe("NetworkIcon", () => {
         expect(screen.getByTestId("Mumbai__text")).toHaveTextContent("Mumbai");
     });
 
-    const sizes: Array<["sm" | "md" | "xl", string]> = [
+    const sizes: Array<["sm" | "md" | "xl" | "sm-md", string]> = [
         ["sm", "w-3.5 h-3.5"],
         ["md", "w-5 h-5"],
         ["xl", "w-8 h-8"],
+        ["sm-md", "w-4 h-4"],
     ];
     it.each(sizes)("should render network icon with different size", (size, className) => {
         render(
