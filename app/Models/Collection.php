@@ -304,7 +304,6 @@ class Collection extends Model
 
     /**
      * @param  Builder<self>  $query
-     * @param  string|null  $chainId
      * @return Builder<self>
      */
     public function scopeFilterByChainId(Builder $query, ?string $chainId): Builder
@@ -321,7 +320,6 @@ class Collection extends Model
 
         return $query->where('collections.network_id', $network->id);
     }
-
 
     /**
      * @param  Builder<self>  $query
