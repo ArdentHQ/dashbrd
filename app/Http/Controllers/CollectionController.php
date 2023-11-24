@@ -41,17 +41,15 @@ class CollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
-        $collectionQuery = $user ? $user->collections() : Collection::query();
-
         /** @var LengthAwarePaginator<Collection> $collections */
-        $collections = $collectionQuery
-                    ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
-                    ->orderByFloorPrice('desc', $currency)
-                    ->with([
-                        'network',
-                        'floorPriceToken',
-                    ])
-                    ->simplePaginate(12);
+        $collections = Collection::query()
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                                ->orderByFloorPrice('desc', $currency)
+                                ->with([
+                                    'network',
+                                    'floorPriceToken',
+                                ])
+                                ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
             'activeSort' => $request->query('sort') === 'floor-price' ? 'floor-price' : 'top',
