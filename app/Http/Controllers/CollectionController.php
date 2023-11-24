@@ -46,7 +46,7 @@ class CollectionController extends Controller
             ->get();
 
         $featuredCollections->each(function (Collection $collection) {
-            $collection->cachedNfts = Cache::remember('featuredNftsForCollection'.$collection->id, 60 * 12, function () use ($collection) {
+            $collection->cachedNfts = Cache::remember('featuredNftsForCollection'.$collection->id, 3600 * 12, function () use ($collection) {
                 return $collection->nfts()->inRandomOrder()->take(3)->get();
             });
         });
