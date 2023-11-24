@@ -254,6 +254,37 @@ it('filters the collections by nft token number', function () {
     expect(Collection::search($user, '9999')->count())->toBe(1);
 });
 
+it('should filter collections by chainId', function () {
+    $ethNetwork = Network::query()->where('chain_id', 1)->first();
+    $polygonNetwork = Network::query()->where('chain_id', 137)->first();
+
+    Collection::factory()->create([
+        'name' => 'Collection 1',
+        'network_id' => $ethNetwork->id,
+    ]);
+
+    Collection::factory()->create([
+        'name' => 'Collection 2',
+        'network_id' => $polygonNetwork->id,
+    ]);
+
+    $ethCollections = Collection::query()->filterByChainId(1)->get();
+
+    expect($ethCollections->count())->toBe(1)
+        ->and($ethCollections->first()->name)->toBe('Collection 1');
+
+    $polygonCollections = Collection::query()->filterByChainId(137)->get();
+
+    expect($polygonCollections->count())->toBe(1)
+        ->and($polygonCollections->first()->name)->toBe('Collection 2');
+
+    $allCollections = Collection::query()->filterByChainId(null)->orderBy('id')->get();
+
+    expect($allCollections->count())->toBe(2)
+        ->and($allCollections[0]->name)->toBe('Collection 1')
+        ->and($allCollections[1]->name)->toBe('Collection 2');
+});
+
 it('filters the collections by nft concatenated name', function () {
     $user = createUser();
 

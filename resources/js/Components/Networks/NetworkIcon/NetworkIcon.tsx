@@ -1,5 +1,6 @@
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
+import { Icon } from "@/Components/Icon";
 import { Tooltip } from "@/Components/Tooltip";
 import { useNetwork } from "@/Hooks/useNetwork";
 import { Ethereum, Polygon } from "@/images";
@@ -9,7 +10,8 @@ interface Properties {
     withoutTooltip?: boolean;
     className?: string;
     textClassName?: string;
-    iconSize?: "sm" | "md" | "xl";
+    iconSize?: "sm" | "md" | "xl" | "sm-md";
+    simpleIcon?: boolean;
 }
 
 export const NetworkIcon = ({
@@ -18,6 +20,7 @@ export const NetworkIcon = ({
     className,
     textClassName,
     iconSize = "md",
+    simpleIcon = false,
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { isPolygon, isEthereum, isTestnet } = useNetwork();
@@ -30,6 +33,9 @@ export const NetworkIcon = ({
             break;
         case "sm":
             iconSizeClass = "w-3.5 h-3.5";
+            break;
+        case "sm-md":
+            iconSizeClass = "w-4 h-4";
             break;
         default:
             iconSizeClass = "w-5 h-5";
@@ -51,7 +57,7 @@ export const NetworkIcon = ({
                             content={t("common.polygon")}
                         >
                             <div className={iconSizeClass}>
-                                <Polygon data-testid="Polygon" />
+                                {simpleIcon ? <Icon name="Polygon" /> : <Polygon data-testid="Polygon" />}
                             </div>
                         </Tooltip>
                     )}
@@ -62,7 +68,7 @@ export const NetworkIcon = ({
                             content={t("common.ethereum")}
                         >
                             <div className={iconSizeClass}>
-                                <Ethereum data-testid="Ethereum" />
+                                {simpleIcon ? <Icon name="Ethereum" /> : <Ethereum data-testid="Ethereum" />}
                             </div>
                         </Tooltip>
                     )}

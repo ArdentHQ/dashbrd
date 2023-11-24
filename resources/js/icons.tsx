@@ -45,6 +45,7 @@ import { ReactComponent as Document } from "@icons/document.svg";
 import { ReactComponent as DoorExit } from "@icons/door-exit.svg";
 import { ReactComponent as DoubleCheck } from "@icons/double-check.svg";
 import { ReactComponent as Ellipsis } from "@icons/ellipsis.svg";
+import { ReactComponent as Ethereum } from "@icons/ethereum.svg";
 import { ReactComponent as ExclamationInTriangle } from "@icons/exclamation-in-triangle.svg";
 import { ReactComponent as Explorer } from "@icons/explorer.svg";
 import { ReactComponent as Eye } from "@icons/eye.svg";
@@ -86,6 +87,7 @@ import { ReactComponent as WalletOpacity } from "@icons/opacity/wallet.svg";
 import { ReactComponent as Pencil } from "@icons/pencil.svg";
 import { ReactComponent as PlusInMagnifyingGlass } from "@icons/plus-in-magnifying-glass.svg";
 import { ReactComponent as Plus } from "@icons/plus.svg";
+import { ReactComponent as Polygon } from "@icons/polygon.svg";
 import { ReactComponent as Redo } from "@icons/redo.svg";
 import { ReactComponent as Refresh } from "@icons/refresh.svg";
 import { ReactComponent as RoundedSquareWithPencil } from "@icons/rounded-square-with-pencil.svg";
@@ -228,4 +230,6 @@ export const SvgCollection = {
     FatDoubleCheck,
     AudioPause,
     AudioPlay,
+    Polygon,
+    Ethereum,
 };

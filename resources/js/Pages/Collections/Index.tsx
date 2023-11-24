@@ -1,17 +1,25 @@
 import { type PageProps } from "@inertiajs/core";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, router, usePage } from "@inertiajs/react";
+import cn from "classnames";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
+import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
+import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface CollectionsIndexProperties extends PageProps {
     activeSort: "top" | "floor-price";
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
+    filters: {
+        chain: ChainFilter | null;
+    };
 }
 
 const CollectionsIndex = ({
@@ -19,47 +27,96 @@ const CollectionsIndex = ({
     title,
     collections: { data: collections },
     auth,
+    filters,
 }: CollectionsIndexProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const { props } = usePage();
 
-    const collectionsColumn1: App.Data.Collections.PopularCollectionData[] = collections.slice(0, 6);
+    const [chain, setChain] = useState<ChainFilter | undefined>(filters.chain ?? undefined);
 
-    const collectionsColumn2: App.Data.Collections.PopularCollectionData[] = collections.slice(6, 12);
+    const isFirstRender = useIsFirstRender();
+
+    useEffect(() => {
+        if (isFirstRender) return;
+
+        router.get(
+            route("collections"),
+            { chain },
+            {
+                preserveScroll: true,
+                preserveState: true,
+            },
+        );
+    }, [chain]);
 
     return (
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
 
             <div className="mx-6 sm:mx-8 2xl:mx-0">
-                <div className="flex items-center">
+                <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
-                    <PopularCollectionsFilterPopover active={activeSort} />
+                    <div className=" flex space-x-3 sm:relative md-lg:hidden">
+                        <PopularCollectionsFilterPopover active={activeSort} />
+
+                        <ViewAllButton className="hidden sm:inline" />
+                    </div>
                 </div>
 
-                <div className="mt-4 hidden md-lg:block">
-                    <PopularCollectionsSorting active={activeSort} />
-                </div>
+                <div className="mt-4 hidden items-center justify-between md-lg:flex">
+                    <div className="flex space-x-3">
+                        <PopularCollectionsSorting active={activeSort} />
 
-                <div className="flex sm:space-x-2 md:space-x-3 lg:space-x-6">
-                    <div className="flex-1">
-                        <PopularCollectionsTable
-                            collections={collectionsColumn1}
-                            user={auth.user}
+                        <ChainFilters
+                            chain={chain}
+                            setChain={setChain}
                         />
                     </div>
 
-                    <div className="hidden flex-1 sm:block">
-                        <PopularCollectionsTable
-                            collections={collectionsColumn2}
-                            user={auth.user}
-                        />
+                    <div>
+                        <ViewAllButton />
+                    </div>
+                </div>
+
+                <div>
+                    <div className="flex sm:space-x-2 md:space-x-3 md-lg:space-x-6">
+                        <div className="flex-1">
+                            <PopularCollectionsTable
+                                collections={collections.slice(0, 6)}
+                                user={auth.user}
+                            />
+                        </div>
+
+                        <div className="hidden flex-1 sm:block">
+                            <PopularCollectionsTable
+                                collections={collections.slice(6, 12)}
+                                user={auth.user}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mt-2 sm:hidden">
+                        <ViewAllButton />
                     </div>
                 </div>
             </div>
         </DefaultLayout>
+    );
+};
+
+const ViewAllButton = ({ className }: { className?: string }): JSX.Element => {
+    const { t } = useTranslation();
+
+    return (
+        <ButtonLink
+            variant="secondary"
+            href="#"
+            className={cn("w-full justify-center sm:w-auto", className)}
+        >
+            {t("common.view_all")}
+        </ButtonLink>
     );
 };
 

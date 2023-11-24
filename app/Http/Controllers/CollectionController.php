@@ -14,6 +14,7 @@ use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
+use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
@@ -41,20 +42,28 @@ class CollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
-        $collectionQuery = $user ? $user->collections() : Collection::query();
+        $chainId = match ($request->query('chain')) {
+            'polygon' => Chain::Polygon->value,
+            'ethereum' => Chain::ETH->value,
+            default => null,
+        };
 
         /** @var LengthAwarePaginator<Collection> $collections */
-        $collections = $collectionQuery
-                    ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
-                    ->orderByFloorPrice('desc', $currency)
-                    ->with([
-                        'network',
-                        'floorPriceToken',
-                    ])
-                    ->simplePaginate(12);
+        $collections = Collection::query()
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                                ->filterByChainId($chainId)
+                                ->orderByFloorPrice('desc', $currency)
+                                ->with([
+                                    'network',
+                                    'floorPriceToken',
+                                ])
+                                ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
             'activeSort' => $request->query('sort') === 'floor-price' ? 'floor-price' : 'top',
+            'filters' => [
+                'chain' => $request->query('chain') ?? null,
+            ],
             'title' => trans('metatags.collections.title'),
             'collections' => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
