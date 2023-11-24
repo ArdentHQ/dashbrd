@@ -42,6 +42,10 @@
     @apply my-4;
 }
 
+.article-content > .twitter-embed-wrapper > blockquote {
+    @apply hidden;
+}
+
 .article-content > .twitter-embed-wrapper {
     @apply flex justify-center;
 }

@@ -59,6 +59,17 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => {
         };
     }, [isDark]);
 
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://platform.twitter.com/widgets.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
     return (
         <div className="article-content">
             <Markdown
