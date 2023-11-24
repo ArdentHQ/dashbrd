@@ -5,7 +5,7 @@ import { FeaturedCollectionStats } from "./FeaturedCollectionStats";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
-import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
+import { CollectionImageWithIcon } from "@/Pages/Collections/Components/CollectionImage";
 
 const truncateDescription = (
     description: App.Data.Collections.CollectionFeaturedData["description"],
@@ -25,18 +25,13 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
             <div className="flex flex-col gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
                 <div className="flex flex-col md-lg:max-w-[448px] md-lg:py-2 xl:w-[460px] 2xl:max-w-[600px]">
                     <div className="flex flex-row gap-4">
-                        <div className="relative h-12 w-12 shrink-0">
-                            <Img
-                                wrapperClassName="aspect-square"
-                                className="h-full w-full rounded-full object-cover"
-                                src={data.image}
-                                isCircle
-                            />
-
-                            <div className="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-4 ring-theme-secondary-50 dark:ring-theme-dark-950">
-                                <NetworkIcon networkId={data.chainId} />
-                            </div>
-                        </div>
+                        <CollectionImageWithIcon
+                            image={data.image}
+                            chainId={data.chainId}
+                            className="relative h-12 w-12 shrink-0"
+                            wrapperClassName="aspect-square"
+                            networkClassName="bottom-0 right-0 block ring-theme-secondary-50 dark:ring-theme-dark-800"
+                        />
 
                         <div className="flex flex-col ">
                             <span className="text-sm font-medium capitalize leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
