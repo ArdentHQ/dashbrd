@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import Markdown from "react-markdown";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
 import tippy, { inlinePositioning } from "tippy.js";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { extractDomain } from "@/Utils/extract-domain";
 import { remarkFigurePlugin } from "@/Utils/Remark/remarkFigurePlugin";
+import { remarkTwitterEmbedPlugin } from "@/Utils/Remark/remarkTwitterEmbedPlugin";
 import { remarkYoutubeEmbedPlugin } from "@/Utils/Remark/remarkYoutubeEmbedPlugin";
 
 interface Properties {
@@ -58,22 +58,22 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => {
         };
     }, [isDark]);
 
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://platform.twitter.com/widgets.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
     return (
         <div className="article-content">
             <Markdown
                 rehypePlugins={[rehypeRaw, [rehypeExternalLinks, { target: "_blank" }]]}
-                remarkPlugins={[remarkFigurePlugin, remarkGfm, remarkYoutubeEmbedPlugin]}
-                components={{
-                    table: ({ children }) => (
-                        <div className="w-fit overflow-hidden rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700">
-                            <div className="w-full border-b-4 border-theme-secondary-300 pb-0.5 dark:border-theme-dark-700">
-                                <div className="custom-scroll w-full overflow-x-auto">
-                                    <table>{children}</table>
-                                </div>
-                            </div>
-                        </div>
-                    ),
-                }}
+                remarkPlugins={[remarkFigurePlugin, remarkYoutubeEmbedPlugin, remarkTwitterEmbedPlugin]}
                 skipHtml
             >
                 {article.content}
