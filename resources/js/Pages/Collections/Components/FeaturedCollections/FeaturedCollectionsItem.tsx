@@ -21,16 +21,16 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
     const { t } = useTranslation();
 
     return (
-        <div className="left-0 top-0 z-10 w-full p-6 md-lg:p-8">
-            <div className="flex flex-col gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
-                <div className="flex flex-col md-lg:max-w-[448px] md-lg:py-2 xl:w-[460px] 2xl:max-w-[600px]">
+        <div className="left-0 top-0 z-10 h-[710px] w-full p-6 sm:h-[630px] md:h-full md-lg:p-8 ">
+            <div className="flex h-full w-full flex-col items-center justify-between gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
+                <div className="flex w-full flex-col md-lg:max-w-[448px] md-lg:py-2 xl:w-[460px] 2xl:max-w-[600px]">
                     <div className="flex flex-row gap-4">
                         <CollectionImageWithIcon
                             image={data.image}
                             chainId={data.chainId}
                             className="relative h-12 w-12 shrink-0"
                             wrapperClassName="aspect-square"
-                            networkClassName="bottom-0 right-0 block ring-theme-secondary-50 dark:ring-theme-dark-800"
+                            networkClassName="bottom-0 right-0 block ring-theme-secondary-50 dark:ring-theme-dark-800 "
                         />
 
                         <div className="flex flex-col ">
@@ -46,7 +46,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                         </div>
                     </div>
 
-                    <div className="my-3 line-clamp-4 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200 lg:line-clamp-2 lg:h-12">
+                    <div className="my-3 line-clamp-4 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:line-clamp-2 md-lg:h-12">
                         {truncateDescription(data.description)}
                     </div>
 
@@ -82,7 +82,7 @@ export const FeaturedCollectionsItem = ({
     data: App.Data.Collections.CollectionFeaturedData;
 }): JSX.Element => (
     <div className="relative">
-        <div className="collection-banner absolute left-0 top-0 -z-10 h-full w-full ">
+        <div className="collection-banner absolute left-0 top-0 -z-10 h-[710px] w-full sm:h-[630px] md:h-full">
             <Img
                 className="h-full w-full object-cover"
                 wrapperClassName="h-full"

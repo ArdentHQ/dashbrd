@@ -27,6 +27,7 @@ export const PopularCollectionName = ({
                     chainId={collection.chainId}
                     className="relative h-8 w-8 shrink-0 md:h-12 md:w-12"
                     wrapperClassName="aspect-square"
+                    networkClassName="left-5 top-5 "
                 />
 
                 <div className="break-word-legacy min-w-0 space-y-0.5 md:lg:space-y-0">
