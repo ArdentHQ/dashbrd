@@ -303,9 +303,9 @@ class Collection extends Model
     }
 
     /**
-     * @param  Builder  $query
+     * @param  Builder<self>  $query
      * @param  string|null  $chainId
-     * @return Builder
+     * @return Builder<self>
      */
     public function scopeFilterByChainId(Builder $query, ?string $chainId): Builder
     {
