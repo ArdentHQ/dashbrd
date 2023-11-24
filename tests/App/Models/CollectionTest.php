@@ -285,7 +285,6 @@ it('should filter collections by chainId', function () {
         ->and($allCollections[1]->name)->toBe('Collection 2');
 });
 
-
 it('filters the collections by nft concatenated name', function () {
     $user = createUser();
 
