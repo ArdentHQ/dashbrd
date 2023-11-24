@@ -55,7 +55,7 @@ it('should skip updating column if metadata is null', function () {
 
     /** @var Collection $collection */
     $collection = Collection::factory()->create([
-        'address' => '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
+        'address' => '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D',
         'network_id' => $network->id,
         'supply' => 8000,
         'floor_price' => 80000000,
