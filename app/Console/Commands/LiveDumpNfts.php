@@ -291,7 +291,7 @@ class LiveDumpNfts extends Command
 
         $nftChunk = json_decode($file, true);
 
-        return Arr::get($nftChunk, 'nextToken');
+        return Arr::get($nftChunk, 'pageKey');
     }
 
     private function getCollectionTraitsAndPersist(Chain $chain, string $address): void
