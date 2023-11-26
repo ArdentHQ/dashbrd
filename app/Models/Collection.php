@@ -552,7 +552,11 @@ class Collection extends Model
         return SpamContract::isSpam($this->address, $this->network);
     }
 
-    public function scopeFeatured($query)
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
     }
