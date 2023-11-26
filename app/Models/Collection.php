@@ -550,4 +550,9 @@ class Collection extends Model
     {
         return SpamContract::isSpam($this->address, $this->network);
     }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
 }
