@@ -65,6 +65,7 @@ class Collection extends Model
         'is_fetching_activity' => 'bool',
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
+        'is_featured' => 'bool',
     ];
 
     /**
