@@ -1184,7 +1184,7 @@ it('can determine whether collection has its activities indexed', function () {
     ])->indexesActivities())->toBeFalse();
 });
 
-it('can determine if a collection is featured or not using its scope', function() {
+it('can determine if a collection is featured or not using its scope', function () {
     $featuredCollection1 = Collection::factory()->create(['is_featured' => true]);
     $featuredCollection2 = Collection::factory()->create(['is_featured' => true]);
     $nonFeaturedCollection = Collection::factory()->create(['is_featured' => false]);
