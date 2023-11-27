@@ -44,11 +44,11 @@ const Drafts = ({
     }
 
     if (drafts.length === 0) {
-        return <EmptyBlock>{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
+        return <EmptyBlock className="mx-6 sm:mx-0">{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
     }
 
     return (
-        <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+        <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 px-6 sm:grid-cols-2 sm:px-0 md-lg:grid-cols-3">
             {drafts.map((draft, index) => (
                 <NftGalleryDraftCard
                     key={index}
@@ -113,12 +113,12 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
     };
 
     if (userGalleries.meta.total === 0) {
-        return <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
+        return <EmptyBlock className="mx-6 sm:mx-0">{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
     }
 
     return (
         <>
-            <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+            <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 px-6 sm:grid-cols-2 sm:px-0 md-lg:grid-cols-3">
                 {userGalleries.data.map((gallery, index) => (
                     <NftGalleryCard
                         key={index}
