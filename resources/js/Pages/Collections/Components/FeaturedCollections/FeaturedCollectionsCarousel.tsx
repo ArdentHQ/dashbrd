@@ -25,7 +25,7 @@ export const FeaturedCollectionsCarousel = ({
                     <div className="absolute inset-y-0 left-3 z-10 flex h-full items-center 2xl:-left-5">
                         <CarouselPreviousButton
                             carouselKey="featuredCollections"
-                            className="shadow-carousel-button-light dark:shadow-carousel-button-dark border-none disabled:opacity-0 dark:bg-theme-dark-700"
+                            className="border-none shadow-carousel-button-light disabled:opacity-0 dark:bg-theme-dark-700 dark:shadow-carousel-button-dark"
                         />
                     </div>
                 </div>
@@ -52,7 +52,7 @@ export const FeaturedCollectionsCarousel = ({
                     <div className="absolute inset-y-0 right-3 z-10 flex h-full items-center 2xl:-right-5">
                         <CarouselNextButton
                             carouselKey="featuredCollections"
-                            className="shadow-carousel-button-light dark:shadow-carousel-button-dark border-none disabled:opacity-0 dark:bg-theme-dark-700"
+                            className="border-none shadow-carousel-button-light disabled:opacity-0 dark:bg-theme-dark-700 dark:shadow-carousel-button-dark"
                         />
                     </div>
                 </div>
