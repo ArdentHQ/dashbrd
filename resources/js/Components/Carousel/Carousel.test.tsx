@@ -89,7 +89,7 @@ describe("Carousel", () => {
     });
 
     it("should not render carousel pagination if carousel instance is not provided", () => {
-        render(<CarouselPagination autoplayDelay={40} />);
+        render(<CarouselPagination />);
 
         expect(screen.queryByTestId("CarouselPagination__item")).not.toBeInTheDocument();
     });
