@@ -88,7 +88,7 @@ class CollectionResource extends Resource
                 ActionGroup::make([
                     Action::make('updateIsFeatured')
                         ->action(function (Collection $collection) {
-                            if (! $collection->is_featured && Collection::where('is_featured', true)->count() >= 4) {
+                            if (! $collection->is_featured && Collection::featured()->count() >= 4) {
                                 Notification::make()
                                 ->title('There are already 4 collections marked as featured. Please remove one before selecting a new one.')
                                 ->warning()

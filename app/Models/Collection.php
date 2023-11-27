@@ -71,6 +71,7 @@ class Collection extends Model
         'is_fetching_activity' => 'bool',
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
+        'is_featured' => 'bool',
     ];
 
     /**
@@ -555,5 +556,14 @@ class Collection extends Model
     public function isSpam(): bool
     {
         return SpamContract::isSpam($this->address, $this->network);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
     }
 }

@@ -1183,3 +1183,17 @@ it('can determine whether collection has its activities indexed', function () {
         'supply' => 100000,
     ])->indexesActivities())->toBeFalse();
 });
+
+it('can determine if a collection is featured or not using its scope', function () {
+    $featuredCollection1 = Collection::factory()->create(['is_featured' => true]);
+    $featuredCollection2 = Collection::factory()->create(['is_featured' => true]);
+    $nonFeaturedCollection = Collection::factory()->create(['is_featured' => false]);
+
+    $featuredCollections = Collection::featured()->get();
+
+    $this->assertTrue($featuredCollections->contains($featuredCollection1));
+    $this->assertTrue($featuredCollections->contains($featuredCollection2));
+    $this->assertFalse($featuredCollections->contains($nonFeaturedCollection));
+
+    $this->assertEquals(2, Collection::featured()->count());
+});
