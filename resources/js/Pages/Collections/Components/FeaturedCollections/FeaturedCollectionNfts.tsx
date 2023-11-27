@@ -1,5 +1,5 @@
-import { twMerge } from "tailwind-merge";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
 
 export const FeaturedCollectionNfts = ({ nfts }: { nfts: App.Data.Gallery.GalleryNftData[] }): JSX.Element => {

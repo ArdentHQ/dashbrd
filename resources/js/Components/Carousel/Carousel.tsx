@@ -183,7 +183,7 @@ export const CarouselPagination = ({
     autoplayDelay = 5000,
 }: {
     carouselInstance?: SwiperClass;
-    autoplayDelay: number;
+    autoplayDelay?: number;
 }): JSX.Element => {
     const { activeIndex, progress } = useCarouselAutoplay({ carouselInstance, autoplayDelay });
 
@@ -191,6 +191,7 @@ export const CarouselPagination = ({
         <div className="flex items-stretch space-x-2">
             {Array.from({ length: carouselInstance?.slides.length ?? 0 }, (_, index) => (
                 <div
+                    data-testid="CarouselPagination__item"
                     className="relative z-10 h-1 flex-grow cursor-pointer overflow-hidden rounded-full bg-theme-hint-200 dark:bg-theme-dark-700"
                     key={index}
                     onClick={() => {
@@ -198,6 +199,7 @@ export const CarouselPagination = ({
                     }}
                 >
                     <div
+                        data-testid="CarouselPagination__progress-bar"
                         className={cn(
                             "transition-width absolute inset-y-0 left-0 bg-theme-hint-600 duration-200 ease-linear",
                         )}
