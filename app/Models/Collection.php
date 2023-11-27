@@ -33,6 +33,7 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  * @property ?string $floor_price
  * @property ?string $last_indexed_token_number
  * @property ?string $image
+ * @property \Illuminate\Database\Eloquent\Collection<int,Nft> $cachedNfts
  *
  * @method BelongsToMany<Article> articlesWithCollections()
  */
@@ -43,6 +44,11 @@ class Collection extends Model
     const TWITTER_URL = 'https://x.com/';
 
     const DISCORD_URL = 'https://discord.gg/';
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection<int, Nft>
+     */
+    public $cachedNfts;
 
     /**
      * @var array<string>
@@ -65,6 +71,7 @@ class Collection extends Model
         'is_fetching_activity' => 'bool',
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
+        'is_featured' => 'bool',
     ];
 
     /**
@@ -549,5 +556,14 @@ class Collection extends Model
     public function isSpam(): bool
     {
         return SpamContract::isSpam($this->address, $this->network);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
     }
 }

@@ -1,8 +1,9 @@
-import { type PageProps, type RequestPayload } from "@inertiajs/core";
+import { type FormDataConvertible, type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
@@ -13,19 +14,21 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
-interface Filters {
-    chain: ChainFilter | null;
-    sort: PopularCollectionsSortBy | null;
+interface Filters extends Record<string, FormDataConvertible> {
+    chain?: ChainFilter;
+    sort?: PopularCollectionsSortBy;
 }
 
 interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
+    featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     filters: Filters;
 }
 
 const CollectionsIndex = ({
     title,
+    featuredCollections,
     collections: { data: collections },
     auth,
     filters,
@@ -41,33 +44,21 @@ const CollectionsIndex = ({
     useEffect(() => {
         if (isFirstRender) return;
 
-        const keys = Object.keys(currentFilters) as Array<keyof Filters>;
-
-        const query: RequestPayload = {};
-
-        for (const key of keys) {
-            const value = currentFilters[key];
-
-            if (value === null) continue;
-
-            query[key] = value;
-        }
-
-        router.get(route("collections"), query, {
-            only: ["collections", "activeSort", "filters"],
+        router.get(route("collections"), currentFilters, {
+            only: ["collections", "filters"],
             preserveScroll: true,
             preserveState: true,
         });
     }, [currentFilters]);
 
-    const setChain = (chain: ChainFilter | null): void => {
+    const setChain = (chain: ChainFilter | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
             chain,
         }));
     };
 
-    const setSortBy = (sort: PopularCollectionsSortBy | null): void => {
+    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
             sort,
@@ -77,8 +68,8 @@ const CollectionsIndex = ({
     return (
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
-
-            <div className="mx-6 sm:mx-8 2xl:mx-0">
+            <FeaturedCollectionsCarousel featuredCollections={featuredCollections} />
+            <div className="mx-6 mt-8 sm:mx-8 lg:mt-12 2xl:mx-0">
                 <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 

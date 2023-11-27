@@ -39,4 +39,16 @@ describe("GridHeader", () => {
         expect(screen.getByTestId("GridHeader__title")).toHaveTextContent("Test Grid");
         expect(screen.getByTestId("GridHeader__value")).toHaveTextContent("Missing Value");
     });
+
+    it("should handle custom class name for wrapper", () => {
+        render(
+            <GridHeader
+                title="Test Grid"
+                value="Test Value"
+                wrapperClassName="test-wrapper"
+            />,
+        );
+
+        expect(screen.getByTestId("GridHeader__wrapper")).toHaveClass("test-wrapper");
+    });
 });

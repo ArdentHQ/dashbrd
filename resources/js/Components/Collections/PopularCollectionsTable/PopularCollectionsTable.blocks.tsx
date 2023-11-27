@@ -1,10 +1,9 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Img } from "@/Components/Image";
-import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { PriceChange } from "@/Components/PriceChange/PriceChange";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
+import { CollectionImageWithIcon } from "@/Pages/Collections/Components/CollectionImage";
 import { FormatCrypto, FormatFiat } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -23,18 +22,13 @@ export const PopularCollectionName = ({
             className="group relative h-11 w-full cursor-pointer md:h-12"
         >
             <div className="absolute flex w-full  items-center space-x-4">
-                <div className="relative h-8 w-8 shrink-0 md:h-12 md:w-12">
-                    <Img
-                        wrapperClassName="aspect-square"
-                        className="h-full w-full rounded-full object-cover"
-                        src={collection.image}
-                        isCircle
-                    />
-
-                    <div className="absolute left-5 top-5 block h-4 w-4 rounded-full ring-4 ring-white dark:ring-theme-dark-900 md:left-8 md:top-8">
-                        <NetworkIcon networkId={collection.chainId} />
-                    </div>
-                </div>
+                <CollectionImageWithIcon
+                    image={collection.image}
+                    chainId={collection.chainId}
+                    className="relative h-8 w-8 shrink-0 md:h-12 md:w-12"
+                    wrapperClassName="aspect-square"
+                    networkClassName="left-5 top-5 "
+                />
 
                 <div className="break-word-legacy min-w-0 space-y-0.5 md:lg:space-y-0">
                     <Tooltip
