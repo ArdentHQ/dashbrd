@@ -1,7 +1,6 @@
+import { twMerge } from "tailwind-merge";
 import React from "react";
 import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
-import cn from "classnames";
-import { twMerge } from "tailwind-merge";
 
 export const FeaturedCollectionNfts = ({ nfts }: { nfts: App.Data.Gallery.GalleryNftData[] }): JSX.Element => {
     const defaultClassName = "w-72 md:w-56 bg-white dark:bg-theme-dark-900 md-lg:w-52";
