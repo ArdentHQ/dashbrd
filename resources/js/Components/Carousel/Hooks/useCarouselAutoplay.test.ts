@@ -54,7 +54,7 @@ describe("useCarouselAutoplay", () => {
         expect(result.current.activeIndex).toBe(0);
     });
 
-    it("should move to next slide", () => {
+    it("should not update progress if slider is paused or not running", () => {
         vi.useFakeTimers();
 
         const carouselInstance = new Swiper(".test");
@@ -75,8 +75,8 @@ describe("useCarouselAutoplay", () => {
                     off: vi.fn(),
                     autoplay: {
                         ...carouselInstance.autoplay,
-                        paused: false,
-                        running: true,
+                        paused: true,
+                        running: false,
                         start: starEventMock,
                     },
                 },
@@ -85,7 +85,7 @@ describe("useCarouselAutoplay", () => {
         );
 
         act(() => {
-            vi.advanceTimersByTime(100);
+            vi.advanceTimersByTime(1000);
         });
 
         expect(starEventMock).toHaveBeenCalled();
@@ -126,7 +126,7 @@ describe("useCarouselAutoplay", () => {
         );
 
         act(() => {
-            vi.advanceTimersByTime(100);
+            vi.advanceTimersByTime(1000);
         });
 
         expect(starEventMock).toHaveBeenCalled();
