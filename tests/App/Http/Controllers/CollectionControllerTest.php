@@ -13,6 +13,7 @@ use App\Models\Nft;
 use App\Models\Token;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('can render the collections overview page', function () {
@@ -21,6 +22,51 @@ it('can render the collections overview page', function () {
     $this->actingAs($user)
         ->get(route('collections'))
         ->assertStatus(200);
+});
+
+it('can return featured collections', function () {
+    $user = createUser();
+
+    Collection::factory(8)->create([
+        'is_featured' => false,
+    ]);
+
+    Collection::factory(2)->create([
+        'is_featured' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections'))
+        ->assertStatus(200)
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Collections/Index')
+                ->has(
+                    'featuredCollections'
+                ),
+            fn (Assert $page) => $page->where('featuredCollections', 2)
+
+        );
+});
+
+it('can cache 3 random nfts from a featured collection', function () {
+    $user = createUser();
+
+    $collection = Collection::factory()->create([
+        'is_featured' => true,
+    ]);
+
+    $nfts = Nft::factory(10)->create([
+        'collection_id' => $collection->id,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('collections'))
+        ->assertStatus(200);
+
+    $cachedNfts = Cache::get('featuredNftsForCollection'.$collection->id);
+
+    expect(count($cachedNfts))->toEqual(3);
 });
 
 it('can render the collections view page', function () {
