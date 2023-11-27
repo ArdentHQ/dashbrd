@@ -80,6 +80,7 @@ describe("Carousel", () => {
                     ...new Swiper(".test"),
                     slides: ["" as unknown as HTMLElement, " " as unknown as HTMLElement],
                     on: vi.fn(),
+                    off: vi.fn(),
                 }}
                 autoplayDelay={40}
             />,
@@ -102,6 +103,7 @@ describe("Carousel", () => {
                     ...new Swiper(".test"),
                     slides: ["" as unknown as HTMLElement, " " as unknown as HTMLElement],
                     on: vi.fn(),
+                    off: vi.fn(),
                     slideTo: slideToMock,
                 }}
                 autoplayDelay={40}
@@ -125,7 +127,7 @@ describe("Carousel", () => {
                 carouselInstance={{
                     ...new Swiper(".test"),
                     slides: ["" as unknown as HTMLElement, " " as unknown as HTMLElement],
-                    on: vi.fn(),
+                    off: vi.fn(),
                 }}
                 autoplayDelay={40}
             />,
