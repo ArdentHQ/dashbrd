@@ -1,6 +1,6 @@
+import cn from "classnames";
 import React from "react";
 import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
-import cn from "classnames";
 
 export const FeaturedCollectionNfts = ({ nfts }: { nfts: App.Data.Gallery.GalleryNftData[] }): JSX.Element => {
     const defaultClassName = "w-72 bg-white dark:bg-theme-dark-900 md-lg:w-52";
