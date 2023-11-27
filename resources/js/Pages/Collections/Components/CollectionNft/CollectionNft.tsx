@@ -9,10 +9,10 @@ import { isTruthy } from "@/Utils/is-truthy";
 
 export const CollectionNft = ({
     nft,
-    classNames,
+    className,
 }: {
     nft: App.Data.Gallery.GalleryNftData;
-    classNames?: string;
+    className?: string;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -30,7 +30,7 @@ export const CollectionNft = ({
             })}
             className={cn(
                 "transition-default group cursor-pointer rounded-xl border border-theme-secondary-300 p-2 ring-theme-primary-100 hover:ring-2 dark:border-theme-dark-700 dark:ring-theme-dark-700",
-                classNames,
+                className,
             )}
         >
             <span className="relative block">

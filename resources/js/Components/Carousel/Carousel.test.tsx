@@ -1,5 +1,15 @@
+import userEvent from "@testing-library/user-event";
 import React from "react";
-import { Carousel, CarouselControls, CarouselItem, CarouselNextButton, CarouselPreviousButton } from "./Carousel";
+import Swiper from "swiper";
+import {
+    Carousel,
+    CarouselControls,
+    CarouselItem,
+    CarouselNextButton,
+    CarouselPagination,
+    CarouselPreviousButton,
+} from "./Carousel";
+import * as useCarouselAutoplayMock from "./Hooks/useCarouselAutoplay";
 import { render, screen } from "@/Tests/testing-library";
 
 describe("Carousel", () => {
@@ -61,5 +71,68 @@ describe("Carousel", () => {
         render(<CarouselPreviousButton />);
 
         expect(screen.getByTestId("CarouselNavigationButtons__previous")).toBeInTheDocument();
+    });
+
+    it("should render carousel pagination", () => {
+        render(
+            <CarouselPagination
+                carouselInstance={{
+                    ...new Swiper(".test"),
+                    slides: ["" as unknown as HTMLElement, " " as unknown as HTMLElement],
+                    on: vi.fn(),
+                    off: vi.fn(),
+                }}
+                autoplayDelay={40}
+            />,
+        );
+
+        expect(screen.getAllByTestId("CarouselPagination__item")).toHaveLength(2);
+    });
+
+    it("should not render carousel pagination if carousel instance is not provided", () => {
+        render(<CarouselPagination />);
+
+        expect(screen.queryByTestId("CarouselPagination__item")).not.toBeInTheDocument();
+    });
+
+    it("should slide to element when clicking pagination link", async () => {
+        const slideToMock = vi.fn();
+        render(
+            <CarouselPagination
+                carouselInstance={{
+                    ...new Swiper(".test"),
+                    slides: ["" as unknown as HTMLElement, " " as unknown as HTMLElement],
+                    on: vi.fn(),
+                    off: vi.fn(),
+                    slideTo: slideToMock,
+                }}
+                autoplayDelay={40}
+            />,
+        );
+
+        expect(screen.getAllByTestId("CarouselPagination__item")).toHaveLength(2);
+
+        await userEvent.click(screen.getAllByTestId("CarouselPagination__item")[0]);
+        expect(slideToMock).toHaveBeenCalled();
+    });
+
+    it("should render pagination with progress bar", () => {
+        vi.spyOn(useCarouselAutoplayMock, "useCarouselAutoplay").mockImplementation(() => ({
+            activeIndex: 0,
+            progress: 50,
+        }));
+
+        render(
+            <CarouselPagination
+                carouselInstance={{
+                    ...new Swiper(".test"),
+                    slides: ["" as unknown as HTMLElement, " " as unknown as HTMLElement],
+                    off: vi.fn(),
+                }}
+                autoplayDelay={40}
+            />,
+        );
+
+        expect(screen.getAllByTestId("CarouselPagination__progress-bar")[0]).toHaveAttribute("style", "width: 50%;");
     });
 });
