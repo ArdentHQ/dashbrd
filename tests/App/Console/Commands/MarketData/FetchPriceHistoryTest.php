@@ -12,7 +12,7 @@ use App\Models\Wallet;
 use Illuminate\Support\Facades\Bus;
 
 it('dispatches a job for every token and user currency in the database', function () {
-    Bus::fake();
+    Bus::fake([FetchPriceHistory::class]);
 
     $network = Network::factory()->create(['is_mainnet' => true]);
 

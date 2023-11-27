@@ -42,12 +42,16 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command(VerifySupportedCurrencies::class)
             ->withoutOverlapping()
+            // If the day of the week (or the period) changes update the
+            // `DependsOnCoingeckoRateLimit.php` (see $jobsThatRunOnMonday)
             ->weeklyOn(Schedule::MONDAY, '10:00');
 
-        // Every 15 minutes for top tokens (prioritized on the command)
+        // Consider that the frequency here (currently `everyFifteenMinutes`)
+        // should match the parameter used on the `getLimitPerMinutes` method
+        // inside the `UpdateTokenDetails` command.
         $schedule
             ->command(UpdateTokenDetails::class, [
-                '--limit='.$this->maxCoingeckoJobsInInterval(),
+                '--top',
             ])
             ->withoutOverlapping()
             ->everyFifteenMinutes();
@@ -57,7 +61,7 @@ class Kernel extends ConsoleKernel
         // updated when he is online)
         $schedule
             ->command(UpdateTokenDetails::class, [
-                '--skip='.$this->maxCoingeckoJobsInInterval(),
+                '--no-top',
             ])
             ->withoutOverlapping()
             ->dailyAt('19:00');
@@ -210,6 +214,8 @@ class Kernel extends ConsoleKernel
                 '--period='.config('dashbrd.wallets.line_chart.period'),
             ])
             ->withoutOverlapping()
+            // In you update this time consider to update the related conditions
+            // on the `DependsOnCoingeckoRateLimit.php` file
             ->dailyAt('13:00');
 
         $schedule
@@ -235,19 +241,6 @@ class Kernel extends ConsoleKernel
             ])
             ->withoutOverlapping()
             ->everyFiveMinutes();
-    }
-
-    private function maxCoingeckoJobsInInterval(): int
-    {
-        // Depends on the frequency of the command, currently `everyFifteenMinutes`)
-        $scheduledEverySeconds = 15 * 60;
-        $maxRequest = (int) config('services.coingecko.rate.max_requests');
-        $perSeconds = (int) config('services.coingecko.rate.per_seconds');
-
-        // Give 5 minutes of room for other tasks
-        $thresholdForOtherTasksSeconds = 5 * 60;
-
-        return (int) ceil($maxRequest / ($perSeconds / ($scheduledEverySeconds - $thresholdForOtherTasksSeconds)));
     }
 
     /**
