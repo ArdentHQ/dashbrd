@@ -10,6 +10,7 @@ use App\Filament\Resources\CollectionResource\Pages\ViewCollection;
 use App\Models\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
@@ -87,9 +88,16 @@ class CollectionResource extends Resource
                 ActionGroup::make([
                     Action::make('updateIsFeatured')
                         ->action(function (Collection $collection) {
-                            $collection->update([
-                                'is_featured' => ! $collection->is_featured,
-                            ]);
+                            if (! $collection->is_featured && Collection::where('is_featured', true)->count() >= 4) {
+                                Notification::make()
+                                ->title('There are already 4 collections marked as featured. Please remove one before selecting a new one.')
+                                ->warning()
+                                ->send();
+                            } else {
+                                return $collection->update([
+                                    'is_featured' => ! $collection->is_featured,
+                                ]);
+                            }
                         })
                         ->label(fn (Collection $collection) => $collection->is_featured ? 'Unmark as featured' : 'Mark as featured')
                         ->icon('heroicon-s-star'),

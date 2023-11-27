@@ -74,6 +74,7 @@ class CollectionController extends Controller
                                 ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
+            'allowsGuests' => true,
             'activeSort' => $request->query('sort') === 'floor-price' ? 'floor-price' : 'top',
             'filters' => [
                 'chain' => $request->query('chain') ?? null,
