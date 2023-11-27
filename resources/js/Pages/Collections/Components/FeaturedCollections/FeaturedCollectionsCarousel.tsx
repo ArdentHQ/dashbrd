@@ -36,6 +36,7 @@ export const FeaturedCollectionsCarousel = ({
                     className="overflow-hidden lg:mx-8 lg:rounded-xl lg:border lg:border-theme-secondary-300 dark:lg:border-theme-dark-700 2xl:mx-0"
                     onSwiper={setCarousel}
                     autoHeight
+                    rewind
                     autoplay={{
                         delay: autoplayDelay,
                         pauseOnMouseEnter: true,
