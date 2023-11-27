@@ -4,19 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Enums\Chain;
-use App\Models\Collection as NftCollection;
-use App\Models\Network;
-use App\Models\Token;
-use App\Support\Facades\Alchemy;
-use App\Support\Facades\Mnemonic;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection as IlluminateCollection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use stdClass;
 
 class ReformatTopCollectionNfts extends Command
 {
