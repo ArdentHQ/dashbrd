@@ -72,10 +72,7 @@ class CollectionController extends Controller
                                 ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
-            'filters' => fn () => array_filter([
-                'chain' => in_array($request->query('chain'), ['polygon', 'ethereum']) ? $request->query('chain') : null,
-                'sort' => in_array($request->query('sort'), ['floor-price']) ? $request->query('sort') : null,
-            ]),
+            'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
             'collections' => fn () => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
@@ -84,6 +81,29 @@ class CollectionController extends Controller
                 return CollectionFeaturedData::fromModel($collection, $user ? $user->currency() : CurrencyCode::USD);
             }),
         ]);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getFilters(Request $request): array
+    {
+        $filter = [
+            'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
+            'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
+        ];
+
+        // If value is not defined (or invalid), remove it from the array since
+        // the frontend expect `undefined` values (not `null`)
+        return array_filter($filter);
+    }
+
+    /**
+     * @param  array<string>  $validValues
+     */
+    private function getValidValue(?string $value, array $validValues): ?string
+    {
+        return in_array($value, $validValues) ? $value : null;
     }
 
     public function show(Request $request, Collection $collection): Response
