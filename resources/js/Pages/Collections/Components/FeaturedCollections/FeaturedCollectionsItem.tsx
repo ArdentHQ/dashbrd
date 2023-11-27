@@ -21,7 +21,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
     const { t } = useTranslation();
 
     return (
-        <div className="left-0 top-0 z-10 h-[710px] w-full p-6 sm:h-[630px] md:h-[580px] md-lg:h-full md-lg:p-8 ">
+        <div className="z-10 h-full px-6 pb-12 pt-6 md-lg:p-8">
             <div className="flex h-full w-full flex-col items-center justify-between gap-6 md-lg:flex-row md-lg:justify-between md-lg:gap-8">
                 <div className="flex w-full flex-col md-lg:max-w-[448px] md-lg:py-2 xl:w-[460px] 2xl:max-w-[600px]">
                     <div className="flex flex-row gap-4">
@@ -46,7 +46,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                         </div>
                     </div>
 
-                    <div className="my-3 line-clamp-4 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200 md:h-12 md-lg:line-clamp-2">
+                    <div className="my-3 line-clamp-4 h-12 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:line-clamp-2">
                         {truncateDescription(data.description)}
                     </div>
 
@@ -58,6 +58,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                             nftsCount={data.nftsCount}
                             volume={data.volume}
                         />
+
                         <ButtonLink
                             className="w-full justify-center sm:h-fit sm:w-auto"
                             variant="primary"
@@ -82,7 +83,7 @@ export const FeaturedCollectionsItem = ({
     data: App.Data.Collections.CollectionFeaturedData;
 }): JSX.Element => (
     <div className="relative">
-        <div className="collection-banner absolute left-0 top-0 -z-10 h-[710px] w-full sm:h-[630px] md:h-[580px] md-lg:h-full">
+        <div className="collection-banner absolute inset-0 -z-10">
             <Img
                 className="h-full w-full object-cover"
                 wrapperClassName="h-full"
