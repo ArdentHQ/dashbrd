@@ -5,8 +5,8 @@ import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Tabs } from "@/Components/Tabs";
 
 export interface ChainFiltersProperties {
-    chain: ChainFilter | null;
-    setChain: (chain: ChainFilter | null) => void;
+    chain: ChainFilter | undefined;
+    setChain: (chain: ChainFilter | undefined) => void;
 }
 
 export enum ChainFilter {
@@ -24,9 +24,9 @@ export const ChainFilters = ({ chain, setChain }: ChainFiltersProperties): JSX.E
                     <Tab as={Fragment}>
                         <Tabs.Button
                             className="sm:grow md-lg:grow-0"
-                            selected={chain === null}
+                            selected={chain === undefined}
                             onClick={() => {
-                                setChain(null);
+                                setChain(undefined);
                             }}
                         >
                             {t("common.all_chains")}

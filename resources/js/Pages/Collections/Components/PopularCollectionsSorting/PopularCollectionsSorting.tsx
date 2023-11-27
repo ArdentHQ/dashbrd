@@ -6,8 +6,8 @@ import { Tabs } from "@/Components/Tabs";
 // null means "top"
 export type PopularCollectionsSortBy = "floor-price";
 export interface PopularCollectionsSortingProperties {
-    sortBy: PopularCollectionsSortBy | null;
-    setSortBy: (sortBy: PopularCollectionsSortBy | null) => void;
+    sortBy: PopularCollectionsSortBy | undefined;
+    setSortBy: (sortBy: PopularCollectionsSortBy | undefined) => void;
 }
 
 export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollectionsSortingProperties): JSX.Element => {
@@ -20,9 +20,9 @@ export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollecti
                     <Tab as={Fragment}>
                         <Tabs.Button
                             className="sm:grow md-lg:grow-0"
-                            selected={sortBy === null}
+                            selected={sortBy === undefined}
                             onClick={() => {
-                                setSortBy(null);
+                                setSortBy(undefined);
                             }}
                         >
                             {t("common.top")}
