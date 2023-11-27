@@ -54,12 +54,13 @@ export const useCarouselAutoplay = ({
 
             carousel.on("slideChange", setActiveSlide);
 
-            return () => {
-                // Clear all listeners and reset to defaults.
-                carousel.off("autoplayStop", start);
-                carousel.off("slideChange", setActiveSlide);
-                setActiveIndex(0);
-                setProgress(0);
+            return {
+                cleanup: () => {
+                    carousel.off("autoplayStop", start);
+                    carousel.off("slideChange", setActiveSlide);
+                    setActiveIndex(0);
+                    setProgress(0);
+                },
             };
         },
         [carouselInstance],
@@ -76,7 +77,7 @@ export const useCarouselAutoplay = ({
      * @returns {void}
      */
     const updateProgress = useCallback(
-        (carousel: SwiperClass) => {
+        (carousel: SwiperClass): { interval: NodeJS.Timeout } => {
             const progressUpdateInterval = 200;
 
             const interval = setInterval(() => {
@@ -88,9 +89,7 @@ export const useCarouselAutoplay = ({
                 setProgress((currentProgress) => Math.round(currentProgress + progressPercentageStep));
             }, progressUpdateInterval);
 
-            return () => {
-                clearInterval(interval);
-            };
+            return { interval };
         },
         [carouselInstance],
     );
@@ -104,9 +103,15 @@ export const useCarouselAutoplay = ({
             return;
         }
 
-        handleSlideChange(carouselInstance);
-        updateProgress(carouselInstance);
-    }, [carouselInstance]);
+        const { cleanup } = handleSlideChange(carouselInstance);
+        const { interval } = updateProgress(carouselInstance);
+
+        return () => {
+            // Clear all listeners and reset to defaults.
+            cleanup();
+            clearInterval(interval);
+        };
+    }, [carouselInstance, handleSlideChange, updateProgress]);
 
     return {
         progress,

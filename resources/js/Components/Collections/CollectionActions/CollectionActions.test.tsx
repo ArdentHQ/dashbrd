@@ -120,7 +120,10 @@ describe("CollectionActions", () => {
 
         await userEvent.click(hideButton);
 
-        expect(routerReloadSpy).toHaveBeenCalled();
+        await waitFor(() => {
+            expect(routerReloadSpy).toHaveBeenCalled();
+        });
+
         expect(routerPostSpy).toHaveBeenCalled();
     });
 
