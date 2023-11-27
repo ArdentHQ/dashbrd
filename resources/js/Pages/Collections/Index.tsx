@@ -2,6 +2,7 @@ import { type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
@@ -15,6 +16,7 @@ interface CollectionsIndexProperties extends PageProps {
     activeSort: "top" | "floor-price";
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
+    featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     filters: {
         chain: ChainFilter | null;
     };
@@ -23,6 +25,7 @@ interface CollectionsIndexProperties extends PageProps {
 const CollectionsIndex = ({
     activeSort,
     title,
+    featuredCollections,
     collections: { data: collections },
     auth,
     filters,
@@ -51,8 +54,8 @@ const CollectionsIndex = ({
     return (
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
-
-            <div className="mx-6 sm:mx-8 2xl:mx-0">
+            <FeaturedCollectionsCarousel featuredCollections={featuredCollections} />
+            <div className="mx-6 mt-8 sm:mx-8 lg:mt-12 2xl:mx-0">
                 <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 

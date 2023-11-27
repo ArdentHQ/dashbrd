@@ -40,6 +40,8 @@ class NftSeeder extends Seeder
                     'website' => $collectionArray['website'],
                 ]),
                 'created_at' => fake()->dateTimeBetween('-2 months'),
+                'is_featured' => $collectionArray['is_featured'] ?? false,
+                'description' => $collectionArray['description'] ?? '',
             ]);
 
             if (Feature::active(Features::Collections->value)) {
@@ -122,6 +124,8 @@ class NftSeeder extends Seeder
                     ['Background', 'Cosmic Purple', TraitDisplayType::Property, 6, 0.06],
                     ['Beak', 'Small', TraitDisplayType::Property, 4125, 42.15],
                 ],
+                'is_featured' => true,
+                'description' => 'Moonbirds are a collection of 10,000 unique NFTs living on the Ethereum blockchain. Each Moonbird is algorithmically generated and has a unique combination of traits, including body, eyes, beak, wings, and background. Moonbirds are a Proof NFT project.',
             ],
             [
                 // https://opensea.io/collection/timelessnfts
@@ -158,6 +162,8 @@ class NftSeeder extends Seeder
                 'traits' => [
                     ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
                 ],
+                'is_featured' => true,
+                'description' => 'Tubby Cats are a collection of 10,000 unique NFTs living on the Ethereum blockchain. Each Tubby Cat is algorithmically generated and has a unique combination of traits, including body, eyes, mouth, and background. Tubby Cats are a Proof NFT project.',
             ],
             [
                 // https://opensea.io/collection/alphadogs
@@ -176,6 +182,7 @@ class NftSeeder extends Seeder
                 'traits' => [
                     ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
                 ],
+                'is_featured' => true,
             ],
             [
                 // https://opensea.io/collection/devilvalley
@@ -210,6 +217,8 @@ class NftSeeder extends Seeder
                 'traits' => [
                     ['Beak', 'Small', TraitDisplayType::Property, 4125, 42.15],
                 ],
+                'is_featured' => true,
+                'description' => 'EDGEHOGS are a collection of 10,000 unique NFTs living on the Ethereum blockchain. Each EDGEHOG is algorithmically generated and has a unique combination of traits, including body, eyes, beak, wings, and background. EDGEHOGS are a Proof NFT project.',
             ],
             [
                 // https://opensea.io/collection/cryptoadz-by-gremplin

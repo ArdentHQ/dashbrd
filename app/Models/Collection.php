@@ -33,6 +33,7 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  * @property ?string $floor_price
  * @property ?string $last_indexed_token_number
  * @property ?string $image
+ * @property \Illuminate\Database\Eloquent\Collection<int,Nft> $cachedNfts
  *
  * @method BelongsToMany<Article> articlesWithCollections()
  */
@@ -43,6 +44,11 @@ class Collection extends Model
     const TWITTER_URL = 'https://x.com/';
 
     const DISCORD_URL = 'https://discord.gg/';
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection<int, Nft>
+     */
+    public $cachedNfts;
 
     /**
      * @var array<string>
