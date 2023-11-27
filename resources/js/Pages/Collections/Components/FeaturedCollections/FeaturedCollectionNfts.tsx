@@ -1,9 +1,10 @@
 import React from "react";
 import { CollectionNft } from "@/Pages/Collections/Components/CollectionNft";
 import cn from "classnames";
+import { twMerge } from "tailwind-merge";
 
 export const FeaturedCollectionNfts = ({ nfts }: { nfts: App.Data.Gallery.GalleryNftData[] }): JSX.Element => {
-    const defaultClassName = "w-72 bg-white dark:bg-theme-dark-900 md-lg:w-52";
+    const defaultClassName = "w-72 md:w-56 bg-white dark:bg-theme-dark-900 md-lg:w-52";
 
     return (
         <div className="flex justify-center space-x-3">
@@ -15,14 +16,14 @@ export const FeaturedCollectionNfts = ({ nfts }: { nfts: App.Data.Gallery.Galler
             {nfts.length > 1 && (
                 <CollectionNft
                     nft={nfts[1]}
-                    className={cn(defaultClassName, "hidden sm:block")}
+                    className={twMerge(defaultClassName, "hidden sm:block")}
                 />
             )}
 
             {nfts.length > 2 && (
                 <CollectionNft
                     nft={nfts[2]}
-                    className={cn(defaultClassName, "hidden xl:block")}
+                    className={twMerge(defaultClassName, "hidden md:block md-lg:hidden xl:block")}
                 />
             )}
         </div>
