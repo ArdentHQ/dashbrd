@@ -200,9 +200,9 @@ export const CarouselPagination = ({
                 >
                     <div
                         data-testid="CarouselPagination__progress-bar"
-                        className={cn(
-                            "transition-width absolute inset-y-0 left-0 bg-theme-hint-600 duration-200 ease-linear",
-                        )}
+                        className={cn(" absolute inset-y-0 left-0 bg-theme-hint-600 ", {
+                            "transition-width duration-200 ease-linear": index === activeIndex,
+                        })}
                         style={{ width: index === activeIndex ? `${progress}%` : 0 }}
                     />
                 </div>
