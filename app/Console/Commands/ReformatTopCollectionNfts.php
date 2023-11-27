@@ -69,7 +69,7 @@ class ReformatTopCollectionNfts extends Command
             $contractDirParts = explode('/', $dir);
             $contractDirName = $contractDirParts[1];
 
-            $oldNfts = json_decode($fs->get("$dir/nfts.json"), true);
+            $oldNfts = json_decode($fs->get("{$dir}/nfts.json"), true);
 
             $newNfts = [];
 
@@ -85,8 +85,8 @@ class ReformatTopCollectionNfts extends Command
                 unset($newDump);
             }
 
-            $fs->put("$newNftsSubDir/$contractDirName/nfts.json", (string) json_encode($newNfts));
-            $fs->copy("$dir/traits.json", "$newNftsSubDir/$contractDirName/traits.json");
+            $fs->put("{$newNftsSubDir}/{$contractDirName}/nfts.json", (string) json_encode($newNfts));
+            $fs->copy("{$dir}/traits.json", "{$newNftsSubDir}/{$contractDirName}/traits.json");
         }
 
         return Command::SUCCESS;
