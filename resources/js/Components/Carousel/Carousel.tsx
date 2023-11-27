@@ -2,9 +2,11 @@ import cn from "classnames";
 import React, { type ComponentProps } from "react";
 
 import { useTranslation } from "react-i18next";
-import { Grid, Navigation, Pagination } from "swiper";
+import { Autoplay, Grid, Navigation, Pagination } from "swiper";
 import { Swiper } from "swiper/react";
-import { type GridOptions } from "swiper/types";
+import { type GridOptions, type Swiper as SwiperClass } from "swiper/types";
+import { twMerge } from "tailwind-merge";
+import { useCarouselAutoplay } from "./Hooks/useCarouselAutoplay";
 import { IconButton } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Heading } from "@/Components/Heading";
@@ -114,11 +116,15 @@ export const Carousel = ({
         <Swiper
             style={{ paddingRight: (horizontalOffset ?? 0) * 2 }}
             className={cn(swiperClassName)}
-            modules={[Navigation, Grid, Pagination]}
+            modules={[Navigation, Grid, Pagination, Autoplay, Pagination]}
             slidesPerView={slidesPerView}
             spaceBetween={spaceBetween}
             slidesOffsetBefore={horizontalOffset}
             slidesOffsetAfter={(horizontalOffset ?? 0) * -1}
+            pagination={{
+                el: ".carousel-pagination",
+                clickable: true,
+            }}
             navigation={{
                 nextEl: `.carousel-button-next-${carouselKey}`,
                 prevEl: `.carousel-button-previous-${carouselKey}`,
@@ -133,12 +139,17 @@ export const Carousel = ({
 export const CarouselPreviousButton = ({
     carouselKey = "1",
     disabled = false,
+    className,
 }: {
     carouselKey?: string;
     disabled?: boolean;
+    className?: string;
 }): JSX.Element => (
     <IconButton
-        className={`carousel-button-previous-${carouselKey} dark:border-theme-dark-700 dark:disabled:bg-theme-dark-900 dark:disabled:text-theme-dark-400`}
+        className={twMerge(
+            `carousel-button-previous-${carouselKey} dark:border-theme-dark-700 dark:disabled:bg-theme-dark-900 dark:disabled:text-theme-dark-400`,
+            className,
+        )}
         data-testid="CarouselNavigationButtons__previous"
         icon="ChevronLeftSmall"
         iconSize="xs"
@@ -157,7 +168,7 @@ export const CarouselNextButton = ({
 }): JSX.Element => (
     <IconButton
         data-testid="CarouselNavigationButtons__next"
-        className={cn(
+        className={twMerge(
             `carousel-button-next-${carouselKey} dark:border-theme-dark-700 dark:disabled:bg-theme-dark-900 dark:disabled:text-theme-dark-400`,
             className,
         )}
@@ -166,3 +177,34 @@ export const CarouselNextButton = ({
         disabled={disabled}
     />
 );
+
+export const CarouselPagination = ({
+    carouselInstance,
+    autoplayDelay = 5000,
+}: {
+    carouselInstance?: SwiperClass;
+    autoplayDelay: number;
+}): JSX.Element => {
+    const { activeIndex, progress } = useCarouselAutoplay({ carouselInstance, autoplayDelay });
+
+    return (
+        <div className="flex items-stretch space-x-2">
+            {Array.from({ length: carouselInstance?.slides.length ?? 0 }, (_, index) => (
+                <div
+                    className="relative z-10 h-2 flex-grow cursor-pointer overflow-hidden rounded-full bg-theme-hint-200 dark:bg-theme-dark-700"
+                    key={index}
+                    onClick={() => {
+                        carouselInstance?.slideTo(index);
+                    }}
+                >
+                    <div
+                        className={cn(
+                            "transition-width absolute inset-y-0 left-0 bg-theme-hint-600 duration-200 ease-linear",
+                        )}
+                        style={{ width: index === activeIndex ? `${progress}%` : 0 }}
+                    />
+                </div>
+            ))}
+        </div>
+    );
+};
