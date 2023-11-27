@@ -41,6 +41,10 @@ module.exports = {
                 "3xl": "0px 48px 64px -36px rgba(49, 51, 63, 0.13), 0px 24px 48px -8px rgba(49, 51, 63, 0.11)",
                 dialog: "0px 2px 6px rgba(33, 34, 37, 0.06), 0px 32px 41px -23px rgba(33, 34, 37, 0.07)",
                 dropdown: "0px 2px 4px -2px rgba(49, 51, 63, 0.06), 0px 4px 8px -2px rgba(49, 51, 63, 0.1)",
+                "carousel-button-light":
+                    "0px 1px 3px 0px rgba(33, 42, 131, 0.10), 0px 6px 6px 0px rgba(33, 42, 131, 0.09), -1px 13px 8px 0px rgba(33, 42, 131, 0.05), -2px 22px 9px 0px rgba(33, 42, 131, 0.01), -3px 35px 10px 0px rgba(33, 42, 131, 0.00)",
+                "carousel-button-dark":
+                    "0px 15px 35px 0px rgba(18, 18, 19, 0.40)",
             },
 
             borderRadius: {
