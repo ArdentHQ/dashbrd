@@ -21,7 +21,7 @@ it('should update nft collection metadata', function () {
 
     /** @var Collection $collection */
     $collection = Collection::factory()->create([
-        'address' => '0xe785e82358879f061bc3dcac6f0444462d4b5330',
+        'address' => '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
         'network_id' => $network->id,
         'supply' => 8000,
         'minted_block' => 12907765,
@@ -43,6 +43,7 @@ it('should update nft collection metadata', function () {
         ->and($collection->description)->toBe('World of Women is a collection of 10,000 NFTs.')
         ->and($updatedAt->timestamp)->toBe($now->timestamp)
         ->and($collection->image())->toBe('image-url')
+        ->and($collection->openSeaSlug())->toBe('world-of-women-nft')
         ->and($collection->banner())->toBe('https://i.seadn.io/gae/GHhptRLebBOWOy8kfXpYCVqsqdes-1-6I_jbuRnGTHHW6TD63CtciH75Dotfu2u8v6EmkWt-tjhkFRVLxRUwgMfKqqy5W24AolJayeo?w=500&auto=format');
 });
 
@@ -55,7 +56,7 @@ it('should skip updating column if metadata is null', function () {
 
     /** @var Collection $collection */
     $collection = Collection::factory()->create([
-        'address' => '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
+        'address' => '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D',
         'network_id' => $network->id,
         'supply' => 8000,
         'floor_price' => 80000000,

@@ -414,6 +414,17 @@ it('should filter out nfts', function () {
                     'error' => 'some error',
                 ],
                 [
+                    'tokenId' => '30',
+                    'contract' => [
+                        'tokenType' => 'ERC155',
+                        'name' => 'ERC1155 Collection',
+                        'symbol' => '1155',
+                        'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
+                    ],
+                    'name' => 'ERC1155',
+                ],
+                [
                     'tokenId' => '4',
                     'contract' => [
                         'tokenType' => 'ERC721',
