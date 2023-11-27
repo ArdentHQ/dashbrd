@@ -23,7 +23,7 @@ export const ChainFilters = ({ chain, setChain }: ChainFiltersProperties): JSX.E
                 <Tabs widthClassName="w-full md-lg:w-auto">
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            className="sm:grow md-lg:grow-0"
+                            growClassName="grow md-lg:grow-0"
                             selected={chain === undefined}
                             onClick={() => {
                                 setChain(undefined);
@@ -35,7 +35,7 @@ export const ChainFilters = ({ chain, setChain }: ChainFiltersProperties): JSX.E
 
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            className="sm:grow md-lg:grow-0"
+                            growClassName="grow md-lg:grow-0"
                             selected={chain === ChainFilter.polygon}
                             onClick={() => {
                                 setChain(ChainFilter.polygon);
@@ -51,7 +51,7 @@ export const ChainFilters = ({ chain, setChain }: ChainFiltersProperties): JSX.E
 
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            className="sm:grow md-lg:grow-0"
+                            growClassName="grow md-lg:grow-0"
                             selected={chain === ChainFilter.ethereum}
                             onClick={() => {
                                 setChain(ChainFilter.ethereum);

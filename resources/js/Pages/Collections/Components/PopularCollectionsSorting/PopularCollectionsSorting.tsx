@@ -19,8 +19,9 @@ export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollecti
                 <Tabs widthClassName="w-full md-lg:w-auto">
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            className="sm:grow md-lg:grow-0"
+                            growClassName="grow md-lg:grow-0"
                             selected={sortBy === undefined}
+                            className="w-1/2 md-lg:w-auto"
                             onClick={() => {
                                 setSortBy(undefined);
                             }}
@@ -31,7 +32,8 @@ export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollecti
 
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            className="sm:grow md-lg:grow-0"
+                            growClassName="grow md-lg:grow-0"
+                            className="w-1/2 md-lg:w-auto"
                             selected={sortBy === "floor-price"}
                             onClick={() => {
                                 setSortBy("floor-price");

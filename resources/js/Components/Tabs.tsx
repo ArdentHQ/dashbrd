@@ -9,6 +9,7 @@ interface TabAnchorProperties extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
     selected?: boolean;
 }
 interface TabButtonProperties extends ButtonHTMLAttributes<HTMLButtonElement> {
+    growClassName?: string;
     selected?: boolean;
     icon?: IconName;
 }
@@ -18,11 +19,13 @@ const getTabClasses = ({
     disabled = false,
     selected,
     className,
+    growClassName = "grow sm:grow-0",
 }: {
     variant: "horizontal" | "vertical" | "icon";
     disabled?: boolean;
     selected: boolean;
     className?: string;
+    growClassName?: string;
 }): string => {
     const baseClassName = cn(
         "transition-default flex items-center font-medium whitespace-nowrap outline-none outline-3 focus-visible:outline-theme-primary-300 dark:focus-visible:outline-theme-primary-700",
@@ -36,7 +39,7 @@ const getTabClasses = ({
     if (variant === "icon") {
         return cn(
             baseClassName,
-            "grow sm:grow-0 justify-center select-none rounded-full w-10 h-10 flex items-center justify-center text-sm -outline-offset-[3px]",
+            "justify-center select-none rounded-full w-10 h-10 flex items-center justify-center text-sm -outline-offset-[3px]",
             {
                 "border-transparent bg-white text-theme-secondary-900 shadow-sm dark:bg-theme-dark-800 dark:text-theme-dark-50":
                     selected,
@@ -45,12 +48,13 @@ const getTabClasses = ({
                 "cursor-not-allowed focus:bg-transparent active:bg-transparent dark:text-theme-dark-400": disabled,
             },
             className,
+            growClassName,
         );
     }
     if (variant === "horizontal") {
         return cn(
             baseClassName,
-            "grow sm:grow-0 justify-center select-none rounded-full px-4 h-8 text-sm -outline-offset-[3px]",
+            "justify-center select-none rounded-full px-4 h-8 text-sm -outline-offset-[3px]",
             {
                 "border-transparent bg-white text-theme-secondary-900 shadow-sm dark:bg-theme-dark-800 dark:text-theme-dark-50":
                     selected,
@@ -59,6 +63,7 @@ const getTabClasses = ({
                 "cursor-not-allowed focus:bg-transparent active:bg-transparent dark:text-theme-dark-400": disabled,
             },
             className,
+            growClassName,
         );
     }
 
@@ -98,7 +103,10 @@ const DisabledLink = forwardRef<HTMLAnchorElement, Omit<TabAnchorProperties, "hr
 DisabledLink.displayName = "Tabs.DisabledLink";
 
 const Button = forwardRef<HTMLButtonElement, TabButtonProperties>(
-    ({ className, disabled, selected = false, children, icon, ...properties }, reference): JSX.Element => (
+    (
+        { className, growClassName, disabled, selected = false, children, icon, ...properties },
+        reference,
+    ): JSX.Element => (
         <button
             type="button"
             ref={reference}
@@ -109,6 +117,7 @@ const Button = forwardRef<HTMLButtonElement, TabButtonProperties>(
                 selected,
                 className,
                 variant: icon !== undefined ? "icon" : "horizontal",
+                growClassName,
             })}
         >
             {icon !== undefined ? <Icon name={icon} /> : children}
