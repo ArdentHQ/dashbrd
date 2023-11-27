@@ -44,7 +44,7 @@ const Drafts = ({
     }
 
     if (drafts.length === 0) {
-        return <EmptyBlock>{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
+        return <EmptyBlock className="mx-6 sm:mx-0">{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
     }
 
     return (
@@ -113,7 +113,7 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
     };
 
     if (userGalleries.meta.total === 0) {
-        return <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
+        return <EmptyBlock className="mx-6 sm:mx-0">{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
     }
 
     return (
