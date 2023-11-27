@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import type Swiper from "swiper";
+import { FeaturedCollectionsItem } from "./FeaturedCollectionsItem";
 import {
     Carousel,
     CarouselItem,
@@ -6,7 +8,6 @@ import {
     CarouselPagination,
     CarouselPreviousButton,
 } from "@/Components/Carousel";
-import { FeaturedCollectionsItem } from "./FeaturedCollectionsItem";
 
 export const FeaturedCollectionsCarousel = ({
     featuredCollections,
