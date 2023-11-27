@@ -191,7 +191,7 @@ export const CarouselPagination = ({
         <div className="flex items-stretch space-x-2">
             {Array.from({ length: carouselInstance?.slides.length ?? 0 }, (_, index) => (
                 <div
-                    className="relative z-10 h-2 flex-grow cursor-pointer overflow-hidden rounded-full bg-theme-hint-200 dark:bg-theme-dark-700"
+                    className="relative z-10 h-1 flex-grow cursor-pointer overflow-hidden rounded-full bg-theme-hint-200 dark:bg-theme-dark-700"
                     key={index}
                     onClick={() => {
                         carouselInstance?.slideTo(index);
