@@ -58,7 +58,7 @@ export const FeaturedCollectionsCarousel = ({
                 </div>
             </div>
 
-            <div className="mx-auto -mt-8 max-w-[16.5rem] md-lg:mt-2">
+            <div className="mx-auto -mt-6 max-w-[16.5rem] md-lg:mt-2">
                 <CarouselPagination
                     carouselInstance={carousel}
                     autoplayDelay={autoplayDelay}
