@@ -84,7 +84,7 @@ class CollectionController extends Controller
     }
 
     /**
-     * @return array<string, string>
+     * @return object{chain?: string, sort?: string}
      */
     private function getFilters(Request $request): object
     {
