@@ -65,6 +65,17 @@ class GalleryRepository
     }
 
     /**
+     * @return LengthAwarePaginator<Gallery>
+     */
+    public function forUser(User $user): LengthAwarePaginator
+    {
+        return $this->modifyQueryForIndex(
+            query: Gallery::where('user_id', $user->id),
+            user: $user,
+        )->paginate(12);
+    }
+
+    /**
      * Modify the query instance to apply relationships and limits used on the galleries index page.
      *
      * @param  Builder<Gallery>  $query

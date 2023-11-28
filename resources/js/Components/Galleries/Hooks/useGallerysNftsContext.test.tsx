@@ -1,23 +1,18 @@
 import { groupBy } from "@ardenthq/sdk-helpers";
-import { fireEvent } from "@testing-library/dom";
-import { act, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import axios from "axios";
-import React from "react";
-import { expect } from "vitest";
+import { useEffect } from "react";
+import { beforeEach, expect } from "vitest";
 import GalleryNftData = App.Data.Gallery.GalleryNftData;
-import {
-    type CollectionsPageMeta,
-    GalleryNfts,
-    useGalleryNftsContext,
-} from "@/Components/Galleries/Hooks/useGalleryNftsContext";
+import { GalleryNfts, useGalleryNftsContext } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
 import * as useMetaMaskContext from "@/Contexts/MetaMaskContext";
 import GalleryNftDataFactory from "@/Tests/Factories/Gallery/GalleryNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import WalletFactory from "@/Tests/Factories/Wallet/WalletFactory";
-import { BASE_URL, requestMockOnce, server } from "@/Tests/Mocks/server";
+import { BASE_URL, requestMock, requestMockOnce, server } from "@/Tests/Mocks/server";
 import { SamplePageMeta } from "@/Tests/SampleData";
 import { getSampleMetaMaskState } from "@/Tests/SampleData/SampleMetaMaskState";
-import { mockAuthContext, render, screen } from "@/Tests/testing-library";
+import { mockAuthContext, render } from "@/Tests/testing-library";
 
 describe("useGalleryNftsContext", () => {
     const firstCollectionNfts = new GalleryNftDataFactory().withImages().createMany(3, {
@@ -42,12 +37,17 @@ describe("useGalleryNftsContext", () => {
             loadMoreNfts,
             loadingNfts,
             getLoadingNftsCount,
+            searchNfts,
         } = useGalleryNftsContext();
 
         const collectionGroups = groupBy(nfts, (nft: App.Data.Gallery.GalleryNftData) => nft.collectionSlug) as Record<
             string,
             GalleryNftData[]
         >;
+
+        useEffect(() => {
+            void searchNfts();
+        }, []);
 
         const collections = Object.entries(collectionGroups);
 
@@ -109,18 +109,15 @@ describe("useGalleryNftsContext", () => {
     };
 
     const Component = ({
-        nfts: givenNfts,
-        pageMeta: givenPageMeta,
         nftsPerPage,
+        collectionsPerPage,
     }: {
-        nfts?: App.Data.Gallery.GalleryNftData[];
-        pageMeta?: CollectionsPageMeta;
         nftsPerPage?: number;
+        collectionsPerPage?: number;
     }): JSX.Element => (
         <GalleryNfts
-            nfts={givenNfts ?? nfts}
-            pageMeta={givenPageMeta ?? { next_page_url: `${BASE_URL}/collections`, total: 10, per_page: 10 }}
-            nftsPerPage={nftsPerPage ?? 10}
+            nftsPerPage={nftsPerPage}
+            collectionsPerPage={collectionsPerPage}
         >
             <HookTestComponent />
         </GalleryNfts>
@@ -143,6 +140,26 @@ describe("useGalleryNftsContext", () => {
         resetAuthContext();
     });
 
+    beforeEach(() => {
+        server.use(
+            requestMock(`${BASE_URL}/my-galleries/collections`, {
+                nfts,
+                collections: {
+                    paginated: {
+                        data: [],
+                        links: SamplePageMeta.paginated.links,
+                        meta: {
+                            ...SamplePageMeta.paginated.meta,
+                            next_page_url: `${BASE_URL}/my-galleries/collections?page=2`,
+                            first_page_url: `${BASE_URL}/my-galleries/collections`,
+                            total: 3,
+                        },
+                    },
+                },
+            }),
+        );
+    });
+
     it("should throw exception if not inside context", () => {
         const originalError = console.error;
         console.error = vi.fn();
@@ -160,38 +177,27 @@ describe("useGalleryNftsContext", () => {
         console.error = originalError;
     });
 
-    it("should customize Load More Collections button based on loaded collections count", () => {
-        const meta = { next_page_url: "https://test.com", total: 12, per_page: 10 };
-
-        const { rerender } = render(
-            <Component
-                nfts={[]}
-                pageMeta={meta}
-            />,
-        );
-        expect(screen.getByTestId("TestGallery__loadCollections").textContent).toBe("load 10 more collections");
-
-        rerender(
-            <Component
-                nfts={[]}
-                pageMeta={{
-                    ...meta,
-                    total: 8,
-                }}
-            />,
-        );
-
-        expect(screen.getByTestId("TestGallery__loadCollections").textContent).toBe("load 8 more collections");
-    });
-
     it("should load collections when `Load More Collections` clicked", async () => {
+        const { container } = render(
+            <Component
+                collectionsPerPage={10}
+                nftsPerPage={10}
+            />,
+        );
+
+        await waitFor(() => {
+            expect(container.getElementsByClassName("TestGallery_Collection").length).toBe(2);
+        });
+
+        expect(container.getElementsByClassName("TestGallery_NFT").length).toBe(6);
+
         const newNfts = new GalleryNftDataFactory().withImages().createMany(2, {
             collectionSlug: "severus-snape",
             collectionName: "Severus Snape",
         });
 
         server.use(
-            requestMockOnce(`${BASE_URL}/collections`, {
+            requestMockOnce(`${BASE_URL}/my-galleries/collections`, {
                 nfts: newNfts,
                 collections: {
                     paginated: {
@@ -199,26 +205,12 @@ describe("useGalleryNftsContext", () => {
                         links: SamplePageMeta.paginated.links,
                         meta: {
                             ...SamplePageMeta.paginated.meta,
-                            next_page_url: null,
                             total: 3,
                         },
                     },
                 },
             }),
         );
-
-        const { container } = render(
-            <Component
-                pageMeta={{
-                    next_page_url: `${BASE_URL}/collections`,
-                    total: 3,
-                    per_page: 10,
-                }}
-            />,
-        );
-
-        expect(container.getElementsByClassName("TestGallery_Collection").length).toBe(2);
-        expect(container.getElementsByClassName("TestGallery_NFT").length).toBe(6);
 
         act(() => {
             fireEvent.click(screen.getByTestId("TestGallery__loadCollections"));
@@ -239,11 +231,15 @@ describe("useGalleryNftsContext", () => {
         });
     });
 
-    it("should not make another fetch collections call when one in progress", () => {
+    it("should not make another fetch collections call when one in progress", async () => {
         render(<Component />);
 
+        await waitFor(() => {
+            expect(screen.getByTestId("TestGallery__loadCollections")).toBeInTheDocument();
+        });
+
         server.use(
-            requestMockOnce(`${BASE_URL}/collections`, {
+            requestMockOnce(`${BASE_URL}/my-galleries/collections`, {
                 nfts,
                 collections: {
                     paginated: {
@@ -262,10 +258,10 @@ describe("useGalleryNftsContext", () => {
         expect(fetchCollectionsMock).toHaveBeenCalledTimes(1);
     });
 
-    it("should not show a load more NFTs button if all loaded", () => {
+    it("should not show a load more NFTs button if all loaded", async () => {
         render(<Component />);
 
-        expect(screen.getByTestId(`loadNfts--${firstCollectionNfts[0].collectionSlug}`)).toBeInTheDocument();
+        expect(await screen.findByTestId(`loadNfts--${firstCollectionNfts[0].collectionSlug}`)).toBeInTheDocument();
         expect(screen.queryByTestId(`loadNfts--${secondCollectionNfts[0].collectionSlug}`)).not.toBeInTheDocument();
     });
 
@@ -284,17 +280,12 @@ describe("useGalleryNftsContext", () => {
             }),
         );
 
-        const { container } = render(
-            <Component
-                pageMeta={{
-                    next_page_url: null,
-                    total: 2,
-                    per_page: 10,
-                }}
-            />,
-        );
+        const { container } = render(<Component />);
 
-        expect(container.getElementsByClassName("TestGallery_Collection").length).toBe(2);
+        await waitFor(() => {
+            expect(container.getElementsByClassName("TestGallery_Collection").length).toBe(2);
+        });
+
         expect(container.getElementsByClassName("TestGallery_NFT").length).toBe(6);
 
         act(() => {
@@ -340,7 +331,7 @@ describe("useGalleryNftsContext", () => {
         });
     });
 
-    it("should not make another fetch NFTs call when one in progress", () => {
+    it("should not make another fetch NFTs call when one in progress", async () => {
         render(<Component />);
 
         const firstCollectionSlug = firstCollectionNfts[0].collectionSlug;
@@ -352,6 +343,10 @@ describe("useGalleryNftsContext", () => {
         );
 
         const fetchCollectionsMock = vi.spyOn(axios, "get");
+
+        await waitFor(() => {
+            expect(screen.getByTestId(`loadNfts--${firstCollectionSlug}`)).toBeInTheDocument();
+        });
 
         fireEvent.click(screen.getByTestId(`loadNfts--${firstCollectionSlug}`));
         fireEvent.click(screen.getByTestId(`loadNfts--${firstCollectionSlug}`));
@@ -374,16 +369,11 @@ describe("useGalleryNftsContext", () => {
             }),
         );
 
-        const { rerender } = render(
-            <Component
-                pageMeta={{
-                    next_page_url: null,
-                    total: 2,
-                    per_page: 10,
-                }}
-                nftsPerPage={3}
-            />,
-        );
+        const { rerender } = render(<Component nftsPerPage={3} />);
+
+        await waitFor(() => {
+            expect(screen.getByTestId(`loadNfts--${firstCollectionSlug}`)).toBeInTheDocument();
+        });
 
         act(() => {
             fireEvent.click(screen.getByTestId(`loadNfts--${firstCollectionSlug}`));
@@ -404,18 +394,32 @@ describe("useGalleryNftsContext", () => {
 
         const newNftSlug = nfts[0].collectionSlug;
 
-        rerender(
-            <Component
-                nfts={nfts}
-                nftsPerPage={2}
-            />,
-        );
-
         server.use(
+            requestMock(`${BASE_URL}/my-galleries/collections`, {
+                nfts,
+                collections: {
+                    paginated: {
+                        data: [],
+                        links: SamplePageMeta.paginated.links,
+                        meta: {
+                            ...SamplePageMeta.paginated.meta,
+                            next_page_url: `${BASE_URL}/my-galleries/collections?page=2`,
+                            first_page_url: `${BASE_URL}/my-galleries/collections`,
+                            total: 3,
+                        },
+                    },
+                },
+            }),
             requestMockOnce(route("my-galleries.nfts", { slug: newNftSlug }), {
                 nfts: [],
             }),
         );
+
+        rerender(<Component nftsPerPage={2} />);
+
+        await waitFor(() => {
+            expect(screen.getByTestId(`loadNfts--${newNftSlug}`)).toBeInTheDocument();
+        });
 
         // should render nftsPerPage amount of skeletons as unfetched 4 > 2
 

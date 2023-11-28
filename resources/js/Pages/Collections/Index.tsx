@@ -117,7 +117,7 @@ const CollectionsIndex = ({
         }
 
         reload({ selectedChainIds });
-    }, [selectedChainIds, auth.authenticated]);
+    }, [selectedChainIds, auth.authenticated, auth.wallet?.address]);
 
     return (
         <DefaultLayout toastMessage={props.toast}>

@@ -154,5 +154,9 @@ return [
     'reddit' => 'Reddit',
     'x' => 'X',
     'sort' => 'Sort',
+    'published' => 'Published',
+    'drafts' => 'Drafts',
+    'draft' => 'Draft',
+    'delete_draft' => 'Delete Draft',
     'share_on' => 'Share on {{platform}}',
 ];

@@ -30,7 +30,7 @@ export const CollectionName = ({
                         isCircle
                     />
 
-                    <div className="absolute left-5 top-5 block h-4 w-4 rounded-full ring-4 ring-white md:hidden">
+                    <div className="absolute left-5 top-5 block h-4 w-4 rounded-full ring-4 ring-white dark:ring-theme-dark-900 md:hidden">
                         <NetworkIcon networkId={collection.chainId} />
                     </div>
                 </div>

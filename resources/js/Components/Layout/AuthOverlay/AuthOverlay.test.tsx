@@ -365,7 +365,7 @@ describe("AuthOverlay", () => {
         expect(screen.queryByTestId("AuthOverlay")).not.toBeInTheDocument();
     });
 
-    it("should render without back button if showBackButton is false", () => {
+    it("should render without close button if showBackButton is false", () => {
         render(
             <AuthOverlay
                 show={true}
@@ -375,10 +375,10 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        expect(screen.queryByTestId("AuthOverlay__back-button")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("AuthOverlay__close-button")).not.toBeInTheDocument();
     });
 
-    it("should render back button if showBackButton is true", () => {
+    it("should render close button if showBackButton is true", () => {
         vi.spyOn(useMetaMaskContext, "useMetaMaskContext").mockReturnValue({
             ...defaultMetamaskConfig,
             requiresSignature: true,
@@ -393,7 +393,7 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        expect(screen.getByTestId("AuthOverlay__back-button")).toBeInTheDocument();
+        expect(screen.getByTestId("AuthOverlay__close-button")).toBeInTheDocument();
     });
 
     it("should redirect to page if referrer is null", () => {
@@ -412,7 +412,7 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
+        fireEvent.click(screen.getByTestId("AuthOverlay__close-button"));
         expect(window.location.href).toContain("/");
     });
 
@@ -433,7 +433,7 @@ describe("AuthOverlay", () => {
             />,
         );
 
-        fireEvent.click(screen.getByTestId("AuthOverlay__back-button"));
+        fireEvent.click(screen.getByTestId("AuthOverlay__close-button"));
         expect(backSpy).toHaveBeenCalled();
     });
 
