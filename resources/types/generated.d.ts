@@ -100,7 +100,7 @@ declare namespace App.Data.Articles {
         userId: number;
         authorName: string;
         authorAvatar: { thumb: string | null; thumb2x: string | null };
-        featuredCollections: Array<App.Data.Articles.FeaturedCollectionData>;
+        collections: Array<App.Data.Articles.FeaturedCollectionData>;
         metaDescription: string | null;
     };
     export type ArticlesData = {

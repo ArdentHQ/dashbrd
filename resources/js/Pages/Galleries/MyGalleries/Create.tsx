@@ -1,26 +1,19 @@
 import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import axios from "axios";
-import uniqBy from "lodash/uniqBy";
-import { type FormEvent, type MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { type FormEvent, type MouseEvent, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import CreateGalleryForm from "./Components/CreateGalleryForm";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
-import { FeaturedCollectionsBanner } from "@/Components/FeaturedCollectionsBanner";
 import { DraftsLimitDialog } from "@/Components/Galleries/DraftsLimitDialog";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
-import { GalleryControls } from "@/Components/Galleries/GalleryPage/GalleryControls";
 import { GalleryFormSlider, GalleryFormSliderTabs } from "@/Components/Galleries/GalleryPage/GalleryFormSlider";
-import { GalleryHeading } from "@/Components/Galleries/GalleryPage/GalleryHeading";
-import { EditableGalleryHook } from "@/Components/Galleries/Hooks/useEditableGalleryContext";
-import { GalleryNfts } from "@/Components/Galleries/Hooks/useGalleryNftsContext";
-import { NftGridEditable } from "@/Components/Galleries/NftGridEditable";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
 import { NoNftsOverlay } from "@/Components/Layout/NoNftsOverlay";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { usePrevious } from "@/Hooks/usePrevious";
 import { useToasts } from "@/Hooks/useToasts";
-import { GalleryNameInput } from "@/Pages/Galleries/Components/GalleryNameInput";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { type GalleryDraftUnsaved, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { useWalletDraftGallery } from "@/Pages/Galleries/hooks/useWalletDraftGallery";
@@ -84,14 +77,16 @@ const Create = ({
         isDisabled: isTruthy(gallery?.slug),
     });
 
-    const { selectedNfts, data, setData, errors, submit, updateSelectedNfts, processing } = useGalleryForm({
+    const deleteDraft = (): void => {
+        void remove(draft.id);
+        replaceUrlQuery({ draftId: "" });
+    };
+
+    const { data, setData, submit, processing, selectedNfts, errors, updateSelectedNfts } = useGalleryForm({
         gallery,
         setDraftNfts: setNfts,
         draft,
-        deleteDraft: (): void => {
-            void remove(draft.id);
-            replaceUrlQuery({ draftId: "" });
-        },
+        deleteDraft,
     });
 
     const previousWallet = usePrevious(auth.wallet.address);
@@ -135,18 +130,6 @@ const Create = ({
             replaceUrlQuery({ draftId: "" });
         }
     }, [draft.id, isLoading, isSaving, auth.wallet.address, previousWallet, data]);
-
-    const totalValue = 0;
-
-    const collections = useMemo<Array<Pick<App.Data.Nfts.NftCollectionData, "name" | "image" | "slug">>>(
-        () =>
-            uniqBy(selectedNfts, (nft) => nft.tokenAddress).map((nft) => ({
-                name: nft.collectionName,
-                image: nft.collectionImage,
-                slug: nft.collectionSlug,
-            })),
-        [selectedNfts],
-    );
 
     const handleGalleryDelete = useCallback(
         (slug: string) => {
@@ -202,6 +185,9 @@ const Create = ({
                     message: t("pages.galleries.my_galleries.nfts_no_longer_owned"),
                     type: "warning",
                 });
+
+                setNfts(nfts);
+                return;
             }
 
             setInitialNfts(nfts);
@@ -240,6 +226,23 @@ const Create = ({
         });
     };
 
+    /**
+     * Remove empty draft when navigating away.
+     */
+    useEffect(() => {
+        const abortListener = router.on("before", () => {
+            const isEmpty = !isTruthy(data.name.trim()) && draft.nfts.length === 0 && !isTruthy(data.coverImage);
+
+            if (isEmpty) {
+                void remove(draft.id);
+            }
+        });
+
+        return () => {
+            abortListener();
+        };
+    }, [data, draft]);
+
     const deleteHandler = (): void => {
         void signedAction(() => {
             setShowDeleteModal(true);
@@ -256,58 +259,22 @@ const Create = ({
         >
             <Head title={title} />
 
-            <div className="mx-6 sm:mx-8 2xl:mx-0">
-                <GalleryNameInput
-                    maxLength={50}
-                    error={errors.name}
-                    name={data.name}
-                    onChange={(name) => {
-                        setData("name", name);
-                    }}
-                    onBlur={() => {
-                        setTitle(data.name);
-                    }}
-                />
-
-                <EditableGalleryHook
-                    selectedNfts={initialNfts}
-                    nftLimit={nftLimit}
-                    key={auth.wallet.address}
-                >
-                    <GalleryHeading
-                        value={totalValue}
-                        nftsCount={data.nfts.length}
-                        collectionsCount={collections.length}
-                        currency={auth.user.attributes.currency}
-                    />
-
-                    <div className="mt-4">
-                        <GalleryControls
-                            reportReasons={props.reportReasons}
-                            showEditAction={false}
-                            likesCount={gallery?.likes}
-                            gallery={gallery}
-                            wallet={auth.wallet}
-                            isDisabled
-                        />
-                    </div>
-
-                    <div className="space-y-4">
-                        <GalleryNfts
-                            nftsPerPage={nftsPerPage}
-                            collectionsPerPage={collectionsPerPage}
-                        >
-                            <NftGridEditable
-                                onChange={updateSelectedNfts}
-                                error={errors.nfts}
-                                hiddenCollectionsCount={hiddenCollectionsCount}
-                            />
-                        </GalleryNfts>
-
-                        <FeaturedCollectionsBanner collections={collections} />
-                    </div>
-                </EditableGalleryHook>
-            </div>
+            <CreateGalleryForm
+                gallery={gallery}
+                setTitle={setTitle}
+                initialNfts={initialNfts}
+                nftLimit={nftLimit}
+                auth={auth}
+                reportReasons={props.reportReasons}
+                nftsPerPage={nftsPerPage}
+                collectionsPerPage={collectionsPerPage}
+                hiddenCollectionsCount={hiddenCollectionsCount}
+                data={data}
+                setData={setData}
+                selectedNfts={selectedNfts}
+                updateSelectedNfts={updateSelectedNfts}
+                errors={errors}
+            />
 
             <GalleryActionToolbar
                 showDelete={isTruthy(gallery)}

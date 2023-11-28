@@ -145,7 +145,7 @@ it('should get article\'s collections', function () {
         $collection->articles()->attach($articles, ['order_index' => 1]);
     });
 
-    $result = $articles->first()->withFeaturedCollections()->first();
+    $result = $articles->first()->withRelatedCollections()->first();
 
     expect($result->collections->count())->toBe(2)
         ->and($result->collections->pluck('name'))->toContain($collections[0]->name)
