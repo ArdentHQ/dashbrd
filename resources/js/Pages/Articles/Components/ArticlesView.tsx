@@ -118,7 +118,7 @@ export const ArticlesView = ({
             {showHighlighted && (
                 <HighlightedArticles
                     isLoading={isLoading}
-                    articles={highlightedArticles ?? []}
+                    articles={highlightedArticles}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
