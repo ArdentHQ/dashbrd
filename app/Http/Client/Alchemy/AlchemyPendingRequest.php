@@ -290,8 +290,8 @@ class AlchemyPendingRequest extends PendingRequest
         $nextToken = Arr::get($data, 'pageKey');
 
         $nfts = collect($nfts)
-            ->filter(fn ($nft) => $this->filterNftV3($nft))
-            ->map(fn ($nft) => $this->parseNftV3($nft, $collection->network_id))
+            ->filter(fn ($nft) => $this->filterNft($nft))
+            ->map(fn ($nft) => $this->parseNft($nft, $collection->network_id))
             ->values();
 
         return new Web3NftsChunk(
