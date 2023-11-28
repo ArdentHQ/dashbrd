@@ -42,7 +42,7 @@
                 "tokenUri": "ipfs://QmTNBQDbggLZdKF1fRgWnXsnRikd52zL5ciNu769g9JoUP/0",
                 "metadata": {
                     "name": "WoW #0",
-                    "image": "ipfs://QmYPznMvizE4BxrYaXM8dpRrzgN6Pg2rtTczjzNn13More",
+                    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgc",
                     "attributes": [
                         {
                             "value": "Soft Purple",

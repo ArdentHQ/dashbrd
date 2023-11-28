@@ -1,0 +1,315 @@
+{
+    "ownedNfts": [
+        {
+            "contract": {
+                "address": "0xe0176bA60efddb29Cac5b15338C9962dAee9de0c",
+                "name": "PREMINT Collector",
+                "symbol": "PREMINTCOLL",
+                "totalSupply": "10000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xB52a42919fA2C6e65fC95484dd907B817f19F627",
+                "deployedBlockNumber": 14498490,
+                "openSeaMetadata": {
+                    "floorPrice": 0.05,
+                    "collectionName": "PREMINT Collector Pass - OFFICIAL",
+                    "collectionSlug": "premint-collector",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gae/aMMR2KXGtRL_jqpS6l1pLoLwUArlwKH9oEnZw-ezBoSANzRGKdManYxuzlB_kztn5bcEQA2Bgx9JWhdEQKLbgj0aFbhC7yFmMS7txw?w=500&auto=format",
+                    "description": "As a PREMINT Collector Pass holder, you will get access to an evolving collector dashboard and features to keep you on top of the hottest mints. For more info see https://collectors.premint.xyz/",
+                    "externalUrl": "https://collectors.premint.xyz/",
+                    "twitterUsername": "premint",
+                    "discordUrl": null,
+                    "bannerImageUrl": "https://i.seadn.io/gae/ZqJbyUOvVtX5ZR-hP0ELSX4N5LHNoXtNscEAzMbwM_QrEKTsAAFqy7bzKnfHPjZcBIDRkFbFTUjtnrtulg3_1uCSLtbbODlCQJh9rQ?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-22T06:40:47.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "8386",
+            "tokenType": "ERC721",
+            "name": "PREMINT Collector Pass",
+            "description": [
+                "A decentralized tale of 7,290 anonymous heroes\nA multi-part journey that unfolds from launch\nCC0 or Full Commercial Rights\n11 Episode NFTs telling the story of your specific character dropped to Broadsiders in the months following mint\nOnce final chapter drops, merge and burn Episode NFTs into a 1/1 Book NFT, featuring your character on the 1/1 cover art, with the ability to print and sell copies\nCollection features rare traits (both cc0 and licensed from other projects) contributed by guest artists and from projects including XCOPY, Cryptopunk #5046, OSF / Rektguy, Moonbirds, Eclectic Method, Goblintown, Nouns, Blitmaps, Kristy Glas, Grillz Gang, Cryptoadz, Robness and more."
+            ],
+            "tokenUri": "https://collectors.premint.xyz/metadata/8386",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/c63b7e2c87024ebf4968e5e5e3eab994",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/c63b7e2c87024ebf4968e5e5e3eab994",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/c63b7e2c87024ebf4968e5e5e3eab994",
+                "contentType": "image/png",
+                "size": 230409,
+                "originalUrl": "https://collectors.premint.xyz/collector-pass.png"
+            },
+            "raw": {
+                "tokenUri": "https://collectors.premint.xyz/metadata/8386",
+                "metadata": {
+                    "name": "PREMINT Collector Pass",
+                    "image": "https://collectors.premint.xyz/collector-pass.png"
+                },
+                "error": "Contract returned a broken token uri"
+            },
+            "collection": {
+                "name": "PREMINT Collector Pass - OFFICIAL",
+                "openSeaSlug": "premint-collector",
+                "externalUrl": "https://collectors.premint.xyz/",
+                "bannerImageUrl": "https://i.seadn.io/gae/ZqJbyUOvVtX5ZR-hP0ELSX4N5LHNoXtNscEAzMbwM_QrEKTsAAFqy7bzKnfHPjZcBIDRkFbFTUjtnrtulg3_1uCSLtbbODlCQJh9rQ?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-08T04:51:22.613Z",
+            "balance": "1",
+            "acquiredAt": {
+                "blockTimestamp": null,
+                "blockNumber": null
+            }
+        },
+        {
+            "contract": {
+                "address": "0xB8Da418FFC2Cb675B8B3d73dca0E3f10811FBbdD",
+                "name": "WE_ARE_KLOUD",
+                "symbol": "KLOUD",
+                "totalSupply": "5000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xcf9144523F1A047612318A4867839CD69fbb2eaa",
+                "deployedBlockNumber": 13973502,
+                "openSeaMetadata": {
+                    "floorPrice": 0.0099,
+                    "collectionName": "WE ARE KLOUD",
+                    "collectionSlug": "we-are-kloud",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gae/ICJQZ_ahWfDPdtF-wz9gx79qTjU5A08L9fGkdB_HEyLT0EzYpE6zIdjZGPq4mwEDd4cT3PufBeMDohfppoX2RXdbfDxSxEYio7gh?w=500&auto=format",
+                    "description": "WE ARE KLOUD is a 5,000 Music NFT collection by KLOUD & Alex Hooker, curated by SoundMint.\n\nSoundMint curated NFTs are generative music collectibles that combine generative visuals with generative music by pairing stems to visual layers; allowing the collector to own a unique 1/1 musical art piece. Collect SoundMint curated NFTs by your favorite artist, trade them with other SoundMint owners, and become a part of the SoundMint generative music ecosystem.\n\nOwning a WE ARE KLOUD NFT grants the owner:\n\n-Full-Commercial IP Licensing Rights to the Audio \n   \n-Unique Avatar Integration into 'World Wide Webb' Metaverse\n",
+                    "externalUrl": "http://soundmint.xyz",
+                    "twitterUsername": "soundmintxyz",
+                    "discordUrl": "https://discord.gg/soundmint",
+                    "bannerImageUrl": "https://i.seadn.io/gae/UCilfcDvkWO8HF-PJ1SB7PpRUj3BsIYPhXuOcvrJOJJCqI2dU8n82DYY3Ab5En0CB_Rp8Rn5Vdroz9pW7o-DewZBX5UKxPeUq6NHi9U?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-27T00:28:34.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "1895",
+            "tokenType": "ERC721",
+            "name": "#1895",
+            "description": "KLOUD is the artistical embodiment of limitless creativity in anonymity. With this NFT drop, the collector enters the KLOUD, owning a unique visual & musical art piece derived from the generative algorithm that is KLOUD x HOOKER x COMPUTER. Holding one of these NFTs grants future access to KLOUD metaverse events.",
+            "tokenUri": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/meta/1895",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/80d6e397bcef8e3d59933d8510d9456c",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/80d6e397bcef8e3d59933d8510d9456c",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/80d6e397bcef8e3d59933d8510d9456c",
+                "contentType": "image/png",
+                "size": 3302206,
+                "originalUrl": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/images/4890.png"
+            },
+            "raw": {
+                "tokenUri": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/meta/1895",
+                "metadata": {
+                    "name": "#1895",
+                    "description": "KLOUD is the artistical embodiment of limitless creativity in anonymity. With this NFT drop, the collector enters the KLOUD, owning a unique visual & musical art piece derived from the generative algorithm that is KLOUD x HOOKER x COMPUTER. Holding one of these NFTs grants future access to KLOUD metaverse events.",
+                    "image": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/images/4890.png",
+                    "attributes": [
+                        {
+                            "value": {
+                                "color": "Yellow"
+                            },
+                            "trait_type": "Bass"
+                        },
+                        {
+                            "value": "Kick Kick Snare",
+                            "trait_type": "Drums"
+                        },
+                        {
+                            "value": "Claps and Snares",
+                            "trait_type": "Percussion"
+                        },
+                        {
+                            "value": "Atmosphere 1 ",
+                            "trait_type": "Lead"
+                        },
+                        {
+                            "value": "Alive",
+                            "trait_type": "Vocal"
+                        },
+                        {
+                            "value": "Contrast",
+                            "trait_type": "Body Type"
+                        },
+                        {
+                            "value": "Blue",
+                            "trait_type": "Background Color"
+                        },
+                        {
+                            "value": "English",
+                            "trait_type": "Background"
+                        },
+                        {
+                            "value": "Code",
+                            "trait_type": "Border"
+                        }
+                    ],
+                    "animation_url": "https://soundarts-nft.s3.amazonaws.com/KLOUD_2022_5000_20000/4890.mp4"
+                },
+                "error": null
+            },
+            "collection": {
+                "name": "WE ARE KLOUD",
+                "openSeaSlug": "we-are-kloud",
+                "externalUrl": "http://soundmint.xyz",
+                "bannerImageUrl": "https://i.seadn.io/gae/UCilfcDvkWO8HF-PJ1SB7PpRUj3BsIYPhXuOcvrJOJJCqI2dU8n82DYY3Ab5En0CB_Rp8Rn5Vdroz9pW7o-DewZBX5UKxPeUq6NHi9U?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-27T02:34:39.329Z",
+            "balance": "1",
+            "acquiredAt": {
+                "blockTimestamp": null,
+                "blockNumber": null
+            }
+        },
+        {
+            "contract": {
+                "address": "0xe0176bA60efddb29Cac5b15338C9962dAee9de0c",
+                "name": "PREMINT Collector",
+                "symbol": "PREMINTCOLL",
+                "totalSupply": "10000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xB52a42919fA2C6e65fC95484dd907B817f19F627",
+                "deployedBlockNumber": 14498490,
+                "openSeaMetadata": {
+                    "floorPrice": 0.05,
+                    "collectionName": "PREMINT Collector Pass - OFFICIAL",
+                    "collectionSlug": "premint-collector",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gae/aMMR2KXGtRL_jqpS6l1pLoLwUArlwKH9oEnZw-ezBoSANzRGKdManYxuzlB_kztn5bcEQA2Bgx9JWhdEQKLbgj0aFbhC7yFmMS7txw?w=500&auto=format",
+                    "description": "As a PREMINT Collector Pass holder, you will get access to an evolving collector dashboard and features to keep you on top of the hottest mints. For more info see https://collectors.premint.xyz/",
+                    "externalUrl": "https://collectors.premint.xyz/",
+                    "twitterUsername": "premint",
+                    "discordUrl": null,
+                    "bannerImageUrl": "https://i.seadn.io/gae/ZqJbyUOvVtX5ZR-hP0ELSX4N5LHNoXtNscEAzMbwM_QrEKTsAAFqy7bzKnfHPjZcBIDRkFbFTUjtnrtulg3_1uCSLtbbODlCQJh9rQ?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-22T06:40:47.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "8387",
+            "tokenType": "ERC721",
+            "name": "PREMINT Collector Pass",
+            "description": "A decentralized tale of 7,290 anonymous heroes\nA multi-part journey that unfolds from launch\nCC0 or Full Commercial Rights\n11 Episode NFTs telling the story of your specific character dropped to Broadsiders in the months following mint\nOnce final chapter drops, merge and burn Episode NFTs into a 1/1 Book NFT, featuring your character on the 1/1 cover art, with the ability to print and sell copies\nCollection features rare traits (both cc0 and licensed from other projects) contributed by guest artists and from projects including XCOPY, Cryptopunk #5046, OSF / Rektguy, Moonbirds, Eclectic Method, Goblintown, Nouns, Blitmaps, Kristy Glas, Grillz Gang, Cryptoadz, Robness and more.",
+            "tokenUri": "https://collectors.premint.xyz/metadata/8386",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/c63b7e2c87024ebf4968e5e5e3eab994",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/c63b7e2c87024ebf4968e5e5e3eab994",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/c63b7e2c87024ebf4968e5e5e3eab994",
+                "contentType": "image/png",
+                "size": 230409,
+                "originalUrl": "https://collectors.premint.xyz/collector-pass.png"
+            },
+            "raw": {
+                "tokenUri": "https://collectors.premint.xyz/metadata/8386",
+                "metadata": {
+                    "name": "PREMINT Collector Pass",
+                    "image": "https://collectors.premint.xyz/collector-pass.png",
+                    "metadata": {},
+                    "attributes": []
+                },
+                "error": "Contract returned a broken token uri"
+            },
+            "collection": {
+                "name": "PREMINT Collector Pass - OFFICIAL",
+                "openSeaSlug": "premint-collector",
+                "externalUrl": "https://collectors.premint.xyz/",
+                "bannerImageUrl": "https://i.seadn.io/gae/ZqJbyUOvVtX5ZR-hP0ELSX4N5LHNoXtNscEAzMbwM_QrEKTsAAFqy7bzKnfHPjZcBIDRkFbFTUjtnrtulg3_1uCSLtbbODlCQJh9rQ?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-08T04:51:22.613Z",
+            "balance": "1",
+            "acquiredAt": {
+                "blockTimestamp": null,
+                "blockNumber": null
+            }
+        },
+        {
+            "contract": {
+                "address": "0xB8Da418FFC2Cb675B8B3d73dca0E3f10811FBbdD",
+                "name": "WE_ARE_KLOUD",
+                "symbol": "KLOUD",
+                "totalSupply": "5000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xcf9144523F1A047612318A4867839CD69fbb2eaa",
+                "deployedBlockNumber": 13973502,
+                "openSeaMetadata": {
+                    "floorPrice": 0.0099,
+                    "collectionName": "WE ARE KLOUD",
+                    "collectionSlug": "we-are-kloud",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gae/ICJQZ_ahWfDPdtF-wz9gx79qTjU5A08L9fGkdB_HEyLT0EzYpE6zIdjZGPq4mwEDd4cT3PufBeMDohfppoX2RXdbfDxSxEYio7gh?w=500&auto=format",
+                    "description": "WE ARE KLOUD is a 5,000 Music NFT collection by KLOUD & Alex Hooker, curated by SoundMint.\n\nSoundMint curated NFTs are generative music collectibles that combine generative visuals with generative music by pairing stems to visual layers; allowing the collector to own a unique 1/1 musical art piece. Collect SoundMint curated NFTs by your favorite artist, trade them with other SoundMint owners, and become a part of the SoundMint generative music ecosystem.\n\nOwning a WE ARE KLOUD NFT grants the owner:\n\n-Full-Commercial IP Licensing Rights to the Audio \n   \n-Unique Avatar Integration into 'World Wide Webb' Metaverse\n",
+                    "externalUrl": "http://soundmint.xyz",
+                    "twitterUsername": "soundmintxyz",
+                    "discordUrl": "https://discord.gg/soundmint",
+                    "bannerImageUrl": "https://i.seadn.io/gae/UCilfcDvkWO8HF-PJ1SB7PpRUj3BsIYPhXuOcvrJOJJCqI2dU8n82DYY3Ab5En0CB_Rp8Rn5Vdroz9pW7o-DewZBX5UKxPeUq6NHi9U?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-27T00:28:34.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "1897",
+            "tokenType": "ERC721",
+            "name": "#1895",
+            "description": "KLOUD is the artistical embodiment of limitless creativity in anonymity. With this NFT drop, the collector enters the KLOUD, owning a unique visual & musical art piece derived from the generative algorithm that is KLOUD x HOOKER x COMPUTER. Holding one of these NFTs grants future access to KLOUD metaverse events.",
+            "tokenUri": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/meta/1895",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/80d6e397bcef8e3d59933d8510d9456c",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/80d6e397bcef8e3d59933d8510d9456c",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/80d6e397bcef8e3d59933d8510d9456c",
+                "contentType": "image/png",
+                "size": 3302206,
+                "originalUrl": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/images/4890.png"
+            },
+            "raw": {
+                "tokenUri": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/meta/1895",
+                "metadata": {
+                    "name": "#1897",
+                    "description": "KLOUD is the artistical embodiment of limitless creativity in anonymity. With this NFT drop, the collector enters the KLOUD, owning a unique visual & musical art piece derived from the generative algorithm that is KLOUD x HOOKER x COMPUTER. Holding one of these NFTs grants future access to KLOUD metaverse events.",
+                    "image": "https://soundmint-public.s3.amazonaws.com/KLOUD_REVEALED/images/4890.png",
+                    "attributes": [
+                        {},
+                        {
+                            "value": {
+                                "color": "Yellow"
+                            },
+                            "trait_type": "Color"
+                        },
+                        {
+                            "value": "Rocket Tail",
+                            "trait_type": "Tails"
+                        },
+                        {
+                            "value": null
+                        },
+                        {
+                            "value": [],
+                            "trait_type": "Tails"
+                        }
+                    ],
+                    "animation_url": "https://soundarts-nft.s3.amazonaws.com/KLOUD_2022_5000_20000/4890.mp4"
+                },
+                "error": null
+            },
+            "collection": {
+                "name": "WE ARE KLOUD",
+                "openSeaSlug": "we-are-kloud",
+                "externalUrl": "http://soundmint.xyz",
+                "bannerImageUrl": "https://i.seadn.io/gae/UCilfcDvkWO8HF-PJ1SB7PpRUj3BsIYPhXuOcvrJOJJCqI2dU8n82DYY3Ab5En0CB_Rp8Rn5Vdroz9pW7o-DewZBX5UKxPeUq6NHi9U?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-27T02:34:39.329Z",
+            "balance": "1",
+            "acquiredAt": {
+                "blockTimestamp": null,
+                "blockNumber": null
+            }
+        }
+    ],
+    "totalCount": 2,
+    "validAt": {
+        "blockNumber": 18008521,
+        "blockHash": "0xf545430a07177631f2cfec2cf1d0d5758e1ed7a76d6d54b26b18009a417eda9a",
+        "blockTimestamp": "2023-08-27T20:56:47Z"
+    },
+    "pageKey": null
+}
