@@ -4,8 +4,6 @@ import axios from "axios";
 import { type FormEvent, type MouseEvent, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CreateGalleryForm from "./Components/CreateGalleryForm";
-import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
-import { DraftsLimitDialog } from "@/Components/Galleries/DraftsLimitDialog";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
 import { GalleryFormSlider, GalleryFormSliderTabs } from "@/Components/Galleries/GalleryPage/GalleryFormSlider";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
@@ -23,6 +21,7 @@ import { fileToImageDataURI } from "@/Utils/file-to-image-data-uri";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
+import { MyGalleryDialogs } from "./Components/MyGalleryDialogs";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -322,37 +321,15 @@ const Create = ({
                 }}
             />
 
-            {isTruthy(gallery) && (
-                <ConfirmDeletionDialog
-                    title={t("pages.galleries.delete_modal.title")}
-                    isOpen={showDeleteModal}
-                    onClose={() => {
-                        setShowDeleteModal(false);
-                    }}
-                    onConfirm={() => {
-                        handleGalleryDelete(gallery.slug);
-                    }}
-                    isDisabled={busy}
-                >
-                    {t("pages.galleries.delete_modal.confirmation_text")}
-                </ConfirmDeletionDialog>
-            )}
-
-            <DraftsLimitDialog
-                title={t("pages.galleries.create.drafts_limit_modal_title")}
-                isOpen={showDraftsLimitModal}
-                onClose={() => {
-                    setShowDraftsLimitModal(false);
-                }}
-                onCancel={() => {
-                    router.visit(route("my-galleries", { draft: 1 }));
-                }}
-                onConfirm={() => {
-                    setShowDraftsLimitModal(false);
-                }}
-            >
-                {t("pages.galleries.create.drafts_limit_modal_message")}
-            </DraftsLimitDialog>
+            <MyGalleryDialogs
+                gallery={gallery}
+                showDeleteModal={showDeleteModal}
+                setShowDeleteModal={setShowDeleteModal}
+                handleGalleryDelete={handleGalleryDelete}
+                isBusy={busy}
+                showDraftsLimitModal={showDraftsLimitModal}
+                setShowDraftsLimitModal={setShowDraftsLimitModal}
+            />
         </LayoutWrapper>
     );
 };
