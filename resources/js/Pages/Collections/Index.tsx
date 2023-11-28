@@ -16,7 +16,7 @@ import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/P
 
 interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
-    sort?: PopularCollectionsSortBy;
+    sortBy?: PopularCollectionsSortBy;
 }
 
 interface CollectionsIndexProperties extends PageProps {
@@ -58,10 +58,10 @@ const CollectionsIndex = ({
         }));
     };
 
-    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
+    const setSortBy = (sortBy: PopularCollectionsSortBy | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
-            sort,
+            sortBy,
         }));
     };
 
@@ -75,7 +75,7 @@ const CollectionsIndex = ({
 
                     <div className=" flex space-x-3 sm:relative md-lg:hidden">
                         <PopularCollectionsFilterPopover
-                            sortBy={currentFilters.sort}
+                            sortBy={currentFilters.sortBy}
                             setSortBy={setSortBy}
                             chain={currentFilters.chain}
                             setChain={setChain}
@@ -88,7 +88,7 @@ const CollectionsIndex = ({
                 <div className="mt-4 hidden items-center justify-between md-lg:flex">
                     <div className="flex space-x-3">
                         <PopularCollectionsSorting
-                            sortBy={currentFilters.sort}
+                            sortBy={currentFilters.sortBy}
                             setSortBy={setSortBy}
                         />
 

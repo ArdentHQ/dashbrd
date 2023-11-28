@@ -62,7 +62,7 @@ class CollectionController extends Controller
 
         /** @var LengthAwarePaginator<Collection> $collections */
         $collections = Collection::query()
-                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                                ->when($request->query('sortBy') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
                                 ->filterByChainId($chainId)
                                 ->orderByFloorPrice('desc', $currency)
                                 ->with([
@@ -90,7 +90,7 @@ class CollectionController extends Controller
     {
         $filter = [
             'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
-            'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
+            'sortBy' => $this->getValidValue($request->get('sortBy'), ['floor-price']),
         ];
 
         // If value is not defined (or invalid), remove it from the array since
