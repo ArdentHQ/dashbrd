@@ -233,21 +233,3 @@ it('should fetch spam contracts', function () {
 
     expect(count($spamContracts))->toBe(3);
 });
-
-it('should fetch spam contracts', function () {
-    Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v3*' => Http::response(json_encode([
-            'contractAddresses' => [
-                '0x123',
-                '0x124',
-                '0x125',
-            ],
-        ]), 200),
-    ]);
-
-    $network = Network::polygon();
-
-    $spamContracts = Alchemy::getSpamContracts($network);
-
-    expect(count($spamContracts))->toBe(3);
-});
