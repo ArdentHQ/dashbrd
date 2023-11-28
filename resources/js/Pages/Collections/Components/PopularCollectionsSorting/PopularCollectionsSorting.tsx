@@ -1,41 +1,29 @@
 import { Tab } from "@headlessui/react";
-import { router } from "@inertiajs/react";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@/Components/Tabs";
 
-interface Properties {
-    active: "top" | "floor-price";
+// null means "top"
+export type PopularCollectionsSortBy = "floor-price";
+export interface PopularCollectionsSortingProperties {
+    sortBy: PopularCollectionsSortBy | undefined;
+    setSortBy: (sortBy: PopularCollectionsSortBy | undefined) => void;
 }
 
-export const PopularCollectionsSorting = ({ active }: Properties): JSX.Element => {
+export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollectionsSortingProperties): JSX.Element => {
     const { t } = useTranslation();
-
-    const sortBy = (sort: "top" | "floor-price"): void => {
-        if (sort === active) {
-            return;
-        }
-
-        router.get(
-            route("collections"),
-            { sort: sort === "floor-price" ? sort : undefined },
-            {
-                only: ["collections", "activeSort"],
-                preserveScroll: true,
-                preserveState: true,
-            },
-        );
-    };
 
     return (
         <Tab.Group as="div">
             <Tab.List>
-                <Tabs>
+                <Tabs widthClassName="w-full md-lg:w-auto">
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            selected={active === "top"}
+                            growClassName="grow md-lg:grow-0"
+                            selected={sortBy === undefined}
+                            className="w-1/2 md-lg:w-auto"
                             onClick={() => {
-                                sortBy("top");
+                                setSortBy(undefined);
                             }}
                         >
                             {t("common.top")}
@@ -44,9 +32,11 @@ export const PopularCollectionsSorting = ({ active }: Properties): JSX.Element =
 
                     <Tab as={Fragment}>
                         <Tabs.Button
-                            selected={active === "floor-price"}
+                            growClassName="grow md-lg:grow-0"
+                            className="w-1/2 md-lg:w-auto"
+                            selected={sortBy === "floor-price"}
                             onClick={() => {
-                                sortBy("floor-price");
+                                setSortBy("floor-price");
                             }}
                         >
                             {t("common.floor_price")}

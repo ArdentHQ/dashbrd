@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Tabs } from "@/Components/Tabs";
 
-interface Properties {
-    chain?: ChainFilter;
-    setChain: (chain?: ChainFilter) => void;
+export interface ChainFiltersProperties {
+    chain: ChainFilter | undefined;
+    setChain: (chain: ChainFilter | undefined) => void;
 }
 
 export enum ChainFilter {
@@ -14,15 +14,16 @@ export enum ChainFilter {
     ethereum = "ethereum",
 }
 
-export const ChainFilters = ({ chain, setChain }: Properties): JSX.Element => {
+export const ChainFilters = ({ chain, setChain }: ChainFiltersProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <Tab.Group as="div">
             <Tab.List>
-                <Tabs>
+                <Tabs widthClassName="w-full md-lg:w-auto">
                     <Tab as={Fragment}>
                         <Tabs.Button
+                            growClassName="grow md-lg:grow-0"
                             selected={chain === undefined}
                             onClick={() => {
                                 setChain(undefined);
@@ -34,6 +35,7 @@ export const ChainFilters = ({ chain, setChain }: Properties): JSX.Element => {
 
                     <Tab as={Fragment}>
                         <Tabs.Button
+                            growClassName="grow md-lg:grow-0"
                             selected={chain === ChainFilter.polygon}
                             onClick={() => {
                                 setChain(ChainFilter.polygon);
@@ -49,6 +51,7 @@ export const ChainFilters = ({ chain, setChain }: Properties): JSX.Element => {
 
                     <Tab as={Fragment}>
                         <Tabs.Button
+                            growClassName="grow md-lg:grow-0"
                             selected={chain === ChainFilter.ethereum}
                             onClick={() => {
                                 setChain(ChainFilter.ethereum);

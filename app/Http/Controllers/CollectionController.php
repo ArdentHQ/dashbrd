@@ -54,8 +54,6 @@ class CollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
-        $collectionQuery = $user ? $user->collections() : Collection::query();
-
         $chainId = match ($request->query('chain')) {
             'polygon' => Chain::Polygon->value,
             'ethereum' => Chain::ETH->value,
@@ -74,19 +72,40 @@ class CollectionController extends Controller
                                 ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
-            'allowsGuests' => true,
-            'activeSort' => $request->query('sort') === 'floor-price' ? 'floor-price' : 'top',
-            'filters' => [
-                'chain' => $request->query('chain') ?? null,
-            ],
-            'title' => trans('metatags.collections.title'),
-            'collections' => PopularCollectionData::collection(
+            'filters' => fn () => $this->getFilters($request),
+            'title' => fn () => trans('metatags.collections.title'),
+            'collections' => fn () => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
             ),
-            'featuredCollections' => $featuredCollections->map(function (Collection $collection) use ($user) {
+            'featuredCollections' => fn () => $featuredCollections->map(function (Collection $collection) use ($user) {
                 return CollectionFeaturedData::fromModel($collection, $user ? $user->currency() : CurrencyCode::USD);
             }),
         ]);
+    }
+
+    /**
+     * @return object{chain?: string, sort?: string}
+     */
+    private function getFilters(Request $request): object
+    {
+        $filter = [
+            'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
+            'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
+        ];
+
+        // If value is not defined (or invalid), remove it from the array since
+        // the frontend expect `undefined` values (not `null`)
+
+        // Must be cast to an object due to some Inertia front-end stuff...
+        return (object) array_filter($filter);
+    }
+
+    /**
+     * @param  array<string>  $validValues
+     */
+    private function getValidValue(?string $value, array $validValues): ?string
+    {
+        return in_array($value, $validValues) ? $value : null;
     }
 
     public function show(Request $request, Collection $collection): Response

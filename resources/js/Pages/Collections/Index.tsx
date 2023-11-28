@@ -1,9 +1,11 @@
-import { type PageProps } from "@inertiajs/core";
+import { type FormDataConvertible, type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
+import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
-import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
+import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
+import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
@@ -12,18 +14,19 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
+interface Filters extends Record<string, FormDataConvertible> {
+    chain?: ChainFilter;
+    sort?: PopularCollectionsSortBy;
+}
+
 interface CollectionsIndexProperties extends PageProps {
-    activeSort: "top" | "floor-price";
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
-    filters: {
-        chain: ChainFilter | null;
-    };
+    filters: Filters;
 }
 
 const CollectionsIndex = ({
-    activeSort,
     title,
     featuredCollections,
     collections: { data: collections },
@@ -34,22 +37,33 @@ const CollectionsIndex = ({
 
     const { props } = usePage();
 
-    const [chain, setChain] = useState<ChainFilter | undefined>(filters.chain ?? undefined);
+    const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
 
     const isFirstRender = useIsFirstRender();
 
     useEffect(() => {
         if (isFirstRender) return;
 
-        router.get(
-            route("collections"),
-            { chain },
-            {
-                preserveScroll: true,
-                preserveState: true,
-            },
-        );
-    }, [chain]);
+        router.get(route("collections"), currentFilters, {
+            only: ["collections", "filters"],
+            preserveScroll: true,
+            preserveState: true,
+        });
+    }, [currentFilters]);
+
+    const setChain = (chain: ChainFilter | undefined): void => {
+        setCurrentFilters((filters) => ({
+            ...filters,
+            chain,
+        }));
+    };
+
+    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
+        setCurrentFilters((filters) => ({
+            ...filters,
+            sort,
+        }));
+    };
 
     return (
         <DefaultLayout toastMessage={props.toast}>
@@ -59,16 +73,27 @@ const CollectionsIndex = ({
                 <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
-                    <div className="hidden sm:block lg:hidden">
-                        <ViewAllButton />
+                    <div className=" flex space-x-3 sm:relative md-lg:hidden">
+                        <PopularCollectionsFilterPopover
+                            sortBy={currentFilters.sort}
+                            setSortBy={setSortBy}
+                            chain={currentFilters.chain}
+                            setChain={setChain}
+                        />
+
+                        <ViewAllButton className="hidden sm:inline" />
                     </div>
                 </div>
 
-                <div className="mt-4 hidden items-center justify-between lg:flex">
+                <div className="mt-4 hidden items-center justify-between md-lg:flex">
                     <div className="flex space-x-3">
-                        <PopularCollectionsSorting active={activeSort} />
+                        <PopularCollectionsSorting
+                            sortBy={currentFilters.sort}
+                            setSortBy={setSortBy}
+                        />
+
                         <ChainFilters
-                            chain={chain}
+                            chain={currentFilters.chain}
                             setChain={setChain}
                         />
                     </div>
@@ -79,7 +104,7 @@ const CollectionsIndex = ({
                 </div>
 
                 <div>
-                    <div className="flex sm:space-x-2 md:space-x-3 lg:space-x-6">
+                    <div className="flex sm:space-x-2 md:space-x-3 md-lg:space-x-6">
                         <div className="flex-1">
                             <PopularCollectionsTable
                                 collections={collections.slice(0, 6)}
@@ -104,14 +129,14 @@ const CollectionsIndex = ({
     );
 };
 
-const ViewAllButton = (): JSX.Element => {
+const ViewAllButton = ({ className }: { className?: string }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <ButtonLink
             variant="secondary"
             href="#"
-            className="w-full justify-center sm:w-auto"
+            className={cn("w-full justify-center sm:w-auto", className)}
         >
             {t("common.view_all")}
         </ButtonLink>
