@@ -10,9 +10,9 @@ export const useDraftLoader = ({
     showToast,
     setNfts,
     setInitialNfts,
-  }: {
+}: {
     setGalleryCoverImageUrl: (url: string) => void;
-    showToast: (toastMessage?: ToastMessage) => void
+    showToast: (toastMessage?: ToastMessage) => void;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setInitialNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
 
@@ -30,11 +30,7 @@ export const useDraftLoader = ({
   } => {
     const { t } = useTranslation();
 
-    const loadDraftCover = async ({
-        draft,
-    }: {
-        draft: GalleryDraftUnsaved;
-    }): Promise<void> => {
+    const loadDraftCover = async ({ draft }: { draft: GalleryDraftUnsaved }): Promise<void> => {
         const file = arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType);
 
         if (file === null) {
@@ -51,11 +47,7 @@ export const useDraftLoader = ({
         }
     };
 
-    const loadDraftNts = async ({
-        draft,
-    }: {
-        draft: GalleryDraftUnsaved;
-    }): Promise<void> => {
+    const loadDraftNts = async ({ draft }: { draft: GalleryDraftUnsaved }): Promise<void> => {
         const { data: nfts } = await axios.get<App.Data.Gallery.GalleryNftData[]>(
             route("user.nfts", {
                 ids: draft.nfts.map((nft) => nft.nftId).join(","),
@@ -79,4 +71,4 @@ export const useDraftLoader = ({
         loadDraftCover,
         loadDraftNts,
     };
-  };
+};
