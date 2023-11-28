@@ -2,6 +2,8 @@ import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import { type FormEvent, type MouseEvent, useCallback, useEffect, useState } from "react";
 import CreateGalleryForm from "./Components/CreateGalleryForm";
+import { MyGalleryDialogs } from "./Components/MyGalleryDialogs";
+import { useDraftLoader } from "./hooks/useDraftLoader";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
 import { GalleryFormSlider, GalleryFormSliderTabs } from "@/Components/Galleries/GalleryPage/GalleryFormSlider";
 import { LayoutWrapper } from "@/Components/Layout/LayoutWrapper";
@@ -17,8 +19,6 @@ import { assertUser, assertWallet } from "@/Utils/assertions";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
-import { MyGalleryDialogs } from "./Components/MyGalleryDialogs";
-import { useDraftLoader } from "./hooks/useDraftLoader";
 
 interface Properties {
     auth: PageProps["auth"];

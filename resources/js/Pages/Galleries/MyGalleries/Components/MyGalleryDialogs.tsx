@@ -1,9 +1,9 @@
+import { router } from "@inertiajs/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ConfirmDeletionDialog } from "@/Components/ConfirmDeletionDialog";
 import { DraftsLimitDialog } from "@/Components/Galleries/DraftsLimitDialog";
 import { isTruthy } from "@/Utils/is-truthy";
-import { useTranslation } from "react-i18next";
-import { router } from "@inertiajs/react";
 
 export const MyGalleryDialogs = ({
     gallery,
