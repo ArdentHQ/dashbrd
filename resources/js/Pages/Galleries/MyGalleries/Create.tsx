@@ -1,8 +1,6 @@
 import { type PageProps, type VisitOptions } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
-import axios from "axios";
 import { type FormEvent, type MouseEvent, useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import CreateGalleryForm from "./Components/CreateGalleryForm";
 import { GalleryActionToolbar } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar";
 import { GalleryFormSlider, GalleryFormSliderTabs } from "@/Components/Galleries/GalleryPage/GalleryFormSlider";
@@ -15,13 +13,12 @@ import { useToasts } from "@/Hooks/useToasts";
 import { useGalleryForm } from "@/Pages/Galleries/hooks/useGalleryForm";
 import { type GalleryDraftUnsaved, useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { useWalletDraftGallery } from "@/Pages/Galleries/hooks/useWalletDraftGallery";
-import { arrayBufferToFile } from "@/Utils/array-buffer-to-file";
 import { assertUser, assertWallet } from "@/Utils/assertions";
-import { fileToImageDataURI } from "@/Utils/file-to-image-data-uri";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 import { MyGalleryDialogs } from "./Components/MyGalleryDialogs";
+import { useDraftLoader } from "./hooks/useDraftLoader";
 
 interface Properties {
     auth: PageProps["auth"];
@@ -47,12 +44,9 @@ const Create = ({
     assertUser(auth.user);
     assertWallet(auth.wallet);
 
-    const { t } = useTranslation();
     const { showToast } = useToasts();
     const { props } = usePage();
-
     const { signedAction } = useAuthorizedAction();
-
     const { initialized } = useMetaMaskContext();
 
     const [isGalleryFormSliderOpen, setIsGalleryFormSliderOpen] = useState(false);
@@ -150,51 +144,20 @@ const Create = ({
         [gallery],
     );
 
+    const { loadDraftCover, loadDraftNts } = useDraftLoader({
+        setGalleryCoverImageUrl,
+        showToast,
+        setNfts,
+        setInitialNfts
+    });
+
     useEffect(() => {
         if (draft.id == null) {
             return;
         }
 
-        const loadDraftCover = async (): Promise<void> => {
-            const file = arrayBufferToFile(draft.cover, draft.coverFileName, draft.coverType);
-
-            if (file === null) {
-                setGalleryCoverImageUrl("");
-
-                return;
-            }
-
-            try {
-                const imageDataURI = await fileToImageDataURI(file);
-                setGalleryCoverImageUrl(imageDataURI);
-            } catch {
-                setGalleryCoverImageUrl("");
-            }
-        };
-
-        const loadDraftNts = async (): Promise<void> => {
-            const { data: nfts } = await axios.get<App.Data.Gallery.GalleryNftData[]>(
-                route("user.nfts", {
-                    ids: draft.nfts.map((nft) => nft.nftId).join(","),
-                }),
-            );
-
-            if (nfts.length < draft.nfts.length) {
-                showToast({
-                    message: t("pages.galleries.my_galleries.nfts_no_longer_owned"),
-                    type: "warning",
-                });
-
-                setNfts(nfts);
-                return;
-            }
-
-            setInitialNfts(nfts);
-        };
-
-        void loadDraftCover();
-
-        void loadDraftNts();
+        void loadDraftCover({draft});
+        void loadDraftNts({draft});
     }, [draft]);
 
     const publishHandler = (event: FormEvent<Element>): void => {

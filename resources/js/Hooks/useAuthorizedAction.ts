@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuth } from "@/Contexts/AuthContext";
 import { useMetaMaskContext } from "@/Contexts/MetaMaskContext";
 
-type SignedActionAction =
+export type SignedActionAction =
     | (({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => Promise<void>)
     | (({ authenticated, signed }: { authenticated: boolean; signed: boolean }) => void);
 
