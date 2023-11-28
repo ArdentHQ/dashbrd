@@ -132,13 +132,16 @@ export const ArticlesView = ({
 
                 {isLoading && displayType === DisplayTypes.List && <ArticlesLoadingList />}
 
-                {!isLoading && articlesToShow.length === 0 && (!isTruthy(highlightedArticles) || highlightedArticles?.length === 0) && query === "" && (
-                    <EmptyBlock className="w-full">
-                        {mode === "articles"
-                            ? t("pages.articles.no_articles")
-                            : t("pages.collections.articles.no_articles")}
-                    </EmptyBlock>
-                )}
+                {!isLoading &&
+                    articlesToShow.length === 0 &&
+                    (!highlightedArticles || highlightedArticles?.length === 0) &&
+                    query === "" && (
+                        <EmptyBlock className="w-full">
+                            {mode === "articles"
+                                ? t("pages.articles.no_articles")
+                                : t("pages.collections.articles.no_articles")}
+                        </EmptyBlock>
+                    )}
 
                 {!isLoading && articlesToShow.length === 0 && highlightedArticles?.length === 0 && query !== "" && (
                     <EmptyBlock className="w-full">
