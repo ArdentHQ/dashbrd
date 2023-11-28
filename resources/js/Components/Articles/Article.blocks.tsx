@@ -62,7 +62,7 @@ export const FeaturedCollections = ({
 
     return (
         <div
-            className="flex max-h-6 w-full flex-1 grow flex-wrap overflow-hidden"
+            className="group flex w-full flex-1 grow flex-wrap"
             ref={container}
             id="FeaturedCollections"
             data-testid="FeaturedCollections"
@@ -72,14 +72,14 @@ export const FeaturedCollections = ({
                     content={collection.name}
                     key={index}
                 >
-                    <div className={cn("mb-1 flex items-center", { "-ml-1": index > 0 })}>
+                    <div className={cn("flex items-center", { "-ml-1": index > 0 })}>
                         <Img
-                            wrapperClassName="h-6 w-6 aspect-square"
+                            wrapperClassName="w-6 aspect-square"
                             src={collection.image}
                             isCircle
                             className={cn("rounded-full ring-2", {
                                 "bg-white ring-white dark:bg-theme-dark-800 dark:ring-theme-dark-800": !isLargeVariant,
-                                "skeleton-primary bg-theme-dark-900 ring-theme-dark-900 dark:bg-theme-primary-800 dark:ring-theme-primary-800":
+                                "skeleton-primary bg-theme-dark-900 ring-theme-dark-900 group-hover:ring-theme-primary-700 dark:bg-theme-primary-800 dark:ring-theme-primary-800":
                                     isLargeVariant,
                             })}
                             errorClassName="!p-0"
@@ -87,6 +87,7 @@ export const FeaturedCollections = ({
                     </div>
                 </Tooltip>
             ))}
+
             <MoreCollectionsLabel
                 total={totalCount}
                 visible={visibleCount}

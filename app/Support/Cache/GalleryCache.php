@@ -84,8 +84,8 @@ class GalleryCache
     {
         return $this->fromCache(
             fn () => NftCollectionData::collection(
-                $this->gallery->collections()->map(fn ($collection) => NftCollectionData::fromModel($collection, $currencyCode)
-                )),
+                $this->gallery->collections()->map(fn ($collection) => NftCollectionData::fromModel($collection, $currencyCode))
+            ),
             self::getCollectionsCacheKey($this->gallery->id, $currencyCode),
             [self::TAG_COLLECTIONS, self::TAG_COLLECTIONS.'_'.$this->gallery->id],
         );
