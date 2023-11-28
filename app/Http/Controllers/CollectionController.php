@@ -62,7 +62,7 @@ class CollectionController extends Controller
 
         /** @var LengthAwarePaginator<Collection> $collections */
         $collections = Collection::query()
-                                ->when($request->query('sortBy') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
                                 ->filterByChainId($chainId)
                                 ->orderByFloorPrice('desc', $currency)
                                 ->with([
@@ -86,16 +86,18 @@ class CollectionController extends Controller
     /**
      * @return array<string, string>
      */
-    private function getFilters(Request $request): array
+    private function getFilters(Request $request): object
     {
         $filter = [
             'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
-            'sortBy' => $this->getValidValue($request->get('sortBy'), ['floor-price']),
+            'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
         ];
 
         // If value is not defined (or invalid), remove it from the array since
         // the frontend expect `undefined` values (not `null`)
-        return array_filter($filter);
+
+        // Must be cast to an object due to some Inertia front-end stuff...
+        return (object) array_filter($filter);
     }
 
     /**
