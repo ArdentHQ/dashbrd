@@ -15,14 +15,14 @@ export const MyGalleryDialogs = ({
     setShowDraftsLimitModal,
 }: {
     gallery?: App.Data.Gallery.GalleryData;
-    showDeleteModal: boolean
-    setShowDeleteModal: (show: boolean) => void
-    handleGalleryDelete: (slug: string) => void
-    isBusy: boolean
-    showDraftsLimitModal: boolean
-    setShowDraftsLimitModal: (show: boolean) => void
+    showDeleteModal: boolean;
+    setShowDeleteModal: (show: boolean) => void;
+    handleGalleryDelete: (slug: string) => void;
+    isBusy: boolean;
+    showDraftsLimitModal: boolean;
+    setShowDraftsLimitModal: (show: boolean) => void;
 }): JSX.Element => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <>

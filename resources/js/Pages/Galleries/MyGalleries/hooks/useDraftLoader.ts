@@ -15,19 +15,10 @@ export const useDraftLoader = ({
     showToast: (toastMessage?: ToastMessage) => void;
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setInitialNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
-
-  }): {
-    loadDraftCover: ({
-        draft,
-    }: {
-        draft: GalleryDraftUnsaved;
-    }) => Promise<void>;
-    loadDraftNts: ({
-        draft,
-    }: {
-        draft: GalleryDraftUnsaved;
-    }) => Promise<void>;
-  } => {
+}): {
+    loadDraftCover: ({ draft }: { draft: GalleryDraftUnsaved }) => Promise<void>;
+    loadDraftNts: ({ draft }: { draft: GalleryDraftUnsaved }) => Promise<void>;
+} => {
     const { t } = useTranslation();
 
     const loadDraftCover = async ({ draft }: { draft: GalleryDraftUnsaved }): Promise<void> => {
