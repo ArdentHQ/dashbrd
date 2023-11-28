@@ -134,7 +134,7 @@ export const ArticlesView = ({
 
                 {!isLoading &&
                     articlesToShow.length === 0 &&
-                    (!isTruthy(highlightedArticles) || highlightedArticles?.length === 0) &&
+                    (!isTruthy(highlightedArticles) || highlightedArticles.length === 0) &&
                     query === "" && (
                         <EmptyBlock className="w-full">
                             {mode === "articles"
