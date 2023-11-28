@@ -160,7 +160,7 @@ it('should getWalletNfts', function () {
 
 it('should getNftMetadata', function () {
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     $user = createUser();
@@ -181,7 +181,7 @@ it('should getNftMetadata', function () {
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(1)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
-        ->and($tokens[0]->tokenAddress)->toBe('0x0e33fd2db4f140dca8f65671c40e36f8fd648fff');
+        ->and($tokens[0]->tokenAddress)->toBe('0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D');
 });
 
 it('should extract nft images', function () {
@@ -412,6 +412,17 @@ it('should filter out nfts', function () {
                     ],
                     'name' => 'NFT WITH ERROR',
                     'error' => 'some error',
+                ],
+                [
+                    'tokenId' => '30',
+                    'contract' => [
+                        'tokenType' => 'ERC155',
+                        'name' => 'ERC1155 Collection',
+                        'symbol' => '1155',
+                        'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
+                    ],
+                    'name' => 'ERC1155',
                 ],
                 [
                     'tokenId' => '4',

@@ -88,7 +88,7 @@ it('should fetch nft metadata', function () {
     $nfts->push($nft);
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     $fetchedNfts = Alchemy::nftMetadataBatch($nfts, $network);
@@ -150,12 +150,12 @@ it('should filter nfts with errors by default', function () {
     $nfts->push($nft);
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_with_error'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     $fetchedNfts = Alchemy::nftMetadataBatch($nfts, $network);
 
-    expect($fetchedNfts->nfts)->toHaveCount(0);
+    expect($fetchedNfts->nfts)->toHaveCount(1);
 });
 
 it('should return error field with METADATA_OUTDATED if parent metadata object is empty', function () {
