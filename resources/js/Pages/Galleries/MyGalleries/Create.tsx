@@ -148,7 +148,7 @@ const Create = ({
         setGalleryCoverImageUrl,
         showToast,
         setNfts,
-        setInitialNfts
+        setInitialNfts,
     });
 
     useEffect(() => {
@@ -156,8 +156,8 @@ const Create = ({
             return;
         }
 
-        void loadDraftCover({draft});
-        void loadDraftNts({draft});
+        void loadDraftCover({ draft });
+        void loadDraftNts({ draft });
     }, [draft]);
 
     const publishHandler = (event: FormEvent<Element>): void => {
