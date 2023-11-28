@@ -21,7 +21,7 @@ export const MyGalleryDialogs = ({
     isBusy: boolean
     showDraftsLimitModal: boolean
     setShowDraftsLimitModal: (show: boolean) => void
-}) => {
+}): JSX.Element => {
     const {t} = useTranslation();
 
   return (

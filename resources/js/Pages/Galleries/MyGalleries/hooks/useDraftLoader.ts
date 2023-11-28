@@ -16,7 +16,18 @@ export const useDraftLoader = ({
     setNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
     setInitialNfts: (nfts: App.Data.Gallery.GalleryNftData[]) => void;
 
-  }) => {
+  }): {
+    loadDraftCover: ({
+        draft,
+    }: {
+        draft: GalleryDraftUnsaved;
+    }) => Promise<void>;
+    loadDraftNts: ({
+        draft,
+    }: {
+        draft: GalleryDraftUnsaved;
+    }) => Promise<void>;
+  } => {
     const { t } = useTranslation();
 
     const loadDraftCover = async ({
