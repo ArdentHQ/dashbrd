@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\TokenType;
 use App\Models\Network;
 use App\Models\Token;
 use Carbon\Carbon;
@@ -34,6 +35,7 @@ class CollectionFactory extends Factory
             'floor_price_token_id' => fn () => Token::factory(),
             'floor_price_retrieved_at' => Carbon::now(),
             'minted_block' => random_int(1, 10000),
+            'type' => TokenType::Erc721,
             'extra_attributes' => fn () => json_encode([
                 'image' => fake()->imageUrl(360, 360, 'animals', true),
                 'website' => fake()->url(),

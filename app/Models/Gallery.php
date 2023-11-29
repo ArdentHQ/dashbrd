@@ -95,7 +95,7 @@ class Gallery extends Model implements Viewable
      */
     public function collections(): Collection
     {
-        return CollectionModel::with('network')->whereIn('id', function ($query) {
+        return CollectionModel::erc721()->with('network')->whereIn('id', function ($query) {
             return $query->select('collection_id')->from('nfts')->whereIn('nfts.id', function ($query) {
                 return $query->select('nft_id')->from('nft_gallery')->where('gallery_id', $this->id);
             });

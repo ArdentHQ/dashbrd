@@ -23,6 +23,7 @@ trait InteractsWithCollections
                 ->select('collections.*')
                 ->where('collections.id', '=', $this->option('collection-id'))
                 ->withoutSpamContracts()
+                ->erc721()
                 ->first();
 
             $collection && $callback($collection, 0);
@@ -34,6 +35,7 @@ trait InteractsWithCollections
             ->when($queryCallback !== null, $queryCallback)
             ->select('collections.*')
             ->withoutSpamContracts()
+            ->erc721()
             ->when($limit !== null, fn ($query) => $query
                 ->limit($limit)
                 ->get()
