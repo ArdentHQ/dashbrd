@@ -1,22 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
+import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
+import { Link } from "@/Components/Link";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { VoteNextMonthWinners, VoteNextMonthWinnersDark } from "@/images";
 
-export const CollectionOfTheMonthWinners = (): JSX.Element => {
+const CharBar = ({ place, votes }: { place: 1 | 2 | 3; votes: number }): JSX.Element => (
+    <div
+        className={cn("collection-winner-bar flex flex-col items-center text-white", {
+            "collection-winner-bar-first w-[130px]": place === 1,
+            "w-[120px] bg-[#515FE1]": place !== 1,
+        })}
+    >
+        <span className="text-[56px] font-bold leading-[100px]">{place}</span>
+    </div>
+);
+
+export const CollectionOfTheMonthWinners = ({
+    className,
+    winners,
+}: {
+    className?: string;
+    // Depending on how we get the data the type may change
+    winners: App.Data.Collections.PopularCollectionData[];
+}): JSX.Element => {
     const { t } = useTranslation();
 
     const { isDark } = useDarkModeContext();
 
-    // @TODO: Make this dynamic
-    const showWinners = true;
+    const showWinners = winners.length > 0;
 
     return (
         <div
             data-testid="CollectionOfTheMonthWinners"
-            className="dark:border-dark-700 flex w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700"
+            className={cn(
+                "dark:border-dark-700 flex w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700",
+                className,
+            )}
         >
             <div className="shadow-collection-of-the-month flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
                 <Heading
@@ -32,8 +54,38 @@ export const CollectionOfTheMonthWinners = (): JSX.Element => {
                 </Heading>
             </div>
             <div className="flex flex-1 items-center justify-center ">
-                {isDark ? <VoteNextMonthWinnersDark /> : <VoteNextMonthWinners />}
+                {showWinners ? (
+                    <div className="flex ">
+                        <CharBar
+                            place={1}
+                            votes={123456}
+                        ></CharBar>
+                        <CharBar
+                            place={2}
+                            votes={35}
+                        ></CharBar>
+                        <CharBar
+                            place={3}
+                            votes={3532532}
+                        ></CharBar>
+                    </div>
+                ) : (
+                    <>{isDark ? <VoteNextMonthWinnersDark /> : <VoteNextMonthWinners />}</>
+                )}
             </div>
+
+            {showWinners && (
+                <div className="shadow-collection-of-the-month-footer flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
+                    <Link
+                        variant="link"
+                        textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
+                        href="/"
+                        fontSize="text-base"
+                    >
+                        {t("pages.collections.collection_of_the_month.view_previous_winners")}
+                    </Link>
+                </div>
+            )}
         </div>
     );
 };
