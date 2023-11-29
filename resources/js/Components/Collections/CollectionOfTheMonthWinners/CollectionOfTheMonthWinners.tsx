@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
@@ -9,6 +10,9 @@ export const CollectionOfTheMonthWinners = (): JSX.Element => {
 
     const { isDark } = useDarkModeContext();
 
+    // @TODO: Make this dynamic
+    const showWinners = true;
+
     return (
         <div
             data-testid="CollectionOfTheMonthWinners"
@@ -19,7 +23,12 @@ export const CollectionOfTheMonthWinners = (): JSX.Element => {
                     level={3}
                     className="text-center"
                 >
-                    {t("pages.collections.collection_of_the_month.vote_for_next_months_winners")}
+                    {showWinners
+                        ? t("pages.collections.collection_of_the_month.winners_month", {
+                              // @TODO: Make this dynamic
+                              month: "August 2023",
+                          })
+                        : t("pages.collections.collection_of_the_month.vote_for_next_months_winners")}
                 </Heading>
             </div>
             <div className="flex flex-1 items-center justify-center ">

@@ -75,6 +75,7 @@ return [
             ],
         ],
         'collection_of_the_month' => [
+            'winners_month' => 'Winners: :month',
             'vote_for_next_months_winners' => 'Vote now for next months winners',
         ],
         'articles' => [
