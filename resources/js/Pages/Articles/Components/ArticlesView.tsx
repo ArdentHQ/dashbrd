@@ -18,7 +18,7 @@ import { ArticleSortBy, ArticleSortDropdown } from "@/Pages/Collections/Componen
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
 import { scrollToTop } from "@/Utils/scroll-to-top";
-import cn from 'classnames';
+import cn from "classnames";
 
 export const articlesViewDefaults = {
     pageLimit: 24,
@@ -124,10 +124,12 @@ export const ArticlesView = ({
                 />
             )}
 
-            <div className={cn("flex flex-col items-center", {
-                "space-y-0": articlesToShow.length === 0,
-                "space-y-6": articlesToShow.length !== 0
-            })}>
+            <div
+                className={cn("flex flex-col items-center", {
+                    "space-y-0": articlesToShow.length === 0,
+                    "space-y-6": articlesToShow.length !== 0,
+                })}
+            >
                 {articlesLoaded && displayType === DisplayTypes.Grid && <ArticlesGrid articles={articlesToShow} />}
 
                 {articlesLoaded && displayType === DisplayTypes.List && <ArticlesList articles={articlesToShow} />}
