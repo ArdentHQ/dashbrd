@@ -23,7 +23,6 @@ return new class extends Migration
 
         $eth = $this->erc1155Addresses('eth');
         $polygon = $this->erc1155Addresses('polygon');
-        dd($polygon);
 
         DB::table('collections')->where(function ($q) use ($polygon) {
             return $q->whereIn('address', $polygon)->where('network_id', 1);
