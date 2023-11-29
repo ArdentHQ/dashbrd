@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Enums\TokenType;
 use App\Jobs\FetchCollectionNfts;
 use App\Models\Collection;
 use App\Models\Network;
