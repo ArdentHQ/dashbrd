@@ -74,6 +74,9 @@ return [
                 'LABEL_SALE' => 'Sale',
             ],
         ],
+        'collection_of_the_month' => [
+            'vote_for_next_months_winners' => 'Vote now for next months winners',
+        ],
         'articles' => [
             'no_articles' => 'No articles have been linked to this collection as of now.',
             'no_articles_with_filters' => 'We could not find any articles matching your search criteria, please try again!',
