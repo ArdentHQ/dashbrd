@@ -130,9 +130,7 @@ const CollectionsIndex = ({
                     {/* Height is hardcoded should depend on the incoming vote table */}
                     <div className="h-[516px] flex-1">{/* Vote table */}</div>
 
-                    <div className="hidden xl:flex">
-                        <CollectionOfTheMonthWinners />
-                    </div>
+                    <CollectionOfTheMonthWinners className="hidden xl:flex" />
                 </div>
             </div>
         </DefaultLayout>

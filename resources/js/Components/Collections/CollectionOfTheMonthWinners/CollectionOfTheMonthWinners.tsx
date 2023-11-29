@@ -1,10 +1,11 @@
+import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { VoteNextMonthWinners, VoteNextMonthWinnersDark } from "@/images";
 
-export const CollectionOfTheMonthWinners = (): JSX.Element => {
+export const CollectionOfTheMonthWinners = ({ className }: { className?: string }): JSX.Element => {
     const { t } = useTranslation();
 
     const { isDark } = useDarkModeContext();
@@ -12,7 +13,10 @@ export const CollectionOfTheMonthWinners = (): JSX.Element => {
     return (
         <div
             data-testid="CollectionOfTheMonthWinners"
-            className="dark:border-dark-700 flex w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700"
+            className={cn(
+                "dark:border-dark-700 flex w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700",
+                className,
+            )}
         >
             <div className="shadow-collection-of-the-month flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
                 <Heading
