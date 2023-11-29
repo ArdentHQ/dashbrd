@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
+use App\Enums\TokenType;
 use App\Jobs\UpdateNftDescription;
 use App\Models\Network;
 use App\Models\Nft;
@@ -52,6 +53,7 @@ it('updates the description and dispatches the next job', function () {
                     mintedAt: null,
                     hasError: false,
                     info: null,
+                    type: TokenType::Erc721,
                 ),
                 new Web3NftData(
                     tokenAddress: $other->collection->address,
@@ -76,6 +78,7 @@ it('updates the description and dispatches the next job', function () {
                     mintedAt: null,
                     hasError: false,
                     info: null,
+                    type: TokenType::Erc721,
                 ),
             ])
         ));
