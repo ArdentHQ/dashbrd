@@ -156,6 +156,7 @@
         "tailwind-merge": "^1.14.0",
         "tippy.js": "^6.3.7",
         "unified": "^11.0.4",
+        "unist-util-visit": "^5.0.0",
         "wavesurfer.js": "^7.4.6"
     }
 }

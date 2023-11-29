@@ -14,7 +14,7 @@ export const CreateGalleryButton = ({
     onClick,
     areAllCollectionsHidden,
 }: {
-    nftCount: number;
+    nftCount?: number;
     variant?: ButtonVariant;
     className?: string;
     isDisabled?: boolean;
@@ -25,7 +25,7 @@ export const CreateGalleryButton = ({
 
     const createGalleryUrl = route("my-galleries.create");
 
-    if (nftCount === 0) {
+    if (nftCount !== undefined && nftCount === 0) {
         return (
             <Tooltip
                 content={t("pages.galleries.my_galleries.new_gallery_no_nfts")}

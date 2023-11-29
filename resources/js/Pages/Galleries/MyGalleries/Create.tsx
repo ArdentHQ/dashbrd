@@ -185,6 +185,9 @@ const Create = ({
                     message: t("pages.galleries.my_galleries.nfts_no_longer_owned"),
                     type: "warning",
                 });
+
+                setNfts(nfts);
+                return;
             }
 
             setInitialNfts(nfts);
@@ -222,6 +225,23 @@ const Create = ({
             },
         });
     };
+
+    /**
+     * Remove empty draft when navigating away.
+     */
+    useEffect(() => {
+        const abortListener = router.on("before", () => {
+            const isEmpty = !isTruthy(data.name.trim()) && draft.nfts.length === 0 && !isTruthy(data.coverImage);
+
+            if (isEmpty) {
+                void remove(draft.id);
+            }
+        });
+
+        return () => {
+            abortListener();
+        };
+    }, [data, draft]);
 
     const deleteHandler = (): void => {
         void signedAction(() => {
