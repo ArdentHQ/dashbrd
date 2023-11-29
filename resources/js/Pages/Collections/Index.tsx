@@ -12,6 +12,7 @@ import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { CollectionOfTheMonth } from "@/Pages/Collections/Components/CollectionOfTheMonth";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface Filters extends Record<string, FormDataConvertible> {
@@ -125,6 +126,8 @@ const CollectionsIndex = ({
                     </div>
                 </div>
             </div>
+
+            <CollectionOfTheMonth />
         </DefaultLayout>
     );
 };
