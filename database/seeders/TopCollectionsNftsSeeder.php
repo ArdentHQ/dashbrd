@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Enums\Chain;
-use App\Models\Collection;
+use App\Enums\TokenType;
 use App\Models\Collection as NftCollection;
+use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Token;
@@ -154,6 +155,7 @@ class TopCollectionsNftsSeeder extends Seeder
             'floor_price_token_id' => $token->id,
             'volume' => $collection->volume_total,
             'supply' => $collection->items_total,
+            'type' => $collection->erc_type === 'erc721' ? TokenType::Erc721->value : TokenType::Erc1155->value,
             'minted_block' => $collection->deploy_block_number,
             'extra_attributes' => json_encode([
                 'image' => $collection->logo_url ?? $collection->featured_url,

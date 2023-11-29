@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Enums\Chain;
+use App\Enums\TokenType;
 use App\Models\Collection as NftCollection;
 use App\Models\Network;
 use App\Models\Token;
@@ -147,6 +148,7 @@ class LiveDumpNfts extends Command
             'network_id' => $network->id,
             'name' => trim($collection->name),
             'slug' => Str::slug($collection->name),
+            'type' => $collection->erc_type === 'erc721' ? TokenType::Erc721 : TokenType::Erc1155,
             'symbol' => $collection->symbol ?? $collection->name,
             'floor_price' => $collection->floor_price * 1e18,
             'floor_price_token_id' => $token->id,
