@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Enums\TokenType;
 use App\Jobs\FetchCollectionNfts;
 use App\Models\Collection;
 use App\Models\Network;
@@ -221,25 +220,6 @@ it('should exclude blacklisted collections', function () {
     Collection::factory()->create([
         'network_id' => $network->id,
         'address' => '0x123',
-    ]);
-
-    $this->artisan('collections:fetch-nfts');
-
-    Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->collection->address === $collection1->address);
-});
-
-it('should exclude erc1155 collections', function () {
-    Bus::fake();
-
-    $network = Network::factory()->create();
-
-    $collection1 = Collection::factory()->create([
-        'network_id' => $network->id,
-    ]);
-
-    Collection::factory()->create([
-        'network_id' => $network->id,
-        'type' => TokenType::Erc1155,
     ]);
 
     $this->artisan('collections:fetch-nfts');

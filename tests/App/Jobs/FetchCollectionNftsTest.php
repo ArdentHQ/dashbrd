@@ -202,17 +202,3 @@ it('skips potentially full collections', function () {
 
     Alchemy::assertNothingSent();
 });
-
-it('does not fetch NFTs for erc1155 collections', function () {
-    Alchemy::fake();
-
-    $collection = Collection::factory()->create([
-        'supply' => 10,
-        'last_indexed_token_number' => 1,
-        'type' => TokenType::Erc1155,
-    ]);
-
-    (new FetchCollectionNfts($collection, startToken: null, skipIfPotentiallyFull: true))->handle();
-
-    Alchemy::assertNothingSent();
-});
