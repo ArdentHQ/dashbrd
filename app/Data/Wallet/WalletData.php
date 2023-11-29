@@ -72,7 +72,7 @@ class WalletData extends Data
             ],
             isRefreshingCollections: (bool) $wallet->is_refreshing_collections,
             canRefreshCollections: $wallet->canRefreshCollections(),
-            hasErc1155Nfts: $wallet->owns_erc1155_tokens,
+            hasErc1155Nfts: $wallet->owns_erc1155_tokens ?? false,
         );
     }
 }
