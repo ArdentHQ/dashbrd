@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Data\Wallet;
 
-use App\Enums\TokenType;
 use App\Models\Wallet;
 use App\Support\Cache\UserCache;
-use Illuminate\Support\Facades\Cache;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -74,11 +72,7 @@ class WalletData extends Data
             ],
             isRefreshingCollections: (bool) $wallet->is_refreshing_collections,
             canRefreshCollections: $wallet->canRefreshCollections(),
-            hasErc1155Nfts: Cache::remember(
-                'wallets:'.$wallet->id.':has-erc1155',
-                now()->addMinutes(30),
-                fn () => $wallet->allNfts()->where('type', TokenType::Erc1155)->exists()
-            ),
+            hasErc1155Nfts: $wallet->owns_erc1155_tokens,
         );
     }
 }

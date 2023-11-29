@@ -40,7 +40,7 @@ it('should fetch nfts for wallet', function () {
     (new FetchWalletNfts($wallet, $network))->handle();
 
     $this->assertDatabaseCount('collections', 47);
-    $this->assertDatabaseCount('nfts', 100);
+    $this->assertDatabaseCount('nfts', 94);
 
     expect(Collection::whereNotNull('last_indexed_token_number')->count())->toBe(0);
 });
@@ -78,7 +78,7 @@ it('should fetch nfts for wallet and dispatch floor price job', function () {
     (new FetchWalletNfts($wallet, $network))->handle();
 
     $this->assertDatabaseCount('collections', 47);
-    $this->assertDatabaseCount('nfts', 100);
+    $this->assertDatabaseCount('nfts', 94);
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 47);
 });
@@ -708,7 +708,7 @@ it('should clear gallery & user cache', function () {
     (new FetchWalletNfts($wallet1, $network))->handle();
 
     $this->assertDatabaseCount('collections', 47);
-    $this->assertDatabaseCount('nfts', 100);
+    $this->assertDatabaseCount('nfts', 94);
     $this->assertDatabaseCount('galleries_dirty', 0);
 
     expect($galleryCache->nftsCount())->toBe(0)
@@ -1225,9 +1225,47 @@ it('should fetch nfts for wallet and keep previous collections last indexed toke
     (new FetchWalletNfts($wallet, $network))->handle();
 
     $this->assertDatabaseCount('collections', 47);
-    $this->assertDatabaseCount('nfts', 100);
+    $this->assertDatabaseCount('nfts', 94);
 
     expect(Collection::whereNotNull('last_indexed_token_number')->count())->toBe(1);
 
     expect($collection->fresh()->last_indexed_token_number)->toBe('12345');
+});
+
+it('stores if the wallet owns ERC1155 NFTs', function () {
+    Bus::fake();
+
+    $nfts = getTestNfts();
+
+    $nfts['ownedNfts'][0]['id']['tokenMetadata']['tokenType'] = 'ERC1155';
+
+    $network = Network::polygon();
+
+    $wallet = Wallet::factory()->create([
+        'owns_erc1155_tokens' => false,
+    ]);
+
+    Alchemy::fake(Http::response($nfts, 200));
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($wallet->fresh()->owns_erc1155_tokens)->toBeTrue();
+});
+
+it('stores if the wallet does not own ERC1155 NFTs', function () {
+    Bus::fake();
+
+    $nfts = getTestNfts();
+
+    $network = Network::polygon();
+
+    $wallet = Wallet::factory()->create([
+        'owns_erc1155_tokens' => true,
+    ]);
+
+    Alchemy::fake(Http::response($nfts, 200));
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    expect($wallet->fresh()->owns_erc1155_tokens)->toBeFalse();
 });

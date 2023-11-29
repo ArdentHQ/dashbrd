@@ -6,6 +6,7 @@ namespace App\Support;
 
 use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
+use App\Enums\TokenType;
 use App\Jobs\DetermineCollectionMintingDate;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
@@ -130,7 +131,7 @@ class Web3NftHandler
             $nfts = $nfts->filter(function ($nft) use ($groupedByAddress) {
                 $collection = $groupedByAddress->get(Str::lower($nft->tokenAddress));
 
-                return $this->shouldKeepNft($collection);
+                return $nft->type === TokenType::Erc721 && $this->shouldKeepNft($collection);
             });
 
             $valuesToUpsert = $nfts->map(function ($nft) use ($groupedByAddress, $now) {
@@ -146,7 +147,6 @@ class Web3NftHandler
                     'deleted_at' => null,
                     'metadata_fetched_at' => $now,
                     'info' => $nft->hasError ? $nft->info : null,
-                    'type' => $nft->type->value,
                 ];
 
                 return $values;
@@ -155,7 +155,7 @@ class Web3NftHandler
             $uniqueBy = ['collection_id', 'token_number'];
 
             $valuesToUpdateIfExists = ['deleted_at', 'info'];
-            $valuesToCheck = ['name', 'description', 'extra_attributes', 'type', 'metadata_fetched_at', 'wallet_id'];
+            $valuesToCheck = ['name', 'description', 'extra_attributes', 'metadata_fetched_at', 'wallet_id'];
 
             foreach ($valuesToCheck as $value) {
                 if (array_filter($valuesToUpsert, fn ($v) => $v[$value] !== null)) {

@@ -45,9 +45,11 @@ class Wallet extends Model
         'onboarded_at',
         'is_refreshing_collections',
         'refreshed_collections_at',
+        'owns_erc1155_tokens',
     ];
 
     protected $casts = [
+        'owns_erc1155_tokens' => 'bool',
         'extra_attributes' => SchemalessAttributes::class,
         'total_usd' => 'float',
         'last_activity_at' => 'datetime',
@@ -74,14 +76,6 @@ class Wallet extends Model
      * @return HasMany<Nft>
      */
     public function nfts(): HasMany
-    {
-        return $this->hasMany(Nft::class)->erc721();
-    }
-
-    /**
-     * @return HasMany<Nft>
-     */
-    public function allNfts(): HasMany
     {
         return $this->hasMany(Nft::class);
     }

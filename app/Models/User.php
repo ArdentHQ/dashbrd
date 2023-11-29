@@ -106,7 +106,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName
      */
     public function nfts(): HasManyThrough
     {
-        return $this->hasManyThrough(Nft::class, Wallet::class)->erc721();
+        return $this->hasManyThrough(Nft::class, Wallet::class);
     }
 
     /**
