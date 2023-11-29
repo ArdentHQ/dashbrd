@@ -51,16 +51,12 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        if ($this->collection->type !== TokenType::Erc721) {
-            return;
-        }
-
         $result = $this->getWeb3DataProvider()->getCollectionsNfts($this->collection, $this->startToken);
 
         (new Web3NftHandler(collection: $this->collection))
                     ->withPersistingLastIndexedTokenNumber()
                     ->store(
-                        $result->nfts, dispatchJobs: true
+                        $result->nfts->filter(fn ($nft) => $nft->type === TokenType::Erc721), dispatchJobs: true
                     );
 
         if ($result->nextToken !== null) {

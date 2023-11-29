@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Data\UserData;
 use App\Enums\CurrencyCode;
 use App\Enums\Role;
-use App\Enums\TokenType;
 use App\Models\Traits\BelongsToWallet;
 use App\Models\Traits\HasWallets;
 use Filament\Models\Contracts\FilamentUser;
@@ -114,7 +113,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName
      */
     public function collections(): Builder
     {
-        return Collection::where('collections.type', TokenType::Erc721)->whereIn('collections.id', function ($query) {
+        return Collection::whereIn('collections.id', function ($query) {
             return $query->select('collection_id')->from('nfts')->whereIn('nfts.wallet_id', $this->wallets()->select('id'));
         });
     }

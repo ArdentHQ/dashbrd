@@ -59,7 +59,7 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
 
         $nftHandler = new Web3NftHandler(wallet: $this->wallet, network: $this->network);
 
-        $nftHandler->store($result->nfts, true);
+        $nftHandler->store($result->nfts->filter(fn ($nft) => $nft->type === TokenType::Erc721), true);
 
         self::dispatchIf(
             $result->nextToken !== null,
