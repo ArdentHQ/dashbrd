@@ -10,7 +10,10 @@ export const CollectionOfTheMonthWinners = (): JSX.Element => {
     const { isDark } = useDarkModeContext();
 
     return (
-        <div className="dark:border-dark-700 flex w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700">
+        <div
+            data-testid="CollectionOfTheMonthWinners"
+            className="dark:border-dark-700 flex w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700"
+        >
             <div className="shadow-collection-of-the-month flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
                 <Heading
                     level={3}
