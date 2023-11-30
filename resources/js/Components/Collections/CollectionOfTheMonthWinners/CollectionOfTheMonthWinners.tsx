@@ -5,16 +5,26 @@ import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
 import { Link } from "@/Components/Link";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
-import { VoteNextMonthWinners, VoteNextMonthWinnersDark } from "@/images";
+import {
+    OneBarChart,
+    OneBarChartDark,
+    ThreeBarChart,
+    ThreeBarChartDark,
+    TwoBarChart,
+    TwoBarChartDark,
+    VoteNextMonthWinners,
+    VoteNextMonthWinnersDark,
+} from "@/images";
 
 const CharBar = ({ place, votes }: { place: 1 | 2 | 3; votes: number }): JSX.Element => (
-    <div
-        className={cn("collection-winner-bar flex flex-col items-center text-white", {
-            "collection-winner-bar-first w-[130px]": place === 1,
-            "w-[120px] bg-[#515FE1]": place !== 1,
-        })}
-    >
-        <span className="text-[56px] font-bold leading-[100px]">{place}</span>
+    <div className="flex flex-col items-center text-white">
+        <OneBarChart />
+        <OneBarChartDark />
+        <TwoBarChart />
+        <TwoBarChartDark />
+        <ThreeBarChart />
+        <ThreeBarChartDark />
+        {/* <span className="text-[56px] font-bold leading-[100px]">{place}</span> */}
     </div>
 );
 

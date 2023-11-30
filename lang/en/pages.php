@@ -77,6 +77,7 @@ return [
         'collection_of_the_month' => [
             'winners_month' => 'Winners: :month',
             'vote_for_next_months_winners' => 'Vote now for next months winners',
+            'view_previous_winners' => 'View Previous Winners',
         ],
         'articles' => [
             'no_articles' => 'No articles have been linked to this collection as of now.',
