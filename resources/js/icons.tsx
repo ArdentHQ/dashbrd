@@ -55,6 +55,7 @@ import { ReactComponent as FatDoubleCheck } from "@icons/fat-double-check.svg";
 import { ReactComponent as FatPlus } from "@icons/fat-plus.svg";
 import { ReactComponent as FatXInCircle } from "@icons/fat-x-in-circle.svg";
 import { ReactComponent as FingerTap } from "@icons/finger-tap.svg";
+import { ReactComponent as Fire } from "@icons/fire.svg";
 import { ReactComponent as Flag } from "@icons/flag.svg";
 import { ReactComponent as FunnelBars } from "@icons/funnel-bars.svg";
 import { ReactComponent as Funnel } from "@icons/funnel.svg";
@@ -163,6 +164,7 @@ export const SvgCollection = {
     FatArrowDown,
     FatArrowUp,
     FingerTap,
+    Fire,
     Flag,
     FunnelBars,
     Funnel,

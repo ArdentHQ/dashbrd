@@ -217,6 +217,8 @@ module.exports = {
             "theme-hint-700": "rgb(var(--theme-color-hint-700) / <alpha-value>)",
             "theme-hint-800": "rgb(var(--theme-color-hint-800) / <alpha-value>)",
             "theme-hint-900": "rgb(var(--theme-color-hint-900) / <alpha-value>)",
+
+            "theme-vote-background": "rgba(var(--theme-color-vote-background) / <alpha-value>)",
         },
     },
 

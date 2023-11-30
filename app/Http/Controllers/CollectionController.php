@@ -72,6 +72,7 @@ class CollectionController extends Controller
                                 ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
+            'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
             'collections' => fn () => PopularCollectionData::collection(
@@ -233,7 +234,7 @@ class CollectionController extends Controller
             ->when($request->get('sort') !== 'popularity', fn ($q) => $q->sortById())
             ->when($request->get('sort') === 'popularity', fn ($q) => $q->sortByPopularity())
             ->orderByPivot('order_index', 'asc')
-            ->withFeaturedCollections()
+            ->withRelatedCollections()
             ->paginate($pageLimit);
 
         /** @var PaginatedDataCollection<int, ArticleData> $paginated */

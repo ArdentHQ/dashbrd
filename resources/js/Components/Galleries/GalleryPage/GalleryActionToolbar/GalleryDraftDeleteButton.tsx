@@ -8,7 +8,13 @@ import { useToasts } from "@/Hooks/useToasts";
 import { useWalletDraftGalleries } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
 import { assertWallet } from "@/Utils/assertions";
 
-export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.Element => {
+export const GalleryDraftDeleteButton = ({
+    className,
+    draftId,
+}: {
+    className?: string;
+    draftId: number;
+}): JSX.Element => {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const { showToast } = useToasts();
@@ -30,6 +36,7 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
                 onFinish: () => {
                     showToast({
                         message: t("pages.galleries.my_galleries.draft_succesfully_deleted"),
+                        type: "success",
                     });
                 },
             },
@@ -41,7 +48,7 @@ export const GalleryDraftDeleteButton = ({ draftId }: { draftId: number }): JSX.
             <IconButton
                 data-testid="GalleryActionToolbar__draftDelete"
                 icon="Trash"
-                className="flex sm:hidden lg:flex"
+                className={className}
                 onClick={() => {
                     setOpen(true);
                 }}
