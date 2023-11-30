@@ -92,7 +92,7 @@ return [
             'vote_for_top_collection' => 'Vote for Top Collection of the Month',
             'vote' => 'Vote',
             'time_left' => 'Time Left',
-            'or_nominate_collection' => 'Or nominate a collection'
+            'or_nominate_collection' => 'Or nominate a collection',
         ],
         'sorting' => [
             'token_number' => 'Token Number',
