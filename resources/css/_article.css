@@ -36,8 +36,34 @@
 .article-content > img,
 .article-content > figure,
 .article-content > pre,
-.article-content > code {
+.article-content > code,
+.article-content > iframe,
+.article-content > .twitter-embed-wrapper {
     @apply my-4;
+}
+
+.article-content > .twitter-embed-wrapper > blockquote {
+    @apply hidden;
+}
+
+.article-content > .twitter-embed-wrapper {
+    @apply flex justify-center;
+}
+
+.article-content > .twitter-embed-wrapper-dark {
+    @apply hidden;
+}
+
+.article-content > .twitter-embed-wrapper iframe {
+    @apply !max-w-full;
+}
+
+.dark .twitter-embed-wrapper {
+    @apply !hidden;
+}
+
+.dark .twitter-embed-wrapper.twitter-embed-wrapper-dark {
+    @apply !flex;
 }
 
 .article-content > blockquote {
@@ -56,8 +82,13 @@
     @apply mb-3 mt-6;
 }
 
-.article-content img {
+.article-content img,
+.article-content iframe {
     @apply mx-auto rounded-lg;
+}
+
+.article-content iframe {
+    @apply aspect-video h-auto w-full;
 }
 
 .article-content h2,

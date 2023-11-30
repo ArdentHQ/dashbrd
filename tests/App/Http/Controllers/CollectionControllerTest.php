@@ -681,7 +681,7 @@ it('should return collection articles', function () {
     $response = $this->getJson(route('collections.articles', $collection))->json('articles');
 
     expect(count($response['paginated']['data']))->toEqual(2)
-        ->and(count($response['paginated']['data'][0]['featuredCollections']))->toEqual(8);
+        ->and(count($response['paginated']['data'][0]['collections']))->toEqual(8);
 });
 
 it('should return collection articles with the given pageLimit', function ($pageLimit, $resultCount) {

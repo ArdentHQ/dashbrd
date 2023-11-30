@@ -70,6 +70,13 @@ export const GalleryActionToolbar = ({
                                         data-testid="GalleryActionToolbar__template-button-mobile"
                                     />
 
+                                    {draftId !== undefined && (
+                                        <GalleryDraftDeleteButton
+                                            className="lg:hidden"
+                                            draftId={draftId}
+                                        />
+                                    )}
+
                                     <Button
                                         icon="GridWithPencil"
                                         iconPosition="right"
@@ -114,8 +121,8 @@ export const GalleryActionToolbar = ({
                                     </div>
                                 </div>
 
-                                <div className="flex space-x-3 sm:hidden">
-                                    <div className="hidden xs:flex">
+                                <div className="flex sm:hidden">
+                                    <div className="mr-3 hidden xs:flex">
                                         <GalleryDraftStatus
                                             isSavingDraft={isSavingDraft}
                                             draftId={draftId}
@@ -202,7 +209,12 @@ export const GalleryActionToolbar = ({
                                         draftId={draftId}
                                     />
 
-                                    {draftId !== undefined && <GalleryDraftDeleteButton draftId={draftId} />}
+                                    {draftId !== undefined && (
+                                        <GalleryDraftDeleteButton
+                                            className="hidden lg:flex"
+                                            draftId={draftId}
+                                        />
+                                    )}
 
                                     {showDelete && (
                                         <IconButton

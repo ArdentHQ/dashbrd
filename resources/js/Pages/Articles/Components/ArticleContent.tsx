@@ -9,6 +9,8 @@ import tippy, { inlinePositioning } from "tippy.js";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import { extractDomain } from "@/Utils/extract-domain";
 import { remarkFigurePlugin } from "@/Utils/Remark/remarkFigurePlugin";
+import { remarkTwitterEmbedPlugin } from "@/Utils/Remark/remarkTwitterEmbedPlugin";
+import { remarkYoutubeEmbedPlugin } from "@/Utils/Remark/remarkYoutubeEmbedPlugin";
 
 interface Properties {
     article: App.Data.Articles.ArticleData;
@@ -57,11 +59,22 @@ export const ArticleContent = ({ article }: Properties): JSX.Element => {
         };
     }, [isDark]);
 
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://platform.twitter.com/widgets.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
     return (
         <div className="article-content">
             <Markdown
                 rehypePlugins={[rehypeRaw, [rehypeExternalLinks, { target: "_blank" }]]}
-                remarkPlugins={[remarkFigurePlugin, remarkGfm]}
+                remarkPlugins={[remarkFigurePlugin, remarkGfm, remarkYoutubeEmbedPlugin, remarkTwitterEmbedPlugin]}
                 components={{
                     table: ({ children }) => (
                         <div className="w-fit overflow-hidden rounded-xl border border-theme-secondary-300 dark:border-theme-dark-700">

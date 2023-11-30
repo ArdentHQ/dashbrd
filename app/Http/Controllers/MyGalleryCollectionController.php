@@ -20,8 +20,11 @@ class MyGalleryCollectionController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $collections = $user
-            ->collections()
+        $collectionsQuery = $request->get('showHidden') === 'true'
+            ? $user->hiddenCollections()
+            : $user->collections()->notHidden($user);
+
+        $collections = $collectionsQuery
             ->where('collections.name', 'ilike', sprintf('%%%s%%', $request->get('query')))
             ->withUserNftsCount($user)
             ->orderBy('id')
