@@ -1,0 +1,124 @@
+{
+    "nfts": [
+        {
+            "contract": {
+                "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+                "name": "BoredApeYachtClub",
+                "symbol": "BAYC",
+                "totalSupply": "10000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+                "deployedBlockNumber": 12287507,
+                "openSeaMetadata": {
+                    "floorPrice": 33.92,
+                    "collectionName": "Bored Ape Yacht Club",
+                    "collectionSlug": "boredapeyachtclub",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
+                    "description": "The Bored Ape Yacht Club is a collection of 10,000 unique Bored Ape NFTs— unique digital collectibles living on the Ethereum blockchain. Your Bored Ape doubles as your Yacht Club membership card, and grants access to members-only benefits, the first of which is access to THE BATHROOM, a collaborative graffiti board. Future areas and perks can be unlocked by the community through roadmap activation. Visit www.BoredApeYachtClub.com for more details.",
+                    "externalUrl": "http://www.boredapeyachtclub.com/",
+                    "twitterUsername": "BoredApeYC",
+                    "discordUrl": "https://discord.gg/3P5K3dzgdB",
+                    "bannerImageUrl": "https://i.seadn.io/gae/i5dYZRkVCUK97bfprQ3WXyrT9BnLSZtVKGJlKQ919uaUB0sxbngVCioaiyu9r6snqfi2aaTyIvv6DHm4m2R3y7hMajbsv14pSZK8mhs?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-20T02:39:14.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "2",
+            "tokenType": "ERC721",
+            "name": null,
+            "description": null,
+            "tokenUri": "https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/7124b9738f8d18e9c0775c9e107b1c52",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/7124b9738f8d18e9c0775c9e107b1c52",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/7124b9738f8d18e9c0775c9e107b1c52",
+                "contentType": "image/png",
+                "size": 148611,
+                "originalUrl": "https://ipfs.io/ipfs/QmcJYkCKK7QPmYWjp4FD2e3Lv5WCGFuHNUByvGKBaytif4"
+            },
+            "raw": {
+                "tokenUri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2",
+                "metadata": {
+                    "image": "ipfs://QmcJYkCKK7QPmYWjp4FD2e3Lv5WCGFuHNUByvGKBaytif4",
+                    "attributes": [
+                        { "value": "3d", "trait_type": "Eyes" },
+                        { "value": "Bored Cigarette", "trait_type": "Mouth" },
+                        { "value": "Robot", "trait_type": "Fur" },
+                        { "value": "Sea Captain's Hat", "trait_type": "Hat" },
+                        { "value": "Aquamarine", "trait_type": "Background" }
+                    ]
+                },
+                "error": null
+            },
+            "collection": {
+                "name": "Bored Ape Yacht Club",
+                "openSeaSlug": "boredapeyachtclub",
+                "externalUrl": "http://www.boredapeyachtclub.com/",
+                "bannerImageUrl": "https://i.seadn.io/gae/i5dYZRkVCUK97bfprQ3WXyrT9BnLSZtVKGJlKQ919uaUB0sxbngVCioaiyu9r6snqfi2aaTyIvv6DHm4m2R3y7hMajbsv14pSZK8mhs?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-25T11:28:38.544Z"
+        },
+        {
+            "contract": {
+                "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+                "name": "BoredApeYachtClub",
+                "symbol": "BAYC",
+                "totalSupply": "10000",
+                "tokenType": "ERC721",
+                "contractDeployer": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+                "deployedBlockNumber": 12287507,
+                "openSeaMetadata": {
+                    "floorPrice": 33.92,
+                    "collectionName": "Bored Ape Yacht Club",
+                    "collectionSlug": "boredapeyachtclub",
+                    "safelistRequestStatus": "verified",
+                    "imageUrl": "https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?w=500&auto=format",
+                    "description": "The Bored Ape Yacht Club is a collection of 10,000 unique Bored Ape NFTs— unique digital collectibles living on the Ethereum blockchain. Your Bored Ape doubles as your Yacht Club membership card, and grants access to members-only benefits, the first of which is access to THE BATHROOM, a collaborative graffiti board. Future areas and perks can be unlocked by the community through roadmap activation. Visit www.BoredApeYachtClub.com for more details.",
+                    "externalUrl": "http://www.boredapeyachtclub.com/",
+                    "twitterUsername": "BoredApeYC",
+                    "discordUrl": "https://discord.gg/3P5K3dzgdB",
+                    "bannerImageUrl": "https://i.seadn.io/gae/i5dYZRkVCUK97bfprQ3WXyrT9BnLSZtVKGJlKQ919uaUB0sxbngVCioaiyu9r6snqfi2aaTyIvv6DHm4m2R3y7hMajbsv14pSZK8mhs?w=500&auto=format",
+                    "lastIngestedAt": "2023-08-20T02:39:14.000Z"
+                },
+                "isSpam": null,
+                "spamClassifications": []
+            },
+            "tokenId": "2",
+            "tokenType": "ERC721",
+            "name": null,
+            "description": null,
+            "tokenUri": "https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2",
+            "image": {
+                "cachedUrl": "https://nft-cdn.alchemy.com/eth-mainnet/7124b9738f8d18e9c0775c9e107b1c52",
+                "thumbnailUrl": "https://res.cloudinary.com/alchemyapi/image/upload/thumbnailv2/eth-mainnet/7124b9738f8d18e9c0775c9e107b1c52",
+                "pngUrl": "https://res.cloudinary.com/alchemyapi/image/upload/convert-png/eth-mainnet/7124b9738f8d18e9c0775c9e107b1c52",
+                "contentType": "image/png",
+                "size": 148611,
+                "originalUrl": "https://ipfs.io/ipfs/QmcJYkCKK7QPmYWjp4FD2e3Lv5WCGFuHNUByvGKBaytif4"
+            },
+            "raw": {
+                "tokenUri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2",
+                "metadata": {
+                    "image": "ipfs://QmcJYkCKK7QPmYWjp4FD2e3Lv5WCGFuHNUByvGKBaytif4",
+                    "attributes": [
+                        { "value": "3d", "trait_type": "Eyes" },
+                        { "value": "Bored Cigarette", "trait_type": "Mouth" },
+                        { "value": "Robot", "trait_type": "Fur" },
+                        { "value": "Sea Captain's Hat", "trait_type": "Hat" },
+                        { "value": "Aquamarine", "trait_type": "Background" }
+                    ]
+                },
+                "error": "Contract returned a broken token uri"
+            },
+            "collection": {
+                "name": "Bored Ape Yacht Club",
+                "openSeaSlug": "boredapeyachtclub",
+                "externalUrl": "http://www.boredapeyachtclub.com/",
+                "bannerImageUrl": "https://i.seadn.io/gae/i5dYZRkVCUK97bfprQ3WXyrT9BnLSZtVKGJlKQ919uaUB0sxbngVCioaiyu9r6snqfi2aaTyIvv6DHm4m2R3y7hMajbsv14pSZK8mhs?w=500&auto=format"
+            },
+            "timeLastUpdated": "2023-08-25T11:28:38.544Z"
+        }
+    ]
+}
