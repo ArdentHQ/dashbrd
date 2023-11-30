@@ -125,9 +125,8 @@ const CollectionsIndex = ({
                         <ViewAllButton />
                     </div>
                 </div>
+                <CollectionOfTheMonth />
             </div>
-
-            <CollectionOfTheMonth />
         </DefaultLayout>
     );
 };
