@@ -80,6 +80,6 @@
     @apply fill-none stroke-[#C2C2FF];
 }
 
-.dark .hidden-votes-svg-shape  {
+.dark .hidden-votes-svg-shape {
     @apply fill-none stroke-[#47509F];
 }
