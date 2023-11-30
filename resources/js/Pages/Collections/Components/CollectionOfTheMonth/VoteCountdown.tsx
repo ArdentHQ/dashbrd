@@ -47,7 +47,7 @@ export const VoteCountdown = (): JSX.Element => {
     )}`;
 
     return (
-        <div className="border-box dark:bg-theme-vote-background flex w-full flex-col overflow-hidden rounded-b-xl rounded-t-2.5xl bg-theme-primary-50 backdrop-blur sm:w-fit sm:flex-row sm:rounded-[1.75rem]">
+        <div className="border-box flex w-full flex-col overflow-hidden rounded-b-xl rounded-t-2.5xl bg-theme-primary-50 backdrop-blur dark:bg-theme-vote-background sm:w-fit sm:flex-row sm:rounded-[1.75rem]">
             <Button
                 disabled={true}
                 className="flex justify-center py-2 text-base sm:px-5 md:px-12"
