@@ -77,7 +77,7 @@ class CollectionController extends Controller
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
             // @TODO: replace with actual top collections and include votes
-            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
+            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(0)->get()),
             'collections' => fn () => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
             ),
