@@ -24,6 +24,7 @@ interface Properties extends PageProps {
     nftCount?: number;
     showDrafts: boolean;
     galleryCount: number;
+    areAllCollectionsHidden: boolean;
 }
 
 const Drafts = ({
@@ -44,11 +45,11 @@ const Drafts = ({
     }
 
     if (drafts.length === 0) {
-        return <EmptyBlock>{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
+        return <EmptyBlock className="mx-6 sm:mx-0">{t("pages.galleries.my_galleries.no_draft_galleries")}</EmptyBlock>;
     }
 
     return (
-        <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+        <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 px-6 sm:grid-cols-2 sm:px-0 md-lg:grid-cols-3">
             {drafts.map((draft, index) => (
                 <NftGalleryDraftCard
                     key={index}
@@ -77,7 +78,13 @@ const Drafts = ({
     );
 };
 
-const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Element => {
+const StoredGalleries = ({
+    galleries,
+    areAllCollectionsHidden,
+}: {
+    galleries: Properties["galleries"];
+    areAllCollectionsHidden: boolean;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     const [galleryToDelete, setGalleryToDelete] = useState<App.Data.Gallery.GalleryData | null>(null);
@@ -113,12 +120,15 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
     };
 
     if (userGalleries.meta.total === 0) {
+        if (areAllCollectionsHidden) {
+            return <EmptyBlock>{t("pages.galleries.my_galleries.no_available_collections")}</EmptyBlock>;
+        }
         return <EmptyBlock>{t("pages.galleries.my_galleries.no_galleries")}</EmptyBlock>;
     }
 
     return (
         <>
-            <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-2 md-lg:grid-cols-3">
+            <div className="-m-1 grid grid-flow-row grid-cols-1 gap-2 px-6 sm:grid-cols-2 sm:px-0 md-lg:grid-cols-3">
                 {userGalleries.data.map((gallery, index) => (
                     <NftGalleryCard
                         key={index}
@@ -153,7 +163,15 @@ const StoredGalleries = ({ galleries }: Pick<Properties, "galleries">): JSX.Elem
     );
 };
 
-const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth }: Properties): JSX.Element => {
+const Index = ({
+    title,
+    galleries,
+    nftCount = 0,
+    galleryCount,
+    showDrafts,
+    auth,
+    areAllCollectionsHidden,
+}: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     assertWallet(auth.wallet);
@@ -174,6 +192,7 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
 
         showToast({
             message: t("pages.galleries.my_galleries.draft_succesfully_deleted"),
+            type: "success",
         });
     };
 
@@ -193,7 +212,10 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
                         </span>
                     </Heading>
 
-                    <CreateGalleryButton nftCount={nftCount} />
+                    <CreateGalleryButton
+                        nftCount={nftCount}
+                        areAllCollectionsHidden={areAllCollectionsHidden}
+                    />
                 </div>
             </div>
 
@@ -207,7 +229,12 @@ const Index = ({ title, galleries, nftCount = 0, galleryCount, showDrafts, auth 
                 />
             )}
 
-            {!showDrafts && <StoredGalleries galleries={galleries} />}
+            {!showDrafts && (
+                <StoredGalleries
+                    galleries={galleries}
+                    areAllCollectionsHidden={areAllCollectionsHidden}
+                />
+            )}
         </Layout>
     );
 };

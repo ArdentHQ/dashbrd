@@ -105,7 +105,7 @@ export const ArticleCard = ({
                 </span>
 
                 <FeaturedCollections
-                    collections={article.featuredCollections}
+                    collections={article.collections}
                     variant={variant}
                 />
             </div>
