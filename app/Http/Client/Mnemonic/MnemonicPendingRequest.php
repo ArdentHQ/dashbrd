@@ -431,18 +431,15 @@ class MnemonicPendingRequest extends PendingRequest
             // Oldest first
             'sortDirection' => 'SORT_DIRECTION_ASC',
             'contractAddress' => $contractAddress,
+            'labelsAny' => 'LABEL_BURN',
         ];
-
-        $labelsQuery = implode('&', array_map(fn ($label) => 'labelsAny='.$label, [
-            'LABEL_BURN',
-        ]));
 
         if ($from !== null) {
             $query['blockTimestampGt'] = $from->toISOString();
         }
 
         /** @var array<string, mixed> $data */
-        $data = self::get(sprintf('/foundational/v1beta2/transfers/nft?%s', $labelsQuery), $query)->json('nftTransfers');
+        $data = self::get('/foundational/v1beta2/transfers/nft', $query)->json('nftTransfers');
 
         return collect($data)->map(function ($transfer) use ($chain, $contractAddress, $ethToken) {
             $currency = CurrencyCode::USD;
