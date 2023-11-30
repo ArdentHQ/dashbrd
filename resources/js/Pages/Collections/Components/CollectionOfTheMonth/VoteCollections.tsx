@@ -1,12 +1,13 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { twMerge } from "tailwind-merge";
 import { VoteCountdown } from "./VoteCountdown";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
 
-export const VoteCollection = (): JSX.Element => {
+export const VoteCollections = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -15,16 +16,26 @@ export const VoteCollection = (): JSX.Element => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
                 <div className="max-w-full flex-1 space-y-2">
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
+                    {Array.from({ length: 4 }).map((_, index) => (
+                        <VoteCollection
+                            order={index}
+                            key={index}
+                            collectionImage="https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format"
+                            collectionName="AlphaDogs"
+                            volume="256"
+                        />
+                    ))}
                 </div>
                 <div className="hidden flex-1 space-y-2 sm:block">
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
+                    {Array.from({ length: 4 }).map((_, index) => (
+                        <VoteCollection
+                            order={index}
+                            key={index}
+                            collectionImage="https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format"
+                            collectionName="AlphaDogs"
+                            volume="256"
+                        />
+                    ))}
                 </div>
             </div>
 
@@ -47,20 +58,34 @@ export const VoteCollection = (): JSX.Element => {
     );
 };
 
-const Item = () => (
+interface VoteCollectionProperties {
+    order: number;
+    collectionName: string;
+    collectionImage: string;
+    volume: string;
+    votes?: number;
+}
+
+const VoteCollection = ({
+    order,
+    collectionImage,
+    collectionName,
+    votes,
+    volume,
+}: VoteCollectionProperties): JSX.Element => (
     <div className="cursor-pointer rounded-lg border border-theme-secondary-300 px-4 py-3 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500">
         <div className="flex items-center justify-between">
             <div className="flex min-w-0 flex-1 space-x-3">
                 <div className="flex">
                     <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-theme-secondary-100 dark:bg-theme-vote-background md:h-12 md:w-12">
-                        <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">1</span>
+                        <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">{order}</span>
                     </div>
                     <div className="relative -ml-2 h-12 w-12 shrink-0">
                         <Img
                             wrapperClassName="aspect-square"
                             className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-700"
                             isCircle
-                            src="https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format"
+                            src={collectionImage}
                         />
                     </div>
                 </div>
@@ -70,32 +95,54 @@ const Item = () => (
                         data-testid="CollectionName__name"
                         className="truncate text-base font-medium text-theme-secondary-900 dark:text-theme-dark-50 md-lg:text-base"
                     >
-                        AlphaDogs AlphaDogs AlphaDogsAlphaDogs AlphaDogs AlphaDogs
+                        {collectionName}
                     </p>
                     <p className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
-                        3.55 ETH
+                        Vol: {volume}
                     </p>
-                    <div className="md-lg:hidden">
-                        <VoteCount />
+                    <div className="mt-0.5 md-lg:hidden">
+                        <VoteCount
+                            iconClass="h-6 w-8"
+                            textClass="text-sm md:text-sm"
+                            voteCount={votes}
+                        />
                     </div>
                 </div>
             </div>
 
             <div className="ml-2 hidden md-lg:block">
-                <VoteCount />
+                <VoteCount voteCount={votes} />
             </div>
         </div>
     </div>
 );
 
-const VoteCount = () => (
+const VoteCount = ({
+    iconClass,
+    textClass,
+    voteCount,
+}: {
+    iconClass?: string;
+    textClass?: string;
+    voteCount?: number;
+}): JSX.Element => (
     <div className="flex items-center space-x-2">
-        <p className="text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6">
+        <p
+            className={twMerge(
+                "text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6",
+                textClass,
+            )}
+        >
             Votes
         </p>
-        <Icon
-            name="HiddenVote"
-            size="2xl"
-        />
+        {voteCount !== undefined ? (
+            <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>395</p>
+        ) : (
+            <Icon
+                className={twMerge("h-7 w-9", iconClass)}
+                name="HiddenVote"
+                size="2xl"
+            />
+        )}
     </div>
 );

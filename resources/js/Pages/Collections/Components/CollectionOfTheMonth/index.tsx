@@ -1,3 +1,3 @@
 export * from "./CollectionOfTheMonth";
-export * from "./VoteCollection";
+export * from "./VoteCollections";
 export * from "./VoteCountdown";
