@@ -6,6 +6,7 @@ interface TimeLeft {
     days: number;
     hours: number;
     minutes: number;
+    seconds: number;
 }
 
 const calculateTimeLeft = (): TimeLeft => {
@@ -16,15 +17,21 @@ const calculateTimeLeft = (): TimeLeft => {
     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
     const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
     return {
         days: Math.max(days, 0),
         hours: Math.max(hours, 0),
         minutes: Math.max(minutes, 0),
+        seconds: Math.max(seconds, 0),
     };
 };
 
-const formatTime = (value: number, unit: string): string => `${value}${unit}`;
+const formatTime = (value: number, unit: string): string => {
+    /* This will prevent fixed widths and jumping UI */
+    const paddedValue = value < 10 ? `0${value}` : `${value}`;
+    return `${paddedValue}${unit}`;
+};
 
 export const VoteCountdown = (): JSX.Element => {
     const { t } = useTranslation();
@@ -41,10 +48,19 @@ export const VoteCountdown = (): JSX.Element => {
         };
     }, []);
 
-    const countdownDisplay = `${formatTime(timeLeft.days, "d")} : ${formatTime(timeLeft.hours, "h")} : ${formatTime(
-        timeLeft.minutes,
-        "m",
-    )}`;
+    let countdownDisplay;
+
+    if (timeLeft.days > 0) {
+        countdownDisplay = `${formatTime(timeLeft.days, "d")} : ${formatTime(timeLeft.hours, "h")} : ${formatTime(
+            timeLeft.minutes,
+            "m",
+        )}`;
+    } else {
+        countdownDisplay = `${formatTime(timeLeft.hours, "h")} : ${formatTime(timeLeft.minutes, "m")} : ${formatTime(
+            timeLeft.seconds,
+            "s",
+        )}`;
+    }
 
     return (
         <div className="border-box flex w-full flex-col overflow-hidden rounded-b-xl rounded-t-2.5xl bg-theme-primary-50 backdrop-blur dark:bg-theme-vote-background sm:w-fit sm:flex-row sm:rounded-[1.75rem]">
