@@ -9,7 +9,7 @@ use App\Enums\NftTransferType;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
 use App\Models\NftActivity;
-use App\Support\Facades\Mnemonic;
+use App\Services\Web3\Mnemonic\MnemonicWeb3DataProvider;
 use App\Support\Queues;
 use Carbon\Carbon;
 use DateTime;
@@ -40,7 +40,7 @@ class FetchBurnActivity implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(MnemonicWeb3DataProvider $provider): void
     {
         if (! config('dashbrd.features.activities') || $this->shouldIgnoreCollection()) {
             return;
@@ -55,7 +55,7 @@ class FetchBurnActivity implements ShouldQueue
             return;
         }
 
-        $activities = Mnemonic::getBurnActivity(
+        $activities = $provider->getBurnActivity(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address,
             limit: static::LIMIT,
