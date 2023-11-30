@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\MarketData;
 
+use App\Console\Commands\DependsOnCoingeckoRateLimit;
 use App\Jobs\UpdateTokenDetails as UpdateTokenDetailsJob;
 use App\Models\Token;
 use App\Models\Wallet;
-use App\Support\Queues;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 
 class UpdateTokenDetails extends Command
 {
+    use DependsOnCoingeckoRateLimit;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'marketdata:update-token-details {token_symbol?} {--wallet-id=} {--limit=} {--skip=}';
+    protected $signature = 'marketdata:update-token-details {token_symbol?} {--wallet-id=} {--top} {--no-top}';
 
     /**
      * The console command description.
@@ -39,7 +41,7 @@ class UpdateTokenDetails extends Command
         if ($walletId) {
             $wallet = Wallet::findOrFail($walletId);
 
-            $this->updateWalletTokenDetails($wallet);
+            $this->updateAllTokenDetails($wallet);
         } elseif (is_string($tokenSymbol)) {
             $tokens = Token::mainnet()->bySymbol($tokenSymbol)->limit(1)->get();
 
@@ -49,29 +51,26 @@ class UpdateTokenDetails extends Command
         }
     }
 
-    private function updateAllTokenDetails(): void
+    private function updateAllTokenDetails(Wallet $wallet = null): void
     {
-        $limit = $this->option('limit');
+        $top = $this->option('top');
 
-        $skip = $this->option('skip');
+        $noTop = $this->option('no-top');
 
         $tokens = Token::mainnet()
             ->prioritized()
-            ->when($limit !== null, fn ($query) => $query->limit((int) $limit))
-            ->when($skip !== null, fn ($query) => $query->skip((int) $skip))
-            ->get();
+            ->when($top || $noTop, function ($query) use ($top) {
+                // Consider that the minutes here should match the frequency of
+                // the command defined on the `Kernel.php` file, currently `everyFifteenMinutes`
+                $limit = $this->getLimitPerMinutes(15);
 
-        $this->dispatchJobForTokens($tokens);
-    }
+                if ($top) {
+                    return $query->limit($limit);
+                }
 
-    private function updateWalletTokenDetails(Wallet $wallet): void
-    {
-        $limit = $this->option('limit');
-
-        $tokens = Token::mainnet()
-            ->prioritized()
-            ->when($limit !== null, fn ($query) => $query->limit((int) $limit))
-            ->where('wallet_id', $wallet->id)
+                return $query->skip($limit);
+            })
+            ->when($wallet !== null, fn ($query) => $query->where('wallet_id', $wallet->id))
             ->get();
 
         $this->dispatchJobForTokens($tokens);
@@ -87,9 +86,15 @@ class UpdateTokenDetails extends Command
         $progressBar = $this->output->createProgressBar($totalTokens);
 
         $tokens->each(function (Token $token) use ($progressBar) {
-            UpdateTokenDetailsJob::dispatch(
-                token: $token,
-            )->onQueue(Queues::TOKENS);
+            $this->dispatchDelayed(
+                callback: fn () => UpdateTokenDetailsJob::dispatch(
+                    token: $token,
+                ),
+                index: $progressBar->getProgress(),
+                job: UpdateTokenDetailsJob::class,
+                // @see comment on `DependsOnCoingeckoRateLimit.php` file
+                delayThreshold: $this->option('no-top') ? 1 : null,
+            );
 
             $progressBar->advance();
         });

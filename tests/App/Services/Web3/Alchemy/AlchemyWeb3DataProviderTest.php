@@ -240,7 +240,7 @@ it('should throw not implemented exception when trying to resolve ENS domain', f
 
 it('can get nft floor price', function () {
     Alchemy::fake([
-        'https://*.g.alchemy.com/nft/v2/*/getFloorPrice?*' => Http::response(
+        'https://*.g.alchemy.com/nft/v3/*/getFloorPrice?*' => Http::response(
             fixtureData('alchemy.get_floor_price'),
             200
         ),
@@ -256,7 +256,7 @@ it('can get nft floor price', function () {
 
 it('can get nft floor price with some errors', function () {
     Alchemy::fake([
-        'https://*.g.alchemy.com/nft/v2/*/getFloorPrice?*' => Http::response(fixtureData('alchemy.get_floor_price_partially_not_found'), 200),
+        'https://*.g.alchemy.com/nft/v3/*/getFloorPrice?*' => Http::response(fixtureData('alchemy.get_floor_price_partially_not_found'), 200),
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
@@ -269,7 +269,7 @@ it('can get nft floor price with some errors', function () {
 
 it('handles error when calling nft floor price', function () {
     Alchemy::fake([
-        'https://*.g.alchemy.com/nft/v2/*/getFloorPrice?*' => Http::response(
+        'https://*.g.alchemy.com/nft/v3/*/getFloorPrice?*' => Http::response(
             fixtureData('alchemy.get_floor_price_not_found'),
             200
         ),
@@ -281,7 +281,7 @@ it('handles error when calling nft floor price', function () {
 
 it('returns null for unsupported network when calling nft floor price', function () {
     Alchemy::fake([
-        'https://*.g.alchemy.com/nft/v2/*/getFloorPrice?*' => Http::response(
+        'https://*.g.alchemy.com/nft/v3/*/getFloorPrice?*' => Http::response(
             fixtureData('alchemy.get_floor_price'),
             200
         ),
