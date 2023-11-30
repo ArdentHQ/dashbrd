@@ -138,7 +138,7 @@ it('should paginate getWalletTokens', function () {
 
 it('should getWalletNfts', function () {
     Alchemy::fake([
-        '*' => Http::response(fixtureData('alchemy.nfts'), 200),
+        '*' => Http::response(fixtureData('alchemy.nfts_for_owner_2'), 200),
     ]);
 
     $network = Network::polygon();
@@ -149,9 +149,9 @@ it('should getWalletNfts', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(100)
+        ->and($tokens)->toHaveCount(4)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
-        ->and($tokens[0]->tokenAddress)->toBe('0x0631cc561618ee4fa142e502c5f5ab9fcc2aa90c')
+        ->and($tokens[0]->tokenAddress)->toBe('0x684E4ED51D350b4d76A3a07864dF572D24e6dC4c')
         ->and($tokens[2]->floorPrice)
         ->toBeInstanceOf(Web3NftCollectionFloorPrice::class)
         ->and($tokens[2]->floorPrice->price)->toEqual('3000000000000000')
@@ -160,7 +160,7 @@ it('should getWalletNfts', function () {
 
 it('should getNftMetadata', function () {
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     $user = createUser();
@@ -181,12 +181,12 @@ it('should getNftMetadata', function () {
     expect($tokens)->toBeInstanceOf(Collection::class)
         ->and($tokens)->toHaveCount(1)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
-        ->and($tokens[0]->tokenAddress)->toBe('0x0e33fd2db4f140dca8f65671c40e36f8fd648fff');
+        ->and($tokens[0]->tokenAddress)->toBe('0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D');
 });
 
 it('should extract nft images', function () {
     Alchemy::fake([
-        '*' => Http::response(fixtureData('alchemy.nfts_media'), 200),
+        '*' => Http::response(fixtureData('alchemy.nfts_for_owner_2'), 200),
     ]);
 
     $network = Network::polygon();
@@ -196,13 +196,13 @@ it('should extract nft images', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(3)
+        ->and($tokens)->toHaveCount(4)
         ->and($tokens)->every(fn ($token) => expect($token->extraAttributes['images'])->toHaveKeys(['thumb', 'small', 'large', 'original', 'originalRaw']));
 });
 
 it('should extract nft traits', function () {
     Alchemy::fake([
-        '*' => Http::response(fixtureData('alchemy.nfts_traits'), 200),
+        '*' => Http::response(fixtureData('alchemy.nfts_for_owner_2'), 200),
     ]);
 
     $network = Network::polygon();
@@ -212,23 +212,22 @@ it('should extract nft traits', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(3)
+        ->and($tokens)->toHaveCount(4)
         ->and($tokens[0]->traits)->toEqual([
-            ['name' => 'Character', 'value' => 'Randy H.', 'displayType' => TraitDisplayType::Property],
-            ['name' => 'Skin', 'value' => 'OG Blue', 'displayType' => TraitDisplayType::Property],
-            ['name' => 'Mouth Creature', 'value' => 'Piquín Pink', 'displayType' => TraitDisplayType::Property],
-        ])
-        ->and($tokens[1]->traits)->toEqual([
-            ['name' => 'Wheel Fairing', 'value' => 'Type 4', 'displayType' => TraitDisplayType::Property],
-            ['name' => 'Windshield', 'value' => 'Type 1', 'displayType' => TraitDisplayType::Property],
-            ['name' => 'Speedometer', 'value' => 'Mechanical', 'displayType' => TraitDisplayType::Property],
-            ['name' => 'Speed', 'value' => '26', 'displayType' => TraitDisplayType::BoostPercentage],
-            ['name' => 'Bottom Fairing', 'value' => 'Type 4', 'displayType' => TraitDisplayType::Property],
-            ['name' => 'Score', 'value' => '8', 'displayType' => TraitDisplayType::Stat],
+            ['name' => 'Faction', 'value' => 'Human', 'displayType' => TraitDisplayType::Property],
+            ['name' => 'Background', 'value' => 'Flamingo Pink', 'displayType' => TraitDisplayType::Property],
         ])
         ->and($tokens[2]->traits)->toEqual([
-            ['name' => 'Background', 'value' => 'Slang', 'displayType' => TraitDisplayType::Property],
-            ['name' => 'Soy %', 'value' => '35', 'displayType' => TraitDisplayType::Property],
+            ['name' => 'Color', 'value' => 'Navy', 'displayType' => TraitDisplayType::Property],
+            ['name' => 'Face', 'value' => 'Core', 'displayType' => TraitDisplayType::Property],
+            ['name' => 'AUX', 'value' => 'Patrician', 'displayType' => TraitDisplayType::Property],
+            ['name' => 'Torso', 'value' => 'Kimono', 'displayType' => TraitDisplayType::Property],
+
+        ])
+        ->and($tokens[3]->traits)->toEqual([
+            ['name' => 'shirt', 'value' => 'hoodie purple', 'displayType' => TraitDisplayType::Property],
+            ['name' => 'face', 'value' => 'ninja red', 'displayType' => TraitDisplayType::Property],
+            ['name' => 'tier', 'value' => 'cool_1', 'displayType' => TraitDisplayType::Property],
         ]);
 });
 
@@ -380,79 +379,108 @@ it('should filter out nfts', function () {
         '*' => Http::sequence()
             ->push(['ownedNfts' => [
                 [
-                    'id' => ['tokenId' => '1', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contractMetadata' => [
-                        'name' => 'SPAM Collection', 'symbol' => 'SPAM',
+                    'tokenId' => '1',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'name' => 'SPAM Collection',
+                        'symbol' => 'SPAM',
                         'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
+                        'isSpam' => true,
                     ],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'spamInfo' => ['isSpam' => true],
-                    'title' => 'SPAM',
+                    'name' => 'SPAM',
                 ],
                 [
-                    'id' => ['tokenId' => '2', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'title' => 'no collection name/symbol',
-                    'contractMetadata' => [
-                        'name' => '', 'symbol' => '',
+                    'tokenId' => '2',
+                    'name' => 'no collection name/symbol',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
+                        'name' => '',
+                        'symbol' => '',
                         'deployedBlockNumber' => 10000,
                     ],
                 ],
                 [
-                    'id' => ['tokenId' => '3', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'contractMetadata' => [
-                        'name' => 'SPAM Collection', 'symbol' => 'SPAM',
+                    'tokenId' => '3',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'name' => 'SPAM Collection',
+                        'symbol' => 'SPAM',
                         'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                     ],
-                    'title' => 'NFT WITH ERROR',
+                    'name' => 'NFT WITH ERROR',
                     'error' => 'some error',
                 ],
                 [
-                    'id' => ['tokenId' => '4', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'contractMetadata' => [
-                        'name' => 'Best Collection', 'symbol' => 'BEST',
+                    'tokenId' => '30',
+                    'contract' => [
+                        'tokenType' => 'ERC155',
+                        'name' => 'ERC1155 Collection',
+                        'symbol' => '1155',
                         'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                     ],
-                    'title' => '',
+                    'name' => 'ERC1155',
                 ],
                 [
-                    'id' => ['tokenId' => '4', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'contractMetadata' => [
-                        'name' => 'Best Collection', 'symbol' => 'BEST',
+                    'tokenId' => '4',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'name' => 'Best Collection',
+                        'symbol' => 'BEST',
                         'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                     ],
-                    'title' => 'OK Both',
+                    'name' => '',
                 ],
                 [
-                    'id' => ['tokenId' => '4', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'contractMetadata' => [
-                        'name' => 'Best Collection', 'symbol' => null,
+                    'tokenId' => '5',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'name' => 'Best Collection',
+                        'symbol' => 'BEST',
                         'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                     ],
-                    'title' => 'OK Name',
+                    'name' => 'OK Both',
                 ],
                 [
-                    'id' => ['tokenId' => '4', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'contractMetadata' => [
-                        'name' => '', 'symbol' => 'BEST',
+                    'tokenId' => '6',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'name' => 'Best Collection',
+                        'symbol' => null,
                         'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                     ],
-                    'title' => 'OK Symbol',
+                    'name' => 'OK Name',
                 ],
                 [
-                    'id' => ['tokenId' => '4', 'tokenMetadata' => ['tokenType' => 'ERC721']],
-                    'contract' => ['address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963'],
-                    'contractMetadata' => [
-                        'name' => null, 'symbol' => null,
+                    'tokenId' => '7',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'name' => '',
+                        'symbol' => 'BEST',
                         'deployedBlockNumber' => 10000,
-                        'openSea' => ['collectionName' => 'BEST'],
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
                     ],
-                    'title' => 'OK OpenSea fallback',
+                    'name' => 'OK Symbol',
+                ],
+                [
+                    'tokenId' => '8',
+                    'contract' => [
+                        'tokenType' => 'ERC721',
+                        'name' => null,
+                        'symbol' => null,
+                        'deployedBlockNumber' => 10000,
+                        'address' => '0x0053399124f0cbb46d2cbacd8a89cf0599974963',
+                        'openSeaMetadata' => [
+                            'collectionName' => 'BEST',
+                        ],
+                    ],
+                    'name' => 'OK OpenSea fallback',
                 ],
             ]]),
     ]);
@@ -469,7 +497,7 @@ it('should filter out nfts', function () {
 });
 
 it('should getCollectionsNfts', function () {
-    $original = fixtureData('alchemy.get_nfts_for_collection');
+    $original = fixtureData('alchemy.get_nfts_for_contract');
 
     $altered = $original;
     // 12345 in hex
@@ -489,7 +517,7 @@ it('should getCollectionsNfts', function () {
     $result = $provider->getCollectionsNfts($collection);
 
     expect($result)->toBeInstanceOf(Web3NftsChunk::class)
-        ->and($result->nfts)->toHaveCount(100)
+        ->and($result->nfts)->toHaveCount(3)
         ->and($result->nfts[0])->toBeInstanceOf(Web3NftData::class)
         ->and($result->nextToken)->toBe('0x0000000000000000000000000000000000000000000000000000000000000064');
 });

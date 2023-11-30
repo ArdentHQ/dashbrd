@@ -17,7 +17,7 @@ it('should fetch nft collections, trigger the job again with the next token and 
     Bus::fake();
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getNFTsForContract?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_contract'), 200),
     ]);
 
     $network = Network::polygon();
@@ -33,8 +33,8 @@ it('should fetch nft collections, trigger the job again with the next token and 
 
     Bus::assertDispatched(FetchCollectionNfts::class, fn ($job) => $job->startToken === '0x0000000000000000000000000000000000000000000000000000000000000064');
 
-    expect(Nft::count())->toBe(100);
-    expect(NftTrait::count())->toBe(585);
+    expect(Nft::count())->toBe(3);
+    expect(NftTrait::count())->toBe(30);
 
     expect($collection->fresh()->extra_attributes->get('nft_last_fetched_at'))->not->toBeNull();
 });
@@ -42,25 +42,25 @@ it('should fetch nft collections, trigger the job again with the next token and 
 it('should fetch nft collections without triggering another job if no next token', function () {
     Bus::fake();
 
-    $response = fixtureData('alchemy.get_nfts_for_collection');
+    $response = fixtureData('alchemy.get_nfts_for_contract');
 
-    unset($response['nextToken']);
+    unset($response['pageKey']);
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response($response, 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getNFTsForContract?contractAddress=*&withMetadata=true&limit=100' => Http::response($response, 200),
     ]);
 
     $network = Network::polygon();
 
     $collection = Collection::factory()->create([
-        'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
+        'address' => '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
         'network_id' => $network->id,
         'last_indexed_token_number' => null,
     ]);
 
     (new FetchCollectionNfts($collection))->handle();
 
-    expect($collection->fresh()->last_indexed_token_number)->toBe('99');
+    expect($collection->fresh()->last_indexed_token_number)->toBe('2');
 
     Bus::assertNotDispatched(FetchCollectionNfts::class);
 });
@@ -80,9 +80,8 @@ it('should retry the job', function () {
 });
 
 it('should not fetch nfts if the collection address is blacklisted', function () {
-
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_blacklisted_collection'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getNFTsForContract?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_contract_blacklisted'), 200),
     ]);
 
     $network = Network::polygon();
@@ -107,7 +106,7 @@ it('should fetch nfts if the collection address is not blacklisted', function ()
     Bus::fake();
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getNFTsForContract?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_contract'), 200),
     ]);
 
     $network = Network::polygon();
@@ -125,15 +124,15 @@ it('should fetch nfts if the collection address is not blacklisted', function ()
 
     (new FetchCollectionNfts($collection))->handle();
 
-    expect(Nft::count())->toBe(100);
-    expect(NftTrait::count())->toBe(585);
+    expect(Nft::count())->toBe(3);
+    expect(NftTrait::count())->toBe(30);
 });
 
 it('should not store nfts if the collection supply is higher than COLLECTIONS_MAX_CAP', function () {
     Bus::fake();
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection_exceeding_max_cap_supply'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getNFTsForContract?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_contract_exceeding_max_cap_supply'), 200),
     ]);
 
     $network = Network::polygon();
@@ -155,7 +154,7 @@ it('should not store nfts if the collection supply is higher than COLLECTIONS_MA
 it('does not store NFTs for collections that do not report a total supply', function () {
     Bus::fake();
 
-    Alchemy::fake(Http::response(fixtureData('alchemy.get_nfts_for_collection_without_total_supply'), 200));
+    Alchemy::fake(Http::response(fixtureData('alchemy.get_nfts_for_contract_without_total_supply'), 200));
 
     $network = Network::polygon();
     $collection = Collection::factory()->create([
@@ -177,17 +176,17 @@ it('updates a max token number when indexing', function () {
     Bus::fake();
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*/getNFTsForCollection?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_collection'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*/getNFTsForContract?contractAddress=*&withMetadata=true&limit=100' => Http::response(fixtureData('alchemy.get_nfts_for_contract'), 200),
     ]);
 
     $network = Network::polygon();
     $collection = Collection::factory()->create([
-        'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
+        'address' => '0xe785E82358879F061BC3dcAC6f0444462D4b5330',
         'network_id' => $network->id,
     ]);
 
     (new FetchCollectionNfts($collection))->handle();
-    expect($collection->fresh()->last_indexed_token_number)->toBe('99');
+    expect($collection->fresh()->last_indexed_token_number)->toBe('2');
 });
 
 it('skips potentially full collections', function () {
