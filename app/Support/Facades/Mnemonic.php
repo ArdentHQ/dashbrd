@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Http;
  * @method static string | null getNftCollectionVolume(Chain $chain, string $contractAddress)
  * @method static Collection<int, Web3NftCollectionTrait> getNftCollectionTraits(Chain $chain, string $contractAddress)
  * @method static Collection<int, CollectionActivity> getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
+ * @method static Collection<int, CollectionActivity> getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  *
  * @see App\Http\Client\Mnemonic\MnemonicPendingRequest
  */

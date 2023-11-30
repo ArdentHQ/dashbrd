@@ -409,6 +409,11 @@ class MnemonicPendingRequest extends PendingRequest
         })->values();
     }
 
+    /**
+     * @see https://docs.mnemonichq.com/reference/foundationalservice_getnfttransfers
+     *
+     * @return Collection<int, CollectionActivity>
+     */
     public function getBurnActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
     {
         // Very similar to `getCollectionActivity` method, however this method only cares about `LABEL_BURN` labels...
