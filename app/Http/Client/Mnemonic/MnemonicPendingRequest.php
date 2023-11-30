@@ -465,7 +465,7 @@ class MnemonicPendingRequest extends PendingRequest
                     'senderReceived' => Arr::get($transfer, 'senderReceived'),
                 ]
             );
-        })->values();
+        });
     }
 
     /**

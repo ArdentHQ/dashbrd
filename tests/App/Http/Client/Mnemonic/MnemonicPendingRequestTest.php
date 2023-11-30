@@ -276,6 +276,37 @@ it('should fetch the collection activity', function () {
     expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
+it('should fetch burn activity', function () {
+    Mnemonic::fake([
+        'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.burn_transfers'), 200),
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+        'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
+    ]);
+
+    // Note: limit is ignored because the fixture is fixed size
+    $data = Mnemonic::getBurnActivity(Chain::Polygon, $collection->address, 100);
+
+    expect($data)->toHaveCount(8);
+
+    $data = $data->first();
+
+    expect($data->contractAddress)->toBe('0x23581767a106ae21c074b2276d25e5c3e136a68b');
+    expect($data->tokenId)->toBe('8304');
+    expect($data->sender)->toBe('0x0000000000000000000000000000000000000000');
+    expect($data->recipient)->toBe('0xe66e1e9e37e4e148b21eb22001431818e980d060');
+    expect($data->txHash)->toBe('0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de');
+    expect($data->logIndex)->toBe('164');
+    expect($data->type)->toBe(NftTransferType::Burn);
+    expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
+    expect($data->totalNative)->toBe(null);
+    expect($data->totalUsd)->toBe(7547.995011517354);
+});
+
 it('should convert total to native currency by using historical price for the given date', function () {
     Mnemonic::fake([
         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),

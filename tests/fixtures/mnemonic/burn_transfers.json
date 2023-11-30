@@ -1,0 +1,262 @@
+{
+    "nftTransfers": [
+        {
+            "blockchainEvent": {
+                "txHash": "0x8f1c4d575332c9a89ceec4d3d05960e23a17ec385912b00f4e970faf446ae4de",
+                "logIndex": "164",
+                "seqIndex": "0",
+                "blockNumber": "14597477",
+                "blockTimestamp": "2022-04-16T16:39:27Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0x0000000000000000000000000000000000000000", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_NO_PAYMENTS",
+                "fungibleTotals": []
+            },
+            "recipient": { "address": "0xe66e1e9e37e4e148b21eb22001431818e980d060", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "2.5",
+                "totalUsd": "7547.995011517354",
+                "nativeTransfersTotal": "2.5",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_SINGLE_TRANSFER",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN"]
+        },
+        {
+            "blockchainEvent": {
+                "txHash": "0x4cb092168f37d22df9f7ff202fd5d2ba43c4f2c0e8876ca3ee8ee6e4a1ffadae",
+                "logIndex": "23",
+                "seqIndex": "0",
+                "blockNumber": "14597525",
+                "blockTimestamp": "2022-04-16T16:49:04Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0xe66e1e9e37e4e148b21eb22001431818e980d060", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_NO_PAYMENTS",
+                "fungibleTotals": []
+            },
+            "recipient": { "address": "0x660f95e3d6fc0a67cd6226a76bf7cf31a1c2a6ce", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_RECIPIENT_NO_PAYMENT",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN"]
+        },
+        {
+            "blockchainEvent": {
+                "txHash": "0x0f4ace575c32ea4a8b8274c27cfa51f824e2a51436f8ebe17f2539dd456b6dc0",
+                "logIndex": "186",
+                "seqIndex": "0",
+                "blockNumber": "14701109",
+                "blockTimestamp": "2022-05-02T23:07:40Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0x660f95e3d6fc0a67cd6226a76bf7cf31a1c2a6ce", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "28.7854361871930582",
+                "totalUsd": "82399.746541664674586519578199118",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "28.7854361871930582",
+                "attributedBy": "ATTRIBUTED_BY_SINGLE_TRANSFER",
+                "fungibleTotals": [
+                    { "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", "totalNormalized": "28.737" }
+                ]
+            },
+            "recipient": { "address": "0x0ccce9b458d1ec2c5ca4a31b65910890f4416d7f", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "30.9",
+                "totalUsd": "88452.790903694841",
+                "nativeTransfersTotal": "30.9",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_SINGLE_TRANSFER",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN", "LABEL_MARKETPLACE_LOOKSRARE"]
+        },
+        {
+            "blockchainEvent": {
+                "txHash": "0xff095fe13b3d988663730be6d773d9051dfb51b8860f110309ee91666710ec1e",
+                "logIndex": "374",
+                "seqIndex": "0",
+                "blockNumber": "15058129",
+                "blockTimestamp": "2022-07-01T18:14:35Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0x0ccce9b458d1ec2c5ca4a31b65910890f4416d7f", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "19.425",
+                "totalUsd": "20823.1506151185636525",
+                "nativeTransfersTotal": "19.425",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_SINGLE_TRANSFER",
+                "fungibleTotals": []
+            },
+            "recipient": { "address": "0x2bcdb960250e281cc5fb609f2f200a8d92687464", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "21",
+                "totalUsd": "22511.5141785065553",
+                "nativeTransfersTotal": "21",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_SINGLE_TRANSFER",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN", "LABEL_MARKETPLACE_OPENSEA"]
+        },
+        {
+            "blockchainEvent": {
+                "txHash": "0x9ff8e924d68b7ec304b92e27595e46f950177c67498452c88969abdb61395157",
+                "logIndex": "284",
+                "seqIndex": "0",
+                "blockNumber": "15058413",
+                "blockTimestamp": "2022-07-01T19:15:08Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0x2bcdb960250e281cc5fb609f2f200a8d92687464", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "21.275",
+                "totalUsd": "22755.5631207295041375",
+                "nativeTransfersTotal": "21.275",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_SINGLE_TRANSFER",
+                "fungibleTotals": []
+            },
+            "recipient": { "address": "0xd1f216b640a9bab9e6dd52e365e15ff2ac7e6002", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "23",
+                "totalUsd": "24600.6087791670315",
+                "nativeTransfersTotal": "23",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_SINGLE_TRANSFER",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN", "LABEL_MARKETPLACE_OPENSEA"]
+        },
+        {
+            "blockchainEvent": {
+                "txHash": "0x3ecbfccdc18fe3785faa0554f15aed17d67c9db143408925a5c7aa9ed154c120",
+                "logIndex": "200",
+                "seqIndex": "0",
+                "blockNumber": "15086030",
+                "blockTimestamp": "2022-07-06T01:30:25Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0xd1f216b640a9bab9e6dd52e365e15ff2ac7e6002", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_NO_PAYMENTS",
+                "fungibleTotals": []
+            },
+            "recipient": { "address": "0x304ffdd9d5e2bd23ecfd99a1da32a0472de766cb", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_RECIPIENT_NO_PAYMENT",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN"]
+        },
+        {
+            "blockchainEvent": {
+                "txHash": "0x2a3cafd159beb7d261c96c158274d6c120bb939f9ff315b4a235821893cc5697",
+                "logIndex": "351",
+                "seqIndex": "0",
+                "blockNumber": "16487098",
+                "blockTimestamp": "2023-01-25T23:25:11Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0x304ffdd9d5e2bd23ecfd99a1da32a0472de766cb", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_NO_PAYMENTS",
+                "fungibleTotals": []
+            },
+            "recipient": { "address": "0x4af4569e174ce8f4a0ab3f7ec484bb1abe4d4e59", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_RECIPIENT_NO_PAYMENT",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN"]
+        },
+        {
+            "blockchainEvent": {
+                "txHash": "0x69e010c9165bdbf51918c6f91e34d06b87e3d58f0ff2f7ced74201a9873b2c63",
+                "logIndex": "409",
+                "seqIndex": "0",
+                "blockNumber": "16487209",
+                "blockTimestamp": "2023-01-25T23:47:59Z"
+            },
+            "contractAddress": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+            "tokenId": "8304",
+            "tokenType": "TYPE_ERC721",
+            "quantity": "1",
+            "sender": { "address": "0x4af4569e174ce8f4a0ab3f7ec484bb1abe4d4e59", "type": "TYPE_OWNER" },
+            "senderReceived": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_NO_PAYMENTS",
+                "fungibleTotals": []
+            },
+            "recipient": { "address": "0x20271cbda9d84fbd9dde6d1e4a77a83d6dc0653e", "type": "TYPE_OWNER" },
+            "recipientPaid": {
+                "totalNative": "0",
+                "totalUsd": "0",
+                "nativeTransfersTotal": "0",
+                "fungibleTransfersTotal": "0",
+                "attributedBy": "ATTRIBUTED_BY_RECIPIENT_NO_PAYMENT",
+                "fungibleTotals": []
+            },
+            "labels": ["LABEL_BURN"]
+        }
+    ]
+}
