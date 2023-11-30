@@ -7,6 +7,7 @@ import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
@@ -124,6 +125,13 @@ const CollectionsIndex = ({
                     <div className="mt-2 sm:hidden">
                         <ViewAllButton />
                     </div>
+                </div>
+
+                <div className="mt-9 flex space-x-4 ">
+                    {/* Height is hardcoded should depend on the incoming vote table */}
+                    <div className="h-[516px] flex-1">{/* Vote table */}</div>
+
+                    <CollectionOfTheMonthWinners className="hidden xl:flex" />
                 </div>
             </div>
 

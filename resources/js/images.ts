@@ -2,6 +2,8 @@ import { ReactComponent as AuthConnectWalletDark } from "@images/auth-connect-wa
 import { ReactComponent as AuthConnectWallet } from "@images/auth-connect-wallet.svg";
 import { ReactComponent as AuthInstallWalletDark } from "@images/auth-install-wallet-dark.svg";
 import { ReactComponent as AuthInstallWallet } from "@images/auth-install-wallet.svg";
+import { ReactComponent as VoteNextMonthWinnersDark } from "@images/collections/vote-next-month-winners-dark.svg";
+import { ReactComponent as VoteNextMonthWinners } from "@images/collections/vote-next-month-winners.svg";
 import { ReactComponent as DeleteModal } from "@images/delete-modal.svg";
 import { ReactComponent as Error401 } from "@images/errors/401.svg";
 import { ReactComponent as Error403 } from "@images/errors/403.svg";
@@ -54,4 +56,6 @@ export {
     RightMiddleGrid,
     SocialLeftGrid,
     SocialRightGrid,
+    VoteNextMonthWinners,
+    VoteNextMonthWinnersDark,
 };
