@@ -92,6 +92,11 @@ return [
             'no_results_ownership' => 'You do not own any NFTs in this collection',
             'error' => 'Could not load search results. Please try again later.',
         ],
+        'vote' => [
+            'vote_for_top_collection' => 'Vote for Top Collection of the Month',
+            'vote' => 'Vote',
+            'time_left' => 'Time Left',
+        ],
         'sorting' => [
             'token_number' => 'Token Number',
             'recently_received' => 'Recently Received',

@@ -7,12 +7,12 @@ import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
-import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { CollectionOfTheMonth } from "@/Pages/Collections/Components/CollectionOfTheMonth";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface Filters extends Record<string, FormDataConvertible> {
@@ -125,14 +125,9 @@ const CollectionsIndex = ({
                         <ViewAllButton />
                     </div>
                 </div>
-
-                <div className="mt-9 flex space-x-4 ">
-                    {/* Height is hardcoded should depend on the incoming vote table */}
-                    <div className="h-[516px] flex-1">{/* Vote table */}</div>
-
-                    <CollectionOfTheMonthWinners className="hidden xl:flex" />
-                </div>
             </div>
+
+            <CollectionOfTheMonth />
         </DefaultLayout>
     );
 };
