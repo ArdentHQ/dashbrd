@@ -1200,7 +1200,7 @@ it('should fetch nfts for wallet and keep previous collections last indexed toke
     $this->assertDatabaseCount('nfts', 0);
 
     (new FetchWalletNfts($wallet, $network))->handle();
-  
+
     $this->assertDatabaseCount('collections', 4);
     $this->assertDatabaseCount('nfts', 4);
 
