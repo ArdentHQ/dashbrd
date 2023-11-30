@@ -32,13 +32,7 @@ const WinnersChartWrapper = ({
     </div>
 );
 
-const WinnersChart = ({
-    winners,
-    className,
-}: {
-    winners: App.Data.Collections.PopularCollectionData[];
-    className?: string;
-}): JSX.Element => {
+const WinnersChart = ({ winners }: { winners: App.Data.Collections.PopularCollectionData[] }): JSX.Element => {
     const { isDark } = useDarkModeContext();
 
     if (winners.length === 1) {
