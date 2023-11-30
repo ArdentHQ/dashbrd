@@ -289,7 +289,7 @@ it('should fetch burn activity', function () {
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getBurnActivity(Chain::Polygon, $collection->address, 100);
+    $data = Mnemonic::getBurnActivity(Chain::Polygon, $collection->address, 100, now());
 
     expect($data)->toHaveCount(8);
 
@@ -305,6 +305,10 @@ it('should fetch burn activity', function () {
     expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
     expect($data->totalNative)->toBe(null);
     expect($data->totalUsd)->toBe(7547.995011517354);
+
+    Mnemonic::assertSent(function ($request) {
+        return $request->data()['blockTimestampGt'] !== null;
+    });
 });
 
 it('should convert total to native currency by using historical price for the given date', function () {
