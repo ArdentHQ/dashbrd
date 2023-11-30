@@ -76,7 +76,7 @@ return [
             ],
         ],
         'collection_of_the_month' => [
-            'vote_for_next_months_winners' => 'Vote now for next months winners',
+            'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
         ],
         'articles' => [
             'no_articles' => 'No articles have been linked to this collection as of now.',
