@@ -16,6 +16,7 @@ import {
     VoteNextMonthWinners,
     VoteNextMonthWinnersDark,
 } from "@/images";
+import { formatNumbershort } from "@/Utils/format-number";
 
 const WinnersChartWrapper = ({
     children,
@@ -33,6 +34,7 @@ const WinnersChartWrapper = ({
 );
 
 const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfTheMonthData[] }): JSX.Element => {
+    const { t } = useTranslation();
     const { isDark } = useDarkModeContext();
 
     if (winners.length === 1) {
@@ -41,13 +43,18 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
                 className="justify-center"
                 chart={isDark ? <OneBarChartDark /> : <OneBarChart />}
             >
-                <div className={cn("relative bottom-[346px]")}>
+                <div className={cn("relative bottom-[346px] left-px flex flex-col items-center space-y-[124px]")}>
                     <Img
                         wrapperClassName="aspect-square h-20 w-20"
                         className="rounded-full"
                         src={winners[0].image}
                         isCircle
                     />
+
+                    <span className="text-center text-base font-medium leading-4.5 text-white">
+                        {formatNumbershort(winners[0].votes)}
+                        <br /> {t("common.votes")}
+                    </span>
                 </div>
             </WinnersChartWrapper>
         );
@@ -61,7 +68,7 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
             >
                 {winners.map((winner, index) => (
                     <div
-                        className={cn("relative", {
+                        className={cn("relative flex flex-col items-center space-y-[124px]", {
                             "bottom-[346px]": index === 0,
                             "bottom-[298px]": index === 1,
                         })}
@@ -73,6 +80,11 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
                             src={winner.image}
                             isCircle
                         />
+
+                        <span className="text-center text-base font-medium leading-4.5 text-white">
+                            {formatNumbershort(winner.votes)}
+                            <br /> {t("common.votes")}
+                        </span>
                     </div>
                 ))}
             </WinnersChartWrapper>
@@ -82,14 +94,14 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
     if (winners.length === 3) {
         return (
             <WinnersChartWrapper
-                className="justify-between px-12"
+                className=" justify-between px-12   "
                 chart={isDark ? <ThreeBarChartDark /> : <ThreeBarChart />}
             >
                 {[winners[1], winners[0], winners[2]].map((winner, index) => (
                     <div
-                        className={cn("relative", {
+                        className={cn("relative flex flex-col items-center space-y-[124px]", {
                             "bottom-[295px]": index === 0,
-                            "bottom-[346px]": index === 1,
+                            "bottom-[346px] left-[2px]": index === 1,
                             "bottom-[268px]": index === 2,
                         })}
                         key={index}
@@ -100,6 +112,11 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
                             src={winner.image}
                             isCircle
                         />
+
+                        <span className="text-center text-base font-medium leading-4.5 text-white">
+                            {formatNumbershort(winner.votes)}
+                            <br /> {t("common.votes")}
+                        </span>
                     </div>
                 ))}
             </WinnersChartWrapper>
