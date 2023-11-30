@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
-use App\Data\Gallery\GalleryNftData;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\DataCollection;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
 class CollectionOfTheMonthData extends Data
 {
-    /**
-     * @param  DataCollection<int, GalleryNftData>  $nfts
-     */
     public function __construct(
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
