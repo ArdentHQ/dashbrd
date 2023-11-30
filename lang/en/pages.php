@@ -91,7 +91,7 @@ return [
         'vote' => [
             'vote_for_top_collection' => 'Vote for Top Collection of the Month',
             'vote' => 'Vote',
-            'time_left' => 'Time Left'
+            'time_left' => 'Time Left',
         ],
         'sorting' => [
             'token_number' => 'Token Number',
