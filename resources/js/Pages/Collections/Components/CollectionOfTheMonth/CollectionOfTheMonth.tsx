@@ -5,8 +5,7 @@ import { CollectionOfTheMonthWinners } from "@/Components/Collections/Collection
 export const CollectionOfTheMonth = ({
     winners,
 }: {
-    // Depending on how we get the data the type may change
-    winners: App.Data.Collections.PopularCollectionData[];
+    winners: App.Data.Collections.CollectionOfTheMonthData[];
 }): JSX.Element => (
     <div className="mt-12 flex w-full flex-col gap-4 px-6 sm:px-8 xl:flex-row xl:px-0">
         <VoteCollection />

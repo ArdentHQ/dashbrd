@@ -24,6 +24,7 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
+    topCollections: App.Data.Collections.CollectionOfTheMonthData[];
     filters: Filters;
 }
 
@@ -31,6 +32,7 @@ const CollectionsIndex = ({
     title,
     featuredCollections,
     collections: { data: collections },
+    topCollections,
     auth,
     filters,
 }: CollectionsIndexProperties): JSX.Element => {
@@ -131,7 +133,7 @@ const CollectionsIndex = ({
                 </div>
             </div>
 
-            <CollectionOfTheMonth winners={winners} />
+            <CollectionOfTheMonth winners={topCollections} />
         </DefaultLayout>
     );
 };

@@ -32,7 +32,7 @@ const WinnersChartWrapper = ({
     </div>
 );
 
-const WinnersChart = ({ winners }: { winners: App.Data.Collections.PopularCollectionData[] }): JSX.Element => {
+const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfTheMonthData[] }): JSX.Element => {
     const { isDark } = useDarkModeContext();
 
     if (winners.length === 1) {
@@ -59,7 +59,7 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.PopularCollec
                 className="justify-between px-18"
                 chart={isDark ? <TwoBarChartDark /> : <TwoBarChart />}
             >
-                {[winners[0], winners[1]].map((winner, index) => (
+                {winners.map((winner, index) => (
                     <div
                         className={cn("relative", {
                             "bottom-[346px]": index === 0,
@@ -118,8 +118,7 @@ export const CollectionOfTheMonthWinners = ({
     winners,
 }: {
     className?: string;
-    // Depending on how we get the data the type may change
-    winners: App.Data.Collections.PopularCollectionData[];
+    winners: App.Data.Collections.CollectionOfTheMonthData[];
 }): JSX.Element => {
     const { t } = useTranslation();
 
