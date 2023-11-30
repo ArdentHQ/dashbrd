@@ -7,7 +7,6 @@ import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
-import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
@@ -66,6 +65,10 @@ const CollectionsIndex = ({
             sort,
         }));
     };
+
+    const winners = collections.slice(0, 3);
+
+    console.log({ winners });
 
     return (
         <DefaultLayout toastMessage={props.toast}>
@@ -126,19 +129,9 @@ const CollectionsIndex = ({
                         <ViewAllButton />
                     </div>
                 </div>
-
-                <div className="mt-9 flex space-x-4 ">
-                    {/* Height is hardcoded should depend on the incoming vote table */}
-                    <div className="h-[516px] flex-1">{/* Vote table */}</div>
-
-                    <CollectionOfTheMonthWinners
-                        className="hidden xl:flex"
-                        winners={collections.splice(0, 3)}
-                    />
-                </div>
             </div>
 
-            <CollectionOfTheMonth />
+            <CollectionOfTheMonth winners={winners} />
         </DefaultLayout>
     );
 };
