@@ -19,12 +19,12 @@ const calculateTimeLeft = (): TimeLeft => {
 
     return {
         days: Math.max(days, 0),
-        hours: days > 0 ? Math.max(hours, 0) : 0,
+        hours: Math.max(hours, 0),
         minutes: Math.max(minutes, 0),
     };
 };
 
-const formatTime = (value: number, unit: string): string => `${value}${unit} `;
+const formatTime = (value: number, unit: string): string => `${value}${unit}`;
 
 export const VoteCountdown = (): JSX.Element => {
     const { t } = useTranslation();
