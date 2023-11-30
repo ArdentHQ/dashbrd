@@ -3,6 +3,7 @@ import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
+import { Img } from "@/Components/Image";
 import { Link } from "@/Components/Link";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import {
@@ -16,17 +17,107 @@ import {
     VoteNextMonthWinnersDark,
 } from "@/images";
 
-const CharBar = ({ place, votes }: { place: 1 | 2 | 3; votes: number }): JSX.Element => (
-    <div className="flex flex-col items-center text-white">
-        <OneBarChart />
-        <OneBarChartDark />
-        <TwoBarChart />
-        <TwoBarChartDark />
-        <ThreeBarChart />
-        <ThreeBarChartDark />
-        {/* <span className="text-[56px] font-bold leading-[100px]">{place}</span> */}
+const WinnersChartWrapper = ({
+    children,
+    chart,
+    className,
+}: {
+    children: JSX.Element[] | JSX.Element;
+    chart: JSX.Element;
+    className?: string;
+}): JSX.Element => (
+    <div className="relative h-[428px] overflow-hidden">
+        <div className="relative bottom-[-50px]">{chart}</div>
+        <div className={cn("absolute left-0 right-0 flex", className)}>{children}</div>
     </div>
 );
+
+const WinnersChart = ({
+    winners,
+    className,
+}: {
+    winners: App.Data.Collections.PopularCollectionData[];
+    className?: string;
+}): JSX.Element => {
+    const { isDark } = useDarkModeContext();
+
+    if (winners.length === 1) {
+        return (
+            <WinnersChartWrapper
+                className="justify-center"
+                chart={isDark ? <OneBarChartDark /> : <OneBarChart />}
+            >
+                <div className={cn("relative bottom-[346px]")}>
+                    <Img
+                        wrapperClassName="aspect-square h-20 w-20"
+                        className="rounded-full"
+                        src={winners[0].image}
+                        isCircle
+                    />
+                </div>
+            </WinnersChartWrapper>
+        );
+    }
+
+    if (winners.length === 2) {
+        return (
+            <WinnersChartWrapper
+                className="justify-between px-18"
+                chart={isDark ? <TwoBarChartDark /> : <TwoBarChart />}
+            >
+                {[winners[0], winners[1]].map((winner, index) => (
+                    <div
+                        className={cn("relative", {
+                            "bottom-[346px]": index === 0,
+                            "bottom-[298px]": index === 1,
+                        })}
+                        key={index}
+                    >
+                        <Img
+                            wrapperClassName="aspect-square h-20 w-20"
+                            className="rounded-full"
+                            src={winner.image}
+                            isCircle
+                        />
+                    </div>
+                ))}
+            </WinnersChartWrapper>
+        );
+    }
+
+    if (winners.length === 3) {
+        return (
+            <WinnersChartWrapper
+                className="justify-between px-12"
+                chart={isDark ? <ThreeBarChartDark /> : <ThreeBarChart />}
+            >
+                {[winners[1], winners[0], winners[2]].map((winner, index) => (
+                    <div
+                        className={cn("relative", {
+                            "bottom-[295px]": index === 0,
+                            "bottom-[346px]": index === 1,
+                            "bottom-[268px]": index === 2,
+                        })}
+                        key={index}
+                    >
+                        <Img
+                            wrapperClassName="aspect-square h-20 w-20"
+                            className="rounded-full"
+                            src={winner.image}
+                            isCircle
+                        />
+                    </div>
+                ))}
+            </WinnersChartWrapper>
+        );
+    }
+
+    if (isDark) {
+        return <VoteNextMonthWinnersDark />;
+    }
+
+    return <VoteNextMonthWinners />;
+};
 
 export const CollectionOfTheMonthWinners = ({
     className,
@@ -37,8 +128,6 @@ export const CollectionOfTheMonthWinners = ({
     winners: App.Data.Collections.PopularCollectionData[];
 }): JSX.Element => {
     const { t } = useTranslation();
-
-    const { isDark } = useDarkModeContext();
 
     const showWinners = winners.length > 0;
 
@@ -63,25 +152,9 @@ export const CollectionOfTheMonthWinners = ({
                         : t("pages.collections.collection_of_the_month.vote_for_next_months_winners")}
                 </Heading>
             </div>
-            <div className="flex flex-1 items-center justify-center ">
-                {showWinners ? (
-                    <div className="flex ">
-                        <CharBar
-                            place={1}
-                            votes={123456}
-                        ></CharBar>
-                        <CharBar
-                            place={2}
-                            votes={35}
-                        ></CharBar>
-                        <CharBar
-                            place={3}
-                            votes={3532532}
-                        ></CharBar>
-                    </div>
-                ) : (
-                    <>{isDark ? <VoteNextMonthWinnersDark /> : <VoteNextMonthWinners />}</>
-                )}
+
+            <div className="flex flex-1 items-center justify-center">
+                <WinnersChart winners={winners} />
             </div>
 
             {showWinners && (
