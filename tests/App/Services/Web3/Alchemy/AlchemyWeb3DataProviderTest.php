@@ -491,7 +491,7 @@ it('should filter out nfts', function () {
     $provider = new AlchemyWeb3DataProvider();
     $nfts = $provider->getWalletNfts($wallet, $network)->nfts;
 
-    expect($nfts)->toHaveCount(6)
+    expect($nfts)->toHaveCount(7)
         ->and($nfts->first()->name)->not->toBeNull()
         ->and($nfts->last()->name)->toEqual('OK OpenSea fallback');
 });

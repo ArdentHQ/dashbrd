@@ -1214,7 +1214,7 @@ it('stores if the wallet owns ERC1155 NFTs', function () {
 
     $nfts = getTestNfts();
 
-    $nfts['ownedNfts'][0]['id']['tokenMetadata']['tokenType'] = 'ERC1155';
+    $nfts['ownedNfts'][0]['contract']['tokenType'] = 'ERC1155';
 
     $network = Network::polygon();
 
