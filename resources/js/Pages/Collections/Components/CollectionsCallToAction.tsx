@@ -1,6 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Collections, CollectionsDark, CollectionsGrid, CollectionsMobile, CollectionsMobileDark } from "@/images";
-import { useTranslation } from "react-i18next";
 
 export const CollectionsCallToAction = (): JSX.Element => {
     const { t } = useTranslation();

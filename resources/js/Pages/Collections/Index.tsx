@@ -3,6 +3,7 @@ import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
@@ -14,7 +15,6 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionOfTheMonth } from "@/Pages/Collections/Components/CollectionOfTheMonth";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 
 interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
