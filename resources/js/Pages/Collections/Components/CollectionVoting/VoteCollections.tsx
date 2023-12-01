@@ -72,7 +72,7 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
 export const VoteCollection = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => (
     <div className="cursor-pointer rounded-lg border border-theme-secondary-300 px-4 py-4 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 md:py-3">
         <div className="flex items-center justify-between">
-            <div className="flex min-w-0 flex-1 space-x-3 items-center">
+            <div className="flex min-w-0 flex-1 items-center space-x-3">
                 <div className="flex">
                     <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-theme-secondary-100 dark:bg-theme-vote-background xs:h-12 xs:w-12">
                         <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
