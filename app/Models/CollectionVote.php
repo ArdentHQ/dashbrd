@@ -18,6 +18,11 @@ class CollectionVote extends Model
         'voted_at',
     ];
 
+    /**
+     * @var Builder<self>
+     *
+     * @return Builder<self>
+     */
     public function scopeinCurrentMonth(Builder $query): Builder
     {
         return $query->whereBetween('voted_at', [
