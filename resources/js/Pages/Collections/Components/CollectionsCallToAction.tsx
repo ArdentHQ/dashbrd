@@ -1,11 +1,11 @@
+import collectionsDark from "@images/collections-dark.png";
+import collectionsMobileDark from "@images/collections-mobile-dark.png";
+import collectionsMobile from "@images/collections-mobile.png";
+import collections from "@images/collections.png";
 import { useTranslation } from "react-i18next";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
-import { CollectionsGrid } from "@/images";
-import collections from "@images/collections.png";
-import collectionsMobile from "@images/collections-mobile.png";
-import collectionsMobileDark from "@images/collections-mobile-dark.png";
-import collectionsDark from "@images/collections-dark.png";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
+import { CollectionsGrid } from "@/images";
 
 export const CollectionsCallToAction = (): JSX.Element => {
     const { t } = useTranslation();
