@@ -38,7 +38,7 @@ class FetchCollectionFloorPrice extends Command
         $this->forEachCollection(
             callback: function ($collection, $index) {
                 $this->dispatchDelayed(
-                    callback: fn () => FetchCollectionFloorPriceJob::dispatch(
+                    callback: fn () => FetchCollectionFloorPriceJob::dispatchSync(
                         chainId: $collection->network->chain_id,
                         address: $collection->address,
                     ),

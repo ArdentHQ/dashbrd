@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { type Dispatch, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
@@ -27,7 +28,7 @@ export const articlesViewDefaults = {
 
 export const ArticlesView = ({
     articles,
-    highlightedArticles,
+    highlightedArticles = [],
     isLoading,
     articlesState,
     dispatch,
@@ -118,12 +119,17 @@ export const ArticlesView = ({
             {showHighlighted && (
                 <HighlightedArticles
                     isLoading={isLoading}
-                    articles={highlightedArticles ?? []}
+                    articles={highlightedArticles}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
 
-            <div className="flex flex-col items-center space-y-6">
+            <div
+                className={cn("flex flex-col items-center", {
+                    "space-y-0": articlesToShow.length === 0,
+                    "space-y-6": articlesToShow.length > 0,
+                })}
+            >
                 {articlesLoaded && displayType === DisplayTypes.Grid && <ArticlesGrid articles={articlesToShow} />}
 
                 {articlesLoaded && displayType === DisplayTypes.List && <ArticlesList articles={articlesToShow} />}
@@ -132,7 +138,7 @@ export const ArticlesView = ({
 
                 {isLoading && displayType === DisplayTypes.List && <ArticlesLoadingList />}
 
-                {!isLoading && articlesToShow.length === 0 && highlightedArticles?.length === 0 && query === "" && (
+                {!isLoading && articlesToShow.length === 0 && highlightedArticles.length === 0 && query === "" && (
                     <EmptyBlock className="w-full">
                         {mode === "articles"
                             ? t("pages.articles.no_articles")
@@ -140,7 +146,7 @@ export const ArticlesView = ({
                     </EmptyBlock>
                 )}
 
-                {!isLoading && articlesToShow.length === 0 && highlightedArticles?.length === 0 && query !== "" && (
+                {!isLoading && articlesToShow.length === 0 && highlightedArticles.length === 0 && query !== "" && (
                     <EmptyBlock className="w-full">
                         {t("pages.collections.articles.no_articles_with_filters")}
                     </EmptyBlock>
