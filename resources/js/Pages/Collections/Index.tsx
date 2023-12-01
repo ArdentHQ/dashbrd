@@ -14,6 +14,7 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionOfTheMonth } from "@/Pages/Collections/Components/CollectionOfTheMonth";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { CollectionsCallToAction } from "./Components/CollectionsCallToAction"
 
 interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
@@ -70,7 +71,7 @@ const CollectionsIndex = ({
 
     return (
         <DefaultLayout
-            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0"
+            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0 -mb-6 sm:-mb-8 lg:mb-0"
             toastMessage={props.toast}
         >
             <Head title={title} />
@@ -135,6 +136,8 @@ const CollectionsIndex = ({
             </div>
 
             <CollectionOfTheMonth winners={topCollections} />
+
+            <CollectionsCallToAction />
         </DefaultLayout>
     );
 };

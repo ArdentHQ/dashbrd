@@ -33,6 +33,11 @@ import { ReactComponent as SocialLeftGrid } from "@images/social-grid-left.svg";
 import { ReactComponent as SocialRightGrid } from "@images/social-grid-right.svg";
 import { ReactComponent as WarningExclamationDark } from "@images/warning-exclamation-dark.svg";
 import { ReactComponent as WarningExclamation } from "@images/warning-exclamation.svg";
+import { ReactComponent as CollectionsGrid } from "@images/collections-grid.svg";
+import { ReactComponent as Collections } from "@images/collections.svg";
+import { ReactComponent as CollectionsMobile } from "@images/collections-mobile.svg";
+import { ReactComponent as CollectionsDark } from "@images/collections-dark.svg";
+import { ReactComponent as CollectionsMobileDark } from "@images/collections-mobile-dark.svg";
 
 export {
     AuthConnectWallet,
@@ -70,4 +75,9 @@ export {
     TwoBarChartDark,
     OneBarChart,
     OneBarChartDark,
+    CollectionsGrid,
+    Collections,
+    CollectionsMobile,
+    CollectionsDark,
+    CollectionsMobileDark,
 };
