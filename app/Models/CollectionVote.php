@@ -18,6 +18,8 @@ class CollectionVote extends Model
         'voted_at',
     ];
 
+    protected $timestamps = false;
+
     /**
      * @param  Builder<self>  $query
      * @return Builder<self>

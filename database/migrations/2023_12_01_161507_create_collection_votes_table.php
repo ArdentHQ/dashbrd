@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignIdFor(Wallet::class, 'wallet_id')->constrained();
             $table->foreignIdFor(Collection::class, 'collection_id')->constrained();
             $table->timestamp('voted_at')->nullable();
-            $table->timestamps();
         });
     }
 };
