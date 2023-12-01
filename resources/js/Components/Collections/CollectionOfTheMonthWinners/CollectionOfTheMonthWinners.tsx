@@ -7,6 +7,8 @@ import { Img } from "@/Components/Image";
 import { Link } from "@/Components/Link";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import {
+    CrownBadge,
+    CrownBadgeDark,
     OneBarChart,
     OneBarChartDark,
     ThreeBarChart,
@@ -130,6 +132,53 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
     return <VoteNextMonthWinners />;
 };
 
+const WinnersChartMobile = ({
+    winner,
+    currentMonth,
+}: {
+    winner: App.Data.Collections.CollectionOfTheMonthData;
+    currentMonth?: string;
+}): JSX.Element => {
+    const { isDark } = useDarkModeContext();
+    const { t } = useTranslation();
+
+    return (
+        <div className="collection-of-the-month-mobile flex flex-col items-center rounded-xl px-4 py-3 sm:flex-row sm:justify-between xl:hidden">
+            <div className="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-x-3.5 sm:space-y-0">
+                <div className="flex">
+                    <div className="relative">
+                        <Img
+                            wrapperClassName="aspect-square h-10 w-10 "
+                            className="rounded-full"
+                            src={winner.image}
+                            isCircle
+                        />
+                    </div>
+
+                    <div className="relative -my-1 -ml-2.5 rounded-full bg-[#eef] p-1 dark:bg-theme-dark-800">
+                        {isDark ? <CrownBadgeDark /> : <CrownBadge />}
+                    </div>
+                </div>
+
+                <span className="collection-of-the-month-legend text-lg font-medium">
+                    {t("pages.collections.collection_of_the_month.winners_month", {
+                        month: currentMonth,
+                    })}
+                </span>
+            </div>
+
+            <Link
+                variant="link"
+                textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
+                href="/"
+                fontSize="text-base"
+            >
+                {t("pages.collections.collection_of_the_month.view_previous_winners")}
+            </Link>
+        </div>
+    );
+};
+
 export const CollectionOfTheMonthWinners = ({
     className,
     winners,
@@ -141,44 +190,55 @@ export const CollectionOfTheMonthWinners = ({
 
     const showWinners = winners.length > 0;
 
+    const date = new Date(); // 2009-11-10
+    const currentMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+
     return (
-        <div
-            data-testid="CollectionOfTheMonthWinners"
-            className={cn(
-                "dark:border-dark-700 flex min-h-[516px] w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700",
-                className,
+        <>
+            {winners.length > 0 && (
+                <WinnersChartMobile
+                    winner={winners[0]}
+                    currentMonth={currentMonth}
+                />
             )}
-        >
-            <div className="shadow-collection-of-the-month flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
-                <Heading
-                    level={3}
-                    className="text-center"
-                >
-                    {showWinners
-                        ? t("pages.collections.collection_of_the_month.winners_month", {
-                              // @TODO: Make this dynamic
-                              month: "August 2023",
-                          })
-                        : t("pages.collections.collection_of_the_month.vote_for_next_months_winners")}
-                </Heading>
-            </div>
 
-            <div className="flex flex-1 items-center justify-center">
-                <WinnersChart winners={winners} />
-            </div>
-
-            {showWinners && (
-                <div className="shadow-collection-of-the-month-footer flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
-                    <Link
-                        variant="link"
-                        textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
-                        href="/"
-                        fontSize="text-base"
+            <div
+                data-testid="CollectionOfTheMonthWinners"
+                className={cn(
+                    "dark:border-dark-700 hidden min-h-[516px] w-full max-w-[419px] flex-col overflow-hidden rounded-xl border border-theme-secondary-300 bg-gradient-to-b from-theme-secondary-300 to-theme-primary-50 dark:border-theme-dark-700 dark:from-theme-dark-800 dark:to-theme-dark-700 xl:flex",
+                    className,
+                )}
+            >
+                <div className="shadow-collection-of-the-month flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
+                    <Heading
+                        level={3}
+                        className="text-center"
                     >
-                        {t("pages.collections.collection_of_the_month.view_previous_winners")}
-                    </Link>
+                        {showWinners
+                            ? t("pages.collections.collection_of_the_month.winners_month", {
+                                  month: currentMonth,
+                              })
+                            : t("pages.collections.collection_of_the_month.vote_for_next_months_winners")}
+                    </Heading>
                 </div>
-            )}
-        </div>
+
+                <div className="flex flex-1 items-center justify-center">
+                    <WinnersChart winners={winners} />
+                </div>
+
+                {showWinners && (
+                    <div className="shadow-collection-of-the-month-footer flex justify-center bg-white px-8 py-4 dark:bg-theme-dark-900">
+                        <Link
+                            variant="link"
+                            textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
+                            href="/"
+                            fontSize="text-base"
+                        >
+                            {t("pages.collections.collection_of_the_month.view_previous_winners")}
+                        </Link>
+                    </div>
+                )}
+            </div>
+        </>
     );
 };
