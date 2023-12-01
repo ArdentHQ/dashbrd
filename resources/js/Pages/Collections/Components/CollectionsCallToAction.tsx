@@ -1,9 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
-import { Collections, CollectionsDark, CollectionsGrid, CollectionsMobile, CollectionsMobileDark } from "@/images";
+import { CollectionsGrid } from "@/images";
+import collections from "@images/collections.png";
+import collectionsMobile from "@images/collections-mobile.png";
+import collectionsMobileDark from "@images/collections-mobile-dark.png";
+import collectionsDark from "@images/collections-dark.png";
+import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 
 export const CollectionsCallToAction = (): JSX.Element => {
     const { t } = useTranslation();
+    const { isDark } = useDarkModeContext();
 
     return (
         <div className="lg:px-8 2xl:px-0">
@@ -33,13 +39,19 @@ export const CollectionsCallToAction = (): JSX.Element => {
                     </div>
 
                     <div className="hidden flex-1 xl:block">
-                        <Collections className="block h-full w-full dark:hidden" />
-                        <CollectionsDark className="hidden h-full w-full dark:block" />
+                        <img
+                            src={isDark ? collectionsDark : collections}
+                            alt={t("common.preview")}
+                            className="h-full w-full"
+                        />
                     </div>
 
                     <div className="hidden w-1/3 md-lg:block lg:w-1/2 xl:hidden">
-                        <CollectionsMobile className="block h-full w-full dark:hidden" />
-                        <CollectionsMobileDark className="hidden h-full w-full dark:block" />
+                        <img
+                            src={isDark ? collectionsMobile : collectionsMobileDark}
+                            alt={t("common.preview")}
+                            className="h-full w-full"
+                        />
                     </div>
                 </div>
             </div>
