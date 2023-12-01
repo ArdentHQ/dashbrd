@@ -25,6 +25,7 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
+    topCollections: App.Data.Collections.CollectionOfTheMonthData[];
     filters: Filters;
 }
 
@@ -42,6 +43,7 @@ const CollectionsIndex = ({
     title,
     featuredCollections,
     collections: { data: collections },
+    topCollections,
     auth,
     filters,
 }: CollectionsIndexProperties): JSX.Element => {
@@ -78,9 +80,14 @@ const CollectionsIndex = ({
     };
 
     return (
-        <DefaultLayout toastMessage={props.toast}>
+        <DefaultLayout
+            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0"
+            toastMessage={props.toast}
+        >
             <Head title={title} />
+
             <FeaturedCollectionsCarousel featuredCollections={featuredCollections} />
+
             <div className="mx-6 mt-8 sm:mx-8 lg:mt-12 2xl:mx-0">
                 <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
@@ -143,6 +150,8 @@ const CollectionsIndex = ({
                     <CollectionOfTheMonthWinners className="hidden xl:flex" />
                 </div>
             </div>
+
+            <CollectionOfTheMonth winners={topCollections} />
         </DefaultLayout>
     );
 };
