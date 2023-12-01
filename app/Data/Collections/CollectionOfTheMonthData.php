@@ -25,9 +25,7 @@ class CollectionOfTheMonthData extends Data
     {
         return new self(
             image: $collection->extra_attributes->get('image'),
-            // @TODO: add actual votes
-            votes: fake()->boolean() ? fake()->numberBetween(1, 999) : fake()->numberBetween(1000, 1000000),
-
+            votes: $collection->votes()->inCurrentMonth()->count(),
         );
     }
 }
