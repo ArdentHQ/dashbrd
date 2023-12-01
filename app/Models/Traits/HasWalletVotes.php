@@ -21,7 +21,7 @@ trait HasWalletVotes
 
     public function addVote(Wallet $wallet): void
     {
-        $this->votes()->create([
+        $this->votes()->updateOrCreate([
             'wallet_id' => $wallet->id,
             'voted_at' => Carbon::now(),
         ]);

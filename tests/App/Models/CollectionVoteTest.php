@@ -15,4 +15,13 @@ test('collection has many votes', function () {
     $collection->addVote($wallet);
 
     expect($collection->votes()->count())->toBe(1);
+
+    $collection->addVote($wallet);
+
+    // Still one vote since the wallet already voted
+    expect($collection->votes()->count())->toBe(1);
+
+    $collection->addVote(Wallet::factory()->create());
+
+    expect($collection->votes()->count())->toBe(2);
 });
