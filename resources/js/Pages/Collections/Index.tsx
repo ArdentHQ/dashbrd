@@ -147,11 +147,12 @@ const CollectionsIndex = ({
                     <VoteCollections
                         collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
                     />
-                    <CollectionOfTheMonthWinners className="hidden xl:flex" />
+                    <CollectionOfTheMonthWinners
+                        winners={topCollections}
+                        className="hidden xl:flex"
+                    />
                 </div>
             </div>
-
-            <CollectionOfTheMonth winners={topCollections} />
         </DefaultLayout>
     );
 };
