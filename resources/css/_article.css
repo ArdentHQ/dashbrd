@@ -36,8 +36,34 @@
 .article-content > img,
 .article-content > figure,
 .article-content > pre,
-.article-content > code {
+.article-content > code,
+.article-content > iframe,
+.article-content > .twitter-embed-wrapper {
     @apply my-4;
+}
+
+.article-content > .twitter-embed-wrapper > blockquote {
+    @apply hidden;
+}
+
+.article-content > .twitter-embed-wrapper {
+    @apply flex justify-center;
+}
+
+.article-content > .twitter-embed-wrapper-dark {
+    @apply hidden;
+}
+
+.article-content > .twitter-embed-wrapper iframe {
+    @apply !max-w-full;
+}
+
+.dark .twitter-embed-wrapper {
+    @apply !hidden;
+}
+
+.dark .twitter-embed-wrapper.twitter-embed-wrapper-dark {
+    @apply !flex;
 }
 
 .article-content > blockquote {
@@ -56,8 +82,13 @@
     @apply mb-3 mt-6;
 }
 
-.article-content img {
+.article-content img,
+.article-content iframe {
     @apply mx-auto rounded-lg;
+}
+
+.article-content iframe {
+    @apply aspect-video h-auto w-full;
 }
 
 .article-content h2,
@@ -177,4 +208,36 @@
 .article-content ol li ul li:before {
     @apply h-[7px] w-[7px] border-2 border-theme-secondary-700 bg-transparent dark:border-theme-dark-50;
     content: "";
+}
+
+.article-content input[type="checkbox"] {
+    @apply dark:form-checkbox-dark form-checkbox box-border h-5 w-5 rounded border-2 border-theme-secondary-300 text-theme-primary-600 transition duration-100 ease-in dark:enabled:border-theme-dark-200 dark:enabled:bg-theme-dark-900 dark:enabled:checked:border-theme-primary-400 dark:enabled:checked:bg-theme-primary-400;
+}
+
+.article-content input[type="checkbox"]:checked {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='%23191D22' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+}
+
+.dark .article-content input[type="checkbox"]:checked {
+    background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 16 16" fill="%2323272D" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"/%3E%3C/svg%3E');
+}
+
+.article-content table {
+    @apply w-full border-separate border-spacing-0 overflow-hidden;
+}
+
+.article-content table thead {
+    @apply bg-theme-secondary-50 dark:bg-theme-dark-950;
+}
+
+.article-content table thead tr th {
+    @apply whitespace-nowrap border-b border-theme-secondary-300 px-4 py-2 text-sm font-medium text-theme-secondary-700 dark:border-theme-dark-700 dark:text-theme-dark-200;
+}
+
+.article-content table tbody td {
+    @apply whitespace-nowrap p-4 text-base;
+}
+
+.article-content table tbody tr:not(:last-child) td {
+    @apply border-b border-dashed border-theme-secondary-300 text-theme-secondary-700 dark:border-theme-dark-700 dark:text-theme-dark-200;
 }

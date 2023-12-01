@@ -252,7 +252,9 @@ describe("Dropdown", () => {
         });
 
         // Not closed
-        expect(screen.getByTestId("content")).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByTestId("content")).toBeInTheDocument();
+        });
     });
 
     it("should close dropdown when clicked outside when using popper", async () => {
@@ -311,7 +313,9 @@ describe("Dropdown", () => {
         await userEvent.click(screen.getByTestId("button"));
 
         // Not closed
-        expect(screen.getByTestId("content")).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByTestId("content")).toBeInTheDocument();
+        });
     });
 
     it("should focus dropdown focusable element when using portal", async () => {

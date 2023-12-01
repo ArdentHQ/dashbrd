@@ -7,10 +7,9 @@ import { CreateGalleryButton } from "@/Pages/Galleries/MyGalleries/Components/Cr
 
 interface Properties extends Pick<MetaMaskState, "connecting" | "initialized"> {
     onClick?: () => void;
-    nftsCount?: number;
 }
 
-const GalleryGuestBanner = ({ initialized, connecting, onClick, nftsCount = 0 }: Properties): JSX.Element => {
+const GalleryGuestBanner = ({ initialized, connecting, onClick }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const { isMdAndAbove } = useBreakpoint();
 
@@ -31,7 +30,6 @@ const GalleryGuestBanner = ({ initialized, connecting, onClick, nftsCount = 0 }:
             <div className="flex h-fit justify-center">
                 <CreateGalleryButton
                     onClick={onClick}
-                    nftCount={nftsCount}
                     variant={isMdAndAbove ? "secondary" : "primary"}
                     isDisabled={connecting || !initialized}
                     className="md:button-light"

@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { type Dispatch, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DisplayType, DisplayTypes } from "@/Components/DisplayType";
@@ -27,7 +28,7 @@ export const articlesViewDefaults = {
 
 export const ArticlesView = ({
     articles,
-    highlightedArticles,
+    highlightedArticles = [],
     isLoading,
     articlesState,
     dispatch,
@@ -58,11 +59,10 @@ export const ArticlesView = ({
         setForceShowHighlighted(false);
     }, [debouncedValue]);
 
-    const articlesCount = articles?.paginated.meta.total ?? 0;
+    const articlesTotal = articles?.paginated.meta.total;
     const articlesLoaded = isTruthy(articles) && !isLoading;
 
     const showHighlighted = forceShowHighlighted || (mode === "articles" && query === "" && page === 1);
-
     const articlesToShow = articlesLoaded ? articles.paginated.data : [];
 
     const handleQueryChange = (query: string): void => {
@@ -91,7 +91,7 @@ export const ArticlesView = ({
 
                 <div className="flex-1">
                     <SearchInput
-                        disabled={articlesLoaded && articlesCount === 0 && query === ""}
+                        disabled={articlesLoaded && articlesTotal === 0 && query === ""}
                         className="hidden sm:block"
                         placeholder={t("pages.collections.articles.search_placeholder")}
                         query={query}
@@ -100,7 +100,7 @@ export const ArticlesView = ({
                 </div>
 
                 <ArticleSortDropdown
-                    disabled={articlesLoaded && articlesCount === 0}
+                    disabled={articlesLoaded && articlesTotal === 0}
                     activeSort={sort}
                     onSort={(sort) => {
                         dispatch({ type: ArticlesViewActionTypes.SetSort, payload: sort });
@@ -109,7 +109,7 @@ export const ArticlesView = ({
             </div>
             <div className="mb-4 sm:hidden">
                 <SearchInput
-                    disabled={articlesLoaded && articlesCount === 0 && query === ""}
+                    disabled={articlesLoaded && articlesTotal === 0 && query === ""}
                     placeholder={t("pages.collections.articles.search_placeholder")}
                     query={query}
                     onChange={handleQueryChange}
@@ -119,12 +119,17 @@ export const ArticlesView = ({
             {showHighlighted && (
                 <HighlightedArticles
                     isLoading={isLoading}
-                    articles={highlightedArticles ?? []}
+                    articles={highlightedArticles}
                     withFullBorder={displayType === DisplayTypes.List}
                 />
             )}
 
-            <div className="flex flex-col items-center space-y-6">
+            <div
+                className={cn("flex flex-col items-center", {
+                    "space-y-0": articlesToShow.length === 0,
+                    "space-y-6": articlesToShow.length > 0,
+                })}
+            >
                 {articlesLoaded && displayType === DisplayTypes.Grid && <ArticlesGrid articles={articlesToShow} />}
 
                 {articlesLoaded && displayType === DisplayTypes.List && <ArticlesList articles={articlesToShow} />}
@@ -133,7 +138,7 @@ export const ArticlesView = ({
 
                 {isLoading && displayType === DisplayTypes.List && <ArticlesLoadingList />}
 
-                {!isLoading && articlesCount === 0 && query === "" && (
+                {!isLoading && articlesToShow.length === 0 && highlightedArticles.length === 0 && query === "" && (
                     <EmptyBlock className="w-full">
                         {mode === "articles"
                             ? t("pages.articles.no_articles")
@@ -141,7 +146,7 @@ export const ArticlesView = ({
                     </EmptyBlock>
                 )}
 
-                {!isLoading && articlesCount === 0 && query !== "" && (
+                {!isLoading && articlesToShow.length === 0 && highlightedArticles.length === 0 && query !== "" && (
                     <EmptyBlock className="w-full">
                         {t("pages.collections.articles.no_articles_with_filters")}
                     </EmptyBlock>

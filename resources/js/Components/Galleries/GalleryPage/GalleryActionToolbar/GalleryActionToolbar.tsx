@@ -1,5 +1,6 @@
 import { type FormEvent, type MouseEvent, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { GalleryDraftDeleteButton } from "./GalleryDraftDeleteButton";
 import { Button, IconButton } from "@/Components/Buttons";
 import { GalleryDraftStatus } from "@/Components/Galleries/GalleryPage/GalleryActionToolbar/GalleryDraftStatus";
 import { Icon } from "@/Components/Icon";
@@ -69,6 +70,13 @@ export const GalleryActionToolbar = ({
                                         data-testid="GalleryActionToolbar__template-button-mobile"
                                     />
 
+                                    {draftId !== undefined && (
+                                        <GalleryDraftDeleteButton
+                                            className="lg:hidden"
+                                            draftId={draftId}
+                                        />
+                                    )}
+
                                     <Button
                                         icon="GridWithPencil"
                                         iconPosition="right"
@@ -113,8 +121,8 @@ export const GalleryActionToolbar = ({
                                     </div>
                                 </div>
 
-                                <div className="flex space-x-3 sm:hidden">
-                                    <div className="hidden xs:flex">
+                                <div className="flex sm:hidden">
+                                    <div className="mr-3 hidden xs:flex">
                                         <GalleryDraftStatus
                                             isSavingDraft={isSavingDraft}
                                             draftId={draftId}
@@ -200,6 +208,13 @@ export const GalleryActionToolbar = ({
                                         isSavingDraft={isSavingDraft}
                                         draftId={draftId}
                                     />
+
+                                    {draftId !== undefined && (
+                                        <GalleryDraftDeleteButton
+                                            className="hidden lg:flex"
+                                            draftId={draftId}
+                                        />
+                                    )}
 
                                     {showDelete && (
                                         <IconButton
