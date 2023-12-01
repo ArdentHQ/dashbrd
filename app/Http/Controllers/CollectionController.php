@@ -8,6 +8,7 @@ use App\Data\Articles\ArticleData;
 use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionFeaturedData;
+use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Collections\PopularCollectionData;
 use App\Data\Gallery\GalleryNftData;
@@ -75,6 +76,8 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
+            // @TODO: replace with actual top collections and include votes
+            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
             'collections' => fn () => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
             ),

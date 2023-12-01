@@ -204,6 +204,10 @@ declare namespace App.Data.Collections {
         images: App.Data.Nfts.NftImagesData;
         traits: Array<App.Data.Collections.CollectionTraitData>;
     };
+    export type CollectionOfTheMonthData = {
+        image: string | null;
+        votes: number;
+    };
     export type CollectionStatsData = {
         nfts: number;
         collections: number;
