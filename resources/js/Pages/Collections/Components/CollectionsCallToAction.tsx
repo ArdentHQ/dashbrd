@@ -48,7 +48,7 @@ export const CollectionsCallToAction = (): JSX.Element => {
 
                     <div className="hidden w-1/3 md-lg:block lg:w-1/2 xl:hidden">
                         <img
-                            src={isDark ? collectionsMobile : collectionsMobileDark}
+                            src={isDark ? collectionsMobileDark : collectionsMobile}
                             alt={t("common.preview")}
                             className="h-full w-full"
                         />
