@@ -14,7 +14,7 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionOfTheMonth } from "@/Pages/Collections/Components/CollectionOfTheMonth";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-import { CollectionsCallToAction } from "./Components/CollectionsCallToAction"
+import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 
 interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
