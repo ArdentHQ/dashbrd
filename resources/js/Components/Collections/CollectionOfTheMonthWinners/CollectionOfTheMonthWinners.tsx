@@ -143,38 +143,40 @@ const WinnersChartMobile = ({
     const { t } = useTranslation();
 
     return (
-        <div className="collection-of-the-month-mobile flex flex-col items-center rounded-xl px-4 py-3 sm:flex-row sm:justify-between xl:hidden">
-            <div className="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-x-3.5 sm:space-y-0">
-                <div className="flex">
-                    <div className="relative">
-                        <Img
-                            wrapperClassName="aspect-square h-10 w-10 "
-                            className="rounded-full"
-                            src={winner.image}
-                            isCircle
-                        />
+        <div className="mt-6 border-t border-theme-secondary-300 pt-6 dark:border-theme-dark-700 xl:hidden">
+            <div className="collection-of-the-month-mobile flex flex-col items-center rounded-xl px-4 py-3 sm:flex-row sm:justify-between  ">
+                <div className="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-x-3.5 sm:space-y-0">
+                    <div className="flex">
+                        <div className="relative">
+                            <Img
+                                wrapperClassName="aspect-square h-10 w-10 "
+                                className="rounded-full"
+                                src={winner.image}
+                                isCircle
+                            />
+                        </div>
+
+                        <div className="relative -my-1 -ml-2.5 rounded-full bg-[#eef] p-1 dark:bg-theme-dark-800">
+                            {isDark ? <CrownBadgeDark /> : <CrownBadge />}
+                        </div>
                     </div>
 
-                    <div className="relative -my-1 -ml-2.5 rounded-full bg-[#eef] p-1 dark:bg-theme-dark-800">
-                        {isDark ? <CrownBadgeDark /> : <CrownBadge />}
-                    </div>
+                    <span className="collection-of-the-month-legend text-lg font-medium">
+                        {t("pages.collections.collection_of_the_month.winners_month", {
+                            month: currentMonth,
+                        })}
+                    </span>
                 </div>
 
-                <span className="collection-of-the-month-legend text-lg font-medium">
-                    {t("pages.collections.collection_of_the_month.winners_month", {
-                        month: currentMonth,
-                    })}
-                </span>
+                <Link
+                    variant="link"
+                    textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
+                    href="/"
+                    fontSize="text-base"
+                >
+                    {t("pages.collections.collection_of_the_month.view_previous_winners")}
+                </Link>
             </div>
-
-            <Link
-                variant="link"
-                textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
-                href="/"
-                fontSize="text-base"
-            >
-                {t("pages.collections.collection_of_the_month.view_previous_winners")}
-            </Link>
         </div>
     );
 };

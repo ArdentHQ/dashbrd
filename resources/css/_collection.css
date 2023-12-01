@@ -30,6 +30,12 @@
     -webkit-text-fill-color: transparent;
 }
 
+.dark .collection-of-the-month-legend {
+    @apply bg-none text-white;
+    background-clip: initial;
+    -webkit-text-fill-color: initial;
+}
+
 .dark .collection-of-the-month-mobile {
     @apply bg-theme-dark-800 bg-none;
 }
