@@ -18,7 +18,7 @@ class CollectionVote extends Model
         'voted_at',
     ];
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $casts = [
         'voted_at' => 'datetime',
