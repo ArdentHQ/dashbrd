@@ -20,6 +20,10 @@ class CollectionVote extends Model
 
     protected $timestamps = false;
 
+    protected $casts = [
+        'voted_at' => 'datetime',
+    ];
+
     /**
      * @param  Builder<self>  $query
      * @return Builder<self>

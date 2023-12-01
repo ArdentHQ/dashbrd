@@ -73,6 +73,7 @@ class Collection extends Model
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
         'is_featured' => 'bool',
+        'has_won_at' => 'datetime',
     ];
 
     /**
