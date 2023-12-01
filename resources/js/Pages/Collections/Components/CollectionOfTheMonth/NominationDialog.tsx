@@ -4,7 +4,7 @@ import { Button } from "@/Components/Buttons";
 import { Dialog } from "@/Components/Dialog";
 import { SearchInput } from "@/Components/Form/SearchInput";
 
-const VoteDialogFooter = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }): JSX.Element => {
+const NominationDialogFooter = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -35,7 +35,7 @@ const VoteDialogFooter = ({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void 
     );
 };
 
-export const VoteDialog = ({
+export const NominationDialog = ({
     isOpen,
     setIsOpen,
 }: {
@@ -52,7 +52,7 @@ export const VoteDialog = ({
             onClose={(): void => {
                 setIsOpen(false);
             }}
-            footer={<VoteDialogFooter setIsOpen={setIsOpen} />}
+            footer={<NominationDialogFooter setIsOpen={setIsOpen} />}
         >
             <div>
                 <SearchInput
@@ -64,5 +64,3 @@ export const VoteDialog = ({
         </Dialog>
     );
 };
-
-export default VoteDialog;

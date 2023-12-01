@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { NominationDialog } from "./NominationDialog";
 import { VoteCountdown } from "./VoteCountdown";
-import VoteDialog from "./VoteDialog";
 import { Heading } from "@/Components/Heading";
 import { LinkButton } from "@/Components/Link";
 
@@ -30,7 +30,7 @@ export const VoteCollection = (): JSX.Element => {
                 </LinkButton>
             </div>
 
-            <VoteDialog
+            <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
             />
