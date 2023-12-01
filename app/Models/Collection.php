@@ -205,7 +205,7 @@ class Collection extends Model
      */
     public function scopeErc721(Builder $query): Builder
     {
-        return $query->where('type', TokenType::Erc721);
+        return $query->where('collections.type', TokenType::Erc721);
     }
 
     /**
