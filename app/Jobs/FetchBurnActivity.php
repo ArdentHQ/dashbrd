@@ -67,7 +67,7 @@ class FetchBurnActivity implements ShouldQueue
         }
 
         $formattedActivities = $activities
-            ->reject(fn ($activity) => $activity->type === null)
+            ->filter(fn ($activity) => $activity->type === NftTransferType::Burn)
             ->unique->key()
             ->map(fn (CollectionActivity $activity) => [
                 'collection_id' => $this->collection->id,
