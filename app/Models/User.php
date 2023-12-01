@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Data\UserData;
 use App\Enums\CurrencyCode;
 use App\Enums\Role;
-use App\Enums\TokenType;
 use App\Models\Traits\BelongsToWallet;
 use App\Models\Traits\HasWallets;
 use Filament\Models\Contracts\FilamentUser;
