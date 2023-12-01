@@ -19,8 +19,7 @@ class CollectionVote extends Model
     ];
 
     /**
-     * @var Builder<self>
-     *
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     public function scopeinCurrentMonth(Builder $query): Builder

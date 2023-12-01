@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 trait HasWalletVotes
 {
     /**
-     * @return HasMany<Wallet>
+     * @return HasMany<CollectionVote>
      */
     public function votes(): HasMany
     {
