@@ -6,34 +6,45 @@ import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
+import { FormatCrypto } from "@/Utils/Currency";
 
-export const VoteCollections = (): JSX.Element => {
+export interface VoteCollectionProperties {
+    name: string;
+    image: string;
+    volume?: string;
+    volumeCurrency?: string;
+    volumeDecimals?: number;
+    votes?: number;
+    index: number;
+}
+
+export const VoteCollections = ({ collections }: { collections: VoteCollectionProperties[] }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <div className="flex w-full min-w-0 flex-col gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:border lg:p-8">
+        <div className="flex w-full min-w-0 flex-col gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
             <Heading level={2}>{t("pages.collections.vote.vote_for_top_collection")}</Heading>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
-                <div className="max-w-full flex-1 space-y-2">
-                    {Array.from({ length: 4 }).map((_, index) => (
+                <div
+                    className="max-w-full flex-1 space-y-2"
+                    data-testid="VoteCollections_Left"
+                >
+                    {collections.slice(0, 4).map((collection, index) => (
                         <VoteCollection
-                            order={index}
                             key={index}
-                            collectionImage="https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format"
-                            collectionName="AlphaDogs"
-                            volume="256"
+                            collection={collection}
                         />
                     ))}
                 </div>
-                <div className="hidden flex-1 space-y-2 sm:block">
-                    {Array.from({ length: 4 }).map((_, index) => (
+                <div
+                    className="hidden flex-1 space-y-2 sm:block"
+                    data-testid="VoteCollections_Right"
+                >
+                    {collections.slice(4, 8).map((collection, index) => (
                         <VoteCollection
-                            order={index}
                             key={index}
-                            collectionImage="https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format"
-                            collectionName="AlphaDogs"
-                            volume="256"
+                            collection={collection}
                         />
                     ))}
                 </div>
@@ -58,34 +69,22 @@ export const VoteCollections = (): JSX.Element => {
     );
 };
 
-interface VoteCollectionProperties {
-    order: number;
-    collectionName: string;
-    collectionImage: string;
-    volume: string;
-    votes?: number;
-}
-
-const VoteCollection = ({
-    order,
-    collectionImage,
-    collectionName,
-    votes,
-    volume,
-}: VoteCollectionProperties): JSX.Element => (
+export const VoteCollection = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => (
     <div className="cursor-pointer rounded-lg border border-theme-secondary-300 px-4 py-3 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500">
         <div className="flex items-center justify-between">
             <div className="flex min-w-0 flex-1 space-x-3">
                 <div className="flex">
                     <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-theme-secondary-100 dark:bg-theme-vote-background md:h-12 md:w-12">
-                        <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">{order}</span>
+                        <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
+                            {collection.index}
+                        </span>
                     </div>
                     <div className="relative -ml-2 h-12 w-12 shrink-0">
                         <Img
                             wrapperClassName="aspect-square"
                             className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-700"
                             isCircle
-                            src={collectionImage}
+                            src={collection.image}
                         />
                     </div>
                 </div>
@@ -95,29 +94,37 @@ const VoteCollection = ({
                         data-testid="CollectionName__name"
                         className="truncate text-base font-medium text-theme-secondary-900 dark:text-theme-dark-50 md-lg:text-base"
                     >
-                        {collectionName}
+                        {collection.name}
                     </p>
                     <p className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
-                        Vol: {volume}
+                        Vol:{" "}
+                        <FormatCrypto
+                            value={collection.volume ?? "0"}
+                            token={{
+                                symbol: collection.volumeCurrency ?? "ETH",
+                                name: collection.volumeCurrency ?? "ETH",
+                                decimals: collection.volumeDecimals ?? 18,
+                            }}
+                        />
                     </p>
                     <div className="mt-0.5 md-lg:hidden">
                         <VoteCount
                             iconClass="h-6 w-8"
                             textClass="text-sm md:text-sm"
-                            voteCount={votes}
+                            voteCount={collection.votes}
                         />
                     </div>
                 </div>
             </div>
 
             <div className="ml-2 hidden md-lg:block">
-                <VoteCount voteCount={votes} />
+                <VoteCount voteCount={collection.votes} />
             </div>
         </div>
     </div>
 );
 
-const VoteCount = ({
+export const VoteCount = ({
     iconClass,
     textClass,
     voteCount,
@@ -136,7 +143,9 @@ const VoteCount = ({
             Votes
         </p>
         {voteCount !== undefined ? (
-            <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>395</p>
+            <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>
+                {voteCount}
+            </p>
         ) : (
             <Icon
                 className={twMerge("h-7 w-9", iconClass)}

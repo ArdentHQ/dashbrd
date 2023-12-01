@@ -1,18 +1,19 @@
 import { type FormDataConvertible, type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { CollectionOfTheMonth } from "@/Pages/Collections/Components/CollectionOfTheMonth";
+import { type VoteCollectionProperties, VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface Filters extends Record<string, FormDataConvertible> {
@@ -26,6 +27,16 @@ interface CollectionsIndexProperties extends PageProps {
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     filters: Filters;
 }
+
+const demoCollection: VoteCollectionProperties = {
+    index: 1,
+    name: "AlphaDogs",
+    image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
+    volume: "256.000000000000000000",
+    volumeCurrency: "ETH",
+    volumeDecimals: 18,
+    votes: 15,
+};
 
 const CollectionsIndex = ({
     title,
@@ -125,7 +136,12 @@ const CollectionsIndex = ({
                         <ViewAllButton />
                     </div>
                 </div>
-                <CollectionOfTheMonth />
+                <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
+                    <VoteCollections
+                        collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
+                    />
+                    <CollectionOfTheMonthWinners className="hidden xl:flex" />
+                </div>
             </div>
         </DefaultLayout>
     );
