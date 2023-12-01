@@ -6,6 +6,7 @@ import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
+import { Tooltip } from "@/Components/Tooltip";
 import { FormatCrypto } from "@/Utils/Currency";
 
 export interface VoteCollectionProperties {
@@ -136,26 +137,33 @@ export const VoteCount = ({
     iconClass?: string;
     textClass?: string;
     voteCount?: number;
-}): JSX.Element => (
-    <div className="flex items-center space-x-2">
-        <p
-            className={twMerge(
-                "text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6",
-                textClass,
-            )}
-        >
-            Votes
-        </p>
-        {voteCount !== undefined ? (
-            <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>
-                {voteCount}
+}): JSX.Element => {
+    const { t } = useTranslation();
+    return (
+        <div className="flex items-center space-x-2">
+            <p
+                className={twMerge(
+                    "text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6",
+                    textClass,
+                )}
+            >
+                Votes
             </p>
-        ) : (
-            <Icon
-                className={twMerge("h-7 w-9", iconClass)}
-                name="HiddenVote"
-                size="2xl"
-            />
-        )}
-    </div>
-);
+            {voteCount !== undefined ? (
+                <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>
+                    {voteCount}
+                </p>
+            ) : (
+                <Tooltip content={t("pages.collections.vote.vote_to_reveal")}>
+                    <div>
+                        <Icon
+                            className={twMerge("h-7 w-9", iconClass)}
+                            name="HiddenVote"
+                            size="2xl"
+                        />
+                    </div>
+                </Tooltip>
+            )}
+        </div>
+    );
+};

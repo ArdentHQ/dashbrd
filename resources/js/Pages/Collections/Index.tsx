@@ -36,7 +36,6 @@ const demoCollection: VoteCollectionProperties = {
     volume: "256.000000000000000000",
     volumeCurrency: "ETH",
     volumeDecimals: 18,
-    votes: 15,
 };
 
 const CollectionsIndex = ({
