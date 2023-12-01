@@ -99,7 +99,7 @@ return [
             'vote' => 'Vote',
             'time_left' => 'Time Left',
             'or_nominate_collection' => 'Or nominate a collection',
-            'vote_to_reveal' => 'Vote to reveal data'
+            'vote_to_reveal' => 'Vote to reveal data',
         ],
         'sorting' => [
             'token_number' => 'Token Number',
