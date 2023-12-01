@@ -68,10 +68,6 @@ const CollectionsIndex = ({
         }));
     };
 
-    const winners = collections.slice(0, 3);
-
-    console.log({ winners });
-
     return (
         <DefaultLayout toastMessage={props.toast}>
             <Head title={title} />
