@@ -29,13 +29,19 @@ const WinnersChartWrapper = ({
     chart: JSX.Element;
     className?: string;
 }): JSX.Element => (
-    <div className="relative h-[428px] overflow-hidden">
-        <div className="relative bottom-[-50px]">{chart}</div>
+    <div className="relative overflow-hidden">
+        <div className="relative">{chart}</div>
         <div className={cn("absolute left-0 right-0 flex", className)}>{children}</div>
     </div>
 );
 
-const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfTheMonthData[] }): JSX.Element => {
+export const WinnersChart = ({
+    winners,
+    large = false,
+}: {
+    winners: App.Data.Collections.CollectionOfTheMonthData[];
+    large?: boolean;
+}): JSX.Element => {
     const { t } = useTranslation();
     const { isDark } = useDarkModeContext();
 
@@ -43,7 +49,13 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
         return (
             <WinnersChartWrapper
                 className="justify-center"
-                chart={isDark ? <OneBarChartDark /> : <OneBarChart />}
+                chart={
+                    isDark ? (
+                        <OneBarChartDark className="h-[377px] w-[155px]" />
+                    ) : (
+                        <OneBarChart className="h-[377px] w-[155px]" />
+                    )
+                }
             >
                 <div className={cn("relative bottom-[346px] left-px flex flex-col items-center space-y-[124px]")}>
                     <Img
@@ -65,8 +77,14 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
     if (winners.length === 2) {
         return (
             <WinnersChartWrapper
-                className="justify-between px-18"
-                chart={isDark ? <TwoBarChartDark /> : <TwoBarChart />}
+                className="justify-between px-[38px]"
+                chart={
+                    isDark ? (
+                        <TwoBarChartDark className="h-[377px] w-[310px]" />
+                    ) : (
+                        <TwoBarChart className="h-[377px] w-[310px]" />
+                    )
+                }
             >
                 {winners.map((winner, index) => (
                     <div
@@ -96,16 +114,26 @@ const WinnersChart = ({ winners }: { winners: App.Data.Collections.CollectionOfT
     if (winners.length === 3) {
         return (
             <WinnersChartWrapper
-                className=" justify-between px-12   "
-                chart={isDark ? <ThreeBarChartDark /> : <ThreeBarChart />}
+                className="justify-between px-4"
+                chart={
+                    isDark ? (
+                        <ThreeBarChartDark className="h-[377px] w-[357px]" />
+                    ) : (
+                        <ThreeBarChart className="h-[377px] w-[357px]" />
+                    )
+                }
             >
                 {[winners[1], winners[0], winners[2]].map((winner, index) => (
                     <div
-                        className={cn("relative flex flex-col items-center space-y-[124px]", {
-                            "bottom-[295px]": index === 0,
-                            "bottom-[346px] left-[2px]": index === 1,
-                            "bottom-[268px]": index === 2,
-                        })}
+                        className={cn("relative flex flex-col items-center space-y-[124px]", [
+                            large
+                                ? {}
+                                : {
+                                      "bottom-[295px]": index === 0,
+                                      "bottom-[346px] left-[2px]": index === 1,
+                                      "bottom-[268px]": index === 2,
+                                  },
+                        ])}
                         key={index}
                     >
                         <Img
@@ -224,7 +252,7 @@ export const CollectionOfTheMonthWinners = ({
                     </Heading>
                 </div>
 
-                <div className="flex flex-1 items-center justify-center">
+                <div className="flex flex-1 items-end justify-center">
                     <WinnersChart winners={winners} />
                 </div>
 
