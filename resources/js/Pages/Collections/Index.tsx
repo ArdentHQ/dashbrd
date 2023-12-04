@@ -30,12 +30,14 @@ interface CollectionsIndexProperties extends PageProps {
 }
 
 const demoCollection: VoteCollectionProperties = {
+    id: 1,
     index: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "256.000000000000000000",
     volumeCurrency: "ETH",
     volumeDecimals: 18,
+    votes: 45,
 };
 
 const CollectionsIndex = ({
@@ -144,6 +146,7 @@ const CollectionsIndex = ({
                 </div>
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
                     <VoteCollections
+                        votedCollectionId={1}
                         collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
                     />
                     <CollectionOfTheMonthWinners
