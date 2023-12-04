@@ -21,10 +21,8 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 class Token extends Model
 {
-    use BelongsToNetwork;
-    use BelongsToTokenGuid;
-    use HasFactory;
-    use WithData;
+    /** @use WithData<TokenData> */
+    use BelongsToNetwork, BelongsToTokenGuid, HasFactory, WithData;
 
     /**
      * @var array<string>
