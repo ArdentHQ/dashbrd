@@ -759,7 +759,7 @@ it('should not store base64 encoded asset images', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'tokenId' => '3218',
                     'name' => 'tiny dinos #3218',
                     'contract' => [
                         'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
@@ -808,7 +808,7 @@ it('should use media thumbnail for collection image if no opensea image url', fu
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'tokenId' => '3218',
                     'contract' => [
                         'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
                         'tokenType' => 'ERC721',
@@ -856,7 +856,7 @@ it('should use media gateway for collection image if no opensea image url', func
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'tokenId' => '0x000000000000000000000000000000000000000000000000000000000000092',
+                    'tokenId' => '3218',
                     'contract' => [
                         'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
                         'tokenType' => 'ERC721',
@@ -903,7 +903,7 @@ it('should not store original asset image if it is in base64 encoded format', fu
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'tokenId' => '3218',
                     'contract' => [
                         'tokenType' => 'ERC721',
                         'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
@@ -942,7 +942,7 @@ it('should extract social details from opensea', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'tokenId' => '3218',
                     'contract' => [
                         'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
                         'tokenType' => 'ERC721',
@@ -989,7 +989,7 @@ it('should use opensea description for collection', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'tokenId' => '3218',
                     'contract' => [
                         'tokenType' => 'ERC721',
                         'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',
@@ -1027,7 +1027,7 @@ it('should handle nft traits', function () {
         '*' => Http::response([
             'ownedNfts' => [
                 [
-                    'tokenId' => '0x0000000000000000000000000000000000000000000000000000000000000c92',
+                    'tokenId' => '3218',
                     'contract' => [
                         'tokenType' => 'ERC721',
                         'address' => '0xd9b78a2f1dafc8bb9c60961790d2beefebee56f4',

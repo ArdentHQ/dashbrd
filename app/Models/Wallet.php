@@ -27,6 +27,7 @@ use Spatie\SchemalessAttributes\Casts\SchemalessAttributes;
 
 class Wallet extends Model
 {
+    /** @use WithData<WalletData> */
     use BelongsToUser, HasBalances, HasFactory, SoftDeletes, WithData;
 
     protected string $dataClass = WalletData::class;
