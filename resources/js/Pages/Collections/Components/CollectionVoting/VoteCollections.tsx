@@ -74,7 +74,10 @@ export const VoteCollection = ({ collection }: { collection: VoteCollectionPrope
     const { t } = useTranslation();
 
     return (
-        <div className="cursor-pointer rounded-lg border border-theme-secondary-300 px-4 py-4 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 md:py-3">
+        <div
+            tabIndex={0}
+            className="cursor-pointer rounded-lg border border-theme-secondary-300 px-4 py-4 hover:outline hover:outline-theme-hint-100 focus:outline-none focus:ring focus:ring-theme-hint-100 dark:border-theme-dark-700 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500 md:py-3"
+        >
             <div className="flex items-center justify-between">
                 <div className="flex min-w-0 flex-1 items-center space-x-3">
                     <div className="flex">
@@ -86,7 +89,7 @@ export const VoteCollection = ({ collection }: { collection: VoteCollectionPrope
                         <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
                             <Img
                                 wrapperClassName="aspect-square"
-                                className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-700"
+                                className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-900"
                                 isCircle
                                 src={collection.image}
                             />
