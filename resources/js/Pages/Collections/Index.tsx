@@ -3,6 +3,7 @@ import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CollectionsVoteReceivedModal } from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
@@ -41,6 +42,8 @@ const CollectionsIndex = ({
     const { props } = usePage();
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
+
+    const [showVoteReceivedModal, setShowVoteReceivedModal] = useState(true);
 
     const isFirstRender = useIsFirstRender();
 
@@ -135,6 +138,17 @@ const CollectionsIndex = ({
             </div>
 
             <CollectionOfTheMonth winners={topCollections} />
+            <CollectionsVoteReceivedModal
+                // @TODO: use a real collection
+                collection={{
+                    slug: "moonbirds",
+                    name: "Moonbirds",
+                }}
+                isOpen={showVoteReceivedModal}
+                onClose={() => {
+                    setShowVoteReceivedModal(false);
+                }}
+            />
         </DefaultLayout>
     );
 };
