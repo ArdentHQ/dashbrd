@@ -3,34 +3,33 @@ import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Dialog } from "@/Components/Dialog";
 
 export const CollectionsVoteReceivedModal = ({
-    isOpen,
     onClose,
     collection,
 }: {
-    isOpen: boolean;
     onClose: () => void;
-    collection: {
+    collection?: {
         name: string;
         slug: string;
     };
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const twitterText = t("pages.collections.collection_of_the_month.vote_received_modal.x_text", {
-        collection: collection.name,
-    });
-
-    const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        twitterText,
-    )}&url=${encodeURIComponent(
-        route("collections.view", {
-            slug: collection.slug,
-        }),
-    )}`;
+    const twitterLink =
+        collection !== undefined
+            ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                  t("pages.collections.collection_of_the_month.vote_received_modal.x_text", {
+                      collection: collection.name,
+                  }),
+              )}&url=${encodeURIComponent(
+                  route("collections.view", {
+                      slug: collection.slug,
+                  }),
+              )}`
+            : "";
 
     return (
         <Dialog
-            isOpen={isOpen}
+            isOpen={collection !== undefined}
             onClose={onClose}
             title={t("pages.collections.collection_of_the_month.vote_received_modal.title")}
             panelClassName="md:max-w-none md:w-[648px]"
@@ -41,7 +40,7 @@ export const CollectionsVoteReceivedModal = ({
                         variant="primary"
                         className="w-full justify-center"
                         icon="Twitter"
-                        iconPosition="right"
+                        iconPosition="left"
                     >
                         {t("pages.collections.collection_of_the_month.vote_received_modal.share_vote")}
                     </ButtonLink>

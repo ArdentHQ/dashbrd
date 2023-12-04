@@ -7,6 +7,7 @@ import { CollectionsVoteReceivedModal } from "./Components/CollectionsVoteReceiv
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
+import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
@@ -43,7 +44,8 @@ const CollectionsIndex = ({
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
 
-    const [showVoteReceivedModal, setShowVoteReceivedModal] = useState(true);
+    const [votedCollection, setVotedCollection] =
+        useState<Pick<App.Data.Collections.PopularCollectionData, "slug" | "name">>();
 
     const isFirstRender = useIsFirstRender();
 
@@ -138,17 +140,25 @@ const CollectionsIndex = ({
             </div>
 
             <CollectionOfTheMonth winners={topCollections} />
+
             <CollectionsVoteReceivedModal
                 // @TODO: use a real collection
-                collection={{
-                    slug: "moonbirds",
-                    name: "Moonbirds",
-                }}
-                isOpen={showVoteReceivedModal}
+                collection={votedCollection}
                 onClose={() => {
-                    setShowVoteReceivedModal(false);
+                    setVotedCollection(undefined);
                 }}
             />
+
+            <Button
+                onClick={() => {
+                    setVotedCollection({
+                        name: "MoonBirds",
+                        slug: "moonbirds",
+                    });
+                }}
+            >
+                Show Vote Modal (temporal)
+            </Button>
         </DefaultLayout>
     );
 };
