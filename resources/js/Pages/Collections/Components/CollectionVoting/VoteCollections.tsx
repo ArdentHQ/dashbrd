@@ -1,3 +1,4 @@
+import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
@@ -35,6 +36,7 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
                         <VoteCollection
                             key={index}
                             collection={collection}
+                            variant={index === 0 ? "selected" : index === 1 ? "voted" : undefined}
                         />
                     ))}
                 </div>
@@ -70,11 +72,24 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
     );
 };
 
-export const VoteCollection = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => {
+export const VoteCollection = ({
+    collection,
+    variant,
+}: {
+    collection: VoteCollectionProperties;
+    variant?: "selected" | "voted" | undefined;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
-        <div className="cursor-pointer rounded-lg border border-theme-secondary-300 px-4 py-4 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 md:py-3">
+        <div
+            className={cn("cursor-pointer rounded-lg  px-4 py-4  md:py-3", {
+                "border-2 border-theme-primary-600": variant === "selected",
+                "border-2 border-theme-primary-600 bg-theme-primary-50": variant === "voted",
+                "border border-theme-secondary-300 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500":
+                    variant === undefined,
+            })}
+        >
             <div className="flex items-center justify-between">
                 <div className="flex min-w-0 flex-1 items-center space-x-3">
                     <div className="flex">
