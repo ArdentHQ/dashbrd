@@ -62,7 +62,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'collections', 'middleware' => ['features:collections', 'signed_wallet']], function () {
-        Route::post('collection-of-the-month', CollectionOfTheMonthController::class)->name('collection-of-the-month');
 
         Route::post('{collection:address}/hidden',
             [HiddenCollectionController::class, 'store'])->name('hidden-collections.store');
@@ -103,6 +102,7 @@ Route::group(['middleware' => 'features:collections'], function () {
 
     Route::group(['prefix' => 'collections'], function () {
         Route::get('', [CollectionController::class, 'index'])->name('collections');
+        Route::get('collection-of-the-month', CollectionOfTheMonthController::class)->name('collection-of-the-month');
         Route::get('{collection:slug}', [CollectionController::class, 'show'])->name('collections.view');
         Route::get('{collection:slug}/articles', [CollectionController::class, 'articles'])->name('collections.articles');
         Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');

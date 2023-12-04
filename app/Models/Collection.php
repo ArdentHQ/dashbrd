@@ -90,7 +90,13 @@ class Collection extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
+            ->generateSlugsFrom(function ($model) {
+                if (Str::slug($model->name) === 'collection-of-the-month') {
+                    return $model->name.' Collection';
+                }
+
+                return $model->name;
+            })
             ->saveSlugsTo('slug');
     }
 
