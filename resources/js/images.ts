@@ -10,6 +10,7 @@ import { ReactComponent as TwoBarChartDark } from "@images/collections/two-bar-c
 import { ReactComponent as TwoBarChart } from "@images/collections/two-bar-chart.svg";
 import { ReactComponent as VoteNextMonthWinnersDark } from "@images/collections/vote-next-month-winners-dark.svg";
 import { ReactComponent as VoteNextMonthWinners } from "@images/collections/vote-next-month-winners.svg";
+import { ReactComponent as CollectionsGrid } from "@images/collections-grid.svg";
 import { ReactComponent as DeleteModal } from "@images/delete-modal.svg";
 import { ReactComponent as Error401 } from "@images/errors/401.svg";
 import { ReactComponent as Error403 } from "@images/errors/403.svg";
@@ -70,4 +71,5 @@ export {
     TwoBarChartDark,
     OneBarChart,
     OneBarChartDark,
+    CollectionsGrid,
 };
