@@ -40,6 +40,7 @@ return [
         'audio_version' => 'Audio version',
         'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
     ],
+
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
@@ -137,6 +138,11 @@ return [
         'featured' => [
             'title' => 'Featured Collections',
             'button' => 'Explore Collection',
+        ],
+        'footer' => [
+            'heading_broken' => ['Connect with MetaMask', '& Manage Your Collection'],
+            'subtitle' => 'Explore, Filter, & Share your favorite NFTs with Dashbrd.',
+            'button' => 'Manage Collections',
         ],
     ],
 
