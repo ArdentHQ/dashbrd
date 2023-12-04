@@ -35,6 +35,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName
 {
     /** @use WithData<UserData> */
     use BelongsToWallet, HasFactory, HasWallets, InteractsWithMedia, Notifiable, SoftDeletes, TwoFactorAuthenticatable, WithData;
+
     use HasRoles {
         assignRole as baseAssignRole;
     }
