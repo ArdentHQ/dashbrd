@@ -250,7 +250,7 @@ class AlchemyPendingRequest extends PendingRequest
                 // With getNFTMetadataBatch, alchemy returns tokens numbers (`tokenId` field) as number instead of hex,
                 // thus the `convertTokenNumber flag to save it as is without attempting to convert from hex.
                 // See https://docs.alchemy.com/reference/sdk-getnftmetadatabatch#response-1
-                return $this->parseNft($nft, $network->id, convertTokenNumber: false);
+                return $this->parseNft($nft, $network->id);
             })
             ->values();
 
@@ -363,7 +363,7 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @param  array<mixed>  $nft
      */
-    public function parseNft(array $nft, int $networkId, bool $convertTokenNumber = true): Web3NftData
+    public function parseNft(array $nft, int $networkId): Web3NftData
     {
         $extractedFloorPrice = $this->tryExtractFloorPrice($nft);
         $collectionName = $this->collectionName($nft);
@@ -400,7 +400,7 @@ class AlchemyPendingRequest extends PendingRequest
             $bannerImageUrl = null;
         }
 
-        $tokenNumber = $convertTokenNumber === true ? CryptoUtils::hexToBigIntStr($nft['tokenId']) : $nft['tokenId'];
+        $tokenNumber = $nft['tokenId'];
 
         $error = Arr::get($nft, 'raw.error');
         $nftInfo = null;
