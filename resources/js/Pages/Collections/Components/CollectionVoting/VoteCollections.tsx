@@ -77,19 +77,29 @@ export const VoteCollection = ({
     variant,
 }: {
     collection: VoteCollectionProperties;
-    variant?: "selected" | "voted" | undefined;
+    variant?: "selected" | "voted";
 }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <div
-            className={cn("cursor-pointer rounded-lg  px-4 py-4  md:py-3", {
-                "border-2 border-theme-primary-600": variant === "selected",
-                "border-2 border-theme-primary-600 bg-theme-primary-50": variant === "voted",
+            className={cn("relative cursor-pointer  overflow-hidden rounded-lg px-4 py-4 md:py-3", {
+                "border-2 border-theme-primary-600 dark:border-theme-hint-400":
+                    variant === "selected" || variant === "voted",
+                "bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
                 "border border-theme-secondary-300 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500":
                     variant === undefined,
             })}
         >
+            {variant === "voted" && (
+                <div className="absolute -right-px -top-px">
+                    <Icon
+                        name="VotedCollectionCheckmark"
+                        size="xl"
+                        className="text-theme-primary-600 dark:text-theme-hint-400"
+                    />
+                </div>
+            )}
             <div className="flex items-center justify-between">
                 <div className="flex min-w-0 flex-1 items-center space-x-3">
                     <div className="flex">

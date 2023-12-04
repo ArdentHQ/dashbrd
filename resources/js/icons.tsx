@@ -113,6 +113,7 @@ import { ReactComponent as Trash } from "@icons/trash.svg";
 import { ReactComponent as Upload } from "@icons/upload.svg";
 import { ReactComponent as UserTeam } from "@icons/user-team.svg";
 import { ReactComponent as UserWithSpeechBalloon } from "@icons/user-with-speech-balloon.svg";
+import { ReactComponent as VotedCollectionCheckmark } from "@icons/voted-collection-checkmark.svg";
 import { ReactComponent as Wallet } from "@icons/wallet.svg";
 import { ReactComponent as XInCircle } from "@icons/x-in-circle.svg";
 import { ReactComponent as X } from "@icons/x.svg";
@@ -236,4 +237,5 @@ export const SvgCollection = {
     Polygon,
     Ethereum,
     HiddenVote,
+    VotedCollectionCheckmark,
 };
