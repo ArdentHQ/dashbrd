@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CollectionOfTheMonthController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\CollectionVoteController;
 use App\Http\Controllers\DashboardController;
@@ -61,6 +62,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'collections', 'middleware' => ['features:collections', 'signed_wallet']], function () {
+        Route::post('collection-of-the-month', CollectionOfTheMonthController::class)->name('collection-of-the-month');
+
         Route::post('{collection:address}/hidden',
             [HiddenCollectionController::class, 'store'])->name('hidden-collections.store');
         Route::delete('{collection:address}/hidden',
@@ -72,6 +75,7 @@ Route::middleware('auth')->group(function () {
         Route::post('{collection:address}/vote', [
             CollectionVoteController::class, 'store',
         ])->name('collection-votes.create');
+
     });
 
     Route::group(['prefix' => 'nfts', 'middleware' => 'signed_wallet'], function () {
