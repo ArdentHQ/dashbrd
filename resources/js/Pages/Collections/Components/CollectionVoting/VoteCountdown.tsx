@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/Components/Buttons";
+import { Icon } from "@/Components/Icon";
+import { Tooltip } from "@/Components/Tooltip";
 
 interface TimeLeft {
     days: number;
@@ -33,7 +35,7 @@ const formatTime = (value: number, unit: string): string => {
     return `${paddedValue}${unit}`;
 };
 
-export const VoteCountdown = (): JSX.Element => {
+export const VoteCountdown = ({ hasUserVoted }: { hasUserVoted?: boolean }): JSX.Element => {
     const { t } = useTranslation();
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -64,12 +66,24 @@ export const VoteCountdown = (): JSX.Element => {
 
     return (
         <div className="border-box flex w-full flex-col overflow-hidden rounded-b-xl rounded-t-2.5xl bg-theme-primary-50 backdrop-blur dark:bg-theme-vote-background sm:w-fit sm:flex-row sm:rounded-[1.75rem]">
-            <Button
-                disabled={true}
-                className="flex justify-center py-2 text-base sm:px-5 md:px-12"
-            >
-                <span className="md:px-0.5">{t("pages.collections.vote.vote")}</span>
-            </Button>
+            {hasUserVoted === true ? (
+                <Tooltip content="You’ve already nominated. Come back next month!">
+                    <div className="h-12 w-12 rounded-full bg-theme-hint-100 p-4 dark:bg-[#28374F]">
+                        <Icon
+                            name="CheckSmall"
+                            size="md"
+                            className="text-theme-primary-600 dark:text-theme-hint-400"
+                        />
+                    </div>
+                </Tooltip>
+            ) : (
+                <Button
+                    disabled={true}
+                    className="flex justify-center py-2 text-base sm:px-5 md:px-12"
+                >
+                    <span className="md:px-0.5">{t("pages.collections.vote.vote")}</span>
+                </Button>
+            )}
 
             <div className="my-3 flex items-center justify-center text-sm font-semibold leading-4 text-theme-secondary-700 dark:text-theme-dark-300 sm:px-5 md:text-base">
                 {t("pages.collections.vote.time_left")}

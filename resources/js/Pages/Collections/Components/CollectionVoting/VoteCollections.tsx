@@ -54,7 +54,7 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
             </div>
 
             <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
-                <VoteCountdown />
+                <VoteCountdown hasUserVoted={true} />
 
                 <LinkButton
                     onClick={(): void => {
@@ -83,11 +83,12 @@ export const VoteCollection = ({
 
     return (
         <div
-            className={cn("relative cursor-pointer  overflow-hidden rounded-lg px-4 py-4 md:py-3", {
+            tabIndex={0}
+            className={cn("relative cursor-pointer  overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
                 "border-2 border-theme-primary-600 dark:border-theme-hint-400":
                     variant === "selected" || variant === "voted",
                 "bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
-                "border border-theme-secondary-300 hover:outline hover:outline-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500":
+                "border border-theme-secondary-300 hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
                     variant === undefined,
             })}
         >
@@ -111,7 +112,7 @@ export const VoteCollection = ({
                         <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
                             <Img
                                 wrapperClassName="aspect-square"
-                                className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-700"
+                                className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-900"
                                 isCircle
                                 src={collection.image}
                             />
