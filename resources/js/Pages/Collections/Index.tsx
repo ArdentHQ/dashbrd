@@ -1,8 +1,9 @@
 import { type FormDataConvertible, type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
@@ -80,7 +81,7 @@ const CollectionsIndex = ({
 
     return (
         <DefaultLayout
-            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0"
+            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0 -mb-6 sm:-mb-8 lg:mb-0"
             toastMessage={props.toast}
         >
             <Head title={title} />
@@ -152,6 +153,8 @@ const CollectionsIndex = ({
                     />
                 </div>
             </div>
+
+            <CollectionsCallToAction />
         </DefaultLayout>
     );
 };
