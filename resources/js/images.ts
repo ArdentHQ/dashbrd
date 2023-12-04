@@ -2,6 +2,8 @@ import { ReactComponent as AuthConnectWalletDark } from "@images/auth-connect-wa
 import { ReactComponent as AuthConnectWallet } from "@images/auth-connect-wallet.svg";
 import { ReactComponent as AuthInstallWalletDark } from "@images/auth-install-wallet-dark.svg";
 import { ReactComponent as AuthInstallWallet } from "@images/auth-install-wallet.svg";
+import { ReactComponent as CrownBadgeDark } from "@images/collections/crown-badge-dark.svg";
+import { ReactComponent as CrownBadge } from "@images/collections/crown-badge.svg";
 import { ReactComponent as OneBarChartDark } from "@images/collections/one-bar-chart-dark.svg";
 import { ReactComponent as OneBarChart } from "@images/collections/one-bar-chart.svg";
 import { ReactComponent as ThreeBarChartDark } from "@images/collections/three-bar-chart-dark.svg";
@@ -41,6 +43,8 @@ export {
     AuthInstallWallet,
     AuthInstallWalletDark,
     WarningExclamation,
+    CrownBadge,
+    CrownBadgeDark,
     WarningExclamationDark,
     ImageLoadError,
     ImageLoadErrorPrimary,
