@@ -192,7 +192,7 @@ export const CollectionOfTheMonthWinners = ({
 
     const showWinners = winners.length > 0;
 
-    const date = new Date(); 
+    const date = new Date();
     const currentMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
 
     return (
