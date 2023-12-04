@@ -40,6 +40,7 @@ return [
         'audio_version' => 'Audio version',
         'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
     ],
+
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
@@ -86,6 +87,7 @@ return [
                 'img_alt' => 'I voted for Dashbrd Project of the Month',
                 'x_text' => 'I voted for :collection for collection of the month @dashbrdapp! Go show your support!',
             ],
+            'vote_success' => 'Your vote has been successfully submitted',
         ],
         'articles' => [
             'no_articles' => 'No articles have been linked to this collection as of now.',
@@ -143,6 +145,11 @@ return [
         'featured' => [
             'title' => 'Featured Collections',
             'button' => 'Explore Collection',
+        ],
+        'footer' => [
+            'heading_broken' => ['Connect with MetaMask', '& Manage Your Collection'],
+            'subtitle' => 'Explore, Filter, & Share your favorite NFTs with Dashbrd.',
+            'button' => 'Manage Collections',
         ],
     ],
 

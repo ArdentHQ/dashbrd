@@ -3,6 +3,7 @@ import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import { CollectionsVoteReceivedModal } from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
@@ -75,7 +76,7 @@ const CollectionsIndex = ({
 
     return (
         <DefaultLayout
-            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0"
+            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0 -mb-6 sm:-mb-8 lg:mb-0"
             toastMessage={props.toast}
         >
             <Head title={title} />
@@ -141,13 +142,7 @@ const CollectionsIndex = ({
 
             <CollectionOfTheMonth winners={topCollections} />
 
-            <CollectionsVoteReceivedModal
-                // @TODO: use a real collection
-                collection={votedCollection}
-                onClose={() => {
-                    setVotedCollection(undefined);
-                }}
-            />
+            <CollectionsCallToAction />
 
             <Button
                 onClick={() => {
@@ -159,6 +154,14 @@ const CollectionsIndex = ({
             >
                 Show Vote Modal (temporal)
             </Button>
+
+            <CollectionsVoteReceivedModal
+                // @TODO: use a real collection
+                collection={votedCollection}
+                onClose={() => {
+                    setVotedCollection(undefined);
+                }}
+            />
         </DefaultLayout>
     );
 };
