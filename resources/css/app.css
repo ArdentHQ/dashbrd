@@ -69,11 +69,11 @@
 }
 
 .hidden-votes-svg-line {
-    @apply fill-[#8A96FD];
+    @apply fill-theme-primary-600;
 }
 
 .dark .hidden-votes-svg-line {
-    @apply fill-[#47509F];
+    @apply fill-theme-primary-400;
 }
 
 .hidden-votes-svg-shape {
