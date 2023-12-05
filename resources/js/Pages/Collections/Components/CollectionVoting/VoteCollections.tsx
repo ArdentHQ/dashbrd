@@ -33,6 +33,9 @@ export const VoteCollections = ({
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
 
+    const getVariant = (collectionId: number) =>
+        votedCollectionId === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+
     return (
         <div className="flex w-full min-w-0 flex-col gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
             <Heading level={2}>{t("pages.collections.vote.vote_for_top_collection")}</Heading>
@@ -47,14 +50,8 @@ export const VoteCollections = ({
                             key={index}
                             collection={{ ...collection, id: index, index: index + 1 }}
                             setSelectedCollectionId={setSelectedCollectionId}
-                            showVoteCount={isTruthy(votedCollectionId)}
-                            variant={
-                                index === votedCollectionId
-                                    ? "voted"
-                                    : index === selectedCollectionId
-                                      ? "selected"
-                                      : undefined
-                            }
+                            votedId={votedCollectionId}
+                            variant={getVariant(index)}
                         />
                     ))}
                 </div>
@@ -67,14 +64,8 @@ export const VoteCollections = ({
                             key={index}
                             collection={{ ...collection, id: index + 4, index: index + 5 }}
                             setSelectedCollectionId={setSelectedCollectionId}
-                            showVoteCount={isTruthy(votedCollectionId)}
-                            variant={
-                                index + 4 === votedCollectionId
-                                    ? "voted"
-                                    : index + 4 === selectedCollectionId
-                                      ? "selected"
-                                      : undefined
-                            }
+                            votedId={votedCollectionId}
+                            variant={getVariant(index)}
                         />
                     ))}
                 </div>
@@ -101,36 +92,36 @@ export const VoteCollections = ({
 
 export const VoteCollection = ({
     collection,
+    votedId,
     variant,
     setSelectedCollectionId,
-    showVoteCount,
 }: {
     collection: VoteCollectionProperties;
+    votedId?: number;
     variant?: "selected" | "voted";
-    showVoteCount: boolean;
     setSelectedCollectionId: (collectionId: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
+
+    const hasVotedId = isTruthy(votedId);
 
     return (
         <div className={cn("rounded-lg", { "border border-transparent": variant === undefined })}>
             <div
                 onClick={() => {
-                    if (variant === "voted") {
+                    if (!isTruthy(votedId)) {
                         setSelectedCollectionId(collection.id);
                     }
                 }}
                 tabIndex={0}
-                className={cn(
-                    "relative cursor-pointer overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3",
-                    {
-                        "border-2 border-theme-primary-600 dark:border-theme-hint-400":
-                            variant === "selected" || variant === "voted",
-                        "bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
-                        "border border-theme-secondary-300 hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
-                            variant === undefined,
-                    },
-                )}
+                className={cn("relative  overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
+                    "border-2 border-theme-primary-600 dark:border-theme-hint-400":
+                        variant === "selected" || variant === "voted",
+                    "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
+                    "border border-theme-secondary-300 dark:border-theme-dark-700": hasVotedId,
+                    "border border-theme-secondary-300 hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
+                        variant === undefined && !hasVotedId,
+                })}
             >
                 {variant === "voted" && (
                     <div className="absolute -right-px -top-px">
@@ -182,7 +173,7 @@ export const VoteCollection = ({
                                     iconClass="h-6 w-8"
                                     textClass="text-sm md:text-sm"
                                     voteCount={collection.votes}
-                                    showVoteCount={showVoteCount}
+                                    showVoteCount={isTruthy(votedId)}
                                 />
                             </div>
                         </div>
@@ -191,7 +182,7 @@ export const VoteCollection = ({
                     <div className="ml-2 hidden md-lg:block">
                         <VoteCount
                             voteCount={collection.votes}
-                            showVoteCount={showVoteCount}
+                            showVoteCount={isTruthy(votedId)}
                         />
                     </div>
                 </div>
