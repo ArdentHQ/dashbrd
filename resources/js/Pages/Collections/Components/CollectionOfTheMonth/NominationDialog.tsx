@@ -57,7 +57,7 @@ export const NominationDialog = ({
             onClose={(): void => {
                 setIsOpen(false);
             }}
-            panelClassName="md:max-w-[640px]"
+            panelClassName="md:max-w-[640px] md-lg:max-w-[720px] lg:max-w-[790px]"
             footer={<NominationDialogFooter setIsOpen={setIsOpen} />}
         >
             <div className="flex flex-col md:gap-0">

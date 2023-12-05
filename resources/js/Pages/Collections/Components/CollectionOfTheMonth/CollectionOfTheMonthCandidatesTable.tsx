@@ -67,6 +67,7 @@ export const CollectionOfTheMonthCandidatesTable = ({
                 id: "floor-price",
                 accessor: (collection) => collection.floorPriceFiat,
                 className: "justify-end whitespace-nowrap",
+                disableSortBy: true,
             });
         }
 
