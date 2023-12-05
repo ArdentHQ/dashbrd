@@ -1,3 +1,4 @@
+import cn from "classnames";
 import React, { useRef } from "react";
 import { NominateCollectionName } from "@/Components/Collections/CollectionName";
 import {
@@ -11,10 +12,14 @@ export const CollectionOfTheMonthTableItem = ({
     collection,
     uniqueKey,
     user,
+    selectedCollection,
+    setSelectedCollection,
 }: {
     collection: App.Data.Collections.PopularCollectionData;
     uniqueKey: string;
     user: App.Data.UserData | null;
+    selectedCollection: number;
+    setSelectedCollection: (selectedCollection: number) => void;
 }): JSX.Element => {
     const reference = useRef(null);
 
@@ -22,9 +27,11 @@ export const CollectionOfTheMonthTableItem = ({
         <TableRow
             ref={reference}
             key={uniqueKey}
-            className="group cursor-pointer dark:border-theme-dark-700"
-            onClick={() => {
-                console.log("TODO: implement");
+            className={cn("group cursor-pointer dark:border-theme-dark-700", {
+                "selected-candidate": selectedCollection === collection.id,
+            })}
+            onClick={(): void => {
+                setSelectedCollection(collection.id);
             }}
         >
             <TableCell
@@ -63,8 +70,9 @@ export const CollectionOfTheMonthTableItem = ({
                 <Radio
                     name="selected"
                     className=""
-                    onChange={(event) => {
-                        console.log(event);
+                    checked={selectedCollection === collection.id}
+                    onChange={(): void => {
+                        setSelectedCollection(collection.id);
                     }}
                 />
             </TableCell>

@@ -10,10 +10,14 @@ export const CollectionOfTheMonthCandidatesTable = ({
     collections,
     activeSort,
     user,
+    selectedCollection,
+    setSelectedCollection,
 }: {
     collections: App.Data.Collections.PopularCollectionData[];
     activeSort: string;
     user: App.Data.UserData | null;
+    selectedCollection: number;
+    setSelectedCollection: (selectedCollection: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
     const { isMdAndAbove, isLgAndAbove } = useBreakpoint();
@@ -92,6 +96,8 @@ export const CollectionOfTheMonthCandidatesTable = ({
                     uniqueKey={`${collection.address}-${collection.chainId}`}
                     key={`${collection.address}-${collection.chainId}`}
                     user={user}
+                    selectedCollection={selectedCollection}
+                    setSelectedCollection={setSelectedCollection}
                 />
             )}
         />
