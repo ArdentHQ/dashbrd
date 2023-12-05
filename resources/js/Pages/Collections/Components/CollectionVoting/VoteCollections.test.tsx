@@ -6,6 +6,8 @@ import {
     VoteCollections,
     VoteCount,
 } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
+import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularCollectionFactory";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 
 const demoCollection: VoteCollectionProperties = {
@@ -21,8 +23,17 @@ const demoCollection: VoteCollectionProperties = {
 const collections = Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[];
 
 describe("VoteCollections", () => {
+    const user = new UserDataFactory().create();
+
+    const candidateCollections = new PopularCollectionFactory().createMany(5);
     it("should render collections in two block, 4 collection in each", () => {
-        render(<VoteCollections collections={collections} />);
+        render(
+            <VoteCollections
+                collections={collections}
+                candidateCollections={candidateCollections}
+                user={user}
+            />,
+        );
 
         const leftBlock = screen.getByTestId("VoteCollections_Left");
         const rightBlock = screen.getByTestId("VoteCollections_Right");
