@@ -67,7 +67,7 @@ export const VoteCountdown = ({ hasUserVoted }: { hasUserVoted?: boolean }): JSX
     return (
         <div className="border-box flex w-full flex-col overflow-hidden rounded-b-xl rounded-t-2.5xl bg-theme-primary-50 backdrop-blur dark:bg-theme-vote-background sm:w-fit sm:flex-row sm:rounded-[1.75rem]">
             {hasUserVoted === true ? (
-                <Tooltip content="You’ve already nominated. Come back next month!">
+                <Tooltip content={t("pages.collections.vote.already_voted")}>
                     <div className="flex h-12 w-full justify-center rounded-full bg-theme-hint-100 p-4 dark:bg-[#28374F] sm:w-12">
                         <Icon
                             name="CheckSmall"

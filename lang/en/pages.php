@@ -102,6 +102,7 @@ return [
             'time_left' => 'Time Left',
             'or_nominate_collection' => 'Or nominate a collection',
             'vote_to_reveal' => 'Vote to reveal data',
+            'already_voted' => 'You’ve already nominated. Come back next month!',
         ],
         'sorting' => [
             'token_number' => 'Token Number',

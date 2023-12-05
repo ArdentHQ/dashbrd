@@ -33,7 +33,7 @@ export const VoteCollections = ({
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
 
-    const getVariant = (collectionId: number) =>
+    const getVariant = (collectionId: number): VoteCollectionVariants =>
         votedCollectionId === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
 
     return (
@@ -65,7 +65,7 @@ export const VoteCollections = ({
                             collection={{ ...collection, id: index + 4, index: index + 5 }}
                             setSelectedCollectionId={setSelectedCollectionId}
                             votedId={votedCollectionId}
-                            variant={getVariant(index)}
+                            variant={getVariant(index + 4)}
                         />
                     ))}
                 </div>
@@ -90,6 +90,8 @@ export const VoteCollections = ({
     );
 };
 
+type VoteCollectionVariants = "selected" | "voted" | undefined;
+
 export const VoteCollection = ({
     collection,
     votedId,
@@ -98,7 +100,7 @@ export const VoteCollection = ({
 }: {
     collection: VoteCollectionProperties;
     votedId?: number;
-    variant?: "selected" | "voted";
+    variant: VoteCollectionVariants;
     setSelectedCollectionId: (collectionId: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -118,9 +120,9 @@ export const VoteCollection = ({
                     "border-2 border-theme-primary-600 dark:border-theme-hint-400":
                         variant === "selected" || variant === "voted",
                     "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
-                    "border border-theme-secondary-300 dark:border-theme-dark-700": hasVotedId,
-                    "border border-theme-secondary-300 hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
-                        variant === undefined && !hasVotedId,
+                    "border border-theme-secondary-300 dark:border-theme-dark-700": variant === undefined,
+                    "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
+                        !hasVotedId && variant === undefined,
                 })}
             >
                 {variant === "voted" && (
