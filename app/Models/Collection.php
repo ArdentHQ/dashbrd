@@ -577,4 +577,13 @@ class Collection extends Model
     {
         return $query->where('is_featured', true);
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotable(Builder $query): Builder
+    {
+        return $query->withCount('votes')->orderBy('votes_count', 'desc');
+    }
 }

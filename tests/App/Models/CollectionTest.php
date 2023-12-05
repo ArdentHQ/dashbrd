@@ -7,6 +7,7 @@ use App\Enums\NftTransferType;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
+use App\Models\CollectionVote;
 use App\Models\Gallery;
 use App\Models\Network;
 use App\Models\Nft;
@@ -1196,4 +1197,30 @@ it('can determine if a collection is featured or not using its scope', function 
     $this->assertFalse($featuredCollections->contains($nonFeaturedCollection));
 
     $this->assertEquals(2, Collection::featured()->count());
+});
+
+it('returns the collections with most votes first for votable', function () {
+    $collectionWith5Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(5)->create(['collection_id' => $collectionWith5Votes->id]);
+
+    $collectionWith1Vote = Collection::factory()->create();
+    CollectionVote::factory()->count(1)->create(['collection_id' => $collectionWith1Vote->id]);
+
+    $collectionWith8Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(8)->create(['collection_id' => $collectionWith8Votes->id]);
+
+    $collectionWithoutVotes = Collection::factory()->create();
+
+    $collectionWith3Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(3)->create(['collection_id' => $collectionWith3Votes->id]);
+
+    $collectionsIds = Collection::votable()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        $collectionWith8Votes->id,
+        $collectionWith5Votes->id,
+        $collectionWith3Votes->id,
+        $collectionWith1Vote->id,
+        $collectionWithoutVotes->id,
+    ]);
 });
