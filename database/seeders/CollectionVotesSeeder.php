@@ -25,13 +25,13 @@ class CollectionVotesSeeder extends Seeder
      */
     public function run(): void
     {
-        // now - 4 months ago - 1 winner
+        // now - 4 months - 1 winner
         $this->addVotes(collectionsCount: 1, winnerCount: 1, subMonths: 4);
 
-        // now - 3 months ago - 2 winners
+        // now - 3 months - 2 winners
         $this->addVotes(collectionsCount: 2, winnerCount: 2, subMonths: 3);
 
-        // now - 2 months ago - 3 winners
+        // now - 2 months - 3 winners
         $this->addVotes(collectionsCount: 3, winnerCount: 3, subMonths: 2);
 
         // now - 1 month - 3 winners - 8 nominated
