@@ -106,15 +106,14 @@
     @apply border-theme-primary-600 dark:border-theme-primary-400
 }
 
-
 .table-list tbody tr.selected-candidate td:first-child::before {
-    @apply border-y-2 border-l-2
+    @apply border-y-2 border-l-2;
 }
 
 .table-list tbody tr.selected-candidate td:last-child::before {
-    @apply border-y-2 border-r-2
+    @apply border-y-2 border-r-2;
 }
 
 .table-list tbody tr.selected-candidate td.custom-table-cell:after {
-    @apply border-y-2
+    @apply border-y-2;
 }
