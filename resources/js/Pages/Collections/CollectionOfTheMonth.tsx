@@ -53,7 +53,7 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                 </div>
 
                 <div className="mt-4 flex flex-col overflow-hidden border-theme-secondary-300 dark:border-theme-dark-700 sm:border-b sm:border-t lg:rounded-xl lg:border ">
-                    <div className="collection-of-the-month-overview flex flex-col items-center justify-center px-6 pt-8 sm:px-10 md:px-[60px] md-lg:px-20">
+                    <div className="collection-of-the-month-overview flex flex-col items-center justify-center pt-8">
                         <Heading level={1}>
                             {t("pages.collections.collection_of_the_month.winners_month", {
                                 month: currentMonth,
