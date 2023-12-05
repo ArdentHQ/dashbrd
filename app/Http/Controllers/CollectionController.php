@@ -47,13 +47,20 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
-            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
+            'collectionsOfTheMont' => fn () => $this->getCollectionsOfTheMonth($request),
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votableCollections' => fn () => $this->getVotableCollections($request),
         ]);
     }
 
+    /**
+     * @return SupportCollection<int, VotableCollectionData>
+     */
+    private function getCollectionsOfTheMonth(Request $request): SupportCollection
+    {
+        return CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get())
+    }
     /**
      * @return SupportCollection<int, VotableCollectionData>
      */

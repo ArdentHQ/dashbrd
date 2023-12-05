@@ -589,4 +589,17 @@ class Collection extends Model
             // volume desc null last
             ->orderByRaw('volume DESC NULLS LAST');
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWinnersOfThePreviousMonth(Builder $query): Builder
+    {
+        return $query
+            ->withCount(['votes' => fn ($query) => $query->inPreviousMonth()])
+            // order by votes count excluding nulls
+            ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
+            ->orderBy('votes_count', 'desc');
+    }
 }
