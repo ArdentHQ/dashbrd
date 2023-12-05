@@ -159,7 +159,7 @@ export const VoteCount = ({
             >
                 Votes
             </p>
-            {voteCount === null ? (
+            {voteCount !== null ? (
                 <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>
                     {voteCount}
                 </p>

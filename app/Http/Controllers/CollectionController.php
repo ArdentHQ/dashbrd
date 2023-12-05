@@ -37,7 +37,6 @@ use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
@@ -51,18 +50,24 @@ class CollectionController extends Controller
             'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
-            'votableCollections' => fn () => $this->getVotableCollections(),
+            'votableCollections' => fn () => $this->getVotableCollections($request),
         ]);
     }
 
     /**
-     * @return DataCollection<int, VotableCollectionData>
+     * @return SupportCollection<int, VotableCollectionData>
      */
-    private function getVotableCollections(): DataCollection
+    private function getVotableCollections(Request $request): SupportCollection
     {
+        $wallet = $request->wallet();
+
+        $userVoted = Collection::whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $wallet->id))->exists();
+
         $collections = Collection::votable()->limit(8)->get();
 
-        return VotableCollectionData::collection($collections);
+        return $collections->map(function (Collection $collection) use ($userVoted) {
+            return VotableCollectionData::fromModel($collection, showVotes: $userVoted);
+        });
     }
 
     /**

@@ -21,12 +21,13 @@ class VotableCollectionData extends Data
         public ?string $volume,
         public ?string $volumeCurrency,
         public ?int $volumeDecimals,
-        public int $votes,
+        public ?int $votes,
     ) {
     }
 
-    public static function fromModel(Collection $collection): self
+    public static function fromModel(Collection $collection, bool $showVotes): self
     {
+
         return new self(
             name: $collection->name,
             image: $collection->extra_attributes->get('image'),
@@ -35,7 +36,7 @@ class VotableCollectionData extends Data
             // the floor price token is the same as the volume token
             volumeCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             volumeDecimals: $collection->floorPriceToken?->decimals,
-            votes: $collection->votes()->inCurrentMonth()->count(),
+            votes: $showVotes ? $collection->votes()->inCurrentMonth()->count() : null,
         );
     }
 }

@@ -253,7 +253,7 @@ declare namespace App.Data.Collections {
         volume: string | null;
         volumeCurrency: string | null;
         volumeDecimals: number | null;
-        votes: number;
+        votes: number | null;
     };
 }
 declare namespace App.Data.Gallery {
