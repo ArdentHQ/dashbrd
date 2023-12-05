@@ -66,6 +66,7 @@ export const NominationDialog = ({
             isOpen={isOpen}
             onClose={(): void => {
                 setIsOpen(false);
+                setSelectedCollection(0);
             }}
             panelClassName="md:max-w-[640px] md-lg:max-w-[720px] lg:max-w-[790px]"
             footer={
