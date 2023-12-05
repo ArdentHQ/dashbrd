@@ -5,7 +5,13 @@ import { VoteCountdown } from "./VoteCountdown";
 import { Heading } from "@/Components/Heading";
 import { LinkButton } from "@/Components/Link";
 
-export const VoteCollection = (): JSX.Element => {
+export const VoteCollection = ({
+    collections,
+    user,
+}: {
+    collections: App.Data.Collections.PopularCollectionData[];
+    user: App.Data.UserData | null;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -33,6 +39,8 @@ export const VoteCollection = (): JSX.Element => {
             <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
+                collections={collections}
+                user={user}
             />
         </div>
     );
