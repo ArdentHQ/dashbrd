@@ -100,7 +100,7 @@ export const VoteCollection = ({
 }: {
     collection: VoteCollectionProperties;
     votedId?: number;
-    variant: VoteCollectionVariants;
+    variant?: VoteCollectionVariants;
     setSelectedCollectionId: (collectionId: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -124,6 +124,7 @@ export const VoteCollection = ({
                     "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
                         !hasVoted && variant === undefined,
                 })}
+                data-testid="VoteCollectionTrigger"
             >
                 {variant === "voted" && (
                     <div className="absolute -right-px -top-px">
