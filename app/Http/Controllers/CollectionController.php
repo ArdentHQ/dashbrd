@@ -76,7 +76,7 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
-            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
+            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(2)->get()),
             'collections' => fn () => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
             ),

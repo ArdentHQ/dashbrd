@@ -51,9 +51,19 @@ export const WinnersChart = ({
                 className="justify-center"
                 chart={
                     isDark ? (
-                        <OneBarChartDark className="h-[377px] w-[155px]" />
+                        <OneBarChartDark
+                            className={cn({
+                                "w-[155px]": !large,
+                                "w-[239px]": large,
+                            })}
+                        />
                     ) : (
-                        <OneBarChart className="h-[377px] w-[155px]" />
+                        <OneBarChart
+                            className={cn({
+                                "w-[155px]": !large,
+                                "w-[239px]": large,
+                            })}
+                        />
                     )
                 }
             >
@@ -80,9 +90,19 @@ export const WinnersChart = ({
                 className="justify-between px-[38px]"
                 chart={
                     isDark ? (
-                        <TwoBarChartDark className="h-[377px] w-[310px]" />
+                        <TwoBarChartDark
+                            className={cn({
+                                "w-[310px]": !large,
+                                "w-[356px]": large,
+                            })}
+                        />
                     ) : (
-                        <TwoBarChart className="h-[377px] w-[310px]" />
+                        <TwoBarChart
+                            className={cn({
+                                "w-[310px]": !large,
+                                "w-[356px]": large,
+                            })}
+                        />
                     )
                 }
             >
@@ -117,9 +137,19 @@ export const WinnersChart = ({
                 className="justify-between px-4"
                 chart={
                     isDark ? (
-                        <ThreeBarChartDark className="h-[377px] w-[357px]" />
+                        <ThreeBarChartDark
+                            className={cn({
+                                "w-[357px]": !large,
+                                "w-[512px]": large,
+                            })}
+                        />
                     ) : (
-                        <ThreeBarChart className="h-[377px] w-[357px]" />
+                        <ThreeBarChart
+                            className={cn({
+                                "w-[357px]": !large,
+                                "w-[512px]": large,
+                            })}
+                        />
                     )
                 }
             >

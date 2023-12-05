@@ -3,14 +3,16 @@ import { Head } from "@inertiajs/react";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
+import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
+    collections: App.Data.Collections.CollectionOfTheMonthData[];
 }
 
-const CollectionOfTheMonth = ({ title }: CollectionOfTheMonthProperties): JSX.Element => {
+const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -44,11 +46,17 @@ const CollectionOfTheMonth = ({ title }: CollectionOfTheMonthProperties): JSX.El
                 </span>
             </div>
 
-            <p>
+            <div className="flex flex-col border border-theme-secondary-300 dark:border-theme-dark-700">
+                <div className="collection-of-the-month-overview flex justify-center">
+                    <WinnersChart
+                        winners={collections}
+                        large
+                    />
+                </div>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae rerum exercitationem qui numquam
                 dicta. Dicta dignissimos ratione ut maxime eligendi nisi iusto minus aliquam porro enim reprehenderit,
                 illum labore ea.
-            </p>
+            </div>
         </DefaultLayout>
     );
 };
