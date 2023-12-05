@@ -32,7 +32,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection as SupoortCollection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -53,9 +53,9 @@ class CollectionController extends Controller
     }
 
     /**
-     * @return SupoortCollection<CollectionFeaturedData>
+     * @return SupportCollection<int, CollectionFeaturedData>
      */
-    private function getFeaturedCollections(Request $request): SupoortCollection
+    private function getFeaturedCollections(Request $request): SupportCollection
     {
         $user = $request->user();
 
