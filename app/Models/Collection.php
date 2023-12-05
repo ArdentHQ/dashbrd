@@ -584,7 +584,7 @@ class Collection extends Model
      */
     public function scopeVotable(Builder $query): Builder
     {
-        return $query->withCount('votes')
+        return $query->withCount(['votes' => fn ($query) => $query->inCurrentMonth()])
             ->orderBy('votes_count', 'desc')
             // volume desc null last
             ->orderByRaw('volume DESC NULLS LAST');

@@ -15,6 +15,7 @@ use App\Models\NftActivity;
 use App\Models\SpamContract;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
 it('can create a basic collection', function () {
@@ -1199,20 +1200,32 @@ it('can determine if a collection is featured or not using its scope', function 
     $this->assertEquals(2, Collection::featured()->count());
 });
 
-it('returns the collections with most votes first for votable', function () {
+it('returns the collections with most votes in the same month first for votable', function () {
     $collectionWith5Votes = Collection::factory()->create();
-    CollectionVote::factory()->count(5)->create(['collection_id' => $collectionWith5Votes->id]);
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collectionWith5Votes->id,
+        'voted_at' => Carbon::now(),
+    ]);
 
     $collectionWith1Vote = Collection::factory()->create();
-    CollectionVote::factory()->count(1)->create(['collection_id' => $collectionWith1Vote->id]);
+    CollectionVote::factory()->count(1)->create([
+        'collection_id' => $collectionWith1Vote->id,
+        'voted_at' => Carbon::now(),
+    ]);
 
     $collectionWith8Votes = Collection::factory()->create();
-    CollectionVote::factory()->count(8)->create(['collection_id' => $collectionWith8Votes->id]);
+    CollectionVote::factory()->count(8)->create([
+        'collection_id' => $collectionWith8Votes->id,
+        'voted_at' => Carbon::now(),
+    ]);
 
     $collectionWithoutVotes = Collection::factory()->create();
 
     $collectionWith3Votes = Collection::factory()->create();
-    CollectionVote::factory()->count(3)->create(['collection_id' => $collectionWith3Votes->id]);
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $collectionWith3Votes->id,
+        'voted_at' => Carbon::now(),
+    ]);
 
     $collectionsIds = Collection::votable()->pluck('id')->toArray();
 
@@ -1222,6 +1235,41 @@ it('returns the collections with most votes first for votable', function () {
         $collectionWith3Votes->id,
         $collectionWith1Vote->id,
         $collectionWithoutVotes->id,
+    ]);
+});
+
+it('only considers the votes on the same votes for votables', function () {
+    $collection1 = Collection::factory()->create();
+    // 5 votes previous to this month
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collection1->id,
+        'voted_at' => Carbon::now()->subMonths(2),
+    ]);
+    // 5 votes this month
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collection1->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collection2 = Collection::factory()->create();
+    // 2 votes previous to this month
+    CollectionVote::factory()->count(2)->create([
+        'collection_id' => $collection2->id,
+        'voted_at' => Carbon::now()->subMonths(2),
+    ]);
+    // 6 votes this month
+    CollectionVote::factory()->count(6)->create([
+        'collection_id' => $collection2->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collectionsIds = Collection::votable()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        // 6 votes this month
+        $collection2->id,
+        // 5 votes this month
+        $collection1->id,
     ]);
 });
 
