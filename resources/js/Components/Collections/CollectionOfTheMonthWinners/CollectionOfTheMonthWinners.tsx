@@ -95,7 +95,10 @@ export const WinnersChart = ({
 
         return (
             <WinnersChartWrapper
-                className="justify-between px-[91px]"
+                className={cn("justify-between", {
+                    "px-[37px]": large,
+                    "px-[91px]": !large,
+                })}
                 chart={isDark ? darkChart : lightChart}
             >
                 {winners.map((winner, index) => (
@@ -109,8 +112,8 @@ export const WinnersChart = ({
                             [
                                 large
                                     ? {
-                                          "bottom-[107px]": index === 0,
-                                          "bottom-[59px]": index === 1,
+                                          "bottom-[166px]": index === 0,
+                                          "bottom-[92px] left-[8px]": index === 1,
                                       }
                                     : {
                                           "bottom-[107px]": index === 0,
