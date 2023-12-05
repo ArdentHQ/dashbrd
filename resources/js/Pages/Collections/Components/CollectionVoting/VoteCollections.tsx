@@ -19,7 +19,11 @@ export interface VoteCollectionProperties {
     index: number;
 }
 
-export const VoteCollections = ({ collections }: { collections: VoteCollectionProperties[] }): JSX.Element => {
+export const VoteCollections = ({
+    collections,
+}: {
+    collections: App.Data.Collections.VoteCollectionData[];
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -70,7 +74,11 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
     );
 };
 
-export const VoteCollection = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => {
+export const VoteCollection = ({
+    collection,
+}: {
+    collection: App.Data.Collections.VoteCollectionData;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (

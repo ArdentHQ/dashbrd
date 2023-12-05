@@ -11,6 +11,7 @@ use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Collections\PopularCollectionData;
+use App\Data\Collections\VoteCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
@@ -72,6 +73,15 @@ class CollectionController extends Controller
                                 ])
                                 ->simplePaginate(12);
 
+        $voteCollections = Collection::query()
+            ->hasNotWon()
+            ->withCount(['votes as vote_count' => fn($query) => $query->inCurrentMonth()])
+            ->orderByDesc('vote_count')
+            ->orderByRaw('collections.volume DESC NULLS LAST')
+            ->limit(13)
+            ->get();
+
+
         return Inertia::render('Collections/Index', [
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
@@ -79,6 +89,9 @@ class CollectionController extends Controller
             'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
             'collections' => fn () => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
+            ),
+            'voteCollections' => fn () => VoteCollectionData::collection(
+                $voteCollections->map(fn ($collection, $index) => VoteCollectionData::fromModel($collection, $index + 1))
             ),
             'featuredCollections' => fn () => $featuredCollections->map(function (Collection $collection) use ($user) {
                 return CollectionFeaturedData::fromModel($collection, $user ? $user->currency() : CurrencyCode::USD);

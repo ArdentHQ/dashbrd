@@ -14,7 +14,7 @@ import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { type VoteCollectionProperties, VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
+import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface Filters extends Record<string, FormDataConvertible> {
@@ -28,16 +28,8 @@ interface CollectionsIndexProperties extends PageProps {
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     topCollections: App.Data.Collections.CollectionOfTheMonthData[];
     filters: Filters;
+    voteCollections: App.Data.Collections.VoteCollectionData[];
 }
-
-const demoCollection: VoteCollectionProperties = {
-    index: 1,
-    name: "AlphaDogs",
-    image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
-    volume: "256.000000000000000000",
-    volumeCurrency: "ETH",
-    volumeDecimals: 18,
-};
 
 const CollectionsIndex = ({
     title,
@@ -46,6 +38,7 @@ const CollectionsIndex = ({
     topCollections,
     auth,
     filters,
+    voteCollections,
 }: CollectionsIndexProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -144,9 +137,7 @@ const CollectionsIndex = ({
                     </div>
                 </div>
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
-                    <VoteCollections
-                        collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
-                    />
+                    <VoteCollections collections={voteCollections} />
                     <CollectionOfTheMonthWinners
                         winners={topCollections}
                         className="hidden xl:flex"

@@ -381,6 +381,15 @@ class Collection extends Model
     }
 
     /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeHasNotWon(Builder $query): Builder
+    {
+        return $query->whereNull('collections.has_won_at');
+    }
+
+    /**
      * @return HasOne<SpamContract>
      */
     public function spamContract(): HasOne
