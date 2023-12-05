@@ -48,10 +48,12 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
 
             <div className="flex flex-col border border-theme-secondary-300 dark:border-theme-dark-700">
                 <div className="collection-of-the-month-overview flex justify-center">
-                    <WinnersChart
-                        winners={collections}
-                        large
-                    />
+                    <div>
+                        <WinnersChart
+                            winners={collections}
+                            large
+                        />
+                    </div>
                 </div>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae rerum exercitationem qui numquam
                 dicta. Dicta dignissimos ratione ut maxime eligendi nisi iusto minus aliquam porro enim reprehenderit,

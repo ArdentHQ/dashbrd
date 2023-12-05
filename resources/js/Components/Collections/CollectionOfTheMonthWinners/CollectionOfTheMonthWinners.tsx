@@ -59,9 +59,17 @@ export const WinnersChart = ({
                 className="justify-center"
                 chart={isDark ? darkChart : lightChart}
             >
-                <div className={cn("relative bottom-[107px] flex flex-col items-center space-y-[124px]")}>
+                <div
+                    className={cn("relative bottom-[107px] flex flex-col items-center", {
+                        "space-y-[124px]": !large,
+                        "space-y-[174px]": large,
+                    })}
+                >
                     <Img
-                        wrapperClassName="aspect-square h-20 w-20"
+                        wrapperClassName={cn("aspect-square", {
+                            "h-20 w-20": !large,
+                            "h-[115px] w-[115px]": large,
+                        })}
                         className="rounded-full"
                         src={winners[0].image}
                         isCircle
@@ -87,14 +95,31 @@ export const WinnersChart = ({
             >
                 {winners.map((winner, index) => (
                     <div
-                        className={cn("relative flex flex-col items-center space-y-[124px]", {
-                            "bottom-[107px]": index === 0,
-                            "bottom-[59px]": index === 1,
-                        })}
+                        className={cn(
+                            "relative flex flex-col items-center",
+                            {
+                                "space-y-[124px]": !large,
+                                "space-y-[174px]": large,
+                            },
+                            [
+                                large
+                                    ? {
+                                          "bottom-[107px]": index === 0,
+                                          "bottom-[59px]": index === 1,
+                                      }
+                                    : {
+                                          "bottom-[107px]": index === 0,
+                                          "bottom-[59px]": index === 1,
+                                      },
+                            ],
+                        )}
                         key={index}
                     >
                         <Img
-                            wrapperClassName="aspect-square h-20 w-20"
+                            wrapperClassName={cn("aspect-square", {
+                                "h-20 w-20": !large,
+                                "h-[115px] w-[115px]": large,
+                            })}
                             className="rounded-full"
                             src={winner.image}
                             isCircle
@@ -116,31 +141,56 @@ export const WinnersChart = ({
 
         return (
             <WinnersChartWrapper
-                className="justify-between px-12"
+                className={cn("justify-between", {
+                    "px-[17px]": large,
+                    "px-8": !large,
+                })}
                 chart={isDark ? darkChart : lightChart}
             >
                 {[winners[1], winners[0], winners[2]].map((winner, index) => (
                     <div
-                        className={cn("relative flex flex-col items-center space-y-[124px] ", [
-                            large
-                                ? {}
-                                : {
-                                      "bottom-[56px]": index === 0,
-                                      "bottom-[107px]": index === 1,
-                                      "bottom-[29px]": index === 2,
-                                  },
-                        ])}
+                        className={cn(
+                            "relative flex flex-col items-center",
+                            {
+                                "space-y-[124px]": !large,
+                                "space-y-[174px]": large,
+                            },
+                            [
+                                large
+                                    ? {
+                                          "bottom-[92px]": index === 0,
+                                          "bottom-[165px]": index === 1,
+                                          "bottom-[53px] right-[9px]": index === 2,
+                                      }
+                                    : {
+                                          "bottom-[56px]": index === 0,
+                                          "bottom-[107px]": index === 1,
+                                          "bottom-[29px]": index === 2,
+                                      },
+                            ],
+                        )}
                         key={index}
                     >
                         <Img
-                            wrapperClassName="aspect-square h-20 w-20"
+                            wrapperClassName={cn("aspect-square relative", {
+                                "h-20 w-20": !large,
+                                "h-[115px] w-[115px]": large,
+                                "left-[7px]": large && index === 0,
+                            })}
                             className="rounded-full"
                             src={winner.image}
                             isCircle
                         />
 
-                        <span className="text-center text-base font-medium leading-4.5 text-white">
-                            {formatNumbershort(winner.votes)}
+                        <span
+                            className={cn("relative text-center text-white", {
+                                "text-base font-medium leading-4.5": !large,
+                                "text-xl font-bold leading-6": large,
+                                "right-[5px]": large && index === 2,
+                            })}
+                        >
+                            {formatNumbershort(1246)}
+                            {/* {formatNumbershort(winner.votes)} */}
                             <br /> {t("common.votes")}
                         </span>
                     </div>
