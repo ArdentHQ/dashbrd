@@ -1254,3 +1254,25 @@ it('stores if the wallet does not own ERC1155 NFTs', function () {
     expect($wallet->owns_erc1155_tokens_eth)->toBeTrue();
     expect($wallet->owns_erc1155_tokens_polygon)->toBeFalse();
 });
+
+it('does not update the opposite network', function () {
+    Bus::fake();
+
+    $nfts = getTestNfts();
+
+    $network = Network::firstWhere('chain_id', 1); // ETH mainnet
+
+    $wallet = Wallet::factory()->create([
+        'owns_erc1155_tokens_eth' => true,
+        'owns_erc1155_tokens_polygon' => true,
+    ]);
+
+    Alchemy::fake(Http::response($nfts, 200));
+
+    (new FetchWalletNfts($wallet, $network))->handle();
+
+    $wallet->refresh();
+
+    expect($wallet->owns_erc1155_tokens_eth)->toBeFalse();
+    expect($wallet->owns_erc1155_tokens_polygon)->toBeTrue();
+});
