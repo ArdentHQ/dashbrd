@@ -60,11 +60,10 @@ class CollectionVotesSeeder extends Seeder
 
         $votedAt = Carbon::now()->subMonths($subMonths);
 
-        $randomCollections->map(function ($collection, $index) use ($votedAt, $collectionsCount, $winnerCount)
-        {
+        $randomCollections->map(function ($collection, $index) use ($votedAt, $collectionsCount, $winnerCount) {
             $voteCount = $collectionsCount > $winnerCount && $winnerCount - $index > 0 ? $winnerCount - $index + 1 : 1;
 
-            for ($i = 0; $i < $voteCount; $i++){
+            for ($i = 0; $i < $voteCount; $i++) {
                 $collection->votes()->create([
                     'wallet_id' => Wallet::factory()->create()->id,
                     'voted_at' => $votedAt,
