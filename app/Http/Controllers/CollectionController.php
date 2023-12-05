@@ -48,7 +48,7 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
-            'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth($request),
+            'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votableCollections' => fn () => $this->getVotableCollections($request),
@@ -56,7 +56,7 @@ class CollectionController extends Controller
     }
 
     /**
-     * @return DataCollection<CollectionOfTheMonthData>
+     * @return DataCollection<int, CollectionOfTheMonthData>
      */
     private function getCollectionsOfTheMonth(): DataCollection
     {
