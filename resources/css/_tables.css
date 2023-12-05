@@ -103,7 +103,7 @@
 }
 
 .table-list tbody tr.selected-candidate td:first-child::before, .table-list tbody tr.selected-candidate td:last-child::before, .table-list tbody tr.selected-candidate td.custom-table-cell:after {
-    @apply !border-theme-primary-600
+    @apply border-theme-primary-600 dark:border-theme-primary-400
 }
 
 
