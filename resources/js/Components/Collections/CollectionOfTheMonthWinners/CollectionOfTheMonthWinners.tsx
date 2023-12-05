@@ -29,9 +29,9 @@ const WinnersChartWrapper = ({
     chart: JSX.Element;
     className?: string;
 }): JSX.Element => (
-    <div className="relative overflow-hidden">
+    <div className="relative flex w-full items-end justify-center overflow-hidden">
         <div className="relative">{chart}</div>
-        <div className={cn("absolute left-0 right-0 flex", className)}>{children}</div>
+        <div className={cn("absolute inset-0 flex items-end", className)}>{children}</div>
     </div>
 );
 
@@ -49,25 +49,9 @@ export const WinnersChart = ({
         return (
             <WinnersChartWrapper
                 className="justify-center"
-                chart={
-                    isDark ? (
-                        <OneBarChartDark
-                            className={cn({
-                                "w-[155px]": !large,
-                                "w-[239px]": large,
-                            })}
-                        />
-                    ) : (
-                        <OneBarChart
-                            className={cn({
-                                "w-[155px]": !large,
-                                "w-[239px]": large,
-                            })}
-                        />
-                    )
-                }
+                chart={isDark ? <OneBarChartDark /> : <OneBarChart />}
             >
-                <div className={cn("relative bottom-[346px] left-px flex flex-col items-center space-y-[124px]")}>
+                <div className={cn("relative bottom-[107px] flex flex-col items-center space-y-[124px]")}>
                     <Img
                         wrapperClassName="aspect-square h-20 w-20"
                         className="rounded-full"
@@ -87,30 +71,14 @@ export const WinnersChart = ({
     if (winners.length === 2) {
         return (
             <WinnersChartWrapper
-                className="justify-between px-[38px]"
-                chart={
-                    isDark ? (
-                        <TwoBarChartDark
-                            className={cn({
-                                "w-[310px]": !large,
-                                "w-[356px]": large,
-                            })}
-                        />
-                    ) : (
-                        <TwoBarChart
-                            className={cn({
-                                "w-[310px]": !large,
-                                "w-[356px]": large,
-                            })}
-                        />
-                    )
-                }
+                className="justify-between px-[91px]"
+                chart={isDark ? <TwoBarChartDark /> : <TwoBarChart />}
             >
                 {winners.map((winner, index) => (
                     <div
                         className={cn("relative flex flex-col items-center space-y-[124px]", {
-                            "bottom-[346px]": index === 0,
-                            "bottom-[298px]": index === 1,
+                            "bottom-[107px]": index === 0,
+                            "bottom-[59px]": index === 1,
                         })}
                         key={index}
                     >
@@ -134,34 +102,18 @@ export const WinnersChart = ({
     if (winners.length === 3) {
         return (
             <WinnersChartWrapper
-                className="justify-between px-4"
-                chart={
-                    isDark ? (
-                        <ThreeBarChartDark
-                            className={cn({
-                                "w-[357px]": !large,
-                                "w-[512px]": large,
-                            })}
-                        />
-                    ) : (
-                        <ThreeBarChart
-                            className={cn({
-                                "w-[357px]": !large,
-                                "w-[512px]": large,
-                            })}
-                        />
-                    )
-                }
+                className="justify-between px-12"
+                chart={isDark ? <ThreeBarChartDark /> : <ThreeBarChart />}
             >
                 {[winners[1], winners[0], winners[2]].map((winner, index) => (
                     <div
-                        className={cn("relative flex flex-col items-center space-y-[124px]", [
+                        className={cn("relative flex flex-col items-center space-y-[124px] ", [
                             large
                                 ? {}
                                 : {
-                                      "bottom-[295px]": index === 0,
-                                      "bottom-[346px] left-[2px]": index === 1,
-                                      "bottom-[268px]": index === 2,
+                                      "bottom-[56px]": index === 0,
+                                      "bottom-[107px]": index === 1,
+                                      "bottom-[29px]": index === 2,
                                   },
                         ])}
                         key={index}
