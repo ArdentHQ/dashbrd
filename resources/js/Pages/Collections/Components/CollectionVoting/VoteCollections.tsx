@@ -9,17 +9,11 @@ import { LinkButton } from "@/Components/Link";
 import { Tooltip } from "@/Components/Tooltip";
 import { FormatCrypto } from "@/Utils/Currency";
 
-export interface VoteCollectionProperties {
-    name: string;
-    image: string;
-    volume?: string;
-    volumeCurrency?: string;
-    volumeDecimals?: number;
-    votes?: number;
-    index: number;
-}
-
-export const VoteCollections = ({ collections }: { collections: VoteCollectionProperties[] }): JSX.Element => {
+export const VoteCollections = ({
+    collections,
+}: {
+    collections: App.Data.Collections.VotableCollectionData[];
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -39,6 +33,7 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
                     {collections.slice(0, 4).map((collection, index) => (
                         <VoteCollection
                             key={index}
+                            index={index + 1}
                             collection={collection}
                         />
                     ))}
@@ -50,6 +45,7 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
                     {collections.slice(4, 8).map((collection, index) => (
                         <VoteCollection
                             key={index}
+                            index={index + 5}
                             collection={collection}
                         />
                     ))}
@@ -75,7 +71,13 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
     );
 };
 
-export const VoteCollection = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => {
+export const VoteCollection = ({
+    index,
+    collection,
+}: {
+    index: number;
+    collection: App.Data.Collections.VotableCollectionData;
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -88,13 +90,13 @@ export const VoteCollection = ({ collection }: { collection: VoteCollectionPrope
                     <div className="flex">
                         <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-theme-secondary-100 dark:bg-theme-vote-background xs:h-12 xs:w-12">
                             <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                                {collection.index}
+                                {index}
                             </span>
                         </div>
                         <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
                             <Img
                                 wrapperClassName="aspect-square"
-                                className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-900"
+                                className="h-full w-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-900"
                                 isCircle
                                 src={collection.image}
                             />
@@ -144,7 +146,7 @@ export const VoteCount = ({
 }: {
     iconClass?: string;
     textClass?: string;
-    voteCount?: number;
+    voteCount: number | null;
 }): JSX.Element => {
     const { t } = useTranslation();
     return (
@@ -157,7 +159,7 @@ export const VoteCount = ({
             >
                 Votes
             </p>
-            {voteCount !== undefined ? (
+            {voteCount === null ? (
                 <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>
                     {voteCount}
                 </p>

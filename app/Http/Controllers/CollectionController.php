@@ -11,6 +11,7 @@ use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Collections\PopularCollectionData;
+use App\Data\Collections\VotableCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
@@ -36,6 +37,7 @@ use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
@@ -49,7 +51,18 @@ class CollectionController extends Controller
             'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
+            'votableCollections' => fn () => $this->getVotableCollections(),
         ]);
+    }
+
+    /**
+     * @return DataCollection<int, VotableCollectionData>
+     */
+    private function getVotableCollections(): DataCollection
+    {
+        $collections = Collection::votable()->limit(8)->get();
+
+        return VotableCollectionData::collection($collections);
     }
 
     /**
@@ -61,7 +74,7 @@ class CollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
-        $featuredCollections = Collection::where('is_featured', true)
+        $featuredCollections = Collection::featured()
             ->withCount(['nfts'])
             ->get();
 
