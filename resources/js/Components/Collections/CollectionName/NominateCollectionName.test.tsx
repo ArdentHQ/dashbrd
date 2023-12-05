@@ -12,4 +12,26 @@ describe("CollectionName", () => {
         expect(screen.getByTestId("NominateCollectionName")).toBeInTheDocument();
         expect(screen.getAllByTestId("Img")).toHaveLength(1);
     });
+
+    it("should use ETH as default volume currency", () => {
+        const collection = new PopularCollectionFactory().create({
+            volume: "0",
+            volumeCurrency: undefined,
+        });
+
+        render(<NominateCollectionName collection={collection} />);
+
+        expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 ETH");
+    });
+
+    it("should render the volume with the selected currency", () => {
+        const collection = new PopularCollectionFactory().create({
+            volume: "0",
+            volumeCurrency: "BTC",
+        });
+
+        render(<NominateCollectionName collection={collection} />);
+
+        expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 BTC");
+    });
 });
