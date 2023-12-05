@@ -34,4 +34,15 @@ describe("CollectionName", () => {
 
         expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 BTC");
     });
+
+    it("should render 0 if collection has no volume", () => {
+        const collection = new PopularCollectionFactory().create({
+            volume: null,
+            volumeCurrency: "BTC",
+        });
+
+        render(<NominateCollectionName collection={collection} />);
+
+        expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 BTC");
+    });
 });
