@@ -14,7 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('wallets', function (Blueprint $table) {
-            $table->boolean('owns_erc1155_tokens')->default(false);
+            $table->boolean('owns_erc1155_tokens_eth')->default(false);
+            $table->boolean('owns_erc1155_tokens_polygon')->default(false);
         });
     }
 };

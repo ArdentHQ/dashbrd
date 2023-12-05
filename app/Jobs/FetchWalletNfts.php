@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enums\Chain;
 use App\Enums\TokenType;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
@@ -80,8 +81,12 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
 
             $nftHandler->cleanupNftsAndGalleries($this->startTimestamp);
 
+            $field = $this->network->chain() === Chain::ETH
+                        ? 'owns_erc1155_tokens_eth'
+                        : 'owns_erc1155_tokens_polygon';
+
             $this->wallet->update([
-                'owns_erc1155_tokens' => $this->ownsErc1155Nfts || $containsErc1155,
+                $field => $this->ownsErc1155Nfts || $containsErc1155,
             ]);
         }
 

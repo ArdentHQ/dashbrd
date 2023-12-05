@@ -142,8 +142,8 @@ export const CollectionActivityTable = ({
             isLoading
                 ? (Array.from({ length: 5 }).fill({}) as App.Data.Nfts.NftActivityData[])
                 : activities !== null
-                  ? activities.paginated.data
-                  : [],
+                ? activities.paginated.data
+                : [],
         [isLoading, activities],
     );
 

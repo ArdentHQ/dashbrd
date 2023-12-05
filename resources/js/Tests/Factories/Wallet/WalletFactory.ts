@@ -19,7 +19,10 @@ export default class WalletFactory extends ModelFactory<App.Data.Wallet.WalletDa
             },
             isRefreshingCollections: false,
             canRefreshCollections: false,
-            hasErc1155Nfts: false,
+            hasErc1155Nfts: {
+                eth: false,
+                polygon: false,
+            },
         };
     }
 

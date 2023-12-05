@@ -1219,14 +1219,18 @@ it('stores if the wallet owns ERC1155 NFTs', function () {
     $network = Network::polygon();
 
     $wallet = Wallet::factory()->create([
-        'owns_erc1155_tokens' => false,
+        'owns_erc1155_tokens_eth' => false,
+        'owns_erc1155_tokens_polygon' => false,
     ]);
 
     Alchemy::fake(Http::response($nfts, 200));
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    expect($wallet->fresh()->owns_erc1155_tokens)->toBeTrue();
+    $wallet->refresh();
+
+    expect($wallet->owns_erc1155_tokens_eth)->toBeFalse();
+    expect($wallet->owns_erc1155_tokens_polygon)->toBeTrue();
 });
 
 it('stores if the wallet does not own ERC1155 NFTs', function () {
@@ -1237,12 +1241,16 @@ it('stores if the wallet does not own ERC1155 NFTs', function () {
     $network = Network::polygon();
 
     $wallet = Wallet::factory()->create([
-        'owns_erc1155_tokens' => true,
+        'owns_erc1155_tokens_eth' => true,
+        'owns_erc1155_tokens_polygon' => false,
     ]);
 
     Alchemy::fake(Http::response($nfts, 200));
 
     (new FetchWalletNfts($wallet, $network))->handle();
 
-    expect($wallet->fresh()->owns_erc1155_tokens)->toBeFalse();
+    $wallet->refresh();
+
+    expect($wallet->owns_erc1155_tokens_eth)->toBeTrue();
+    expect($wallet->owns_erc1155_tokens_polygon)->toBeFalse();
 });

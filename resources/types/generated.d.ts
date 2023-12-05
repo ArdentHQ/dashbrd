@@ -505,7 +505,7 @@ declare namespace App.Data.Wallet {
         timestamps: { tokens_fetched_at: number | null; native_balances_fetched_at: number | null };
         isRefreshingCollections: boolean;
         canRefreshCollections: boolean;
-        hasErc1155Nfts: boolean;
+        hasErc1155Nfts: { eth: boolean; polygon: boolean };
     };
 }
 declare namespace App.Enums {

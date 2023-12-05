@@ -46,11 +46,13 @@ class Wallet extends Model
         'onboarded_at',
         'is_refreshing_collections',
         'refreshed_collections_at',
-        'owns_erc1155_tokens',
+        'owns_erc1155_tokens_eth',
+        'owns_erc1155_tokens_polygon',
     ];
 
     protected $casts = [
-        'owns_erc1155_tokens' => 'bool',
+        'owns_erc1155_tokens_eth' => 'bool',
+        'owns_erc1155_tokens_polygon' => 'bool',
         'extra_attributes' => SchemalessAttributes::class,
         'total_usd' => 'float',
         'last_activity_at' => 'datetime',
