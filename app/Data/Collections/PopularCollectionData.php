@@ -18,6 +18,7 @@ class PopularCollectionData extends Data
 {
     public function __construct(
         public int $id,
+        public string $address,
         public string $name,
         public string $slug,
         #[LiteralTypeScriptType('App.Enums.Chain')]
@@ -25,12 +26,14 @@ class PopularCollectionData extends Data
         public ?string $floorPrice,
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
+        public ?float $floorPriceFiat,
         public ?string $volume,
         public ?float $volumeFiat,
         public ?string $volumeCurrency,
         public ?int $volumeDecimals,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
+        public int $nftsCount,
     ) {
     }
 
@@ -39,17 +42,20 @@ class PopularCollectionData extends Data
         return new self(
             id: $collection->id,
             name: $collection->name,
+            address: $collection->address,
             slug: $collection->slug,
             chainId: $collection->network->chain_id,
             floorPrice: $collection->floor_price,
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
+            floorPriceFiat: (float) $collection->fiatValue($currency),
             // @TODO: makey this dynamic
             volume: '19000000000000000000',
             volumeFiat: 35380.4,
             volumeCurrency: 'eth',
             volumeDecimals: 18,
             image: $collection->extra_attributes->get('image'),
+            nftsCount: $collection->nfts_count,
         );
     }
 }
