@@ -37,6 +37,7 @@ use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
@@ -47,7 +48,7 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
-            'collectionsOfTheMont' => fn () => $this->getCollectionsOfTheMonth($request),
+            'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth($request),
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votableCollections' => fn () => $this->getVotableCollections($request),
@@ -55,12 +56,13 @@ class CollectionController extends Controller
     }
 
     /**
-     * @return SupportCollection<int, VotableCollectionData>
+     * @return DataCollection<CollectionOfTheMonthData>
      */
-    private function getCollectionsOfTheMonth(Request $request): SupportCollection
+    private function getCollectionsOfTheMonth(): DataCollection
     {
-        return CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get())
+        return CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
     }
+
     /**
      * @return SupportCollection<int, VotableCollectionData>
      */
