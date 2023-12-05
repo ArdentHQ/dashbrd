@@ -75,12 +75,11 @@ class CollectionController extends Controller
 
         $voteCollections = Collection::query()
             ->hasNotWon()
-            ->withCount(['votes as vote_count' => fn($query) => $query->inCurrentMonth()])
+            ->withCount(['votes as vote_count' => fn ($query) => $query->inCurrentMonth()])
             ->orderByDesc('vote_count')
             ->orderByRaw('collections.volume DESC NULLS LAST')
             ->limit(13)
             ->get();
-
 
         return Inertia::render('Collections/Index', [
             'allowsGuests' => true,
