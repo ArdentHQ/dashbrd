@@ -60,9 +60,9 @@ export const WinnersChart = ({
                 chart={isDark ? darkChart : lightChart}
             >
                 <div
-                    className={cn("relative bottom-[107px] flex flex-col items-center", {
-                        "space-y-[124px]": !large,
-                        "space-y-[174px]": large,
+                    className={cn("relative flex flex-col items-center", {
+                        "bottom-[107px] space-y-[124px]": !large,
+                        "bottom-[166px] space-y-[174px]": large,
                     })}
                 >
                     <Img
