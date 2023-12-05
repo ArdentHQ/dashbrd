@@ -1224,3 +1224,34 @@ it('returns the collections with most votes first for votable', function () {
         $collectionWithoutVotes->id,
     ]);
 });
+
+it('sorts by volume if collections have the same amount of votes', function () {
+    $mediumVolume = Collection::factory()->create([
+        'volume' => 100,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $mediumVolume->id]);
+
+    $highVolume = Collection::factory()->create([
+        'volume' => 1000,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $highVolume->id]);
+
+    $noVolume = Collection::factory()->create([
+        'volume' => null,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $noVolume->id]);
+
+    $lowVolume = Collection::factory()->create([
+        'volume' => 1,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $lowVolume->id]);
+
+    $collectionsIds = Collection::votable()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        $highVolume->id,
+        $mediumVolume->id,
+        $lowVolume->id,
+        $noVolume->id,
+    ]);
+});
