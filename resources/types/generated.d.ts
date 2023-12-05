@@ -230,17 +230,20 @@ declare namespace App.Data.Collections {
     };
     export type PopularCollectionData = {
         id: number;
+        address: string;
         name: string;
         slug: string;
         chainId: App.Enums.Chain;
         floorPrice: string | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        floorPriceFiat: number | null;
         volume: string | null;
         volumeFiat: number | null;
         volumeCurrency: string | null;
         volumeDecimals: number | null;
         image: string | null;
+        nftsCount: number;
     };
     export type SimpleNftData = {
         id: number;
