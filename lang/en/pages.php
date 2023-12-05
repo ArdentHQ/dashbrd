@@ -40,6 +40,7 @@ return [
         'audio_version' => 'Audio version',
         'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
     ],
+
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
@@ -79,6 +80,7 @@ return [
             'winners_month' => 'Winners: :month',
             'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
             'view_previous_winners' => 'View Previous Winners',
+            'vote_success' => 'Your vote has been successfully submitted',
         ],
         'articles' => [
             'no_articles' => 'No articles have been linked to this collection as of now.',
@@ -137,6 +139,11 @@ return [
         'featured' => [
             'title' => 'Featured Collections',
             'button' => 'Explore Collection',
+        ],
+        'footer' => [
+            'heading_broken' => ['Connect with MetaMask', '& Manage Your Collection'],
+            'subtitle' => 'Explore, Filter, & Share your favorite NFTs with Dashbrd.',
+            'button' => 'Manage Collections',
         ],
     ],
 
