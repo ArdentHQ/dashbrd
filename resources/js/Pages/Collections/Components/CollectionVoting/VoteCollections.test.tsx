@@ -2,23 +2,20 @@ import { within } from "@testing-library/react";
 import { expect } from "vitest";
 import {
     VoteCollection,
-    type VoteCollectionProperties,
     VoteCollections,
     VoteCount,
 } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
+import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 
-const demoCollection: VoteCollectionProperties = {
-    index: 1,
+const demoCollection = new VotableCollectionDataFactory().create({
     name: "AlphaDogs",
-    image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "256.000000000000000000",
-    volumeCurrency: "ETH",
-    volumeDecimals: 18,
-    votes: 15,
-};
+});
 
-const collections = Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[];
+const collections = new VotableCollectionDataFactory().createMany(8, {
+    name: "AlphaDogs",
+});
 
 describe("VoteCollections", () => {
     it("should render collections in two block, 4 collection in each", () => {
@@ -33,13 +30,23 @@ describe("VoteCollections", () => {
 });
 describe("VoteCollection", () => {
     it("should render the component", () => {
-        render(<VoteCollection collection={demoCollection} />);
+        render(
+            <VoteCollection
+                collection={demoCollection}
+                index={1}
+            />,
+        );
 
         expect(screen.getByText("AlphaDogs")).toBeInTheDocument();
     });
 
     it("should render volume of the collection", () => {
-        render(<VoteCollection collection={demoCollection} />);
+        render(
+            <VoteCollection
+                collection={demoCollection}
+                index={1}
+            />,
+        );
 
         expect(screen.getByText(/Vol: 256 ETH/)).toBeInTheDocument();
     });
@@ -47,7 +54,7 @@ describe("VoteCollection", () => {
 
 describe("VoteCount", () => {
     it("should render without vote count", () => {
-        render(<VoteCount />);
+        render(<VoteCount voteCount={null} />);
 
         expect(screen.getByTestId("icon-HiddenVote")).toBeInTheDocument();
     });

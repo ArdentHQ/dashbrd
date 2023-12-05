@@ -115,9 +115,9 @@ export const VoteCollection = ({
                             <FormatCrypto
                                 value={collection.volume ?? "0"}
                                 token={{
-                                    symbol: collection.volumeCurrency ?? "ETH",
-                                    name: collection.volumeCurrency ?? "ETH",
-                                    decimals: collection.volumeDecimals ?? 18,
+                                    symbol: "ETH",
+                                    name: "ETH",
+                                    decimals: 18,
                                 }}
                             />
                         </p>

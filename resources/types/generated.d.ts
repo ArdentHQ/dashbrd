@@ -251,8 +251,6 @@ declare namespace App.Data.Collections {
         name: string;
         image: string | null;
         volume: string | null;
-        volumeCurrency: string | null;
-        volumeDecimals: number | null;
         votes: number | null;
     };
 }
