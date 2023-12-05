@@ -4,6 +4,7 @@ import cn from "classnames";
 import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinners";
+import { Heading } from "@/Components/Heading";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
@@ -15,49 +16,60 @@ interface CollectionOfTheMonthProperties extends PageProps {
 const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
+    const date = new Date();
+    const currentMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+
     return (
-        <DefaultLayout wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0 -mb-6 sm:-mb-8 lg:mb-0">
+        <DefaultLayout>
             <Head title={title} />
 
-            <div className="flex items-center">
-                <IconButton
-                    icon="ChevronLeftSmall"
-                    onClick={() => {
-                        router.get(route("collections"));
-                    }}
-                    iconSize="xs"
-                    className="mr-3 text-theme-dark-300"
-                />
-                <span>
-                    <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                        {t("common.back_to")}{" "}
-                    </span>
-                    <Link
-                        href={route("collections")}
-                        className={cn(
-                            "transition-default font-medium text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none",
-                            "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
-                            "focus-visible:decoration-theme-primary-700",
-                            "dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500",
-                        )}
-                    >
-                        {t("common.collections")}
-                    </Link>
-                </span>
-            </div>
+            <div className="lg:mx-8 2xl:mx-0">
+                <div className="-mb-4 -mt-6 flex items-center bg-theme-hint-50 px-8 py-4 dark:bg-theme-dark-800 sm:-mt-8 lg:mb-0  lg:mt-0 lg:bg-transparent lg:px-0 lg:py-0 dark:lg:bg-transparent ">
+                    <IconButton
+                        icon="ChevronLeftSmall"
+                        onClick={() => {
+                            router.get(route("collections"));
+                        }}
+                        iconSize="xs"
+                        className="mr-3 h-6 w-6 bg-transparent text-theme-dark-300 lg:h-10 lg:w-10"
+                    />
 
-            <div className="flex flex-col border border-theme-secondary-300 dark:border-theme-dark-700">
-                <div className="collection-of-the-month-overview flex justify-center">
-                    <div>
-                        <WinnersChart
-                            winners={collections}
-                            large
-                        />
-                    </div>
+                    <span>
+                        <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
+                            {t("common.back_to")}{" "}
+                        </span>
+                        <Link
+                            href={route("collections")}
+                            className={cn(
+                                "transition-default font-medium text-theme-primary-600 underline decoration-transparent underline-offset-2 outline-none",
+                                "hover:text-theme-primary-700 hover:decoration-theme-primary-700",
+                                "focus-visible:decoration-theme-primary-700",
+                                "dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500",
+                            )}
+                        >
+                            {t("common.collections")}
+                        </Link>
+                    </span>
                 </div>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae rerum exercitationem qui numquam
-                dicta. Dicta dignissimos ratione ut maxime eligendi nisi iusto minus aliquam porro enim reprehenderit,
-                illum labore ea.
+
+                <div className="mt-4 flex flex-col overflow-hidden border-theme-secondary-300 dark:border-theme-dark-700 sm:border-b sm:border-t lg:rounded-xl lg:border ">
+                    <div className="collection-of-the-month-overview flex flex-col items-center justify-center px-6 pt-8 sm:px-10 md:px-[60px] md-lg:px-20">
+                        <Heading level={1}>
+                            {t("pages.collections.collection_of_the_month.winners_month", {
+                                month: currentMonth,
+                            })}
+                        </Heading>
+                        <div className="mt-11">
+                            <WinnersChart
+                                winners={collections}
+                                large
+                            />
+                        </div>
+                    </div>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae rerum exercitationem qui
+                    numquam dicta. Dicta dignissimos ratione ut maxime eligendi nisi iusto minus aliquam porro enim
+                    reprehenderit, illum labore ea.
+                </div>
             </div>
         </DefaultLayout>
     );

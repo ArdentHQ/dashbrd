@@ -39,3 +39,13 @@
 .dark .collection-of-the-month-mobile {
     @apply bg-theme-dark-800 bg-none;
 }
+
+.collection-of-the-month-overview {
+    background-image: url("../images/collections/com-bg.svg");
+    @apply bg-theme-hint-50 bg-cover bg-center bg-no-repeat;
+}
+
+.dark .collection-of-the-month-overview {
+    background-image: url("../images/collections/com-bg-dark.svg");
+    @apply bg-theme-dark-800;
+}
