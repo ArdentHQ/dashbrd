@@ -75,7 +75,12 @@ export const WinnersChart = ({
                         isCircle
                     />
 
-                    <span className="text-center text-base font-medium leading-4.5 text-white">
+                    <span
+                        className={cn("relative text-center text-white", {
+                            "text-base font-medium leading-4.5": !large,
+                            "text-xl font-bold leading-6": large,
+                        })}
+                    >
                         {formatNumbershort(winners[0].votes)}
                         <br /> {t("common.votes")}
                     </span>
@@ -125,7 +130,12 @@ export const WinnersChart = ({
                             isCircle
                         />
 
-                        <span className="text-center text-base font-medium leading-4.5 text-white">
+                        <span
+                            className={cn("relative text-center text-white", {
+                                "text-base font-medium leading-4.5": !large,
+                                "text-xl font-bold leading-6": large,
+                            })}
+                        >
                             {formatNumbershort(winner.votes)}
                             <br /> {t("common.votes")}
                         </span>

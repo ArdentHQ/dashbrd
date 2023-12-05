@@ -14,7 +14,7 @@ class CollectionOfTheMonthController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('Collections/CollectionOfTheMonth', [
-            'collections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
+            'collections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(2)->get()),
             'allowsGuests' => true,
             'title' => fn () => trans('metatags.collections.of-the-month.title'),
         ]);
