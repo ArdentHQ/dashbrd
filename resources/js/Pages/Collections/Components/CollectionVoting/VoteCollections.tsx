@@ -23,8 +23,8 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
     const { t } = useTranslation();
 
     return (
-        <div className="flex w-full min-w-0 flex-col gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
-            <Heading level={2}>{t("pages.collections.vote.vote_for_top_collection")}</Heading>
+        <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
+            <Heading level={1}>{t("pages.collections.vote.vote_for_top_collection")}</Heading>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
                 <div
