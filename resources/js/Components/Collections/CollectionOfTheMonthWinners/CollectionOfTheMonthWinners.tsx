@@ -229,7 +229,7 @@ const WinnersChartMobile = ({
                 <Link
                     variant="link"
                     textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
-                    href="/"
+                    href={route("collection-of-the-month")}
                     fontSize="text-base"
                 >
                     {t("pages.collections.collection_of_the_month.view_previous_winners")}
@@ -291,7 +291,7 @@ export const CollectionOfTheMonthWinners = ({
                         <Link
                             variant="link"
                             textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
-                            href="/"
+                            href={route("collection-of-the-month")}
                             fontSize="text-base"
                         >
                             {t("pages.collections.collection_of_the_month.view_previous_winners")}
