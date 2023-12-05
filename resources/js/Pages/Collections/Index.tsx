@@ -147,6 +147,7 @@ const CollectionsIndex = ({
                     <VoteCollections
                         collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
                     />
+
                     <CollectionOfTheMonthWinners
                         winners={topCollections}
                         className="hidden xl:flex"

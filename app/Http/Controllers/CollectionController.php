@@ -31,7 +31,8 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection as SupoortCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -41,7 +42,24 @@ class CollectionController extends Controller
 {
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
+        return Inertia::render('Collections/Index', [
+            'allowsGuests' => true,
+            'filters' => fn () => $this->getFilters($request),
+            'title' => fn () => trans('metatags.collections.title'),
+            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
+            'collections' => fn () => $this->getPopularCollections($request),
+            'featuredCollections' => fn () => $this->getFeaturedCollections($request),
+        ]);
+    }
+
+    /**
+     * @return SupoortCollection<CollectionFeaturedData>
+     */
+    private function getFeaturedCollections(Request $request): SupoortCollection
+    {
         $user = $request->user();
+
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
 
         $featuredCollections = Collection::where('is_featured', true)
             ->withCount(['nfts'])
@@ -53,7 +71,17 @@ class CollectionController extends Controller
             });
         });
 
-        $currency = $user ? $user->currency() : CurrencyCode::USD;
+        return $featuredCollections->map(function (Collection $collection) use ($currency) {
+            return CollectionFeaturedData::fromModel($collection, $currency);
+        });
+    }
+
+    /**
+     * @return Paginator<PopularCollectionData>
+     */
+    private function getPopularCollections(Request $request): Paginator
+    {
+        $user = $request->user();
 
         $chainId = match ($request->query('chain')) {
             'polygon' => Chain::Polygon->value,
@@ -61,7 +89,9 @@ class CollectionController extends Controller
             default => null,
         };
 
-        /** @var LengthAwarePaginator<Collection> $collections */
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
+
+        /** @var Paginator<PopularCollectionData> $collections */
         $collections = Collection::query()
                                 ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
                                 ->filterByChainId($chainId)
@@ -72,18 +102,7 @@ class CollectionController extends Controller
                                 ])
                                 ->simplePaginate(12);
 
-        return Inertia::render('Collections/Index', [
-            'allowsGuests' => true,
-            'filters' => fn () => $this->getFilters($request),
-            'title' => fn () => trans('metatags.collections.title'),
-            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
-            'collections' => fn () => PopularCollectionData::collection(
-                $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
-            ),
-            'featuredCollections' => fn () => $featuredCollections->map(function (Collection $collection) use ($user) {
-                return CollectionFeaturedData::fromModel($collection, $user ? $user->currency() : CurrencyCode::USD);
-            }),
-        ]);
+        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency));
     }
 
     /**
