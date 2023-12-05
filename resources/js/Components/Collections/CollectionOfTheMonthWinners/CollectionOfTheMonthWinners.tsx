@@ -9,12 +9,17 @@ import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import {
     CrownBadge,
     CrownBadgeDark,
-    OneBarChart,
     OneBarChartDark,
+    OneBarChartLg,
+    OneBarChartLgDark,
     ThreeBarChart,
     ThreeBarChartDark,
+    ThreeBarChartLg,
+    ThreeBarChartLgDark,
     TwoBarChart,
     TwoBarChartDark,
+    TwoBarChartLg,
+    TwoBarChartLgDark,
     VoteNextMonthWinners,
     VoteNextMonthWinnersDark,
 } from "@/images";
@@ -46,10 +51,13 @@ export const WinnersChart = ({
     const { isDark } = useDarkModeContext();
 
     if (winners.length === 1) {
+        const lightChart = large ? <OneBarChartLg /> : <OneBarChartDark />;
+        const darkChart = large ? <OneBarChartLgDark /> : <OneBarChartDark />;
+
         return (
             <WinnersChartWrapper
                 className="justify-center"
-                chart={isDark ? <OneBarChartDark /> : <OneBarChart />}
+                chart={isDark ? darkChart : lightChart}
             >
                 <div className={cn("relative bottom-[107px] flex flex-col items-center space-y-[124px]")}>
                     <Img
@@ -69,10 +77,13 @@ export const WinnersChart = ({
     }
 
     if (winners.length === 2) {
+        const lightChart = large ? <TwoBarChartLg /> : <TwoBarChart />;
+        const darkChart = large ? <TwoBarChartLgDark /> : <TwoBarChartDark />;
+
         return (
             <WinnersChartWrapper
                 className="justify-between px-[91px]"
-                chart={isDark ? <TwoBarChartDark /> : <TwoBarChart />}
+                chart={isDark ? darkChart : lightChart}
             >
                 {winners.map((winner, index) => (
                     <div
@@ -100,10 +111,13 @@ export const WinnersChart = ({
     }
 
     if (winners.length === 3) {
+        const lightChart = large ? <ThreeBarChartLg /> : <ThreeBarChart />;
+        const darkChart = large ? <ThreeBarChartLgDark /> : <ThreeBarChartDark />;
+
         return (
             <WinnersChartWrapper
                 className="justify-between px-12"
-                chart={isDark ? <ThreeBarChartDark /> : <ThreeBarChart />}
+                chart={isDark ? darkChart : lightChart}
             >
                 {[winners[1], winners[0], winners[2]].map((winner, index) => (
                     <div
