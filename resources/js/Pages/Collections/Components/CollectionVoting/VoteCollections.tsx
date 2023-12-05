@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
+import { NominationDialog } from "./NominationDialog";
 import { VoteCountdown } from "./VoteCountdown";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
@@ -19,8 +20,18 @@ export interface VoteCollectionProperties {
     index: number;
 }
 
-export const VoteCollections = ({ collections }: { collections: VoteCollectionProperties[] }): JSX.Element => {
+export const VoteCollections = ({
+    candidateCollections,
+    collections,
+    user,
+}: {
+    candidateCollections: App.Data.Collections.PopularCollectionData[];
+    collections: VoteCollectionProperties[];
+    user: App.Data.UserData | null;
+}): JSX.Element => {
     const { t } = useTranslation();
+
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     return (
         <div className="flex w-full min-w-0 flex-col gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
@@ -56,7 +67,7 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
 
                 <LinkButton
                     onClick={(): void => {
-                        console.log("TODO: Implement or nominate collection");
+                        setIsDialogOpen(true);
                     }}
                     variant="link"
                     className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
@@ -66,6 +77,13 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
                     {t("pages.collections.vote.or_nominate_collection")}
                 </LinkButton>
             </div>
+
+            <NominationDialog
+                isOpen={isDialogOpen}
+                setIsOpen={setIsDialogOpen}
+                collections={candidateCollections}
+                user={user}
+            />
         </div>
     );
 };

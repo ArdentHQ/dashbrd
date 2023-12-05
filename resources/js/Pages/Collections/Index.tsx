@@ -16,7 +16,6 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { type VoteCollectionProperties, VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-import { CollectionOfTheMonth } from "./Components/CollectionOfTheMonth";
 
 interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
@@ -147,6 +146,8 @@ const CollectionsIndex = ({
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
                     <VoteCollections
                         collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
+                        user={auth.user}
+                        candidateCollections={collections.slice(0, 5)}
                     />
                     <CollectionOfTheMonthWinners
                         winners={topCollections}
@@ -155,11 +156,6 @@ const CollectionsIndex = ({
                 </div>
             </div>
 
-            <CollectionOfTheMonth
-                winners={topCollections}
-                collections={collections.slice(0, 5)}
-                user={auth.user}
-            />
             <CollectionsCallToAction />
         </DefaultLayout>
     );
