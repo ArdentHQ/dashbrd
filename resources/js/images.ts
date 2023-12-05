@@ -2,6 +2,8 @@ import { ReactComponent as AuthConnectWalletDark } from "@images/auth-connect-wa
 import { ReactComponent as AuthConnectWallet } from "@images/auth-connect-wallet.svg";
 import { ReactComponent as AuthInstallWalletDark } from "@images/auth-install-wallet-dark.svg";
 import { ReactComponent as AuthInstallWallet } from "@images/auth-install-wallet.svg";
+import { ReactComponent as CrownBadgeDark } from "@images/collections/crown-badge-dark.svg";
+import { ReactComponent as CrownBadge } from "@images/collections/crown-badge.svg";
 import { ReactComponent as OneBarChartDark } from "@images/collections/one-bar-chart-dark.svg";
 import { ReactComponent as OneBarChart } from "@images/collections/one-bar-chart.svg";
 import { ReactComponent as ThreeBarChartDark } from "@images/collections/three-bar-chart-dark.svg";
@@ -10,6 +12,7 @@ import { ReactComponent as TwoBarChartDark } from "@images/collections/two-bar-c
 import { ReactComponent as TwoBarChart } from "@images/collections/two-bar-chart.svg";
 import { ReactComponent as VoteNextMonthWinnersDark } from "@images/collections/vote-next-month-winners-dark.svg";
 import { ReactComponent as VoteNextMonthWinners } from "@images/collections/vote-next-month-winners.svg";
+import { ReactComponent as CollectionsGrid } from "@images/collections-grid.svg";
 import { ReactComponent as DeleteModal } from "@images/delete-modal.svg";
 import { ReactComponent as Error401 } from "@images/errors/401.svg";
 import { ReactComponent as Error403 } from "@images/errors/403.svg";
@@ -40,6 +43,8 @@ export {
     AuthInstallWallet,
     AuthInstallWalletDark,
     WarningExclamation,
+    CrownBadge,
+    CrownBadgeDark,
     WarningExclamationDark,
     ImageLoadError,
     ImageLoadErrorPrimary,
@@ -70,4 +75,5 @@ export {
     TwoBarChartDark,
     OneBarChart,
     OneBarChartDark,
+    CollectionsGrid,
 };

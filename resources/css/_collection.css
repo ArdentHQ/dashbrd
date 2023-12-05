@@ -13,3 +13,29 @@
 .shadow-collection-of-the-month-footer {
     box-shadow: 0px 15px 35px 0px rgba(18, 18, 19, 0.4);
 }
+
+.collection-of-the-month-mobile {
+    background: linear-gradient(90deg, #eef -17%, #eff1ff 50.56%, #ffeded 113.99%);
+    backdrop-filter: blur(7px);
+}
+
+.collection-of-the-month-legend {
+    font-feature-settings:
+        "clig" off,
+        "liga" off;
+    background: linear-gradient(89deg, #26f1f1 -47.66%, #5060ee -1.35%, #744de0 76.67%, #fe6c3e 137.39%);
+    background-clip: text;
+    backdrop-filter: blur(7px);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dark .collection-of-the-month-legend {
+    @apply bg-none text-white;
+    background-clip: initial;
+    -webkit-text-fill-color: initial;
+}
+
+.dark .collection-of-the-month-mobile {
+    @apply bg-theme-dark-800 bg-none;
+}

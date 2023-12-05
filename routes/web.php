@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionReportController;
+use App\Http\Controllers\CollectionVoteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Filament\LogoutController;
 use App\Http\Controllers\FilteredGalleryController;
@@ -67,6 +68,10 @@ Route::middleware('auth')->group(function () {
         Route::post('{collection:address}/reports', [
             CollectionReportController::class, 'store',
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
+
+        Route::post('{collection:address}/vote', [
+            CollectionVoteController::class, 'store',
+        ])->name('collection-votes.create');
     });
 
     Route::group(['prefix' => 'nfts', 'middleware' => 'signed_wallet'], function () {
