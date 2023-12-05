@@ -70,6 +70,7 @@ class CollectionController extends Controller
                                     'network',
                                     'floorPriceToken',
                                 ])
+                                ->withCount(['nfts'])
                                 ->simplePaginate(12);
 
         return Inertia::render('Collections/Index', [
