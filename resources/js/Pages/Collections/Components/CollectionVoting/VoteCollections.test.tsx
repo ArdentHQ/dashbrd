@@ -38,7 +38,7 @@ describe("VoteCollection", () => {
             <VoteCollection
                 collection={demoCollection}
                 votedId={1}
-                setSelectedCollectionId={() => 1}
+                setSelectedCollectionId={vi.fn()}
             />,
         );
 
@@ -50,7 +50,7 @@ describe("VoteCollection", () => {
             <VoteCollection
                 collection={demoCollection}
                 votedId={1}
-                setSelectedCollectionId={() => 1}
+                setSelectedCollectionId={vi.fn()}
             />,
         );
 
@@ -62,7 +62,7 @@ describe("VoteCollection", () => {
             <VoteCollection
                 collection={demoCollection}
                 votedId={1}
-                setSelectedCollectionId={() => 1}
+                setSelectedCollectionId={vi.fn()}
                 variant="voted"
             />,
         );
