@@ -67,3 +67,19 @@
         background-image: linear-gradient(90deg, rgb(var(--theme-color-dark-800)) 55.67%, transparent 151.85%);
     }
 }
+
+.hidden-votes-svg-line {
+    @apply fill-theme-primary-600;
+}
+
+.dark .hidden-votes-svg-line {
+    @apply fill-theme-primary-400;
+}
+
+.hidden-votes-svg-shape {
+    @apply fill-none stroke-[#C2C2FF];
+}
+
+.dark .hidden-votes-svg-shape {
+    @apply fill-none stroke-[#47509F];
+}

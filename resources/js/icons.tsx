@@ -65,6 +65,7 @@ import { ReactComponent as GridWithPencil } from "@icons/grid-with-pencil.svg";
 import { ReactComponent as Grid } from "@icons/grid.svg";
 import { ReactComponent as Heart } from "@icons/heart.svg";
 import { ReactComponent as HeartbeatInCircle } from "@icons/heartbeat-in-circle.svg";
+import { ReactComponent as HiddenVote } from "@icons/hidden-vote.svg";
 import { ReactComponent as Image } from "@icons/image.svg";
 import { ReactComponent as InfoInCircle } from "@icons/info-in-circle.svg";
 import { ReactComponent as KeyboardDelete } from "@icons/keyboard-delete.svg";
@@ -234,4 +235,5 @@ export const SvgCollection = {
     AudioPlay,
     Polygon,
     Ethereum,
+    HiddenVote,
 };
