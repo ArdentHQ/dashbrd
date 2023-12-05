@@ -105,7 +105,7 @@ export const VoteCollection = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const hasVotedId = isTruthy(votedId);
+    const hasVoted = isTruthy(votedId);
 
     return (
         <div className={cn("rounded-lg", { "border border-transparent": variant === undefined })}>
@@ -122,7 +122,7 @@ export const VoteCollection = ({
                     "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
                     "border border-theme-secondary-300 dark:border-theme-dark-700": variant === undefined,
                     "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
-                        !hasVotedId && variant === undefined,
+                        !hasVoted && variant === undefined,
                 })}
             >
                 {variant === "voted" && (
@@ -175,7 +175,7 @@ export const VoteCollection = ({
                                     iconClass="h-6 w-8"
                                     textClass="text-sm md:text-sm"
                                     voteCount={collection.votes}
-                                    showVoteCount={isTruthy(votedId)}
+                                    showVoteCount={hasVoted}
                                 />
                             </div>
                         </div>
@@ -184,7 +184,7 @@ export const VoteCollection = ({
                     <div className="ml-2 hidden md-lg:block">
                         <VoteCount
                             voteCount={collection.votes}
-                            showVoteCount={isTruthy(votedId)}
+                            showVoteCount={hasVoted}
                         />
                     </div>
                 </div>
