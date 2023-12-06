@@ -15,7 +15,7 @@ import { isTruthy } from "@/Utils/is-truthy";
 export interface VoteCollectionProperties {
     id: number;
     name: string;
-    image: string;
+    image: string | null;
     votes?: number;
     index: number;
     floorPrice: string | null;
@@ -106,7 +106,11 @@ export const VoteCollections = ({
             <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
-                collections={collections.slice(8, 15)}
+                collections={collections.slice(8, 15).map((collection, index) => ({
+                    ...collection,
+                    index: index + 8,
+                    id: index + 8,
+                }))}
                 user={user}
             />
         </div>
