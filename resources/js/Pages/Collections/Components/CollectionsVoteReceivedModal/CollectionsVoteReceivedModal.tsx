@@ -40,7 +40,7 @@ export const CollectionsVoteReceivedModal = ({
                         variant="primary"
                         className="w-full justify-center"
                         icon="Twitter"
-                        iconPosition="left"
+                        iconPosition="right"
                     >
                         {t("pages.collections.collection_of_the_month.vote_received_modal.share_vote")}
                     </ButtonLink>
