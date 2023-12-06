@@ -10,7 +10,7 @@ import { render, screen, userEvent } from "@/Tests/testing-library";
 
 const demoCollection = new VotableCollectionDataFactory().create({
     id: 1,
-    index: 1,
+    rank: 1,
     name: "AlphaDogs",
     volume: "256.000000000000000000",
 });
@@ -21,7 +21,12 @@ const collections = new VotableCollectionDataFactory().createMany(8, {
 
 describe("VoteCollections", () => {
     it("should render collections in two block, 4 collection in each", () => {
-        render(<VoteCollections collections={collections} />);
+        render(
+            <VoteCollections
+                collections={collections}
+                votedCollection={null}
+            />,
+        );
 
         const leftBlock = screen.getByTestId("VoteCollections_Left");
         const rightBlock = screen.getByTestId("VoteCollections_Right");

@@ -26,6 +26,9 @@ class VotableCollectionData extends Data
 
     public static function fromModel(Collection $collection, bool $showVotes): self
     {
+        /**
+         * @var mixed $collection
+         */
         return new self(
             id: $collection->id,
             rank: $collection->rank,
