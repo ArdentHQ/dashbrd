@@ -68,14 +68,20 @@ class CollectionController extends Controller
         return CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
     }
 
-    private function getVotedCollection(Request $request): ?Collection
+    private function getVotedCollection(Request $request): ?VotableCollectionData
     {
         /**
          * @var Wallet|null $wallet
          */
         $wallet = $request->wallet();
 
-        return $wallet !== null ? Collection::votedByWalletInCurrentMonth($wallet)->first() : null;
+        if ($wallet === null) {
+            return null;
+        }
+
+        $collection = Collection::votedByWalletInCurrentMonth($wallet)->first();
+
+        return $collection !== null ? VotableCollectionData::fromModel($collection, showVotes: true) : null;
     }
 
     /**
