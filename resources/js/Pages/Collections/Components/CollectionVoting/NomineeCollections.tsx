@@ -2,11 +2,11 @@ import { BigNumber } from "@ardenthq/sdk-helpers";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { type Column, type TableState } from "react-table";
-import { CollectionOfTheMonthTableItem } from "./CollectionOfTheMonthTableItem";
+import { NomineeCollection } from "./NomineeCollection";
 import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const CollectionOfTheMonthCandidatesTable = ({
+export const NomineeCollections = ({
     collections,
     activeSort,
     user,
@@ -52,14 +52,12 @@ export const CollectionOfTheMonthCandidatesTable = ({
             },
         ];
 
+        // @TODO fix 0s below collection.floorPriceFiat && nfts_count
         if (isMdAndAbove) {
             columns.splice(-1, 0, {
                 Header: t("common.volume").toString(),
                 id: "value",
-                accessor: (collection) =>
-                    BigNumber.make(collection.floorPriceFiat ?? 0)
-                        .times(0) // TODO nfts_count
-                        .toString(),
+                accessor: () => BigNumber.make(0).times(0).toString(),
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
                 className: "justify-end",
@@ -69,7 +67,7 @@ export const CollectionOfTheMonthCandidatesTable = ({
             columns.splice(-2, 0, {
                 Header: t("common.floor_price").toString(),
                 id: "floor-price",
-                accessor: (collection) => collection.floorPriceFiat,
+                accessor: () => 0,
                 className: "justify-end whitespace-nowrap",
                 disableSortBy: true,
             });
@@ -91,7 +89,7 @@ export const CollectionOfTheMonthCandidatesTable = ({
             sortDirection="desc"
             manualSortBy={false}
             row={(collection: App.Data.Collections.PopularCollectionData) => (
-                <CollectionOfTheMonthTableItem
+                <NomineeCollection
                     collection={collection}
                     uniqueKey={collection.slug}
                     key={collection.slug}

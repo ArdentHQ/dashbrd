@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CollectionOfTheMonthCandidatesTable } from "./CollectionOfTheMonthCandidatesTable";
+import { NomineeCollections } from "./NomineeCollections";
 import { Button } from "@/Components/Buttons";
 import { Dialog } from "@/Components/Dialog";
 import { SearchInput } from "@/Components/Form/SearchInput";
@@ -84,7 +84,7 @@ export const NominationDialog = ({
                     onChange={setQuery}
                 />
 
-                <CollectionOfTheMonthCandidatesTable
+                <NomineeCollections
                     collections={collections}
                     activeSort=""
                     user={user}

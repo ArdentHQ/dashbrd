@@ -8,7 +8,7 @@ import {
 import { Radio } from "@/Components/Form/Radio";
 import { TableCell, TableRow } from "@/Components/Table";
 
-export const CollectionOfTheMonthTableItem = ({
+export const NomineeCollection = ({
     collection,
     uniqueKey,
     user,
