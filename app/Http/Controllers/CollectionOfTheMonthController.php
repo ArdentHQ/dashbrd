@@ -22,7 +22,7 @@ class CollectionOfTheMonthController extends Controller
     }
 
     /**
-     * @return DataCollection<CollectionOfTheMonthData>
+     * @return DataCollection<int, CollectionOfTheMonthData>
      */
     private function getCollections(): DataCollection
     {
