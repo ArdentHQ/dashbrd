@@ -3,6 +3,7 @@ import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import { CollectionsVoteReceivedModal } from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
@@ -30,15 +31,19 @@ interface CollectionsIndexProperties extends PageProps {
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     topCollections: App.Data.Collections.CollectionOfTheMonthData[];
     filters: Filters;
+    latestArticles: App.Data.Articles.ArticleData[];
+    popularArticles: App.Data.Articles.ArticleData[];
 }
 
 const demoCollection: VoteCollectionProperties = {
+    id: 1,
     index: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "256.000000000000000000",
     volumeCurrency: "ETH",
     volumeDecimals: 18,
+    votes: 45,
 };
 
 const CollectionsIndex = ({
@@ -48,6 +53,8 @@ const CollectionsIndex = ({
     topCollections,
     auth,
     filters,
+    latestArticles,
+    popularArticles,
 }: CollectionsIndexProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -150,6 +157,7 @@ const CollectionsIndex = ({
                 </div>
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
                     <VoteCollections
+                        votedCollectionId={1}
                         collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
                     />
                     <CollectionOfTheMonthWinners
@@ -158,6 +166,11 @@ const CollectionsIndex = ({
                     />
                 </div>
             </div>
+
+            <CollectionsArticles
+                latest={latestArticles}
+                popular={popularArticles}
+            />
 
             <CollectionsCallToAction />
 

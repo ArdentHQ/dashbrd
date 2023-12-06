@@ -1,4 +1,5 @@
-import React from "react";
+import cn from "classnames";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
 import { VoteCountdown } from "./VoteCountdown";
@@ -8,8 +9,10 @@ import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
 import { Tooltip } from "@/Components/Tooltip";
 import { FormatCrypto } from "@/Utils/Currency";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export interface VoteCollectionProperties {
+    id: number;
     name: string;
     image: string;
     volume?: string;
@@ -19,8 +22,19 @@ export interface VoteCollectionProperties {
     index: number;
 }
 
-export const VoteCollections = ({ collections }: { collections: VoteCollectionProperties[] }): JSX.Element => {
+export const VoteCollections = ({
+    collections,
+    votedCollectionId,
+}: {
+    collections: VoteCollectionProperties[];
+    votedCollectionId?: number;
+}): JSX.Element => {
     const { t } = useTranslation();
+
+    const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
+
+    const getVariant = (collectionId: number): VoteCollectionVariants =>
+        votedCollectionId === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
 
     return (
         <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
@@ -39,7 +53,10 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
                     {collections.slice(0, 4).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            collection={collection}
+                            collection={{ ...collection, id: index, index: index + 1 }}
+                            setSelectedCollectionId={setSelectedCollectionId}
+                            votedId={votedCollectionId}
+                            variant={getVariant(index)}
                         />
                     ))}
                 </div>
@@ -50,14 +67,17 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
                     {collections.slice(4, 8).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            collection={collection}
+                            collection={{ ...collection, id: index + 4, index: index + 5 }}
+                            setSelectedCollectionId={setSelectedCollectionId}
+                            votedId={votedCollectionId}
+                            variant={getVariant(index + 4)}
                         />
                     ))}
                 </div>
             </div>
 
             <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
-                <VoteCountdown />
+                <VoteCountdown hasUserVoted={isTruthy(votedCollectionId)} />
 
                 <LinkButton
                     onClick={(): void => {
@@ -75,62 +95,118 @@ export const VoteCollections = ({ collections }: { collections: VoteCollectionPr
     );
 };
 
-export const VoteCollection = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => {
+type VoteCollectionVariants = "selected" | "voted" | undefined;
+
+export const VoteCollection = ({
+    collection,
+    votedId,
+    variant,
+    setSelectedCollectionId,
+}: {
+    collection: VoteCollectionProperties;
+    votedId?: number;
+    variant?: VoteCollectionVariants;
+    setSelectedCollectionId: (collectionId: number) => void;
+}): JSX.Element => {
     const { t } = useTranslation();
 
+    const hasVoted = isTruthy(votedId);
+
     return (
-        <div
-            tabIndex={0}
-            className="cursor-pointer rounded-lg border border-theme-secondary-300 px-4 py-4 hover:outline hover:outline-theme-hint-100 focus:outline-none focus:ring focus:ring-theme-hint-100 dark:border-theme-dark-700 dark:border-theme-dark-700 dark:hover:outline-theme-dark-500 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500 md:py-3"
-        >
-            <div className="flex items-center justify-between">
-                <div className="flex min-w-0 flex-1 items-center space-x-3">
-                    <div className="flex">
-                        <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-theme-secondary-100 dark:bg-theme-vote-background xs:h-12 xs:w-12">
-                            <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                                {collection.index}
-                            </span>
+        <div className={cn("rounded-lg", { "border border-transparent": variant === undefined })}>
+            <div
+                onClick={() => {
+                    if (!isTruthy(votedId)) {
+                        setSelectedCollectionId(collection.id);
+                    }
+                }}
+                tabIndex={0}
+                className={cn("relative  overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
+                    "border-2 border-theme-primary-600 dark:border-theme-hint-400":
+                        variant === "selected" || variant === "voted",
+                    "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
+                    "border border-theme-secondary-300 dark:border-theme-dark-700": variant === undefined,
+                    "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
+                        !hasVoted && variant === undefined,
+                })}
+                data-testid="VoteCollectionTrigger"
+            >
+                {variant === "voted" && (
+                    <div className="absolute -right-px -top-px">
+                        <Icon
+                            name="VotedCollectionCheckmark"
+                            size="xl"
+                            className="text-theme-primary-600 dark:text-theme-hint-400"
+                        />
+                    </div>
+                )}
+                <div className="flex items-center justify-between">
+                    <div className="flex min-w-0 flex-1 items-center space-x-3">
+                        <div className="flex">
+                            <div
+                                className={cn(
+                                    "relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full dark:bg-theme-vote-background xs:h-12 xs:w-12",
+                                    {
+                                        "bg-theme-secondary-100": variant !== "voted",
+                                        "bg-theme-primary-100": variant === "voted",
+                                    },
+                                )}
+                            >
+                                <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
+                                    {collection.index}
+                                </span>
+                            </div>
+                            <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
+                                <Img
+                                    wrapperClassName="aspect-square"
+                                    className={cn(
+                                        "h-full w-full rounded-full rounded-full bg-white object-cover ring-4  dark:bg-theme-dark-700 dark:ring-theme-dark-900",
+                                        {
+                                            "ring-white dark:ring-theme-dark-900": variant !== "voted",
+                                            "ring-theme-primary-50 dark:ring-theme-dark-800": variant === "voted",
+                                        },
+                                    )}
+                                    isCircle
+                                    src={collection.image}
+                                />
+                            </div>
                         </div>
-                        <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
-                            <Img
-                                wrapperClassName="aspect-square"
-                                className="h-full w-full rounded-full rounded-full bg-white object-cover ring-4 ring-white dark:bg-theme-dark-700 dark:ring-theme-dark-900"
-                                isCircle
-                                src={collection.image}
-                            />
+
+                        <div className="break-word-legacy min-w-0 space-y-0.5 ">
+                            <p
+                                data-testid="CollectionName__name"
+                                className="truncate text-base font-medium text-theme-secondary-900 dark:text-theme-dark-50 md-lg:text-base"
+                            >
+                                {collection.name}
+                            </p>
+                            <p className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
+                                {t("common.vol")}:{" "}
+                                <FormatCrypto
+                                    value={collection.volume ?? "0"}
+                                    token={{
+                                        symbol: collection.volumeCurrency ?? "ETH",
+                                        name: collection.volumeCurrency ?? "ETH",
+                                        decimals: collection.volumeDecimals ?? 18,
+                                    }}
+                                />
+                            </p>
+                            <div className="mt-0.5 md-lg:hidden">
+                                <VoteCount
+                                    iconClass="h-6 w-8"
+                                    textClass="text-sm md:text-sm"
+                                    voteCount={collection.votes}
+                                    showVoteCount={hasVoted}
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="break-word-legacy min-w-0 space-y-0.5 ">
-                        <p
-                            data-testid="CollectionName__name"
-                            className="truncate text-base font-medium text-theme-secondary-900 dark:text-theme-dark-50 md-lg:text-base"
-                        >
-                            {collection.name}
-                        </p>
-                        <p className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
-                            {t("common.vol")}:{" "}
-                            <FormatCrypto
-                                value={collection.volume ?? "0"}
-                                token={{
-                                    symbol: collection.volumeCurrency ?? "ETH",
-                                    name: collection.volumeCurrency ?? "ETH",
-                                    decimals: collection.volumeDecimals ?? 18,
-                                }}
-                            />
-                        </p>
-                        <div className="mt-0.5 md-lg:hidden">
-                            <VoteCount
-                                iconClass="h-6 w-8"
-                                textClass="text-sm md:text-sm"
-                                voteCount={collection.votes}
-                            />
-                        </div>
+                    <div className="ml-2 hidden md-lg:block">
+                        <VoteCount
+                            voteCount={collection.votes}
+                            showVoteCount={hasVoted}
+                        />
                     </div>
-                </div>
-
-                <div className="ml-2 hidden md-lg:block">
-                    <VoteCount voteCount={collection.votes} />
                 </div>
             </div>
         </div>
@@ -141,10 +217,12 @@ export const VoteCount = ({
     iconClass,
     textClass,
     voteCount,
+    showVoteCount,
 }: {
     iconClass?: string;
     textClass?: string;
     voteCount?: number;
+    showVoteCount: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
     return (
@@ -157,7 +235,7 @@ export const VoteCount = ({
             >
                 Votes
             </p>
-            {voteCount !== undefined ? (
+            {showVoteCount ? (
                 <p className={twMerge("font-medium text-theme-secondary-900 dark:text-theme-dark-50", textClass)}>
                     {voteCount}
                 </p>
