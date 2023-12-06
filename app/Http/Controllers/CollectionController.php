@@ -53,6 +53,7 @@ class CollectionController extends Controller
             'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
+            'votedCollection' => fn () => $this->getVotedCollection($request),
             'votableCollections' => fn () => $this->getVotableCollections($request),
             'latestArticles' => fn () => $this->getLatestArticles(),
             'popularArticles' => fn () => $this->getPopularArticles(),
@@ -67,6 +68,16 @@ class CollectionController extends Controller
         return CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
     }
 
+    private function getVotedCollection(Request $request): ?Collection
+    {
+        /**
+         * @var Wallet|null $wallet
+         */
+        $wallet = $request->wallet();
+
+        return $wallet !== null ? Collection::votedByWalletInCurrentMonth($wallet)->first() : null;
+    }
+
     /**
      * @return SupportCollection<int, VotableCollectionData>
      */
@@ -77,9 +88,9 @@ class CollectionController extends Controller
          */
         $wallet = $request->wallet();
 
-        $userVoted = Collection::whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $wallet?->id))->exists();
+        $userVoted = $wallet !== null ? Collection::votedByWalletInCurrentMonth($wallet)->exists() : false;
 
-        $collections = Collection::votable()->limit(8)->get();
+        $collections = Collection::votable()->limit(13)->get();
 
         return $collections->map(function (Collection $collection) use ($userVoted) {
             return VotableCollectionData::fromModel($collection, showVotes: $userVoted);

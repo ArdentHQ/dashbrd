@@ -1,5 +1,5 @@
 import cn from "classnames";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
 import { VoteCountdown } from "./VoteCountdown";
@@ -8,24 +8,41 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
 import { Tooltip } from "@/Components/Tooltip";
+import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
-
 type VoteCollectionVariants = "selected" | "voted" | undefined;
 
 export const VoteCollections = ({
     collections,
-    votedCollectionId,
+    votedCollection,
 }: {
     collections: App.Data.Collections.VotableCollectionData[];
-    votedCollectionId?: number;
+    votedCollection: App.Data.Collections.VotableCollectionData | null;
 }): JSX.Element => {
     const { t } = useTranslation();
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
+    const { isSmAndAbove } = useBreakpoint();
 
     const getVariant = (collectionId: number): VoteCollectionVariants =>
-        votedCollectionId === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+        votedCollection?.id === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+
+    const collectionsWithVote = useMemo(() => {
+        const mergeVote =
+            votedCollection !== null &&
+            !collections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
+
+        if (mergeVote) {
+            if (isSmAndAbove) {
+                return [...collections.slice(0, 7), votedCollection];
+            } else {
+                return [...collections.slice(0, 3), votedCollection];
+            }
+        }
+
+        return collections.slice(0, 8);
+    }, [isSmAndAbove, collections]);
 
     return (
         <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
@@ -41,14 +58,13 @@ export const VoteCollections = ({
                     className="max-w-full flex-1 space-y-2"
                     data-testid="VoteCollections_Left"
                 >
-                    {collections.slice(0, 4).map((collection, index) => (
+                    {collectionsWithVote.slice(0, 4).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            index={index + 1}
                             collection={collection}
                             setSelectedCollectionId={setSelectedCollectionId}
-                            votedId={votedCollectionId}
-                            variant={getVariant(index)}
+                            votedId={votedCollection?.id}
+                            variant={getVariant(collection.id)}
                         />
                     ))}
                 </div>
@@ -56,21 +72,20 @@ export const VoteCollections = ({
                     className="hidden flex-1 space-y-2 sm:block"
                     data-testid="VoteCollections_Right"
                 >
-                    {collections.slice(4, 8).map((collection, index) => (
+                    {collectionsWithVote.slice(4, 8).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            index={index + 5}
                             collection={collection}
                             setSelectedCollectionId={setSelectedCollectionId}
-                            votedId={votedCollectionId}
-                            variant={getVariant(index + 4)}
+                            votedId={votedCollection?.id}
+                            variant={getVariant(collection.id)}
                         />
                     ))}
                 </div>
             </div>
 
             <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
-                <VoteCountdown hasUserVoted={isTruthy(votedCollectionId)} />
+                <VoteCountdown hasUserVoted={votedCollection !== null} />
 
                 <LinkButton
                     onClick={(): void => {
@@ -90,7 +105,6 @@ export const VoteCollections = ({
 
 export const VoteCollection = ({
     collection,
-    index,
     votedId,
     variant,
     setSelectedCollectionId,
@@ -98,7 +112,6 @@ export const VoteCollection = ({
     collection: App.Data.Collections.VotableCollectionData;
     votedId?: number;
     variant?: VoteCollectionVariants;
-    index: number;
     setSelectedCollectionId: (collectionId: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -146,7 +159,7 @@ export const VoteCollection = ({
                                 )}
                             >
                                 <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                                    {index}
+                                    {collection.rank}
                                 </span>
                             </div>
                             <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">

@@ -32,6 +32,7 @@ interface CollectionsIndexProperties extends PageProps {
     filters: Filters;
     latestArticles: App.Data.Articles.ArticleData[];
     popularArticles: App.Data.Articles.ArticleData[];
+    votedCollection: App.Data.Collections.VotableCollectionData | null;
 }
 
 const CollectionsIndex = ({
@@ -40,6 +41,7 @@ const CollectionsIndex = ({
     collections: { data: collections },
     collectionsOfTheMonth,
     votableCollections,
+    votedCollection,
     auth,
     filters,
     latestArticles,
@@ -144,7 +146,7 @@ const CollectionsIndex = ({
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
                     <VoteCollections
                         collections={votableCollections}
-                        votedCollectionId={1}
+                        votedCollection={votedCollection}
                     />
 
                     <CollectionOfTheMonthWinners

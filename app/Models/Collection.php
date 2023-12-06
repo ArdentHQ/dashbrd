@@ -11,6 +11,7 @@ use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -584,10 +585,31 @@ class Collection extends Model
      */
     public function scopeVotable(Builder $query): Builder
     {
-        return $query->withCount(['votes' => fn ($query) => $query->inCurrentMonth()])
-            ->orderBy('votes_count', 'desc')
-            // volume desc null last
-            ->orderByRaw('volume DESC NULLS LAST');
+        $subQuery = Collection::query()->select([
+            'collections.*',
+            DB::raw('COUNT(collection_votes.id) as votes_count'),
+            DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
+        ])
+            ->leftJoin('collection_votes', function ($join) {
+                $join->on('collection_votes.collection_id', '=', 'collections.id')
+                    ->whereBetween('collection_votes.voted_at', [
+                        Carbon::now()->startOfMonth(),
+                        Carbon::now()->endOfMonth(),
+                    ]);
+            })
+            ->groupBy('collections.id');
+
+        return $query->fromSub($subQuery, 'collections');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotedByWalletInCurrentMonth(Builder $query, Wallet $wallet): Builder
+    {
+        return $query->votable()
+            ->whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $wallet->id));
     }
 
     /**

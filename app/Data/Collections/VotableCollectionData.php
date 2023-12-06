@@ -15,6 +15,7 @@ class VotableCollectionData extends Data
 {
     public function __construct(
         public int $id,
+        public int $rank,
         public string $name,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
@@ -25,13 +26,13 @@ class VotableCollectionData extends Data
 
     public static function fromModel(Collection $collection, bool $showVotes): self
     {
-
         return new self(
             id: $collection->id,
+            rank: $collection->rank,
             name: $collection->name,
             image: $collection->extra_attributes->get('image'),
             volume: $collection->volume,
-            votes: $showVotes ? $collection->votes()->inCurrentMonth()->count() : null,
+            votes: $showVotes ? $collection->votes_count : null,
         );
     }
 }
