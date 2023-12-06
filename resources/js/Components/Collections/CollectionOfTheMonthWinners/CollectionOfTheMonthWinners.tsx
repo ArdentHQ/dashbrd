@@ -176,9 +176,9 @@ export const WinnersChart = ({
                             [
                                 large
                                     ? {
-                                          "bottom-[37px] left-[23px] sm:bottom-[90px]": index === 0,
+                                          "bottom-[37px] left-[9px] sm:bottom-[90px] sm:left-[23px]": index === 0,
                                           "bottom-[70px] sm:bottom-[163px]": index === 1,
-                                          "bottom-[19px] right-[22px] sm:bottom-[51px]": index === 2,
+                                          "bottom-[19px] left-[-11px] sm:bottom-[51px] sm:right-[22px]": index === 2,
                                       }
                                     : {
                                           "bottom-[56px]": index === 0,
@@ -201,9 +201,9 @@ export const WinnersChart = ({
 
                         <span
                             className={cn("relative text-center text-white", {
-                                "left-[-14px] sm:left-[-4px] ": large && index === 0,
+                                "sm:left-[-4px] ": large && index === 0,
                                 "left-[1px] ": large && index === 1,
-                                "left-[9px] sm:left-[-8px] ": large && index === 2,
+                                "left-[-2px] sm:left-[-19px] ": large && index === 2,
                                 "text-base font-medium leading-4.5": !large,
                                 "text-xs font-bold leading-[14px] sm:text-xl sm:leading-6": large,
                             })}

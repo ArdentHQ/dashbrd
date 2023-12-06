@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { Heading } from "@/Components/Heading";
+import { Icon } from "@/Components/Icon";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
@@ -17,7 +18,8 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
     const { t } = useTranslation();
 
     const date = new Date();
-    const currentMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+    date.setMonth(date.getMonth() - 1);
+    const previousMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
 
     return (
         <DefaultLayout>
@@ -56,7 +58,7 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                     <div className="collection-of-the-month-overview flex flex-col items-center justify-center pt-8">
                         <Heading level={1}>
                             {t("pages.collections.collection_of_the_month.winners_month", {
-                                month: currentMonth,
+                                month: previousMonth,
                             })}
                         </Heading>
                         <div className="mt-11">
@@ -66,9 +68,28 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                             />
                         </div>
                     </div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae rerum exercitationem qui
-                    numquam dicta. Dicta dignissimos ratione ut maxime eligendi nisi iusto minus aliquam porro enim
-                    reprehenderit, illum labore ea.
+
+                    <div className="flex items-center justify-center border-t border-theme-secondary-300 p-8 dark:border-theme-dark-700 sm:min-h-[262px]">
+                        <div className="flex max-w-[230px] flex-col items-center text-center">
+                            <div className="mb-3 flex h-[42px] w-[42px] items-center justify-center rounded-full border border-theme-secondary-300 dark:border-theme-dark-700">
+                                <Icon
+                                    name="Clock"
+                                    className="text-theme-secondary-700 dark:text-theme-dark-300"
+                                    size="lg"
+                                />
+                            </div>
+                            <Heading
+                                level={3}
+                                className="text-theme-secondary-700 dark:text-theme-dark-200"
+                            >
+                                {t("pages.collections.collection_of_the_month.content_to_be_added.title")}
+                            </Heading>
+
+                            <p className="text-theme-secondary-700 dark:text-theme-dark-200">
+                                {t("pages.collections.collection_of_the_month.content_to_be_added.description")}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </DefaultLayout>
