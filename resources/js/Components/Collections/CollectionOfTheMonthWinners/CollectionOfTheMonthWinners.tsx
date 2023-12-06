@@ -149,16 +149,9 @@ export const WinnersChart = ({
     }
 
     if (winners.length === 3) {
-        const lightChart = large ? (
-            <>
-                <ThreeBarChartLg className="hidden h-auto md:block md:w-[640px] md-lg:w-[800px] xl:w-auto" />
-                <ThreeBarChart className="-mb-[28px] h-auto w-[272px] sm:w-[560px] md:hidden" />
-            </>
-        ) : (
-            <ThreeBarChart />
-        );
+        const lightChart = large ? <ThreeBarChartLg className="h-auto w-[230px] sm:w-auto" /> : <ThreeBarChart />;
         const darkChart = large ? (
-            <ThreeBarChartLgDark className="h-auto w-[272px] sm:w-[560px] md:w-[640px] md-lg:w-[800px] xl:w-auto" />
+            <ThreeBarChartLgDark className="h-auto w-[230px] sm:w-auto" />
         ) : (
             <ThreeBarChartDark />
         );
@@ -166,7 +159,6 @@ export const WinnersChart = ({
         return (
             <WinnersChartWrapper
                 className={cn("justify-between", {
-                    "px-[17px] sm:px-[32px]": large,
                     "px-8": !large,
                 })}
                 chart={isDark ? darkChart : lightChart}
@@ -177,15 +169,14 @@ export const WinnersChart = ({
                             "relative flex flex-col items-center",
                             {
                                 "space-y-[124px]": !large,
-                                "space-y-[84px] sm:space-y-[200px] md:space-y-[194px] md-lg:space-y-[238px] xl:space-y-[174px]":
-                                    large,
+                                "space-y-[76px] sm:space-y-[174px]": large,
                             },
                             [
                                 large
                                     ? {
-                                          "bottom-[36px] sm:bottom-[89px] xl:bottom-[92px]": index === 0,
-                                          "bottom-[62px] sm:bottom-[188px] xl:bottom-[165px]": index === 1,
-                                          "bottom-[22px] sm:bottom-[43px] xl:bottom-[53px] xl:right-[9px]": index === 2,
+                                          "bottom-[37px] left-[23px] sm:bottom-[90px]": index === 0,
+                                          "bottom-[70px] sm:bottom-[163px]": index === 1,
+                                          "bottom-[19px] right-[22px] sm:bottom-[51px]": index === 2,
                                       }
                                     : {
                                           "bottom-[56px]": index === 0,
@@ -199,10 +190,7 @@ export const WinnersChart = ({
                         <Img
                             wrapperClassName={cn("aspect-square relative", {
                                 "h-20 w-20": !large,
-                                "xl:h-[115px] xl:w-[115px] md-lg:w-[165px] md-lg:h-[165px] md:w-[134px] md:h-[134px] sm:w-[115px] sm:h-[115px] w-[54px] h-[54px]":
-                                    large,
-                                "xl:left-[7px]": large && index === 0,
-                                "sm:left-[5px] md:left-auto": large && index === 2,
+                                "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
                             })}
                             className="rounded-full"
                             src={winner.image}
@@ -211,9 +199,11 @@ export const WinnersChart = ({
 
                         <span
                             className={cn("relative text-center text-white", {
+                                "left-[-14px] sm:left-[-4px] ": large && index === 0,
+                                "left-[1px] ": large && index === 1,
+                                "left-[9px] sm:left-[-8px] ": large && index === 2,
                                 "text-base font-medium leading-4.5": !large,
-                                "text-sm font-medium leading-[14px] sm:text-xl sm:font-bold sm:leading-6": large,
-                                "xl:right-[5px]": large && index === 2,
+                                "text-xs font-bold leading-[14px] sm:text-xl sm:leading-6": large,
                             })}
                         >
                             {formatNumbershort(winner.votes)}
