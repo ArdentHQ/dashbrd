@@ -3,6 +3,7 @@ import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
@@ -29,15 +30,19 @@ interface CollectionsIndexProperties extends PageProps {
     topCollections: App.Data.Collections.CollectionOfTheMonthData[];
     filters: Filters;
     collectionsTableResults: App.Data.Collections.CollectionData[];
+    latestArticles: App.Data.Articles.ArticleData[];
+    popularArticles: App.Data.Articles.ArticleData[];
 }
 
 const demoCollection: VoteCollectionProperties = {
+    id: 1,
     index: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "256.000000000000000000",
     volumeCurrency: "ETH",
     volumeDecimals: 18,
+    votes: 45,
 };
 
 const CollectionsIndex = ({
@@ -47,8 +52,11 @@ const CollectionsIndex = ({
     topCollections,
     auth,
     filters,
+    latestArticles,
+    popularArticles,
 }: CollectionsIndexProperties): JSX.Element => {
     const { t } = useTranslation();
+
     const { props } = usePage();
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
@@ -145,6 +153,7 @@ const CollectionsIndex = ({
                 </div>
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
                     <VoteCollections
+                        votedCollectionId={1}
                         collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
                         user={auth.user}
                         candidateCollections={collections.slice(0, 5)}
@@ -155,6 +164,11 @@ const CollectionsIndex = ({
                     />
                 </div>
             </div>
+
+            <CollectionsArticles
+                latest={latestArticles}
+                popular={popularArticles}
+            />
 
             <CollectionsCallToAction />
         </DefaultLayout>

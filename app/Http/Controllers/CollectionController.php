@@ -23,6 +23,7 @@ use App\Enums\TraitDisplayType;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
+use App\Models\Article;
 use App\Models\Collection;
 use App\Models\User;
 use App\Support\Queues;
@@ -77,6 +78,18 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
+            'latestArticles' => fn () => ArticleData::collection(Article::isPublished()
+                                            ->with('media', 'user.media')
+                                            ->withRelatedCollections()
+                                            ->sortByPublishedDate()
+                                            ->limit(8)
+                                            ->get()),
+            'popularArticles' => fn () => ArticleData::collection(Article::isPublished()
+                                            ->with('media', 'user.media')
+                                            ->withRelatedCollections()
+                                            ->sortByPopularity()
+                                            ->limit(8)
+                                            ->get()),
             'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
             'collections' => fn () => PopularCollectionData::collection(
                 $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))

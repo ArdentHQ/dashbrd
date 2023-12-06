@@ -83,6 +83,7 @@ return [
             'vote_success' => 'Your vote has been successfully submitted',
         ],
         'articles' => [
+            'heading' => 'Latest NFT News & Features',
             'no_articles' => 'No articles have been linked to this collection as of now.',
             'no_articles_with_filters' => 'We could not find any articles matching your search criteria, please try again!',
             'search_placeholder' => 'Search in Articles',
@@ -102,6 +103,7 @@ return [
             'time_left' => 'Time Left',
             'or_nominate_collection' => 'Or nominate a collection',
             'vote_to_reveal' => 'Vote to reveal data',
+            'already_voted' => 'You’ve already nominated. Come back next month!',
         ],
         'sorting' => [
             'token_number' => 'Token Number',
