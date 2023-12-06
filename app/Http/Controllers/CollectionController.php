@@ -27,6 +27,7 @@ use App\Jobs\SyncCollection;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
@@ -71,6 +72,9 @@ class CollectionController extends Controller
      */
     private function getVotableCollections(Request $request): SupportCollection
     {
+        /**
+         * @var Wallet|null $wallet
+         */
         $wallet = $request->wallet();
 
         $userVoted = Collection::whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $wallet?->id))->exists();
