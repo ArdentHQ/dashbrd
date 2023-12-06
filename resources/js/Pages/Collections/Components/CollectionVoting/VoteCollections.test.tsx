@@ -6,7 +6,6 @@ import {
     VoteCollections,
     VoteCount,
 } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
-import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularCollectionFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
@@ -19,19 +18,23 @@ const demoCollection: VoteCollectionProperties = {
     volumeCurrency: "ETH",
     volumeDecimals: 18,
     votes: 15,
+    floorPriceFiat: "45.25",
+    floorPrice: "0",
+    floorPriceCurrency: "ETH",
+    floorPriceDecimals: 18,
+    volumeFiat: 45.12,
+    nftsCount: 5,
 };
 
-const collections = Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[];
+const collections = Array.from({ length: 13 }).fill(demoCollection) as VoteCollectionProperties[];
 
 describe("VoteCollections", () => {
     const user = new UserDataFactory().create();
 
-    const candidateCollections = new PopularCollectionFactory().createMany(5);
     it("should render collections in two block, 4 collection in each", () => {
         render(
             <VoteCollections
                 collections={collections}
-                candidateCollections={candidateCollections}
                 user={user}
             />,
         );
