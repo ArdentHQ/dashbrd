@@ -58,7 +58,7 @@ export const CollectionOfTheMonthCandidatesTable = ({
                 id: "value",
                 accessor: (collection) =>
                     BigNumber.make(collection.floorPriceFiat ?? 0)
-                        .times(collection.nftsCount)
+                        .times(0) // TODO nfts_count
                         .toString(),
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
@@ -93,8 +93,8 @@ export const CollectionOfTheMonthCandidatesTable = ({
             row={(collection: App.Data.Collections.PopularCollectionData) => (
                 <CollectionOfTheMonthTableItem
                     collection={collection}
-                    uniqueKey={`${collection.address}-${collection.chainId}`}
-                    key={`${collection.address}-${collection.chainId}`}
+                    uniqueKey={collection.slug}
+                    key={collection.slug}
                     user={user}
                     selectedCollection={selectedCollection}
                     setSelectedCollection={setSelectedCollection}
