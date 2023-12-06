@@ -26,7 +26,12 @@ export const CollectionsArticles = ({ latest, popular }: Properties): JSX.Elemen
     return (
         <div className="articles-scroll mt-6 border-t-4 border-theme-secondary-200 pt-14 dark:border-theme-dark-800 sm:mt-8 sm:pt-8 lg:mt-12 lg:border-t-0 lg:pt-0">
             <div className="mb-4 px-6 2xl:px-0">
-                <Heading level={1}>{t("pages.collections.articles.heading")}</Heading>
+                <Heading
+                    level={1}
+                    as="h2"
+                >
+                    {t("pages.collections.articles.heading")}
+                </Heading>
 
                 <div className="mt-3 flex w-full items-center justify-between sm:mt-4">
                     <ArticleTabs
