@@ -90,13 +90,12 @@ export const WinnersChart = ({
     }
 
     if (winners.length === 2) {
-        const lightChart = large ? <TwoBarChartLg /> : <TwoBarChart />;
-        const darkChart = large ? <TwoBarChartLgDark /> : <TwoBarChartDark />;
+        const lightChart = large ? <TwoBarChartLg className="h-auto w-[160px] sm:w-auto" /> : <TwoBarChart />;
+        const darkChart = large ? <TwoBarChartLgDark className="h-auto w-[160px] sm:w-auto" /> : <TwoBarChartDark />;
 
         return (
             <WinnersChartWrapper
                 className={cn("justify-between", {
-                    "px-[37px]": large,
                     "px-[91px]": !large,
                 })}
                 chart={isDark ? darkChart : lightChart}
@@ -107,13 +106,13 @@ export const WinnersChart = ({
                             "relative flex flex-col items-center",
                             {
                                 "space-y-[124px]": !large,
-                                "space-y-[174px]": large,
+                                "space-y-[76px] sm:space-y-[174px]": large,
                             },
                             [
                                 large
                                     ? {
-                                          "bottom-[166px]": index === 0,
-                                          "bottom-[92px] left-[8px]": index === 1,
+                                          "bottom-[70px] left-[15px] sm:bottom-[164px] sm:left-[36px]": index === 0,
+                                          "bottom-[38px] right-[13px] sm:bottom-[90px] sm:right-[26px]": index === 1,
                                       }
                                     : {
                                           "bottom-[107px]": index === 0,
@@ -124,9 +123,9 @@ export const WinnersChart = ({
                         key={index}
                     >
                         <Img
-                            wrapperClassName={cn("aspect-square", {
+                            wrapperClassName={cn("aspect-square relative", {
                                 "h-20 w-20": !large,
-                                "h-[115px] w-[115px]": large,
+                                "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
                             })}
                             className="rounded-full"
                             src={winner.image}
@@ -135,8 +134,10 @@ export const WinnersChart = ({
 
                         <span
                             className={cn("relative text-center text-white", {
+                                "left-[3px]": large && index === 0,
+                                "left-[2px] sm:right-[2px]": large && index === 1,
                                 "text-base font-medium leading-4.5": !large,
-                                "text-xl font-bold leading-6": large,
+                                "text-xs font-bold leading-[14px] sm:text-xl sm:leading-6": large,
                             })}
                         >
                             {formatNumbershort(winner.votes)}
@@ -150,6 +151,7 @@ export const WinnersChart = ({
 
     if (winners.length === 3) {
         const lightChart = large ? <ThreeBarChartLg className="h-auto w-[230px] sm:w-auto" /> : <ThreeBarChart />;
+
         const darkChart = large ? (
             <ThreeBarChartLgDark className="h-auto w-[230px] sm:w-auto" />
         ) : (
