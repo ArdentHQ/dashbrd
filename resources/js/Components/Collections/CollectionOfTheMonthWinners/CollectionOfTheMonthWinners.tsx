@@ -2,43 +2,18 @@
 import cn from "classnames";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import {
+    CollectionOfTheMonthWinnersChart,
+    CollectionOfTheMonthWinnersChartWrapper,
+    CollectionOfTheMonthWinnersCollectionAvatar,
+    CollectionOfTheMonthWinnersVotesLabel,
+    CollectionOfTheMonthWinnersWinnerWrapper,
+} from "./CollectionOfTheMonthWinners.blocks";
 import { Heading } from "@/Components/Heading";
 import { Img } from "@/Components/Image";
 import { Link } from "@/Components/Link";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
-import {
-    CrownBadge,
-    CrownBadgeDark,
-    OneBarChartDark,
-    OneBarChartLg,
-    OneBarChartLgDark,
-    ThreeBarChart,
-    ThreeBarChartDark,
-    ThreeBarChartLg,
-    ThreeBarChartLgDark,
-    TwoBarChart,
-    TwoBarChartDark,
-    TwoBarChartLg,
-    TwoBarChartLgDark,
-    VoteNextMonthWinners,
-    VoteNextMonthWinnersDark,
-} from "@/images";
-import { formatNumbershort } from "@/Utils/format-number";
-
-const WinnersChartWrapper = ({
-    children,
-    chart,
-    className,
-}: {
-    children: JSX.Element[] | JSX.Element;
-    chart: JSX.Element;
-    className?: string;
-}): JSX.Element => (
-    <div className="relative flex w-full items-end justify-center overflow-hidden">
-        <div className="relative">{chart}</div>
-        <div className={cn("absolute inset-0 flex items-end", className)}>{children}</div>
-    </div>
-);
+import { CrownBadge, CrownBadgeDark, VoteNextMonthWinners, VoteNextMonthWinnersDark } from "@/images";
 
 export const WinnersChart = ({
     winners,
@@ -47,63 +22,62 @@ export const WinnersChart = ({
     winners: App.Data.Collections.CollectionOfTheMonthData[];
     large?: boolean;
 }): JSX.Element => {
-    const { t } = useTranslation();
     const { isDark } = useDarkModeContext();
 
-    if (winners.length === 1) {
-        const lightChart = large ? <OneBarChartLg className="h-auto w-[100px] sm:w-auto" /> : <OneBarChartDark />;
-        const darkChart = large ? <OneBarChartLgDark className="h-auto w-[100px] sm:w-auto" /> : <OneBarChartDark />;
+    if (winners.length === 0) {
+        if (isDark) {
+            return <VoteNextMonthWinnersDark />;
+        }
 
+        return <VoteNextMonthWinners />;
+    }
+
+    const totalWinners: 1 | 2 | 3 = winners.length as 1 | 2 | 3;
+
+    const chart = (
+        <CollectionOfTheMonthWinnersChart
+            large={large}
+            totalWinners={totalWinners}
+        />
+    );
+
+    if (totalWinners === 1) {
         return (
-            <WinnersChartWrapper
+            <CollectionOfTheMonthWinnersChartWrapper
                 className="justify-center"
-                chart={isDark ? darkChart : lightChart}
+                chart={chart}
             >
-                <div
-                    className={cn("relative flex flex-col items-center", {
+                <CollectionOfTheMonthWinnersWinnerWrapper
+                    className={cn({
                         "bottom-[107px] space-y-[124px]": !large,
                         "bottom-[61px] space-y-[70px] sm:bottom-[164px] sm:space-y-[174px]": large,
                     })}
                 >
-                    <Img
-                        wrapperClassName={cn("aspect-square relative", {
-                            "h-20 w-20": !large,
-                            "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
-                        })}
-                        className="rounded-full"
-                        src={winners[0].image}
-                        isCircle
+                    <CollectionOfTheMonthWinnersCollectionAvatar
+                        image={winners[0].image}
+                        large={large}
                     />
 
-                    <span
-                        className={cn("relative text-center text-white", {
-                            "text-base font-medium leading-4.5": !large,
-                            "text-xs font-bold leading-[14px] sm:text-xl sm:leading-6": large,
-                        })}
-                    >
-                        {formatNumbershort(winners[0].votes)}
-                        <br /> {t("common.votes")}
-                    </span>
-                </div>
-            </WinnersChartWrapper>
+                    <CollectionOfTheMonthWinnersVotesLabel
+                        votes={winners[0].votes}
+                        large={large}
+                    />
+                </CollectionOfTheMonthWinnersWinnerWrapper>
+            </CollectionOfTheMonthWinnersChartWrapper>
         );
     }
 
-    if (winners.length === 2) {
-        const lightChart = large ? <TwoBarChartLg className="h-auto w-[160px] sm:w-auto" /> : <TwoBarChart />;
-        const darkChart = large ? <TwoBarChartLgDark className="h-auto w-[160px] sm:w-auto" /> : <TwoBarChartDark />;
-
+    if (totalWinners === 2) {
         return (
-            <WinnersChartWrapper
+            <CollectionOfTheMonthWinnersChartWrapper
                 className={cn("justify-between", {
                     "px-[91px]": !large,
                 })}
-                chart={isDark ? darkChart : lightChart}
+                chart={chart}
             >
                 {winners.map((winner, index) => (
-                    <div
+                    <CollectionOfTheMonthWinnersWinnerWrapper
                         className={cn(
-                            "relative flex flex-col items-center",
                             {
                                 "space-y-[124px]": !large,
                                 "space-y-[76px] sm:space-y-[174px]": large,
@@ -122,106 +96,73 @@ export const WinnersChart = ({
                         )}
                         key={index}
                     >
-                        <Img
-                            wrapperClassName={cn("aspect-square relative", {
-                                "h-20 w-20": !large,
-                                "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
-                            })}
-                            className="rounded-full"
-                            src={winner.image}
-                            isCircle
+                        <CollectionOfTheMonthWinnersCollectionAvatar
+                            image={winner.image}
+                            large={large}
                         />
 
-                        <span
+                        <CollectionOfTheMonthWinnersVotesLabel
                             className={cn("relative text-center text-white", {
                                 "left-[3px]": large && index === 0,
                                 "left-[2px] sm:right-[2px]": large && index === 1,
-                                "text-base font-medium leading-4.5": !large,
-                                "text-xs font-bold leading-[14px] sm:text-xl sm:leading-6": large,
                             })}
-                        >
-                            {formatNumbershort(winner.votes)}
-                            <br /> {t("common.votes")}
-                        </span>
-                    </div>
-                ))}
-            </WinnersChartWrapper>
-        );
-    }
-
-    if (winners.length === 3) {
-        const lightChart = large ? <ThreeBarChartLg className="h-auto w-[230px] sm:w-auto" /> : <ThreeBarChart />;
-
-        const darkChart = large ? (
-            <ThreeBarChartLgDark className="h-auto w-[230px] sm:w-auto" />
-        ) : (
-            <ThreeBarChartDark />
-        );
-
-        return (
-            <WinnersChartWrapper
-                className={cn("justify-between", {
-                    "px-12": !large,
-                })}
-                chart={isDark ? darkChart : lightChart}
-            >
-                {[winners[1], winners[0], winners[2]].map((winner, index) => (
-                    <div
-                        className={cn(
-                            "relative flex flex-col items-center",
-                            {
-                                "space-y-[124px]": !large,
-                                "space-y-[76px] sm:space-y-[174px]": large,
-                            },
-                            [
-                                large
-                                    ? {
-                                          "bottom-[37px] left-[9px] sm:bottom-[90px] sm:left-[23px]": index === 0,
-                                          "bottom-[70px] sm:bottom-[163px]": index === 1,
-                                          "bottom-[19px] left-[-11px] sm:bottom-[51px] sm:right-[22px]": index === 2,
-                                      }
-                                    : {
-                                          "bottom-[56px]": index === 0,
-                                          "bottom-[107px]": index === 1,
-                                          "bottom-[29px]": index === 2,
-                                      },
-                            ],
-                        )}
-                        key={index}
-                    >
-                        <Img
-                            wrapperClassName={cn("aspect-square relative", {
-                                "h-20 w-20": !large,
-                                "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
-                            })}
-                            className="rounded-full"
-                            src={winner.image}
-                            isCircle
+                            votes={winner.votes}
+                            large={large}
                         />
-
-                        <span
-                            className={cn("relative text-center text-white", {
-                                "sm:left-[-4px] ": large && index === 0,
-                                "left-[1px] ": large && index === 1,
-                                "left-[-2px] sm:left-[-19px] ": large && index === 2,
-                                "text-base font-medium leading-4.5": !large,
-                                "text-xs font-bold leading-[14px] sm:text-xl sm:leading-6": large,
-                            })}
-                        >
-                            {formatNumbershort(winner.votes)}
-                            <br /> {t("common.votes")}
-                        </span>
-                    </div>
+                    </CollectionOfTheMonthWinnersWinnerWrapper>
                 ))}
-            </WinnersChartWrapper>
+            </CollectionOfTheMonthWinnersChartWrapper>
         );
     }
 
-    if (isDark) {
-        return <VoteNextMonthWinnersDark />;
-    }
+    return (
+        <CollectionOfTheMonthWinnersChartWrapper
+            className={cn("justify-between", {
+                "px-12": !large,
+            })}
+            chart={chart}
+        >
+            {[winners[1], winners[0], winners[2]].map((winner, index) => (
+                <CollectionOfTheMonthWinnersWinnerWrapper
+                    className={cn(
+                        {
+                            "space-y-[124px]": !large,
+                            "space-y-[76px] sm:space-y-[174px]": large,
+                        },
+                        [
+                            large
+                                ? {
+                                      "bottom-[37px] left-[9px] sm:bottom-[90px] sm:left-[23px]": index === 0,
+                                      "bottom-[70px] sm:bottom-[163px]": index === 1,
+                                      "bottom-[19px] left-[-11px] sm:bottom-[51px] sm:right-[22px]": index === 2,
+                                  }
+                                : {
+                                      "bottom-[56px]": index === 0,
+                                      "bottom-[107px]": index === 1,
+                                      "bottom-[29px]": index === 2,
+                                  },
+                        ],
+                    )}
+                    key={index}
+                >
+                    <CollectionOfTheMonthWinnersCollectionAvatar
+                        image={winner.image}
+                        large={large}
+                    />
 
-    return <VoteNextMonthWinners />;
+                    <CollectionOfTheMonthWinnersVotesLabel
+                        className={cn("relative text-center text-white", {
+                            "sm:left-[-4px] ": large && index === 0,
+                            "left-[1px] ": large && index === 1,
+                            "left-[-2px] sm:left-[-19px] ": large && index === 2,
+                        })}
+                        votes={winner.votes}
+                        large={large}
+                    />
+                </CollectionOfTheMonthWinnersWinnerWrapper>
+            ))}
+        </CollectionOfTheMonthWinnersChartWrapper>
+    );
 };
 
 const WinnersChartMobile = ({
