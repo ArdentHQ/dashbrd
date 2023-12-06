@@ -62,7 +62,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::group(['prefix' => 'collections', 'middleware' => ['features:collections', 'signed_wallet']], function () {
-
         Route::post('{collection:address}/hidden',
             [HiddenCollectionController::class, 'store'])->name('hidden-collections.store');
         Route::delete('{collection:address}/hidden',
@@ -74,7 +73,6 @@ Route::middleware('auth')->group(function () {
         Route::post('{collection:address}/vote', [
             CollectionVoteController::class, 'store',
         ])->name('collection-votes.create');
-
     });
 
     Route::group(['prefix' => 'nfts', 'middleware' => 'signed_wallet'], function () {
