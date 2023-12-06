@@ -28,7 +28,7 @@ describe("NominateCollectionName", () => {
     });
 
     it("should use ETH as default volume currency", () => {
-        render(<NominateCollectionName collection={demoCollection} />);
+        render(<NominateCollectionName collection={{ ...demoCollection, volumeCurrency: null }} />);
 
         expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 ETH");
     });
