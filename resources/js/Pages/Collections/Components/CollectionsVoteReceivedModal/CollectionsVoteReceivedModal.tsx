@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Dialog } from "@/Components/Dialog";
+import { isTruthy } from "@/Utils/is-truthy";
 
 export const CollectionsVoteReceivedModal = ({
     onClose,
@@ -14,18 +15,21 @@ export const CollectionsVoteReceivedModal = ({
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const twitterLink =
-        collection !== undefined
-            ? `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                  t("pages.collections.collection_of_the_month.vote_received_modal.x_text", {
-                      collection: collection.name,
-                  }),
-              )}&url=${encodeURIComponent(
-                  route("collections.view", {
-                      slug: collection.slug,
-                  }),
-              )}`
-            : "";
+    const twitterUrl = (collection?: { name: string; slug: string }): string => {
+        if (!isTruthy(collection)) {
+            return "";
+        }
+
+        const url = new URL("https://twitter.com/intent/tweet");
+
+        url.searchParams.set(
+            "text",
+            t("pages.collections.collection_of_the_month.vote_received_modal.x_text", { collection: collection.name }),
+        );
+        url.searchParams.set("url", route("collections.view", { slug: collection.slug }));
+
+        return url.toString();
+    };
 
     return (
         <Dialog
@@ -36,7 +40,8 @@ export const CollectionsVoteReceivedModal = ({
             footer={
                 <div className="mb-6 border-t border-theme-secondary-300 px-6 pt-4 dark:border-theme-dark-700">
                     <ButtonLink
-                        href={twitterLink}
+                        href={twitterUrl()}
+                        target="_blank"
                         variant="primary"
                         className="w-full justify-center"
                         icon="Twitter"
