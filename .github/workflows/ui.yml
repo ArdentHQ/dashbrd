@@ -196,7 +196,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
-          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite
+          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite, :psr
           coverage: none
 
       - name: Cache dependencies
