@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
-import { CollectionsVoteReceivedModal } from "./Components/CollectionsVoteReceivedModal";
+import {
+    CollectionsVoteReceivedModal,
+    type TemporalVotableCollection,
+} from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
@@ -62,8 +65,7 @@ const CollectionsIndex = ({
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
 
-    const [votedCollection, setVotedCollection] =
-        useState<Pick<App.Data.Collections.PopularCollectionData, "slug" | "name">>();
+    const [votedCollection, setVotedCollection] = useState<TemporalVotableCollection>();
 
     const isFirstRender = useIsFirstRender();
 
@@ -155,7 +157,10 @@ const CollectionsIndex = ({
                         <ViewAllButton />
                     </div>
                 </div>
-                <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
+                <div
+                    id="votes"
+                    className="mt-12 flex w-full flex-col gap-4 xl:flex-row"
+                >
                     <VoteCollections
                         votedCollectionId={1}
                         collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
@@ -174,16 +179,32 @@ const CollectionsIndex = ({
 
             <CollectionsCallToAction />
 
-            <Button
-                onClick={() => {
-                    setVotedCollection({
-                        name: "MoonBirds",
-                        slug: "moonbirds",
-                    });
-                }}
-            >
-                Show Vote Modal (temporal)
-            </Button>
+            {/* @TODO: remove this */}
+            <div className="mt-2">
+                <Button
+                    onClick={() => {
+                        setVotedCollection({
+                            name: "MoonBirds",
+                            slug: "moonbirds",
+                            twitterUsername: "moonbirds",
+                        });
+                    }}
+                >
+                    Show Vote Modal
+                </Button>
+
+                <Button
+                    onClick={() => {
+                        setVotedCollection({
+                            name: "MoonBirds",
+                            slug: "moonbirds",
+                            twitterUsername: null,
+                        });
+                    }}
+                >
+                    Show Vote Modal without twitter
+                </Button>
+            </div>
 
             <CollectionsVoteReceivedModal
                 // @TODO: use a real collection

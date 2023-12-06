@@ -2,31 +2,40 @@ import { useTranslation } from "react-i18next";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Dialog } from "@/Components/Dialog";
 import { isTruthy } from "@/Utils/is-truthy";
+import { toTwitterHashtag } from "@/Utils/to-twitter-hashtag";
+
+// @TODO: use a real collection
+export interface TemporalVotableCollection {
+    name: string;
+    slug: string;
+    twitterUsername: string | null;
+}
 
 export const CollectionsVoteReceivedModal = ({
     onClose,
     collection,
 }: {
     onClose: () => void;
-    collection?: {
-        name: string;
-        slug: string;
-    };
+    collection?: TemporalVotableCollection;
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const twitterUrl = (collection?: { name: string; slug: string }): string => {
+    const twitterUrl = (): string => {
         if (!isTruthy(collection)) {
             return "";
         }
 
         const url = new URL("https://twitter.com/intent/tweet");
 
+        const collectionName =
+            collection.twitterUsername !== null ? `@${collection.twitterUsername}` : toTwitterHashtag(collection.name);
+
         url.searchParams.set(
             "text",
-            t("pages.collections.collection_of_the_month.vote_received_modal.x_text", { collection: collection.name }),
+            t("pages.collections.collection_of_the_month.vote_received_modal.x_text", { collection: collectionName }),
         );
-        url.searchParams.set("url", route("collections.view", { slug: collection.slug }));
+
+        url.searchParams.set("url", `${route("collections")}#votes`);
 
         return url.toString();
     };
