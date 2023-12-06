@@ -248,6 +248,8 @@ declare namespace App.Data.Collections {
         images: App.Data.Nfts.NftImagesData;
     };
     export type VotableCollectionData = {
+        id: number;
+        index: number;
         name: string;
         image: string | null;
         volume: string | null;
