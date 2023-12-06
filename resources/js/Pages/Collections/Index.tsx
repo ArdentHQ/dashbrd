@@ -185,7 +185,6 @@ const CollectionsIndex = ({
                     onClick={() => {
                         setVotedCollection({
                             name: "MoonBirds",
-                            slug: "moonbirds",
                             twitterUsername: "moonbirds",
                         });
                     }}
@@ -197,7 +196,6 @@ const CollectionsIndex = ({
                     onClick={() => {
                         setVotedCollection({
                             name: "MoonBirds",
-                            slug: "moonbirds",
                             twitterUsername: null,
                         });
                     }}

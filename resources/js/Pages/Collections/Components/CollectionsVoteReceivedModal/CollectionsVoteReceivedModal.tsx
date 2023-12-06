@@ -7,7 +7,6 @@ import { toTwitterHashtag } from "@/Utils/to-twitter-hashtag";
 // @TODO: use a real collection
 export interface TemporalVotableCollection {
     name: string;
-    slug: string;
     twitterUsername: string | null;
 }
 
