@@ -16,9 +16,6 @@ export default class PopularCollectionFactory extends ModelFactory<App.Data.Coll
             volumeCurrency: this.optional(this.cryptoCurrency()),
             volumeDecimals: this.optional(18),
             image: this.optional(faker.image.avatar(), 0.9),
-            address: faker.datatype.string(42),
-            floorPriceFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
-            nftsCount: faker.datatype.number({ min: 1, max: 100000 }),
         };
     }
 
