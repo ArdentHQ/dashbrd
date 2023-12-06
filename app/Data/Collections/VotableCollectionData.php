@@ -15,7 +15,6 @@ class VotableCollectionData extends Data
 {
     public function __construct(
         public int $id,
-        public int $index,
         public string $name,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
@@ -29,8 +28,6 @@ class VotableCollectionData extends Data
 
         return new self(
             id: $collection->id,
-            // @TODO
-            index: 0,
             name: $collection->name,
             image: $collection->extra_attributes->get('image'),
             volume: $collection->volume,

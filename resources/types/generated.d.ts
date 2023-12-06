@@ -249,7 +249,6 @@ declare namespace App.Data.Collections {
     };
     export type VotableCollectionData = {
         id: number;
-        index: number;
         name: string;
         image: string | null;
         volume: string | null;

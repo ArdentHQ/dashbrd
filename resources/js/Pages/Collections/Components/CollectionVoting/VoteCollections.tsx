@@ -44,6 +44,7 @@ export const VoteCollections = ({
                     {collections.slice(0, 4).map((collection, index) => (
                         <VoteCollection
                             key={index}
+                            index={index + 1}
                             collection={collection}
                             setSelectedCollectionId={setSelectedCollectionId}
                             votedId={votedCollectionId}
@@ -58,6 +59,7 @@ export const VoteCollections = ({
                     {collections.slice(4, 8).map((collection, index) => (
                         <VoteCollection
                             key={index}
+                            index={index + 5}
                             collection={collection}
                             setSelectedCollectionId={setSelectedCollectionId}
                             votedId={votedCollectionId}
@@ -88,6 +90,7 @@ export const VoteCollections = ({
 
 export const VoteCollection = ({
     collection,
+    index,
     votedId,
     variant,
     setSelectedCollectionId,
@@ -95,6 +98,7 @@ export const VoteCollection = ({
     collection: App.Data.Collections.VotableCollectionData;
     votedId?: number;
     variant?: VoteCollectionVariants;
+    index: number;
     setSelectedCollectionId: (collectionId: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -142,7 +146,7 @@ export const VoteCollection = ({
                                 )}
                             >
                                 <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                                    {collection.index}
+                                    {index}
                                 </span>
                             </div>
                             <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
