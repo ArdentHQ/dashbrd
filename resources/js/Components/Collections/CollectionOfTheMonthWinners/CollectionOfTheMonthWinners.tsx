@@ -161,7 +161,7 @@ export const WinnersChart = ({
         return (
             <WinnersChartWrapper
                 className={cn("justify-between", {
-                    "px-8": !large,
+                    "px-12": !large,
                 })}
                 chart={isDark ? darkChart : lightChart}
             >
@@ -316,7 +316,12 @@ export const CollectionOfTheMonthWinners = ({
                     </Heading>
                 </div>
 
-                <div className="flex flex-1 items-end justify-center">
+                <div
+                    className={cn("flex flex-1 justify-center", {
+                        "items-end": winners.length > 0,
+                        "items-center": winners.length === 0,
+                    })}
+                >
                     <WinnersChart winners={winners} />
                 </div>
 
