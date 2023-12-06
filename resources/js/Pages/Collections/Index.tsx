@@ -3,6 +3,7 @@ import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
@@ -29,6 +30,8 @@ interface CollectionsIndexProperties extends PageProps {
     collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
     votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
+    latestArticles: App.Data.Articles.ArticleData[];
+    popularArticles: App.Data.Articles.ArticleData[];
 }
 
 const CollectionsIndex = ({
@@ -39,6 +42,8 @@ const CollectionsIndex = ({
     votableCollections,
     auth,
     filters,
+    latestArticles,
+    popularArticles,
 }: CollectionsIndexProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -137,7 +142,10 @@ const CollectionsIndex = ({
                     </div>
                 </div>
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
-                    <VoteCollections collections={votableCollections} />
+                    <VoteCollections
+                        collections={votableCollections}
+                        votedCollectionId={1}
+                    />
 
                     <CollectionOfTheMonthWinners
                         winners={collectionsOfTheMonth}
@@ -145,6 +153,11 @@ const CollectionsIndex = ({
                     />
                 </div>
             </div>
+
+            <CollectionsArticles
+                latest={latestArticles}
+                popular={popularArticles}
+            />
 
             <CollectionsCallToAction />
         </DefaultLayout>

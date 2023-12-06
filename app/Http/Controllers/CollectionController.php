@@ -24,6 +24,7 @@ use App\Enums\TraitDisplayType;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
+use App\Models\Article;
 use App\Models\Collection;
 use App\Models\User;
 use App\Support\Queues;
@@ -52,6 +53,8 @@ class CollectionController extends Controller
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votableCollections' => fn () => $this->getVotableCollections($request),
+            'latestArticles' => fn () => $this->getLatestArticles(),
+            'popularArticles' => fn () => $this->getPopularArticles(),
         ]);
     }
 
@@ -130,6 +133,34 @@ class CollectionController extends Controller
                                 ->simplePaginate(12);
 
         return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency));
+    }
+
+    /**
+     * @return DataCollection<int, ArticleData>
+     */
+    private function getLatestArticles(): DataCollection
+    {
+        return ArticleData::collection(Article::isPublished()
+                    ->with('media', 'user.media')
+                    ->withRelatedCollections()
+                    ->sortByPublishedDate()
+                    ->limit(8)
+                    ->get());
+
+    }
+
+    /**
+     * @return DataCollection<int, ArticleData>
+     */
+    private function getPopularArticles()
+    {
+        return ArticleData::collection(Article::isPublished()
+                    ->with('media', 'user.media')
+                    ->withRelatedCollections()
+                    ->sortByPopularity()
+                    ->limit(8)
+                    ->get());
+
     }
 
     /**
