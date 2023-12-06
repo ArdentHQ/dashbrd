@@ -4,6 +4,7 @@ import { NomineeCollections } from "./NomineeCollections";
 import { Button } from "@/Components/Buttons";
 import { Dialog } from "@/Components/Dialog";
 import { SearchInput } from "@/Components/Form/SearchInput";
+import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 
 const NominationDialogFooter = ({
     setIsOpen,
@@ -53,7 +54,7 @@ export const NominationDialog = ({
 }: {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
-    collections: App.Data.Collections.PopularCollectionData[];
+    collections: VoteCollectionProperties[];
     user: App.Data.UserData | null;
 }): JSX.Element => {
     const { t } = useTranslation();

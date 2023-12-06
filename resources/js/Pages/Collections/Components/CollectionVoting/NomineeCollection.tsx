@@ -7,6 +7,7 @@ import {
 } from "@/Components/Collections/PopularCollectionsTable/PopularCollectionsTable.blocks";
 import { Radio } from "@/Components/Form/Radio";
 import { TableCell, TableRow } from "@/Components/Table";
+import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 
 export const NomineeCollection = ({
     collection,
@@ -15,7 +16,7 @@ export const NomineeCollection = ({
     selectedCollection,
     setSelectedCollection,
 }: {
-    collection: App.Data.Collections.PopularCollectionData;
+    collection: VoteCollectionProperties;
     uniqueKey: string;
     user: App.Data.UserData | null;
     selectedCollection: number;

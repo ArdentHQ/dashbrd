@@ -2,13 +2,10 @@ import { useRef } from "react";
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
+import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting";
 import { FormatCrypto } from "@/Utils/Currency";
 
-export const NominateCollectionName = ({
-    collection,
-}: {
-    collection: App.Data.Collections.PopularCollectionData;
-}): JSX.Element => {
+export const NominateCollectionName = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => {
     const collectionNameReference = useRef<HTMLParagraphElement>(null);
     const isTruncated = useIsTruncated({ reference: collectionNameReference });
 

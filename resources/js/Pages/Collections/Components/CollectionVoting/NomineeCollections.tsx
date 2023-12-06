@@ -5,6 +5,7 @@ import { type Column, type TableState } from "react-table";
 import { NomineeCollection } from "./NomineeCollection";
 import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 
 export const NomineeCollections = ({
     collections,
@@ -13,7 +14,7 @@ export const NomineeCollections = ({
     selectedCollection,
     setSelectedCollection,
 }: {
-    collections: App.Data.Collections.PopularCollectionData[];
+    collections: VoteCollectionProperties[];
     activeSort: string;
     user: App.Data.UserData | null;
     selectedCollection: number;
@@ -22,7 +23,7 @@ export const NomineeCollections = ({
     const { t } = useTranslation();
     const { isMdAndAbove, isLgAndAbove } = useBreakpoint();
 
-    const initialState = useMemo<Partial<TableState<App.Data.Collections.PopularCollectionData>>>(
+    const initialState = useMemo<Partial<TableState<VoteCollectionProperties>>>(
         () => ({
             sortBy: [
                 {
@@ -35,7 +36,7 @@ export const NomineeCollections = ({
     );
 
     const columns = useMemo(() => {
-        const columns: Array<Column<App.Data.Collections.PopularCollectionData>> = [
+        const columns: Array<Column<VoteCollectionProperties>> = [
             {
                 Header: t("pages.collections.popular_collections").toString(),
                 id: "name",
@@ -57,7 +58,8 @@ export const NomineeCollections = ({
             columns.splice(-1, 0, {
                 Header: t("common.volume").toString(),
                 id: "value",
-                accessor: () => BigNumber.make(0).times(0).toString(),
+                accessor: (collection) =>
+                    BigNumber.make(collection.floorPriceFiat).times(collection.nftsCount).toString(),
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
                 className: "justify-end",
@@ -67,7 +69,7 @@ export const NomineeCollections = ({
             columns.splice(-2, 0, {
                 Header: t("common.floor_price").toString(),
                 id: "floor-price",
-                accessor: () => 0,
+                accessor: (collection) => collection.floorPrice,
                 className: "justify-end whitespace-nowrap",
                 disableSortBy: true,
             });
@@ -88,11 +90,11 @@ export const NomineeCollections = ({
             initialState={initialState}
             sortDirection="desc"
             manualSortBy={false}
-            row={(collection: App.Data.Collections.PopularCollectionData) => (
+            row={(collection: VoteCollectionProperties) => (
                 <NomineeCollection
                     collection={collection}
-                    uniqueKey={collection.slug}
-                    key={collection.slug}
+                    uniqueKey={collection.id.toString()}
+                    key={collection.id}
                     user={user}
                     selectedCollection={selectedCollection}
                     setSelectedCollection={setSelectedCollection}

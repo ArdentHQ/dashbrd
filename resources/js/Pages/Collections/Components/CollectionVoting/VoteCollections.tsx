@@ -16,20 +16,24 @@ export interface VoteCollectionProperties {
     id: number;
     name: string;
     image: string;
-    volume?: string;
-    volumeCurrency?: string;
-    volumeDecimals?: number;
     votes?: number;
     index: number;
+    floorPrice: string | null;
+    floorPriceCurrency: string | null;
+    floorPriceFiat: string | null;
+    floorPriceDecimals: number | null;
+    volume: string | null;
+    volumeFiat: number | null;
+    volumeCurrency: string | null;
+    volumeDecimals: number | null;
+    nftsCount: number | null;
 }
 
 export const VoteCollections = ({
-    candidateCollections,
     collections,
     user,
     votedCollectionId,
 }: {
-    candidateCollections: App.Data.Collections.PopularCollectionData[];
     collections: VoteCollectionProperties[];
     user: App.Data.UserData | null;
     votedCollectionId?: number;
@@ -102,7 +106,7 @@ export const VoteCollections = ({
             <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
-                collections={candidateCollections}
+                collections={collections.slice(8, 15)}
                 user={user}
             />
         </div>
