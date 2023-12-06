@@ -51,8 +51,8 @@ export const WinnersChart = ({
     const { isDark } = useDarkModeContext();
 
     if (winners.length === 1) {
-        const lightChart = large ? <OneBarChartLg /> : <OneBarChartDark />;
-        const darkChart = large ? <OneBarChartLgDark /> : <OneBarChartDark />;
+        const lightChart = large ? <OneBarChartLg className="h-auto w-[100px] sm:w-auto" /> : <OneBarChartDark />;
+        const darkChart = large ? <OneBarChartLgDark className="h-auto w-[100px] sm:w-auto" /> : <OneBarChartDark />;
 
         return (
             <WinnersChartWrapper
@@ -62,13 +62,13 @@ export const WinnersChart = ({
                 <div
                     className={cn("relative flex flex-col items-center", {
                         "bottom-[107px] space-y-[124px]": !large,
-                        "bottom-[166px] space-y-[174px]": large,
+                        "bottom-[61px] space-y-[70px] sm:bottom-[164px] sm:space-y-[174px]": large,
                     })}
                 >
                     <Img
-                        wrapperClassName={cn("aspect-square", {
+                        wrapperClassName={cn("aspect-square relative", {
                             "h-20 w-20": !large,
-                            "h-[115px] w-[115px]": large,
+                            "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
                         })}
                         className="rounded-full"
                         src={winners[0].image}
@@ -78,7 +78,7 @@ export const WinnersChart = ({
                     <span
                         className={cn("relative text-center text-white", {
                             "text-base font-medium leading-4.5": !large,
-                            "text-xl font-bold leading-6": large,
+                            "text-xs font-bold leading-[14px] sm:text-xl sm:leading-6": large,
                         })}
                     >
                         {formatNumbershort(winners[0].votes)}
