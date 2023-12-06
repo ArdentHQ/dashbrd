@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8583d4d87c1d1f387c86b30606a4988c",
+    "content-hash": "a63c66bf4bf22706ce79522b684fc6f1",
     "packages": [
         {
             "name": "atymic/twitter",
@@ -16355,5 +16355,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
