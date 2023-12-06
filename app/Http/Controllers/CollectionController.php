@@ -73,7 +73,7 @@ class CollectionController extends Controller
     {
         $wallet = $request->wallet();
 
-        $userVoted = Collection::whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $wallet->id))->exists();
+        $userVoted = Collection::whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $wallet?->id))->exists();
 
         $collections = Collection::votable()->limit(8)->get();
 
