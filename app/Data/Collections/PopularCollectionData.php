@@ -36,6 +36,7 @@ class PopularCollectionData extends Data
 
     public static function fromModel(Collection $collection, CurrencyCode $currency): self
     {
+        /** @var mixed $collection (volume_fiat is add with the `scopeSelectVolumeFiat`) */
         return new self(
             id: $collection->id,
             name: $collection->name,
