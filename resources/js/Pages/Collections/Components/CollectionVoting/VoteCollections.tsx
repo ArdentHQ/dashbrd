@@ -2,6 +2,7 @@ import cn from "classnames";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
+import { NominationDialog } from "./NominationDialog";
 import { VoteCountdown } from "./VoteCountdown";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
@@ -14,19 +15,27 @@ import { isTruthy } from "@/Utils/is-truthy";
 export interface VoteCollectionProperties {
     id: number;
     name: string;
-    image: string;
-    volume?: string;
-    volumeCurrency?: string;
-    volumeDecimals?: number;
+    image: string | null;
     votes?: number;
     index: number;
+    floorPrice: string | null;
+    floorPriceCurrency: string | null;
+    floorPriceFiat: string | null;
+    floorPriceDecimals: number | null;
+    volume: string | null;
+    volumeFiat: number | null;
+    volumeCurrency: string | null;
+    volumeDecimals: number | null;
+    nftsCount: number | null;
 }
 
 export const VoteCollections = ({
     collections,
+    user,
     votedCollectionId,
 }: {
     collections: VoteCollectionProperties[];
+    user: App.Data.UserData | null;
     votedCollectionId?: number;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -35,6 +44,8 @@ export const VoteCollections = ({
 
     const getVariant = (collectionId: number): VoteCollectionVariants =>
         votedCollectionId === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     return (
         <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
@@ -81,7 +92,7 @@ export const VoteCollections = ({
 
                 <LinkButton
                     onClick={(): void => {
-                        console.log("TODO: Implement or nominate collection");
+                        setIsDialogOpen(true);
                     }}
                     variant="link"
                     className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
@@ -91,6 +102,17 @@ export const VoteCollections = ({
                     {t("pages.collections.vote.or_nominate_collection")}
                 </LinkButton>
             </div>
+
+            <NominationDialog
+                isOpen={isDialogOpen}
+                setIsOpen={setIsDialogOpen}
+                collections={collections.slice(8, 15).map((collection, index) => ({
+                    ...collection,
+                    index: index + 8,
+                    id: index + 8,
+                }))}
+                user={user}
+            />
         </div>
     );
 };

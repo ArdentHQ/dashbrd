@@ -29,11 +29,17 @@ interface CollectionsIndexProperties extends PageProps {
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     topCollections: App.Data.Collections.CollectionOfTheMonthData[];
     filters: Filters;
+    collectionsTableResults: App.Data.Collections.CollectionData[];
     latestArticles: App.Data.Articles.ArticleData[];
     popularArticles: App.Data.Articles.ArticleData[];
 }
 
 const demoCollection: VoteCollectionProperties = {
+    floorPriceFiat: "45.25",
+    floorPrice: "0",
+    floorPriceCurrency: "ETH",
+    floorPriceDecimals: 18,
+    volumeFiat: 45.12,
     id: 1,
     index: 1,
     name: "AlphaDogs",
@@ -42,6 +48,7 @@ const demoCollection: VoteCollectionProperties = {
     volumeCurrency: "ETH",
     volumeDecimals: 18,
     votes: 45,
+    nftsCount: 5,
 };
 
 const CollectionsIndex = ({
@@ -153,7 +160,8 @@ const CollectionsIndex = ({
                 <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
                     <VoteCollections
                         votedCollectionId={1}
-                        collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
+                        collections={Array.from({ length: 13 }).fill(demoCollection) as VoteCollectionProperties[]}
+                        user={auth.user}
                     />
                     <CollectionOfTheMonthWinners
                         winners={topCollections}
