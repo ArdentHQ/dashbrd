@@ -1,6 +1,6 @@
 import cn from "classnames";
 import React, { useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { NominateCollectionName } from "@/Components/Collections/CollectionName";
 import {
     PopularCollectionFloorPrice,
@@ -39,7 +39,7 @@ export const NomineeCollection = ({
 
     return (
         <Tooltip
-            content={t("pages.collections.collection_of_the_month.has_won_already")}
+            content={<Trans i18nKey="pages.collections.collection_of_the_month.has_won_already" />}
             disabled={!isDisabled}
         >
             <TableRow

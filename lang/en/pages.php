@@ -81,7 +81,7 @@ return [
             'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
             'view_previous_winners' => 'View Previous Winners',
             'vote_success' => 'Your vote has been successfully submitted',
-            'has_won_already' => 'This collection has already won Collection of the Month.',
+            'has_won_already' => 'This collection has already <br> won Collection of the Month.',
         ],
         'articles' => [
             'heading' => 'Latest NFT News & Features',
