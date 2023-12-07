@@ -46,6 +46,7 @@ describe("VoteCollection", () => {
                 collection={demoCollection}
                 votedId={1}
                 setSelectedCollectionId={vi.fn()}
+                index={1}
             />,
         );
 
@@ -58,6 +59,7 @@ describe("VoteCollection", () => {
                 collection={demoCollection}
                 votedId={1}
                 setSelectedCollectionId={vi.fn()}
+                index={1}
             />,
         );
 
@@ -71,6 +73,7 @@ describe("VoteCollection", () => {
                 votedId={1}
                 setSelectedCollectionId={vi.fn()}
                 variant="voted"
+                index={1}
             />,
         );
 
@@ -86,6 +89,7 @@ describe("VoteCollection", () => {
                 votedId={1}
                 setSelectedCollectionId={selectCollectionMock}
                 variant="voted"
+                index={1}
             />,
         );
 
@@ -99,6 +103,7 @@ describe("VoteCollection", () => {
             <VoteCollection
                 collection={demoCollection}
                 setSelectedCollectionId={selectCollectionMock}
+                index={1}
             />,
         );
 
