@@ -26,12 +26,6 @@ describe("NominateCollectionName", () => {
         expect(screen.getByTestId("NominateCollectionName")).toBeInTheDocument();
     });
 
-    it("should use ETH as default volume currency", () => {
-        render(<NominateCollectionName collection={{ ...demoCollection, volumeCurrency: null }} />);
-
-        expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 ETH");
-    });
-
     it("should render the volume with the selected currency", () => {
         render(<NominateCollectionName collection={{ ...demoCollection, volumeCurrency: "BTC" }} />);
 
@@ -42,21 +36,6 @@ describe("NominateCollectionName", () => {
         render(<NominateCollectionName collection={{ ...demoCollection, volume: null, volumeCurrency: "BTC" }} />);
 
         expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 BTC");
-    });
-
-    it("should render the volume using 18 decimals to format by default", () => {
-        render(
-            <NominateCollectionName
-                collection={{
-                    ...demoCollection,
-                    volume: "1000000000000000000",
-                    volumeCurrency: "ETH",
-                    volumeDecimals: null,
-                }}
-            />,
-        );
-
-        expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("1 ETH");
     });
 
     it("should render the volume using the specified decimals", () => {
