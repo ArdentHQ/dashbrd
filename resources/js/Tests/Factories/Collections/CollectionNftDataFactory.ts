@@ -12,10 +12,6 @@ export default class CollectionNftDataFactory extends ModelFactory<App.Data.Coll
             tokenNumber: faker.datatype.number({ min: 1, max: 100000 }).toString(),
             images: new NftImagesDataFactory().create(),
             traits: new CollectionTraitDataFactory().createMany(faker.datatype.number({ min: 0, max: 3 })),
-            floorPrice: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
-            floorPriceFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
-            floorPriceCurrency: this.optional(this.cryptoCurrency()),
-            floorPriceDecimals: this.optional(18),
         };
     }
 
