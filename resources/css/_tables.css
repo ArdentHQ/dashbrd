@@ -67,10 +67,10 @@
 
 .table-list tbody tr::after {
     content: "";
-    @apply transition-default pointer-events-none absolute inset-0 -mx-3 rounded-xl outline outline-3 outline-transparent dark:hover:outline-theme-dark-500;
+    @apply transition-default pointer-events-none absolute inset-0 -mx-3 rounded-xl outline outline-3 outline-transparent;
 }
 
-.table-list tbody tr:hover::after {
+.table-list tbody tr:not(.disabled-row):hover::after {
     content: "";
     @apply outline-theme-primary-100 dark:outline-theme-dark-500;
 }
@@ -118,4 +118,14 @@
 
 .table-list tbody tr.selected-candidate td.custom-table-cell:after {
     @apply border-y-2;
+}
+
+.table-list tbody tr.disabled-row td:first-child::before,
+.table-list tbody tr.disabled-row td:last-child::before {
+    @apply bg-theme-secondary-50 dark:bg-theme-dark-800;
+}
+
+.table-list tbody tr.disabled-row td.custom-table-cell div,
+.table-list tbody tr.disabled-row td.custom-table-cell p {
+    @apply text-theme-secondary-500 dark:text-theme-dark-400;
 }
