@@ -249,7 +249,7 @@ declare namespace App.Data.Collections {
     };
     export type VotableCollectionData = {
         id: number;
-        rank: number;
+        rank: number | null;
         name: string;
         image: string | null;
         votes: number | null;

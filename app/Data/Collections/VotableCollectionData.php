@@ -16,7 +16,7 @@ class VotableCollectionData extends Data
 {
     public function __construct(
         public int $id,
-        public int $rank,
+        public ?int $rank,
         public string $name,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
