@@ -27,7 +27,6 @@ use App\Jobs\SyncCollection;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\User;
-use App\Models\Wallet;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
@@ -70,18 +69,15 @@ class CollectionController extends Controller
 
     private function getVotedCollection(Request $request): ?VotableCollectionData
     {
-        /**
-         * @var Wallet|null $wallet
-         */
-        $wallet = $request->wallet();
+        $user = $request->user();
 
-        if ($wallet === null) {
+        if ($user === null) {
             return null;
         }
 
-        $collection = Collection::votedByWalletInCurrentMonth($wallet)->first();
+        $collection = Collection::votedByWalletInCurrentMonth($user->wallet)->first();
 
-        return $collection !== null ? VotableCollectionData::fromModel($collection, showVotes: true) : null;
+        return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true) : null;
     }
 
     /**
@@ -89,17 +85,17 @@ class CollectionController extends Controller
      */
     private function getVotableCollections(Request $request): SupportCollection
     {
-        /**
-         * @var Wallet|null $wallet
-         */
-        $wallet = $request->wallet();
+        $user = $request->user();
 
-        $userVoted = $wallet !== null ? Collection::votedByWalletInCurrentMonth($wallet)->exists() : false;
+        $currency = $user?->currency() ?? CurrencyCode::USD;
 
+        $userVoted = $user !== null ? Collection::votedByWalletInCurrentMonth($user->wallet)->exists() : false;
+
+        // 8 collections on the vote table + 5 collections to nominate
         $collections = Collection::votable()->limit(13)->get();
 
-        return $collections->map(function (Collection $collection) use ($userVoted) {
-            return VotableCollectionData::fromModel($collection, showVotes: $userVoted);
+        return $collections->map(function (Collection $collection) use ($userVoted, $currency) {
+            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted);
         });
     }
 

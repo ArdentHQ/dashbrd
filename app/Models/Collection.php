@@ -587,8 +587,13 @@ class Collection extends Model
     {
         $subQuery = Collection::query()->select([
             'collections.*',
+            DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
+            DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
             DB::raw('COUNT(collection_votes.id) as votes_count'),
             DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
+            DB::raw("
+                (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> 'usd')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
+            AS volume_fiat"),
         ])
             ->leftJoin('collection_votes', function ($join) {
                 $join->on('collection_votes.collection_id', '=', 'collections.id')
@@ -597,6 +602,9 @@ class Collection extends Model
                         Carbon::now()->endOfMonth(),
                     ]);
             })
+            ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
+            ->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw("'ETH'"))
+            ->withCount('nfts')
             ->groupBy('collections.id');
 
         return $query->fromSub($subQuery, 'collections');
