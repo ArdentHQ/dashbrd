@@ -64,7 +64,10 @@ export const PopularCollectionName = ({
 export const PopularCollectionFloorPrice = ({
     collection,
 }: {
-    collection: App.Data.Collections.PopularCollectionData;
+    collection: Pick<
+        App.Data.Collections.PopularCollectionData,
+        "floorPrice" | "floorPriceCurrency" | "floorPriceDecimals"
+    >;
 }): JSX.Element => (
     <div
         data-testid="PopularCollectionFloorPrice"
@@ -100,7 +103,10 @@ export const PopularCollectionVolume = ({
     collection,
     user,
 }: {
-    collection: App.Data.Collections.PopularCollectionData;
+    collection: Pick<
+        App.Data.Collections.PopularCollectionData,
+        "volume" | "volumeCurrency" | "volumeDecimals" | "volumeFiat"
+    >;
     user: App.Data.UserData | null;
 }): JSX.Element => (
     <div
