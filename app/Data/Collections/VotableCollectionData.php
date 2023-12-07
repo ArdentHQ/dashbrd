@@ -29,6 +29,7 @@ class VotableCollectionData extends Data
         public ?float $volumeFiat,
         public string $volumeCurrency,
         public int $volumeDecimals,
+        public int $nftsCount,
     ) {
     }
 
@@ -52,6 +53,7 @@ class VotableCollectionData extends Data
             // Volume is normalized to `ETH`
             volumeCurrency: 'ETH',
             volumeDecimals: 18,
+            nftsCount: $collection->nfts_count,
         );
     }
 }

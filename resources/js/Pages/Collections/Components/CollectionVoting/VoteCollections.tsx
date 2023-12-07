@@ -32,11 +32,11 @@ export const VoteCollections = ({
         votedCollection?.id === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
 
     const collectionsWithVote = useMemo(() => {
-        const mergeVote =
+        const shouldMergeUserVote =
             votedCollection !== null &&
             !collections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
 
-        if (mergeVote) {
+        if (shouldMergeUserVote) {
             if (isSmAndAbove) {
                 return [...collections.slice(0, 7), votedCollection];
             } else {
@@ -44,7 +44,19 @@ export const VoteCollections = ({
             }
         }
 
-        return collections.slice(0, 8);
+        if (isSmAndAbove) {
+            return collections.slice(0, 8);
+        }
+
+        return collections.slice(0, 4);
+    }, [isSmAndAbove, collections, votedCollection]);
+
+    const nominatableCollections = useMemo(() => {
+        if (isSmAndAbove) {
+            return collections.slice(8, 13);
+        }
+
+        return collections.slice(4, 9);
     }, [isSmAndAbove, collections]);
 
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -108,11 +120,7 @@ export const VoteCollections = ({
             <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
-                collections={collections.slice(8, 15).map((collection, index) => ({
-                    ...collection,
-                    index: index + 8,
-                    id: index + 8,
-                }))}
+                collections={nominatableCollections}
                 user={user}
             />
         </div>

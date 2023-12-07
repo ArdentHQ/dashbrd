@@ -1,16 +1,15 @@
 import React from "react";
 import { NominateCollectionName } from "./NominateCollectionName";
-import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting";
+import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 
-const demoCollection: VoteCollectionProperties = {
-    floorPriceFiat: "45.25",
+const demoCollection = new VotableCollectionDataFactory().create({
+    floorPriceFiat: 45.25,
     floorPrice: "0",
     floorPriceCurrency: "ETH",
     floorPriceDecimals: 18,
     volumeFiat: 45.12,
     id: 1,
-    index: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "0",
@@ -18,7 +17,7 @@ const demoCollection: VoteCollectionProperties = {
     volumeDecimals: 18,
     votes: 45,
     nftsCount: 5,
-};
+});
 
 describe("NominateCollectionName", () => {
     it("should render", () => {

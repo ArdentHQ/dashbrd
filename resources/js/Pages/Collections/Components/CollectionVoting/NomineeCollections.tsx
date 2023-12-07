@@ -5,7 +5,6 @@ import { type Column, type TableState } from "react-table";
 import { NomineeCollection } from "./NomineeCollection";
 import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
-import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 
 export const NomineeCollections = ({
     collections,
@@ -14,7 +13,7 @@ export const NomineeCollections = ({
     selectedCollection,
     setSelectedCollection,
 }: {
-    collections: VoteCollectionProperties[];
+    collections: App.Data.Collections.VotableCollectionData[];
     activeSort: string;
     user: App.Data.UserData | null;
     selectedCollection: number;
@@ -23,7 +22,7 @@ export const NomineeCollections = ({
     const { t } = useTranslation();
     const { isMdAndAbove, isLgAndAbove } = useBreakpoint();
 
-    const initialState = useMemo<Partial<TableState<VoteCollectionProperties>>>(
+    const initialState = useMemo<Partial<TableState<App.Data.Collections.VotableCollectionData>>>(
         () => ({
             sortBy: [
                 {
@@ -36,7 +35,7 @@ export const NomineeCollections = ({
     );
 
     const columns = useMemo(() => {
-        const columns: Array<Column<VoteCollectionProperties>> = [
+        const columns: Array<Column<App.Data.Collections.VotableCollectionData>> = [
             {
                 Header: t("pages.collections.popular_collections").toString(),
                 id: "name",
@@ -90,7 +89,7 @@ export const NomineeCollections = ({
             initialState={initialState}
             sortDirection="desc"
             manualSortBy={false}
-            row={(collection: VoteCollectionProperties) => (
+            row={(collection: App.Data.Collections.VotableCollectionData) => (
                 <NomineeCollection
                     collection={collection}
                     uniqueKey={collection.id.toString()}
