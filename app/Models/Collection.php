@@ -588,7 +588,7 @@ class Collection extends Model
         $subQuery = Collection::query()
             ->votable($currency)
             ->addSelect([
-                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
+                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
             ]);
 
         return $query->fromSub($subQuery, 'collections');
