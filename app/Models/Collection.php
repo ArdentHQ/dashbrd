@@ -594,7 +594,7 @@ class Collection extends Model
             DB::raw('COUNT(collection_votes.id) as votes_count'),
             DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
             DB::raw("
-                (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '$currencyCode')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
+                (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
             AS volume_fiat"),
         ])
             ->leftJoin('collection_votes', function ($join) {
