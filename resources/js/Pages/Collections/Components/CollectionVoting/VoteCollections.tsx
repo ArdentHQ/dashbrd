@@ -106,7 +106,7 @@ export const VoteCollections = ({
             <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
-                collections={collections.slice(8, 15).map((collection, index) => ({
+                initialCollections={collections.slice(8, 15).map((collection, index) => ({
                     ...collection,
                     index: index + 8,
                     id: index + 8,

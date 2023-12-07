@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NomineeCollections } from "./NomineeCollections";
 import { Button } from "@/Components/Buttons";
 import { Dialog } from "@/Components/Dialog";
 import { SearchInput } from "@/Components/Form/SearchInput";
+import { useDebounce } from "@/Hooks/useDebounce";
 import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 
 const NominationDialogFooter = ({
@@ -49,17 +51,47 @@ const NominationDialogFooter = ({
 export const NominationDialog = ({
     isOpen,
     setIsOpen,
-    collections,
+    initialCollections,
     user,
 }: {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
-    collections: VoteCollectionProperties[];
+    initialCollections: VoteCollectionProperties[];
     user: App.Data.UserData | null;
 }): JSX.Element => {
     const { t } = useTranslation();
     const [query, setQuery] = useState<string>("");
     const [selectedCollection, setSelectedCollection] = useState<number>(0);
+    const [collections, setCollections] = useState(initialCollections);
+
+    const [debouncedQuery] = useDebounce(query, 500);
+
+    const searchCollections = async (): Promise<void> => {
+        if (debouncedQuery.trim().length === 0) {
+            setCollections(initialCollections);
+
+            return;
+        }
+
+        const { data } = await axios.get<{
+            collections: VoteCollectionProperties[];
+        }>(route("nominatable-collections", { query: debouncedQuery }));
+
+        setCollections(data.collections);
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            void searchCollections();
+        }
+    }, [debouncedQuery]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setQuery("");
+            setCollections(initialCollections);
+        }
+    }, [isOpen]);
 
     return (
         <Dialog
