@@ -587,16 +587,15 @@ class Collection extends Model
     {
         $currencyCode = Str::lower($currency->value);
 
-        $subQuery = Collection::query()->select([
-            'collections.*',
-            DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
-            DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
-            DB::raw('COUNT(collection_votes.id) as votes_count'),
-            DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
-            DB::raw("
-                (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
-            AS volume_fiat"),
-        ])
+        $subQuery = Collection::query()
+            ->selectVolumeFiat($currency)
+            ->addSelect([
+                'collections.*',
+                DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
+                DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
+                DB::raw('COUNT(collection_votes.id) as votes_count'),
+                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
+            ])
             ->leftJoin('collection_votes', function ($join) {
                 $join->on('collection_votes.collection_id', '=', 'collections.id')
                     ->whereBetween('collection_votes.voted_at', [
@@ -605,11 +604,25 @@ class Collection extends Model
                     ]);
             })
             ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
-            ->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw("'ETH'"))
             ->withCount('nfts')
             ->groupBy('collections.id');
 
         return $query->fromSub($subQuery, 'collections');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeSelectVolumeFiat(Builder $query, CurrencyCode $currency): Builder
+    {
+        $currencyCode = Str::lower($currency->value);
+
+        return $query->addSelect(
+            DB::raw("
+            (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
+        AS volume_fiat")
+        )->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw("'ETH'"));
     }
 
     /**

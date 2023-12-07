@@ -147,6 +147,9 @@ class CollectionController extends Controller
                                     'network',
                                     'floorPriceToken',
                                 ])
+                                ->selectVolumeFiat($currency)
+                                ->addSelect('collections.*')
+                                ->groupBy('collections.id')
                                 ->simplePaginate(12);
 
         return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency));
