@@ -95,7 +95,7 @@ export const NominationDialog = ({
 
     return (
         <Dialog
-            title={t("pages.collections.vote.or_nominate_collection")}
+            title={t("pages.collections.vote.nominate_collection")}
             isOpen={isOpen}
             onClose={(): void => {
                 setIsOpen(false);

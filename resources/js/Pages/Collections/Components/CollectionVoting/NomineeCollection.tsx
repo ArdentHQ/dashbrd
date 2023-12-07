@@ -28,7 +28,7 @@ export const NomineeCollection = ({
         <TableRow
             ref={reference}
             key={uniqueKey}
-            className={cn("group cursor-pointer dark:border-theme-dark-700", {
+            className={cn("group cursor-pointer border-b-0 dark:border-theme-dark-700", {
                 "selected-candidate": selectedCollection === collection.id,
             })}
             onClick={(): void => {
