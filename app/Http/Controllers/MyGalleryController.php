@@ -28,12 +28,12 @@ class MyGalleryController extends Controller
 
         $showDrafts = $request->boolean('draft');
 
-        $galleries = $galleries->forUser($user)->through(
+        $userGalleries = $galleries->forUser($user)->through(
             fn ($gallery) => GalleryCardData::fromModel($gallery, $user)
         );
 
         /** @var PaginatedDataCollection<int, GalleryCardData> */
-        $collection = GalleryCardData::collection($galleries);
+        $collection = GalleryCardData::collection($userGalleries);
 
         $userCollectionsCount = $user->collections()->count();
         $hiddenCollectionsCount = $user->hiddenCollections()->count();
