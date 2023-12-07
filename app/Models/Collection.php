@@ -583,7 +583,7 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeVotable(Builder $query): Builder
+    public function scopeVotable(Builder $query, CurrencyCode $currency): Builder
     {
         $subQuery = Collection::query()->select([
             'collections.*',
@@ -592,7 +592,7 @@ class Collection extends Model
             DB::raw('COUNT(collection_votes.id) as votes_count'),
             DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
             DB::raw("
-                (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> 'usd')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
+                (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '$currency->value')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
             AS volume_fiat"),
         ])
             ->leftJoin('collection_votes', function ($join) {
@@ -614,10 +614,10 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeVotedByWalletInCurrentMonth(Builder $query, Wallet $wallet): Builder
+    public function scopeVotedByUserInCurrentMonth(Builder $query, User $user): Builder
     {
-        return $query->votable()
-            ->whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $wallet->id));
+        return $query->votable($user->currency())
+            ->whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $user->wallet_id));
     }
 
     /**

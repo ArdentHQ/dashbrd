@@ -75,7 +75,7 @@ class CollectionController extends Controller
             return null;
         }
 
-        $collection = Collection::votedByWalletInCurrentMonth($user->wallet)->first();
+        $collection = Collection::votedByUserInCurrentMonth($user)->first();
 
         return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true) : null;
     }
@@ -89,10 +89,10 @@ class CollectionController extends Controller
 
         $currency = $user?->currency() ?? CurrencyCode::USD;
 
-        $userVoted = $user !== null ? Collection::votedByWalletInCurrentMonth($user->wallet)->exists() : false;
+        $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
         // 8 collections on the vote table + 5 collections to nominate
-        $collections = Collection::votable()->limit(13)->get();
+        $collections = Collection::votable($currency)->limit(13)->get();
 
         return $collections->map(function (Collection $collection) use ($userVoted, $currency) {
             return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted);

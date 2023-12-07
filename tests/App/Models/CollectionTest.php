@@ -1227,7 +1227,7 @@ it('returns the collections with most votes in the same month first for votable'
         'voted_at' => Carbon::now(),
     ]);
 
-    $collectionsIds = Collection::votable()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable(CurrencyCode::USD)->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         $collectionWith8Votes->id,
@@ -1263,7 +1263,7 @@ it('only considers the votes on the same votes for votables', function () {
         'voted_at' => Carbon::now(),
     ]);
 
-    $collectionsIds = Collection::votable()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable(CurrencyCode::USD)->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         // 6 votes this month
@@ -1294,7 +1294,7 @@ it('sorts by volume if collections have the same amount of votes', function () {
     ]);
     CollectionVote::factory()->count(3)->create(['collection_id' => $lowVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
 
-    $collectionsIds = Collection::votable()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable(CurrencyCode::USD)->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         $highVolume->id,
