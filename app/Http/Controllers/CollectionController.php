@@ -68,6 +68,7 @@ class CollectionController extends Controller
             return redirect()->route('collections', $request->except('showHidden'));
         }
 
+
         $cache = new UserCache($user);
 
         $sortBy = in_array($request->query('sort'), ['oldest', 'received', 'name', 'floor-price', 'value', 'chain']) ? $request->query('sort') : null;
