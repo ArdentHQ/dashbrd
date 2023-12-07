@@ -46,7 +46,6 @@ const DashboardContent = ({
     onSend?: (asset?: App.Data.TokenListItemData) => void;
     onReceive?: (asset?: App.Data.TokenListItemData) => void;
 }): JSX.Element => {
-
     const { t } = useTranslation();
 
     const { isOpen: isBreakdownOpen, setOpen: setBreakdownOpen } = useSliderContext();
