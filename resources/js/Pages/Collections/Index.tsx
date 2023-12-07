@@ -20,7 +20,7 @@ import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { type VoteCollectionProperties, VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
+import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface Filters extends Record<string, FormDataConvertible> {
@@ -39,14 +39,14 @@ interface CollectionsIndexProperties extends PageProps {
     popularArticles: App.Data.Articles.ArticleData[];
 }
 
-const demoCollection: VoteCollectionProperties = {
-    floorPriceFiat: "45.25",
+const demoCollection: App.Data.Collections.VotableCollectionData = {
+    floorPriceFiat: 45.25,
     floorPrice: "0",
     floorPriceCurrency: "ETH",
     floorPriceDecimals: 18,
     volumeFiat: 45.12,
     id: 1,
-    index: 1,
+    rank: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "256.000000000000000000",
@@ -170,7 +170,11 @@ const CollectionsIndex = ({
                 >
                     <VoteCollections
                         votedCollectionId={1}
-                        collections={Array.from({ length: 13 }).fill(demoCollection) as VoteCollectionProperties[]}
+                        collections={
+                            Array.from({ length: 13 }).fill(
+                                demoCollection,
+                            ) as App.Data.Collections.VotableCollectionData[]
+                        }
                         user={auth.user}
                     />
                     <CollectionOfTheMonthWinners

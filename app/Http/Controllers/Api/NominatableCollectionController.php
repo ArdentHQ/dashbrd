@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Data\Collections\PopularCollectionData;
+use App\Data\Collections\VotableCollectionData;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use Illuminate\Http\JsonResponse;
@@ -23,10 +23,12 @@ class NominatableCollectionController extends Controller
 
         $collections = Collection::search($request->user(), $query)
                                 ->limit(15)
+                                ->withCount('nfts')
+                                ->orderBy('name', 'asc')
                                 ->get();
 
         return response()->json([
-            'collections' => $collections->map(fn ($collection) => PopularCollectionData::fromModel($collection, $request->user()->currency())),
+            'collections' => $collections->map(fn ($collection) => VotableCollectionData::fromModel($collection, $request->user()->currency())),
         ]);
     }
 }

@@ -2,23 +2,22 @@ import { within } from "@testing-library/react";
 import { expect } from "vitest";
 import {
     VoteCollection,
-    type VoteCollectionProperties,
     VoteCollections,
     VoteCount,
 } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
-const demoCollection: VoteCollectionProperties = {
+const demoCollection: App.Data.Collections.VotableCollectionData = {
     id: 1,
-    index: 1,
+    rank: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "256.000000000000000000",
     volumeCurrency: "ETH",
     volumeDecimals: 18,
     votes: 15,
-    floorPriceFiat: "45.25",
+    floorPriceFiat: 45.25,
     floorPrice: "0",
     floorPriceCurrency: "ETH",
     floorPriceDecimals: 18,
@@ -26,7 +25,7 @@ const demoCollection: VoteCollectionProperties = {
     nftsCount: 5,
 };
 
-const collections = Array.from({ length: 13 }).fill(demoCollection) as VoteCollectionProperties[];
+const collections = Array.from({ length: 13 }).fill(demoCollection) as App.Data.Collections.VotableCollectionData[];
 
 describe("VoteCollections", () => {
     const user = new UserDataFactory().create();

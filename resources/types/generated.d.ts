@@ -247,6 +247,22 @@ declare namespace App.Data.Collections {
         tokenNumber: string;
         images: App.Data.Nfts.NftImagesData;
     };
+    export type VotableCollectionData = {
+        id: number;
+        rank: number;
+        name: string;
+        image: string | null;
+        volume: string | null;
+        votes: number;
+        volumeFiat: number | null;
+        volumeCurrency: string | null;
+        volumeDecimals: number | null;
+        floorPrice: string | null;
+        floorPriceFiat: number | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        nftsCount: number;
+    };
 }
 declare namespace App.Data.Gallery {
     export type GalleriesCardData = {

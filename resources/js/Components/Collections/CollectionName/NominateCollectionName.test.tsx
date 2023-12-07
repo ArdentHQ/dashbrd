@@ -1,21 +1,20 @@
 import React from "react";
 import { NominateCollectionName } from "./NominateCollectionName";
-import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting";
 import { render, screen } from "@/Tests/testing-library";
 
-const demoCollection: VoteCollectionProperties = {
-    floorPriceFiat: "45.25",
+const demoCollection: App.Data.Collections.VotableCollectionData = {
+    floorPriceFiat: 45.25,
     floorPrice: "0",
     floorPriceCurrency: "ETH",
     floorPriceDecimals: 18,
     volumeFiat: 45.12,
     id: 1,
-    index: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "0",
     volumeCurrency: "ETH",
     volumeDecimals: 18,
+    rank: 1,
     votes: 45,
     nftsCount: 5,
 };

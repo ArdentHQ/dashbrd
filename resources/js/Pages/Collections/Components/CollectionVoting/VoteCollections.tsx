@@ -12,29 +12,12 @@ import { Tooltip } from "@/Components/Tooltip";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
 
-export interface VoteCollectionProperties {
-    id: number;
-    name: string;
-    image: string | null;
-    votes?: number;
-    index: number;
-    floorPrice: string | null;
-    floorPriceCurrency: string | null;
-    floorPriceFiat: string | null;
-    floorPriceDecimals: number | null;
-    volume: string | null;
-    volumeFiat: number | null;
-    volumeCurrency: string | null;
-    volumeDecimals: number | null;
-    nftsCount: number | null;
-}
-
 export const VoteCollections = ({
     collections,
     user,
     votedCollectionId,
 }: {
-    collections: VoteCollectionProperties[];
+    collections: App.Data.Collections.VotableCollectionData[];
     user: App.Data.UserData | null;
     votedCollectionId?: number;
 }): JSX.Element => {
@@ -64,7 +47,7 @@ export const VoteCollections = ({
                     {collections.slice(0, 4).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            collection={{ ...collection, id: index, index: index + 1 }}
+                            collection={{ ...collection, id: index, rank: index + 1 }}
                             setSelectedCollectionId={setSelectedCollectionId}
                             votedId={votedCollectionId}
                             variant={getVariant(index)}
@@ -78,7 +61,7 @@ export const VoteCollections = ({
                     {collections.slice(4, 8).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            collection={{ ...collection, id: index + 4, index: index + 5 }}
+                            collection={{ ...collection, id: index + 4, rank: index + 5 }}
                             setSelectedCollectionId={setSelectedCollectionId}
                             votedId={votedCollectionId}
                             variant={getVariant(index + 4)}
@@ -125,7 +108,7 @@ export const VoteCollection = ({
     variant,
     setSelectedCollectionId,
 }: {
-    collection: VoteCollectionProperties;
+    collection: App.Data.Collections.VotableCollectionData;
     votedId?: number;
     variant?: VoteCollectionVariants;
     setSelectedCollectionId: (collectionId: number) => void;
@@ -175,7 +158,7 @@ export const VoteCollection = ({
                                 )}
                             >
                                 <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                                    {collection.index}
+                                    {collection.rank}
                                 </span>
                             </div>
                             <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">

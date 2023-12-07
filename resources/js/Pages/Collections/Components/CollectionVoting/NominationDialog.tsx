@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { NomineeCollections } from "./NomineeCollections";
 import { Button } from "@/Components/Buttons";
 import { Dialog } from "@/Components/Dialog";
+import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { useDebounce } from "@/Hooks/useDebounce";
-import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 
 const NominationDialogFooter = ({
     setIsOpen,
@@ -56,7 +56,7 @@ export const NominationDialog = ({
 }: {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
-    initialCollections: VoteCollectionProperties[];
+    initialCollections: App.Data.Collections.VotableCollectionData[];
     user: App.Data.UserData | null;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -74,7 +74,7 @@ export const NominationDialog = ({
         }
 
         const { data } = await axios.get<{
-            collections: VoteCollectionProperties[];
+            collections: App.Data.Collections.VotableCollectionData[];
         }>(route("nominatable-collections", { query: debouncedQuery }));
 
         setCollections(data.collections);
@@ -116,6 +116,10 @@ export const NominationDialog = ({
                     query={query}
                     onChange={setQuery}
                 />
+
+                {collections.length === 0 && (
+                    <EmptyBlock className="mt-3">{t("pages.collections.search.no_results")}</EmptyBlock>
+                )}
 
                 <NomineeCollections
                     collections={collections}
