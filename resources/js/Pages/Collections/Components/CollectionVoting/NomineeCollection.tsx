@@ -1,6 +1,6 @@
 import cn from "classnames";
 import React, { useRef } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import { NominateCollectionName } from "@/Components/Collections/CollectionName";
 import {
     PopularCollectionFloorPrice,
@@ -24,8 +24,6 @@ export const NomineeCollection = ({
     selectedCollection: number;
     setSelectedCollection: (selectedCollection: number) => void;
 }): JSX.Element => {
-    const { t } = useTranslation();
-
     const reference = useRef(null);
 
     // @TODO hook up with real data
