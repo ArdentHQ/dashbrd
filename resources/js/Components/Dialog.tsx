@@ -13,6 +13,7 @@ interface Properties extends HTMLAttributes<HTMLDivElement> {
     isUsedByConfirmationDialog?: boolean;
     hasBlurryOverlay?: boolean;
     footer?: React.ReactNode;
+    panelClassName?: string;
 }
 
 const NOOP = /* istanbul ignore next */ (): null => null;
@@ -27,6 +28,7 @@ const Dialog = ({
     isUsedByConfirmationDialog = false,
     hasBlurryOverlay = false,
     className,
+    panelClassName,
     footer,
     ...properties
 }: Properties): JSX.Element => (
@@ -77,7 +79,10 @@ const Dialog = ({
                         <HeadlessDialog.Panel
                             as="div"
                             data-testid="Dialog__panel"
-                            className="flex h-screen w-full flex-col overflow-hidden bg-white text-left transition-all dark:bg-theme-dark-900 sm:block sm:h-auto sm:max-w-md sm:rounded-2xl sm:shadow-dialog"
+                            className={cn(
+                                "flex h-screen w-full flex-col overflow-hidden bg-white text-left transition-all dark:bg-theme-dark-900 sm:block sm:h-auto sm:max-w-md sm:rounded-2xl sm:shadow-dialog",
+                                panelClassName,
+                            )}
                         >
                             <div className="flex items-center justify-between border-b border-theme-secondary-300 px-6 pb-4 pt-6 dark:border-theme-dark-700">
                                 <HeadlessDialog.Title

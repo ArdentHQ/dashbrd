@@ -6,6 +6,7 @@ import {
     VoteCount,
 } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
+import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 const demoCollection = new VotableCollectionDataFactory().create({
@@ -20,11 +21,14 @@ const collections = new VotableCollectionDataFactory().createMany(8, {
 });
 
 describe("VoteCollections", () => {
+    const user = new UserDataFactory().create();
+
     it("should render collections in two block, 4 collection in each", () => {
         render(
             <VoteCollections
                 collections={collections}
                 votedCollection={null}
+                user={user}
             />,
         );
 

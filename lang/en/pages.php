@@ -80,6 +80,13 @@ return [
             'winners_month' => 'Winners: :month',
             'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
             'view_previous_winners' => 'View Previous Winners',
+            'vote_received_modal' => [
+                'title' => 'Vote Received',
+                'description' => 'Your vote has been recorded. Share your vote on X and let everyone know!',
+                'share_vote' => 'Share Vote',
+                'img_alt' => 'I voted for Dashbrd Project of the Month',
+                'x_text' => 'I voted for :collection for collection of the month @dashbrdapp! Go show your support!',
+            ],
             'vote_success' => 'Your vote has been successfully submitted',
         ],
         'articles' => [
@@ -102,6 +109,7 @@ return [
             'vote' => 'Vote',
             'time_left' => 'Time Left',
             'or_nominate_collection' => 'Or nominate a collection',
+            'nominate_collection' => 'Nominate a collection',
             'vote_to_reveal' => 'Vote to reveal data',
             'already_voted' => 'You’ve already nominated. Come back next month!',
         ],

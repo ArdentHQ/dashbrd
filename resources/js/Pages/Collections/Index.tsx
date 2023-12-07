@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
+import {
+    CollectionsVoteReceivedModal,
+    type TemporalVotableCollection,
+} from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
+import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
@@ -30,6 +35,7 @@ interface CollectionsIndexProperties extends PageProps {
     collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
     votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
+    collectionsTableResults: App.Data.Collections.CollectionData[];
     latestArticles: App.Data.Articles.ArticleData[];
     popularArticles: App.Data.Articles.ArticleData[];
     votedCollection: App.Data.Collections.VotableCollectionData | null;
@@ -52,6 +58,8 @@ const CollectionsIndex = ({
     const { props } = usePage();
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
+
+    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
 
     const isFirstRender = useIsFirstRender();
 
@@ -143,10 +151,14 @@ const CollectionsIndex = ({
                         <ViewAllButton />
                     </div>
                 </div>
-                <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
+                <div
+                    id="votes"
+                    className="mt-12 flex w-full flex-col gap-4 xl:flex-row"
+                >
                     <VoteCollections
                         collections={votableCollections}
                         votedCollection={votedCollection}
+                        user={auth.user}
                     />
 
                     <CollectionOfTheMonthWinners
@@ -162,6 +174,39 @@ const CollectionsIndex = ({
             />
 
             <CollectionsCallToAction />
+
+            {/* @TODO: remove this */}
+            <div className="mt-2">
+                <Button
+                    onClick={() => {
+                        setRecentlyVotedCollection({
+                            name: "MoonBirds",
+                            twitterUsername: "moonbirds",
+                        });
+                    }}
+                >
+                    Show Vote Modal
+                </Button>
+
+                <Button
+                    onClick={() => {
+                        setRecentlyVotedCollection({
+                            name: "MoonBirds",
+                            twitterUsername: null,
+                        });
+                    }}
+                >
+                    Show Vote Modal without twitter
+                </Button>
+            </div>
+
+            <CollectionsVoteReceivedModal
+                // @TODO: use a real collection
+                collection={recentlyVotedCollection}
+                onClose={() => {
+                    setRecentlyVotedCollection(undefined);
+                }}
+            />
         </DefaultLayout>
     );
 };

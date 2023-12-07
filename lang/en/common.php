@@ -165,5 +165,6 @@ return [
     'top' => 'Top',
     'all_chains' => 'All chains',
     'votes' => 'Votes',
+    'vote' => 'Vote',
     'vol' => 'Vol',
 ];
