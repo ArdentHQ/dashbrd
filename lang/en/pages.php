@@ -77,7 +77,7 @@ return [
             ],
         ],
         'collection_of_the_month' => [
-            'collection_of_the_month_month' => 'Collection of the Month August 2023',
+            'title' => 'Collection of the Month :month',
             'winners_month' => 'Winners: :month',
             'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
             'view_previous_winners' => 'View Previous Winners',
