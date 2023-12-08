@@ -3,14 +3,13 @@ import { useRef } from "react";
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
-import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting";
 import { FormatCrypto } from "@/Utils/Currency";
 
 export const NominateCollectionName = ({
     collection,
     isDisabled,
 }: {
-    collection: VoteCollectionProperties;
+    collection: App.Data.Collections.VotableCollectionData;
     isDisabled?: boolean;
 }): JSX.Element => {
     const collectionNameReference = useRef<HTMLParagraphElement>(null);
@@ -52,9 +51,9 @@ export const NominateCollectionName = ({
                         <FormatCrypto
                             value={collection.volume ?? "0"}
                             token={{
-                                symbol: collection.volumeCurrency ?? "ETH",
-                                name: collection.volumeCurrency ?? "ETH",
-                                decimals: collection.volumeDecimals ?? 18,
+                                symbol: collection.volumeCurrency,
+                                name: collection.volumeCurrency,
+                                decimals: collection.volumeDecimals,
                             }}
                         />
                     </p>

@@ -296,10 +296,10 @@ export const WinnersChart = ({
 
 export const WinnersChartMobile = ({
     winner,
-    currentMonth,
+    previousMonth,
 }: {
     winner: App.Data.Collections.CollectionOfTheMonthData;
-    currentMonth?: string;
+    previousMonth?: string;
 }): JSX.Element => {
     const { isDark } = useDarkModeContext();
     const { t } = useTranslation();
@@ -325,7 +325,7 @@ export const WinnersChartMobile = ({
 
                     <span className="collection-of-the-month-legend text-lg font-medium">
                         {t("pages.collections.collection_of_the_month.winners_month", {
-                            month: currentMonth,
+                            month: previousMonth,
                         })}
                     </span>
                 </div>

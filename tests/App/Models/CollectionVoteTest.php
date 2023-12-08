@@ -29,7 +29,6 @@ test('collection has many votes', function () {
 });
 
 it('filters votes from the current month', function () {
-
     $collection = Collection::factory()->create();
 
     CollectionVote::factory()->create([
@@ -55,4 +54,32 @@ it('filters votes from the current month', function () {
     expect($collection->votes()->inCurrentMonth()->count())->toBe(2);
 
     expect($collection->votes()->inCurrentMonth()->whereIn('id', $other)->count())->toBe(0);
+});
+
+it('filters votes from the previous month', function () {
+    $collection = Collection::factory()->create();
+
+    CollectionVote::factory()->create([
+        'collection_id' => $collection->id,
+        'voted_at' => Carbon::now()->subMonth()->startOfMonth(),
+    ]);
+
+    $other[] = CollectionVote::factory()->create([
+        'collection_id' => $collection->id,
+        'voted_at' => Carbon::now()->subMonth()->endOfMonth()->addDay(),
+    ])->id;
+
+    CollectionVote::factory()->create([
+        'collection_id' => $collection->id,
+        'voted_at' => Carbon::now()->subMonth()->startOfMonth()->addDays(15),
+    ]);
+
+    $other[] = CollectionVote::factory()->create([
+        'collection_id' => $collection->id,
+        'voted_at' => Carbon::now()->subMonth()->startOfMonth()->subDay(),
+    ])->id;
+
+    expect($collection->votes()->inPreviousMonth()->count())->toBe(2);
+
+    expect($collection->votes()->inPreviousMonth()->whereIn('id', $other)->count())->toBe(0);
 });

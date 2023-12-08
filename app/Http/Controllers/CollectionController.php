@@ -11,6 +11,7 @@ use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Collections\PopularCollectionData;
+use App\Data\Collections\VotableCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
@@ -32,19 +33,82 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
+        return Inertia::render('Collections/Index', [
+            'allowsGuests' => true,
+            'filters' => fn () => $this->getFilters($request),
+            'title' => fn () => trans('metatags.collections.title'),
+            'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
+            'collections' => fn () => $this->getPopularCollections($request),
+            'featuredCollections' => fn () => $this->getFeaturedCollections($request),
+            'votedCollection' => fn () => $this->getVotedCollection($request),
+            'votableCollections' => fn () => $this->getVotableCollections($request),
+            'latestArticles' => fn () => $this->getLatestArticles(),
+            'popularArticles' => fn () => $this->getPopularArticles(),
+        ]);
+    }
+
+    /**
+     * @return DataCollection<int, CollectionOfTheMonthData>
+     */
+    private function getCollectionsOfTheMonth(): DataCollection
+    {
+        return CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
+    }
+
+    private function getVotedCollection(Request $request): ?VotableCollectionData
+    {
         $user = $request->user();
 
-        $featuredCollections = Collection::where('is_featured', true)
+        if ($user === null) {
+            return null;
+        }
+
+        $collection = Collection::votableWithRank($user->currency())->votedByUserInCurrentMonth($user)->first();
+
+        return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true) : null;
+    }
+
+    /**
+     * @return SupportCollection<int, VotableCollectionData>
+     */
+    private function getVotableCollections(Request $request): SupportCollection
+    {
+        $user = $request->user();
+
+        $currency = $user?->currency() ?? CurrencyCode::USD;
+
+        $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
+
+        // 8 collections on the vote table + 5 collections to nominate
+        $collections = Collection::votable($currency)->limit(13)->get();
+
+        return $collections->map(function (Collection $collection) use ($userVoted, $currency) {
+            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted);
+        });
+    }
+
+    /**
+     * @return SupportCollection<int, CollectionFeaturedData>
+     */
+    private function getFeaturedCollections(Request $request): SupportCollection
+    {
+        $user = $request->user();
+
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
+
+        $featuredCollections = Collection::featured()
             ->withCount(['nfts'])
             ->get();
 
@@ -54,7 +118,17 @@ class CollectionController extends Controller
             });
         });
 
-        $currency = $user ? $user->currency() : CurrencyCode::USD;
+        return $featuredCollections->map(function (Collection $collection) use ($currency) {
+            return CollectionFeaturedData::fromModel($collection, $currency);
+        });
+    }
+
+    /**
+     * @return Paginator<PopularCollectionData>
+     */
+    private function getPopularCollections(Request $request): Paginator
+    {
+        $user = $request->user();
 
         $chainId = match ($request->query('chain')) {
             'polygon' => Chain::Polygon->value,
@@ -62,7 +136,9 @@ class CollectionController extends Controller
             default => null,
         };
 
-        /** @var LengthAwarePaginator<Collection> $collections */
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
+
+        /** @var Paginator<PopularCollectionData> $collections */
         $collections = Collection::query()
                                 ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
                                 ->filterByChainId($chainId)
@@ -71,32 +147,40 @@ class CollectionController extends Controller
                                     'network',
                                     'floorPriceToken',
                                 ])
+                                ->selectVolumeFiat($currency)
+                                ->addSelect('collections.*')
+                                ->groupBy('collections.id')
                                 ->simplePaginate(12);
 
-        return Inertia::render('Collections/Index', [
-            'allowsGuests' => true,
-            'filters' => fn () => $this->getFilters($request),
-            'title' => fn () => trans('metatags.collections.title'),
-            'latestArticles' => fn () => ArticleData::collection(Article::isPublished()
-                                            ->with('media', 'user.media')
-                                            ->withRelatedCollections()
-                                            ->sortByPublishedDate()
-                                            ->limit(8)
-                                            ->get()),
-            'popularArticles' => fn () => ArticleData::collection(Article::isPublished()
-                                            ->with('media', 'user.media')
-                                            ->withRelatedCollections()
-                                            ->sortByPopularity()
-                                            ->limit(8)
-                                            ->get()),
-            'topCollections' => fn () => CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get()),
-            'collections' => fn () => PopularCollectionData::collection(
-                $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency))
-            ),
-            'featuredCollections' => fn () => $featuredCollections->map(function (Collection $collection) use ($user) {
-                return CollectionFeaturedData::fromModel($collection, $user ? $user->currency() : CurrencyCode::USD);
-            }),
-        ]);
+        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency));
+    }
+
+    /**
+     * @return DataCollection<int, ArticleData>
+     */
+    private function getLatestArticles(): DataCollection
+    {
+        return ArticleData::collection(Article::isPublished()
+                    ->with('media', 'user.media')
+                    ->withRelatedCollections()
+                    ->sortByPublishedDate()
+                    ->limit(8)
+                    ->get());
+
+    }
+
+    /**
+     * @return DataCollection<int, ArticleData>
+     */
+    private function getPopularArticles()
+    {
+        return ArticleData::collection(Article::isPublished()
+                    ->with('media', 'user.media')
+                    ->withRelatedCollections()
+                    ->sortByPopularity()
+                    ->limit(8)
+                    ->get());
+
     }
 
     /**

@@ -2,31 +2,23 @@ import { within } from "@testing-library/react";
 import { expect } from "vitest";
 import {
     VoteCollection,
-    type VoteCollectionProperties,
     VoteCollections,
     VoteCount,
 } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
+import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
-const demoCollection: VoteCollectionProperties = {
+const demoCollection = new VotableCollectionDataFactory().create({
     id: 1,
-    index: 1,
+    rank: 1,
     name: "AlphaDogs",
-    image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
     volume: "256.000000000000000000",
-    volumeCurrency: "ETH",
-    volumeDecimals: 18,
-    votes: 15,
-    floorPriceFiat: "45.25",
-    floorPrice: "0",
-    floorPriceCurrency: "ETH",
-    floorPriceDecimals: 18,
-    volumeFiat: 45.12,
-    nftsCount: 5,
-};
+});
 
-const collections = Array.from({ length: 13 }).fill(demoCollection) as VoteCollectionProperties[];
+const collections = new VotableCollectionDataFactory().createMany(8, {
+    name: "AlphaDogs",
+});
 
 describe("VoteCollections", () => {
     const user = new UserDataFactory().create();
@@ -35,6 +27,7 @@ describe("VoteCollections", () => {
         render(
             <VoteCollections
                 collections={collections}
+                votedCollection={null}
                 user={user}
             />,
         );
@@ -53,6 +46,7 @@ describe("VoteCollection", () => {
                 collection={demoCollection}
                 votedId={1}
                 setSelectedCollectionId={vi.fn()}
+                index={1}
             />,
         );
 
@@ -65,6 +59,7 @@ describe("VoteCollection", () => {
                 collection={demoCollection}
                 votedId={1}
                 setSelectedCollectionId={vi.fn()}
+                index={1}
             />,
         );
 
@@ -78,6 +73,7 @@ describe("VoteCollection", () => {
                 votedId={1}
                 setSelectedCollectionId={vi.fn()}
                 variant="voted"
+                index={1}
             />,
         );
 
@@ -93,6 +89,7 @@ describe("VoteCollection", () => {
                 votedId={1}
                 setSelectedCollectionId={selectCollectionMock}
                 variant="voted"
+                index={1}
             />,
         );
 
@@ -106,6 +103,7 @@ describe("VoteCollection", () => {
             <VoteCollection
                 collection={demoCollection}
                 setSelectedCollectionId={selectCollectionMock}
+                index={1}
             />,
         );
 
@@ -118,7 +116,7 @@ describe("VoteCount", () => {
     it("should render without vote count", () => {
         render(
             <VoteCount
-                voteCount={45}
+                voteCount={null}
                 showVoteCount={false}
             />,
         );

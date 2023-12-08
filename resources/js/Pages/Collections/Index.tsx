@@ -20,7 +20,7 @@ import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { type VoteCollectionProperties, VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
+import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface Filters extends Record<string, FormDataConvertible> {
@@ -32,35 +32,22 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
-    topCollections: App.Data.Collections.CollectionOfTheMonthData[];
+    collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
+    votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
     collectionsTableResults: App.Data.Collections.CollectionData[];
     latestArticles: App.Data.Articles.ArticleData[];
     popularArticles: App.Data.Articles.ArticleData[];
+    votedCollection: App.Data.Collections.VotableCollectionData | null;
 }
-
-const demoCollection: VoteCollectionProperties = {
-    floorPriceFiat: "45.25",
-    floorPrice: "0",
-    floorPriceCurrency: "ETH",
-    floorPriceDecimals: 18,
-    volumeFiat: 45.12,
-    id: 1,
-    index: 1,
-    name: "AlphaDogs",
-    image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
-    volume: "256.000000000000000000",
-    volumeCurrency: "ETH",
-    volumeDecimals: 18,
-    votes: 45,
-    nftsCount: 5,
-};
 
 const CollectionsIndex = ({
     title,
     featuredCollections,
     collections: { data: collections },
-    topCollections,
+    collectionsOfTheMonth,
+    votableCollections,
+    votedCollection,
     auth,
     filters,
     latestArticles,
@@ -72,7 +59,7 @@ const CollectionsIndex = ({
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
 
-    const [votedCollection, setVotedCollection] = useState<TemporalVotableCollection>();
+    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
 
     const isFirstRender = useIsFirstRender();
 
@@ -169,12 +156,13 @@ const CollectionsIndex = ({
                     className="mt-12 flex w-full flex-col gap-4 xl:flex-row"
                 >
                     <VoteCollections
-                        votedCollectionId={1}
-                        collections={Array.from({ length: 13 }).fill(demoCollection) as VoteCollectionProperties[]}
+                        collections={votableCollections}
+                        votedCollection={votedCollection}
                         user={auth.user}
                     />
+
                     <CollectionOfTheMonthWinners
-                        winners={topCollections}
+                        winners={collectionsOfTheMonth}
                         className="hidden xl:flex"
                     />
                 </div>
@@ -191,7 +179,7 @@ const CollectionsIndex = ({
             <div className="mt-2">
                 <Button
                     onClick={() => {
-                        setVotedCollection({
+                        setRecentlyVotedCollection({
                             name: "MoonBirds",
                             twitterUsername: "moonbirds",
                         });
@@ -202,7 +190,7 @@ const CollectionsIndex = ({
 
                 <Button
                     onClick={() => {
-                        setVotedCollection({
+                        setRecentlyVotedCollection({
                             name: "MoonBirds",
                             twitterUsername: null,
                         });
@@ -214,9 +202,9 @@ const CollectionsIndex = ({
 
             <CollectionsVoteReceivedModal
                 // @TODO: use a real collection
-                collection={votedCollection}
+                collection={recentlyVotedCollection}
                 onClose={() => {
-                    setVotedCollection(undefined);
+                    setRecentlyVotedCollection(undefined);
                 }}
             />
         </DefaultLayout>

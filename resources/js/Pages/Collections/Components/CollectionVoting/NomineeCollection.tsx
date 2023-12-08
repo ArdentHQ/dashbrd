@@ -9,7 +9,6 @@ import {
 import { Radio } from "@/Components/Form/Radio";
 import { TableCell, TableRow } from "@/Components/Table";
 import { Tooltip } from "@/Components/Tooltip";
-import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 
 export const NomineeCollection = ({
     collection,
@@ -18,7 +17,7 @@ export const NomineeCollection = ({
     selectedCollection,
     setSelectedCollection,
 }: {
-    collection: VoteCollectionProperties;
+    collection: App.Data.Collections.VotableCollectionData;
     uniqueKey: string;
     user: App.Data.UserData | null;
     selectedCollection: number;
