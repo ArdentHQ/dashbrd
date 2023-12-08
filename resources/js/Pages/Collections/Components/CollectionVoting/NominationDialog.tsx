@@ -95,8 +95,11 @@ export const NominationDialog = ({
 
     useEffect(() => {
         if (!isOpen) {
-            setQuery("");
-            setCollections(initialCollections);
+            // To offset the transition...
+            setTimeout(() => {
+                setQuery("");
+                setCollections(initialCollections);
+            }, 200);
         }
     }, [isOpen]);
 
