@@ -14,7 +14,10 @@ export const WinnerCollections = ({ months = [] }: { months: string[] }): JSX.El
             <WinnerCollectionsFilter />
 
             {months.map((month) => (
-                <WinnerCollectionsList month={month} />
+                <WinnerCollectionsList
+                    month={month}
+                    key={month}
+                />
             ))}
         </>
     );
