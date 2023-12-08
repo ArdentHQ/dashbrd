@@ -69,6 +69,8 @@ export const NominationDialog = ({
     const [debouncedQuery] = useDebounce(query, 500);
 
     const searchCollections = async (): Promise<void> => {
+        setSelectedCollection(0);
+
         if (debouncedQuery.trim().length === 0) {
             setCollections(initialCollections);
 
