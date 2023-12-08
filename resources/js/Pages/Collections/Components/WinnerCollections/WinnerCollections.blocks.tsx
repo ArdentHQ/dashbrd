@@ -1,27 +1,19 @@
-import { type PageProps, router } from "@inertiajs/core";
-import { Head } from "@inertiajs/react";
 import cn from "classnames";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, IconButton } from "@/Components/Buttons";
-import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinners/CollectionOfTheMonthWinners.blocks";
+import { Dropdown } from "@/Components/Dropdown";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
-import { Link } from "@/Components/Link";
 import { Img } from "@/Components/Image";
-import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
-import { Dropdown } from "@/Components/Dropdown";
 import { DropdownButton } from "@/Components/SortDropdown";
-import { useState } from "react";
+import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
 
-const WinnerCollectionLabel = ({ label, value }: { label: string; value: string }) => {
-    return (
-        <p className="flex w-full justify-between space-x-1 whitespace-nowrap text-sm font-medium sm:w-auto">
-            <span className="text-theme-secondary-700 dark:text-theme-dark-200 ">{label}</span>
-            <span className="text-theme-secondary-900 dark:text-theme-dark-50">{value}</span>
-        </p>
-    );
-};
+const WinnerCollectionLabel = ({ label, value }: { label: string; value: string }): JSX.Element => (
+    <p className="flex w-full justify-between space-x-1 whitespace-nowrap text-sm font-medium sm:w-auto">
+        <span className="text-theme-secondary-700 dark:text-theme-dark-200 ">{label}</span>
+        <span className="text-theme-secondary-900 dark:text-theme-dark-50">{value}</span>
+    </p>
+);
 
 export const WinnerCollectionRow = ({
     floorPrice,
@@ -37,7 +29,7 @@ export const WinnerCollectionRow = ({
     floorPrice: string;
     image?: string;
     index: number;
-}) => {
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -92,7 +84,7 @@ export const WinnerCollectionRow = ({
     );
 };
 
-export const WinnerCollectionsEmptyBlock = () => {
+export const WinnerCollectionsEmptyBlock = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -122,7 +114,7 @@ export const WinnerCollectionsEmptyBlock = () => {
     );
 };
 
-export const WinnerCollectionsList = ({ month }: { month: string }) => {
+export const WinnerCollectionsList = ({ month }: { month: string }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -160,60 +152,53 @@ const YearSelectionDropdown = ({
     onChange?: (year: string) => void;
     options: string[];
     selectedYear: string;
-}) => {
-    return (
-        <Dropdown>
-            <Dropdown.Trigger>
-                {({ open }) => {
-                    return (
-                        <button
-                            type="button"
-                            className="transition-default flex items-center space-x-3 "
-                        >
-                            <span className="font-medium dark:text-theme-hint-400">{selectedYear}</span>
-                            <Icon
-                                name="ChevronDownSmall"
-                                className={cn(
-                                    "transform text-theme-secondary-700 transition duration-100 dark:text-theme-dark-200",
-                                    {
-                                        "rotate-180": open,
-                                    },
-                                )}
-                            />
-                        </button>
-                    );
-                }}
-            </Dropdown.Trigger>
+}): JSX.Element => (
+    <Dropdown>
+        <Dropdown.Trigger>
+            {({ open }) => (
+                <button
+                    type="button"
+                    className="transition-default flex items-center space-x-3 "
+                >
+                    <span className="font-medium dark:text-theme-hint-400">{selectedYear}</span>
+                    <Icon
+                        name="ChevronDownSmall"
+                        className={cn(
+                            "transform text-theme-secondary-700 transition duration-100 dark:text-theme-dark-200",
+                            {
+                                "rotate-180": open,
+                            },
+                        )}
+                    />
+                </button>
+            )}
+        </Dropdown.Trigger>
 
-            <Dropdown.Content
-                className="left-0 right-0 z-10 w-full origin-top-right px-6 sm:left-auto sm:mt-2 sm:h-fit sm:w-48 sm:px-0"
-                contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5 dark:bg-theme-dark-900 dark:border dark:border-theme-dark-700"
-            >
-                {({ setOpen }) =>
-                    options.map((year) => {
-                        return (
-                            <DropdownButton
-                                key={year}
-                                isActive={selectedYear === year}
-                                onClick={() => {
-                                    setOpen(false);
-                                    onChange?.(year);
-                                }}
-                            >
-                                {year}
-                            </DropdownButton>
-                        );
-                    })
-                }
-            </Dropdown.Content>
-        </Dropdown>
-    );
-};
+        <Dropdown.Content
+            className="left-0 right-0 z-10 w-full origin-top-right px-6 sm:left-auto sm:mt-2 sm:h-fit sm:w-48 sm:px-0"
+            contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5 dark:bg-theme-dark-900 dark:border dark:border-theme-dark-700"
+        >
+            {({ setOpen }) =>
+                options.map((year) => (
+                    <DropdownButton
+                        key={year}
+                        isActive={selectedYear === year}
+                        onClick={() => {
+                            setOpen(false);
+                            onChange?.(year);
+                        }}
+                    >
+                        {year}
+                    </DropdownButton>
+                ))
+            }
+        </Dropdown.Content>
+    </Dropdown>
+);
 
-export const WinnerCollectionsFilter = () => {
+export const WinnerCollectionsFilter = (): JSX.Element => {
     const { t } = useTranslation();
 
-    // TODO: Use db data.
     const options = ["2023", "2022", "2021"];
     const [selectedYear, setSelectedYear] = useState("2023");
 
@@ -225,7 +210,9 @@ export const WinnerCollectionsFilter = () => {
                 <YearSelectionDropdown
                     options={options}
                     selectedYear={selectedYear}
-                    onChange={(year) => setSelectedYear(year)}
+                    onChange={(year) => {
+                        setSelectedYear(year);
+                    }}
                 />
             </div>
         </div>

@@ -4,9 +4,8 @@ import {
     WinnerCollectionsList,
 } from "./WinnerCollections.blocks";
 
-export const WinnerCollections = () => {
-    // TODO: handle with real data.
-    if (false) {
+export const WinnerCollections = ({ months = [] }: { months: string[] }): JSX.Element => {
+    if (months.length === 0) {
         return <WinnerCollectionsEmptyBlock />;
     }
 
