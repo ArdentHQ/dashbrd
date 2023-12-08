@@ -9,7 +9,6 @@ import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableC
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
-
 const demoCollection = new VotableCollectionDataFactory().create({
     id: 1,
     rank: 1,
