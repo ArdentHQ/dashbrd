@@ -69,7 +69,7 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                         </div>
                     </div>
 
-                    <WinnerCollections />
+                    <WinnerCollections months={["November", "October", "September", "August"]} />
                 </div>
             </div>
         </DefaultLayout>
