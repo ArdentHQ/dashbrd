@@ -28,7 +28,7 @@ class NominatableCollectionController extends Controller
                                 ->get();
 
         return response()->json([
-            'collections' => $collections->map(fn ($collection) => VotableCollectionData::fromModel($collection, $request->user()->currency())),
+            'collections' => $collections->map(fn ($collection) => VotableCollectionData::fromModel($collection, $request->user()->currency(), showVotes: false)),
         ]);
     }
 }

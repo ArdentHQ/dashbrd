@@ -15,7 +15,6 @@ const demoCollection = new VotableCollectionDataFactory().create({
     volume: "0",
     volumeCurrency: "ETH",
     volumeDecimals: 18,
-    rank: 1,
     votes: 45,
     nftsCount: 5,
 });
