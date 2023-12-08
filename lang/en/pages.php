@@ -93,6 +93,7 @@ return [
                 'title' => 'Content to be added',
                 'description' => 'There will be a list of previous month winners here soon!',
             ],
+            'has_won_already' => 'This collection has already <br> won Collection of the Month.',
         ],
         'articles' => [
             'heading' => 'Latest NFT News & Features',
