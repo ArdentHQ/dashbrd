@@ -1,8 +1,9 @@
 import React from "react";
 import { NominateCollectionName } from "./NominateCollectionName";
+import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
 import { render, screen } from "@/Tests/testing-library";
 
-const demoCollection: App.Data.Collections.VotableCollectionData = {
+const demoCollection = new VotableCollectionDataFactory().create({
     floorPriceFiat: 45.25,
     floorPrice: "0",
     floorPriceCurrency: "ETH",
@@ -17,19 +18,13 @@ const demoCollection: App.Data.Collections.VotableCollectionData = {
     rank: 1,
     votes: 45,
     nftsCount: 5,
-};
+});
 
 describe("NominateCollectionName", () => {
     it("should render", () => {
         render(<NominateCollectionName collection={demoCollection} />);
 
         expect(screen.getByTestId("NominateCollectionName")).toBeInTheDocument();
-    });
-
-    it("should use ETH as default volume currency", () => {
-        render(<NominateCollectionName collection={{ ...demoCollection, volumeCurrency: null }} />);
-
-        expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 ETH");
     });
 
     it("should render the volume with the selected currency", () => {
@@ -42,21 +37,6 @@ describe("NominateCollectionName", () => {
         render(<NominateCollectionName collection={{ ...demoCollection, volume: null, volumeCurrency: "BTC" }} />);
 
         expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("0 BTC");
-    });
-
-    it("should render the volume using 18 decimals to format by default", () => {
-        render(
-            <NominateCollectionName
-                collection={{
-                    ...demoCollection,
-                    volume: "1000000000000000000",
-                    volumeCurrency: "ETH",
-                    volumeDecimals: null,
-                }}
-            />,
-        );
-
-        expect(screen.getByTestId("CollectionName__volume")).toHaveTextContent("1 ETH");
     });
 
     it("should render the volume using the specified decimals", () => {

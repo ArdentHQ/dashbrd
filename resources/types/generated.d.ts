@@ -257,6 +257,10 @@ declare namespace App.Data.Collections {
         volumeFiat: number | null;
         volumeCurrency: string | null;
         volumeDecimals: number | null;
+        rank: number | null;
+        name: string;
+        image: string | null;
+        votes: number | null;
         floorPrice: string | null;
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;

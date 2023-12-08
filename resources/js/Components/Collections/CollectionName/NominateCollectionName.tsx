@@ -51,9 +51,9 @@ export const NominateCollectionName = ({
                         <FormatCrypto
                             value={collection.volume ?? "0"}
                             token={{
-                                symbol: collection.volumeCurrency ?? "ETH",
-                                name: collection.volumeCurrency ?? "ETH",
-                                decimals: collection.volumeDecimals ?? 18,
+                                symbol: collection.volumeCurrency,
+                                name: collection.volumeCurrency,
+                                decimals: collection.volumeDecimals,
                             }}
                         />
                     </p>

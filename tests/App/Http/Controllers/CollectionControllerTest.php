@@ -24,6 +24,11 @@ it('can render the collections overview page', function () {
         ->assertStatus(200);
 });
 
+it('can render the collections overview page as guest', function () {
+    $this->get(route('collections'))
+        ->assertStatus(200);
+});
+
 it('can return featured collections', function () {
     $user = createUser();
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CollectionOfTheMonthController;
 use App\Http\Controllers\CollectionReportController;
 use App\Http\Controllers\CollectionVoteController;
 use App\Http\Controllers\DashboardController;
@@ -99,6 +100,7 @@ Route::group(['middleware' => 'features:collections'], function () {
 
     Route::group(['prefix' => 'collections'], function () {
         Route::get('', [CollectionController::class, 'index'])->name('collections');
+        Route::get('collection-of-the-month', CollectionOfTheMonthController::class)->name('collection-of-the-month');
         Route::get('{collection:slug}', [CollectionController::class, 'show'])->name('collections.view');
         Route::get('{collection:slug}/articles', [CollectionController::class, 'articles'])->name('collections.articles');
         Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');

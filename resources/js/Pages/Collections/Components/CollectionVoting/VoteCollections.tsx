@@ -1,5 +1,5 @@
 import cn from "classnames";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
 import { NominationDialog } from "./NominationDialog";
@@ -9,24 +9,55 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
 import { Tooltip } from "@/Components/Tooltip";
+import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
+type VoteCollectionVariants = "selected" | "voted" | undefined;
 
 export const VoteCollections = ({
     collections,
+    votedCollection,
     user,
-    votedCollectionId,
 }: {
     collections: App.Data.Collections.VotableCollectionData[];
+    votedCollection: App.Data.Collections.VotableCollectionData | null;
     user: App.Data.UserData | null;
-    votedCollectionId?: number;
 }): JSX.Element => {
     const { t } = useTranslation();
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
+    const { isSmAndAbove } = useBreakpoint();
 
     const getVariant = (collectionId: number): VoteCollectionVariants =>
-        votedCollectionId === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+        votedCollection?.id === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+
+    const collectionsWithVote = useMemo(() => {
+        const shouldMergeUserVote =
+            votedCollection !== null &&
+            !collections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
+
+        if (shouldMergeUserVote) {
+            if (isSmAndAbove) {
+                return [...collections.slice(0, 7), votedCollection];
+            } else {
+                return [...collections.slice(0, 3), votedCollection];
+            }
+        }
+
+        if (isSmAndAbove) {
+            return collections.slice(0, 8);
+        }
+
+        return collections.slice(0, 4);
+    }, [isSmAndAbove, collections, votedCollection]);
+
+    const nominatableCollections = useMemo(() => {
+        if (isSmAndAbove) {
+            return collections.slice(8, 13);
+        }
+
+        return collections.slice(4, 9);
+    }, [isSmAndAbove, collections]);
 
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -44,13 +75,14 @@ export const VoteCollections = ({
                     className="max-w-full flex-1 space-y-2"
                     data-testid="VoteCollections_Left"
                 >
-                    {collections.slice(0, 4).map((collection, index) => (
+                    {collectionsWithVote.slice(0, 4).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            collection={{ ...collection, id: index, rank: index + 1 }}
+                            index={index + 1}
+                            collection={collection}
                             setSelectedCollectionId={setSelectedCollectionId}
-                            votedId={votedCollectionId}
-                            variant={getVariant(index)}
+                            votedId={votedCollection?.id}
+                            variant={getVariant(collection.id)}
                         />
                     ))}
                 </div>
@@ -58,20 +90,21 @@ export const VoteCollections = ({
                     className="hidden flex-1 space-y-2 sm:block"
                     data-testid="VoteCollections_Right"
                 >
-                    {collections.slice(4, 8).map((collection, index) => (
+                    {collectionsWithVote.slice(4, 8).map((collection, index) => (
                         <VoteCollection
                             key={index}
-                            collection={{ ...collection, id: index + 4, rank: index + 5 }}
+                            index={index + 4}
+                            collection={collection}
                             setSelectedCollectionId={setSelectedCollectionId}
-                            votedId={votedCollectionId}
-                            variant={getVariant(index + 4)}
+                            votedId={votedCollection?.id}
+                            variant={getVariant(collection.id)}
                         />
                     ))}
                 </div>
             </div>
 
             <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
-                <VoteCountdown hasUserVoted={isTruthy(votedCollectionId)} />
+                <VoteCountdown hasUserVoted={votedCollection !== null} />
 
                 <LinkButton
                     onClick={(): void => {
@@ -89,26 +122,22 @@ export const VoteCollections = ({
             <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
-                initialCollections={collections.slice(8, 15).map((collection, index) => ({
-                    ...collection,
-                    index: index + 8,
-                    id: index + 8,
-                }))}
+                initialCollections={nominatableCollections}
                 user={user}
             />
         </div>
     );
 };
 
-type VoteCollectionVariants = "selected" | "voted" | undefined;
-
 export const VoteCollection = ({
     collection,
     votedId,
     variant,
     setSelectedCollectionId,
+    index,
 }: {
     collection: App.Data.Collections.VotableCollectionData;
+    index: number;
     votedId?: number;
     variant?: VoteCollectionVariants;
     setSelectedCollectionId: (collectionId: number) => void;
@@ -158,14 +187,14 @@ export const VoteCollection = ({
                                 )}
                             >
                                 <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                                    {collection.rank}
+                                    {collection.rank ?? index}
                                 </span>
                             </div>
                             <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
                                 <Img
                                     wrapperClassName="aspect-square"
                                     className={cn(
-                                        "h-full w-full rounded-full rounded-full bg-white object-cover ring-4  dark:bg-theme-dark-700 dark:ring-theme-dark-900",
+                                        "h-full w-full rounded-full bg-white object-cover ring-4  dark:bg-theme-dark-700 dark:ring-theme-dark-900",
                                         {
                                             "ring-white dark:ring-theme-dark-900": variant !== "voted",
                                             "ring-theme-primary-50 dark:ring-theme-dark-800": variant === "voted",
@@ -189,9 +218,9 @@ export const VoteCollection = ({
                                 <FormatCrypto
                                     value={collection.volume ?? "0"}
                                     token={{
-                                        symbol: collection.volumeCurrency ?? "ETH",
-                                        name: collection.volumeCurrency ?? "ETH",
-                                        decimals: collection.volumeDecimals ?? 18,
+                                        symbol: "ETH",
+                                        name: "ETH",
+                                        decimals: 18,
                                     }}
                                 />
                             </p>
@@ -226,7 +255,7 @@ export const VoteCount = ({
 }: {
     iconClass?: string;
     textClass?: string;
-    voteCount?: number;
+    voteCount: number | null;
     showVoteCount: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();

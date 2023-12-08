@@ -35,4 +35,16 @@ class CollectionVote extends Model
             Carbon::now()->endOfMonth(),
         ]);
     }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeInPreviousMonth(Builder $query): Builder
+    {
+        return $query->whereBetween('voted_at', [
+            Carbon::now()->subMonth()->startOfMonth(),
+            Carbon::now()->subMonth()->endOfMonth(),
+        ]);
+    }
 }

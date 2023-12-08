@@ -32,11 +32,13 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
-    topCollections: App.Data.Collections.CollectionOfTheMonthData[];
+    collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
+    votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
     collectionsTableResults: App.Data.Collections.CollectionData[];
     latestArticles: App.Data.Articles.ArticleData[];
     popularArticles: App.Data.Articles.ArticleData[];
+    votedCollection: App.Data.Collections.VotableCollectionData | null;
 }
 
 const demoCollection: App.Data.Collections.VotableCollectionData = {
@@ -60,7 +62,9 @@ const CollectionsIndex = ({
     title,
     featuredCollections,
     collections: { data: collections },
-    topCollections,
+    collectionsOfTheMonth,
+    votableCollections,
+    votedCollection,
     auth,
     filters,
     latestArticles,
@@ -72,7 +76,7 @@ const CollectionsIndex = ({
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
 
-    const [votedCollection, setVotedCollection] = useState<TemporalVotableCollection>();
+    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
 
     const isFirstRender = useIsFirstRender();
 
@@ -169,16 +173,13 @@ const CollectionsIndex = ({
                     className="mt-12 flex w-full flex-col gap-4 xl:flex-row"
                 >
                     <VoteCollections
-                        votedCollectionId={1}
-                        collections={
-                            Array.from({ length: 13 }).fill(
-                                demoCollection,
-                            ) as App.Data.Collections.VotableCollectionData[]
-                        }
+                        collections={votableCollections}
+                        votedCollection={votedCollection}
                         user={auth.user}
                     />
+
                     <CollectionOfTheMonthWinners
-                        winners={topCollections}
+                        winners={collectionsOfTheMonth}
                         className="hidden xl:flex"
                     />
                 </div>
@@ -195,7 +196,7 @@ const CollectionsIndex = ({
             <div className="mt-2">
                 <Button
                     onClick={() => {
-                        setVotedCollection({
+                        setRecentlyVotedCollection({
                             name: "MoonBirds",
                             twitterUsername: "moonbirds",
                         });
@@ -206,7 +207,7 @@ const CollectionsIndex = ({
 
                 <Button
                     onClick={() => {
-                        setVotedCollection({
+                        setRecentlyVotedCollection({
                             name: "MoonBirds",
                             twitterUsername: null,
                         });
@@ -218,9 +219,9 @@ const CollectionsIndex = ({
 
             <CollectionsVoteReceivedModal
                 // @TODO: use a real collection
-                collection={votedCollection}
+                collection={recentlyVotedCollection}
                 onClose={() => {
-                    setVotedCollection(undefined);
+                    setRecentlyVotedCollection(undefined);
                 }}
             />
         </DefaultLayout>

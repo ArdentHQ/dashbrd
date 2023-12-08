@@ -17,7 +17,6 @@ class CollectionOfTheMonthData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public int $votes,
-
     ) {
     }
 
@@ -25,7 +24,7 @@ class CollectionOfTheMonthData extends Data
     {
         return new self(
             image: $collection->extra_attributes->get('image'),
-            votes: $collection->votes()->inCurrentMonth()->count(),
+            votes: $collection->votes()->inPreviousMonth()->count(),
         );
     }
 }
