@@ -6,6 +6,7 @@ import { Button } from "@/Components/Buttons";
 import { Dialog } from "@/Components/Dialog";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
+import { LoadingBlock } from "@/Components/LoadingBlock/LoadingBlock";
 import { useDebounce } from "@/Hooks/useDebounce";
 
 const NominationDialogFooter = ({
@@ -60,8 +61,9 @@ export const NominationDialog = ({
     user: App.Data.UserData | null;
 }): JSX.Element => {
     const { t } = useTranslation();
-    const [query, setQuery] = useState<string>("");
-    const [selectedCollection, setSelectedCollection] = useState<number>(0);
+    const [query, setQuery] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [selectedCollection, setSelectedCollection] = useState(0);
     const [collections, setCollections] = useState(initialCollections);
 
     const [debouncedQuery] = useDebounce(query, 500);
@@ -73,11 +75,14 @@ export const NominationDialog = ({
             return;
         }
 
+        setLoading(true);
+
         const { data } = await axios.get<{
             collections: App.Data.Collections.VotableCollectionData[];
         }>(route("nominatable-collections", { query: debouncedQuery }));
 
         setCollections(data.collections);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -117,17 +122,26 @@ export const NominationDialog = ({
                     onChange={setQuery}
                 />
 
-                {collections.length === 0 && (
+                {loading && (
+                    <LoadingBlock
+                        className="mt-3"
+                        text={t("pages.collections.search.loading_results")}
+                    />
+                )}
+
+                {collections.length === 0 && !loading && (
                     <EmptyBlock className="mt-3">{t("pages.collections.search.no_results")}</EmptyBlock>
                 )}
 
-                <NomineeCollections
-                    collections={collections}
-                    activeSort=""
-                    user={user}
-                    selectedCollection={selectedCollection}
-                    setSelectedCollection={setSelectedCollection}
-                />
+                {!loading && (
+                    <NomineeCollections
+                        collections={collections}
+                        activeSort=""
+                        user={user}
+                        selectedCollection={selectedCollection}
+                        setSelectedCollection={setSelectedCollection}
+                    />
+                )}
             </div>
         </Dialog>
     );
