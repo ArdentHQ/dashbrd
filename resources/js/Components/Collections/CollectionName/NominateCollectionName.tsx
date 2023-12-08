@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { useRef } from "react";
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
@@ -5,7 +6,13 @@ import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { type VoteCollectionProperties } from "@/Pages/Collections/Components/CollectionVoting";
 import { FormatCrypto } from "@/Utils/Currency";
 
-export const NominateCollectionName = ({ collection }: { collection: VoteCollectionProperties }): JSX.Element => {
+export const NominateCollectionName = ({
+    collection,
+    isDisabled,
+}: {
+    collection: VoteCollectionProperties;
+    isDisabled?: boolean;
+}): JSX.Element => {
     const collectionNameReference = useRef<HTMLParagraphElement>(null);
     const isTruncated = useIsTruncated({ reference: collectionNameReference });
 
@@ -18,7 +25,7 @@ export const NominateCollectionName = ({ collection }: { collection: VoteCollect
                 <div className="relative h-12 w-12 shrink-0">
                     <Img
                         wrapperClassName="aspect-square"
-                        className="h-full w-full rounded-full object-cover"
+                        className={cn("h-full w-full rounded-full object-cover", { "grayscale-[50%]": isDisabled })}
                         src={collection.image}
                         isCircle
                     />
