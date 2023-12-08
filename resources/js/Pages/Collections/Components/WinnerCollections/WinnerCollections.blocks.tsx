@@ -88,3 +88,62 @@ export const WinnerCollectionRow = ({
         </div>
     );
 };
+
+export const WinnerCollectionsEmptyBlock = () => {
+    const { t } = useTranslation();
+
+    return (
+        <div className="flex items-center justify-center border-t border-theme-secondary-300 p-8 dark:border-theme-dark-700 sm:min-h-[262px]">
+            <div className="flex max-w-[230px] flex-col items-center text-center">
+                <div className="mb-3 flex h-[42px] w-[42px] items-center justify-center rounded-full border border-theme-secondary-300 dark:border-theme-dark-700">
+                    <Icon
+                        name="Clock"
+                        className="text-theme-secondary-700 dark:text-theme-dark-300"
+                        size="lg"
+                    />
+                </div>
+
+                <Heading
+                    level={3}
+                    className="text-theme-secondary-700 dark:text-theme-dark-200"
+                >
+                    {t("pages.collections.collection_of_the_month.content_to_be_added.title")}
+                </Heading>
+
+                <p className="text-theme-secondary-700 dark:text-theme-dark-200">
+                    {t("pages.collections.collection_of_the_month.content_to_be_added.description")}
+                </p>
+            </div>
+        </div>
+    );
+};
+
+export const WinnerCollectionsList = ({ month }: { month: string }) => {
+    const { t } = useTranslation();
+
+    return (
+        <div className="border-t border-theme-secondary-300 dark:border-theme-dark-700">
+            <div className="p-8">
+                <Heading level={4}>
+                    {t("pages.collections.collection_of_the_month.winners_month", {
+                        month,
+                    })}
+                </Heading>
+
+                <div className="mt-4 rounded-md border border-theme-secondary-300 dark:border-theme-dark-700">
+                    {[1, 2, 3].map((key) => (
+                        <WinnerCollectionRow
+                            index={key}
+                            image="https://i.seadn.io/gae/H-eyNE1MwL5ohL-tCfn_Xa1Sl9M9B4612tLYeUlQubzt4ewhr4huJIR5OLuyO3Z5PpJFSwdm7rq-TikAh7f5eUw338A2cy6HRH75?w=500&auto=format"
+                            name="jfs ajfkas jfsla fjlskjfksl fkjlsd jfksldfj sklf jlskfjs"
+                            key={key}
+                            floorPrice="0.01231232312 ETH"
+                            volume="0.01231232312 ETH"
+                            votes="1.7k"
+                        />
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};

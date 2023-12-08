@@ -11,7 +11,7 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
 import { Img } from "@/Components/Image";
-import { WinnerCollections } from "./Components/WinnerCollections/WinnerCollections";
+import { WinnerCollections } from "./Components/WinnerCollections";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
@@ -73,31 +73,7 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-center border-t border-theme-secondary-300 p-8 dark:border-theme-dark-700 sm:min-h-[262px]">
-                        <div className="flex max-w-[230px] flex-col items-center text-center">
-                            <div className="mb-3 flex h-[42px] w-[42px] items-center justify-center rounded-full border border-theme-secondary-300 dark:border-theme-dark-700">
-                                <Icon
-                                    name="Clock"
-                                    className="text-theme-secondary-700 dark:text-theme-dark-300"
-                                    size="lg"
-                                />
-                            </div>
-                            <Heading
-                                level={3}
-                                className="text-theme-secondary-700 dark:text-theme-dark-200"
-                            >
-                                {t("pages.collections.collection_of_the_month.content_to_be_added.title")}
-                            </Heading>
-
-                            <p className="text-theme-secondary-700 dark:text-theme-dark-200">
-                                {t("pages.collections.collection_of_the_month.content_to_be_added.description")}
-                            </p>
-                        </div>
-                    </div>
-
-                    <WinnerCollections month="November" />
-                    <WinnerCollections month="October" />
-                    <WinnerCollections month="September" />
+                    <WinnerCollections />
                 </div>
             </div>
         </DefaultLayout>
