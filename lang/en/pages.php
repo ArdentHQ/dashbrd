@@ -81,6 +81,7 @@ return [
             'winners_month' => 'Winners: :month',
             'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
             'view_previous_winners' => 'View Previous Winners',
+            'previous_winners' => 'Previous Winners',
             'vote_success' => 'Your vote has been successfully submitted',
             'content_to_be_added' => [
                 'title' => 'Content to be added',

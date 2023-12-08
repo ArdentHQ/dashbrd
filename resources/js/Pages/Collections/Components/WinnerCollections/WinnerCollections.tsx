@@ -1,4 +1,8 @@
-import { WinnerCollectionsEmptyBlock, WinnerCollectionsList } from "./WinnerCollections.blocks";
+import {
+    WinnerCollectionsEmptyBlock,
+    WinnerCollectionsFilter,
+    WinnerCollectionsList,
+} from "./WinnerCollections.blocks";
 
 export const WinnerCollections = () => {
     if (false) {
@@ -7,6 +11,7 @@ export const WinnerCollections = () => {
 
     return (
         <>
+            <WinnerCollectionsFilter />
             <WinnerCollectionsList month="November" />
             <WinnerCollectionsList month="October" />
             <WinnerCollectionsList month="September" />

@@ -2,7 +2,7 @@ import { type PageProps, router } from "@inertiajs/core";
 import { Head } from "@inertiajs/react";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { IconButton } from "@/Components/Buttons";
+import { Button, IconButton } from "@/Components/Buttons";
 import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinners/CollectionOfTheMonthWinners.blocks";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
@@ -10,6 +10,9 @@ import { Link } from "@/Components/Link";
 import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
+import { Dropdown } from "@/Components/Dropdown";
+import { DropdownButton } from "@/Components/SortDropdown";
+import { useState } from "react";
 
 const WinnerCollectionLabel = ({ label, value }: { label: string; value: string }) => {
     return (
@@ -104,7 +107,8 @@ export const WinnerCollectionsEmptyBlock = () => {
                 </div>
 
                 <Heading
-                    level={3}
+                    level={4}
+                    as="h3"
                     className="text-theme-secondary-700 dark:text-theme-dark-200"
                 >
                     {t("pages.collections.collection_of_the_month.content_to_be_added.title")}
@@ -143,6 +147,86 @@ export const WinnerCollectionsList = ({ month }: { month: string }) => {
                         />
                     ))}
                 </div>
+            </div>
+        </div>
+    );
+};
+
+const YearSelectionDropdown = ({
+    onChange,
+    options,
+    selectedYear,
+}: {
+    onChange?: (year: string) => void;
+    options: string[];
+    selectedYear: string;
+}) => {
+    return (
+        <Dropdown>
+            <Dropdown.Trigger>
+                {({ open }) => {
+                    return (
+                        <button
+                            type="button"
+                            className="transition-default flex items-center space-x-3 "
+                        >
+                            <span className="font-medium dark:text-theme-hint-400">{selectedYear}</span>
+                            <Icon
+                                name="ChevronDownSmall"
+                                className={cn(
+                                    "transform text-theme-secondary-700 transition duration-100 dark:text-theme-dark-50",
+                                    {
+                                        "rotate-180": open,
+                                    },
+                                )}
+                            />
+                        </button>
+                    );
+                }}
+            </Dropdown.Trigger>
+
+            <Dropdown.Content
+                className="left-0 right-0 z-10 w-full origin-top-right px-6 sm:left-auto sm:mt-2 sm:h-fit sm:w-48 sm:px-0"
+                contentClasses="shadow-3xl flex w-full select-none flex-col overflow-hidden rounded-xl bg-white py-3.5 dark:bg-theme-dark-900 dark:border dark:border-theme-dark-700"
+            >
+                {({ setOpen }) =>
+                    options.map((year) => {
+                        return (
+                            <DropdownButton
+                                key={year}
+                                isActive={selectedYear === year}
+                                onClick={() => {
+                                    setOpen(false);
+                                    onChange?.(year);
+                                }}
+                            >
+                                {year}
+                            </DropdownButton>
+                        );
+                    })
+                }
+            </Dropdown.Content>
+        </Dropdown>
+    );
+};
+
+export const WinnerCollectionsFilter = () => {
+    const { t } = useTranslation();
+
+    // TODO: Use db data.
+    const options = ["2023", "2022", "2021"];
+    const [selectedYear, setSelectedYear] = useState("2023");
+
+    return (
+        <div className="border-t border-theme-secondary-300 p-8 dark:border-theme-dark-700">
+            <div className="flex items-center justify-between">
+                <Heading level={4}>{t("pages.collections.collection_of_the_month.previous_winners")}</Heading>
+
+                <YearSelectionDropdown
+                    options={options}
+                    selectedYear={selectedYear}
+                    onChange={(year) => setSelectedYear(year)}
+                />
             </div>
         </div>
     );
