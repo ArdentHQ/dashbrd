@@ -77,6 +77,7 @@ return [
             ],
         ],
         'collection_of_the_month' => [
+            'title' => 'Collection of the Month :month',
             'winners_month' => 'Winners: :month',
             'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
             'view_previous_winners' => 'View Previous Winners',
@@ -88,6 +89,10 @@ return [
                 'x_text' => 'I voted for :collection for collection of the month @dashbrdapp! Go show your support!',
             ],
             'vote_success' => 'Your vote has been successfully submitted',
+            'content_to_be_added' => [
+                'title' => 'Content to be added',
+                'description' => 'There will be a list of previous month winners here soon!',
+            ],
             'has_won_already' => 'This collection has already <br> won Collection of the Month.',
         ],
         'articles' => [

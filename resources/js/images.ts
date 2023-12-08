@@ -5,10 +5,16 @@ import { ReactComponent as AuthInstallWallet } from "@images/auth-install-wallet
 import { ReactComponent as CrownBadgeDark } from "@images/collections/crown-badge-dark.svg";
 import { ReactComponent as CrownBadge } from "@images/collections/crown-badge.svg";
 import { ReactComponent as OneBarChartDark } from "@images/collections/one-bar-chart-dark.svg";
+import { ReactComponent as OneBarChartLgDark } from "@images/collections/one-bar-chart-lg-dark.svg";
+import { ReactComponent as OneBarChartLg } from "@images/collections/one-bar-chart-lg.svg";
 import { ReactComponent as OneBarChart } from "@images/collections/one-bar-chart.svg";
 import { ReactComponent as ThreeBarChartDark } from "@images/collections/three-bar-chart-dark.svg";
+import { ReactComponent as ThreeBarChartLgDark } from "@images/collections/three-bar-chart-lg-dark.svg";
+import { ReactComponent as ThreeBarChartLg } from "@images/collections/three-bar-chart-lg.svg";
 import { ReactComponent as ThreeBarChart } from "@images/collections/three-bar-chart.svg";
 import { ReactComponent as TwoBarChartDark } from "@images/collections/two-bar-chart-dark.svg";
+import { ReactComponent as TwoBarChartLgDark } from "@images/collections/two-bar-chart-lg-dark.svg";
+import { ReactComponent as TwoBarChartLg } from "@images/collections/two-bar-chart-lg.svg";
 import { ReactComponent as TwoBarChart } from "@images/collections/two-bar-chart.svg";
 import { ReactComponent as VoteNextMonthWinnersDark } from "@images/collections/vote-next-month-winners-dark.svg";
 import { ReactComponent as VoteNextMonthWinners } from "@images/collections/vote-next-month-winners.svg";
@@ -75,5 +81,11 @@ export {
     TwoBarChartDark,
     OneBarChart,
     OneBarChartDark,
+    OneBarChartLgDark,
+    OneBarChartLg,
+    ThreeBarChartLgDark,
+    ThreeBarChartLg,
+    TwoBarChartLgDark,
+    TwoBarChartLg,
     CollectionsGrid,
 };
