@@ -174,7 +174,7 @@ const YearSelectionDropdown = ({
                             <Icon
                                 name="ChevronDownSmall"
                                 className={cn(
-                                    "transform text-theme-secondary-700 transition duration-100 dark:text-theme-dark-50",
+                                    "transform text-theme-secondary-700 transition duration-100 dark:text-theme-dark-200",
                                     {
                                         "rotate-180": open,
                                     },
