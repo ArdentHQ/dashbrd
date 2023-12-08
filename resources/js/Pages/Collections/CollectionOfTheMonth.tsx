@@ -9,6 +9,10 @@ import { Icon } from "@/Components/Icon";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
+import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
+import { Img } from "@/Components/Image";
+import { WinnerCollections } from "./Components/WinnerCollections/WinnerCollections";
+
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
     collections: App.Data.Collections.CollectionOfTheMonthData[];
@@ -90,6 +94,10 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                             </p>
                         </div>
                     </div>
+
+                    <WinnerCollections month="November" />
+                    <WinnerCollections month="October" />
+                    <WinnerCollections month="September" />
                 </div>
             </div>
         </DefaultLayout>
