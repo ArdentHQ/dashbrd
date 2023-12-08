@@ -88,6 +88,7 @@ return [
                 'x_text' => 'I voted for :collection for collection of the month @dashbrdapp! Go show your support!',
             ],
             'vote_success' => 'Your vote has been successfully submitted',
+            'has_won_already' => 'This collection has already <br> won Collection of the Month.',
         ],
         'articles' => [
             'heading' => 'Latest NFT News & Features',
