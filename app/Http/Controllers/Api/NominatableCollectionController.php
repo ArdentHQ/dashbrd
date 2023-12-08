@@ -20,16 +20,17 @@ class NominatableCollectionController extends Controller
 
         /** @var string|null */
         $query = $request->query('query');
+        $currency = $request->user()->currency();
 
         $collections = Collection::search($request->user(), $query)
                                 ->limit(15)
-                                ->withCount('nfts')
+                                ->votable($currency, orderByVotes: false)
                                 ->orderBy('name', 'asc')
                                 ->get();
 
         return response()->json([
             'collections' => $collections->map(
-                fn ($collection) => VotableCollectionData::fromModel($collection, $request->user()->currency(), showVotes: false)
+                fn ($collection) => VotableCollectionData::fromModel($collection, $currency, showVotes: false)
             ),
         ]);
     }
