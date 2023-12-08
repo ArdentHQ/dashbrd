@@ -90,8 +90,19 @@ class Collection extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
+            ->generateSlugsFrom(fn (self $model) => $this->preventForbiddenSlugs($model))
             ->saveSlugsTo('slug');
+    }
+
+    private function preventForbiddenSlugs(self $model): string
+    {
+        $forbidden = ['collection-of-the-month'];
+
+        if (in_array(Str::slug($model->name), $forbidden, true)) {
+            return $model->name.' Collection';
+        }
+
+        return $model->name;
     }
 
     /**
