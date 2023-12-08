@@ -187,7 +187,7 @@ export const VoteCollection = ({
                                 )}
                             >
                                 <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
-                                    {collection.rank}
+                                    {collection.rank ?? index}
                                 </span>
                             </div>
                             <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
