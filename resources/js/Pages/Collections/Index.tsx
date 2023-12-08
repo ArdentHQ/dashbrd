@@ -41,23 +41,6 @@ interface CollectionsIndexProperties extends PageProps {
     votedCollection: App.Data.Collections.VotableCollectionData | null;
 }
 
-const demoCollection: App.Data.Collections.VotableCollectionData = {
-    floorPriceFiat: 45.25,
-    floorPrice: "0",
-    floorPriceCurrency: "ETH",
-    floorPriceDecimals: 18,
-    volumeFiat: 45.12,
-    id: 1,
-    rank: 1,
-    name: "AlphaDogs",
-    image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
-    volume: "256.000000000000000000",
-    volumeCurrency: "ETH",
-    volumeDecimals: 18,
-    votes: 45,
-    nftsCount: 5,
-};
-
 const CollectionsIndex = ({
     title,
     featuredCollections,

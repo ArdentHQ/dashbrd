@@ -33,7 +33,7 @@ class VotableCollectionData extends Data
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes = false): self
     {
         /**
          * @var mixed $collection

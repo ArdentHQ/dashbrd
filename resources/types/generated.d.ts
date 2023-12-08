@@ -249,14 +249,6 @@ declare namespace App.Data.Collections {
     };
     export type VotableCollectionData = {
         id: number;
-        rank: number;
-        name: string;
-        image: string | null;
-        volume: string | null;
-        votes: number;
-        volumeFiat: number | null;
-        volumeCurrency: string | null;
-        volumeDecimals: number | null;
         rank: number | null;
         name: string;
         image: string | null;
@@ -265,6 +257,10 @@ declare namespace App.Data.Collections {
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        volume: string | null;
+        volumeFiat: number | null;
+        volumeCurrency: string;
+        volumeDecimals: number;
         nftsCount: number;
     };
 }
