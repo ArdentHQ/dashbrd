@@ -263,7 +263,7 @@ export const WinnersChart = ({
                                 ? {
                                       "bottom-[37px] left-[9px] sm:bottom-[90px] sm:left-[23px]": index === 0,
                                       "bottom-[70px] sm:bottom-[163px]": index === 1,
-                                      "bottom-[19px] left-[-11px] sm:bottom-[51px] sm:right-[22px]": index === 2,
+                                      "bottom-[19px] right-[11px] sm:bottom-[51px] sm:right-[22px]": index === 2,
                                   }
                                 : {
                                       "bottom-[56px]": index === 0,
@@ -283,7 +283,7 @@ export const WinnersChart = ({
                         className={cn("relative text-center text-white", {
                             "sm:left-[-4px] ": large && index === 0,
                             "left-[1px] ": large && index === 1,
-                            "left-[-2px] sm:left-[-19px] ": large && index === 2,
+                            "right-[2px] sm:right-[8px] ": large && index === 2,
                         })}
                         votes={winner.votes}
                         large={large}
@@ -296,10 +296,10 @@ export const WinnersChart = ({
 
 export const WinnersChartMobile = ({
     winner,
-    currentMonth,
+    previousMonth,
 }: {
     winner: App.Data.Collections.CollectionOfTheMonthData;
-    currentMonth?: string;
+    previousMonth?: string;
 }): JSX.Element => {
     const { isDark } = useDarkModeContext();
     const { t } = useTranslation();
@@ -325,7 +325,7 @@ export const WinnersChartMobile = ({
 
                     <span className="collection-of-the-month-legend text-lg font-medium">
                         {t("pages.collections.collection_of_the_month.winners_month", {
-                            month: currentMonth,
+                            month: previousMonth,
                         })}
                     </span>
                 </div>

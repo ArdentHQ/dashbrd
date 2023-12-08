@@ -5,6 +5,7 @@ import {
 } from "./WinnerCollections.blocks";
 
 export const WinnerCollections = () => {
+    // TODO: handle with real data.
     if (false) {
         return <WinnerCollectionsEmptyBlock />;
     }

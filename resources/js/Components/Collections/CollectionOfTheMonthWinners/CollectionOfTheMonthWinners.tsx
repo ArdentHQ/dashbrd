@@ -18,14 +18,15 @@ export const CollectionOfTheMonthWinners = ({
     const showWinners = winners.length > 0;
 
     const date = new Date();
-    const currentMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+    date.setMonth(date.getMonth() - 1);
+    const previousMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
 
     return (
         <>
             {winners.length > 0 && (
                 <WinnersChartMobile
                     winner={winners[0]}
-                    currentMonth={currentMonth}
+                    previousMonth={previousMonth}
                 />
             )}
 
@@ -43,7 +44,7 @@ export const CollectionOfTheMonthWinners = ({
                     >
                         {showWinners
                             ? t("pages.collections.collection_of_the_month.winners_month", {
-                                  month: currentMonth,
+                                  month: previousMonth,
                               })
                             : t("pages.collections.collection_of_the_month.vote_for_next_months_winners")}
                     </Heading>

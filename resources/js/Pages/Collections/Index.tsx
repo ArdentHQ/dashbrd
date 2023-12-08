@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
+import {
+    CollectionsVoteReceivedModal,
+    type TemporalVotableCollection,
+} from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
+import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
@@ -15,7 +20,7 @@ import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { type VoteCollectionProperties, VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
+import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 interface Filters extends Record<string, FormDataConvertible> {
@@ -27,28 +32,22 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
-    topCollections: App.Data.Collections.CollectionOfTheMonthData[];
+    collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
+    votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
+    collectionsTableResults: App.Data.Collections.CollectionData[];
     latestArticles: App.Data.Articles.ArticleData[];
     popularArticles: App.Data.Articles.ArticleData[];
+    votedCollection: App.Data.Collections.VotableCollectionData | null;
 }
-
-const demoCollection: VoteCollectionProperties = {
-    id: 1,
-    index: 1,
-    name: "AlphaDogs",
-    image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
-    volume: "256.000000000000000000",
-    volumeCurrency: "ETH",
-    volumeDecimals: 18,
-    votes: 45,
-};
 
 const CollectionsIndex = ({
     title,
     featuredCollections,
     collections: { data: collections },
-    topCollections,
+    collectionsOfTheMonth,
+    votableCollections,
+    votedCollection,
     auth,
     filters,
     latestArticles,
@@ -59,6 +58,8 @@ const CollectionsIndex = ({
     const { props } = usePage();
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
+
+    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
 
     const isFirstRender = useIsFirstRender();
 
@@ -150,13 +151,18 @@ const CollectionsIndex = ({
                         <ViewAllButton />
                     </div>
                 </div>
-                <div className="mt-12 flex w-full flex-col gap-4 xl:flex-row">
+                <div
+                    id="votes"
+                    className="mt-12 flex w-full flex-col gap-4 xl:flex-row"
+                >
                     <VoteCollections
-                        votedCollectionId={1}
-                        collections={Array.from({ length: 8 }).fill(demoCollection) as VoteCollectionProperties[]}
+                        collections={votableCollections}
+                        votedCollection={votedCollection}
+                        user={auth.user}
                     />
+
                     <CollectionOfTheMonthWinners
-                        winners={topCollections}
+                        winners={collectionsOfTheMonth}
                         className="hidden xl:flex"
                     />
                 </div>
@@ -168,6 +174,39 @@ const CollectionsIndex = ({
             />
 
             <CollectionsCallToAction />
+
+            {/* @TODO: remove this */}
+            <div className="mt-2">
+                <Button
+                    onClick={() => {
+                        setRecentlyVotedCollection({
+                            name: "MoonBirds",
+                            twitterUsername: "moonbirds",
+                        });
+                    }}
+                >
+                    Show Vote Modal
+                </Button>
+
+                <Button
+                    onClick={() => {
+                        setRecentlyVotedCollection({
+                            name: "MoonBirds",
+                            twitterUsername: null,
+                        });
+                    }}
+                >
+                    Show Vote Modal without twitter
+                </Button>
+            </div>
+
+            <CollectionsVoteReceivedModal
+                // @TODO: use a real collection
+                collection={recentlyVotedCollection}
+                onClose={() => {
+                    setRecentlyVotedCollection(undefined);
+                }}
+            />
         </DefaultLayout>
     );
 };

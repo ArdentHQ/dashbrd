@@ -8,9 +8,6 @@ import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-
-import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
-import { Img } from "@/Components/Image";
 import { WinnerCollections } from "./Components/WinnerCollections";
 
 interface CollectionOfTheMonthProperties extends PageProps {

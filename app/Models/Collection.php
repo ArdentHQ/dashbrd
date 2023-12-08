@@ -11,6 +11,7 @@ use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -587,5 +588,85 @@ class Collection extends Model
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotableWithRank(Builder $query, CurrencyCode $currency): Builder
+    {
+        $subQuery = Collection::query()
+            ->votable($currency)
+            ->addSelect([
+                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
+            ]);
+
+        return $query->fromSub($subQuery, 'collections');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotable(Builder $query, CurrencyCode $currency): Builder
+    {
+        return $query
+            ->selectVolumeFiat($currency)
+            ->addSelect([
+                'collections.*',
+                DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
+                DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
+                DB::raw('COUNT(Distinct collection_votes.id) as votes_count'),
+            ])
+            ->leftJoin('collection_votes', function ($join) {
+                $join->on('collection_votes.collection_id', '=', 'collections.id')
+                    ->whereBetween('collection_votes.voted_at', [
+                        Carbon::now()->startOfMonth(),
+                        Carbon::now()->endOfMonth(),
+                    ]);
+            })
+            ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
+            ->withCount('nfts')
+            ->groupBy('collections.id')
+            ->orderBy('votes_count', 'desc')
+            ->orderByRaw('volume DESC NULLS LAST');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeSelectVolumeFiat(Builder $query, CurrencyCode $currency): Builder
+    {
+        $currencyCode = Str::lower($currency->value);
+
+        return $query->addSelect(
+            DB::raw("
+            (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
+        AS volume_fiat")
+        )->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw("'ETH'"));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotedByUserInCurrentMonth(Builder $query, User $user): Builder
+    {
+        return $query->whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $user->wallet_id));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWinnersOfThePreviousMonth(Builder $query): Builder
+    {
+        return $query
+            ->withCount(['votes' => fn ($query) => $query->inPreviousMonth()])
+            // order by votes count excluding nulls
+            ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
+            ->orderBy('votes_count', 'desc');
     }
 }
