@@ -68,7 +68,7 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * Send a pool of asynchronous requests concurrently.
      *
-     * @return array<array-key, \Illuminate\Http\Client\Response>
+     * @return array<array-key, Response>
      */
     public function pool(callable $callback)
     {
