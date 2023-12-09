@@ -252,23 +252,6 @@ class MnemonicPendingRequest extends PendingRequest
         return intval($data['ownersCount']);
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
-    public function getNftCollectionVolumeRequest(Chain $chain, string $contractAddress, string $duration): Response|Promise
-    {
-        $this->chain = MnemonicChain::fromChain($chain);
-
-        if (! in_array($duration, ['DURATION_1_DAY', 'DURATION_7_DAYS', 'DURATION_30_DAYS'])) {
-            throw new \Exception('Invalid duration');
-        }
-
-        /** @var array<string, mixed> $data */
-        return self::get(sprintf(
-            '/collections/v1beta2/%s/sales_volume/%s/GROUP_BY_PERIOD_1_DAY',
-            $contractAddress,
-            $duration,
-        ), []);
-    }
-
     /**
      * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
      *
