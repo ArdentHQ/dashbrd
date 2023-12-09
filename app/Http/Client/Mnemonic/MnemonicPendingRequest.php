@@ -255,7 +255,7 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
      *
-     * @return array{1d: string|null, 7d: string|null, 1m: string|null}
+     * @return array{ "1d": string|null, "7d": string|null, "1m": string|null }
      */
     public function getNftCollectionVolume(Chain $chain, string $contractAddress): array
     {

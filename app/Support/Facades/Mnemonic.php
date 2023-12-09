@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Http;
  * @method static Web3NftCollectionFloorPrice | null getNftCollectionFloorPrice(Chain $chain, string $contractAddress)
  * @method static string | null getNftCollectionBanner(Chain $chain, string $contractAddress)
  * @method static int | null getNftCollectionOwners(Chain $chain, string $contractAddress)
- * @method static string | null getNftCollectionVolume(Chain $chain, string $contractAddress)
+ * @method static array{ "1d": string|null, "7d": string|null, "1m": string|null } getNftCollectionVolume(Chain $chain, string $contractAddress)
  * @method static Collection<int, Web3NftCollectionTrait> getNftCollectionTraits(Chain $chain, string $contractAddress)
  * @method static Collection<int, CollectionActivity> getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  *
