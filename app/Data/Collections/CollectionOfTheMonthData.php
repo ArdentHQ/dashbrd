@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Enums\CurrencyCode;
+use DateTime;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
 use Spatie\LaravelData\Attributes\WithTransformer;
@@ -17,6 +19,10 @@ class CollectionOfTheMonthData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public int $votes,
+        public ?string $volume,
+        public ?string $floorPrice,
+        public ?string $name,
+        public ?DateTime $hasWonAt,
     ) {
     }
 
@@ -25,6 +31,10 @@ class CollectionOfTheMonthData extends Data
         return new self(
             image: $collection->extra_attributes->get('image'),
             votes: $collection->votes()->inPreviousMonth()->count(),
+            volume: $collection->volume,
+            floorPrice: $collection->floor_price,
+            name: $collection->name,
+            hasWonAt: $collection->has_won_at
         );
     }
 }

@@ -7,30 +7,33 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { DropdownButton } from "@/Components/SortDropdown";
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
+import { isTruthy } from "@/Utils/is-truthy";
 
-const WinnerCollectionLabel = ({ label, value }: { label: string; value: string }): JSX.Element => (
-    <p className="flex w-full justify-between space-x-1 whitespace-nowrap text-sm font-medium sm:w-auto">
-        <span className="text-theme-secondary-700 dark:text-theme-dark-200 ">{label}</span>
-        <span className="text-theme-secondary-900 dark:text-theme-dark-50">{value}</span>
-    </p>
-);
+const WinnerCollectionLabel = ({ label, value }: { label: string; value: string | null }): JSX.Element => {
+    const { t } = useTranslation();
+
+    return (
+        <p className="flex w-full justify-between space-x-1 whitespace-nowrap text-sm font-medium sm:w-auto">
+            <span className="text-theme-secondary-700 dark:text-theme-dark-200 ">{label}</span>
+
+            {isTruthy(value) && <span className="text-theme-secondary-900 dark:text-theme-dark-50">{value}</span>}
+
+            {!isTruthy(value) && (
+                <span className="text-theme-secondary-900 dark:text-theme-dark-50">{t("common.na")}</span>
+            )}
+        </p>
+    );
+};
 
 export const WinnerCollectionRow = ({
-    floorPrice,
-    volume,
-    votes,
-    name,
-    image,
     index,
+    collection,
 }: {
-    name: string;
-    votes: string;
-    volume: string;
-    floorPrice: string;
-    image?: string;
     index: number;
+    collection: App.Data.Collections.CollectionOfTheMonthData;
 }): JSX.Element => {
     const { t } = useTranslation();
+    console.log({ collection });
 
     return (
         <div className="flex flex-col items-center justify-end border-t border-theme-secondary-300 p-4 first:border-none dark:border-theme-dark-700 lg:flex-row">
@@ -39,18 +42,18 @@ export const WinnerCollectionRow = ({
                     <Img
                         wrapperClassName="h-12 w-12"
                         className="rounded-full"
-                        src={image}
+                        src={collection.image}
                     />
 
-                    {index === 1 && (
+                    {index === 0 && (
                         <WinnerBadgeFirst className="z-10 w-12 rounded-full bg-white ring-4 ring-white dark:bg-theme-dark-900 dark:ring-theme-dark-900" />
                     )}
 
-                    {index === 2 && (
+                    {index === 1 && (
                         <WinnerBadgeSecond className="z-10 w-12 rounded-full bg-white ring-4 ring-white dark:bg-theme-dark-900 dark:ring-theme-dark-900" />
                     )}
 
-                    {index === 3 && (
+                    {index === 2 && (
                         <WinnerBadgeThird className="z-10 w-12 rounded-full bg-white ring-4 ring-white dark:bg-theme-dark-900 dark:ring-theme-dark-900" />
                     )}
                 </div>
@@ -60,24 +63,24 @@ export const WinnerCollectionRow = ({
                         "w-full truncate text-sm font-medium text-theme-secondary-900 dark:text-theme-dark-50",
                     )}
                 >
-                    {name}
+                    {collection.name}
                 </p>
             </div>
 
             <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 md:space-x-16 lg:mt-0 lg:justify-end">
                 <WinnerCollectionLabel
                     label={t("common.volume")}
-                    value={volume}
+                    value={collection.volume}
                 />
 
                 <WinnerCollectionLabel
                     label={t("common.floor_price")}
-                    value={floorPrice}
+                    value={collection.floorPrice}
                 />
 
                 <WinnerCollectionLabel
                     label={t("common.votes")}
-                    value={votes}
+                    value={collection.votes.toString()}
                 />
             </div>
         </div>
@@ -114,7 +117,13 @@ export const WinnerCollectionsEmptyBlock = (): JSX.Element => {
     );
 };
 
-export const WinnerCollectionsList = ({ month }: { month: string }): JSX.Element => {
+export const WinnerCollectionsList = ({
+    month,
+    collections,
+}: {
+    month: string;
+    collections: App.Data.Collections.CollectionOfTheMonthData[];
+}): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -127,15 +136,11 @@ export const WinnerCollectionsList = ({ month }: { month: string }): JSX.Element
                 </Heading>
 
                 <div className="mt-4 rounded-md border border-theme-secondary-300 dark:border-theme-dark-700">
-                    {[1, 2, 3].map((key) => (
+                    {collections.slice(0, 3).map((collection, key) => (
                         <WinnerCollectionRow
+                            collection={collection}
                             index={key}
-                            image="https://i.seadn.io/gae/H-eyNE1MwL5ohL-tCfn_Xa1Sl9M9B4612tLYeUlQubzt4ewhr4huJIR5OLuyO3Z5PpJFSwdm7rq-TikAh7f5eUw338A2cy6HRH75?w=500&auto=format"
-                            name="jfs ajfkas jfsla fjlskjfksl fkjlsd jfksldfj sklf jlskfjs"
                             key={key}
-                            floorPrice="0.01231232312 ETH"
-                            volume="0.01231232312 ETH"
-                            votes="1.7k"
                         />
                     ))}
                 </div>
