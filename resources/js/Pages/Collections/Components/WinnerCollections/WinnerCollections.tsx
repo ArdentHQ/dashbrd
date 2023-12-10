@@ -1,10 +1,10 @@
 import { groupBy } from "@ardenthq/sdk-helpers";
+import { DateTime } from "@ardenthq/sdk-intl";
 import {
     WinnerCollectionsEmptyBlock,
     WinnerCollectionsFilter,
     WinnerCollectionsList,
 } from "./WinnerCollections.blocks";
-import { DateTime } from "@ardenthq/sdk-intl";
 
 export const WinnerCollections = ({
     collections,
