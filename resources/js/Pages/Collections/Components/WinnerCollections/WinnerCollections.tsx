@@ -11,7 +11,7 @@ export const WinnerCollections = ({
 }: {
     collections: App.Data.Collections.CollectionOfTheMonthData[];
 }): JSX.Element => {
-    const collectionsByMonth = groupBy(collections, ({ winningMonth }) => DateTime.make(winningMonth).format("MMMM"));
+    const collectionsByMonth = groupBy(collections, ({ hasWonAt }) => DateTime.make(hasWonAt).format("MMMM"));
     const monthNames = Object.keys(collectionsByMonth);
 
     if (monthNames.length === 0) {
@@ -24,7 +24,7 @@ export const WinnerCollections = ({
 
             {monthNames.map((month) => (
                 <WinnerCollectionsList
-                    collections={month as keyof typeof collectionsByMonth}
+                    collections={collectionsByMonth[month as keyof typeof collectionsByMonth]}
                     month={month}
                     key={month}
                 />

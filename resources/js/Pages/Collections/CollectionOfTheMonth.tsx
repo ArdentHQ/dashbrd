@@ -12,9 +12,14 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
     collections: App.Data.Collections.CollectionOfTheMonthData[];
+    winnersOfTheYear: App.Data.Collections.CollectionOfTheMonthData[];
 }
 
-const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProperties): JSX.Element => {
+const CollectionOfTheMonth = ({
+    title,
+    collections,
+    winnersOfTheYear,
+}: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const date = new Date();
@@ -69,7 +74,7 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                         </div>
                     </div>
 
-                    <WinnerCollections collections={collections} />
+                    <WinnerCollections collections={winnersOfTheYear} />
                 </div>
             </div>
         </DefaultLayout>
