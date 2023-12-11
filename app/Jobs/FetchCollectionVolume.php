@@ -44,11 +44,13 @@ class FetchCollectionVolume implements ShouldQueue
             contractAddress: $this->collection->address
         );
 
-        $this->collection->update([
+        $data = array_filter([
             'volume' => $volumes['1d'],
             'volume_7d' => $volumes['7d'],
             'volume_1m' => $volumes['1m'],
-        ]);
+        ], fn ($value) => $value !== null);
+
+        $this->collection->update($data);
 
         Log::info('FetchCollectionVolume Job: Handled', [
             'collection' => $this->collection->address,
