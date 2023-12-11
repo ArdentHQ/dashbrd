@@ -68,7 +68,7 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, CollectionActivity>
      */
-    public function getBurnActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
     {
         return Mnemonic::getBurnActivity($chain, $contractAddress, $limit, $from);
     }

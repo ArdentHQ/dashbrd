@@ -414,7 +414,7 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return Collection<int, CollectionActivity>
      */
-    public function getBurnActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
     {
         // Very similar to `getCollectionActivity` method, however this method only cares about `LABEL_BURN` labels...
 
