@@ -46,7 +46,7 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(Factory $factory = null)
+    public function __construct(?Factory $factory = null)
     {
         parent::__construct($factory);
 
@@ -348,7 +348,7 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return Collection<int, CollectionActivity>
      */
-    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
