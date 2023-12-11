@@ -1353,4 +1353,6 @@ it('has floor price history', function () {
     FloorPriceHistory::factory()->count(2)->create();
 
     expect($collection->floorPriceHistory()->count())->toBe(3);
+
+    expect($collection->floorPriceHistory()->first())->toBeInstanceOf(FloorPriceHistory::class);
 });
