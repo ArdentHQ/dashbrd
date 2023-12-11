@@ -129,14 +129,37 @@ export const NominationDialog = ({
                 />
 
                 {loading && (
-                    <LoadingBlock
-                        className="mt-3"
-                        text={t("pages.collections.search.loading_results")}
-                    />
+                    <div>
+                        {/* Added to enforce table headers */}
+                        <NomineeCollections
+                            collections={[]}
+                            activeSort=""
+                            user={user}
+                            selectedCollection={0}
+                            setSelectedCollection={setSelectedCollection}
+                            showHeaderWhenEmpty
+                        />
+
+                        <LoadingBlock
+                            text={t("pages.collections.search.loading_results")}
+                        />
+                    </div>
                 )}
 
                 {collections.length === 0 && !loading && (
-                    <EmptyBlock className="mt-3">{t("pages.collections.search.no_results")}</EmptyBlock>
+                    <div>
+                        {/* Added to enforce table headers */}
+                        <NomineeCollections
+                            collections={[]}
+                            activeSort=""
+                            user={user}
+                            selectedCollection={0}
+                            setSelectedCollection={setSelectedCollection}
+                            showHeaderWhenEmpty
+                        />
+
+                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                    </div>
                 )}
 
                 {!loading && (
