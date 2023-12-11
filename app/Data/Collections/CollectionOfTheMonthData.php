@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
-use App\Enums\CurrencyCode;
 use DateTime;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
+use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -21,6 +21,8 @@ class CollectionOfTheMonthData extends Data
         public int $votes,
         public ?string $volume,
         public ?string $floorPrice,
+        public ?string $floorPriceCurrency,
+        public ?int $floorPriceDecimals,
         public ?string $name,
         public ?DateTime $hasWonAt,
     ) {
@@ -33,6 +35,8 @@ class CollectionOfTheMonthData extends Data
             votes: $collection->votes()->inPreviousMonth()->count(),
             volume: $collection->volume,
             floorPrice: $collection->floor_price,
+            floorPriceCurrency: $collection->floorPriceToken?->symbol,
+            floorPriceDecimals: $collection->floorPriceToken?->decimals,
             name: $collection->name,
             hasWonAt: $collection->has_won_at
         );

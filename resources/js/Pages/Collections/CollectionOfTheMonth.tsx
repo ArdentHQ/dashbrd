@@ -8,18 +8,16 @@ import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinne
 import { Heading } from "@/Components/Heading";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { groupBy } from "@ardenthq/sdk-helpers";
+import { DateTime } from "@ardenthq/sdk-intl";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
     collections: App.Data.Collections.CollectionOfTheMonthData[];
-    winnersOfTheYear: App.Data.Collections.CollectionOfTheMonthData[];
+    winners: App.Data.Collections.CollectionOfTheMonthData[];
 }
 
-const CollectionOfTheMonth = ({
-    title,
-    collections,
-    winnersOfTheYear,
-}: CollectionOfTheMonthProperties): JSX.Element => {
+const CollectionOfTheMonth = ({ title, collections, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const date = new Date();
@@ -74,7 +72,7 @@ const CollectionOfTheMonth = ({
                         </div>
                     </div>
 
-                    <WinnerCollections collections={winnersOfTheYear} />
+                    <WinnerCollections collections={winners} />
                 </div>
             </div>
         </DefaultLayout>

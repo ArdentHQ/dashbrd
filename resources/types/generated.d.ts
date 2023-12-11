@@ -209,6 +209,8 @@ declare namespace App.Data.Collections {
         votes: number;
         volume: string | null;
         floorPrice: string | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
         name: string | null;
         hasWonAt: string | null;
     };

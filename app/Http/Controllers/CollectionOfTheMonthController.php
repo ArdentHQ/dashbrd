@@ -17,7 +17,7 @@ class CollectionOfTheMonthController extends Controller
     {
         return Inertia::render('Collections/CollectionOfTheMonth', [
             'collections' => fn () => $this->getCollections(),
-            'winnersOfTheYear' => fn () => $this->getWinnersOfTheYear(),
+            'winners' => fn () => $this->getWinnerColletions(),
             'allowsGuests' => true,
             'title' => fn () => trans('metatags.collections.of-the-month.title', [
                 'month' => Carbon::now()->startOfMonth()->subMonth()->format('F Y'),
@@ -43,8 +43,14 @@ class CollectionOfTheMonthController extends Controller
     /**
      * @return DataCollection<int, CollectionOfTheMonthData>
      */
-    private function getWinnersOfTheYear(): DataCollection
+    private function getWinnerColletions(): DataCollection
     {
-        return CollectionOfTheMonthData::collection(Collection::query()->whereNotNull("has_won_at")->get());
+        return CollectionOfTheMonthData::collection(
+            Collection::query()
+                ->whereNotNull("has_won_at")
+                ->get()
+                ->sortByDesc("has_won_at")
+                ->values()
+        );
     }
 }

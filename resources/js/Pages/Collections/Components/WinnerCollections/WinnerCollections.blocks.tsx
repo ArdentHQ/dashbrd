@@ -1,5 +1,4 @@
 import cn from "classnames";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "@/Components/Dropdown";
 import { Heading } from "@/Components/Heading";
@@ -8,17 +7,19 @@ import { Img } from "@/Components/Image";
 import { DropdownButton } from "@/Components/SortDropdown";
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
+import { ReactNode } from "react";
+import { FormatCrypto, FormatFiat, FormatFiatShort } from "@/Utils/Currency";
 
-const WinnerCollectionLabel = ({ label, value }: { label: string; value: string | null }): JSX.Element => {
+const WinnerCollectionLabel = ({ label, children }: { label: string; children: ReactNode }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <p className="flex w-full justify-between space-x-1 whitespace-nowrap text-sm font-medium sm:w-auto">
             <span className="text-theme-secondary-700 dark:text-theme-dark-200 ">{label}</span>
 
-            {isTruthy(value) && <span className="text-theme-secondary-900 dark:text-theme-dark-50">{value}</span>}
+            {isTruthy(children) && <span className="text-theme-secondary-900 dark:text-theme-dark-50">{children}</span>}
 
-            {!isTruthy(value) && (
+            {!isTruthy(children) && (
                 <span className="text-theme-secondary-900 dark:text-theme-dark-50">{t("common.na")}</span>
             )}
         </p>
@@ -34,6 +35,12 @@ export const WinnerCollectionRow = ({
 }): JSX.Element => {
     const { t } = useTranslation();
     console.log({ collection });
+
+    const token = {
+        symbol: collection.floorPriceCurrency ?? "ETH",
+        name: collection.floorPriceCurrency ?? "ETH",
+        decimals: collection.floorPriceDecimals ?? 18,
+    };
 
     return (
         <div className="flex flex-col items-center justify-end border-t border-theme-secondary-300 p-4 first:border-none dark:border-theme-dark-700 lg:flex-row">
@@ -68,20 +75,26 @@ export const WinnerCollectionRow = ({
             </div>
 
             <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 md:space-x-16 lg:mt-0 lg:justify-end">
-                <WinnerCollectionLabel
-                    label={t("common.volume")}
-                    value={collection.volume}
-                />
+                <WinnerCollectionLabel label={t("common.volume")}>
+                    <FormatCrypto
+                        value={collection.volume ?? "0"}
+                        token={token}
+                    />
+                </WinnerCollectionLabel>
 
-                <WinnerCollectionLabel
-                    label={t("common.floor_price")}
-                    value={collection.floorPrice}
-                />
+                <WinnerCollectionLabel label={t("common.floor_price")}>
+                    <FormatCrypto
+                        value={collection.floorPrice ?? "0"}
+                        token={token}
+                    />
+                </WinnerCollectionLabel>
 
-                <WinnerCollectionLabel
-                    label={t("common.votes")}
-                    value={collection.votes.toString()}
-                />
+                <WinnerCollectionLabel label={t("common.votes")}>
+                    <FormatFiatShort
+                        value={collection.votes?.toString() ?? "0"}
+                        currency={token.symbol}
+                    />
+                </WinnerCollectionLabel>
             </div>
         </div>
     );
@@ -201,11 +214,16 @@ const YearSelectionDropdown = ({
     </Dropdown>
 );
 
-export const WinnerCollectionsFilter = (): JSX.Element => {
+export const WinnerCollectionsFilter = ({
+    availableYears = [],
+    selectedYear,
+    onChange,
+}: {
+    availableYears: string[];
+    selectedYear: string;
+    onChange?: (year: string) => void;
+}): JSX.Element => {
     const { t } = useTranslation();
-
-    const options = ["2023", "2022", "2021"];
-    const [selectedYear, setSelectedYear] = useState("2023");
 
     return (
         <div className="border-t border-theme-secondary-300 p-8 dark:border-theme-dark-700">
@@ -213,11 +231,9 @@ export const WinnerCollectionsFilter = (): JSX.Element => {
                 <Heading level={4}>{t("pages.collections.collection_of_the_month.previous_winners")}</Heading>
 
                 <YearSelectionDropdown
-                    options={options}
+                    options={availableYears}
                     selectedYear={selectedYear}
-                    onChange={(year) => {
-                        setSelectedYear(year);
-                    }}
+                    onChange={onChange}
                 />
             </div>
         </div>
