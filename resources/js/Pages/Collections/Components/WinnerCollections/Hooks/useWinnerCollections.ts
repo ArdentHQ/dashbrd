@@ -40,7 +40,13 @@ export const useWinnerCollections = ({
     availableMonths: string[];
     selectedYear: string;
     setSelectedYear: (year: string) => void;
-    filterCollections: ({ year, month }: { year: string; month: string }) => void;
+    filterCollections: ({
+        year,
+        month,
+    }: {
+        year: string;
+        month: string;
+    }) => App.Data.Collections.CollectionOfTheMonthData[];
 } => {
     const availableYears = uniq(collections.map(({ hasWonAt }) => DateTime.make(hasWonAt ?? undefined).format("YYYY")));
     const [selectedYear, setSelectedYear] = useState(availableYears[0]);
