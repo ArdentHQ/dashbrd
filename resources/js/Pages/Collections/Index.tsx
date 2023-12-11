@@ -23,7 +23,7 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
-interface Filters extends Record<string, FormDataConvertible> {
+export interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
     sort?: PopularCollectionsSortBy;
 }
