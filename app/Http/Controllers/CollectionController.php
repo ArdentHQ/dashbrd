@@ -147,7 +147,8 @@ class CollectionController extends Controller
                                     'network',
                                     'floorPriceToken',
                                 ])
-                                ->selectVolumeFiat($currency)
+                                ->addSelectVolumeFiat($currency)
+                                ->addFloorPriceChange()
                                 ->addSelect('collections.*')
                                 ->groupBy('collections.id')
                                 ->simplePaginate(12);

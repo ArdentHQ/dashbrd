@@ -236,6 +236,7 @@ declare namespace App.Data.Collections {
         floorPrice: string | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        floorPriceChange: number | null;
         volume: string | null;
         volumeFiat: number | null;
         volumeCurrency: string | null;
