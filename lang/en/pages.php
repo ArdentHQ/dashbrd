@@ -413,5 +413,5 @@ return [
     'popular_collections' => [
         'title' => 'Popular NFT Collections',
         'header_title' => '<0>:nftsCount</0> :nfts from <0>:collectionsCount</0> :collections, worth about <0><1>:worth</1></0>',
-    ]
+    ],
 ];
