@@ -51,8 +51,10 @@ export const useWinnerCollections = ({
     const availableYears = uniq(collections.map(({ hasWonAt }) => DateTime.make(hasWonAt ?? undefined).format("YYYY")));
     const [selectedYear, setSelectedYear] = useState(availableYears[0]);
 
-    const m = filterCollections({ year: selectedYear, collections });
-    const availableMonths = uniq(m.map(({ hasWonAt }) => DateTime.make(hasWonAt ?? undefined).format("MMMM")));
+    const winners = filterCollections({ year: selectedYear, collections });
+
+    const months = winners.map(({ hasWonAt }) => DateTime.make(hasWonAt ?? undefined).getMonth());
+    const availableMonths = sortByDesc(uniq(months)).map((month) => DateTime.make().setMonth(month).format("MMMM"));
 
     return {
         availableYears,
