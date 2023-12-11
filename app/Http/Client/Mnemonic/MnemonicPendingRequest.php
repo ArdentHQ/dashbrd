@@ -36,6 +36,13 @@ use Throwable;
 
 class MnemonicPendingRequest extends PendingRequest
 {
+    /**
+     * The factory instance.
+     *
+     * @var \App\Http\Client\Mnemonic\MnemonicFactory|null
+     */
+    protected $factory;
+
     protected string $apiUrl;
 
     private static string $apiUrlPlaceholder = '{CHAIN-NETWORK}';
@@ -47,7 +54,7 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(Factory $factory = null, MnemonicChain $chain = null)
+    public function __construct(MnemonicFactory $factory = null, MnemonicChain $chain = null)
     {
         parent::__construct($factory);
 
