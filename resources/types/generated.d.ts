@@ -228,25 +228,6 @@ declare namespace App.Data.Collections {
         displayType: string;
         nftsCount: number;
     };
-    export type CollectionsData = {
-        paginated: {
-            data: Array<App.Data.Collections.CollectionData>;
-            links: Array<{ url: string | null; label: string; active: boolean }>;
-            meta: {
-                current_page: number;
-                first_page_url: string;
-                from: number | null;
-                last_page: number;
-                last_page_url: string;
-                next_page_url: string | null;
-                path: string;
-                per_page: number;
-                prev_page_url: string | null;
-                to: number | null;
-                total: number;
-            };
-        };
-    };
     export type PopularCollectionData = {
         id: number;
         name: string;

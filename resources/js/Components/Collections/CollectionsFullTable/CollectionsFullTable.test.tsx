@@ -1,31 +1,13 @@
 import { router } from "@inertiajs/react";
-import { type SpyInstance } from "vitest";
+import { expect } from "vitest";
 import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable/CollectionsFullTable";
-import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import SimpleNftDataFactory from "@/Tests/Factories/Collections/SimpleNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
-let useAuthorizedActionSpy: SpyInstance;
-const signedActionMock = vi.fn();
-
-describe("CollectionsTable", () => {
-    beforeEach(() => {
-        signedActionMock.mockImplementation((action) => {
-            action({ authenticated: true, signed: true });
-        });
-
-        useAuthorizedActionSpy = vi.spyOn(useAuthorizedActionMock, "useAuthorizedAction").mockReturnValue({
-            signedAction: signedActionMock,
-            authenticatedAction: vi.fn(),
-        });
-    });
-
-    afterEach(() => {
-        useAuthorizedActionSpy.mockRestore();
-    });
-
+describe("CollectionsFullTable", () => {
     const collections = new CollectionFactory().withPrices().createMany(3);
 
     const collection = new CollectionFactory().withoutPrices().create();
@@ -66,7 +48,7 @@ describe("CollectionsTable", () => {
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
     });
 
-    it("renders when custom sorting options are passed", () => {
+    it("should render when custom sorting options are passed", () => {
         const { getByTestId } = render(
             <CollectionsFullTable
                 collections={collections}
@@ -88,7 +70,7 @@ describe("CollectionsTable", () => {
         expect(screen.queryByTestId("CollectionsTable")).not.toBeInTheDocument();
     });
 
-    it("visits the collection page on row click", async () => {
+    it("should visit the collection page on row click", async () => {
         const function_ = vi.fn();
         const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
 
@@ -106,7 +88,7 @@ describe("CollectionsTable", () => {
         expect(routerSpy).toHaveBeenCalled();
     });
 
-    it("can sort the table when sortable heading is clicked", async () => {
+    it("should sort the table when sortable heading is clicked", async () => {
         const sortFunction = vi.fn();
 
         const { getByTestId } = render(
@@ -128,7 +110,7 @@ describe("CollectionsTable", () => {
         expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
     });
 
-    it("can sort the table when sortable heading is clicked but reverse the direction", async () => {
+    it("should sort the table when sortable heading is clicked but reverse the direction", async () => {
         const sortFunction = vi.fn();
 
         const { getByTestId } = render(
@@ -152,7 +134,7 @@ describe("CollectionsTable", () => {
         expect(sortFunction).toHaveBeenCalledWith({ direction: "desc", selectedChainIds: undefined, sortBy: "name" });
     });
 
-    it("can sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
+    it("should sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
         const { getByTestId } = render(
             <CollectionsFullTable
                 collections={collections}
@@ -169,7 +151,31 @@ describe("CollectionsTable", () => {
         await userEvent.click(tableHeader);
     });
 
-    it.each(allBreakpoints)("renders without crashing on %s screen if no floor price data", (breakpoint) => {
+    it("should sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
+        const sortFunction = vi.fn();
+
+        const { getByTestId } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                activeSort="name"
+                sortDirection="desc"
+                onSort={sortFunction}
+            />,
+        );
+
+        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+
+        const tableHeader = screen.getAllByRole("columnheader")[0];
+
+        expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
+
+        await userEvent.click(tableHeader);
+
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
+    });
+
+    it.each(allBreakpoints)("should render without crashing on %s screen if no floor price data", (breakpoint) => {
         const { getByTestId } = render(
             <CollectionsFullTable
                 collections={collectionsWithNoFloorPriceCurrencyData}
@@ -205,7 +211,7 @@ describe("CollectionsTable", () => {
         expect(getByTestId("CollectionsTableItem__unknown-value")).toBeInTheDocument();
     });
 
-    it("defaults fiat value to 0", () => {
+    it("should default fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
             <CollectionsFullTable
                 collections={[
@@ -223,5 +229,20 @@ describe("CollectionsTable", () => {
         expect(queryByTestId("CollectionsTableItem__unknown-floor-price")).not.toBeInTheDocument();
         expect(queryByTestId("CollectionsTableItem__unknown-value")).not.toBeInTheDocument();
         expect(getByTestId("CollectionPortfolioValue__fiat")).toBeInTheDocument();
+    });
+
+    it("should render predefined amount of NFT images", () => {
+        const nfts = new SimpleNftDataFactory().createMany(5);
+
+        const collectionWithNfts = { ...collection, nftsCount: nfts.length, nfts };
+
+        const { getAllByTestId } = render(
+            <CollectionsFullTable
+                collections={[collectionWithNfts]}
+                user={user}
+            />,
+        );
+
+        expect(getAllByTestId(`CollectionImages__Image`).length).toBe(2);
     });
 });
