@@ -614,6 +614,7 @@ class Collection extends Model
     {
         return $query
             ->addSelectVolumeFiat($currency)
+            ->addFloorPriceChange()
             ->addSelect([
                 'collections.*',
                 DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
