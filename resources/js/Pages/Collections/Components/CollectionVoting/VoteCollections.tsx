@@ -133,19 +133,21 @@ export const VoteCollections = ({
                     hasUserVoted={votedCollection !== null}
                 />
 
-                <LinkButton
-                    onClick={(): void => {
-                        void signedAction(() => {
-                            setIsDialogOpen(true);
-                        });
-                    }}
-                    variant="link"
-                    className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
-                    fontSize="!text-base"
-                    textColor="!text-theme-primary-600 dark:!text-theme-primary-400"
-                >
-                    {t("pages.collections.vote.or_nominate_collection")}
-                </LinkButton>
+                {votedCollection === null && (
+                    <LinkButton
+                        onClick={(): void => {
+                            void signedAction(() => {
+                                setIsDialogOpen(true);
+                            });
+                        }}
+                        variant="link"
+                        className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
+                        fontSize="!text-base"
+                        textColor="!text-theme-primary-600 dark:!text-theme-primary-400"
+                    >
+                        {t("pages.collections.vote.or_nominate_collection")}
+                    </LinkButton>
+                )}
             </div>
 
             <NominationDialog
@@ -184,11 +186,12 @@ export const VoteCollection = ({
                     }
                 }}
                 tabIndex={0}
-                className={cn("relative cursor-pointer overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
+                className={cn("relative overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
                     "border-2 border-theme-primary-600 dark:border-theme-hint-400":
                         variant === "selected" || variant === "voted",
                     "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
                     "border border-theme-secondary-300 dark:border-theme-dark-700": variant === undefined,
+                    "cursor-pointer": !hasVoted,
                     "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
                         !hasVoted && variant === undefined,
                 })}
