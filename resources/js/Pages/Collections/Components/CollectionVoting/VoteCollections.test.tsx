@@ -1,5 +1,6 @@
 import { within } from "@testing-library/react";
 import { expect } from "vitest";
+import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
 import {
     VoteCollection,
     VoteCollections,
@@ -8,7 +9,6 @@ import {
 import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
-import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
 
 const demoCollection = new VotableCollectionDataFactory().create({
     id: 1,
