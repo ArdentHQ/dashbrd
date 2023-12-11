@@ -2,12 +2,12 @@ import { BigNumber } from "@ardenthq/sdk-helpers";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { type Column, type TableState } from "react-table";
-import { type CollectionTableProperties } from "./CollectionsTable.contracts";
-import { CollectionsTableItem } from "./CollectionsTableItem";
+import { type CollectionTableProperties } from "./CollectionsFullTable.contracts";
+import { CollectionsFullTableItem } from "./CollectionsFullTableItem";
 import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const PopularCollectionsTableFull = ({
+export const CollectionsFullTable = ({
     collections,
     user,
     activeSort = "",
@@ -112,7 +112,7 @@ export const PopularCollectionsTableFull = ({
             }
             data={collections}
             row={(collection: App.Data.Collections.CollectionData) => (
-                <CollectionsTableItem
+                <CollectionsFullTableItem
                     collection={collection}
                     uniqueKey={collection.slug}
                     key={`${collection.address}-${collection.chainId}`}

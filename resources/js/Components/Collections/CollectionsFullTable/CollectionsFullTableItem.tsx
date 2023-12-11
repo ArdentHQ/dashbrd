@@ -6,12 +6,16 @@ import { type CollectionTableItemProperties } from "./CollectionsTable.contracts
 import { CollectionPortfolioValue } from "@/Components/Collections//CollectionPortfolioValue";
 import { CollectionFloorPrice } from "@/Components/Collections/CollectionFloorPrice";
 import { CollectionImages } from "@/Components/Collections/CollectionImages";
-import { CollectionName } from "@/Components/Collections/CollectionName";
+import { PopularCollectionName } from "@/Components/Collections/PopularCollectionsTableFull/CollectionName";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { TableCell, TableRow } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
-export const CollectionsTableItem = ({ collection, uniqueKey, user }: CollectionTableItemProperties): JSX.Element => {
+export const CollectionsFullTableItem = ({
+    collection,
+    uniqueKey,
+    user,
+}: CollectionTableItemProperties): JSX.Element => {
     const { isMdAndAbove, isLgAndAbove, isXlAndAbove, isSmAndAbove } = useBreakpoint();
     const { t } = useTranslation();
 
@@ -55,10 +59,7 @@ export const CollectionsTableItem = ({ collection, uniqueKey, user }: Collection
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
-                <CollectionName
-                    collection={collection}
-                    ownedCount={collection.nftsCount}
-                />
+                <PopularCollectionName collection={collection} />
             </TableCell>
 
             {isLgAndAbove && (

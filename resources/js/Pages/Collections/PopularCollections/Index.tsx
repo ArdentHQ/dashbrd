@@ -2,7 +2,7 @@ import { type PageProps } from "@inertiajs/core";
 import { Head, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { PopularCollectionsTableFull } from "@/Components/Collections/PopularCollectionsTableFull";
+import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
@@ -16,7 +16,7 @@ import {
 } from "@/Pages/Collections/Components/PopularCollectionsSorting";
 import { type Filters } from "@/Pages/Collections/Index";
 
-const CollectionsIndex = ({
+const Index = ({
     auth,
     stats,
     title,
@@ -36,7 +36,8 @@ const CollectionsIndex = ({
 
     const { t } = useTranslation();
 
-    const isSearching = false;
+    const isSearching = Math.random() === 0;
+    const query = Math.random() === 0 ? "" : "1";
 
     const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
 
@@ -103,7 +104,7 @@ const CollectionsIndex = ({
                         </div>
                     )}
 
-                    <PopularCollectionsTableFull
+                    <CollectionsFullTable
                         collections={collections.data}
                         user={auth.user}
                     />
@@ -119,4 +120,4 @@ const CollectionsIndex = ({
     );
 };
 
-export default CollectionsIndex;
+export default Index;
