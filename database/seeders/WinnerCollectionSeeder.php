@@ -21,7 +21,7 @@ class WinnerCollectionSeeder extends Seeder
         for ($month = 1; $month <= 12; $month++) {
 
             $monthlyWinnerCollections = Collection::query()
-                ->whereNull("has_won_at")
+                ->whereNull('has_won_at')
                 ->limit(3)
                 ->get();
 
