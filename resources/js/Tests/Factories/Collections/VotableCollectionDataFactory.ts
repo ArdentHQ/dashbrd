@@ -7,6 +7,7 @@ export default class VotableCollectionDataFactory extends ModelFactory<App.Data.
             id: faker.datatype.number({ min: 1, max: 1000 }),
             rank: faker.datatype.number({ min: 1, max: 1000 }),
             name: faker.lorem.words(),
+            address: this.generateAddress(),
             image: this.optional(faker.image.avatar(), 0.9),
             votes: this.optional(faker.datatype.number({ min: 1, max: 1000 })),
             floorPrice: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),

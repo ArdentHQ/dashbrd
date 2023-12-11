@@ -35,7 +35,13 @@ const formatTime = (value: number, unit: string): string => {
     return `${paddedValue}${unit}`;
 };
 
-export const VoteCountdown = ({ hasUserVoted }: { hasUserVoted?: boolean }): JSX.Element => {
+interface Properties {
+    hasUserVoted?: boolean;
+    isDisabled: boolean;
+    onSubmit: () => void;
+}
+
+export const VoteCountdown = ({ hasUserVoted, onSubmit, isDisabled }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -78,7 +84,9 @@ export const VoteCountdown = ({ hasUserVoted }: { hasUserVoted?: boolean }): JSX
                 </Tooltip>
             ) : (
                 <Button
-                    disabled={true}
+                    disabled={isDisabled}
+                    onClick={onSubmit}
+                    type="button"
                     className="flex justify-center py-2 text-base sm:px-5 md:px-12"
                 >
                     <span className="md:px-0.5">{t("pages.collections.vote.vote")}</span>

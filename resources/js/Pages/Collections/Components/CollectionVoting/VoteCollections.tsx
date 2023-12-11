@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/core";
 import cn from "classnames";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,6 +10,7 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
 import { Tooltip } from "@/Components/Tooltip";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -27,9 +29,30 @@ export const VoteCollections = ({
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
     const { isSmAndAbove } = useBreakpoint();
+    const { signedAction } = useAuthorizedAction();
 
     const getVariant = (collectionId: number): VoteCollectionVariants =>
         votedCollection?.id === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+
+    const [loading, setLoading] = useState(false);
+
+    const vote = (): void => {
+        void signedAction((): void => {
+            setLoading(true);
+
+            router.post(
+                route("collection-votes.create", selectedCollectionId),
+                {},
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    onFinish: () => {
+                        setLoading(false);
+                    },
+                },
+            );
+        });
+    };
 
     const collectionsWithVote = useMemo(() => {
         const shouldMergeUserVote =
@@ -104,11 +127,17 @@ export const VoteCollections = ({
             </div>
 
             <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
-                <VoteCountdown hasUserVoted={votedCollection !== null} />
+                <VoteCountdown
+                    onSubmit={vote}
+                    isDisabled={loading || selectedCollectionId === undefined}
+                    hasUserVoted={votedCollection !== null}
+                />
 
                 <LinkButton
                     onClick={(): void => {
-                        setIsDialogOpen(true);
+                        void signedAction(() => {
+                            setIsDialogOpen(true);
+                        });
                     }}
                     variant="link"
                     className="font-medium leading-6 dark:hover:decoration-theme-primary-400"

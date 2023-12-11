@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { router } from "@inertiajs/core";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NomineeCollections } from "./NomineeCollections";
 import { Button } from "@/Components/Buttons";
@@ -9,10 +10,14 @@ const NominationDialogFooter = ({
     setIsOpen,
     selectedCollection,
     setSelectedCollection,
+    onSubmit,
+    isDisabled,
 }: {
     setIsOpen: (isOpen: boolean) => void;
     selectedCollection: number;
     setSelectedCollection: (selectedCollection: number) => void;
+    onSubmit: () => void;
+    isDisabled: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -32,10 +37,8 @@ const NominationDialogFooter = ({
 
                 <Button
                     variant="primary"
-                    onClick={(): void => {
-                        console.log("TODO: implement");
-                    }}
-                    disabled={selectedCollection === 0}
+                    onClick={onSubmit}
+                    disabled={selectedCollection === 0 || isDisabled}
                     className="w-full items-end justify-center md:px-8"
                 >
                     {t("common.vote")}
@@ -60,6 +63,30 @@ export const NominationDialog = ({
     const [query, setQuery] = useState<string>("");
     const [selectedCollection, setSelectedCollection] = useState<number>(0);
 
+    const collection = useMemo(
+        () => collections.filter((c) => c.id === selectedCollection)[0],
+        [collections, selectedCollection],
+    );
+
+    const [loading, setLoading] = useState(false);
+
+    const vote = (): void => {
+        setLoading(true);
+
+        router.post(
+            route("collection-votes.create", collection),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onFinish: () => {
+                    setLoading(false);
+                    setIsOpen(false);
+                },
+            },
+        );
+    };
+
     return (
         <Dialog
             title={t("pages.collections.vote.nominate_collection")}
@@ -74,6 +101,8 @@ export const NominationDialog = ({
                     setIsOpen={setIsOpen}
                     selectedCollection={selectedCollection}
                     setSelectedCollection={setSelectedCollection}
+                    onSubmit={vote}
+                    isDisabled={loading}
                 />
             }
         >

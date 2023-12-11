@@ -251,6 +251,7 @@ declare namespace App.Data.Collections {
         id: number;
         rank: number | null;
         name: string;
+        address: string;
         image: string | null;
         votes: number | null;
         floorPrice: string | null;

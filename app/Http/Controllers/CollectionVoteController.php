@@ -12,7 +12,7 @@ class CollectionVoteController extends Controller
 {
     public function store(Request $request, Collection $collection): RedirectResponse
     {
-        $collection->addVote($request->wallet());
+        // $collection->addVote($request->wallet());
 
         return back()->toast(trans('pages.collections.collection_of_the_month.vote_success'), type: 'success');
     }
