@@ -34,7 +34,6 @@ export const WinnerCollectionRow = ({
     collection: App.Data.Collections.CollectionOfTheMonthData;
 }): JSX.Element => {
     const { t } = useTranslation();
-    console.log({ collection });
 
     const token = {
         symbol: collection.floorPriceCurrency ?? "ETH",
