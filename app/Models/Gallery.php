@@ -158,7 +158,7 @@ class Gallery extends Model implements Viewable
     /**
      * @param  null|array<int>  $galleriesIds
      */
-    public static function updateValues(array $galleriesIds = null): void
+    public static function updateValues(?array $galleriesIds = null): void
     {
         $calculateValueQuery = get_query('gallery.calculate_value');
 

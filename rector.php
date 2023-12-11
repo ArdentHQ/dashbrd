@@ -7,7 +7,6 @@ use Rector\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
-use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
 use Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector;
 use Rector\CodingStyle\Rector\ClassConst\SplitGroupedClassConstantsRector;
 use Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector;
@@ -60,7 +59,6 @@ return static function (RectorConfig $rectorConfig): void {
         SplitDoubleAssignRector::class,
         WrapEncapsedVariableInCurlyBracesRector::class,
         NewlineBeforeNewAssignSetRector::class,
-        AddArrayDefaultToArrayPropertyRector::class,
         MakeInheritedMethodVisibilitySameAsParentRector::class,
         CallUserFuncArrayToVariadicRector::class,
         VersionCompareFuncCallToConstantRector::class,

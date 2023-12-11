@@ -14,7 +14,7 @@ trait InteractsWithCollections
      * @param  Closure(Collection, int):void  $callback
      * @param  Closure(Builder<Collection>):Builder<Collection>|null  $queryCallback
      */
-    public function forEachCollection(Closure $callback, Closure $queryCallback = null, int $limit = null): void
+    public function forEachCollection(Closure $callback, ?Closure $queryCallback = null, ?int $limit = null): void
     {
         // Apply `$queryCallback` to modify the query before fetching collections...
 

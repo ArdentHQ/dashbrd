@@ -144,7 +144,7 @@ class TokenFactory extends Factory
             ]);
     }
 
-    public function withGuid(string $deterministicGuid = null): self
+    public function withGuid(?string $deterministicGuid = null): self
     {
         return $this->state(fn () => [
             'token_guid' => function ($params) use ($deterministicGuid) {
