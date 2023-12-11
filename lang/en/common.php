@@ -167,4 +167,5 @@ return [
     'votes' => 'Votes',
     'vote' => 'Vote',
     'vol' => 'Vol',
+    'collection_preview' => 'Collection Preview',
 ];

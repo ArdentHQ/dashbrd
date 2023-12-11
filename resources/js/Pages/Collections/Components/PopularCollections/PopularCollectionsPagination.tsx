@@ -34,6 +34,7 @@ export const PopularCollectionsPagination = ({
                 <Pagination
                     data={pagination}
                     onPageChange={onPageChange}
+                    className="w-fit"
                 />
             )}
         </div>

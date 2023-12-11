@@ -36,6 +36,7 @@ const Index = ({
 
     const { t } = useTranslation();
 
+    // TODO replace with real logic
     const isSearching = Math.random() === 0;
     const query = Math.random() === 0 ? "" : "1";
 
@@ -72,7 +73,7 @@ const Index = ({
                         stats={stats}
                         currency={auth.user?.attributes.currency ?? "USD"}
                     />
-                    <div className="mt-4 hidden items-center justify-between md-lg:flex">
+                    <div className="mt-6 hidden items-center justify-between md-lg:flex">
                         <div className="flex space-x-3">
                             <PopularCollectionsSorting
                                 sortBy={currentFilters.sort}
@@ -87,7 +88,7 @@ const Index = ({
                     </div>
                 </div>
 
-                <div className="mx-6 mt-4 sm:mx-8 2xl:mx-0">
+                <div className="mx-6 mt-1 sm:mx-8 2xl:mx-0">
                     {collections.data.length === 0 && (
                         <div className="mt-7">
                             {isSearching ? (
@@ -109,11 +110,13 @@ const Index = ({
                         user={auth.user}
                     />
 
-                    <PopularCollectionsPagination
-                        pagination={collections}
-                        onPageLimitChange={() => 1}
-                        onPageChange={() => 2}
-                    />
+                    <div className="mt-2">
+                        <PopularCollectionsPagination
+                            pagination={collections}
+                            onPageLimitChange={() => 1}
+                            onPageChange={() => 2}
+                        />
+                    </div>
                 </div>
             </div>
         </DefaultLayout>

@@ -19,13 +19,13 @@ export const PopularCollectionsHeading = ({
                     level={1}
                     className="dark:text-theme-dark-50"
                 >
-                    {t("common.my_collections")}
+                    {t("pages.popular_collections.title")}
                 </Heading>
             </div>
 
-            <span className="mt-1 block text-sm font-medium leading-5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-base">
+            <span className="mt-2 block text-sm font-medium leading-5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-base">
                 <Trans
-                    i18nKey="pages.collections.header_title"
+                    i18nKey="pages.popular_collections.header_title"
                     values={{
                         nftsCount: stats.nfts,
                         collectionsCount: stats.collections,
