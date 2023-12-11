@@ -16,11 +16,14 @@ class FloorPriceHistory extends Model
      */
     protected $table = 'floor_price_history';
 
+    public $timestamps = false;
+
     /**
      * @var array<string>
      */
     protected $fillable = [
-        'floor_price_token_id',
         'floor_price',
+        'token_id',
+        'retrieved_at',
     ];
 }

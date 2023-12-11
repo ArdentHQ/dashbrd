@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Collection::class)->constrained()->cascadeOnDelete();
             $table->addColumn('numeric', 'floor_price', ['numeric_type' => 'numeric'])->nullable();
-            $table->foreignIdFor(Token::class, 'floor_price_token_id')->nullable()->cascadeOnDelete();
-            $table->timestamps();
+            $table->foreignIdFor(Token::class, 'token_id')->nullable()->cascadeOnDelete();
+            $table->timestamp('retrieved_at')->nullable();
         });
     }
 };
