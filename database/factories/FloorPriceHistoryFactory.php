@@ -24,7 +24,7 @@ class FloorPriceHistoryFactory extends Factory
             'collection_id' => fn () => Collection::factory(),
             'floor_price' => (string) (random_int(50, 1000) * 1e18),
             'token_id' => fn () => Token::factory(),
-            'retrieved_at' => $this->faker->dateTimeBetween('-3 day', 'now'),
+            'retrieved_at' => $this->faker->dateTimeBetween('-3 days', 'now'),
         ];
     }
 }
