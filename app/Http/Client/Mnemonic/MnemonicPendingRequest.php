@@ -39,7 +39,7 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * The factory instance.
      *
-     * @var \App\Http\Client\Mnemonic\MnemonicFactory|null
+     * @var MnemonicFactory|null
      */
     protected $factory;
 
