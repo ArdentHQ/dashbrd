@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
+use App\Models\Traits\HasFloorPriceHistory;
 use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
@@ -41,7 +42,7 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 

@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\CollectionVote;
+use App\Models\FloorPriceHistory;
 use App\Models\Gallery;
 use App\Models\Network;
 use App\Models\Nft;
@@ -1340,4 +1341,16 @@ it('returns the collection of the month by most votes in the last month', functi
         $collectionWith3Votes->id,
         $collectionWith1Vote->id,
     ]);
+});
+
+it('has floor price history', function () {
+    $collection = Collection::factory()->create();
+
+    FloorPriceHistory::factory()->count(3)->create([
+        'collection_id' => $collection->id,
+    ]);
+
+    FloorPriceHistory::factory()->count(2)->create();
+
+    expect($collection->floorPriceHistory()->count())->toBe(3);
 });
