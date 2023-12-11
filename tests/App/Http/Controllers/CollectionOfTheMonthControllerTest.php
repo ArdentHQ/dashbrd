@@ -8,10 +8,14 @@ use App\Models\CollectionVote;
 it('opens the collection of the month page', function () {
     $collection = Collection::factory()->create();
 
-    CollectionVote::factory()->create(['collection_id' => $collection->id]);
+    CollectionVote::factory()->create([
+        'collection_id' => $collection->id,
+        'voted_at' => now()->subMonth()->subDay(),
+    ]);
 
     $this->get(route('collection-of-the-month'))->assertOk();
 });
+
 it('shows a 404 page if no collections', function () {
     $this->get(route('collection-of-the-month'))->assertNotFound();
 });
