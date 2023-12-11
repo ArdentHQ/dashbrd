@@ -8,7 +8,8 @@ import { DropdownButton } from "@/Components/SortDropdown";
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
 import { isTruthy } from "@/Utils/is-truthy";
 import { ReactNode } from "react";
-import { FormatCrypto, FormatFiat, FormatFiatShort } from "@/Utils/Currency";
+import { FormatCrypto, FormatFiatShort } from "@/Utils/Currency";
+import { Table, TableCell, TableRow } from "@/Components/Table";
 
 const WinnerCollectionLabel = ({ label, children }: { label: string; children: ReactNode }): JSX.Element => {
     const { t } = useTranslation();
@@ -26,11 +27,11 @@ const WinnerCollectionLabel = ({ label, children }: { label: string; children: R
     );
 };
 
-export const WinnerCollectionRow = ({
-    index,
+export const WinnerCollectionMainInfo = ({
+    position,
     collection,
 }: {
-    index: number;
+    position: number;
     collection: App.Data.Collections.CollectionOfTheMonthData;
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -42,7 +43,7 @@ export const WinnerCollectionRow = ({
     };
 
     return (
-        <div className="flex flex-col items-center justify-end border-t border-theme-secondary-300 p-4 first:border-none dark:border-theme-dark-700 lg:flex-row">
+        <div className="w-full">
             <div className="flex w-full items-center space-x-3 overflow-hidden">
                 <div className="flex items-center justify-start -space-x-2">
                     <Img
@@ -51,15 +52,15 @@ export const WinnerCollectionRow = ({
                         src={collection.image}
                     />
 
-                    {index === 0 && (
+                    {position === 0 && (
                         <WinnerBadgeFirst className="z-10 w-12 rounded-full bg-white ring-4 ring-white dark:bg-theme-dark-900 dark:ring-theme-dark-900" />
                     )}
 
-                    {index === 1 && (
+                    {position === 1 && (
                         <WinnerBadgeSecond className="z-10 w-12 rounded-full bg-white ring-4 ring-white dark:bg-theme-dark-900 dark:ring-theme-dark-900" />
                     )}
 
-                    {index === 2 && (
+                    {position === 2 && (
                         <WinnerBadgeThird className="z-10 w-12 rounded-full bg-white ring-4 ring-white dark:bg-theme-dark-900 dark:ring-theme-dark-900" />
                     )}
                 </div>
@@ -73,7 +74,7 @@ export const WinnerCollectionRow = ({
                 </p>
             </div>
 
-            <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 md:space-x-16 lg:mt-0 lg:justify-end">
+            <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 md:hidden">
                 <WinnerCollectionLabel label={t("common.volume")}>
                     <FormatCrypto
                         value={collection.volume ?? "0"}
@@ -124,38 +125,6 @@ export const WinnerCollectionsEmptyBlock = (): JSX.Element => {
                 <p className="text-theme-secondary-700 dark:text-theme-dark-200">
                     {t("pages.collections.collection_of_the_month.content_to_be_added.description")}
                 </p>
-            </div>
-        </div>
-    );
-};
-
-export const WinnerCollectionsList = ({
-    month,
-    collections,
-}: {
-    month: string;
-    collections: App.Data.Collections.CollectionOfTheMonthData[];
-}): JSX.Element => {
-    const { t } = useTranslation();
-
-    return (
-        <div className="border-t border-theme-secondary-300 dark:border-theme-dark-700">
-            <div className="p-8">
-                <Heading level={4}>
-                    {t("pages.collections.collection_of_the_month.winners_month", {
-                        month,
-                    })}
-                </Heading>
-
-                <div className="mt-4 rounded-md border border-theme-secondary-300 dark:border-theme-dark-700">
-                    {collections.slice(0, 3).map((collection, key) => (
-                        <WinnerCollectionRow
-                            collection={collection}
-                            index={key}
-                            key={key}
-                        />
-                    ))}
-                </div>
             </div>
         </div>
     );
@@ -233,6 +202,131 @@ export const WinnerCollectionsFilter = ({
                     options={availableYears}
                     selectedYear={selectedYear}
                     onChange={onChange}
+                />
+            </div>
+        </div>
+    );
+};
+
+export const WinnerCollectionTableRow = ({
+    index,
+    collection,
+}: {
+    index: number;
+    collection: App.Data.Collections.CollectionOfTheMonthData;
+}): JSX.Element => {
+    const { t } = useTranslation();
+
+    const token = {
+        symbol: collection.floorPriceCurrency ?? "ETH",
+        name: collection.floorPriceCurrency ?? "ETH",
+        decimals: collection.floorPriceDecimals ?? 18,
+    };
+
+    return (
+        <TableRow>
+            <TableCell
+                innerClassName="p-4"
+                className="w-full"
+            >
+                <WinnerCollectionMainInfo
+                    position={index}
+                    collection={collection}
+                />
+            </TableCell>
+
+            <TableCell
+                className="hidden md:table-cell"
+                paddingClassName="p-4"
+                innerClassName="justify-end"
+            >
+                <WinnerCollectionLabel label={t("common.volume")}>
+                    <FormatCrypto
+                        value={collection.volume ?? "0"}
+                        token={token}
+                    />
+                </WinnerCollectionLabel>
+            </TableCell>
+
+            <TableCell
+                className="hidden md:table-cell"
+                paddingClassName="p-4"
+                innerClassName="justify-end"
+            >
+                <WinnerCollectionLabel label={t("common.floor_price")}>
+                    <FormatCrypto
+                        value={collection.floorPrice ?? "0"}
+                        token={token}
+                    />
+                </WinnerCollectionLabel>
+            </TableCell>
+
+            <TableCell
+                className="hidden md:table-cell"
+                paddingClassName="p-4"
+                innerClassName="justify-end"
+            >
+                <WinnerCollectionLabel label={t("common.votes")}>
+                    <FormatFiatShort
+                        value={collection.votes?.toString() ?? "0"}
+                        currency=""
+                    />
+                </WinnerCollectionLabel>
+            </TableCell>
+        </TableRow>
+    );
+};
+
+export const WinnerCollectionsTable = ({
+    month,
+    collections,
+}: {
+    month: string;
+    collections: App.Data.Collections.CollectionOfTheMonthData[];
+}): JSX.Element => {
+    const { t } = useTranslation();
+
+    const columns = [
+        {
+            id: "info",
+            cellWidth: "w-full",
+        },
+        {
+            id: "volume",
+            className: "justify-end",
+            sortDescFirst: true,
+        },
+        {
+            id: "floorPrice",
+        },
+        {
+            id: "votes",
+        },
+    ];
+
+    return (
+        <div className="border-t border-theme-secondary-300 dark:border-theme-dark-700">
+            <div className="p-8">
+                <Heading
+                    level={4}
+                    className="mb-4"
+                >
+                    {t("pages.collections.collection_of_the_month.winners_month", {
+                        month,
+                    })}
+                </Heading>
+
+                <Table
+                    hideHeader
+                    columns={columns}
+                    data={collections.slice(0, 3)}
+                    row={(collection, index) => (
+                        <WinnerCollectionTableRow
+                            collection={collection}
+                            index={index}
+                            key={index}
+                        />
+                    )}
                 />
             </div>
         </div>

@@ -1,7 +1,7 @@
 import {
     WinnerCollectionsEmptyBlock,
     WinnerCollectionsFilter,
-    WinnerCollectionsList,
+    WinnerCollectionsTable,
 } from "./WinnerCollections.blocks";
 import { useWinnerCollections } from "./Hooks/useWinnerCollections";
 
@@ -27,7 +27,7 @@ export const WinnerCollections = ({
             />
 
             {availableMonths.map((month) => (
-                <WinnerCollectionsList
+                <WinnerCollectionsTable
                     collections={filterCollections({ year: selectedYear, month })}
                     month={month}
                     key={month}
