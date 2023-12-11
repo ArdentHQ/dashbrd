@@ -143,7 +143,7 @@ export const CollectionsFullTableItem = ({
                 >
                     <CollectionImages
                         nfts={collection.nfts}
-                        nftsCount={nftsToShow}
+                        nftsCount={collection.nftsCount > nftsToShow ? nftsToShow : collection.nftsCount}
                         maxItems={nftsToShow}
                     />
                 </TableCell>

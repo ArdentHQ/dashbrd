@@ -113,6 +113,7 @@ describe("CollectionsTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
+                onSort={sortFunction}
             />,
         );
 
@@ -134,6 +135,9 @@ describe("CollectionsTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
+                onSort={sortFunction}
+                activeSort="name"
+                sortDirection="asc"
             />,
         );
 
