@@ -41,10 +41,10 @@ class CollectionOfTheMonthController extends Controller
     }
 
     /**
-     * @return Collection
+     * @return DataCollection<int, CollectionOfTheMonthData>
      */
     private function getWinnersOfTheYear(): DataCollection
     {
-        return CollectionOfTheMonthData::collection(Collection::query()->whereNotNull("has_won_at")->limit(3)->get());
+        return CollectionOfTheMonthData::collection(Collection::query()->whereNotNull("has_won_at")->get());
     }
 }
