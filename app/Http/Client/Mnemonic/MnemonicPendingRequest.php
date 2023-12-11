@@ -68,13 +68,16 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * Send a pool of asynchronous requests concurrently.
      *
+     * @see parent::pool()
+     *
      * @return array<array-key, Response>
      */
     public function pool(callable $callback)
     {
         $results = [];
 
-        $requests = tap(new MnemonicPool($this->factory, $this->chain), $callback)->getRequests();
+        // Modified from parent::pool() to use our own pool class
+        $requests = tap(new MnemonicPool($this->factory->withChain($this->chain)), $callback)->getRequests();
 
         foreach ($requests as $key => $item) {
             $results[$key] = $item instanceof static ? $item->getPromise()->wait() : $item->wait();

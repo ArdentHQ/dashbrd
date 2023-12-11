@@ -107,12 +107,21 @@ it('should get owners', function () {
 
 it('should get volume', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
-            ->push([
-                'dataPoints' => [
-                    ['volume' => '12.3'],
-                ],
-            ], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => [
+                ['volume' => '12.3'],
+            ],
+        ], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => [
+                ['volume' => '45.6'],
+            ],
+        ], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => [
+                ['volume' => '78.9'],
+            ],
+        ], 200),
     ]);
 
     $network = Network::polygon();
@@ -123,13 +132,27 @@ it('should get volume', function () {
 
     $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
 
-    expect($data)->toBe('12300000000000000000');
+    expect($data)->toBe([
+        '1d' => '12300000000000000000',
+        '7d' => '45600000000000000000',
+        '1m' => '78900000000000000000',
+    ]);
 });
 
-it('should handle no volume', function ($request) {
+it('should handle no volume', function ($response) {
+
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
-            ->push($request, 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => $response,
+        ], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => [
+                ['volume' => '45.6'],
+            ],
+        ], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => $response,
+        ], 200),
     ]);
 
     $network = Network::polygon();
@@ -140,7 +163,11 @@ it('should handle no volume', function ($request) {
 
     $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
 
-    expect($data)->toBe(null);
+    expect($data)->toBe([
+        '1d' => null,
+        '7d' => '45600000000000000000',
+        '1m' => null,
+    ]);
 })->with([
     'null volume' => [[
         'dataPoints' => [
