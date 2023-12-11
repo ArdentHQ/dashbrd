@@ -110,7 +110,13 @@ const Dialog = ({
                                 )}
                             </div>
 
-                            <div className={cn(innerWrapperClassName, "flex-1", isUsedByConfirmationDialog ? "" : "px-6 pb-6 pt-4")}>
+                            <div
+                                className={cn(
+                                    innerWrapperClassName,
+                                    "flex-1",
+                                    isUsedByConfirmationDialog ? "" : "px-6 pb-6 pt-4",
+                                )}
+                            >
                                 {children}
                             </div>
                             {footer}
