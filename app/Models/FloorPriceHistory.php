@@ -20,7 +20,7 @@ class FloorPriceHistory extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'collection_id',
+        'floor_price_token_id',
         'floor_price',
     ];
 }
