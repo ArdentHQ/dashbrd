@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
-use DateTime;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
-use Illuminate\Support\Str;
+use DateTime;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;

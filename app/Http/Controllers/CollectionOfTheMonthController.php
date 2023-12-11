@@ -46,9 +46,9 @@ class CollectionOfTheMonthController extends Controller
     {
         return CollectionOfTheMonthData::collection(
             Collection::query()
-                ->whereNotNull("has_won_at")
+                ->whereNotNull('has_won_at')
                 ->get()
-                ->sortByDesc("has_won_at")
+                ->sortByDesc('has_won_at')
                 ->values()
         );
     }
