@@ -16,7 +16,7 @@ class CollectionOfTheMonthController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('Collections/CollectionOfTheMonth', [
-            'collections' => fn () => $this->getCollections(),
+            'collections' => fn () => $this->getCollectionsOfTheMonth(),
             'allowsGuests' => true,
             'title' => fn () => trans('metatags.collections.of-the-month.title', [
                 'month' => Carbon::now()->startOfMonth()->subMonth()->format('F Y'),
@@ -27,10 +27,9 @@ class CollectionOfTheMonthController extends Controller
     /**
      * @return DataCollection<int, CollectionOfTheMonthData>
      */
-    private function getCollections(): DataCollection
+    private function getCollectionsOfTheMonth(): DataCollection
     {
-        // @TODO: use real data (see https://github.com/ArdentHQ/dashbrd/pull/540)
-        $collections = CollectionOfTheMonthData::collection(Collection::query()->inRandomOrder()->limit(3)->get());
+        $collections = CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
 
         if ($collections->count() === 0) {
             abort(404);
