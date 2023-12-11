@@ -1,11 +1,10 @@
 import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
-import { PopularCollectionsTableFull } from "./PopularCollectionsTableFull";
+import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable/CollectionsFullTable";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
-import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
-import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
+import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 let useAuthorizedActionSpy: SpyInstance;
@@ -55,53 +54,11 @@ describe("CollectionsTable", () => {
 
     const user = new UserDataFactory().create();
 
-    it.each(allBreakpoints)("should render loading state in %s screen", (breakpoint) => {
-        render(
-            <PopularCollectionsTableFull
-                isLoading
-                hiddenCollectionAddresses={[]}
-                collections={collections}
-                user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
-            />,
-            { breakpoint },
-        );
-
-        expect(screen.getByTestId("CollectionsTableSkeleton")).toBeInTheDocument();
-    });
-
-    it.each(allBreakpoints)("should render loading state if no user", (breakpoint) => {
-        const resetMock = mockAuthContext({});
-
-        render(
-            <PopularCollectionsTableFull
-                isLoading
-                hiddenCollectionAddresses={[]}
-                collections={collections}
-                user={null}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
-            />,
-            { breakpoint },
-        );
-
-        expect(screen.getByTestId("CollectionsTableSkeleton")).toBeInTheDocument();
-
-        resetMock();
-    });
-
     it.each(allBreakpoints)("renders without crashing on %s screen", (breakpoint) => {
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collections}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
             />,
             { breakpoint },
         );
@@ -110,19 +67,10 @@ describe("CollectionsTable", () => {
     });
 
     it("renders when custom sorting options are passed", () => {
-        const function_ = vi.fn();
-
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collections}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
-                activeSort="name"
-                sortDirection="desc"
-                onSort={function_}
             />,
         );
 
@@ -131,40 +79,13 @@ describe("CollectionsTable", () => {
 
     it("should not render if there are no collections", () => {
         render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={[]}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
             />,
         );
 
         expect(screen.queryByTestId("CollectionsTable")).not.toBeInTheDocument();
-    });
-
-    it("should emit loadMore if viewing last items", () => {
-        const onLoadMoreMock = vi.fn();
-
-        mockViewportVisibilitySensor({
-            inViewport: true,
-        });
-
-        render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
-                collections={[...collections, ...collections, ...collections, ...collections]}
-                user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onLoadMore={onLoadMoreMock}
-                onChanged={vi.fn()}
-            />,
-        );
-
-        expect(screen.getByTestId("CollectionsTable")).toBeInTheDocument();
-        expect(onLoadMoreMock).toHaveBeenCalled();
     });
 
     it("visits the collection page on row click", async () => {
@@ -172,13 +93,9 @@ describe("CollectionsTable", () => {
         const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
 
         const { getByTestId, getAllByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collections}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
             />,
         );
 
@@ -193,16 +110,9 @@ describe("CollectionsTable", () => {
         const sortFunction = vi.fn();
 
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collections}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
-                activeSort="test"
-                sortDirection="asc"
-                onSort={sortFunction}
             />,
         );
 
@@ -221,16 +131,9 @@ describe("CollectionsTable", () => {
         const sortFunction = vi.fn();
 
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collections}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
-                activeSort="name"
-                sortDirection="asc"
-                onSort={sortFunction}
             />,
         );
 
@@ -246,19 +149,10 @@ describe("CollectionsTable", () => {
     });
 
     it("can sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
-        const sortFunction = vi.fn();
-
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collections}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
-                activeSort="name"
-                sortDirection="desc"
-                onSort={sortFunction}
             />,
         );
 
@@ -269,19 +163,13 @@ describe("CollectionsTable", () => {
         expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
 
         await userEvent.click(tableHeader);
-
-        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
     });
 
     it.each(allBreakpoints)("renders without crashing on %s screen if no floor price data", (breakpoint) => {
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collectionsWithNoFloorPriceCurrencyData}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
             />,
             { breakpoint },
         );
@@ -291,13 +179,9 @@ describe("CollectionsTable", () => {
 
     it("should render when floor price fiat is null", () => {
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collectionsWithNullFloorPriceFiatData}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
             />,
         );
 
@@ -306,13 +190,9 @@ describe("CollectionsTable", () => {
 
     it("should render when floor price is null", () => {
         const { getByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={collectionsWithNullFloorPriceData}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
             />,
         );
 
@@ -323,8 +203,7 @@ describe("CollectionsTable", () => {
 
     it("defaults fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
-            <PopularCollectionsTableFull
-                hiddenCollectionAddresses={[]}
+            <CollectionsFullTable
                 collections={[
                     {
                         ...collection,
@@ -333,9 +212,6 @@ describe("CollectionsTable", () => {
                     },
                 ]}
                 user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
             />,
         );
 

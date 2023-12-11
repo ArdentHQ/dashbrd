@@ -5,11 +5,7 @@ import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 
-export const PopularCollectionName = ({
-    collection,
-}: {
-    collection: App.Data.Collections.CollectionData;
-}): JSX.Element => {
+export const CollectionName = ({ collection }: { collection: App.Data.Collections.CollectionData }): JSX.Element => {
     const { t } = useTranslation();
     const collectionNameReference = useRef<HTMLParagraphElement>(null);
     const isTruncated = useIsTruncated({ reference: collectionNameReference });
