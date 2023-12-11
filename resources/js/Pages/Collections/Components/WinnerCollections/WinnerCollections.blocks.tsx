@@ -92,7 +92,7 @@ export const WinnerCollectionRow = ({
                 <WinnerCollectionLabel label={t("common.votes")}>
                     <FormatFiatShort
                         value={collection.votes?.toString() ?? "0"}
-                        currency={token.symbol}
+                        currency=""
                     />
                 </WinnerCollectionLabel>
             </div>
