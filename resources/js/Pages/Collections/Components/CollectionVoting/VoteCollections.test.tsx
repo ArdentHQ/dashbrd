@@ -8,6 +8,7 @@ import {
 import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
+import MetaMaskContextProvider from "@/Contexts/MetaMaskContext"
 
 const demoCollection = new VotableCollectionDataFactory().create({
     id: 1,
@@ -25,11 +26,13 @@ describe("VoteCollections", () => {
 
     it("should render collections in two block, 4 collection in each", () => {
         render(
-            <VoteCollections
-                collections={collections}
-                votedCollection={null}
-                user={user}
-            />,
+            <MetaMaskContextProvider>
+                <VoteCollections
+                    collections={collections}
+                    votedCollection={null}
+                    user={user}
+                />
+            </MetaMaskContextProvider>
         );
 
         const leftBlock = screen.getByTestId("VoteCollections_Left");
