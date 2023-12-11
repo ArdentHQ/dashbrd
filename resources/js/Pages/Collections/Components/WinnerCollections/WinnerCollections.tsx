@@ -1,9 +1,9 @@
+import { useWinnerCollections } from "./Hooks/useWinnerCollections";
 import {
     WinnerCollectionsEmptyBlock,
     WinnerCollectionsFilter,
     WinnerCollectionsTable,
 } from "./WinnerCollections.blocks";
-import { useWinnerCollections } from "./Hooks/useWinnerCollections";
 
 export const WinnerCollections = ({
     collections,

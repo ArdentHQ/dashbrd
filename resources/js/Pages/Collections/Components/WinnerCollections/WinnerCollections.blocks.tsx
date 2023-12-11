@@ -1,15 +1,15 @@
 import cn from "classnames";
+import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "@/Components/Dropdown";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { DropdownButton } from "@/Components/SortDropdown";
-import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
-import { isTruthy } from "@/Utils/is-truthy";
-import { ReactNode } from "react";
-import { FormatCrypto, FormatFiatShort } from "@/Utils/Currency";
 import { Table, TableCell, TableRow } from "@/Components/Table";
+import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
+import { FormatCrypto, FormatFiatShort } from "@/Utils/Currency";
+import { isTruthy } from "@/Utils/is-truthy";
 
 const WinnerCollectionLabel = ({ label, children }: { label: string; children: ReactNode }): JSX.Element => {
     const { t } = useTranslation();
@@ -91,7 +91,7 @@ export const WinnerCollectionMainInfo = ({
 
                 <WinnerCollectionLabel label={t("common.votes")}>
                     <FormatFiatShort
-                        value={collection.votes?.toString() ?? "0"}
+                        value={collection.votes.toString()}
                         currency=""
                     />
                 </WinnerCollectionLabel>
@@ -268,7 +268,7 @@ export const WinnerCollectionTableRow = ({
             >
                 <WinnerCollectionLabel label={t("common.votes")}>
                     <FormatFiatShort
-                        value={collection.votes?.toString() ?? "0"}
+                        value={collection.votes.toString()}
                         currency=""
                     />
                 </WinnerCollectionLabel>

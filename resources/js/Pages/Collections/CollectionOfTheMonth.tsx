@@ -8,8 +8,6 @@ import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinne
 import { Heading } from "@/Components/Heading";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { groupBy } from "@ardenthq/sdk-helpers";
-import { DateTime } from "@ardenthq/sdk-intl";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;

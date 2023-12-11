@@ -1,7 +1,7 @@
-import { DateTime } from "@ardenthq/sdk-intl";
-import { isTruthy } from "@/Utils/is-truthy";
 import { sortByDesc, uniq } from "@ardenthq/sdk-helpers";
+import { DateTime } from "@ardenthq/sdk-intl";
 import { useState } from "react";
+import { isTruthy } from "@/Utils/is-truthy";
 
 const filterCollections = ({
     year,
@@ -11,8 +11,8 @@ const filterCollections = ({
     year: string;
     month?: string;
     collections: App.Data.Collections.CollectionOfTheMonthData[];
-}) => {
-    return sortByDesc(
+}): App.Data.Collections.CollectionOfTheMonthData[] =>
+    sortByDesc(
         collections.filter((collection) => {
             if (!isTruthy(collection.hasWonAt)) {
                 return false;
@@ -30,13 +30,18 @@ const filterCollections = ({
         }),
         "votes",
     );
-};
 
 export const useWinnerCollections = ({
     collections,
 }: {
     collections: App.Data.Collections.CollectionOfTheMonthData[];
-}) => {
+}): {
+    availableYears: string[];
+    availableMonths: string[];
+    selectedYear: string;
+    setSelectedYear: (year: string) => void;
+    filterCollections: ({ year, month }: { year: string; month: string }) => void;
+} => {
     const availableYears = uniq(collections.map(({ hasWonAt }) => DateTime.make(hasWonAt ?? undefined).format("YYYY")));
     const [selectedYear, setSelectedYear] = useState(availableYears[0]);
 
@@ -48,8 +53,7 @@ export const useWinnerCollections = ({
         availableMonths,
         selectedYear,
         setSelectedYear,
-        filterCollections: ({ year, month }: { year: string; month: string }) => {
-            return filterCollections({ year, month, collections });
-        },
+        filterCollections: ({ year, month }: { year: string; month: string }) =>
+            filterCollections({ year, month, collections }),
     };
 };
