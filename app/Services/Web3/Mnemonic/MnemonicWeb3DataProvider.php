@@ -29,7 +29,7 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null): Web3NftsChunk
     {
         throw new NotImplementedException();
     }
@@ -60,7 +60,7 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, CollectionActivity>
      */
-    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
     {
         return Mnemonic::getCollectionActivity($chain, $contractAddress, $limit, $from);
     }
