@@ -184,7 +184,7 @@ export const VoteCollection = ({
                     }
                 }}
                 tabIndex={0}
-                className={cn("relative  overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
+                className={cn("relative cursor-pointer overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
                     "border-2 border-theme-primary-600 dark:border-theme-hint-400":
                         variant === "selected" || variant === "voted",
                     "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
