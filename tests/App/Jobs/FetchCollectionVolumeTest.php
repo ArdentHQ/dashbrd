@@ -15,6 +15,16 @@ it('should fetch nft collection volume', function () {
                 ['volume' => '12.3'],
             ],
         ], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => [
+                ['volume' => '45.6'],
+            ],
+        ], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::response([
+            'dataPoints' => [
+                ['volume' => '78.9'],
+            ],
+        ], 200),
     ]);
 
     $network = Network::polygon();
@@ -33,6 +43,8 @@ it('should fetch nft collection volume', function () {
     $collection->refresh();
 
     expect($collection->volume)->toBe('12300000000000000000');
+    expect($collection->volume_7d)->toBe('45600000000000000000');
+    expect($collection->volume_1m)->toBe('78900000000000000000');
 });
 
 it('has a retry limit', function () {
