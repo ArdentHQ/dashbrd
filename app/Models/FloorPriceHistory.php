@@ -26,4 +26,13 @@ class FloorPriceHistory extends Model
         'token_id',
         'retrieved_at',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'retrieved_at' => 'datetime',
+    ];
 }
