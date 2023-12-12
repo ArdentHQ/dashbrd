@@ -29,12 +29,19 @@ class CollectionOfTheMonthController extends Controller
      */
     private function getWinnerColletions(): DataCollection
     {
-        return CollectionOfTheMonthData::collection(
+
+        $winners =  CollectionOfTheMonthData::collection(
             Collection::query()
                 ->whereNotNull('has_won_at')
                 ->get()
                 ->sortByDesc('has_won_at')
                 ->values()
         );
+
+        if ($winners->count() === 0) {
+            abort(404);
+        }
+
+        return $winners;
     }
 }
