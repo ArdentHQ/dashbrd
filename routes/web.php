@@ -21,6 +21,7 @@ use App\Http\Controllers\MyGalleryController;
 use App\Http\Controllers\NftController;
 use App\Http\Controllers\NftReportController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\PopularCollectionController;
 use App\Http\Controllers\RefreshCsrfTokenController;
 use App\Http\Controllers\WalletController;
 use App\Http\Middleware\EnsureOnboarded;
@@ -94,6 +95,10 @@ Route::group(['prefix' => 'articles', 'middleware' => 'features:articles'], func
 Route::group(['middleware' => 'features:collections'], function () {
     Route::group(['prefix' => 'my-collections'], function () {
         Route::get('', [MyCollectionsController::class, 'index'])->name('my-collections')->middleware(EnsureOnboarded::class);
+    });
+
+    Route::group(['prefix' => 'popular-collections'], function () {
+        Route::get('', [PopularCollectionController::class, 'index'])->name('popular-collections');
     });
 
     Route::group(['prefix' => 'collections'], function () {
