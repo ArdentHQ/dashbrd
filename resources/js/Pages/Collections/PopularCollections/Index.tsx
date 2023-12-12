@@ -7,7 +7,6 @@ import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/PopularCollections/CollectionsFullTablePagination";
-import { PopularCollectionsFilterPopover } from "@/Pages/Collections/Components/PopularCollectionsFilterPopover";
 import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
 import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
@@ -67,14 +66,6 @@ const Index = ({
                             onChange={setSearchQuery}
                             placeholder="Search by Collection Name"
                         />
-                        <div className="relative ml-3 md-lg:hidden">
-                            <PopularCollectionsFilterPopover
-                                sortBy={currentFilters.sort}
-                                setSortBy={setSortBy}
-                                chain={currentFilters.chain}
-                                setChain={setChain}
-                            />
-                        </div>
                     </div>
                 </div>
 
