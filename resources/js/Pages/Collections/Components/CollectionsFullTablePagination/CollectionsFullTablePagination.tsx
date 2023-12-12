@@ -11,7 +11,7 @@ interface Properties {
 export const CollectionsFullTablePagination = ({ pagination, onPageLimitChange }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    if (pagination.meta.total < 12) {
+    if (pagination.meta.total < 25) {
         return <></>;
     }
 
