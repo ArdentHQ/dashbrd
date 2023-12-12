@@ -40,6 +40,7 @@ export const CollectionsFullTable = ({
                 className: "justify-start",
                 cellWidth: "sm:w-full",
                 paddingClassName: "py-2 px-2 md:px-5",
+                disableSortBy: true,
             },
             {
                 Header: t("common.value").toString(),
@@ -51,6 +52,7 @@ export const CollectionsFullTable = ({
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
                 className: "justify-end",
+                disableSortBy: true,
             },
         ];
 
@@ -81,6 +83,7 @@ export const CollectionsFullTable = ({
                 id: "chain",
                 accessor: (collection) => collection.chainId,
                 className: "justify-end",
+                disableSortBy: true,
             });
         }
 

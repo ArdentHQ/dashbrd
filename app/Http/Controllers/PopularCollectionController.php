@@ -49,7 +49,7 @@ class PopularCollectionController extends Controller
             'title' => trans('metatags.popular-collections.title'),
             'allowsGuests' => true,
             'collections' => CollectionData::collection(
-                $collections->through(fn ($collection) => CollectionData::fromModel($collection, $user->currency()))
+                $collections->through(fn ($collection) => CollectionData::fromModel($collection, $currency))
             ),
             'stats' => new CollectionStatsData(
                 nfts: 145,

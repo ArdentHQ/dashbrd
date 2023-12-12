@@ -3,6 +3,7 @@ import { Head, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { type RouteParams } from "ziggy-js";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import {
@@ -85,7 +86,10 @@ const CollectionsIndex = ({
                             setChain={setChain}
                         />
 
-                        <ViewAllButton className="hidden sm:inline" />
+                        <ViewAllButton
+                            className="hidden sm:inline"
+                            filters={currentFilters}
+                        />
                     </div>
                 </div>
 
@@ -103,7 +107,7 @@ const CollectionsIndex = ({
                     </div>
 
                     <div>
-                        <ViewAllButton />
+                        <ViewAllButton filters={currentFilters} />
                     </div>
                 </div>
 
@@ -125,7 +129,7 @@ const CollectionsIndex = ({
                     </div>
 
                     <div className="mt-2 sm:hidden">
-                        <ViewAllButton />
+                        <ViewAllButton filters={currentFilters} />
                     </div>
                 </div>
                 <div
@@ -188,13 +192,13 @@ const CollectionsIndex = ({
     );
 };
 
-const ViewAllButton = ({ className }: { className?: string }): JSX.Element => {
+const ViewAllButton = ({ className, filters }: { className?: string; filters: Filters }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
         <ButtonLink
             variant="secondary"
-            href="#"
+            href={route("popular-collections", filters as RouteParams)}
             className={cn("w-full justify-center sm:w-auto", className)}
         >
             {t("common.view_all")}
