@@ -12,6 +12,7 @@ export default class CollectionOfTheMonthFactory extends ModelFactory<App.Data.C
             floorPriceDecimals: 18,
             name: faker.word.noun(),
             hasWonAt: faker.date.recent().toString(),
+            slug: faker.word.noun(),
         };
     }
 }
