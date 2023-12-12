@@ -84,11 +84,13 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
                 'floor_price_retrieved_at' => $retrievedAt,
             ]);
 
-            $collection->floorPriceHistory()->create([
-                'floor_price' => $price,
-                'token_id' => $token?->id,
-                'retrieved_at' => $retrievedAt,
-            ]);
+            if ($price !== null) {
+                $collection->floorPriceHistory()->create([
+                    'floor_price' => $price,
+                    'token_id' => $token?->id,
+                    'retrieved_at' => $retrievedAt,
+                ]);
+            }
 
             Log::info('FetchCollectionFloorPrice Job: Set floor price', [
                 'chainId' => $this->chainId,

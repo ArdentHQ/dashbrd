@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('floor_price_history', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Collection::class)->constrained()->cascadeOnDelete();
-            $table->addColumn('numeric', 'floor_price', ['numeric_type' => 'numeric'])->nullable();
+            $table->addColumn('numeric', 'floor_price', ['numeric_type' => 'numeric']);
             $table->foreignIdFor(Token::class, 'token_id')->nullable()->cascadeOnDelete();
             $table->timestamp('retrieved_at')->nullable();
         });
