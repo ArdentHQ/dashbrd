@@ -24,6 +24,7 @@ class CollectionOfTheMonthData extends Data
         public ?int $floorPriceDecimals,
         public ?string $name,
         public ?DateTime $hasWonAt,
+        public string $slug,
     ) {
     }
 
@@ -37,7 +38,8 @@ class CollectionOfTheMonthData extends Data
             floorPriceCurrency: $collection->floorPriceToken?->symbol,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
             name: $collection->name,
-            hasWonAt: $collection->has_won_at
+            hasWonAt: $collection->has_won_at,
+            slug: $collection->slug
         );
     }
 }

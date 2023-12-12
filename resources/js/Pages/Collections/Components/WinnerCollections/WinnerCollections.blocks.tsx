@@ -11,6 +11,7 @@ import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images"
 import { FormatCrypto } from "@/Utils/Currency";
 import { formatNumbershort } from "@/Utils/format-number";
 import { isTruthy } from "@/Utils/is-truthy";
+import { router } from "@inertiajs/core";
 
 const WinnerCollectionLabel = ({ label, children }: { label: string; children: ReactNode }): JSX.Element => {
     const { t } = useTranslation();
@@ -68,7 +69,7 @@ export const WinnerCollectionMainInfo = ({
 
                 <p
                     className={cn(
-                        "line-clamp-2 w-full text-sm font-medium text-theme-secondary-900 dark:text-theme-dark-50",
+                        "line-clamp-2 w-full text-sm font-medium text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400",
                     )}
                 >
                     {collection.name}
@@ -209,9 +210,11 @@ export const WinnerCollectionsFilter = ({
 export const WinnerCollectionTableRow = ({
     index,
     collection,
+    onClick,
 }: {
     index: number;
     collection: App.Data.Collections.CollectionOfTheMonthData;
+    onClick: () => void;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -222,7 +225,10 @@ export const WinnerCollectionTableRow = ({
     };
 
     return (
-        <TableRow>
+        <TableRow
+            className="group cursor-pointer"
+            onClick={onClick}
+        >
             <TableCell
                 innerClassName="p-4"
                 className="w-full"
@@ -317,6 +323,13 @@ export const WinnerCollectionsTable = ({
                     data={collections.slice(0, 3)}
                     row={(collection, index) => (
                         <WinnerCollectionTableRow
+                            onClick={() => {
+                                router.visit(
+                                    route("collections.view", {
+                                        slug: collection.slug,
+                                    }),
+                                );
+                            }}
                             collection={collection}
                             index={index}
                             key={index}

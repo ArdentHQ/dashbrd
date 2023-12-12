@@ -213,6 +213,7 @@ declare namespace App.Data.Collections {
         floorPriceDecimals: number | null;
         name: string | null;
         hasWonAt: string | null;
+        slug: string;
     };
     export type CollectionStatsData = {
         nfts: number;
