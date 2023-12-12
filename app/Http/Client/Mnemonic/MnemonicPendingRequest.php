@@ -54,7 +54,7 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(MnemonicFactory $factory = null, MnemonicChain $chain = null)
+    public function __construct(?MnemonicFactory $factory = null, ?MnemonicChain $chain = null)
     {
         parent::__construct($factory);
 
