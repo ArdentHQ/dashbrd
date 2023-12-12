@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Traits;
+namespace App\Controllers\Traits;
 
 use Illuminate\Http\Request;
 

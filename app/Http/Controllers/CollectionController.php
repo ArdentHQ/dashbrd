@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Controllers\Traits\HasCollectionFilters;
 use App\Data\Articles\ArticleData;
 use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionDetailData;
@@ -26,7 +27,6 @@ use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Article;
 use App\Models\Collection;
-use App\Models\Traits\HasCollectionFilters;
 use App\Models\User;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
