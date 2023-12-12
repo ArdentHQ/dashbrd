@@ -10,6 +10,7 @@ import { CollectionName } from "@/Components/Collections/CollectionsFullTable/Co
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { TableCell, TableRow } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { formatNumbershort } from "@/Utils/format-number";
 
 export const CollectionsFullTableItem = ({
     collection,
@@ -118,7 +119,9 @@ export const CollectionsFullTableItem = ({
                     paddingClassName="px-2 md:px-5"
                     hoverClassName=""
                 >
-                    {collection.nftsCount}
+                    <div className="text-sm font-medium leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50 md:text-base md:leading-6">
+                        {formatNumbershort(collection.nftsCount)}
+                    </div>
                 </TableCell>
             )}
 
