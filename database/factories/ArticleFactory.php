@@ -35,7 +35,7 @@ class ArticleFactory extends Factory
         ];
     }
 
-    public function published(Carbon $publishedAt = null): Factory
+    public function published(?Carbon $publishedAt = null): Factory
     {
         return $this->state(function (array $attributes) use ($publishedAt) {
             return [

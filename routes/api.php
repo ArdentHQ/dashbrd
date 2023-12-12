@@ -48,6 +48,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user/nfts', Api\UserNftController::class)->name('user.nfts');
 
+    Route::get('/nominatable-collections', [Api\NominatableCollectionController::class, 'index'])
+            ->name('nominatable-collections');
+
     Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
             ->name('nft.refresh')
             ->middleware('throttle:nft:refresh');

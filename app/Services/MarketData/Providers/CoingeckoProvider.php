@@ -110,7 +110,7 @@ class CoingeckoProvider implements MarketDataProvider
      *
      * @return DataCollection<int, PriceHistoryData>
      */
-    public function getPriceHistory(Token $token, CurrencyCode $currency, Period $period, int $sampleCount = null): DataCollection
+    public function getPriceHistory(Token $token, CurrencyCode $currency, Period $period, ?int $sampleCount = null): DataCollection
     {
         $coingeckoId = $this->lookupCoingeckoTokenId($token);
 
@@ -136,7 +136,7 @@ class CoingeckoProvider implements MarketDataProvider
      * @param  Collection<int, Token>  $tokens
      * @return Collection<string, DataCollection<int, PriceHistoryData>>
      */
-    public function getBatchPriceHistory(Collection $tokens, CurrencyCode $currency, Period $period, int $sampleCount = null): Collection
+    public function getBatchPriceHistory(Collection $tokens, CurrencyCode $currency, Period $period, ?int $sampleCount = null): Collection
     {
         $tokensWithCoingeckoIds = $this->getTokensWithCoingeckoId($tokens);
 
