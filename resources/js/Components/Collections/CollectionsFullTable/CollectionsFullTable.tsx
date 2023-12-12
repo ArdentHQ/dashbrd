@@ -40,7 +40,6 @@ export const CollectionsFullTable = ({
                 className: "justify-start",
                 cellWidth: "sm:w-full",
                 paddingClassName: "py-2 px-2 md:px-5",
-                disableSortBy: true,
             },
             {
                 Header: t("common.value").toString(),
@@ -52,7 +51,6 @@ export const CollectionsFullTable = ({
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
                 className: "justify-end",
-                disableSortBy: true,
             },
         ];
 
@@ -60,13 +58,11 @@ export const CollectionsFullTable = ({
             columns.splice(columns.length, 0, {
                 Header: t("common.collection_preview").toString(),
                 className: "whitespace-nowrap xl:w-64 lg:w-48",
-                disableSortBy: true,
             });
 
             columns.splice(columns.length - 1, 0, {
                 Header: t("common.items").toString(),
                 className: "justify-end whitespace-nowrap",
-                disableSortBy: true,
             });
         }
 
@@ -83,7 +79,6 @@ export const CollectionsFullTable = ({
                 id: "chain",
                 accessor: (collection) => collection.chainId,
                 className: "justify-end",
-                disableSortBy: true,
             });
         }
 
