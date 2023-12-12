@@ -1,20 +1,17 @@
 import { type PageProps } from "@inertiajs/core";
-import { Head, router, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { Head, usePage } from "@inertiajs/react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
+import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
-import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/PopularCollections/CollectionsFullTablePagination";
-import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
-import {
-    type PopularCollectionsSortBy,
-    PopularCollectionsSorting,
-} from "@/Pages/Collections/Components/PopularCollectionsSorting";
-import { type Filters } from "@/Pages/Collections/Index";
+import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
+import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 const Index = ({
     auth,
@@ -40,29 +37,10 @@ const Index = ({
     const isSearching = Math.random() === 0;
     const query = Math.random() === 0 ? "" : "1";
 
-    const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
-
-    const isFirstRender = useIsFirstRender();
-
-    useEffect(() => {
-        if (isFirstRender) return;
-
-        router.get(route("popular-collections"), currentFilters);
-    }, [currentFilters]);
-
-    const setChain = (chain: ChainFilter | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            chain,
-        }));
-    };
-
-    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            sort,
-        }));
-    };
+    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery } = useCollectionFilters({
+        filters,
+        filterRoute: route("popular-collections"),
+    });
 
     return (
         <DefaultLayout toastMessage={props.toast}>
@@ -73,18 +51,26 @@ const Index = ({
                         stats={stats}
                         currency={auth.user?.attributes.currency ?? "USD"}
                     />
-                    <div className="mt-6 hidden items-center justify-between md-lg:flex">
-                        <div className="flex space-x-3">
-                            <PopularCollectionsSorting
-                                sortBy={currentFilters.sort}
-                                setSortBy={setSortBy}
-                            />
+                    <div className="mt-6 flex items-center justify-between">
+                        <div className="hidden items-center justify-between md-lg:flex">
+                            <div className="flex space-x-3">
+                                <PopularCollectionsSorting
+                                    sortBy={currentFilters.sort}
+                                    setSortBy={setSortBy}
+                                />
 
-                            <ChainFilters
-                                chain={currentFilters.chain}
-                                setChain={setChain}
-                            />
+                                <ChainFilters
+                                    chain={currentFilters.chain}
+                                    setChain={setChain}
+                                />
+                            </div>
                         </div>
+                        <SearchInput
+                            className="w-full md-lg:w-auto"
+                            query={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder="Search by Collection Name"
+                        />
                     </div>
                 </div>
 
