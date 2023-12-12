@@ -6,16 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionStatsData;
-use App\Data\Collections\PopularCollectionData;
-use App\Data\Network\NetworkWithCollectionsData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
-use App\Models\Network;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
 use Inertia\Inertia;
 use Inertia\Response;
 
