@@ -37,7 +37,7 @@ export const useWinnerCollections = ({
     collections: App.Data.Collections.CollectionOfTheMonthData[];
 }): {
     availableYears: string[];
-    availableMonths: string[];
+    availableMonths: (year: string) => string[];
     selectedYear: string;
     setSelectedYear: (year: string) => void;
     filterCollections: ({
@@ -53,8 +53,19 @@ export const useWinnerCollections = ({
 
     const winners = filterCollections({ year: selectedYear, collections });
 
-    const months = winners.map(({ hasWonAt }) => DateTime.make(hasWonAt ?? undefined).getMonth());
-    const availableMonths = sortByDesc(uniq(months)).map((month) => DateTime.make().setMonth(month).format("MMMM"));
+    const availableMonths = (year: string) => {
+        const months = winners.map(({ hasWonAt }) => DateTime.make(hasWonAt ?? undefined).getMonth());
+        return sortByDesc(uniq(months))
+            .map((month) => DateTime.make().setMonth(month).format("MMMM"))
+            .filter((month) => {
+                if (year !== DateTime.make().format("YYYY")) {
+                    return true;
+                }
+
+                // Exclude this month.
+                return month !== DateTime.make().format("MMMM");
+            });
+    };
 
     return {
         availableYears,

@@ -14,7 +14,7 @@ export const WinnerCollections = ({
         collections,
     });
 
-    if (availableYears.length === 0 || availableMonths.length === 0) {
+    if (availableYears.length === 0 || availableMonths(selectedYear).length === 0) {
         return <WinnerCollectionsEmptyBlock />;
     }
 
@@ -26,7 +26,7 @@ export const WinnerCollections = ({
                 onChange={setSelectedYear}
             />
 
-            {availableMonths.map((month) => (
+            {availableMonths(selectedYear).map((month) => (
                 <WinnerCollectionsTable
                     collections={filterCollections({ year: selectedYear, month })}
                     month={month}
