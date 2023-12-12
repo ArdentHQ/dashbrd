@@ -9,7 +9,7 @@ interface Properties {
     onPageChange: (page: number) => void;
 }
 
-export const PopularCollectionsPagination = ({
+export const CollectionsFullTablePagination = ({
     pagination,
     onPageLimitChange,
     onPageChange,
@@ -25,7 +25,7 @@ export const PopularCollectionsPagination = ({
             <SelectPageLimit
                 suffix={t("common.items")}
                 value={pagination.meta.per_page}
-                options={[12, 24, 48, 96]}
+                options={[25, 50, 75, 100]}
                 onChange={({ value }) => {
                     onPageLimitChange(Number(value));
                 }}

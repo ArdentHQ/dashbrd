@@ -7,7 +7,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { PopularCollectionsPagination } from "@/Pages/Collections/Components/PopularCollections/PopularCollectionsPagination";
+import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/PopularCollections/CollectionsFullTablePagination";
 import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
 import {
@@ -111,7 +111,7 @@ const Index = ({
                     />
 
                     <div className="mt-2">
-                        <PopularCollectionsPagination
+                        <CollectionsFullTablePagination
                             pagination={collections}
                             onPageLimitChange={() => 1}
                             onPageChange={() => 2}
