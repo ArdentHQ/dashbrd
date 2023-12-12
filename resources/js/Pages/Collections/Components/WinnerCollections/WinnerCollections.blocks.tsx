@@ -44,7 +44,7 @@ export const WinnerCollectionMainInfo = ({
 
     return (
         <div className="w-full">
-            <div className="flex w-full items-center space-x-3 overflow-hidden">
+            <div className="flex w-full items-center space-x-3">
                 <div className="flex items-center justify-start -space-x-2">
                     <Img
                         wrapperClassName="h-12 w-12"
@@ -67,7 +67,7 @@ export const WinnerCollectionMainInfo = ({
 
                 <p
                     className={cn(
-                        "w-full truncate text-sm font-medium text-theme-secondary-900 dark:text-theme-dark-50",
+                        "line-clamp-2 w-full text-sm font-medium text-theme-secondary-900 dark:text-theme-dark-50",
                     )}
                 >
                     {collection.name}
