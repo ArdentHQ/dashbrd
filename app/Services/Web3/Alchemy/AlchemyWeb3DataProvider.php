@@ -31,15 +31,15 @@ class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
         return Alchemy::getWalletTokens($wallet, $network);
     }
 
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null, int $limit = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null, ?int $limit = null): Web3NftsChunk
     {
         return Alchemy::getWalletNfts($wallet, $network, $cursor, $limit);
     }
 
     public function getCollectionsNfts(
         CollectionModel $collection,
-        string $startToken = null,
-        int $limit = null
+        ?string $startToken = null,
+        ?int $limit = null
     ): Web3NftsChunk {
         return Alchemy::collectionNfts($collection, $startToken, $limit);
     }

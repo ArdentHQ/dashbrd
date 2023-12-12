@@ -80,7 +80,7 @@ it('releases the job if throttled', function ($service) {
         ->andReturnSelf()
         ->shouldReceive('then')
         // Mock implementation
-        ->andReturnUsing(function (callable $callback, callable $failure = null) use ($job) {
+        ->andReturnUsing(function (callable $callback, ?callable $failure = null) use ($job) {
             $failure($job);
         });
 
