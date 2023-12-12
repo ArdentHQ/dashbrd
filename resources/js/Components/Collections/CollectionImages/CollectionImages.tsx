@@ -17,6 +17,7 @@ export const CollectionImages = ({
             <div
                 className="h-20 w-20"
                 key={nft.id}
+                data-testid="CollectionImages__Image"
             >
                 <Img
                     wrapperClassName="aspect-square"
