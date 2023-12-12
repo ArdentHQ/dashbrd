@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Controllers\Traits\HasCollectionFilters;
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionStatsData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
+use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Models\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;

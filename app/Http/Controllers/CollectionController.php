@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Controllers\Traits\HasCollectionFilters;
 use App\Data\Articles\ArticleData;
 use App\Data\Articles\ArticlesData;
 use App\Data\Collections\CollectionDetailData;
@@ -22,6 +21,7 @@ use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TraitDisplayType;
+use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
