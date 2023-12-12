@@ -88,92 +88,92 @@ describe("CollectionsFullTable", () => {
         expect(routerSpy).toHaveBeenCalled();
     });
 
-    // it("should sort the table when sortable heading is clicked", async () => {
-    //     const sortFunction = vi.fn();
-    //
-    //     const { getByTestId } = render(
-    //         <CollectionsFullTable
-    //             collections={collections}
-    //             user={user}
-    //             onSort={sortFunction}
-    //         />,
-    //     );
-    //
-    //     expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-    //
-    //     const tableHeader = screen.getAllByRole("columnheader")[0];
-    //
-    //     expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
-    //
-    //     await userEvent.click(tableHeader);
-    //
-    //     expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
-    // });
-    //
-    // it("should sort the table when sortable heading is clicked but reverse the direction", async () => {
-    //     const sortFunction = vi.fn();
-    //
-    //     const { getByTestId } = render(
-    //         <CollectionsFullTable
-    //             collections={collections}
-    //             user={user}
-    //             onSort={sortFunction}
-    //             activeSort="name"
-    //             sortDirection="asc"
-    //         />,
-    //     );
-    //
-    //     expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-    //
-    //     const tableHeader = screen.getAllByRole("columnheader")[0];
-    //
-    //     expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
-    //
-    //     await userEvent.click(tableHeader);
-    //
-    //     expect(sortFunction).toHaveBeenCalledWith({ direction: "desc", selectedChainIds: undefined, sortBy: "name" });
-    // });
-    //
-    // it("should sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
-    //     const { getByTestId } = render(
-    //         <CollectionsFullTable
-    //             collections={collections}
-    //             user={user}
-    //         />,
-    //     );
-    //
-    //     expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-    //
-    //     const tableHeader = screen.getAllByRole("columnheader")[0];
-    //
-    //     expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
-    //
-    //     await userEvent.click(tableHeader);
-    // });
-    //
-    // it("should sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
-    //     const sortFunction = vi.fn();
-    //
-    //     const { getByTestId } = render(
-    //         <CollectionsFullTable
-    //             collections={collections}
-    //             user={user}
-    //             activeSort="name"
-    //             sortDirection="desc"
-    //             onSort={sortFunction}
-    //         />,
-    //     );
-    //
-    //     expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-    //
-    //     const tableHeader = screen.getAllByRole("columnheader")[0];
-    //
-    //     expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
-    //
-    //     await userEvent.click(tableHeader);
-    //
-    //     expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
-    // });
+    it("should sort the table when sortable heading is clicked", async () => {
+        const sortFunction = vi.fn();
+
+        const { getByTestId } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                onSort={sortFunction}
+            />,
+        );
+
+        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+
+        const tableHeader = screen.getAllByRole("columnheader")[0];
+
+        expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
+
+        await userEvent.click(tableHeader);
+
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
+    });
+
+    it("should sort the table when sortable heading is clicked but reverse the direction", async () => {
+        const sortFunction = vi.fn();
+
+        const { getByTestId } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                onSort={sortFunction}
+                activeSort="name"
+                sortDirection="asc"
+            />,
+        );
+
+        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+
+        const tableHeader = screen.getAllByRole("columnheader")[0];
+
+        expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
+
+        await userEvent.click(tableHeader);
+
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "desc", selectedChainIds: undefined, sortBy: "name" });
+    });
+
+    it("should sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
+        const { getByTestId } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+            />,
+        );
+
+        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+
+        const tableHeader = screen.getAllByRole("columnheader")[0];
+
+        expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
+
+        await userEvent.click(tableHeader);
+    });
+
+    it("should sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
+        const sortFunction = vi.fn();
+
+        const { getByTestId } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                activeSort="name"
+                sortDirection="desc"
+                onSort={sortFunction}
+            />,
+        );
+
+        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+
+        const tableHeader = screen.getAllByRole("columnheader")[0];
+
+        expect(tableHeader.querySelector("svg#arrow-up")).toBeInTheDocument();
+
+        await userEvent.click(tableHeader);
+
+        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
+    });
 
     it.each(allBreakpoints)("should render without crashing on %s screen if no floor price data", (breakpoint) => {
         const { getByTestId } = render(
