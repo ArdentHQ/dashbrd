@@ -48,7 +48,7 @@ class CollectionDetailData extends Data
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currencyCode = null, User $user = null): self
+    public static function fromModel(Collection $collection, ?CurrencyCode $currencyCode = null, ?User $user = null): self
     {
         $symbol = $collection->floorPriceToken?->symbol;
 

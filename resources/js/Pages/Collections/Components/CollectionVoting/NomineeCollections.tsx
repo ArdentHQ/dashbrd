@@ -12,12 +12,14 @@ export const NomineeCollections = ({
     user,
     selectedCollection,
     setSelectedCollection,
+    showHeaderWhenEmpty = false,
 }: {
     collections: App.Data.Collections.VotableCollectionData[];
     activeSort: string;
     user: App.Data.UserData | null;
     selectedCollection: number;
     setSelectedCollection: (selectedCollection: number) => void;
+    showHeaderWhenEmpty?: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
     const { isMdAndAbove, isLgAndAbove } = useBreakpoint();
@@ -47,7 +49,7 @@ export const NomineeCollections = ({
             },
             {
                 id: "action",
-                paddingClassName: "px-0",
+                paddingClassName: "px-0 [&_>_div]:w-12",
                 disableSortBy: true,
             },
         ];
@@ -77,7 +79,7 @@ export const NomineeCollections = ({
         return columns;
     }, [t, isMdAndAbove, isLgAndAbove]);
 
-    if (collections.length === 0) {
+    if (!showHeaderWhenEmpty && collections.length === 0) {
         return <></>;
     }
 

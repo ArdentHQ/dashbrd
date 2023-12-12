@@ -610,7 +610,7 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeVotable(Builder $query, CurrencyCode $currency): Builder
+    public function scopeVotable(Builder $query, CurrencyCode $currency, bool $orderByVotes = true): Builder
     {
         return $query
             ->addSelectVolumeFiat($currency)
@@ -631,8 +631,7 @@ class Collection extends Model
             ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
             ->withCount('nfts')
             ->groupBy('collections.id')
-            ->orderBy('votes_count', 'desc')
-            ->orderByRaw('volume DESC NULLS LAST');
+            ->when($orderByVotes, fn ($q) => $q->orderBy('votes_count', 'desc')->orderByRaw('volume DESC NULLS LAST'));
     }
 
     /**
