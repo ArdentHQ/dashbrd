@@ -294,13 +294,13 @@ export const WinnerCollectionsTable = ({
         {
             id: "volume",
             className: "justify-end",
-            sortDescFirst: true,
         },
         {
             id: "floorPrice",
         },
         {
             id: "votes",
+            sortDescFirst: true,
         },
     ];
 
