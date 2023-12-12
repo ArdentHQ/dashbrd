@@ -11,6 +11,7 @@ export interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
     sort?: PopularCollectionsSortBy;
     query?: string;
+    perPage?: number;
 }
 
 interface CollectionFiltersState {
@@ -19,6 +20,7 @@ interface CollectionFiltersState {
     setChain: (sort: ChainFilter | undefined) => void;
     searchQuery: string;
     setSearchQuery: (query: string) => void;
+    setPerPage: (perPage: number) => void;
 }
 export const useCollectionFilters = ({
     filters,
@@ -66,11 +68,19 @@ export const useCollectionFilters = ({
         }));
     };
 
+    const setPerPage = (perPage: number): void => {
+        setCurrentFilters((filters) => ({
+            ...filters,
+            perPage,
+        }));
+    };
+
     return {
         currentFilters,
         setChain,
         setSortBy,
         searchQuery,
         setSearchQuery,
+        setPerPage,
     };
 };

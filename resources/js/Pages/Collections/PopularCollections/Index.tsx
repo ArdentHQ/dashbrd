@@ -33,7 +33,7 @@ const Index = ({
 
     const { t } = useTranslation();
 
-    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery } = useCollectionFilters({
+    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery, setPerPage } = useCollectionFilters({
         filters,
         filterRoute: route("popular-collections"),
     });
@@ -94,7 +94,7 @@ const Index = ({
                     <div className="mt-2">
                         <CollectionsFullTablePagination
                             pagination={collections}
-                            onPageLimitChange={() => 1}
+                            onPageLimitChange={setPerPage}
                         />
                     </div>
                 </div>
