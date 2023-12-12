@@ -27,20 +27,6 @@ class CollectionOfTheMonthController extends Controller
     /**
      * @return DataCollection<int, CollectionOfTheMonthData>
      */
-    private function getCollectionsOfTheMonth(): DataCollection
-    {
-        $collections = CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
-
-        if ($collections->count() === 0) {
-            abort(404);
-        }
-
-        return $collections;
-    }
-
-    /**
-     * @return DataCollection<int, CollectionOfTheMonthData>
-     */
     private function getWinnerColletions(): DataCollection
     {
         return CollectionOfTheMonthData::collection(
