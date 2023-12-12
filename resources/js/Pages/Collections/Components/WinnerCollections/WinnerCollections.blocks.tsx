@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/core";
 import cn from "classnames";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +12,6 @@ import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images"
 import { FormatCrypto } from "@/Utils/Currency";
 import { formatNumbershort } from "@/Utils/format-number";
 import { isTruthy } from "@/Utils/is-truthy";
-import { router } from "@inertiajs/core";
 
 const WinnerCollectionLabel = ({ label, children }: { label: string; children: ReactNode }): JSX.Element => {
     const { t } = useTranslation();
