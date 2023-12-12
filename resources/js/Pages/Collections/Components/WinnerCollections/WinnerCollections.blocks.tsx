@@ -145,7 +145,9 @@ const YearSelectionDropdown = ({
                     type="button"
                     className="transition-default flex items-center space-x-3 "
                 >
-                    <span className="font-medium dark:text-theme-hint-400">{selectedYear}</span>
+                    <span className="font-medium hover:text-theme-hint-700 dark:text-theme-hint-400">
+                        {selectedYear}
+                    </span>
                     <Icon
                         name="ChevronDownSmall"
                         className={cn(
