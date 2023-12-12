@@ -70,6 +70,10 @@ return [
         'title' => 'My Collections | Dashbrd',
     ],
 
+    'popular-collections' => [
+        'title' => 'Popular NFT Collections | Dashbrd',
+    ],
+
     'nfts' => [
         'view' => [
             'title' => ':nft NFT | Dashbrd',
