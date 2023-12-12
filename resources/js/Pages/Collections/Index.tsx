@@ -3,6 +3,7 @@ import { Head, router, usePage } from "@inertiajs/react";
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { type RouteParams } from "ziggy-js";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import {
@@ -220,7 +221,7 @@ const ViewAllButton = ({ className, filters }: { className?: string; filters: Fi
     return (
         <ButtonLink
             variant="secondary"
-            href={route("popular-collections", filters)}
+            href={route("popular-collections", filters as RouteParams)}
             className={cn("w-full justify-center sm:w-auto", className)}
         >
             {t("common.view_all")}
