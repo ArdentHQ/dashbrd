@@ -60,7 +60,7 @@ class TokenListItemData extends Data
      * @param  Collection<int, int>  $chainIds
      * @return PaginatedDataCollection<int, TokenListItemData>
      */
-    public static function paginated(User $user, int $perPage, int $currentPage = null, string $sortBy, string $sortDirection, Collection $chainIds): PaginatedDataCollection
+    public static function paginated(User $user, int $perPage, ?int $currentPage, string $sortBy, string $sortDirection, Collection $chainIds): PaginatedDataCollection
     {
         $sortBy = in_array($sortBy, self::$sortByOptions) ? $sortBy : 'fiat_balance';
 

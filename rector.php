@@ -7,7 +7,6 @@ use Rector\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
-use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
 use Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector;
 use Rector\CodingStyle\Rector\ClassConst\SplitGroupedClassConstantsRector;
 use Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector;
@@ -23,7 +22,6 @@ use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\Property\SplitGroupedPropertiesRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
-use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
@@ -54,7 +52,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         NewlineAfterStatementRector::class,
         RemoveFinalFromConstRector::class,
-        BinarySwitchToIfElseRector::class,
         ConsistentImplodeRector::class,
         TernaryConditionVariableAssignmentRector::class,
         StringClassNameToClassConstantRector::class,
@@ -62,7 +59,6 @@ return static function (RectorConfig $rectorConfig): void {
         SplitDoubleAssignRector::class,
         WrapEncapsedVariableInCurlyBracesRector::class,
         NewlineBeforeNewAssignSetRector::class,
-        AddArrayDefaultToArrayPropertyRector::class,
         MakeInheritedMethodVisibilitySameAsParentRector::class,
         CallUserFuncArrayToVariadicRector::class,
         VersionCompareFuncCallToConstantRector::class,
