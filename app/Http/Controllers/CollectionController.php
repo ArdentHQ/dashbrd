@@ -191,6 +191,7 @@ class CollectionController extends Controller
         $filter = [
             'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
             'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
+            'period' => $this->getValidValue($request->get('period'), ['24h', '7d', '30d']),
         ];
 
         // If value is not defined (or invalid), remove it from the array since

@@ -22,11 +22,17 @@ import { type PaginationData } from "@/Components/Pagination/Pagination.contract
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
-import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import {
+    type ChainFilter,
+    ChainFilters,
+    type PeriodFilterOptions,
+    PeriodFilters,
+} from "@/Pages/Collections/Components/PopularCollectionsFilters";
 
 export interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
     sort?: PopularCollectionsSortBy;
+    period?: PeriodFilterOptions;
 }
 
 interface CollectionsIndexProperties extends PageProps {
@@ -81,9 +87,17 @@ const CollectionsIndex = ({
         }));
     };
 
+    const setPeriod = (period: PeriodFilterOptions | undefined): void => {
+        setCurrentFilters((filters) => ({
+            ...filters,
+            period,
+        }));
+    };
+
     const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
+            period: sort === "floor-price" ? undefined : filters.period,
             sort,
         }));
     };
@@ -107,6 +121,8 @@ const CollectionsIndex = ({
                             setSortBy={setSortBy}
                             chain={currentFilters.chain}
                             setChain={setChain}
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
                         />
 
                         <ViewAllButton
@@ -121,6 +137,12 @@ const CollectionsIndex = ({
                         <PopularCollectionsSorting
                             sortBy={currentFilters.sort}
                             setSortBy={setSortBy}
+                        />
+
+                        <PeriodFilters
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
+                            disabled={currentFilters.sort === "floor-price"}
                         />
 
                         <ChainFilters

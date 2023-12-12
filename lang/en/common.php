@@ -168,4 +168,7 @@ return [
     'vote' => 'Vote',
     'vol' => 'Vol',
     'collection_preview' => 'Collection Preview',
+    '24h' => '24h',
+    '7d' => '7d',
+    '30d' => '30d',
 ];
