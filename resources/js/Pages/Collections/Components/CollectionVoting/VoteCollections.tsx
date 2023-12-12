@@ -122,7 +122,7 @@ export const VoteCollections = ({
             <NominationDialog
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
-                collections={nominatableCollections}
+                initialCollections={nominatableCollections}
                 user={user}
             />
         </div>
