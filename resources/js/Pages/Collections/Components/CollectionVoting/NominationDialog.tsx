@@ -111,8 +111,6 @@ export const NominationDialog = ({
         [collections, selectedCollection],
     );
 
-    const [loading, setLoading] = useState(false);
-
     const vote = (): void => {
         setLoading(true);
 

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CollectionVote extends Model
 {
@@ -25,10 +26,26 @@ class CollectionVote extends Model
     ];
 
     /**
+     * @return BelongsTo<Wallet, CollectionVote>
+     */
+    public function wallet(): BelongsTo
+    {
+        return $this->belongsTo(Wallet::class);
+    }
+
+    /**
+     * @return BelongsTo<Collection, CollectionVote>
+     */
+    public function collection(): BelongsTo
+    {
+        return $this->belongsTo(Collection::class);
+    }
+
+    /**
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeinCurrentMonth(Builder $query): Builder
+    public function scopeInCurrentMonth(Builder $query): Builder
     {
         return $query->whereBetween('voted_at', [
             Carbon::now()->startOfMonth(),
