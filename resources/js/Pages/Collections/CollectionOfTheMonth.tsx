@@ -8,19 +8,20 @@ import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinne
 import { Heading } from "@/Components/Heading";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { DateTime } from "@ardenthq/sdk-intl";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
-    collections: App.Data.Collections.CollectionOfTheMonthData[];
     winners: App.Data.Collections.CollectionOfTheMonthData[];
 }
 
-const CollectionOfTheMonth = ({ title, collections, winners }: CollectionOfTheMonthProperties): JSX.Element => {
+const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const date = new Date();
-    date.setMonth(date.getMonth() - 1);
-    const previousMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+    const month = DateTime.make(winners[0]?.hasWonAt ?? undefined).format("MMMM");
+    const latestMonthWinners = winners.filter((winner) => {
+        return DateTime.make(winner.hasWonAt ?? undefined).format("MMMM:YYYY") === DateTime.make().format("MMMM:YYYY");
+    });
 
     return (
         <DefaultLayout>
@@ -59,12 +60,12 @@ const CollectionOfTheMonth = ({ title, collections, winners }: CollectionOfTheMo
                     <div className="collection-of-the-month-overview flex flex-col items-center justify-center pt-8">
                         <Heading level={1}>
                             {t("pages.collections.collection_of_the_month.winners_month", {
-                                month: previousMonth,
+                                month,
                             })}
                         </Heading>
                         <div className="mt-11">
                             <WinnersChart
-                                winners={collections}
+                                winners={latestMonthWinners}
                                 large
                             />
                         </div>

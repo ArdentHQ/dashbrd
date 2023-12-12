@@ -16,7 +16,6 @@ class CollectionOfTheMonthController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('Collections/CollectionOfTheMonth', [
-            'collections' => fn () => $this->getCollectionsOfTheMonth(),
             'winners' => fn () => $this->getWinnerColletions(),
             'allowsGuests' => true,
             'title' => fn () => trans('metatags.collections.of-the-month.title', [

@@ -41,11 +41,17 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
+    use BelongsToNetwork;
+    use HasEagerLimit;
+    use HasFactory;
+    use HasSlug;
+    use HasWalletVotes;
+    use Reportable;
+    use SoftDeletes;
 
-    const TWITTER_URL = 'https://x.com/';
+    public const TWITTER_URL = 'https://x.com/';
 
-    const DISCORD_URL = 'https://discord.gg/';
+    public const DISCORD_URL = 'https://discord.gg/';
 
     /**
      * @var \Illuminate\Database\Eloquent\Collection<int, Nft>
@@ -398,7 +404,8 @@ class Collection extends Model
     public function spamContract(): HasOne
     {
         return $this->hasOne(SpamContract::class, 'address', 'address')->when(
-            $this->network_id !== null, fn ($query) => $query->where('network_id', $this->network_id)
+            $this->network_id !== null,
+            fn ($query) => $query->where('network_id', $this->network_id)
         );
     }
 
@@ -654,18 +661,5 @@ class Collection extends Model
     public function scopeVotedByUserInCurrentMonth(Builder $query, User $user): Builder
     {
         return $query->whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $user->wallet_id));
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeWinnersOfThePreviousMonth(Builder $query): Builder
-    {
-        return $query
-            ->withCount(['votes' => fn ($query) => $query->inPreviousMonth()])
-            // order by votes count excluding nulls
-            ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
-            ->orderBy('votes_count', 'desc');
     }
 }
