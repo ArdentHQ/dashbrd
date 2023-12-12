@@ -14,6 +14,7 @@ interface Properties extends HTMLAttributes<HTMLDivElement> {
     hasBlurryOverlay?: boolean;
     footer?: React.ReactNode;
     panelClassName?: string;
+    innerWrapperClassName?: string;
 }
 
 const NOOP = /* istanbul ignore next */ (): null => null;
@@ -29,6 +30,7 @@ const Dialog = ({
     hasBlurryOverlay = false,
     className,
     panelClassName,
+    innerWrapperClassName,
     footer,
     ...properties
 }: Properties): JSX.Element => (
@@ -108,7 +110,13 @@ const Dialog = ({
                                 )}
                             </div>
 
-                            <div className={cn("flex-1", isUsedByConfirmationDialog ? "" : "px-6 pb-6 pt-4")}>
+                            <div
+                                className={cn(
+                                    innerWrapperClassName,
+                                    "flex-1",
+                                    isUsedByConfirmationDialog ? "" : "px-6 pb-6 pt-4",
+                                )}
+                            >
                                 {children}
                             </div>
                             {footer}

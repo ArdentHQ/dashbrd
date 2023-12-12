@@ -33,7 +33,7 @@ it('should refresh NFT metadata', function () {
     expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(0);
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v3/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
@@ -59,12 +59,37 @@ it('should not refresh NFT metadata if not requested', function () {
     expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(0);
 
     Alchemy::fake([
-        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata'), 200),
+        'https://polygon-mainnet.g.alchemy.com/nft/v2/*' => Http::response(fixtureData('alchemy.nft_batch_metadata_2'), 200),
     ]);
 
     (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
 
     expect(Nft::whereNotNull('metadata_fetched_at')->get())->toHaveCount(0);
+});
+
+it('should not refresh NFT metadata for NFTs that were previously burned', function () {
+    Bus::fake();
+    $user = createUser();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create();
+
+    $nft = Nft::factory()->create([
+        'wallet_id' => $user->wallet,
+        'collection_id' => $collection,
+        'metadata_fetched_at' => null,
+        'metadata_requested_at' => now(),
+        'burned_at' => now(),
+    ]);
+
+    Alchemy::fake();
+
+    (new RefreshNftMetadata($collection))->handle(app(AlchemyWeb3DataProvider::class));
+
+    Alchemy::assertNothingSent();
+
+    expect($nft->fresh()->metadata_fetched_at)->toBeNull();
 });
 
 it('should skip refreshing NFT metadata for a spam collection', function () {

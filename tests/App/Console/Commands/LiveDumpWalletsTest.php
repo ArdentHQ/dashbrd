@@ -18,8 +18,8 @@ it('fetches NFTs', function () {
     Alchemy::fake(function (Request $request) {
         if ($request->method() == 'GET') {
             $path = $request->toPsrRequest()->getUri()->getPath();
-            if (Str::endsWith($path, 'getNFTs')) {
-                return Http::response(fixtureData('alchemy.nfts'), 200);
+            if (Str::endsWith($path, 'getNFTsForOwner')) {
+                return Http::response(fixtureData('alchemy.nfts_for_owner_2'), 200);
             }
         }
 

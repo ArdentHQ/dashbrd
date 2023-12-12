@@ -91,7 +91,7 @@ class GalleryCache
         );
     }
 
-    public static function clearCollections(int $galleryId = null): void
+    public static function clearCollections(?int $galleryId = null): void
     {
         $tags = $galleryId ? [self::TAG_COLLECTIONS.'_'.$galleryId] : [self::TAG_COLLECTIONS];
 

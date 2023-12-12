@@ -20,7 +20,7 @@ trait LoadsFromCache
     /**
      * @param  string|array<string>  $uniqueKeyParts
      */
-    protected function fromCache(Closure $callback, array|string $uniqueKeyParts, int $ttl = null, bool $ignoreCache = false): mixed
+    protected function fromCache(Closure $callback, array|string $uniqueKeyParts, ?int $ttl = null, bool $ignoreCache = false): mixed
     {
         $methodName = $this->getMethodName();
 
