@@ -8,8 +8,9 @@ import { Img } from "@/Components/Image";
 import { DropdownButton } from "@/Components/SortDropdown";
 import { Table, TableCell, TableRow } from "@/Components/Table";
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
-import { FormatCrypto, FormatFiatShort } from "@/Utils/Currency";
+import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
+import { formatNumbershort } from "@/Utils/format-number";
 
 const WinnerCollectionLabel = ({ label, children }: { label: string; children: ReactNode }): JSX.Element => {
     const { t } = useTranslation();
@@ -90,10 +91,7 @@ export const WinnerCollectionMainInfo = ({
                 </WinnerCollectionLabel>
 
                 <WinnerCollectionLabel label={t("common.votes")}>
-                    <FormatFiatShort
-                        value={collection.votes.toString()}
-                        currency=""
-                    />
+                    {formatNumbershort(collection.votes)}
                 </WinnerCollectionLabel>
             </div>
         </div>
@@ -267,10 +265,7 @@ export const WinnerCollectionTableRow = ({
                 innerClassName="justify-end"
             >
                 <WinnerCollectionLabel label={t("common.votes")}>
-                    <FormatFiatShort
-                        value={collection.votes.toString()}
-                        currency=""
-                    />
+                    {formatNumbershort(collection.votes)}
                 </WinnerCollectionLabel>
             </TableCell>
         </TableRow>
