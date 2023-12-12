@@ -9,8 +9,8 @@ import { DropdownButton } from "@/Components/SortDropdown";
 import { Table, TableCell, TableRow } from "@/Components/Table";
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
 import { FormatCrypto } from "@/Utils/Currency";
-import { isTruthy } from "@/Utils/is-truthy";
 import { formatNumbershort } from "@/Utils/format-number";
+import { isTruthy } from "@/Utils/is-truthy";
 
 const WinnerCollectionLabel = ({ label, children }: { label: string; children: ReactNode }): JSX.Element => {
     const { t } = useTranslation();
