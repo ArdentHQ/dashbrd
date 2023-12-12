@@ -1,6 +1,5 @@
 import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
@@ -8,6 +7,7 @@ import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/PopularCollections/CollectionsFullTablePagination";
+import { PopularCollectionsFilterPopover } from "@/Pages/Collections/Components/PopularCollectionsFilterPopover";
 import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
 import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
@@ -32,10 +32,6 @@ const Index = ({
     const { props } = usePage();
 
     const { t } = useTranslation();
-
-    // @TODO replace with real logic
-    const isSearching = Math.random() === 0;
-    const query = Math.random() === 0 ? "" : "1";
 
     const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery } = useCollectionFilters({
         filters,
@@ -71,23 +67,21 @@ const Index = ({
                             onChange={setSearchQuery}
                             placeholder="Search by Collection Name"
                         />
+                        <div className="relative ml-3 md-lg:hidden">
+                            <PopularCollectionsFilterPopover
+                                sortBy={currentFilters.sort}
+                                setSortBy={setSortBy}
+                                chain={currentFilters.chain}
+                                setChain={setChain}
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <div className="mx-6 mt-1 sm:mx-8 2xl:mx-0">
                     {collections.data.length === 0 && (
                         <div className="mt-7">
-                            {isSearching ? (
-                                <EmptyBlock>{t("pages.collections.search.loading_results")}</EmptyBlock>
-                            ) : (
-                                <>
-                                    {query !== "" ? (
-                                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
-                                    ) : (
-                                        <EmptyBlock>{t("pages.collections.no_collections")}</EmptyBlock>
-                                    )}
-                                </>
-                            )}
+                            <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
                         </div>
                     )}
 
@@ -100,7 +94,6 @@ const Index = ({
                         <CollectionsFullTablePagination
                             pagination={collections}
                             onPageLimitChange={() => 1}
-                            onPageChange={() => 2}
                         />
                     </div>
                 </div>

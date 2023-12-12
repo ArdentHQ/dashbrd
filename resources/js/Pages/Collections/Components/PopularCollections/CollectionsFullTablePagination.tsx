@@ -6,14 +6,9 @@ import { SelectPageLimit } from "@/Components/Pagination/SelectPageLimit";
 interface Properties {
     pagination: PaginationData<App.Data.Collections.CollectionData>;
     onPageLimitChange: (limit: number) => void;
-    onPageChange: (page: number) => void;
 }
 
-export const CollectionsFullTablePagination = ({
-    pagination,
-    onPageLimitChange,
-    onPageChange,
-}: Properties): JSX.Element => {
+export const CollectionsFullTablePagination = ({ pagination, onPageLimitChange }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     if (pagination.meta.total < 12) {
@@ -33,7 +28,6 @@ export const CollectionsFullTablePagination = ({
             {pagination.meta.last_page > 1 && (
                 <Pagination
                     data={pagination}
-                    onPageChange={onPageChange}
                     className="w-full xs:w-fit"
                 />
             )}
