@@ -112,7 +112,7 @@ export const NominationDialog = ({
                 setSelectedCollection(0);
             }}
             panelClassName="md:max-w-[640px] md-lg:max-w-[720px] lg:max-w-[790px] sm:!h-[754px] justify-between sm:flex"
-            innerWrapperClassName="overflow-scroll"
+            innerWrapperClassName="overflow-y-auto"
             footer={
                 <NominationDialogFooter
                     setIsOpen={setIsOpen}
