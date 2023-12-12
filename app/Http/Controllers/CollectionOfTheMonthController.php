@@ -30,7 +30,7 @@ class CollectionOfTheMonthController extends Controller
     private function getWinnerColletions(): DataCollection
     {
 
-        $winners =  CollectionOfTheMonthData::collection(
+        $winners = CollectionOfTheMonthData::collection(
             Collection::query()
                 ->whereNotNull('has_won_at')
                 ->get()
