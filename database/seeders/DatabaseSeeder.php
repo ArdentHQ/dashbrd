@@ -34,7 +34,6 @@ class DatabaseSeeder extends Seeder
         if (Feature::active(Features::Collections->value) || Feature::active(Features::Galleries->value)) {
             $this->call(NftSeeder::class);
             $this->call(CollectionVotesSeeder::class);
-            $this->call(WinnerCollectionSeeder::class);
         }
 
         if (Feature::active(Features::Galleries->value)) {

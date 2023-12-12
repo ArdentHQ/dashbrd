@@ -13,6 +13,7 @@ class WinnerCollectionSeeder extends Seeder
     public function run(): void
     {
         $this->generateWinners(Carbon::now()->year);
+        $this->generateWinners(Carbon::now()->subYear()->year);
     }
 
     public function generateWinners(int $year): void
