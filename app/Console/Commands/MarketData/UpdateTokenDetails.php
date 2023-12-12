@@ -51,7 +51,7 @@ class UpdateTokenDetails extends Command
         }
     }
 
-    private function updateAllTokenDetails(Wallet $wallet = null): void
+    private function updateAllTokenDetails(?Wallet $wallet = null): void
     {
         $top = $this->option('top');
 

@@ -30,7 +30,7 @@ class CoingeckoPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(Factory $factory = null)
+    public function __construct(?Factory $factory = null)
     {
         parent::__construct($factory);
 
