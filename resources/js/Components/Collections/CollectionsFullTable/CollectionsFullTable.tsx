@@ -57,7 +57,7 @@ export const CollectionsFullTable = ({
         if (isMdAndAbove) {
             columns.splice(columns.length, 0, {
                 Header: t("common.collection_preview").toString(),
-                className: "whitespace-nowrap xl:w-96 lg:w-48",
+                className: "whitespace-nowrap xl:w-64 lg:w-48",
                 disableSortBy: true,
             });
 
