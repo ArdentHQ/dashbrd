@@ -6,7 +6,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/PopularCollections/CollectionsFullTablePagination";
+import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/CollectionsFullTablePagination/CollectionsFullTablePagination";
 import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
 import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
