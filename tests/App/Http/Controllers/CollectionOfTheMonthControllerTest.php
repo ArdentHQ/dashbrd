@@ -6,7 +6,9 @@ use App\Models\Collection;
 use App\Models\CollectionVote;
 
 it('opens the collection of the month page', function () {
-    $collection = Collection::factory()->create();
+    $collection = Collection::factory()->create([
+        "has_won_at" => now()->subMonth()->subDay()
+    ]);
 
     CollectionVote::factory()->create([
         'collection_id' => $collection->id,
