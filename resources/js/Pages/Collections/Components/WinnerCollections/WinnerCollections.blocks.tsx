@@ -75,7 +75,7 @@ export const WinnerCollectionMainInfo = ({
                 </p>
             </div>
 
-            <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 md:hidden">
+            <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 lg:hidden">
                 <WinnerCollectionLabel label={t("common.volume")}>
                     <FormatCrypto
                         value={collection.volume ?? "0"}
@@ -234,7 +234,7 @@ export const WinnerCollectionTableRow = ({
             </TableCell>
 
             <TableCell
-                className="hidden md:table-cell"
+                className="hidden lg:table-cell"
                 paddingClassName="p-4"
                 innerClassName="justify-end"
             >
@@ -247,7 +247,7 @@ export const WinnerCollectionTableRow = ({
             </TableCell>
 
             <TableCell
-                className="hidden md:table-cell"
+                className="hidden lg:table-cell"
                 paddingClassName="p-4"
                 innerClassName="justify-end"
             >
@@ -260,7 +260,7 @@ export const WinnerCollectionTableRow = ({
             </TableCell>
 
             <TableCell
-                className="hidden md:table-cell"
+                className="hidden lg:table-cell"
                 paddingClassName="p-4"
                 innerClassName="justify-end"
             >
