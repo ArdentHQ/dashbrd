@@ -100,7 +100,7 @@ const CollectionsIndex = ({
                         <PeriodFilters
                             period={currentFilters.period}
                             setPeriod={setPeriod}
-                            disabled={currentFilters.sort === "floor-price"}
+                            sortBy={currentFilters.sort}
                         />
 
                         <ChainFilters

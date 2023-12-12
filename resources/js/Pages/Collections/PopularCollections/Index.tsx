@@ -1,20 +1,15 @@
 import { type PageProps } from "@inertiajs/core";
-import { Head, router, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { Head, usePage } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
-import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/PopularCollections/CollectionsFullTablePagination";
-import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
-import {
-    type PopularCollectionsSortBy,
-    PopularCollectionsSorting,
-} from "@/Pages/Collections/Components/PopularCollectionsSorting";
-import { type Filters } from "@/Pages/Collections/Index";
+import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
+import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionsFilters";
 
 const Index = ({
     auth,
@@ -40,29 +35,10 @@ const Index = ({
     const isSearching = Math.random() === 0;
     const query = Math.random() === 0 ? "" : "1";
 
-    const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
-
-    const isFirstRender = useIsFirstRender();
-
-    useEffect(() => {
-        if (isFirstRender) return;
-
-        router.get(route("popular-collections"), currentFilters);
-    }, [currentFilters]);
-
-    const setChain = (chain: ChainFilter | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            chain,
-        }));
-    };
-
-    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            sort,
-        }));
-    };
+    const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
+        filters,
+        route: route("collections"),
+    });
 
     return (
         <DefaultLayout toastMessage={props.toast}>
@@ -78,6 +54,12 @@ const Index = ({
                             <PopularCollectionsSorting
                                 sortBy={currentFilters.sort}
                                 setSortBy={setSortBy}
+                            />
+
+                            <PeriodFilters
+                                period={currentFilters.period}
+                                setPeriod={setPeriod}
+                                sortBy={currentFilters.sort}
                             />
 
                             <ChainFilters

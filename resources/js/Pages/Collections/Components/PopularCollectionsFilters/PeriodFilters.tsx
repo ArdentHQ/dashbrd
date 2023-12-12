@@ -2,11 +2,11 @@ import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@/Components/Tabs";
+import { type PopularCollectionsSortingProperties } from "@/Pages/Collections/Components/PopularCollectionsSorting/PopularCollectionsSorting";
 
-export interface PeriodFiltersProperties {
+export interface PeriodFiltersProperties extends Pick<PopularCollectionsSortingProperties, "sortBy"> {
     period: PeriodFilterOptions | undefined;
     setPeriod: (period: PeriodFilterOptions | undefined) => void;
-    disabled: boolean;
 }
 
 export enum PeriodFilterOptions {
@@ -15,7 +15,7 @@ export enum PeriodFilterOptions {
     "30d" = "30d",
 }
 
-export const PeriodFilters = ({ period, setPeriod, disabled = false }: PeriodFiltersProperties): JSX.Element => {
+export const PeriodFilters = ({ period, setPeriod, sortBy }: PeriodFiltersProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -23,7 +23,7 @@ export const PeriodFilters = ({ period, setPeriod, disabled = false }: PeriodFil
             <Tab.List>
                 <Tabs
                     widthClassName="w-full md-lg:w-auto"
-                    disabled={disabled}
+                    disabled={sortBy === "floor-price"}
                 >
                     {Object.values(PeriodFilterOptions).map((option) => (
                         <Tab
@@ -38,7 +38,7 @@ export const PeriodFilters = ({ period, setPeriod, disabled = false }: PeriodFil
                                 onClick={() => {
                                     setPeriod(option);
                                 }}
-                                disabled={disabled}
+                                disabled={sortBy === "floor-price"}
                             >
                                 {t(`common.${option}`)}
                             </Tabs.Button>

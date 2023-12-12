@@ -60,7 +60,7 @@ export const PopularCollectionsFilterPopover = ({
                                         <PeriodFilters
                                             period={period}
                                             setPeriod={setPeriod}
-                                            disabled={sortBy === "floor-price"}
+                                            sortBy={sortBy}
                                         />
 
                                         <ChainFilters
