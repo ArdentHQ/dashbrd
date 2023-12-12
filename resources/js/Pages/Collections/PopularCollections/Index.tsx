@@ -37,7 +37,7 @@ const Index = ({
 
     const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
         filters,
-        route: route("collections"),
+        route: route("popular-collections"),
     });
 
     return (

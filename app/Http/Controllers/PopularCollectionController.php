@@ -9,6 +9,7 @@ use App\Data\Collections\CollectionStatsData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
+use App\Models\Traits\HasCollectionFilters;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ use Inertia\Response;
 
 class PopularCollectionController extends Controller
 {
+    use HasCollectionFilters;
+
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
         $user = $request->user();
@@ -57,30 +60,5 @@ class PopularCollectionController extends Controller
             ),
             'filters' => $this->getFilters($request),
         ]);
-    }
-
-    /**
-     * @return object{chain?: string, sort?: string}
-     */
-    private function getFilters(Request $request): object
-    {
-        $filter = [
-            'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
-            'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
-        ];
-
-        // If value is not defined (or invalid), remove it from the array since
-        // the frontend expect `undefined` values (not `null`)
-
-        // Must be cast to an object due to some Inertia front-end stuff...
-        return (object) array_filter($filter);
-    }
-
-    /**
-     * @param  array<string>  $validValues
-     */
-    private function getValidValue(?string $value, array $validValues): ?string
-    {
-        return in_array($value, $validValues) ? $value : null;
     }
 }

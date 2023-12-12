@@ -26,6 +26,7 @@ use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Article;
 use App\Models\Collection;
+use App\Models\Traits\HasCollectionFilters;
 use App\Models\User;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
@@ -43,6 +44,8 @@ use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {
+    use HasCollectionFilters;
+
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
         return Inertia::render('Collections/Index', [
@@ -181,32 +184,6 @@ class CollectionController extends Controller
                     ->limit(8)
                     ->get());
 
-    }
-
-    /**
-     * @return object{chain?: string, sort?: string}
-     */
-    private function getFilters(Request $request): object
-    {
-        $filter = [
-            'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
-            'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
-            'period' => $this->getValidValue($request->get('period'), ['24h', '7d', '30d']),
-        ];
-
-        // If value is not defined (or invalid), remove it from the array since
-        // the frontend expect `undefined` values (not `null`)
-
-        // Must be cast to an object due to some Inertia front-end stuff...
-        return (object) array_filter($filter);
-    }
-
-    /**
-     * @param  array<string>  $validValues
-     */
-    private function getValidValue(?string $value, array $validValues): ?string
-    {
-        return in_array($value, $validValues) ? $value : null;
     }
 
     public function show(Request $request, Collection $collection): Response
