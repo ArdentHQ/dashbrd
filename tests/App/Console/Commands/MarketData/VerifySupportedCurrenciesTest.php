@@ -6,7 +6,7 @@ use App\Jobs\VerifySupportedCurrencies;
 use Illuminate\Support\Facades\Bus;
 
 it('dispatches a job', function () {
-    Bus::fake();
+    Bus::fake([VerifySupportedCurrencies::class]);
 
     $this->artisan('marketdata:verify-supported-currencies');
 

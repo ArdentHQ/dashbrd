@@ -93,7 +93,7 @@ describe("WalletTokensTable", () => {
         );
 
         switch (breakpoint) {
-            case "xs":
+            case Breakpoint.xs:
                 expect(screen.getByTestId(tokenCell)).toBeInTheDocument();
                 expect(screen.getByTestId(balanceCell)).toBeInTheDocument();
                 expect(screen.queryByTestId(priceCell)).not.toBeInTheDocument();
@@ -104,8 +104,8 @@ describe("WalletTokensTable", () => {
                 expect(screen.queryByRole("button", { name: "Details" })).not.toBeInTheDocument();
                 break;
 
-            case "sm":
-            case "md":
+            case Breakpoint.sm:
+            case Breakpoint.md:
                 expect(screen.getByTestId(tokenCell)).toBeInTheDocument();
                 expect(screen.getByTestId(balanceCell)).toBeInTheDocument();
                 expect(screen.getByTestId(priceCell)).toBeInTheDocument();
@@ -116,7 +116,7 @@ describe("WalletTokensTable", () => {
                 expect(screen.getByRole("button", { name: "Details" })).toBeInTheDocument();
                 break;
 
-            case "lg":
+            case Breakpoint.lg:
                 expect(screen.getByTestId(tokenCell)).toBeInTheDocument();
                 expect(screen.getByTestId(balanceCell)).toBeInTheDocument();
                 expect(screen.getByTestId(priceCell)).toBeInTheDocument();
@@ -127,7 +127,7 @@ describe("WalletTokensTable", () => {
                 expect(screen.getByRole("button", { name: "Details" })).toBeInTheDocument();
                 break;
 
-            case "xl":
+            case Breakpoint.xl:
                 expect(screen.getByTestId(tokenCell)).toBeInTheDocument();
                 expect(screen.getByTestId(balanceCell)).toBeInTheDocument();
                 expect(screen.getByTestId(priceCell)).toBeInTheDocument();

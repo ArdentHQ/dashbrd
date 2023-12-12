@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NftHiddenCollectionsToggle > should display the toggle as checked if showHidden is true 1`] = `
+<DocumentFragment>
+  <div
+    class="flex items-center gap-3"
+    data-testid="NftHiddenCollectionsToggle"
+  >
+    <span
+      class="text-base font-medium text-theme-secondary-700 dark:text-theme-dark-200"
+    >
+      Show hidden collections
+    </span>
+    <button
+      aria-checked="true"
+      class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700 bg-theme-primary-600 hover:bg-theme-primary-700 active:bg-theme-primary-800 dark:bg-theme-primary-400 dark:hover:bg-theme-primary-600 dark:focus-visible:bg-theme-primary-400 dark:active:bg-theme-primary-400"
+      data-headlessui-state="checked"
+      data-testid="Toggle"
+      id="headlessui-switch-:r1:"
+      role="switch"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="sr-only"
+      >
+        Disable
+      </span>
+      <span
+        class="inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out bg-white translate-x-[1.375rem]"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`NftHiddenCollectionsToggle > should display the toggle as unchecked if showHidden is false 1`] = `
+<DocumentFragment>
+  <div
+    class="flex items-center gap-3"
+    data-testid="NftHiddenCollectionsToggle"
+  >
+    <span
+      class="text-base font-medium text-theme-secondary-700 dark:text-theme-dark-200"
+    >
+      Show hidden collections
+    </span>
+    <button
+      aria-checked="false"
+      class="relative inline-flex h-6 w-11 items-center rounded-full transition duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 dark:focus-visible:ring-theme-primary-700 bg-theme-secondary-200 hover:bg-theme-secondary-300 active:bg-theme-secondary-400 dark:bg-theme-dark-700 dark:focus-within:bg-theme-dark-700 dark:hover:bg-theme-dark-800 dark:active:bg-theme-dark-800"
+      data-headlessui-state=""
+      data-testid="Toggle"
+      id="headlessui-switch-:r2:"
+      role="switch"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="sr-only"
+      >
+        Enable
+      </span>
+      <span
+        class="inline-block h-5 w-5 rounded-full shadow-sm transition duration-200 ease-in-out bg-white translate-x-0.5"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;

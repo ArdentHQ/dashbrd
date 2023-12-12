@@ -23,7 +23,6 @@ use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\Property\SplitGroupedPropertiesRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
-use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
@@ -54,7 +53,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         NewlineAfterStatementRector::class,
         RemoveFinalFromConstRector::class,
-        BinarySwitchToIfElseRector::class,
         ConsistentImplodeRector::class,
         TernaryConditionVariableAssignmentRector::class,
         StringClassNameToClassConstantRector::class,

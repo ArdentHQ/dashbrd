@@ -100,7 +100,7 @@ declare namespace App.Data.Articles {
         userId: number;
         authorName: string;
         authorAvatar: { thumb: string | null; thumb2x: string | null };
-        featuredCollections: Array<App.Data.Articles.FeaturedCollectionData>;
+        collections: Array<App.Data.Articles.FeaturedCollectionData>;
         metaDescription: string | null;
     };
     export type ArticlesData = {
@@ -509,5 +509,5 @@ declare namespace App.Data.Wallet {
 }
 declare namespace App.Enums {
     export type Chain = 1 | 5 | 137 | 80001;
-    export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER";
+    export type NftTransferType = "LABEL_MINT" | "LABEL_SALE" | "LABEL_TRANSFER" | "LABEL_BURN";
 }

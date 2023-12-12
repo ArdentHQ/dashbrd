@@ -43,30 +43,28 @@ class LiveDumpNfts extends Command
     /**
      * @var array<mixed>
      */
-    protected $requiredAttributes = [
-        'title',
+    protected array $requiredAttributes = [
+        'name',
         'description',
+        'tokenId',
         'contract' => [
             'address',
-        ],
-        'id' => [
-            'tokenId',
-        ],
-        'media' => [
-            '0' => ['thumbnail', 'gateway', 'raw'],
-        ],
-        'contractMetadata' => [
             'symbol',
             'name',
             'totalSupply',
-            'openSea' => ['twitterUsername', 'discordUrl', 'floorPrice', 'collectionName', 'imageUrl', 'externalUrl', 'description'],
+            'openSeaMetadata' => ['twitterUsername', 'discordUrl', 'floorPrice', 'collectionName', 'imageUrl', 'externalUrl', 'description'],
             'deployedBlockNumber',
         ],
-        'metadata' => [
-            'image',
-            'attributes',
-            'properties',
-            'external_url',
+        'image' => [
+            'thumbnailUrl', 'cachedUrl', 'originalUrl',
+        ],
+        'raw' => [
+            'metadata' => [
+                'image',
+                'attributes',
+                'properties',
+                'external_url',
+            ],
         ],
     ];
 
@@ -188,10 +186,10 @@ class LiveDumpNfts extends Command
     private function removeEncodedAttributes(array $nft): array
     {
         $potentiallyEncodedAttributes = [
-            'media.0.thumbnail',
-            'media.0.gateway',
-            'media.0.raw',
-            'metadata.image',
+            'image.thumbnailUrl',
+            'image.cachedUrl',
+            'image.originalUrl',
+            'raw.metadata.image',
         ];
 
         foreach ($potentiallyEncodedAttributes as $attribute) {
@@ -291,7 +289,7 @@ class LiveDumpNfts extends Command
 
         $nftChunk = json_decode($file, true);
 
-        return Arr::get($nftChunk, 'nextToken');
+        return Arr::get($nftChunk, 'pageKey');
     }
 
     private function getCollectionTraitsAndPersist(Chain $chain, string $address): void

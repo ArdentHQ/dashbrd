@@ -10,6 +10,7 @@ use App\Support\Facades\Alchemy;
 use App\Support\Facades\Mnemonic;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -19,7 +20,7 @@ beforeEach(function () {
         if ($request->method() == 'GET') {
             $path = $request->toPsrRequest()->getUri()->getPath();
             if (Str::contains($path, 'getNFTsForCollection')) {
-                return Http::response(fixtureData('alchemy.get_nfts_for_collection_last_page'), 200);
+                return Http::response(fixtureData('alchemy.get_nfts_for_contract'), 200);
             }
         }
 
@@ -101,6 +102,9 @@ it('should fetch NFTs', function () {
     $this->artisan('nfts:live-dump --collection-index=0 --chain-id=1');
 
     $liveDumps->each(fn ($liveDump) => expect($this->fakeFileSystem->exists($liveDump))->toBeTrue());
+
+    $dump = json_decode($this->fakeFileSystem->get($liveDumps[0]));
+    expect(Arr::get($dump, 'raw.metadata.image'))->toBe(null);
 });
 
 it('should run only in non-production environments', function () {
@@ -131,10 +135,10 @@ it('should return error if the given start index chunk does not exist', function
         ->assertExitCode(Command::INVALID);
 });
 
-it('should continue continue from the given chunk', function () {
+it('should continue from the given chunk', function () {
     $this->fakeFileSystem->put(
         'collection-nfts/eth_0x4e1f41613c9084fdb9e34e11fae9412427480e56/nft-chunks/1.json',
-        json_encode(fixtureData('alchemy.get_nfts_for_collection'))
+        json_encode(fixtureData('alchemy.get_nfts_for_contract'))
     );
 
     $this->artisan('nfts:live-dump --collection-index=0 --chain-id=1 --start-chunk-index=1');

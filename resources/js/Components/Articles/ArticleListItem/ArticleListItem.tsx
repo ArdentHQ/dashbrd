@@ -44,7 +44,7 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
                         <span className="mr-2 hidden shrink-0 text-sm font-medium text-theme-secondary-700 dark:text-theme-dark-200 sm:block">
                             {t("pages.articles.featured_collections")}:
                         </span>
-                        <FeaturedCollections collections={article.featuredCollections} />
+                        <FeaturedCollections collections={article.collections} />
                     </div>
                 </div>
             </div>

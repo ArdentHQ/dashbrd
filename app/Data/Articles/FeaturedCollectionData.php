@@ -26,7 +26,7 @@ class FeaturedCollectionData extends Data
         return new self(
             name: $collection->name,
             slug: $collection->slug,
-            image: $collection->image,
+            image: $collection->image(),
         );
     }
 }

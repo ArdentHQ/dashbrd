@@ -374,7 +374,7 @@ it('should convert total to native currency by using historical price for the pe
 it('should ignore activity with unexpected label', function () {
     $response = fixtureData('mnemonic.nft_transfers');
 
-    $response['nftTransfers'][1]['labels'] = ['LABEL_BURN'];
+    $response['nftTransfers'][1]['labels'] = ['LABEL_TEST'];
 
     Mnemonic::fake([
         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response($response, 200),
@@ -391,9 +391,6 @@ it('should ignore activity with unexpected label', function () {
     $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
-
-    expect($data->contains(fn ($activity) => $activity->type?->value === 'LABEL_BURN'))->toBeFalse();
-    expect($data->contains(fn ($activity) => $activity->type === null))->toBeTrue();
 });
 
 it('should fetch activity from date', function () {

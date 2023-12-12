@@ -19,7 +19,7 @@ describe("NftCollectionSlider", () => {
 
     let TestButton: () => JSX.Element;
 
-    let Component: () => JSX.Element;
+    let Component: ({ hiddenCollectionsCount }: { hiddenCollectionsCount?: number }) => JSX.Element;
 
     const addToGalleryMock = vi.fn();
     const removeFromGalleryMock = vi.fn();
@@ -82,7 +82,7 @@ describe("NftCollectionSlider", () => {
         };
 
         // eslint-disable-next-line react/display-name
-        Component = (): JSX.Element => {
+        Component = ({ hiddenCollectionsCount = 0 }: { hiddenCollectionsCount?: number }): JSX.Element => {
             const [isSliderOpen, setSliderOpen] = useState(false);
 
             return (
@@ -100,7 +100,7 @@ describe("NftCollectionSlider", () => {
                     >
                         <GalleryNfts>
                             <NftSelectionHook>
-                                <NftCollectionSlider />
+                                <NftCollectionSlider hiddenCollectionsCount={hiddenCollectionsCount} />
                                 <TestButton />
                             </NftSelectionHook>
                         </GalleryNfts>
@@ -389,4 +389,24 @@ describe("NftCollectionSlider", () => {
             expect(screen.queryByTestId(buttonTestId)).not.toBeInTheDocument();
         },
     );
+
+    it("should not render NftHiddenCollectionsToggle if there are no hidden collections", async () => {
+        render(<Component />);
+
+        await userEvent.click(screen.getByTestId("TestButton"));
+
+        await waitFor(() => {
+            expect(screen.queryByTestId("NftHiddenCollectionsToggle")).not.toBeInTheDocument();
+        });
+    });
+
+    it("should render NftHiddenCollectionsToggle if there are hidden collections", async () => {
+        render(<Component hiddenCollectionsCount={1} />);
+
+        await userEvent.click(screen.getByTestId("TestButton"));
+
+        await waitFor(() => {
+            expect(screen.queryAllByTestId("NftHiddenCollectionsToggle")).toHaveLength(2);
+        });
+    });
 });

@@ -63,9 +63,9 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
 
         <div className="px-6 pt-6 sm:px-8 md:pt-3 2xl:px-0">
             <FeaturedCollectionsBanner
-                collections={article.featuredCollections}
-                subtitle={tp("pages.articles.consists_of_collections", article.featuredCollections.length, {
-                    count: article.featuredCollections.length,
+                collections={article.collections}
+                subtitle={tp("pages.articles.consists_of_collections", article.collections.length, {
+                    count: article.collections.length,
                 })}
             />
         </div>

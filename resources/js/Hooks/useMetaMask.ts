@@ -186,6 +186,10 @@ const useMetaMask = (): MetaMaskState => {
         account?: string;
         chainId?: App.Enums.Chain;
     }): Promise<void> => {
+        if (connecting) {
+            return;
+        }
+
         setSwitching(true);
 
         try {
@@ -205,7 +209,7 @@ const useMetaMask = (): MetaMaskState => {
     };
 
     useEffect(() => {
-        if (requiresSwitch) {
+        if (requiresSwitch && !connecting) {
             setRequiresSwitch(false);
 
             void switchUserWallet({
@@ -213,7 +217,7 @@ const useMetaMask = (): MetaMaskState => {
                 chainId,
             });
         }
-    }, [requiresSwitch, account, chainId]);
+    }, [connecting, requiresSwitch, account, chainId]);
 
     // Initialize the Web3Provider when the page loads
     useEffect(() => {
@@ -473,6 +477,10 @@ const useMetaMask = (): MetaMaskState => {
     }, [requestChainAndAccount, router, onSigned]);
 
     const connectWallet = useCallback(async () => {
+        if (requiresSwitch) {
+            return;
+        }
+
         setConnecting(true);
 
         setErrorMessage(undefined);
@@ -510,7 +518,7 @@ const useMetaMask = (): MetaMaskState => {
 
             setConnecting(false);
         }
-    }, [requestChainAndAccount, router, onConnected]);
+    }, [requiresSwitch, requestChainAndAccount, router, onConnected]);
 
     const addNetwork = async (chainId: Chains): Promise<void> => {
         if (ethereumProvider === undefined) {

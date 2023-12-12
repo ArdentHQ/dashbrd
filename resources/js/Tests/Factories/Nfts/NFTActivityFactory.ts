@@ -10,7 +10,7 @@ export default class NFTActivityFactory extends ModelFactory<App.Data.Nfts.NftAc
             recipient: this.generateAddress(),
             timestamp: faker.date.past().getTime(),
             nft: new CollectionNftDataFactory().create(),
-            type: faker.helpers.arrayElement(["LABEL_MINT", "LABEL_SALE", "LABEL_TRANSFER"]),
+            type: faker.helpers.arrayElement(["LABEL_MINT", "LABEL_SALE", "LABEL_TRANSFER", "LABEL_BURN"]),
             totalUsd: faker.datatype.number().toString(),
             totalNative: faker.datatype.number().toString(),
         };

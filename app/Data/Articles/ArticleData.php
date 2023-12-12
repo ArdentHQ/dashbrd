@@ -19,7 +19,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class ArticleData extends Data
 {
     /**
-     * @param  DataCollection<int, FeaturedCollectionData>  $featuredCollections
+     * @param  DataCollection<int, FeaturedCollectionData>  $collections
      */
     public function __construct(
         public int $id,
@@ -39,7 +39,7 @@ class ArticleData extends Data
         #[LiteralTypeScriptType('{ thumb: string | null, thumb2x: string | null }')]
         public array $authorAvatar,
         #[DataCollectionOf(FeaturedCollectionData::class)]
-        public DataCollection $featuredCollections,
+        public DataCollection $collections,
 
         public ?string $metaDescription,
     ) {
@@ -71,7 +71,7 @@ class ArticleData extends Data
                 'thumb' => $user->hasMedia('avatar') ? $user->getFirstMediaUrl('avatar', 'thumb') : null,
                 'thumb2x' => $user->hasMedia('avatar') ? $user->getFirstMediaUrl('avatar', 'thumb2x') : null,
             ],
-            featuredCollections: FeaturedCollectionData::collection($article->collections),
+            collections: FeaturedCollectionData::collection($article->collections),
             metaDescription: $article->meta_description,
         );
     }

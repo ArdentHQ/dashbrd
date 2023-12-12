@@ -372,6 +372,7 @@ class MnemonicPendingRequest extends PendingRequest
             'LABEL_MINT',
             'LABEL_SALE',
             'LABEL_TRANSFER',
+            'LABEL_BURN',
         ]));
 
         if ($from !== null) {
@@ -455,19 +456,21 @@ class MnemonicPendingRequest extends PendingRequest
 
     /**
      * @param  string[]  $labels
+     *
+     * @see https://docs.mnemonichq.com/references/uniform/rest/reference/#operation/FoundationalService_GetNftTransfers
      */
     private function extractNftTransferType(array $labels): ?NftTransferType
     {
-        $validLabels = ['LABEL_MINT', 'LABEL_TRANSFER', 'LABEL_SALE'];
+        $label = collect($labels)->intersect([
+            'LABEL_MINT', 'LABEL_BURN', 'LABEL_TRANSFER', 'LABEL_SALE',
+        ])->first();
 
-        $label = collect($validLabels)->first(function ($label) use ($labels) {
-            return in_array($label, $labels);
-        });
-
-        if ($label === null) {
-            return null;
-        }
-
-        return NftTransferType::getEnumFromValue($label);
+        return match ($label) {
+            'LABEL_MINT' => NftTransferType::Mint,
+            'LABEL_SALE' => NftTransferType::Sale,
+            'LABEL_TRANSFER' => NftTransferType::Transfer,
+            'LABEL_BURN' => NftTransferType::Burn,
+            default => null,
+        };
     }
 }

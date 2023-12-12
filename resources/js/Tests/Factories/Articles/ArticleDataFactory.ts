@@ -22,7 +22,7 @@ export default class ArticleDataFactory extends ModelFactory<App.Data.Articles.A
             category: "news",
             publishedAt: Number(faker.finance.amount(1, 1500, 2)),
             metaDescription: faker.lorem.paragraph(),
-            featuredCollections: new NFTCollectionFactory()
+            collections: new NFTCollectionFactory()
                 .withImage()
                 .createMany(3) as App.Data.Articles.FeaturedCollectionData[],
             authorName: faker.name.firstName(),

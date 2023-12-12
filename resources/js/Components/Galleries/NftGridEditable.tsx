@@ -11,9 +11,11 @@ import { isTruthy } from "@/Utils/is-truthy";
 export const NftGridEditable = ({
     onChange,
     error,
+    hiddenCollectionsCount,
 }: {
     error?: string;
     onChange?: (selected: App.Data.Gallery.GalleryNftData[]) => void;
+    hiddenCollectionsCount: number;
 }): JSX.Element => {
     const { setOpen: setNftSliderOpen } = useSliderContext();
     const { nfts: galleryNfts, nftLimit } = useEditableGalleryContext();
@@ -74,7 +76,7 @@ export const NftGridEditable = ({
             </ReactSortable>
 
             <NftSelectionHook>
-                <NftCollectionSlider />
+                <NftCollectionSlider hiddenCollectionsCount={hiddenCollectionsCount} />
             </NftSelectionHook>
         </div>
     );

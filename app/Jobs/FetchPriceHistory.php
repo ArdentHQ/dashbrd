@@ -10,6 +10,7 @@ use App\Enums\Period;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Token;
 use App\Models\TokenPriceHistory;
+use App\Support\Queues;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Bus\Queueable;
@@ -32,6 +33,8 @@ class FetchPriceHistory implements ShouldBeUnique, ShouldQueue
         private Period $period,
         private string $currency
     ) {
+
+        $this->onQueue(Queues::SCHEDULED_DEFAULT);
     }
 
     /**
