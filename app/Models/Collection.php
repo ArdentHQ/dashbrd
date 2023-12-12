@@ -374,6 +374,19 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeSearchByName(Builder $query, ?string $searchQuery): Builder
+    {
+        if ($searchQuery === null || $searchQuery === '') {
+            return $query;
+        }
+
+        return $query->where('collections.name', 'ilike', sprintf('%%%s%%', $searchQuery));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeWithUserNftsCount(Builder $query, User $user): Builder
     {
         return $query->withCount([

@@ -30,6 +30,7 @@ class PopularCollectionController extends Controller
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
         $collections = Collection::query()
+            ->searchByName($request->get('query'))
             ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
             ->filterByChainId($chainId)
             ->orderByFloorPrice('desc', $currency)
