@@ -128,7 +128,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName
         return $this->belongsToMany(Collection::class, 'hidden_collections');
     }
 
-    public function collectionsValue(CurrencyCode $currency, bool $readFromDatabase = true, bool $onlyHidden = null): ?float
+    public function collectionsValue(CurrencyCode $currency, bool $readFromDatabase = true, ?bool $onlyHidden = null): ?float
     {
         if (! $readFromDatabase) {
             $query = get_query($onlyHidden ? 'users.calculate_collections_value_hidden' : 'users.calculate_collections_value_shown', [

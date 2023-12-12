@@ -58,7 +58,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
         });
     }
 
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null): Web3NftsChunk
     {
         $nfts = Nft::with('collection')
             ->whereHas('collection', static fn ($query) => $query->where('network_id', $network->id))

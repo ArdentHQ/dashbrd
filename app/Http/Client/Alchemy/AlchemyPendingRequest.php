@@ -54,7 +54,7 @@ class AlchemyPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(Factory $factory = null)
+    public function __construct(?Factory $factory = null)
     {
         parent::__construct($factory);
 
@@ -185,7 +185,7 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @see https://docs.alchemy.com/reference/getnfts
      */
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null, int $limit = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null, ?int $limit = null): Web3NftsChunk
     {
         $this->apiUrl = $this->getNftV3ApiUrl();
 
@@ -259,8 +259,8 @@ class AlchemyPendingRequest extends PendingRequest
      */
     public function collectionNfts(
         CollectionModel $collection,
-        string $startToken = null,
-        int $limit = null
+        ?string $startToken = null,
+        ?int $limit = null
     ): Web3NftsChunk {
         $this->apiUrl = $this->getNftV3ApiUrl();
 
@@ -300,7 +300,7 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @return array<stdClass>|null
      */
-    public function collectionNftsRaw(CollectionModel $collection, string $startToken = null): ?array
+    public function collectionNftsRaw(CollectionModel $collection, ?string $startToken = null): ?array
     {
         $this->apiUrl = $this->getNftV3ApiUrl();
 

@@ -216,7 +216,7 @@ class LiveDumpNfts extends Command
         Chain $chain,
         int $itemsTotal,
         int $chunk,
-        string $cursor = null,
+        ?string $cursor = null,
     ): void {
         $perChunkLimit = 100;
 

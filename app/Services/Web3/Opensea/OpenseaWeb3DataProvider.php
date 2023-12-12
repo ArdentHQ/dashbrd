@@ -30,7 +30,7 @@ final class OpenseaWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null): Web3NftsChunk
     {
         throw new NotImplementedException();
     }

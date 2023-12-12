@@ -20,15 +20,10 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Throwable;
 
-class FetchCollectionActivity implements ShouldQueue
+class FetchBurnActivity implements ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use RecoversFromProviderErrors;
-    use SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     public const LIMIT = 500;
 
@@ -37,7 +32,7 @@ class FetchCollectionActivity implements ShouldQueue
      */
     public function __construct(
         public Collection $collection,
-        public bool $forced = false,
+        public bool $isFirstRun = true,
     ) {
         $this->onQueue(Queues::SCHEDULED_NFTS);
     }
@@ -48,32 +43,19 @@ class FetchCollectionActivity implements ShouldQueue
     public function handle(MnemonicWeb3DataProvider $provider): void
     {
         if (! config('dashbrd.features.activities') || $this->shouldIgnoreCollection()) {
-            $this->collection->update([
-                'is_fetching_activity' => false,
-                'activity_updated_at' => now(),
-            ]);
-
             return;
         }
 
         if ($this->collection->isInvalid()) {
-            $this->collection->update([
-                'is_fetching_activity' => false,
-                'activity_updated_at' => now(),
-            ]);
-
             return;
         }
 
-        if ($this->collection->is_fetching_activity && ! $this->forced) {
+        // This collection never had its activity retrieved, so we don't want to fetch only burn activity...
+        if ($this->collection->activity_updated_at === null) {
             return;
         }
 
-        $this->collection->update([
-            'is_fetching_activity' => true,
-        ]);
-
-        $activities = $provider->getCollectionActivity(
+        $activities = $provider->getBurnActivity(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address,
             limit: static::LIMIT,
@@ -81,16 +63,11 @@ class FetchCollectionActivity implements ShouldQueue
         );
 
         if ($activities->isEmpty()) {
-            $this->collection->update([
-                'is_fetching_activity' => false,
-                'activity_updated_at' => now(),
-            ]);
-
             return;
         }
 
         $formattedActivities = $activities
-            ->reject(fn ($activity) => $activity->type === null)
+            ->filter(fn ($activity) => $activity->type === NftTransferType::Burn)
             ->unique->key()
             ->map(fn (CollectionActivity $activity) => [
                 'collection_id' => $this->collection->id,
@@ -107,18 +84,7 @@ class FetchCollectionActivity implements ShouldQueue
             ])->toArray();
 
         if (count($formattedActivities) === 0) {
-            $this->collection->update([
-                'is_fetching_activity' => false,
-                'activity_updated_at' => now(),
-            ]);
-
             return;
-        }
-
-        $burnActivities = $activities->filter(fn ($activity) => $activity->type === NftTransferType::Burn);
-
-        if ($burnActivities->isNotEmpty()) {
-            SyncBurnedNfts::dispatch($this->collection, $burnActivities);
         }
 
         DB::transaction(function () use ($formattedActivities, $activities) {
@@ -126,21 +92,20 @@ class FetchCollectionActivity implements ShouldQueue
 
             // If we get the limit it may be that there are more activities to fetch...
             if (static::LIMIT === count($activities)) {
-                self::dispatch($this->collection, forced: true)->afterCommit();
-            } else {
-                $this->collection->update([
-                    'is_fetching_activity' => false,
-                    'activity_updated_at' => now(),
-                    'activity_update_requested_at' => null,
-                ]);
+                self::dispatch($this->collection, isFirstRun: false)->afterCommit();
             }
         }, attempts: 5);
     }
 
     private function latestActivityTimestamp(): ?Carbon
     {
+        if ($this->isFirstRun) {
+            return null;
+        }
+
         return $this->collection
                     ->activities()
+                    ->where('type', NftTransferType::Burn)
                     ->latest('timestamp')
                     ->value('timestamp');
     }
@@ -155,14 +120,6 @@ class FetchCollectionActivity implements ShouldQueue
         return collect($blacklisted)
                         ->map(fn ($collection) => Str::lower($collection))
                         ->contains(Str::lower($this->collection->address));
-    }
-
-    public function onFailure(Throwable $exception): void
-    {
-        $this->collection->update([
-            'is_fetching_activity' => false,
-            'activity_updated_at' => now(),
-        ]);
     }
 
     public function retryUntil(): DateTime
