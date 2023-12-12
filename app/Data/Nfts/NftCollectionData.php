@@ -30,7 +30,7 @@ class NftCollectionData extends Data
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currencyCode = null): self
+    public static function fromModel(Collection $collection, ?CurrencyCode $currencyCode = null): self
     {
         return new self(
             name: $collection->name,

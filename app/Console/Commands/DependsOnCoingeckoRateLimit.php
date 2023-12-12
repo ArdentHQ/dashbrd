@@ -109,7 +109,7 @@ trait DependsOnCoingeckoRateLimit
         return $isAfter1245;
     }
 
-    private function dispatchDelayed(Closure $callback, int $index, string $job, int $delayThreshold = null): void
+    private function dispatchDelayed(Closure $callback, int $index, string $job, ?int $delayThreshold = null): void
     {
         // Note: I cant use delay directly on the job because it throws
         // the "too many attempts" error after some time so im delaying

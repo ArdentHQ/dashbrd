@@ -22,30 +22,47 @@ use Illuminate\Support\Facades\Log;
 
 class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use RecoversFromProviderErrors;
-    use SerializesModels;
-
-    /**
-     * Create a new job instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
     /**
      * Execute the job.
      */
     public function handle(AlchemyWeb3DataProvider $provider): void
     {
-        $networks = Network::onlyMainnet()->get();
+        Network::onlyMainnet()->get()->each(function ($network) use ($provider) {
+            $this->refreshForNetwork($network, $provider);
+        });
+    }
 
-        foreach ($networks as $network) {
-            $this->refreshNftMetadataByNetwork($network, $provider);
+    private function refreshForNetwork(Network $network, AlchemyWeb3DataProvider $provider): void
+    {
+        $nfts = Nft::query()
+                    ->whereNull('burned_at')
+                    ->whereNotNull('metadata_requested_at')
+                    ->whereHas('collection', fn ($q) => $q->where('network_id', $network->id))
+                    ->where(function ($query) {
+                        return $query->whereNull('metadata_fetched_at')
+                                        ->orWhereRaw('metadata_fetched_at < metadata_requested_at');
+                    })
+                    ->get();
+
+        if (count($nfts) === 0) {
+            Log::info('RefreshNftMetadata Job: No nfts found for metadata update. Aborting.');
+
+            return;
         }
+
+        // Chunk by 100 to comply with Alchemy's batch limit...
+        $nfts->chunk(100)->map(function ($nftsChunk) use ($provider, $network) {
+            $result = $provider->getNftMetadata($nftsChunk, $network);
+
+            (new Web3NftHandler(network: $network))->store($result->nfts);
+        });
+
+        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
+            'nfts_count' => $nfts->count(),
+            'network' => $network->id,
+        ]);
     }
 
     public function uniqueId(): string
@@ -67,41 +84,5 @@ class RefreshNftMetadata implements ShouldBeUnique, ShouldQueue
     public function retryUntil(): DateTime
     {
         return now()->addMinutes(10);
-    }
-
-    /**
-     * Fetch nft metadata for a network.
-     *
-     * @return void
-     */
-    private function refreshNftMetadataByNetwork(Network $network, AlchemyWeb3DataProvider $provider)
-    {
-
-        $nfts = Nft::whereNotNull('metadata_requested_at')
-            ->whereHas('collection', function ($query) use ($network) {
-                $query->where('network_id', $network->id);
-            })
-            ->where(function ($query) {
-                $query->whereNull('metadata_fetched_at')->orWhereRaw('metadata_fetched_at < metadata_requested_at');
-            })
-            ->get();
-
-        if (count($nfts) === 0) {
-            Log::info('RefreshNftMetadata Job: No nfts found for metadata update. Aborting.');
-
-            return;
-        }
-
-        // Chunk by 100 to comply with Alchemy's nfts batch limit.
-        $nfts->chunk(100)->map(function ($nftsChunk) use ($provider, $network) {
-            $result = $provider->getNftMetadata($nftsChunk, $network);
-
-            (new Web3NftHandler(network: $network))->store($result->nfts);
-        });
-
-        Log::info('RefreshNftMetadata Job: Handled with Web3NftHandler', [
-            'nfts_count' => $nfts->count(),
-            'network' => $network->id,
-        ]);
     }
 }
