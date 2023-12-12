@@ -36,7 +36,7 @@ const Index = ({
 
     const { t } = useTranslation();
 
-    // TODO replace with real logic
+    // @TODO replace with real logic
     const isSearching = Math.random() === 0;
     const query = Math.random() === 0 ? "" : "1";
 

@@ -6,12 +6,16 @@ namespace App\Http\Controllers;
 
 use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionStatsData;
+use App\Data\Collections\PopularCollectionData;
 use App\Data\Network\NetworkWithCollectionsData;
+use App\Enums\Chain;
+use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Models\Network;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,32 +25,28 @@ class PopularCollectionController extends Controller
     {
         $user = $request->user();
 
-        $selectedChainIds = array_filter(explode(',', $request->get('chain', '')));
-        $selectedChainIds = array_filter($selectedChainIds, fn ($id) => is_numeric($id));
+        $chainId = match ($request->query('chain')) {
+            'polygon' => Chain::Polygon->value,
+            'ethereum' => Chain::ETH->value,
+            default => null,
+        };
 
-        $sortBy = in_array($request->query('sort'), ['oldest', 'received', 'name', 'floor-price', 'value', 'chain']) ? $request->query('sort') : null;
-        $defaultSortDirection = $sortBy === null ? 'desc' : 'asc';
-
-        $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
-        $networks = NetworkWithCollectionsData::fromModel($user, false);
-
-        $selectedChainIds = array_filter($selectedChainIds, function ($id) use ($networks) {
-            return $networks->firstWhere('chainId', $id)?->collectionsCount > 0;
-        });
-
-        $searchQuery = $request->get('query');
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
 
         $collections = Collection::query()
-            ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
-            ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
-            ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
+            ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+            ->filterByChainId($chainId)
+            ->orderByFloorPrice('desc', $currency)
             ->with([
                 'network',
                 'floorPriceToken',
                 'nfts' => fn ($q) => $q->limit(4),
             ])
             ->withCount('nfts')
-            ->paginate(5);
+            ->selectVolumeFiat($currency)
+            ->addSelect('collections.*')
+            ->groupBy('collections.id')
+            ->paginate(25);
 
         return Inertia::render('Collections/PopularCollections/Index', [
             'title' => trans('metatags.popular-collections.title'),
@@ -55,11 +55,10 @@ class PopularCollectionController extends Controller
                 $collections->through(fn ($collection) => CollectionData::fromModel($collection, $user->currency()))
             ),
             'stats' => new CollectionStatsData(
-                nfts: 45,
-                collections: 5,
+                nfts: 145,
+                collections: 25,
                 value: 256000,
             ),
-            'availableNetworks' => $networks,
             'filters' => $this->getFilters($request),
         ]);
     }
