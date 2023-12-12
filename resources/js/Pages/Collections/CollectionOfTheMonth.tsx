@@ -18,11 +18,12 @@ interface CollectionOfTheMonthProperties extends PageProps {
 const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const month = DateTime.make(winners[0]?.hasWonAt ?? undefined).format("MMMM");
     const latestMonthWinners = winners.filter(
         (winner) =>
             DateTime.make(winner.hasWonAt ?? undefined).format("MMMM:YYYY") === DateTime.make().format("MMMM:YYYY"),
     );
+
+    const month = DateTime.make(latestMonthWinners[0]?.hasWonAt ?? undefined).format("MMMM");
 
     return (
         <DefaultLayout>
