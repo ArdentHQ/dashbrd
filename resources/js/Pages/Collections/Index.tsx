@@ -58,6 +58,11 @@ const CollectionsIndex = ({
     const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
         filters,
         route: route("collections"),
+        options: {
+            only: ["collections", "filters"],
+            preserveScroll: true,
+            preserveState: true,
+        },
     });
 
     return (

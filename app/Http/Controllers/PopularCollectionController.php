@@ -32,7 +32,10 @@ class PopularCollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
+        $perPage = min($request->has('perPage') ? (int) $request->get('perPage') : 50, 100);
+
         $collections = Collection::query()
+            ->searchByName($request->get('query'))
             ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
             ->filterByChainId($chainId)
             ->orderByFloorPrice('desc', $currency)
@@ -45,7 +48,8 @@ class PopularCollectionController extends Controller
             ->selectVolumeFiat($currency)
             ->addSelect('collections.*')
             ->groupBy('collections.id')
-            ->paginate(25);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return Inertia::render('Collections/PopularCollections/Index', [
             'title' => trans('metatags.popular-collections.title'),

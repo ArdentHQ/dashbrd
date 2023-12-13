@@ -18,11 +18,10 @@ class NominatableCollectionController extends Controller
             'query' => 'nullable|string',
         ]);
 
-        /** @var string|null */
-        $query = $request->query('query');
         $currency = $request->user()->currency();
 
-        $collections = Collection::search($request->user(), $query)
+        $collections = Collection::query()
+                                ->searchByName($request->get('query'))
                                 ->limit(15)
                                 ->votable($currency, orderByVotes: false)
                                 ->orderBy('name', 'asc')
