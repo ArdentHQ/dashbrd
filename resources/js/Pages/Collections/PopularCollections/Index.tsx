@@ -6,7 +6,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/PopularCollections/CollectionsFullTablePagination";
+import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/CollectionsFullTablePagination/CollectionsFullTablePagination";
 import { PopularCollectionsFilterPopover } from "@/Pages/Collections/Components/PopularCollectionsFilterPopover";
 import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
@@ -36,6 +36,9 @@ const Index = ({
     const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery, setPerPage } = useCollectionFilters({
         filters,
         filterRoute: route("popular-collections"),
+        options: {
+            preserveState: true,
+        },
     });
 
     return (
@@ -62,7 +65,7 @@ const Index = ({
                             </div>
                         </div>
                         <SearchInput
-                            className="w-full md-lg:w-auto"
+                            className="w-full md-lg:w-80"
                             query={searchQuery}
                             onChange={setSearchQuery}
                             placeholder="Search by Collection Name"
@@ -80,16 +83,14 @@ const Index = ({
                 </div>
 
                 <div className="mx-6 mt-1 sm:mx-8 2xl:mx-0">
-                    {collections.data.length === 0 && (
-                        <div className="mt-7">
-                            <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
-                        </div>
-                    )}
-
                     <CollectionsFullTable
                         collections={collections.data}
                         user={auth.user}
                     />
+
+                    {collections.data.length === 0 && (
+                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                    )}
 
                     <div className="mt-2">
                         <CollectionsFullTablePagination
