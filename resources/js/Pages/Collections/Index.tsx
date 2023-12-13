@@ -15,7 +15,7 @@ import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
-import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 interface CollectionsIndexProperties extends PageProps {
@@ -47,7 +47,9 @@ const CollectionsIndex = ({
 
     const { props } = usePage();
 
-    const { currentFilters, setChain, setSortBy } = useCollectionFilters({
+    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
+
+    const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
         filters,
         filterRoute: route("collections"),
         options: {
@@ -76,6 +78,8 @@ const CollectionsIndex = ({
                             setSortBy={setSortBy}
                             chain={currentFilters.chain}
                             setChain={setChain}
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
                         />
 
                         <ViewAllButton
@@ -90,6 +94,12 @@ const CollectionsIndex = ({
                         <PopularCollectionsSorting
                             sortBy={currentFilters.sort}
                             setSortBy={setSortBy}
+                        />
+
+                        <PeriodFilters
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
+                            sortBy={currentFilters.sort}
                         />
 
                         <ChainFilters
