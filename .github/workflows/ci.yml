@@ -15,50 +15,6 @@ on:
       - "**.css"
 
 jobs:
-  rector:
-    runs-on: ubuntu-latest
-
-    concurrency:
-      group: ${{ github.head_ref }}-rector
-      cancel-in-progress: true
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-          extensions: mbstring, dom, fileinfo, intl, gd, imagick, bcmath, soap, zip, sqlite
-          coverage: none
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.composer/cache/files
-          key: dependencies-composer-${{ hashFiles('composer.lock') }}
-
-      - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
-
-      - name: Prepare Application
-        run: cp .env.example .env && php artisan key:generate
-
-      - name: Run Rector
-        run: ./vendor/bin/rector process
-
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "refactor: code quality assurance"
-          commit_author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          commit_user_name: ${{ github.actor }}
-          commit_user_email: ${{ github.actor }}@users.noreply.github.co
-          branch: ${{ github.head_ref }}
-
   unit:
     runs-on: ubuntu-latest
 
