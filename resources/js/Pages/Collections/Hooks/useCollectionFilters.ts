@@ -52,7 +52,7 @@ export const useCollectionFilters = ({
 
         setCurrentFilters((filters) => ({
             ...filters,
-            query: debouncedQuery,
+            query: debouncedQuery === "" ? undefined : debouncedQuery,
         }));
     }, [debouncedQuery]);
 
