@@ -36,7 +36,7 @@ const Index = ({
 
     const { isXs } = useBreakpoint();
 
-    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery, setPerPage, setPeriod } =
+    const { currentFilters, setChain, setSortBy, setPeriod, searchQuery, setSearchQuery, setPerPage } =
         useCollectionFilters({
             filters,
             filterRoute: route("popular-collections"),
@@ -62,6 +62,12 @@ const Index = ({
                                     setSortBy={setSortBy}
                                 />
 
+                                <PeriodFilters
+                                    period={currentFilters.period}
+                                    setPeriod={setPeriod}
+                                    sortBy={currentFilters.sort}
+                                />
+
                                 <ChainFilters
                                     chain={currentFilters.chain}
                                     setChain={setChain}
@@ -79,21 +85,10 @@ const Index = ({
                             <PopularCollectionsFilterPopover
                                 sortBy={currentFilters.sort}
                                 setSortBy={setSortBy}
-                                period={currentFilters.period}
-                                setPeriod={setPeriod}
                                 chain={currentFilters.chain}
                                 setChain={setChain}
-                            />
-
-                            <PeriodFilters
                                 period={currentFilters.period}
                                 setPeriod={setPeriod}
-                                sortBy={currentFilters.sort}
-                            />
-
-                            <ChainFilters
-                                chain={currentFilters.chain}
-                                setChain={setChain}
                             />
                         </div>
                     </div>
