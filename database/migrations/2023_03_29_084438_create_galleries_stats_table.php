@@ -25,6 +25,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::unprepared(get_query('migrations.create_galleries_stats_triggers'));
+        $query = get_query('migrations.create_galleries_stats_triggers');
+
+        if (empty($query)) {
+            dd('Empty stats!');
+        }
+
+        DB::unprepared($query);
     }
 };
