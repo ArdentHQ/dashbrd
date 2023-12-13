@@ -1,5 +1,6 @@
 import cn from "classnames";
 import { forwardRef, type RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { twMerge } from "tailwind-merge";
 import { TextInputAvatar, TextInputButton } from "./TextInput.blocks";
 import { type TextInputProperties } from "./TextInput.contracts";
 import { textInputDynamicClassnames } from "./TextInput.styles";
@@ -79,8 +80,8 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
                     onFocus={focusHandler}
                     onBlur={blurHandler}
                     type={type}
-                    className={cn(
-                        "relative block h-full w-full rounded-xl border-0 px-0 py-3 ring-0 transition placeholder:text-theme-secondary-500 focus:outline-none focus:ring-0 enabled:text-theme-secondary-900 dark:bg-theme-dark-900 dark:text-theme-dark-50 dark:placeholder:text-theme-dark-400",
+                    className={twMerge(
+                        "relative block h-full w-full rounded-xl border-0 py-3 pl-0 pr-0 ring-0 transition placeholder:text-theme-secondary-500 focus:outline-none focus:ring-0 enabled:text-theme-secondary-900 dark:bg-theme-dark-900 dark:text-theme-dark-50 dark:placeholder:text-theme-dark-400",
                         "disabled:cursor-not-allowed disabled:bg-theme-secondary-50 disabled:text-theme-secondary-700 dark:disabled:bg-theme-dark-900 dark:disabled:text-theme-dark-200",
                         className,
                     )}

@@ -85,10 +85,6 @@ export const CollectionsFullTable = ({
         return columns;
     }, [t, isMdAndAbove, isLgAndAbove]);
 
-    if (collections.length === 0) {
-        return <></>;
-    }
-
     return (
         <Table
             data-testid="CollectionsTable"

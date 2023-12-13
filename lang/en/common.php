@@ -52,6 +52,7 @@ return [
     'my_collection' => 'My Collection',
     'max' => 'Max',
     'chain' => 'Chain',
+    'search' => 'Search',
     'copied' => 'Copied!',
     'coming_soon' => 'Coming Soon',
     'more_details' => 'More Details',
