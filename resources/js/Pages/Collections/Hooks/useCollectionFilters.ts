@@ -4,12 +4,13 @@ import { router } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
-import { type ChainFilter } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { type ChainFilter, type PeriodFilterOptions } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { type PopularCollectionsSortBy } from "@/Pages/Collections/Components/PopularCollectionsSorting";
 
 export interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
     sort?: PopularCollectionsSortBy;
+    period?: PeriodFilterOptions;
     query?: string;
     perPage?: number;
 }
@@ -18,6 +19,7 @@ interface CollectionFiltersState {
     currentFilters: Filters;
     setSortBy: (sort: PopularCollectionsSortBy | undefined) => void;
     setChain: (sort: ChainFilter | undefined) => void;
+    setPeriod: (period: PeriodFilterOptions | undefined) => void;
     searchQuery: string;
     setSearchQuery: (query: string) => void;
     setPerPage: (perPage: number) => void;
@@ -61,6 +63,13 @@ export const useCollectionFilters = ({
         }));
     };
 
+    const setPeriod = (period: PeriodFilterOptions | undefined): void => {
+        setCurrentFilters((filters) => ({
+            ...filters,
+            period,
+        }));
+    };
+
     const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
@@ -82,5 +91,6 @@ export const useCollectionFilters = ({
         searchQuery,
         setSearchQuery,
         setPerPage,
+        setPeriod,
     };
 };
