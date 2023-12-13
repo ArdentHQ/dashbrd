@@ -242,7 +242,7 @@ jobs:
           key: ${{ runner.os }}-build-output-${{ hashFiles('**/pnpm-lock.yml', 'resources/**', 'lang/**') }}
 
       - name: Run Tests
-        run: ./vendor/bin/pest --parallel --coverage --min=100 --coverage-html=.coverage --coverage-clover=coverage.xml
+        run: ./vendor/bin/pest --parallel --coverage --min=100 --bail --coverage-html=.coverage --coverage-clover=coverage.xml
         env:
           DB_CONNECTION: pgsql
           DB_HOST: 127.0.0.1
