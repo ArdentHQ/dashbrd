@@ -74,7 +74,7 @@ const Index = ({
                             placeholder={isXs ? t("common.search") : t("pages.collections.search_by_name")}
                         />
 
-                        <div className="relative ml-3 md-lg:hidden">
+                        <div className="ml-3 sm:relative md-lg:hidden">
                             <PopularCollectionsFilterPopover
                                 sortBy={currentFilters.sort}
                                 setSortBy={setSortBy}
