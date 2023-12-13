@@ -1,7 +1,7 @@
-import { type FormDataConvertible, type PageProps } from "@inertiajs/core";
-import { Head, router, usePage } from "@inertiajs/react";
+import { type PageProps } from "@inertiajs/core";
+import { Head, usePage } from "@inertiajs/react";
 import cn from "classnames";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type RouteParams } from "ziggy-js";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
@@ -12,22 +12,17 @@ import {
 } from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
-import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
+import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
-import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
-import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-
-export interface Filters extends Record<string, FormDataConvertible> {
-    chain?: ChainFilter;
-    sort?: PopularCollectionsSortBy;
-}
+import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 interface CollectionsIndexProperties extends PageProps {
     title: string;
@@ -58,35 +53,17 @@ const CollectionsIndex = ({
 
     const { props } = usePage();
 
-    const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
-
-    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
-
-    const isFirstRender = useIsFirstRender();
-
-    useEffect(() => {
-        if (isFirstRender) return;
-
-        router.get(route("collections"), currentFilters, {
+    const { currentFilters, setChain, setSortBy } = useCollectionFilters({
+        filters,
+        filterRoute: route("collections"),
+        options: {
             only: ["collections", "filters"],
             preserveScroll: true,
             preserveState: true,
-        });
-    }, [currentFilters]);
+        },
+    });
 
-    const setChain = (chain: ChainFilter | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            chain,
-        }));
-    };
-
-    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            sort,
-        }));
-    };
+    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
 
     return (
         <DefaultLayout
