@@ -85,7 +85,7 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
             if ($price !== null) {
                 $collection->floorPriceHistory()->create([
                     'floor_price' => $price,
-                    'token_id' => $token?->id,
+                    'token_id' => $token->id,
                     'retrieved_at' => $floorPrice->retrievedAt,
                 ]);
             }
