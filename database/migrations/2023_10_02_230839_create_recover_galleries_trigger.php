@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement(get_query('migrations.create_recover_galleries_trigger'));
+        dd(get_query('migrations.create_recover_galleries_trigger'));
+        DB::unprepared(get_query('migrations.create_recover_galleries_trigger'));
     }
 };
