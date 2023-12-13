@@ -14,6 +14,10 @@ if (! function_exists('get_query')) {
     {
         $contents = file_get_contents(base_path('queries/'.$name.'.sql'));
 
+        if (empty($contents)) {
+            dd('Empty contents');
+        }
+
         // @codeCoverageIgnoreStart
         if ($contents === false) {
             throw new Exception(sprintf('Cannot read file: %s', $name));
@@ -21,7 +25,13 @@ if (! function_exists('get_query')) {
 
         // @codeCoverageIgnoreEnd
 
-        return Blade::render($contents, $params);
+        $compiled = Blade::render($contents, $params);
+
+        if (empty($compiled)) {
+            dd('Empty compiled');
+        }
+
+        return $compiled;
     }
 }
 
