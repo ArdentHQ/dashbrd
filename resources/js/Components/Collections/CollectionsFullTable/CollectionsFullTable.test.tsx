@@ -59,6 +59,17 @@ describe("CollectionsFullTable", () => {
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
     });
 
+    it("should not render if there are no collections", () => {
+        render(
+            <CollectionsFullTable
+                collections={[]}
+                user={user}
+            />,
+        );
+
+        expect(screen.queryByTestId("CollectionsTable")).not.toBeInTheDocument();
+    });
+
     it("should visit the collection page on row click", async () => {
         const function_ = vi.fn();
         const routerSpy = vi.spyOn(router, "visit").mockImplementation(function_);
