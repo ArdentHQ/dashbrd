@@ -176,6 +176,26 @@ it('filters the collections by collection name', function () {
     expect(Collection::search($user, 'Another')->count())->toBe(1);
 });
 
+it('should search collections by collection name', function () {
+    $collection1 = Collection::factory()->create([
+        'name' => 'Test name',
+    ]);
+
+    $collection2 = Collection::factory()->create([
+        'name' => 'Test name 2',
+    ]);
+
+    $collection3 = Collection::factory()->create([
+        'name' => 'Another',
+    ]);
+
+    expect(Collection::searchByName('Test')->count())->toBe(2)
+        ->and(Collection::searchByName('Test')->get()->pluck('id')->toArray())
+        ->toEqualCanonicalizing([$collection1->id, $collection2->id])
+        ->and(Collection::searchByName('Another')->count())->toBe(1);
+
+});
+
 it('filters the collections by a nft name', function () {
     $user = createUser();
 
