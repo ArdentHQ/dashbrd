@@ -263,6 +263,7 @@ declare namespace App.Data.Collections {
         volumeCurrency: string;
         volumeDecimals: number;
         nftsCount: number;
+        twitterUsername: string | null;
     };
 }
 declare namespace App.Data.Gallery {

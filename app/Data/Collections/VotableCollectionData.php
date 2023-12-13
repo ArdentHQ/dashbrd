@@ -31,6 +31,7 @@ class VotableCollectionData extends Data
         public string $volumeCurrency,
         public int $volumeDecimals,
         public int $nftsCount,
+        public ?string $twitterUsername,
     ) {
     }
 
@@ -56,6 +57,7 @@ class VotableCollectionData extends Data
             volumeCurrency: 'ETH',
             volumeDecimals: 18,
             nftsCount: $collection->nfts_count,
+            twitterUsername: $collection->twitter(),
         );
     }
 }
