@@ -36,7 +36,6 @@ const Index = ({
 
     const { isXs } = useBreakpoint();
 
-    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery } = useCollectionFilters({
     const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery, setPerPage } = useCollectionFilters({
         filters,
         filterRoute: route("popular-collections"),
