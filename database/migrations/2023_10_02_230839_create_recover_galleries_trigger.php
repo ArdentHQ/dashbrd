@@ -12,7 +12,7 @@ return new class extends Migration
         $query = get_query('migrations.create_recover_galleries_trigger');
 
         if (empty($query)) {
-            dd('Empty!');
+            dd('Empty recover!');
         }
 
         DB::unprepared($query);

@@ -12,6 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::unprepared(get_query('migrations.create_prune_galleries_trigger'));
+        $query = get_query('migrations.create_prune_galleries_trigger');
+
+        if (empty($query)) {
+            dd('Empty prune!');
+        }
+
+        DB::unprepared($query);
     }
 };
