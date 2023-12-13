@@ -5,6 +5,7 @@ import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTa
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
+import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/CollectionsFullTablePagination/CollectionsFullTablePagination";
 import { PopularCollectionsFilterPopover } from "@/Pages/Collections/Components/PopularCollectionsFilterPopover";
@@ -33,6 +34,9 @@ const Index = ({
 
     const { t } = useTranslation();
 
+    const { isXs } = useBreakpoint();
+
+    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery } = useCollectionFilters({
     const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery, setPerPage } = useCollectionFilters({
         filters,
         filterRoute: route("popular-collections"),
@@ -68,7 +72,7 @@ const Index = ({
                             className="w-full md-lg:w-80"
                             query={searchQuery}
                             onChange={setSearchQuery}
-                            placeholder="Search by Collection Name"
+                            placeholder={isXs ? t("common.search") : t("pages.collections.search_by_name")}
                         />
 
                         <div className="relative ml-3 md-lg:hidden">
