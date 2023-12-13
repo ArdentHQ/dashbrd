@@ -35,6 +35,9 @@ const Index = ({
     const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery } = useCollectionFilters({
         filters,
         filterRoute: route("popular-collections"),
+        options: {
+            preserveState: true,
+        },
     });
 
     return (
@@ -70,16 +73,16 @@ const Index = ({
                 </div>
 
                 <div className="mx-6 mt-1 sm:mx-8 2xl:mx-0">
+                    <CollectionsFullTable
+                        collections={collections.data}
+                        user={auth.user}
+                    />
+
                     {collections.data.length === 0 && (
                         <div className="mt-7">
                             <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
                         </div>
                     )}
-
-                    <CollectionsFullTable
-                        collections={collections.data}
-                        user={auth.user}
-                    />
 
                     <div className="mt-2">
                         <CollectionsFullTablePagination

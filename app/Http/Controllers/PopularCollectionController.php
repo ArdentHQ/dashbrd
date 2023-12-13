@@ -43,7 +43,8 @@ class PopularCollectionController extends Controller
             ->selectVolumeFiat($currency)
             ->addSelect('collections.*')
             ->groupBy('collections.id')
-            ->paginate(25);
+            ->paginate(25)
+            ->withQueryString();
 
         return Inertia::render('Collections/PopularCollections/Index', [
             'title' => trans('metatags.popular-collections.title'),
