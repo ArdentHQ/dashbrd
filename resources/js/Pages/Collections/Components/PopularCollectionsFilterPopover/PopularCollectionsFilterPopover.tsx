@@ -2,15 +2,29 @@ import { useTranslation } from "react-i18next";
 import { IconButton } from "@/Components/Buttons";
 import { Popover } from "@/Components/Popover";
 import { Tooltip } from "@/Components/Tooltip";
-import { ChainFilters, type ChainFiltersProperties } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import {
+    ChainFilters,
+    type ChainFiltersProperties,
+    PeriodFilters,
+    type PeriodFiltersProperties,
+} from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import {
     PopularCollectionsSorting,
     type PopularCollectionsSortingProperties,
 } from "@/Pages/Collections/Components/PopularCollectionsSorting/PopularCollectionsSorting";
 
-type Properties = PopularCollectionsSortingProperties & ChainFiltersProperties;
+type Properties = PopularCollectionsSortingProperties &
+    ChainFiltersProperties &
+    Pick<PeriodFiltersProperties, "period" | "setPeriod">;
 
-export const PopularCollectionsFilterPopover = ({ sortBy, setSortBy, chain, setChain }: Properties): JSX.Element => {
+export const PopularCollectionsFilterPopover = ({
+    sortBy,
+    setSortBy,
+    chain,
+    setChain,
+    period,
+    setPeriod,
+}: Properties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -41,6 +55,12 @@ export const PopularCollectionsFilterPopover = ({ sortBy, setSortBy, chain, setC
                                         <PopularCollectionsSorting
                                             sortBy={sortBy}
                                             setSortBy={setSortBy}
+                                        />
+
+                                        <PeriodFilters
+                                            period={period}
+                                            setPeriod={setPeriod}
+                                            sortBy={sortBy}
                                         />
 
                                         <ChainFilters
