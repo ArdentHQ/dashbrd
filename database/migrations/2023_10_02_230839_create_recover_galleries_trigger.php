@@ -9,7 +9,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        dd(get_query('migrations.create_recover_galleries_trigger'));
+        $query = get_query('migrations.create_recover_galleries_trigger');
+
+        if (empty($query)) {
+            dd('Empty!');
+        }
+
         DB::unprepared(get_query('migrations.create_recover_galleries_trigger'));
     }
 };
