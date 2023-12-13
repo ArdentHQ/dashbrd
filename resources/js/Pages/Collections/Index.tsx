@@ -22,7 +22,7 @@ import { type PaginationData } from "@/Components/Pagination/Pagination.contract
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionsFilters";
+import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 interface CollectionsIndexProperties extends PageProps {
     title: string;
@@ -57,7 +57,7 @@ const CollectionsIndex = ({
 
     const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
         filters,
-        route: route("collections"),
+        filterRoute: route("collections"),
         options: {
             only: ["collections", "filters"],
             preserveScroll: true,
