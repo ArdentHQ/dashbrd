@@ -56,6 +56,7 @@ return [
         'value' => 'Value',
         'rarity' => 'Rarity',
         'report' => 'Report',
+        'search_by_name' => 'Search by Collection Name',
         'hide_collection' => 'Hide Collection',
         'unhide_collection' => 'Unhide Collection',
         'no_collections' => 'You do not own any NFTs yet. Once you do they will be shown here.',

@@ -29,7 +29,10 @@ class PopularCollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
+        $perPage = min($request->has('perPage') ? (int) $request->get('perPage') : 50, 100);
+
         $collections = Collection::query()
+            ->searchByName($request->get('query'))
             ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
             ->filterByChainId($chainId)
             ->orderByFloorPrice('desc', $currency)
@@ -42,7 +45,8 @@ class PopularCollectionController extends Controller
             ->addSelectVolumeFiat($currency)
             ->addSelect('collections.*')
             ->groupBy('collections.id')
-            ->paginate(25);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return Inertia::render('Collections/PopularCollections/Index', [
             'title' => trans('metatags.popular-collections.title'),
@@ -67,6 +71,7 @@ class PopularCollectionController extends Controller
         $filter = [
             'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
             'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
+            'query' => $request->get('query'),
         ];
 
         // If value is not defined (or invalid), remove it from the array since
