@@ -73,6 +73,7 @@ export const useCollectionFilters = ({
     const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
+            period: sort === "floor-price" ? undefined : filters.period,
             sort,
         }));
     };
