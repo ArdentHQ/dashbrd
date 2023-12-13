@@ -64,7 +64,7 @@ const Index = ({
                             </div>
                         </div>
                         <SearchInput
-                            className="w-full lg:w-80"
+                            className="w-full md-lg:w-80"
                             query={searchQuery}
                             onChange={setSearchQuery}
                             placeholder="Search by Collection Name"
