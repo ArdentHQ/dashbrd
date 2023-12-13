@@ -9,7 +9,7 @@ import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/CollectionsFullTablePagination/CollectionsFullTablePagination";
 import { PopularCollectionsFilterPopover } from "@/Pages/Collections/Components/PopularCollectionsFilterPopover";
-import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
 import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
 import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
@@ -36,13 +36,14 @@ const Index = ({
 
     const { isXs } = useBreakpoint();
 
-    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery, setPerPage } = useCollectionFilters({
-        filters,
-        filterRoute: route("popular-collections"),
-        options: {
-            preserveState: true,
-        },
-    });
+    const { currentFilters, setChain, setSortBy, setPeriod, searchQuery, setSearchQuery, setPerPage } =
+        useCollectionFilters({
+            filters,
+            filterRoute: route("popular-collections"),
+            options: {
+                preserveState: true,
+            },
+        });
 
     return (
         <DefaultLayout toastMessage={props.toast}>
@@ -59,6 +60,12 @@ const Index = ({
                                 <PopularCollectionsSorting
                                     sortBy={currentFilters.sort}
                                     setSortBy={setSortBy}
+                                />
+
+                                <PeriodFilters
+                                    period={currentFilters.period}
+                                    setPeriod={setPeriod}
+                                    sortBy={currentFilters.sort}
                                 />
 
                                 <ChainFilters
@@ -80,6 +87,8 @@ const Index = ({
                                 setSortBy={setSortBy}
                                 chain={currentFilters.chain}
                                 setChain={setChain}
+                                period={currentFilters.period}
+                                setPeriod={setPeriod}
                             />
                         </div>
                     </div>
