@@ -20,7 +20,7 @@ export const CollectionsFullTablePagination = ({ pagination, onPageLimitChange }
             <SelectPageLimit
                 suffix={t("common.items")}
                 value={pagination.meta.per_page}
-                options={[25, 50, 75, 100]}
+                options={[25, 50, 100]}
                 onChange={({ value }) => {
                     onPageLimitChange(Number(value));
                 }}
