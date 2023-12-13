@@ -8,6 +8,7 @@ import { type PaginationData } from "@/Components/Pagination/Pagination.contract
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/CollectionsFullTablePagination/CollectionsFullTablePagination";
+import { PopularCollectionsFilterPopover } from "@/Pages/Collections/Components/PopularCollectionsFilterPopover";
 import { ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
 import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
@@ -35,7 +36,7 @@ const Index = ({
 
     const { isXs } = useBreakpoint();
 
-    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery } = useCollectionFilters({
+    const { currentFilters, setChain, setSortBy, searchQuery, setSearchQuery, setPerPage } = useCollectionFilters({
         filters,
         filterRoute: route("popular-collections"),
         options: {
@@ -72,6 +73,15 @@ const Index = ({
                             onChange={setSearchQuery}
                             placeholder={isXs ? t("common.search") : t("pages.collections.search_by_name")}
                         />
+
+                        <div className="ml-3 sm:relative md-lg:hidden">
+                            <PopularCollectionsFilterPopover
+                                sortBy={currentFilters.sort}
+                                setSortBy={setSortBy}
+                                chain={currentFilters.chain}
+                                setChain={setChain}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -88,7 +98,7 @@ const Index = ({
                     <div className="mt-2">
                         <CollectionsFullTablePagination
                             pagination={collections}
-                            onPageLimitChange={() => 1}
+                            onPageLimitChange={setPerPage}
                         />
                     </div>
                 </div>

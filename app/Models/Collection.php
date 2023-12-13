@@ -97,7 +97,7 @@ class Collection extends Model
 
     private function preventForbiddenSlugs(self $model): string
     {
-        $forbidden = ['collection-of-the-month'];
+        $forbidden = ['collection-of-the-month', 'popular'];
 
         if (in_array(Str::slug($model->name), $forbidden, true)) {
             return $model->name.' Collection';
