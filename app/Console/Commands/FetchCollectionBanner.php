@@ -16,7 +16,7 @@ class FetchCollectionBanner extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-banner {--collection-id=}';
+    protected $signature = 'collections:fetch-banner {--collection-id=}';
 
     /**
      * The console command description.

@@ -14,7 +14,7 @@ it('dispatches a job for a specific collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionBanner::class, 0);
 
-    $this->artisan('nfts:fetch-collection-banner', [
+    $this->artisan('collections:fetch-banner', [
         '--collection-id' => $collection->id,
     ]);
 
@@ -24,7 +24,7 @@ it('dispatches a job for a specific collection', function () {
 it('should return error if `collection-id` flag is missing', function () {
     Bus::fake();
 
-    $response = $this->artisan('nfts:fetch-collection-banner');
+    $response = $this->artisan('collections:fetch-banner');
 
     $response->assertExitCode(Command::INVALID);
 
