@@ -15,6 +15,6 @@ return new class extends Migration
             dd('Empty!');
         }
 
-        DB::unprepared(get_query('migrations.create_recover_galleries_trigger'));
+        DB::unprepared($query);
     }
 };
