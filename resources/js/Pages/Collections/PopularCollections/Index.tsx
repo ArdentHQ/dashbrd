@@ -79,9 +79,7 @@ const Index = ({
                     />
 
                     {collections.data.length === 0 && (
-                        <div className="mt-7">
-                            <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
-                        </div>
+                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
                     )}
 
                     <div className="mt-2">
