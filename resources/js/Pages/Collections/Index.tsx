@@ -47,8 +47,6 @@ const CollectionsIndex = ({
 
     const { props } = usePage();
 
-    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
-
     const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
         filters,
         filterRoute: route("collections"),
