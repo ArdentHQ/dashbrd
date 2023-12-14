@@ -70,7 +70,7 @@ class PopularCollectionController extends Controller
             'stats' => new CollectionStatsData(
                 nfts: $stats['nftsCount'],
                 collections: $stats['collectionsCount'],
-                value: (float)$stats['fiatValues']->where('key', $currency->value)->first()?->total ?? 0
+                value: (float) $stats['fiatValues']->where('key', $currency->value)->first()?->total ?? 0
             ),
             'filters' => $this->getFilters($request),
         ]);
