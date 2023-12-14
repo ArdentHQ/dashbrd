@@ -227,7 +227,7 @@ class Collection extends Model
     {
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
 
-        $walletFilter =  $wallet ? "WHERE nfts.wallet_id = $wallet->id" : "";
+        $walletFilter = $wallet ? "WHERE nfts.wallet_id = $wallet->id" : '';
 
         return $query->selectRaw(
             sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
