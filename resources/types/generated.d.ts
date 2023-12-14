@@ -207,6 +207,13 @@ declare namespace App.Data.Collections {
     export type CollectionOfTheMonthData = {
         image: string | null;
         votes: number;
+        volume: string | null;
+        floorPrice: string | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        name: string | null;
+        hasWonAt: string | null;
+        slug: string;
     };
     export type CollectionStatsData = {
         nfts: number;

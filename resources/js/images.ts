@@ -42,6 +42,9 @@ import { ReactComponent as SocialLeftGrid } from "@images/social-grid-left.svg";
 import { ReactComponent as SocialRightGrid } from "@images/social-grid-right.svg";
 import { ReactComponent as WarningExclamationDark } from "@images/warning-exclamation-dark.svg";
 import { ReactComponent as WarningExclamation } from "@images/warning-exclamation.svg";
+import { ReactComponent as WinnerBadgeFirst } from "@images/winner-badge-first.svg";
+import { ReactComponent as WinnerBadgeSecond } from "@images/winner-badge-second.svg";
+import { ReactComponent as WinnerBadgeThird } from "@images/winner-badge-third.svg";
 
 export {
     AuthConnectWallet,
@@ -88,4 +91,7 @@ export {
     TwoBarChartLgDark,
     TwoBarChartLg,
     CollectionsGrid,
+    WinnerBadgeFirst,
+    WinnerBadgeSecond,
+    WinnerBadgeThird,
 };
