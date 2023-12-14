@@ -45,21 +45,27 @@ class CollectionWinner extends Model
     /**
      * @return LaravelCollection<int, CollectionWinnersData>
      */
-    public static function getByMonth(?int $year = null): LaravelCollection
+    public static function getByMonth(): LaravelCollection
     {
         $winners = static::query()
                         ->with([
                             'collection' => fn ($q) => $q->withTrashed(),
                             'collection.floorPriceToken',
                         ])
-                        ->when($year !== null, fn ($q) => $q->where('year', $year))
-                        ->get();
+                        ->get()
+                        ->groupBy(fn ($winner) => $winner->month.'-'.$winner->year);
 
-        return $winners->groupBy(fn ($winner) => $winner->month.'-'.$winner->year)->map(fn ($winners) => new CollectionWinnersData(
-            year: $winners[0]->year,
-            month: $winners[0]->month,
-            winners: $winners->sortByDesc('votes')->values()->map(fn ($winner) => CollectionOfTheMonthData::fromModel($winner)),
-        ))->values();
+        return $winners->map(function ($winners) {
+            $collections = $winners->sortByDesc('votes')->map(
+                fn ($winner) => CollectionOfTheMonthData::fromModel($winner)
+            )->values();
+
+            return new CollectionWinnersData(
+                year: $winners[0]->year,
+                month: $winners[0]->month,
+                winners: $collections,
+            );
+        })->values();
     }
 
     /**
