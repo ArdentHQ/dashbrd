@@ -44,8 +44,9 @@ class PopularCollectionController extends Controller
 
         $collections = Collection::query()
             ->searchByName($request->get('query'))
-            ->when($sortBy === null, fn ($q) => $q->orderBy('volume', 'desc'))
+            ->when($sortBy === null, fn ($q) => $q->orderBy('volume', 'desc')) // @TODO handle top sorting
             ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
+            ->when($sortBy === 'value', fn ($q) => $q->orderByValue(null, $sortDirection, $currency))
             ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $currency))
             ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
             ->filterByChainId($chainId)
