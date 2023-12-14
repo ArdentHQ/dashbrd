@@ -53,7 +53,7 @@ class PopularCollectionController extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
-        $stats = Cache::remember('popular-collection-stats', now()->addHour(), function () {
+        $stats = Cache::remember('popular-collections-stats', now()->addHour(), function () {
             return [
                 'fiatValues' => collect(Collection::getFiatValueSum()),
                 'collectionsCount' => Collection::query()->count(),
