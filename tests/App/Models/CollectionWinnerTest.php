@@ -14,8 +14,8 @@ it('can get IDs for collections that are not eligible for winning "collection of
     $collectionIds = CollectionWinner::ineligibleCollectionIds();
 
     expect($collectionIds)->toHaveCount(2);
-    expect($collectionIds->contains($first->id))->toBeTrue();
-    expect($collectionIds->contains($second->id))->toBeTrue();
+    expect($collectionIds->contains($first->collection_id))->toBeTrue();
+    expect($collectionIds->contains($second->collection_id))->toBeTrue();
 });
 
 it('can get current "collection of the month" winners', function () {
