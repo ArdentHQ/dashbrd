@@ -25,7 +25,7 @@ it('dispatches a job for collections without banners', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 0);
 
-    $this->artisan('nfts:fetch-collection-banner-batch', [
+    $this->artisan('collections:fetch-banner-batch', [
         '--missing-only' => true,
     ]);
 
@@ -46,7 +46,7 @@ it('should exclude spam contracts', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 0);
 
-    $this->artisan('nfts:fetch-collection-banner-batch');
+    $this->artisan('collections:fetch-banner-batch');
 
     Bus::assertDispatched(FetchCollectionBannerBatch::class, function ($job) use ($collections) {
         return ! in_array($collections->first()->address, $job->collectionAddresses);
@@ -62,7 +62,7 @@ it('dispatches a job for collections', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 0);
 
-    $this->artisan('nfts:fetch-collection-banner-batch');
+    $this->artisan('collections:fetch-banner-batch');
 
     Bus::assertDispatchedTimes(FetchCollectionBannerBatch::class, 2);
 });

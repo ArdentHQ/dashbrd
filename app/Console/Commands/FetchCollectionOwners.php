@@ -16,7 +16,7 @@ class FetchCollectionOwners extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-owners {--collection-id=}';
+    protected $signature = 'collections:fetch-owners {--collection-id=}';
 
     /**
      * The console command description.
