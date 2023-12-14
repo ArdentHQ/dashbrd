@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\CollectionVote;
+use App\Models\CollectionWinner;
 use App\Models\FloorPriceHistory;
 use App\Models\Gallery;
 use App\Models\Network;
@@ -1375,4 +1376,17 @@ it('has floor price history', function () {
     expect($collection->floorPriceHistory()->count())->toBe(3);
 
     expect($collection->floorPriceHistory()->first())->toBeInstanceOf(FloorPriceHistory::class);
+});
+
+it('can scope the query to only include collections eligible for winning "collection of the month"', function () {
+    CollectionWinner::factory()->create();
+    CollectionWinner::factory()->create();
+
+    $collection = Collection::factory()->create();
+
+    $collections = Collection::eligibleToWin()->get();
+
+    expect(Collection::count())->toBe(3);
+    expect($collections)->toHaveCount(1);
+    expect($collections->contains($collection))->toBeTrue();
 });
