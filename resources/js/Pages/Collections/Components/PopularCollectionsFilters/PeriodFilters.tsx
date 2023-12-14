@@ -38,7 +38,7 @@ export const PeriodFilters = ({ period, setPeriod, sortBy }: PeriodFiltersProper
                                 onClick={() => {
                                     setPeriod(option);
                                 }}
-                                disabled={sortBy === "floor-price"}
+                                disabled={sortBy !== undefined}
                             >
                                 {t(`common.${option}`)}
                             </Tabs.Button>
