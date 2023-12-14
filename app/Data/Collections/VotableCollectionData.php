@@ -18,6 +18,7 @@ class VotableCollectionData extends Data
         public int $id,
         public ?int $rank,
         public string $name,
+        public string $address,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?int $votes,
@@ -31,6 +32,7 @@ class VotableCollectionData extends Data
         public string $volumeCurrency,
         public int $volumeDecimals,
         public int $nftsCount,
+        public ?string $twitterUsername,
     ) {
     }
 
@@ -43,6 +45,7 @@ class VotableCollectionData extends Data
             id: $collection->id,
             rank: $collection->rank,
             name: $collection->name,
+            address: $collection->address,
             image: $collection->extra_attributes->get('image'),
             votes: $showVotes ? $collection->votes_count : null,
             floorPrice: $collection->floor_price,
@@ -56,6 +59,7 @@ class VotableCollectionData extends Data
             volumeCurrency: 'ETH',
             volumeDecimals: 18,
             nftsCount: $collection->nfts_count,
+            twitterUsername: $collection->twitter(),
         );
     }
 }
