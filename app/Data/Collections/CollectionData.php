@@ -32,6 +32,7 @@ class CollectionData extends Data
         public ?float $floorPriceFiat,
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
+        public ?string $supply,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?string $banner,
@@ -55,6 +56,7 @@ class CollectionData extends Data
             floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
+            supply: $collection->supply,
             image: $collection->extra_attributes->get('image'),
             banner: $collection->extra_attributes->get('banner'),
             openSeaSlug: $collection->extra_attributes->get('opensea_slug'),

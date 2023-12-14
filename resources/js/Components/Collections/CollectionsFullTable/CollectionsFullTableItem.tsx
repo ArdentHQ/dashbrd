@@ -120,7 +120,7 @@ export const CollectionsFullTableItem = ({
                     hoverClassName=""
                 >
                     <div className="text-sm font-medium leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50 md:text-base md:leading-6">
-                        {formatNumbershort(collection.nftsCount)}
+                        {formatNumbershort(collection.supply ?? collection.nftsCount)}
                     </div>
                 </TableCell>
             )}
