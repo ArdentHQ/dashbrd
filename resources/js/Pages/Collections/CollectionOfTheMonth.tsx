@@ -1,4 +1,3 @@
-import { DateTime } from "@ardenthq/sdk-intl";
 import { type PageProps, router } from "@inertiajs/core";
 import { Head } from "@inertiajs/react";
 import cn from "classnames";
@@ -12,18 +11,30 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
-    winners: App.Data.Collections.CollectionOfTheMonthData[];
+    winners: App.Data.Collections.CollectionWinnersData[];
 }
 
 const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const latestMonthWinners = winners.filter(
-        (winner) =>
-            DateTime.make(winner.hasWonAt ?? undefined).format("MMMM:YYYY") === DateTime.make().format("MMMM:YYYY"),
-    );
+        (winner) => winner.month === new Date().getMonth() && winner.year === new Date().getFullYear(),
+    )[0];
 
-    const month = DateTime.make(latestMonthWinners[0]?.hasWonAt ?? undefined).format("MMMM");
+    const month = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ][latestMonthWinners.month - 1];
 
     return (
         <DefaultLayout>

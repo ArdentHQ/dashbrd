@@ -22,7 +22,7 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
-    collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
+    collectionsOfTheMonth: App.Data.Collections.CollectionWinnersData;
     votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
     collectionsTableResults: App.Data.Collections.CollectionData[];

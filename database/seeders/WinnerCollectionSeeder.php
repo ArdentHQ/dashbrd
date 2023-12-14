@@ -5,33 +5,34 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\Collection;
-use Carbon\Carbon;
+use App\Models\CollectionWinner;
 use Illuminate\Database\Seeder;
 
 class WinnerCollectionSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->generateWinners(Carbon::now()->year);
-        $this->generateWinners(Carbon::now()->subYear()->year);
-    }
+        $existingIds = [];
 
-    public function generateWinners(int $year): void
-    {
+        collect([2022, 2023])->crossJoin(range(1, 12))->each(function ($item) use ($existingIds) {
+            [$year, $month] = $item;
 
-        for ($month = 1; $month <= 12; $month++) {
+            $collections = Collection::inRandomOrder()->whereNotIn('id', $existingIds)->limit(3)->get();
 
-            $monthlyWinnerCollections = Collection::query()
-                ->whereNull('has_won_at')
-                ->limit(3)
-                ->get();
+            if (count($collections) < 3) {
+                return;
+            }
 
-            $currentDate = Carbon::createFromDate($year, $month, 1);
+            if (now()->year === $year && now()->month === $month) {
+                return;
+            }
 
-            $monthlyWinnerCollections->each(function ($collection) use ($currentDate) {
-                $collection->update(['has_won_at' => $currentDate->toString()]);
-            });
+            $existingIds = array_merge($existingIds, $collections->modelKeys());
 
-        }
+            $collections->each(fn ($collection) => CollectionWinner::factory()->for($collection)->create([
+                'month' => $month,
+                'year' => $year,
+            ]));
+        });
     }
 }

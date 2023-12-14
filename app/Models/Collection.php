@@ -75,7 +75,6 @@ class Collection extends Model
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
         'is_featured' => 'bool',
-        'has_won_at' => 'datetime',
     ];
 
     /**
@@ -670,13 +669,13 @@ class Collection extends Model
     {
         return $query->addSelect(
             DB::raw("(
-                SELECT 
-                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) - 
-                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) / 
+                SELECT
+                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) -
+                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) /
                     AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100
-                FROM 
+                FROM
                     floor_price_history fp1
-                WHERE 
+                WHERE
                     fp1.collection_id = collections.id AND
                     fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY') AS price_change_24h
             ")
@@ -703,5 +702,14 @@ class Collection extends Model
             // order by votes count excluding nulls
             ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
             ->orderBy('votes_count', 'desc');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeEligibleToWin(Builder $query): Builder
+    {
+        return $query->whereNotIn('id', CollectionWinner::ineligibleCollectionIds());
     }
 }

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Data\Collections\CollectionOfTheMonthData;
-use App\Models\Collection;
+use App\Data\Collections\CollectionWinnersData;
+use App\Models\CollectionWinner;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\LaravelData\DataCollection;
 
 class CollectionOfTheMonthController extends Controller
 {
@@ -25,22 +25,13 @@ class CollectionOfTheMonthController extends Controller
     }
 
     /**
-     * @return DataCollection<int, CollectionOfTheMonthData>
+     * @return Collection<int, CollectionWinnersData>
      */
-    private function getWinnerColletions(): DataCollection
+    private function getWinnerColletions(): Collection
     {
+        $winners = CollectionWinner::getByMonth();
 
-        $winners = CollectionOfTheMonthData::collection(
-            Collection::query()
-                ->whereNotNull('has_won_at')
-                ->get()
-                ->sortByDesc('has_won_at')
-                ->values()
-        );
-
-        if ($winners->count() === 0) {
-            abort(404);
-        }
+        abort_if($winners->isEmpty(), 404);
 
         return $winners;
     }

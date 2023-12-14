@@ -134,9 +134,9 @@ const YearSelectionDropdown = ({
     options,
     selectedYear,
 }: {
-    onChange?: (year: string) => void;
-    options: string[];
-    selectedYear: string;
+    onChange?: (year: number) => void;
+    options: number[];
+    selectedYear: number;
 }): JSX.Element => (
     <Dropdown>
         <Dropdown.Trigger>
@@ -188,9 +188,9 @@ export const WinnerCollectionsFilter = ({
     selectedYear,
     onChange,
 }: {
-    availableYears: string[];
-    selectedYear: string;
-    onChange?: (year: string) => void;
+    availableYears: number[];
+    selectedYear: number;
+    onChange?: (year: number) => void;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -284,8 +284,8 @@ export const WinnerCollectionsTable = ({
     month,
     collections,
 }: {
-    month: string;
-    collections: App.Data.Collections.CollectionOfTheMonthData[];
+    month: number;
+    collections: App.Data.Collections.CollectionWinnersData;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -315,14 +315,27 @@ export const WinnerCollectionsTable = ({
                     className="mb-4"
                 >
                     {t("pages.collections.collection_of_the_month.winners_month", {
-                        month,
+                        month: [
+                            "January",
+                            "February",
+                            "March",
+                            "April",
+                            "May",
+                            "June",
+                            "July",
+                            "August",
+                            "September",
+                            "October",
+                            "November",
+                            "December",
+                        ][month - 1],
                     })}
                 </Heading>
 
                 <Table
                     hideHeader
                     columns={columns}
-                    data={collections.slice(0, 3)}
+                    data={collections.winners.slice(0, 3)}
                     row={(collection, index) => (
                         <WinnerCollectionTableRow
                             onClick={() => {
