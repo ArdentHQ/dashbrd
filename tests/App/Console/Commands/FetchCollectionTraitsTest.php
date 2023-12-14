@@ -13,7 +13,7 @@ it('dispatches a job for collections', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionTraits::class, 0);
 
-    $this->artisan('nfts:fetch-collection-traits');
+    $this->artisan('collections:fetch-traits');
 
     Bus::assertDispatchedTimes(FetchCollectionTraits::class, 3);
 });
@@ -25,7 +25,7 @@ it('dispatches a job for a specific collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionTraits::class, 0);
 
-    $this->artisan('nfts:fetch-collection-traits', [
+    $this->artisan('collections:fetch-traits', [
         '--collection-id' => $collection->id,
     ]);
 

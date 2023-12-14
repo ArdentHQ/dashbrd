@@ -19,7 +19,7 @@ class FetchCollectionBannerBatch extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-banner-batch {--missing-only}';
+    protected $signature = 'collections:fetch-banner-batch {--missing-only}';
 
     /**
      * The console command description.

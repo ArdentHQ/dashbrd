@@ -15,7 +15,7 @@ it('dispatches a job for collections', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
 
-    $this->artisan('nfts:fetch-collection-floor-price');
+    $this->artisan('collections:fetch-floor-price');
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 3);
 });
@@ -29,7 +29,7 @@ it('dispatches a job for collections if provider is not opensea', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
 
-    $this->artisan('nfts:fetch-collection-floor-price');
+    $this->artisan('collections:fetch-floor-price');
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 3);
 
@@ -50,7 +50,7 @@ it('should not dispatch a job for a spam collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
 
-    $this->artisan('nfts:fetch-collection-floor-price');
+    $this->artisan('collections:fetch-floor-price');
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 2);
 });
@@ -62,7 +62,7 @@ it('dispatches a job for a specific collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
 
-    $this->artisan('nfts:fetch-collection-floor-price', [
+    $this->artisan('collections:fetch-floor-price', [
         '--collection-id' => $collection->id,
     ]);
 
@@ -81,7 +81,7 @@ it('should not dispatch a job for a given spam collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionFloorPrice::class, 0);
 
-    $this->artisan('nfts:fetch-collection-floor-price', [
+    $this->artisan('collections:fetch-floor-price', [
         '--collection-id' => $collection->id,
     ]);
 
