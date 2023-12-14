@@ -251,6 +251,7 @@ declare namespace App.Data.Collections {
         id: number;
         rank: number | null;
         name: string;
+        address: string;
         image: string | null;
         votes: number | null;
         floorPrice: string | null;
@@ -262,6 +263,7 @@ declare namespace App.Data.Collections {
         volumeCurrency: string;
         volumeDecimals: number;
         nftsCount: number;
+        twitterUsername: string | null;
     };
 }
 declare namespace App.Data.Gallery {
