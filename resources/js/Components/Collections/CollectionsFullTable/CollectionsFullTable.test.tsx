@@ -234,4 +234,15 @@ describe("CollectionsFullTable", () => {
 
         expect(getAllByTestId(`CollectionImages__Image`).length).toBe(2);
     });
+
+    it("should show N/A if collection supply is null", () => {
+        const { getByTestId } = render(
+            <CollectionsFullTable
+                collections={[{ ...collection, supply: null }]}
+                user={user}
+            />,
+        );
+
+        expect(getByTestId("CollectionsTableItem__unknown-supply")).toBeInTheDocument();
+    });
 });
