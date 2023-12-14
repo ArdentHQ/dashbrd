@@ -24,7 +24,7 @@ const sort = ({
     selectedChainIds?: number[];
 }): void => {
     router.get(
-        route("collections"),
+        route("my.collections"),
         {
             ...getQueryParameters(),
             sort: sortBy,
