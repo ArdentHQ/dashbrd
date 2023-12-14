@@ -11,6 +11,7 @@ export default class PopularCollectionFactory extends ModelFactory<App.Data.Coll
             floorPrice: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
             floorPriceCurrency: this.optional(this.cryptoCurrency()),
             floorPriceDecimals: this.optional(18),
+            floorPriceChange: this.optional(faker.datatype.number({ min: -100, max: 100 })),
             volume: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
             volumeFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
             volumeCurrency: this.optional(this.cryptoCurrency()),

@@ -26,6 +26,7 @@ class VotableCollectionData extends Data
         public ?float $floorPriceFiat,
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
+        public ?float $floorPriceChange,
         public ?string $volume,
         public ?float $volumeFiat,
         public string $volumeCurrency,
@@ -51,6 +52,7 @@ class VotableCollectionData extends Data
             floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floor_price_symbol,
             floorPriceDecimals: $collection->floor_price_decimals,
+            floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
             volume: $collection->volume,
             volumeFiat: (float) $collection->volume_fiat,
             // Volume is normalized to `ETH`

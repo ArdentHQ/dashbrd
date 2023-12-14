@@ -14,6 +14,7 @@ export default class VotableCollectionDataFactory extends ModelFactory<App.Data.
             floorPriceFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
             floorPriceCurrency: this.optional(this.cryptoCurrency()),
             floorPriceDecimals: this.optional(18),
+            floorPriceChange: this.optional(faker.datatype.number({ min: -100, max: 100 })),
             volume: this.optional(faker.datatype.number({ min: 1, max: 100000 }).toString()),
             volumeFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
             volumeCurrency: "ETH",
