@@ -26,7 +26,14 @@ describe("PopularCollectionsTable", () => {
         useAuthorizedActionSpy.mockRestore();
     });
 
-    const collections = new PopularCollectionFactory().createMany(3);
+    const collections = [
+        ...new PopularCollectionFactory().createMany(2, {
+            floorPriceChange: 50,
+        }),
+        ...new PopularCollectionFactory().createMany(2, {
+            floorPriceChange: null,
+        }),
+    ];
 
     const user = new UserDataFactory().create();
 
