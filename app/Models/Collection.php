@@ -706,7 +706,7 @@ class Collection extends Model
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public static function getFiatValueSum(): array
     {
