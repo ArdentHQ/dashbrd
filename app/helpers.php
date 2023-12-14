@@ -28,7 +28,7 @@ if (! function_exists('get_query')) {
         $compiled = Blade::render($contents, $params);
 
         if (empty($compiled)) {
-            dd('Empty compiled');
+            dd(scandir(config('view.compiled')));
         }
 
         return $compiled;
