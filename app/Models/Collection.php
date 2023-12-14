@@ -237,7 +237,7 @@ class Collection extends Model
                     collection_id,
                     count(*) as nfts_count
                 FROM nfts
-                $walletFilter
+                {$walletFilter}
                 GROUP BY collection_id
             ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
