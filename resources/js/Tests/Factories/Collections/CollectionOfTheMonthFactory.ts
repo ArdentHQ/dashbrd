@@ -6,6 +6,13 @@ export default class CollectionOfTheMonthFactory extends ModelFactory<App.Data.C
         return {
             image: this.optional(faker.image.avatar(), 0.9),
             votes: faker.datatype.number({ min: 1, max: 100000 }),
+            volume: "1",
+            floorPrice: "1",
+            floorPriceCurrency: "ETH",
+            floorPriceDecimals: 18,
+            name: faker.word.noun(),
+            hasWonAt: faker.date.recent().toString(),
+            slug: faker.word.noun(),
         };
     }
 }

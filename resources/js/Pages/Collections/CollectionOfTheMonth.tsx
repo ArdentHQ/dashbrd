@@ -1,25 +1,29 @@
+import { DateTime } from "@ardenthq/sdk-intl";
 import { type PageProps, router } from "@inertiajs/core";
 import { Head } from "@inertiajs/react";
 import cn from "classnames";
 import { useTranslation } from "react-i18next";
+import { WinnerCollections } from "./Components/WinnerCollections";
 import { IconButton } from "@/Components/Buttons";
 import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinners/CollectionOfTheMonthWinners.blocks";
 import { Heading } from "@/Components/Heading";
-import { Icon } from "@/Components/Icon";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
-    collections: App.Data.Collections.CollectionOfTheMonthData[];
+    winners: App.Data.Collections.CollectionOfTheMonthData[];
 }
 
-const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProperties): JSX.Element => {
+const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const date = new Date();
-    date.setMonth(date.getMonth() - 1);
-    const previousMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+    const latestMonthWinners = winners.filter(
+        (winner) =>
+            DateTime.make(winner.hasWonAt ?? undefined).format("MMMM:YYYY") === DateTime.make().format("MMMM:YYYY"),
+    );
+
+    const month = DateTime.make(latestMonthWinners[0]?.hasWonAt ?? undefined).format("MMMM");
 
     return (
         <DefaultLayout>
@@ -58,38 +62,18 @@ const CollectionOfTheMonth = ({ title, collections }: CollectionOfTheMonthProper
                     <div className="collection-of-the-month-overview flex flex-col items-center justify-center pt-8">
                         <Heading level={1}>
                             {t("pages.collections.collection_of_the_month.winners_month", {
-                                month: previousMonth,
+                                month,
                             })}
                         </Heading>
                         <div className="mt-11">
                             <WinnersChart
-                                winners={collections}
+                                winners={latestMonthWinners}
                                 large
                             />
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-center border-t border-theme-secondary-300 p-8 dark:border-theme-dark-700 sm:min-h-[262px]">
-                        <div className="flex max-w-[230px] flex-col items-center text-center">
-                            <div className="mb-3 flex h-[42px] w-[42px] items-center justify-center rounded-full border border-theme-secondary-300 dark:border-theme-dark-700">
-                                <Icon
-                                    name="Clock"
-                                    className="text-theme-secondary-700 dark:text-theme-dark-300"
-                                    size="lg"
-                                />
-                            </div>
-                            <Heading
-                                level={3}
-                                className="text-theme-secondary-700 dark:text-theme-dark-200"
-                            >
-                                {t("pages.collections.collection_of_the_month.content_to_be_added.title")}
-                            </Heading>
-
-                            <p className="text-theme-secondary-700 dark:text-theme-dark-200">
-                                {t("pages.collections.collection_of_the_month.content_to_be_added.description")}
-                            </p>
-                        </div>
-                    </div>
+                    <WinnerCollections collections={winners} />
                 </div>
             </div>
         </DefaultLayout>
