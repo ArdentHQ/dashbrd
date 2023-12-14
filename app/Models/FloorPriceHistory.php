@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 
 class FloorPriceHistory extends Model
 {
-    use HasFactory;
+    use HasFactory, MassPrunable;
 
     /**
      * @var string
@@ -35,4 +37,12 @@ class FloorPriceHistory extends Model
     protected $casts = [
         'retrieved_at' => 'datetime',
     ];
+
+    /**
+     * @return Builder<FloorPriceHistory>
+     */
+    public function prunable(): Builder
+    {
+        return static::where('retrieved_at', '<=', now()->subMonth()->subDay());
+    }
 }
