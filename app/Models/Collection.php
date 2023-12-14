@@ -670,13 +670,13 @@ class Collection extends Model
     {
         return $query->addSelect(
             DB::raw("(
-                SELECT 
-                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) - 
-                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) / 
+                SELECT
+                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) -
+                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) /
                     AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100
-                FROM 
+                FROM
                     floor_price_history fp1
-                WHERE 
+                WHERE
                     fp1.collection_id = collections.id AND
                     fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY') AS price_change_24h
             ")
@@ -703,5 +703,18 @@ class Collection extends Model
             // order by votes count excluding nulls
             ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
             ->orderBy('votes_count', 'desc');
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getFiatValueSum(): array
+    {
+        return DB::select("SELECT
+                key, COALESCE(SUM(value::numeric), 0) as total
+            FROM
+                collections, jsonb_each_text(fiat_value) as currencies(key,value)
+            GROUP BY key;"
+            );
     }
 }
