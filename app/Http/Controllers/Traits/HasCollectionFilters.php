@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 trait HasCollectionFilters
 {
     private array $allowedSortByValues = ['name', 'floor-price', 'value', 'chain'];
+
     /**
      * @return object{chain?: string, sort?: string, period?: string}
      */
