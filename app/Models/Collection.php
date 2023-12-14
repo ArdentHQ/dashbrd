@@ -710,11 +710,11 @@ class Collection extends Model
      */
     public static function getFiatValueSum(): array
     {
-        return DB::select("SELECT
+        return DB::select('SELECT
                 key, COALESCE(SUM(value::numeric), 0) as total
             FROM
                 collections, jsonb_each_text(fiat_value) as currencies(key,value)
-            GROUP BY key;"
-            );
+            GROUP BY key;'
+        );
     }
 }
