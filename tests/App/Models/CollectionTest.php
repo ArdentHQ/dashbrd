@@ -1382,7 +1382,7 @@ it('should get sum of fiat values of collections', function () {
         'fiat_value' => [
             'USD' => 10,
             'EUR' => 20,
-        ]
+        ],
     ]);
 
     Collection::factory()->create([
@@ -1390,13 +1390,13 @@ it('should get sum of fiat values of collections', function () {
             'USD' => 20,
             'EUR' => 30,
             'AZN' => 45,
-        ]
+        ],
     ]);
 
     Collection::factory()->create([
         'fiat_value' => [
             'EUR' => 30,
-        ]
+        ],
     ]);
 
     Collection::factory()->create();
