@@ -1,5 +1,6 @@
 import { within } from "@testing-library/react";
 import { expect } from "vitest";
+import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
 import {
     VoteCollection,
     VoteCollections,
@@ -25,11 +26,13 @@ describe("VoteCollections", () => {
 
     it("should render collections in two block, 4 collection in each", () => {
         render(
-            <VoteCollections
-                collections={collections}
-                votedCollection={null}
-                user={user}
-            />,
+            <MetaMaskContextProvider>
+                <VoteCollections
+                    collections={collections}
+                    votedCollection={null}
+                    user={user}
+                />
+            </MetaMaskContextProvider>,
         );
 
         const leftBlock = screen.getByTestId("VoteCollections_Left");

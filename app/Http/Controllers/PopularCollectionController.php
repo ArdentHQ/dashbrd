@@ -8,6 +8,7 @@ use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionStatsData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
+use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Models\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -17,6 +18,8 @@ use Inertia\Response;
 
 class PopularCollectionController extends Controller
 {
+    use HasCollectionFilters;
+
     public function index(Request $request): Response|JsonResponse|RedirectResponse
     {
         $user = $request->user();
@@ -29,7 +32,10 @@ class PopularCollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
+        $perPage = min($request->has('perPage') ? (int) $request->get('perPage') : 50, 100);
+
         $collections = Collection::query()
+            ->searchByName($request->get('query'))
             ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
             ->filterByChainId($chainId)
             ->orderByFloorPrice('desc', $currency)
@@ -42,7 +48,8 @@ class PopularCollectionController extends Controller
             ->selectVolumeFiat($currency)
             ->addSelect('collections.*')
             ->groupBy('collections.id')
-            ->paginate(25);
+            ->paginate($perPage)
+            ->withQueryString();
 
         return Inertia::render('Collections/PopularCollections/Index', [
             'title' => trans('metatags.popular-collections.title'),
@@ -57,30 +64,5 @@ class PopularCollectionController extends Controller
             ),
             'filters' => $this->getFilters($request),
         ]);
-    }
-
-    /**
-     * @return object{chain?: string, sort?: string}
-     */
-    private function getFilters(Request $request): object
-    {
-        $filter = [
-            'chain' => $this->getValidValue($request->get('chain'), ['polygon', 'ethereum']),
-            'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
-        ];
-
-        // If value is not defined (or invalid), remove it from the array since
-        // the frontend expect `undefined` values (not `null`)
-
-        // Must be cast to an object due to some Inertia front-end stuff...
-        return (object) array_filter($filter);
-    }
-
-    /**
-     * @param  array<string>  $validValues
-     */
-    private function getValidValue(?string $value, array $validValues): ?string
-    {
-        return in_array($value, $validValues) ? $value : null;
     }
 }

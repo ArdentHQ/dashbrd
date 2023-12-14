@@ -71,9 +71,7 @@ Route::middleware('auth')->group(function () {
             CollectionReportController::class, 'store',
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
 
-        Route::post('{collection:address}/vote', [
-            CollectionVoteController::class, 'store',
-        ])->name('collection-votes.create');
+        Route::post('{collection}/vote', [CollectionVoteController::class, 'store'])->name('collection-votes.create');
     });
 
     Route::group(['prefix' => 'nfts', 'middleware' => 'signed_wallet'], function () {
@@ -99,13 +97,12 @@ Route::group(['middleware' => 'features:collections'], function () {
         Route::get('', [MyCollectionsController::class, 'index'])->name('my-collections')->middleware(EnsureOnboarded::class);
     });
 
-    Route::group(['prefix' => 'popular-collections'], function () {
-        Route::get('', [PopularCollectionController::class, 'index'])->name('popular-collections');
-    });
-
     Route::group(['prefix' => 'collections'], function () {
         Route::get('', [CollectionController::class, 'index'])->name('collections');
+
         Route::get('collection-of-the-month', CollectionOfTheMonthController::class)->name('collection-of-the-month');
+        Route::get('popular', [PopularCollectionController::class, 'index'])->name('popular-collections');
+
         Route::get('{collection:slug}', [CollectionController::class, 'show'])->name('collections.view');
         Route::get('{collection:slug}/articles', [CollectionController::class, 'articles'])->name('collections.articles');
         Route::get('{collection:slug}/{nft:token_number}', [NftController::class, 'show'])->name('collection-nfts.view');

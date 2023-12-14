@@ -1,33 +1,22 @@
-import { type FormDataConvertible, type PageProps } from "@inertiajs/core";
-import { Head, router, usePage } from "@inertiajs/react";
+import { type PageProps } from "@inertiajs/core";
+import { Head, usePage } from "@inertiajs/react";
 import cn from "classnames";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type RouteParams } from "ziggy-js";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
-import {
-    CollectionsVoteReceivedModal,
-    type TemporalVotableCollection,
-} from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
-import { type PopularCollectionsSortBy, PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
-import { Button } from "@/Components/Buttons";
+import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
-import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
-import { type ChainFilter, ChainFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-
-export interface Filters extends Record<string, FormDataConvertible> {
-    chain?: ChainFilter;
-    sort?: PopularCollectionsSortBy;
-}
+import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
+import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 interface CollectionsIndexProperties extends PageProps {
     title: string;
@@ -58,35 +47,15 @@ const CollectionsIndex = ({
 
     const { props } = usePage();
 
-    const [currentFilters, setCurrentFilters] = useState<Filters>(filters);
-
-    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
-
-    const isFirstRender = useIsFirstRender();
-
-    useEffect(() => {
-        if (isFirstRender) return;
-
-        router.get(route("collections"), currentFilters, {
+    const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
+        filters,
+        filterRoute: route("collections"),
+        options: {
             only: ["collections", "filters"],
             preserveScroll: true,
             preserveState: true,
-        });
-    }, [currentFilters]);
-
-    const setChain = (chain: ChainFilter | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            chain,
-        }));
-    };
-
-    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
-        setCurrentFilters((filters) => ({
-            ...filters,
-            sort,
-        }));
-    };
+        },
+    });
 
     return (
         <DefaultLayout
@@ -107,6 +76,8 @@ const CollectionsIndex = ({
                             setSortBy={setSortBy}
                             chain={currentFilters.chain}
                             setChain={setChain}
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
                         />
 
                         <ViewAllButton
@@ -121,6 +92,12 @@ const CollectionsIndex = ({
                         <PopularCollectionsSorting
                             sortBy={currentFilters.sort}
                             setSortBy={setSortBy}
+                        />
+
+                        <PeriodFilters
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
+                            sortBy={currentFilters.sort}
                         />
 
                         <ChainFilters
@@ -178,39 +155,6 @@ const CollectionsIndex = ({
             />
 
             <CollectionsCallToAction />
-
-            {/* @TODO: remove this */}
-            <div className="mt-2">
-                <Button
-                    onClick={() => {
-                        setRecentlyVotedCollection({
-                            name: "MoonBirds",
-                            twitterUsername: "moonbirds",
-                        });
-                    }}
-                >
-                    Show Vote Modal
-                </Button>
-
-                <Button
-                    onClick={() => {
-                        setRecentlyVotedCollection({
-                            name: "MoonBirds",
-                            twitterUsername: null,
-                        });
-                    }}
-                >
-                    Show Vote Modal without twitter
-                </Button>
-            </div>
-
-            <CollectionsVoteReceivedModal
-                // @TODO: use a real collection
-                collection={recentlyVotedCollection}
-                onClose={() => {
-                    setRecentlyVotedCollection(undefined);
-                }}
-            />
         </DefaultLayout>
     );
 };

@@ -52,6 +52,7 @@ return [
     'my_collection' => 'My Collection',
     'max' => 'Max',
     'chain' => 'Chain',
+    'search' => 'Search',
     'copied' => 'Copied!',
     'coming_soon' => 'Coming Soon',
     'more_details' => 'More Details',
@@ -168,4 +169,7 @@ return [
     'vote' => 'Vote',
     'vol' => 'Vol',
     'collection_preview' => 'Collection Preview',
+    '24h' => '24h',
+    '7d' => '7d',
+    '30d' => '30d',
 ];
