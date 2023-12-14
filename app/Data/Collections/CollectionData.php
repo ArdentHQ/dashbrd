@@ -32,7 +32,7 @@ class CollectionData extends Data
         public ?float $floorPriceFiat,
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
-        public ?string $supply,
+        public ?int $supply,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?string $banner,

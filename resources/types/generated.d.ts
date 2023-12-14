@@ -143,6 +143,7 @@ declare namespace App.Data.Collections {
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        supply: number | null;
         image: string | null;
         banner: string | null;
         openSeaSlug: string | null;
