@@ -45,7 +45,7 @@ class PopularCollectionController extends Controller
                 'nfts' => fn ($q) => $q->limit(4),
             ])
             ->withCount('nfts')
-            ->selectVolumeFiat($currency)
+            ->addSelectVolumeFiat($currency)
             ->addSelect('collections.*')
             ->groupBy('collections.id')
             ->paginate($perPage)

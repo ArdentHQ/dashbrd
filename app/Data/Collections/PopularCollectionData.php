@@ -25,6 +25,7 @@ class PopularCollectionData extends Data
         public ?string $floorPrice,
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
+        public ?float $floorPriceChange,
         public ?string $volume,
         public ?float $volumeFiat,
         public ?string $volumeCurrency,
@@ -36,7 +37,7 @@ class PopularCollectionData extends Data
 
     public static function fromModel(Collection $collection, CurrencyCode $currency): self
     {
-        /** @var mixed $collection (volume_fiat is add with the `scopeSelectVolumeFiat`) */
+        /** @var mixed $collection (volume_fiat is added with the `scopeAddSelectVolumeFiat` and `price_change_24h` with the `scopeAddFloorPriceChange`) */
         return new self(
             id: $collection->id,
             name: $collection->name,
@@ -45,6 +46,7 @@ class PopularCollectionData extends Data
             floorPrice: $collection->floor_price,
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
+            floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
             volume: $collection->volume,
             volumeFiat: (float) $collection->volume_fiat,
             // Volume is normalized to `ETH`

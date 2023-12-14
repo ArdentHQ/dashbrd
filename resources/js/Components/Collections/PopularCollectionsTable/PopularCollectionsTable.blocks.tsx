@@ -66,38 +66,45 @@ export const PopularCollectionFloorPrice = ({
 }: {
     collection: Pick<
         App.Data.Collections.PopularCollectionData,
-        "floorPrice" | "floorPriceCurrency" | "floorPriceDecimals"
+        "floorPrice" | "floorPriceCurrency" | "floorPriceDecimals" | "floorPriceChange"
     >;
-}): JSX.Element => (
-    <div
-        data-testid="PopularCollectionFloorPrice"
-        className="inline-block"
-    >
-        <div className="flex flex-col items-end space-y-0.5 whitespace-nowrap font-medium">
-            <div
-                data-testid="CollectionFloorPrice__crypto"
-                className="text-sm leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6"
-            >
-                <FormatCrypto
-                    value={collection.floorPrice ?? "0"}
-                    token={{
-                        symbol: collection.floorPriceCurrency ?? "ETH",
-                        name: collection.floorPriceCurrency ?? "ETH",
-                        decimals: collection.floorPriceDecimals ?? 18,
-                    }}
-                />
-            </div>
+}): JSX.Element => {
+    const { t } = useTranslation();
 
-            <span
-                data-testid="PopularCollectionFloorPrice__price-change"
-                className="text-sm"
-            >
-                {/* @TODO: Make dynamic */}
-                <PriceChange change={24.5678} />
-            </span>
+    return (
+        <div
+            data-testid="PopularCollectionFloorPrice"
+            className="inline-block"
+        >
+            <div className="flex flex-col items-end space-y-0.5 whitespace-nowrap font-medium">
+                <div
+                    data-testid="CollectionFloorPrice__crypto"
+                    className="text-sm leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6"
+                >
+                    <FormatCrypto
+                        value={collection.floorPrice ?? "0"}
+                        token={{
+                            symbol: collection.floorPriceCurrency ?? "ETH",
+                            name: collection.floorPriceCurrency ?? "ETH",
+                            decimals: collection.floorPriceDecimals ?? 18,
+                        }}
+                    />
+                </div>
+
+                <span
+                    data-testid="PopularCollectionFloorPrice__price-change"
+                    className="text-sm"
+                >
+                    {collection.floorPriceChange != null ? (
+                        <PriceChange change={collection.floorPriceChange} />
+                    ) : (
+                        <span className="text-theme-secondary-500 dark:text-theme-dark-300">{t("common.na")}</span>
+                    )}
+                </span>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export const PopularCollectionVolume = ({
     collection,

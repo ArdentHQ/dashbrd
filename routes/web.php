@@ -71,9 +71,7 @@ Route::middleware('auth')->group(function () {
             CollectionReportController::class, 'store',
         ])->name('collection-reports.create')->middleware('throttle:collection:reports');
 
-        Route::post('{collection:address}/vote', [
-            CollectionVoteController::class, 'store',
-        ])->name('collection-votes.create');
+        Route::post('{collection}/vote', [CollectionVoteController::class, 'store'])->name('collection-votes.create');
     });
 
     Route::group(['prefix' => 'nfts', 'middleware' => 'signed_wallet'], function () {

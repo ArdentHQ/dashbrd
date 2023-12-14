@@ -4,18 +4,14 @@ import { Dialog } from "@/Components/Dialog";
 import { isTruthy } from "@/Utils/is-truthy";
 import { toTwitterHashtag } from "@/Utils/to-twitter-hashtag";
 
-// @TODO: use a real collection
-export interface TemporalVotableCollection {
-    name: string;
-    twitterUsername: string | null;
-}
-
 export const CollectionsVoteReceivedModal = ({
+    isOpen,
     onClose,
     collection,
 }: {
+    isOpen: boolean;
     onClose: () => void;
-    collection?: TemporalVotableCollection;
+    collection?: App.Data.Collections.VotableCollectionData;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -41,7 +37,7 @@ export const CollectionsVoteReceivedModal = ({
 
     return (
         <Dialog
-            isOpen={collection !== undefined}
+            isOpen={isOpen}
             onClose={onClose}
             title={t("pages.collections.collection_of_the_month.vote_received_modal.title")}
             panelClassName="md:max-w-none md:w-[648px]"

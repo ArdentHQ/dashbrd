@@ -1,19 +1,13 @@
 import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
 import cn from "classnames";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { type RouteParams } from "ziggy-js";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
-import {
-    CollectionsVoteReceivedModal,
-    type TemporalVotableCollection,
-} from "./Components/CollectionsVoteReceivedModal";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
 import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
 import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
-import { Button } from "@/Components/Buttons";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
@@ -52,8 +46,6 @@ const CollectionsIndex = ({
     const { t } = useTranslation();
 
     const { props } = usePage();
-
-    const [recentlyVotedCollection, setRecentlyVotedCollection] = useState<TemporalVotableCollection>();
 
     const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
         filters,
@@ -163,39 +155,6 @@ const CollectionsIndex = ({
             />
 
             <CollectionsCallToAction />
-
-            {/* @TODO: remove this */}
-            <div className="mt-2">
-                <Button
-                    onClick={() => {
-                        setRecentlyVotedCollection({
-                            name: "MoonBirds",
-                            twitterUsername: "moonbirds",
-                        });
-                    }}
-                >
-                    Show Vote Modal
-                </Button>
-
-                <Button
-                    onClick={() => {
-                        setRecentlyVotedCollection({
-                            name: "MoonBirds",
-                            twitterUsername: null,
-                        });
-                    }}
-                >
-                    Show Vote Modal without twitter
-                </Button>
-            </div>
-
-            <CollectionsVoteReceivedModal
-                // @TODO: use a real collection
-                collection={recentlyVotedCollection}
-                onClose={() => {
-                    setRecentlyVotedCollection(undefined);
-                }}
-            />
         </DefaultLayout>
     );
 };

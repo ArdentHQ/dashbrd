@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/core";
 import cn from "classnames";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,9 +10,12 @@ import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
 import { Tooltip } from "@/Components/Tooltip";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { CollectionsVoteReceivedModal } from "@/Pages/Collections/Components/CollectionsVoteReceivedModal";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
+
 type VoteCollectionVariants = "selected" | "voted" | undefined;
 
 export const VoteCollections = ({
@@ -26,10 +30,39 @@ export const VoteCollections = ({
     const { t } = useTranslation();
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
+    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const { isSmAndAbove } = useBreakpoint();
+    const { signedAction } = useAuthorizedAction();
+
+    const collection = useMemo(
+        () => collections.filter((c) => c.id === selectedCollectionId)[0],
+        [collections, selectedCollectionId],
+    );
 
     const getVariant = (collectionId: number): VoteCollectionVariants =>
         votedCollection?.id === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+
+    const [loading, setLoading] = useState(false);
+
+    const vote = (): void => {
+        void signedAction((): void => {
+            setLoading(true);
+
+            router.post(
+                route("collection-votes.create", selectedCollectionId),
+                {},
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    onFinish: () => {
+                        setLoading(false);
+
+                        setShowConfirmationDialog(true);
+                    },
+                },
+            );
+        });
+    };
 
     const collectionsWithVote = useMemo(() => {
         const shouldMergeUserVote =
@@ -62,70 +95,89 @@ export const VoteCollections = ({
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     return (
-        <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
-            <Heading
-                level={1}
-                as="h2"
-            >
-                {t("pages.collections.vote.vote_for_top_collection")}
-            </Heading>
+        <>
+            <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
+                <Heading
+                    level={1}
+                    as="h2"
+                >
+                    {t("pages.collections.vote.vote_for_top_collection")}
+                </Heading>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
-                <div
-                    className="max-w-full flex-1 space-y-2"
-                    data-testid="VoteCollections_Left"
-                >
-                    {collectionsWithVote.slice(0, 4).map((collection, index) => (
-                        <VoteCollection
-                            key={index}
-                            index={index + 1}
-                            collection={collection}
-                            setSelectedCollectionId={setSelectedCollectionId}
-                            votedId={votedCollection?.id}
-                            variant={getVariant(collection.id)}
-                        />
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
+                    <div
+                        className="max-w-full flex-1 space-y-2"
+                        data-testid="VoteCollections_Left"
+                    >
+                        {collectionsWithVote.slice(0, 4).map((collection, index) => (
+                            <VoteCollection
+                                key={index}
+                                index={index + 1}
+                                collection={collection}
+                                setSelectedCollectionId={setSelectedCollectionId}
+                                votedId={votedCollection?.id}
+                                variant={getVariant(collection.id)}
+                            />
+                        ))}
+                    </div>
+                    <div
+                        className="hidden flex-1 space-y-2 sm:block"
+                        data-testid="VoteCollections_Right"
+                    >
+                        {collectionsWithVote.slice(4, 8).map((collection, index) => (
+                            <VoteCollection
+                                key={index}
+                                index={index + 4}
+                                collection={collection}
+                                setSelectedCollectionId={setSelectedCollectionId}
+                                votedId={votedCollection?.id}
+                                variant={getVariant(collection.id)}
+                            />
+                        ))}
+                    </div>
                 </div>
-                <div
-                    className="hidden flex-1 space-y-2 sm:block"
-                    data-testid="VoteCollections_Right"
-                >
-                    {collectionsWithVote.slice(4, 8).map((collection, index) => (
-                        <VoteCollection
-                            key={index}
-                            index={index + 4}
-                            collection={collection}
-                            setSelectedCollectionId={setSelectedCollectionId}
-                            votedId={votedCollection?.id}
-                            variant={getVariant(collection.id)}
-                        />
-                    ))}
+
+                <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
+                    <VoteCountdown
+                        onSubmit={vote}
+                        isDisabled={loading || selectedCollectionId === undefined}
+                        hasUserVoted={votedCollection !== null}
+                    />
+
+                    {votedCollection === null && (
+                        <LinkButton
+                            onClick={(): void => {
+                                void signedAction(() => {
+                                    setIsDialogOpen(true);
+                                });
+                            }}
+                            variant="link"
+                            className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
+                            fontSize="!text-base"
+                            textColor="!text-theme-primary-600 dark:!text-theme-primary-400"
+                        >
+                            {t("pages.collections.vote.or_nominate_collection")}
+                        </LinkButton>
+                    )}
                 </div>
+
+                <NominationDialog
+                    isOpen={isDialogOpen}
+                    setIsOpen={setIsDialogOpen}
+                    initialCollections={nominatableCollections}
+                    user={user}
+                />
             </div>
 
-            <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
-                <VoteCountdown hasUserVoted={votedCollection !== null} />
-
-                <LinkButton
-                    onClick={(): void => {
-                        setIsDialogOpen(true);
-                    }}
-                    variant="link"
-                    className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
-                    fontSize="!text-base"
-                    textColor="!text-theme-primary-600 dark:!text-theme-primary-400"
-                >
-                    {t("pages.collections.vote.or_nominate_collection")}
-                </LinkButton>
-            </div>
-
-            <NominationDialog
-                isOpen={isDialogOpen}
-                setIsOpen={setIsDialogOpen}
-                initialCollections={nominatableCollections}
-                user={user}
+            <CollectionsVoteReceivedModal
+                isOpen={showConfirmationDialog}
+                onClose={() => {
+                    setShowConfirmationDialog(false);
+                    setSelectedCollectionId(0);
+                }}
+                collection={collection}
             />
-        </div>
+        </>
     );
 };
 
@@ -155,11 +207,12 @@ export const VoteCollection = ({
                     }
                 }}
                 tabIndex={0}
-                className={cn("relative  overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
+                className={cn("relative overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
                     "border-2 border-theme-primary-600 dark:border-theme-hint-400":
                         variant === "selected" || variant === "voted",
                     "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
                     "border border-theme-secondary-300 dark:border-theme-dark-700": variant === undefined,
+                    "cursor-pointer": !hasVoted,
                     "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
                         !hasVoted && variant === undefined,
                 })}

@@ -41,6 +41,14 @@ it('should fetch nft collection floor price', function () {
 
     expect($collection->floor_price)->toBe('1229900000000000000')
         ->and($collection->floor_price_token_id)->toBe($token->id);
+
+    expect($collection->floorPriceHistory()->count())->toBe(1);
+
+    $floorPriceHistory = $collection->floorPriceHistory()->first();
+
+    expect($floorPriceHistory->floor_price)->toBe('1229900000000000000')
+        ->and($floorPriceHistory->token_id)->toBe($token->id)
+        ->and($floorPriceHistory->retrieved_at)->toBeInstanceOf(Carbon::class);
 });
 
 it('should handle null floor price in response', function () {
@@ -77,6 +85,8 @@ it('should handle null floor price in response', function () {
     expect($collection->floor_price)->toBe(null)
         ->and($collection->floor_price_token_id)->toBe(null)
         ->and($collection->floor_price_retrieved_at->gt($retrievedAt))->toBe(true);
+
+    expect($collection->floorPriceHistory()->count())->toBe(0);
 });
 
 it('should handle non existing collection when fetching floor price', function () {

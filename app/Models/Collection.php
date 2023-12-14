@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
+use App\Models\Traits\HasFloorPriceHistory;
 use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
@@ -41,7 +42,7 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
@@ -625,7 +626,8 @@ class Collection extends Model
     public function scopeVotable(Builder $query, CurrencyCode $currency, bool $orderByVotes = true): Builder
     {
         return $query
-            ->selectVolumeFiat($currency)
+            ->addSelectVolumeFiat($currency)
+            ->addFloorPriceChange()
             ->addSelect([
                 'collections.*',
                 DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
@@ -649,7 +651,7 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeSelectVolumeFiat(Builder $query, CurrencyCode $currency): Builder
+    public function scopeAddSelectVolumeFiat(Builder $query, CurrencyCode $currency): Builder
     {
         $currencyCode = Str::lower($currency->value);
 
@@ -658,6 +660,27 @@ class Collection extends Model
             (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
         AS volume_fiat")
         )->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw("'ETH'"));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeAddFloorPriceChange(Builder $query): Builder
+    {
+        return $query->addSelect(
+            DB::raw("(
+                SELECT 
+                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) - 
+                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) / 
+                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100
+                FROM 
+                    floor_price_history fp1
+                WHERE 
+                    fp1.collection_id = collections.id AND
+                    fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY') AS price_change_24h
+            ")
+        );
     }
 
     /**

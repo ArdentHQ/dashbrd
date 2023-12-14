@@ -1,5 +1,6 @@
+import { router } from "@inertiajs/core";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NomineeCollections } from "./NomineeCollections";
 import { Button } from "@/Components/Buttons";
@@ -8,15 +9,20 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { LoadingBlock } from "@/Components/LoadingBlock/LoadingBlock";
 import { useDebounce } from "@/Hooks/useDebounce";
+import { CollectionsVoteReceivedModal } from "@/Pages/Collections/Components/CollectionsVoteReceivedModal";
 
 const NominationDialogFooter = ({
     setIsOpen,
     selectedCollection,
     setSelectedCollection,
+    onSubmit,
+    isDisabled,
 }: {
     setIsOpen: (isOpen: boolean) => void;
     selectedCollection: number;
     setSelectedCollection: (selectedCollection: number) => void;
+    onSubmit: () => void;
+    isDisabled: boolean;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -36,10 +42,8 @@ const NominationDialogFooter = ({
 
                 <Button
                     variant="primary"
-                    onClick={(): void => {
-                        console.log("TODO: implement");
-                    }}
-                    disabled={selectedCollection === 0}
+                    onClick={onSubmit}
+                    disabled={selectedCollection === 0 || isDisabled}
                     className="w-full items-end justify-center md:px-8"
                 >
                     {t("common.vote")}
@@ -63,6 +67,8 @@ export const NominationDialog = ({
     const { t } = useTranslation();
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
+    const [searching, setSearching] = useState(false);
+    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
     const [selectedCollection, setSelectedCollection] = useState(0);
     const [collections, setCollections] = useState(initialCollections);
 
@@ -77,14 +83,14 @@ export const NominationDialog = ({
             return;
         }
 
-        setLoading(true);
+        setSearching(true);
 
         const { data } = await axios.get<{
             collections: App.Data.Collections.VotableCollectionData[];
         }>(route("nominatable-collections", { query: debouncedQuery }));
 
         setCollections(data.collections);
-        setLoading(false);
+        setSearching(false);
     };
 
     useEffect(() => {
@@ -103,73 +109,110 @@ export const NominationDialog = ({
         }
     }, [isOpen]);
 
+    const collection = useMemo(
+        () => collections.filter((c) => c.id === selectedCollection)[0],
+        [collections, selectedCollection],
+    );
+
+    const vote = (): void => {
+        setLoading(true);
+
+        router.post(
+            route("collection-votes.create", collection),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onFinish: () => {
+                    setLoading(false);
+                    setIsOpen(false);
+
+                    setShowConfirmationDialog(true);
+                },
+            },
+        );
+    };
+
     return (
-        <Dialog
-            title={t("pages.collections.vote.nominate_collection")}
-            isOpen={isOpen}
-            onClose={(): void => {
-                setIsOpen(false);
-                setSelectedCollection(0);
-            }}
-            panelClassName="md:max-w-[640px] md-lg:max-w-[720px] lg:max-w-[790px] sm:!h-[754px] justify-between sm:flex"
-            innerWrapperClassName="overflow-y-auto"
-            footer={
-                <NominationDialogFooter
-                    setIsOpen={setIsOpen}
-                    selectedCollection={selectedCollection}
-                    setSelectedCollection={setSelectedCollection}
-                />
-            }
-        >
-            <div className="flex flex-col md:gap-0">
-                <SearchInput
-                    placeholder={t("pages.collections.search_placeholder")}
-                    query={query}
-                    onChange={setQuery}
-                />
-
-                {loading && (
-                    <div>
-                        {/* Added to enforce table headers */}
-                        <NomineeCollections
-                            collections={[]}
-                            activeSort=""
-                            user={user}
-                            selectedCollection={0}
-                            setSelectedCollection={setSelectedCollection}
-                            showHeaderWhenEmpty
-                        />
-
-                        <LoadingBlock text={t("pages.collections.search.loading_results")} />
-                    </div>
-                )}
-
-                {collections.length === 0 && !loading && (
-                    <div>
-                        {/* Added to enforce table headers */}
-                        <NomineeCollections
-                            collections={[]}
-                            activeSort=""
-                            user={user}
-                            selectedCollection={0}
-                            setSelectedCollection={setSelectedCollection}
-                            showHeaderWhenEmpty
-                        />
-
-                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
-                    </div>
-                )}
-
-                {!loading && (
-                    <NomineeCollections
-                        collections={collections}
-                        activeSort=""
-                        user={user}
+        <>
+            <Dialog
+                title={t("pages.collections.vote.nominate_collection")}
+                isOpen={isOpen}
+                onClose={(): void => {
+                    setIsOpen(false);
+                    setSelectedCollection(0);
+                }}
+                panelClassName="md:max-w-[640px] md-lg:max-w-[720px] lg:max-w-[790px] sm:!h-[754px] justify-between sm:flex"
+                innerWrapperClassName="overflow-y-auto"
+                footer={
+                    <NominationDialogFooter
+                        setIsOpen={setIsOpen}
                         selectedCollection={selectedCollection}
                         setSelectedCollection={setSelectedCollection}
+                        onSubmit={vote}
+                        isDisabled={loading || searching}
                     />
-                )}
-            </div>
-        </Dialog>
+                }
+            >
+                <div className="flex flex-col md:gap-0">
+                    <SearchInput
+                        placeholder={t("pages.collections.search_placeholder")}
+                        query={query}
+                        onChange={setQuery}
+                    />
+
+                    {searching && (
+                        <div>
+                            {/* Added to enforce table headers */}
+                            <NomineeCollections
+                                collections={[]}
+                                activeSort=""
+                                user={user}
+                                selectedCollection={0}
+                                setSelectedCollection={setSelectedCollection}
+                                showHeaderWhenEmpty
+                            />
+
+                            <LoadingBlock text={t("pages.collections.search.loading_results")} />
+                        </div>
+                    )}
+
+                    {collections.length === 0 && !searching && (
+                        <div>
+                            {/* Added to enforce table headers */}
+                            <NomineeCollections
+                                collections={[]}
+                                activeSort=""
+                                user={user}
+                                selectedCollection={0}
+                                setSelectedCollection={setSelectedCollection}
+                                showHeaderWhenEmpty
+                            />
+
+                            <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
+                        </div>
+                    )}
+
+                    {!searching && (
+                        <NomineeCollections
+                            collections={collections}
+                            activeSort=""
+                            user={user}
+                            selectedCollection={selectedCollection}
+                            setSelectedCollection={setSelectedCollection}
+                        />
+                    )}
+                </div>
+            </Dialog>
+
+            <CollectionsVoteReceivedModal
+                isOpen={showConfirmationDialog}
+                onClose={() => {
+                    setShowConfirmationDialog(false);
+                    setSelectedCollection(0);
+                }}
+                collection={collection}
+            />
+        </>
     );
 };

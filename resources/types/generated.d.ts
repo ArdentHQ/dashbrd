@@ -236,6 +236,7 @@ declare namespace App.Data.Collections {
         floorPrice: string | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        floorPriceChange: number | null;
         volume: string | null;
         volumeFiat: number | null;
         volumeCurrency: string | null;
@@ -251,17 +252,20 @@ declare namespace App.Data.Collections {
         id: number;
         rank: number | null;
         name: string;
+        address: string;
         image: string | null;
         votes: number | null;
         floorPrice: string | null;
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        floorPriceChange: number | null;
         volume: string | null;
         volumeFiat: number | null;
         volumeCurrency: string;
         volumeDecimals: number;
         nftsCount: number;
+        twitterUsername: string | null;
     };
 }
 declare namespace App.Data.Gallery {
