@@ -107,21 +107,20 @@ class CollectionController extends Controller
      */
     private function getFeaturedCollections(Request $request): SupportCollection
     {
-        $user = $request->user();
+        $currency = $request->user()?->currency() ?? CurrencyCode::USD;
 
-        $currency = $user ? $user->currency() : CurrencyCode::USD;
+        $collections = Collection::featured()
+                        ->withCount('nfts')
+                        ->with([
+                            'network',
+                            'floorPriceToken',
+                            'nfts' => fn ($q) => $q->inRandomOrder()->limit(3)
+                        ])
+                        ->get();
 
-        $featuredCollections = Collection::featured()
-            ->withCount(['nfts'])
-            ->get();
+        return $collections->map(function (Collection $collection) use ($currency) {
+            $collection->nfts->each->setRelation('collection', $collection);
 
-        $featuredCollections->each(function (Collection $collection) {
-            $collection->cachedNfts = Cache::remember('featuredNftsForCollection'.$collection->id, 3600 * 12, function () use ($collection) {
-                return $collection->nfts()->inRandomOrder()->take(3)->get();
-            });
-        });
-
-        return $featuredCollections->map(function (Collection $collection) use ($currency) {
             return CollectionFeaturedData::fromModel($collection, $currency);
         });
     }
