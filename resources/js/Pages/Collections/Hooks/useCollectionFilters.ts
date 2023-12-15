@@ -7,12 +7,15 @@ import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
 import { type ChainFilter, type PeriodFilterOptions } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { type PopularCollectionsSortBy } from "@/Pages/Collections/Components/PopularCollectionsSorting";
 
+export type SortByDirection = "asc" | "desc";
+
 export interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
     sort?: PopularCollectionsSortBy;
     period?: PeriodFilterOptions;
     query?: string;
     perPage?: number;
+    direction?: SortByDirection;
 }
 
 interface CollectionFiltersState {
@@ -70,11 +73,12 @@ export const useCollectionFilters = ({
         }));
     };
 
-    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
+    const setSortBy = (sort: PopularCollectionsSortBy | undefined, direction?: SortByDirection): void => {
         setCurrentFilters((filters) => ({
             ...filters,
-            period: sort === "floor-price" ? undefined : filters.period,
+            period: sort === undefined ? filters.period : undefined,
             sort,
+            direction,
         }));
     };
 

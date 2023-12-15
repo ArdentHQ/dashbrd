@@ -98,6 +98,9 @@ const Index = ({
                     <CollectionsFullTable
                         collections={collections.data}
                         user={auth.user}
+                        setSortBy={setSortBy}
+                        activeSort={currentFilters.sort ?? ""}
+                        direction={currentFilters.direction}
                     />
 
                     {collections.data.length === 0 && (
