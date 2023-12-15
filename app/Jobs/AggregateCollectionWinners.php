@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection as LaravelCollection;
+use Illuminate\Support\Facades\DB;
 
 class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
 {
@@ -27,14 +28,26 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
 
         $winners = $this->winners();
 
-        CollectionWinner::insert($winners->map(fn ($collection) => [
+        $collections = $winners->map(fn ($collection) => [
             'collection_id' => $collection->id,
             'votes' => $collection->votes_count,
             'month' => $previousMonth->month,
             'year' => $previousMonth->year,
             'created_at' => now(),
             'updated_at' => now(),
-        ])->toArray());
+        ])->toArray();
+
+        DB::transaction(function () use ($collections, $winners, $previousMonth) {
+            CollectionWinner::upsert($collections, uniqueBy: ['collection_id', 'month', 'year']);
+
+            // We created the 3 winners, so remove all others for the month and year...
+            // This is to prevent accidental bugs if this job runs multiple times in a month...
+            CollectionWinner::query()
+                        ->whereNotIn('collection_id', $winners->pluck('id'))
+                        ->where('month', $previousMonth->month)
+                        ->where('year', $previousMonth->year)
+                        ->delete();
+        });
     }
 
     /**

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->unsignedSmallInteger('month');
             $table->unsignedSmallInteger('year');
             $table->timestamps();
+
+            $table->unique(['collection_id', 'month', 'year']);
         });
     }
 
