@@ -126,8 +126,7 @@ describe("GalleryActionToolbar", () => {
             />,
         );
 
-        // eslint-disable-next-line @typescript-eslint/require-await
-        await waitFor(async () => {
+        await waitFor(() => {
             expect(screen.getByTestId("Icon_DraftSaved")).toBeInTheDocument();
         });
     });
