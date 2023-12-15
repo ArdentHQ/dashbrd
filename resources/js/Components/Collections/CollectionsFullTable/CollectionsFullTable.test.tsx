@@ -259,6 +259,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={[{ ...collection, supply: null }]}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
