@@ -116,7 +116,7 @@ describe("GalleryActionToolbar", () => {
         expect(screen.getByTestId("Icon_SavingDraft")).toBeInTheDocument();
     });
 
-    it("should show draft saved icon", () => {
+    it("should show draft saved icon", async () => {
         render(
             <GalleryActionToolbar
                 galleryCoverUrl="/test"
@@ -126,7 +126,8 @@ describe("GalleryActionToolbar", () => {
             />,
         );
 
-        waitFor(() => {
+        // eslint-disable-next-line @typescript-eslint/require-await
+        await waitFor(async () => {
             expect(screen.getByTestId("Icon_DraftSaved")).toBeInTheDocument();
         });
     });
