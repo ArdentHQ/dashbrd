@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { GridHeader } from "@/Components/GridHeader";
 import { FormatCrypto } from "@/Utils/Currency";
-import { formatNumbershort } from "@/utils/format-number";
+import { formatNumbershort } from "@/Utils/format-number";
 
 export const FeaturedCollectionStats = ({
     floorPrice,
