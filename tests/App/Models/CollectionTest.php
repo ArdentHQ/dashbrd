@@ -1376,3 +1376,34 @@ it('has floor price history', function () {
 
     expect($collection->floorPriceHistory()->first())->toBeInstanceOf(FloorPriceHistory::class);
 });
+
+it('should get sum of fiat values of collections', function () {
+    Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 10,
+            'EUR' => 20,
+        ],
+    ]);
+
+    Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 20,
+            'EUR' => 30,
+            'AZN' => 45,
+        ],
+    ]);
+
+    Collection::factory()->create([
+        'fiat_value' => [
+            'EUR' => 30,
+        ],
+    ]);
+
+    Collection::factory()->create();
+
+    $fiatValues = collect(Collection::getFiatValueSum());
+
+    expect($fiatValues->where('key', 'USD')->first()->total)->toBeString(30);
+    expect($fiatValues->where('key', 'EUR')->first()->total)->toBeString(80);
+    expect($fiatValues->where('key', 'AZN')->first()->total)->toBeString(45);
+});
