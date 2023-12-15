@@ -37,7 +37,7 @@ export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollecti
                             className="w-1/2 md-lg:w-auto"
                             selected={sortBy === "floor-price"}
                             onClick={() => {
-                                setSortBy("floor-price");
+                                setSortBy("floor-price", "desc");
                             }}
                         >
                             {t("common.floor_price")}
