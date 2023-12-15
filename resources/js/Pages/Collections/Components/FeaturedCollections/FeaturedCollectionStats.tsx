@@ -13,7 +13,7 @@ export const FeaturedCollectionStats = ({
     floorPrice: string | null;
     floorPriceCurrency: string | null;
     floorPriceDecimals: number | null;
-    nftsCount: number;
+    nftsCount: number | null;
     volume: string | null;
 }): JSX.Element => {
     const { t } = useTranslation();
