@@ -71,7 +71,7 @@ class PopularCollectionController extends Controller
             ];
         });
 
-        return Inertia::render('Collections/PopularCollections/Index', [
+        return Inertia::render('Collections/CollectionsCatalog/Index', [
             'title' => trans('metatags.popular-collections.title'),
             'allowsGuests' => true,
             'collections' => CollectionData::collection(

@@ -2,9 +2,9 @@ import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@/Components/Tabs";
-import { type PopularCollectionsSortingProperties } from "@/Pages/Collections/Components/PopularCollectionsSorting/PopularCollectionsSorting";
+import { type CollectionsSortingProperties } from "@/Pages/Collections/Components/CollectionsSortingTabs/CollectionsSortingTabs";
 
-export interface PeriodFiltersProperties extends Pick<PopularCollectionsSortingProperties, "sortBy"> {
+export interface PeriodFiltersProperties extends Pick<CollectionsSortingProperties, "sortBy"> {
     period: PeriodFilterOptions | undefined;
     setPeriod: (period: PeriodFilterOptions | undefined) => void;
 }
