@@ -1,7 +1,7 @@
 import React from "react";
 import { GalleryActionToolbar } from "./GalleryActionToolbar";
 import { type GalleryDraft } from "@/Pages/Galleries/hooks/useWalletDraftGalleries";
-import { act, render, screen } from "@/Tests/testing-library";
+import { render, screen, waitFor } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
 
 interface IndexedDBMockResponse {
@@ -116,19 +116,19 @@ describe("GalleryActionToolbar", () => {
         expect(screen.getByTestId("Icon_SavingDraft")).toBeInTheDocument();
     });
 
-    it("should show draft saved icon", async () => {
-        await act(async () =>
-            render(
-                <GalleryActionToolbar
-                    galleryCoverUrl="/test"
-                    isProcessing
-                    draftId={1}
-                    isSavingDraft={false}
-                />,
-            ),
+    it("should show draft saved icon", () => {
+        render(
+            <GalleryActionToolbar
+                galleryCoverUrl="/test"
+                isProcessing
+                draftId={1}
+                isSavingDraft={false}
+            />,
         );
 
-        expect(screen.getByTestId("Icon_DraftSaved")).toBeInTheDocument();
+        waitFor(() => {
+            expect(screen.getByTestId("Icon_DraftSaved")).toBeInTheDocument();
+        });
     });
 
     it.each(allBreakpoints)("should render without delete button in %s screen", (breakpoint) => {
