@@ -2,12 +2,13 @@ import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@/Components/Tabs";
+import { type SortByDirection } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 // null means "top"
-export type PopularCollectionsSortBy = "floor-price";
+export type PopularCollectionsSortBy = "floor-price" | "name" | "value" | "chain";
 export interface PopularCollectionsSortingProperties {
     sortBy: PopularCollectionsSortBy | undefined;
-    setSortBy: (sortBy: PopularCollectionsSortBy | undefined) => void;
+    setSortBy: (sortBy: PopularCollectionsSortBy | undefined, direction?: SortByDirection) => void;
 }
 
 export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollectionsSortingProperties): JSX.Element => {

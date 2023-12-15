@@ -222,9 +222,11 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeOrderByValue(Builder $query, Wallet $wallet, string $direction, CurrencyCode $currency = CurrencyCode::USD): Builder
+    public function scopeOrderByValue(Builder $query, ?Wallet $wallet, ?string $direction, ?CurrencyCode $currency = CurrencyCode::USD): Builder
     {
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        $walletFilter = $wallet ? "WHERE nfts.wallet_id = $wallet->id" : '';
 
         return $query->selectRaw(
             sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
@@ -234,7 +236,7 @@ class Collection extends Model
                     collection_id,
                     count(*) as nfts_count
                 FROM nfts
-                WHERE nfts.wallet_id = $wallet->id
+                {$walletFilter}
                 GROUP BY collection_id
             ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
@@ -711,5 +713,17 @@ class Collection extends Model
     public function scopeEligibleToWin(Builder $query): Builder
     {
         return $query->whereNotIn('id', CollectionWinner::ineligibleCollectionIds());
+    }
+  
+     * @return array<string, mixed>
+     */
+    public static function getFiatValueSum(): array
+    {
+        return DB::select('SELECT
+                key, COALESCE(SUM(value::numeric), 0) as total
+            FROM
+                collections, jsonb_each_text(fiat_value) as currencies(key,value)
+            GROUP BY key;'
+        );
     }
 }
