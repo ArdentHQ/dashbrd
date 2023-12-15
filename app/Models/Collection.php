@@ -714,7 +714,8 @@ class Collection extends Model
     {
         return $query->whereNotIn('id', CollectionWinner::ineligibleCollectionIds());
     }
-  
+
+    /**
      * @return array<string, mixed>
      */
     public static function getFiatValueSum(): array
