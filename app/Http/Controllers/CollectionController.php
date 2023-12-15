@@ -36,7 +36,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection as SupportCollection;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\DataCollection;
@@ -114,7 +113,7 @@ class CollectionController extends Controller
                         ->with([
                             'network',
                             'floorPriceToken',
-                            'nfts' => fn ($q) => $q->inRandomOrder()->limit(3)
+                            'nfts' => fn ($q) => $q->inRandomOrder()->limit(3),
                         ])
                         ->get();
 
