@@ -1,3 +1,6 @@
+import { type PopularCollectionsSortBy } from "@/Pages/Collections/Components/PopularCollectionsSorting";
+import { type SortByDirection } from "@/Pages/Collections/Hooks/useCollectionFilters";
+
 export interface CollectionTableItemProperties {
     collection: App.Data.Collections.CollectionData;
     uniqueKey: string;
@@ -7,16 +10,7 @@ export interface CollectionTableItemProperties {
 export interface CollectionTableProperties {
     collections: App.Data.Collections.CollectionData[];
     user: App.Data.UserData | null;
-    activeSort?: string;
-    sortDirection?: "asc" | "desc";
-    onSort?: ({
-        sortBy,
-        direction,
-        selectedChainIds,
-    }: {
-        sortBy: string;
-        direction?: string;
-        selectedChainIds?: number[];
-    }) => void;
-    selectedChainIds?: number[];
+    setSortBy: (sortBy: PopularCollectionsSortBy | undefined, direction?: SortByDirection) => void;
+    activeSort: PopularCollectionsSortBy | "";
+    direction?: SortByDirection;
 }

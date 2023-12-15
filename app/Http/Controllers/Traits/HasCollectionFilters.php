@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 trait HasCollectionFilters
 {
     /**
+     * @var array<string>
+     */
+    private array $allowedSortByValues = ['name', 'floor-price', 'value', 'chain'];
+
+    /**
      * @return object{chain?: string, sort?: string, period?: string}
      */
     private function getFilters(Request $request): object
@@ -18,6 +23,7 @@ trait HasCollectionFilters
             'sort' => $this->getValidValue($request->get('sort'), ['floor-price']),
             'period' => $this->getValidValue($request->get('period'), ['24h', '7d', '30d']),
             'query' => boolval($query = $request->get('query')) ? $query : null,
+            'direction' => $this->getValidValue($request->get('direction'), ['asc', 'desc']),
         ];
 
         // If value is not defined (or invalid), remove it from the array since

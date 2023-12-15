@@ -1407,3 +1407,85 @@ it('should get sum of fiat values of collections', function () {
     expect($fiatValues->where('key', 'EUR')->first()->total)->toBeString(80);
     expect($fiatValues->where('key', 'AZN')->first()->total)->toBeString(45);
 });
+
+it('should sort collections', function () {
+    // 4 eur * 2 nft = 8 eur
+    $collection1 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 5,
+            'EUR' => 4,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection1,
+    ]);
+
+    // 1 eur * 2 nft = 2 eur
+    $collection2 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 3,
+            'EUR' => 1,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection2,
+    ]);
+
+    // 5 eur * 2 = 10 eur
+    $collection3 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 8,
+            'EUR' => 5,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection3,
+    ]);
+
+    // 1 eur * 10 nft = 10 eur
+    $collection4 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => null,
+            'EUR' => 1,
+        ],
+    ])->id;
+
+    Nft::factory()->count(10)->create([
+        'collection_id' => $collection4,
+    ]);
+
+    // 0 eur * 7 nft = 0
+    $collection5 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 1,
+            'EUR' => 0,
+        ],
+    ])->id;
+
+    Nft::factory()->count(7)->create([
+        'collection_id' => $collection5,
+    ]);
+
+    $ordered = Collection::query()->orderByValue(null, 'asc', CurrencyCode::EUR)->pluck('id')->toArray();
+
+    expect($ordered)->toEqual([
+        $collection5, // 0
+        $collection2, // 1
+        $collection1, // 4
+        $collection3, // 8
+        $collection4, // 10
+    ]);
+
+    $ordered = Collection::query()->orderByValue(null, 'desc', CurrencyCode::EUR)->pluck('id')->toArray();
+
+    expect($ordered)->toEqual([
+        $collection4, // 10
+        $collection3, // 8
+        $collection1, // 4
+        $collection2, // 1
+        $collection5, // 0
+    ]);
+});

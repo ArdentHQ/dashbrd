@@ -36,9 +36,19 @@ class PopularCollectionController extends Controller
 
         $perPage = min($request->has('perPage') ? (int) $request->get('perPage') : 50, 100);
 
+        $sortBy = in_array($request->query('sort'), $this->allowedSortByValues) ? $request->query('sort') : null;
+
+        $defaultSortDirection = $sortBy === null ? 'desc' : 'asc';
+
+        $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
+
         $collections = Collection::query()
             ->searchByName($request->get('query'))
-            ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+            ->when($sortBy === null, fn ($q) => $q->orderBy('volume', 'desc')) // @TODO handle top sorting
+            ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
+            ->when($sortBy === 'value', fn ($q) => $q->orderByValue(null, $sortDirection, $currency))
+            ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $currency))
+            ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
             ->filterByChainId($chainId)
             ->orderByFloorPrice('desc', $currency)
             ->with([

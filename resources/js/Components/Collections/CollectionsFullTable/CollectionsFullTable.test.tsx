@@ -41,6 +41,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
             { breakpoint },
         );
@@ -53,6 +55,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
@@ -67,6 +71,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
@@ -84,7 +90,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
-                onSort={sortFunction}
+                activeSort={""}
+                setSortBy={sortFunction}
             />,
         );
 
@@ -96,7 +103,7 @@ describe("CollectionsFullTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
+        expect(sortFunction).toHaveBeenCalledWith("name", "asc");
     });
 
     it("should sort the table when sortable heading is clicked but reverse the direction", async () => {
@@ -106,9 +113,9 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
-                onSort={sortFunction}
                 activeSort="name"
-                sortDirection="asc"
+                direction="asc"
+                setSortBy={sortFunction}
             />,
         );
 
@@ -120,7 +127,7 @@ describe("CollectionsFullTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith({ direction: "desc", selectedChainIds: undefined, sortBy: "name" });
+        expect(sortFunction).toHaveBeenCalledWith("name", "desc");
     });
 
     it("should sort the table when sortable heading is clicked but reverse the direction to asc", async () => {
@@ -128,6 +135,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collections}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
@@ -148,8 +157,8 @@ describe("CollectionsFullTable", () => {
                 collections={collections}
                 user={user}
                 activeSort="name"
-                sortDirection="desc"
-                onSort={sortFunction}
+                direction="desc"
+                setSortBy={sortFunction}
             />,
         );
 
@@ -161,7 +170,7 @@ describe("CollectionsFullTable", () => {
 
         await userEvent.click(tableHeader);
 
-        expect(sortFunction).toHaveBeenCalledWith({ direction: "asc", selectedChainIds: undefined, sortBy: "name" });
+        expect(sortFunction).toHaveBeenCalledWith("name", "asc");
     });
 
     it.each(allBreakpoints)("should render without crashing on %s screen if no floor price data", (breakpoint) => {
@@ -169,6 +178,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collectionsWithNoFloorPriceCurrencyData}
                 user={user}
+                activeSort=""
+                setSortBy={vi.fn()}
             />,
             { breakpoint },
         );
@@ -181,6 +192,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collectionsWithNullFloorPriceFiatData}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
@@ -192,6 +205,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={collectionsWithNullFloorPriceData}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
@@ -211,6 +226,8 @@ describe("CollectionsFullTable", () => {
                     },
                 ]}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
@@ -229,6 +246,8 @@ describe("CollectionsFullTable", () => {
             <CollectionsFullTable
                 collections={[collectionWithNfts]}
                 user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
             />,
         );
 
