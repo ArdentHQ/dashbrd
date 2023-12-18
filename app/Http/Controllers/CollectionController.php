@@ -113,7 +113,6 @@ class CollectionController extends Controller
             'featured-collections',
             now()->addHour(),
             fn () => Collection::featured()
-                        ->withCount('nfts')
                         ->with([
                             'network',
                             'floorPriceToken',
