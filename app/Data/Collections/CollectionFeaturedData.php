@@ -38,7 +38,7 @@ class CollectionFeaturedData extends Data
         public ?string $banner,
         public ?string $openSeaSlug,
         public string $website,
-        public int $nftsCount,
+        public ?int $supply,
         #[DataCollectionOf(GalleryNftData::class)]
         public DataCollection $nfts,
         public bool $isFeatured,
@@ -63,7 +63,7 @@ class CollectionFeaturedData extends Data
             banner: $collection->extra_attributes->get('banner'),
             openSeaSlug: $collection->extra_attributes->get('opensea_slug'),
             website: $collection->website(),
-            nftsCount: $collection->nfts_count,
+            supply: $collection->supply,
             nfts: GalleryNftData::collection($collection->cachedNfts),
             isFeatured: $collection->is_featured,
             description: $collection->description,

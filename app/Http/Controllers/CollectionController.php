@@ -112,7 +112,6 @@ class CollectionController extends Controller
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
         $featuredCollections = Collection::featured()
-            ->withCount(['nfts'])
             ->get();
 
         $featuredCollections->each(function (Collection $collection) {
