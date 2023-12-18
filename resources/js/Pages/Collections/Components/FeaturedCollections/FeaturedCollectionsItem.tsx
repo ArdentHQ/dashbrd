@@ -46,7 +46,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                         </div>
                     </div>
 
-                    <div className="my-3 line-clamp-4 h-12 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:line-clamp-2">
+                    <div className="my-3 line-clamp-4 h-24 text-base font-medium leading-6 text-theme-secondary-700 dark:text-theme-dark-200 xs:h-18 sm:h-12 md-lg:line-clamp-2">
                         {truncateDescription(data.description)}
                     </div>
 
