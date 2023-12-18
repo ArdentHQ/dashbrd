@@ -36,6 +36,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\LaravelData\DataCollection;
@@ -108,14 +109,18 @@ class CollectionController extends Controller
     {
         $currency = $request->user()?->currency() ?? CurrencyCode::USD;
 
-        $collections = Collection::featured()
+        $collections = Cache::remember(
+            'featured-collections',
+            now()->addHour(),
+            fn () => Collection::featured()
                         ->withCount('nfts')
                         ->with([
                             'network',
                             'floorPriceToken',
                             'nfts' => fn ($q) => $q->inRandomOrder()->limit(3),
                         ])
-                        ->get();
+                        ->get()
+        );
 
         return $collections->map(function (Collection $collection) use ($currency) {
             $collection->nfts->each->setRelation('collection', $collection);

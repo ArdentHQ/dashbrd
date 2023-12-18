@@ -8,7 +8,6 @@ use App\Data\Gallery\GalleryNftData;
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithTransformer;
@@ -65,11 +64,7 @@ class CollectionFeaturedData extends Data
             openSeaSlug: $collection->extra_attributes->get('opensea_slug'),
             website: $collection->website(),
             nftsCount: $collection->nfts_count,
-            nfts: GalleryNftData::collection(Cache::remember(
-                key: 'featuredNftsForCollection'.$collection->id,
-                ttl: 3600 * 12,
-                callback: fn () => $collection->nfts
-            )),
+            nfts: GalleryNftData::collection($collection->nfts),
             isFeatured: $collection->is_featured,
             description: $collection->description,
             volume: $collection->volume,
