@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,8 @@ class VolumeChangeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'collection_id' => Collection::factory(),
+            'volume' => random_int(1, 1000000),
         ];
     }
 }
