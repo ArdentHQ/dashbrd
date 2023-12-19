@@ -7,11 +7,11 @@ import { SearchInput } from "@/Components/Form/SearchInput";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { CollectionsFilterPopover } from "@/Pages/Collections/Components/CollectionsFilterPopover";
+import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import { CollectionsFullTablePagination } from "@/Pages/Collections/Components/CollectionsFullTablePagination/CollectionsFullTablePagination";
-import { PopularCollectionsFilterPopover } from "@/Pages/Collections/Components/PopularCollectionsFilterPopover";
-import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-import { PopularCollectionsHeading } from "@/Pages/Collections/Components/PopularCollectionsHeading";
-import { PopularCollectionsSorting } from "@/Pages/Collections/Components/PopularCollectionsSorting";
+import { CollectionsHeading } from "@/Pages/Collections/Components/CollectionsHeading";
+import { CollectionsSortingTabs } from "@/Pages/Collections/Components/CollectionsSortingTabs";
 import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 const Index = ({
@@ -50,14 +50,14 @@ const Index = ({
             <Head title={title} />
             <div>
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
-                    <PopularCollectionsHeading
+                    <CollectionsHeading
                         stats={stats}
                         currency={auth.user?.attributes.currency ?? "USD"}
                     />
                     <div className="mt-6 flex items-center justify-between">
                         <div className="hidden items-center justify-between md-lg:flex">
                             <div className="flex space-x-3">
-                                <PopularCollectionsSorting
+                                <CollectionsSortingTabs
                                     sortBy={currentFilters.sort}
                                     setSortBy={setSortBy}
                                 />
@@ -82,7 +82,7 @@ const Index = ({
                         />
 
                         <div className="ml-3 sm:relative md-lg:hidden">
-                            <PopularCollectionsFilterPopover
+                            <CollectionsFilterPopover
                                 sortBy={currentFilters.sort}
                                 setSortBy={setSortBy}
                                 chain={currentFilters.chain}

@@ -6,7 +6,7 @@ import { type CollectionTableProperties } from "./CollectionsFullTable.contracts
 import { CollectionsFullTableItem } from "./CollectionsFullTableItem";
 import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
-import { type PopularCollectionsSortBy } from "@/Pages/Collections/Components/PopularCollectionsSorting";
+import { type CollectionsSortByOption } from "@/Pages/Collections/Components/CollectionsSortingTabs";
 
 export const CollectionsFullTable = ({
     collections,
@@ -97,7 +97,7 @@ export const CollectionsFullTable = ({
             onSort={(column) => {
                 const newDirection = column.id === activeSort ? (direction === "asc" ? "desc" : "asc") : "asc";
 
-                setSortBy(column.id as PopularCollectionsSortBy, newDirection);
+                setSortBy(column.id as CollectionsSortByOption, newDirection);
             }}
             data={collections}
             row={(collection: App.Data.Collections.CollectionData) => (

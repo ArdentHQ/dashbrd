@@ -5,13 +5,13 @@ import { Tabs } from "@/Components/Tabs";
 import { type SortByDirection } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 // null means "top"
-export type PopularCollectionsSortBy = "floor-price" | "name" | "value" | "chain";
-export interface PopularCollectionsSortingProperties {
-    sortBy: PopularCollectionsSortBy | undefined;
-    setSortBy: (sortBy: PopularCollectionsSortBy | undefined, direction?: SortByDirection) => void;
+export type CollectionsSortByOption = "floor-price" | "name" | "value" | "chain";
+export interface CollectionsSortingProperties {
+    sortBy: CollectionsSortByOption | undefined;
+    setSortBy: (sortBy: CollectionsSortByOption | undefined, direction?: SortByDirection) => void;
 }
 
-export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollectionsSortingProperties): JSX.Element => {
+export const CollectionsSortingTabs = ({ sortBy, setSortBy }: CollectionsSortingProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (

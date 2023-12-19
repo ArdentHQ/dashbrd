@@ -1,4 +1,4 @@
-import { type PopularCollectionsSortBy } from "@/Pages/Collections/Components/PopularCollectionsSorting";
+import { type CollectionsSortByOption } from "@/Pages/Collections/Components/CollectionsSortingTabs";
 import { type SortByDirection } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 export interface CollectionTableItemProperties {
@@ -10,7 +10,7 @@ export interface CollectionTableItemProperties {
 export interface CollectionTableProperties {
     collections: App.Data.Collections.CollectionData[];
     user: App.Data.UserData | null;
-    setSortBy: (sortBy: PopularCollectionsSortBy | undefined, direction?: SortByDirection) => void;
-    activeSort: PopularCollectionsSortBy | "";
+    setSortBy: (sortBy: CollectionsSortByOption | undefined, direction?: SortByDirection) => void;
+    activeSort: CollectionsSortByOption | "";
     direction?: SortByDirection;
 }
