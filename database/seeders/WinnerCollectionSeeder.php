@@ -31,6 +31,11 @@ class WinnerCollectionSeeder extends Seeder
 
             $collections->each(fn ($collection, $index) => CollectionWinner::factory()->for($collection)->create([
                 'rank' => $index + 1,
+                'votes' => [
+                    random_int(21, 30),
+                    random_int(11, 20),
+                    random_int(1, 10),
+                ][$index],
                 'month' => $month,
                 'year' => $year,
             ]));
