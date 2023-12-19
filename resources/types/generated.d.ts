@@ -191,7 +191,7 @@ declare namespace App.Data.Collections {
         banner: string | null;
         openSeaSlug: string | null;
         website: string;
-        nftsCount: number;
+        supply: number | null;
         nfts: Array<App.Data.Gallery.GalleryNftData>;
         isFeatured: boolean;
         description: string | null;
