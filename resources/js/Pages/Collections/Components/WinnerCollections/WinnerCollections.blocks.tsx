@@ -315,20 +315,7 @@ export const WinnerCollectionsTable = ({
                     className="mb-4"
                 >
                     {t("pages.collections.collection_of_the_month.winners_month", {
-                        month: [
-                            "January",
-                            "February",
-                            "March",
-                            "April",
-                            "May",
-                            "June",
-                            "July",
-                            "August",
-                            "September",
-                            "October",
-                            "November",
-                            "December",
-                        ][month - 1],
+                        month: t(`common.months.${month - 1}`),
                     })}
                 </Heading>
 

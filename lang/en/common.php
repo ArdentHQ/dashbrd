@@ -172,4 +172,18 @@ return [
     '24h' => '24h',
     '7d' => '7d',
     '30d' => '30d',
+    'months' => [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ],
 ];

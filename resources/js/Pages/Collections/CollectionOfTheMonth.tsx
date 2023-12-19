@@ -21,20 +21,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
         (winner) => winner.month === new Date().getMonth() && winner.year === new Date().getFullYear(),
     )[0];
 
-    const month = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ][latestMonthWinners.month - 1];
+    const month = t(`common.months.${latestMonthWinners.month - 1}`);
 
     return (
         <DefaultLayout>

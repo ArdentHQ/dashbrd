@@ -1379,16 +1379,29 @@ it('has floor price history', function () {
 });
 
 it('can scope the query to only include collections eligible for winning "collection of the month"', function () {
-    CollectionWinner::factory()->create();
-    CollectionWinner::factory()->create();
+    CollectionWinner::factory()->create([
+        'rank' => 1,
+        'month' => 10,
+        'year' => 2023,
+    ]);
 
-    $collection = Collection::factory()->create();
+    CollectionWinner::factory()->create([
+        'rank' => 1,
+        'month' => 9,
+        'year' => 2023,
+    ]);
+
+    $winner = CollectionWinner::factory()->create([
+        'rank' => 2,
+        'month' => 10,
+        'year' => 2023,
+    ]);
 
     $collections = Collection::eligibleToWin()->get();
 
     expect(Collection::count())->toBe(3);
     expect($collections)->toHaveCount(1);
-    expect($collections->contains($collection))->toBeTrue();
+    expect($collections->contains($winner->collection))->toBeTrue();
 });
 
 it('should get sum of fiat values of collections', function () {
