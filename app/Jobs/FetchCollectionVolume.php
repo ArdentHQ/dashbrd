@@ -54,6 +54,8 @@ class FetchCollectionVolume implements ShouldQueue
                 $this->collection->volumeChanges()->create([
                     'volume' => $volume,
                 ]);
+
+                // TODO: Recompute average 24h/7d/1m volume...
             }
         });
 
