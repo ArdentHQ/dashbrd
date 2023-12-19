@@ -6,8 +6,17 @@ use App\Models\Collection;
 use App\Models\CollectionWinner;
 
 it('can get IDs for collections that are not eligible for winning "collection of the month"', function () {
-    $first = CollectionWinner::factory()->create();
-    $second = CollectionWinner::factory()->create();
+    $first = CollectionWinner::factory()->create([
+        'rank' => 1,
+    ]);
+
+    $second = CollectionWinner::factory()->create([
+        'rank' => 1,
+    ]);
+
+    CollectionWinner::factory()->create([
+        'rank' => 2,
+    ]);
 
     Collection::factory()->create();
 
@@ -24,16 +33,19 @@ it('can get current "collection of the month" winners', function () {
     $first = CollectionWinner::factory()->create([
         'year' => $previousMonth->year,
         'month' => $previousMonth->month,
+        'rank' => 1,
     ]);
 
     $second = CollectionWinner::factory()->create([
         'year' => $previousMonth->year,
         'month' => $previousMonth->month,
+        'rank' => 2,
     ]);
 
     CollectionWinner::factory()->create([
         'year' => $previousMonth->year,
         'month' => $previousMonth->month - 1,
+        'rank' => 1,
     ]);
 
     $winners = CollectionWinner::current();

@@ -20,9 +20,12 @@ return new class extends Migration
             $table->unsignedInteger('votes');
             $table->unsignedSmallInteger('month');
             $table->unsignedSmallInteger('year');
+            $table->unsignedSmallInteger('rank');
             $table->timestamps();
 
             $table->unique(['collection_id', 'month', 'year']);
+
+            $table->unique(['month', 'year', 'rank']);
         });
     }
 

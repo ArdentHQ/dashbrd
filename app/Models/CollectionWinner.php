@@ -22,6 +22,7 @@ class CollectionWinner extends Model
         'votes' => 'int',
         'month' => 'int',
         'year' => 'int',
+        'rank' => 'int',
     ];
 
     /**
@@ -39,7 +40,10 @@ class CollectionWinner extends Model
      */
     public static function ineligibleCollectionIds(): LaravelCollection
     {
-        return static::distinct('collection_id')->pluck('collection_id');
+        return static::query()
+                    ->distinct('collection_id')
+                    ->where('rank', 1)
+                    ->pluck('collection_id');
     }
 
     /**
@@ -56,7 +60,7 @@ class CollectionWinner extends Model
                         ->groupBy(fn ($winner) => $winner->month.'-'.$winner->year);
 
         return $winners->map(function ($winners) {
-            $collections = $winners->sortByDesc('votes')->map(
+            $collections = $winners->sortByDesc('rank')->map(
                 fn ($winner) => CollectionOfTheMonthData::fromModel($winner)
             )->values();
 
@@ -82,7 +86,7 @@ class CollectionWinner extends Model
                         'collection' => fn ($q) => $q->withTrashed(),
                         'collection.floorPriceToken',
                     ])
-                    ->orderBy('votes', 'desc')
+                    ->orderBy('rank', 'desc')
                     ->limit(3)
                     ->get();
     }

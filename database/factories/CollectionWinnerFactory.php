@@ -24,6 +24,7 @@ class CollectionWinnerFactory extends Factory
             'votes' => random_int(1, 1000),
             'month' => random_int(1, 12),
             'year' => random_int(2020, 2023),
+            'rank' => random_int(1, 3),
         ];
     }
 }

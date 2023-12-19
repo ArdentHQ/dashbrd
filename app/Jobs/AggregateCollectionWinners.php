@@ -28,11 +28,12 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
 
         $winners = $this->winners();
 
-        $collections = $winners->map(fn ($collection) => [
+        $collections = $winners->map(fn ($collection, $index) => [
             'collection_id' => $collection->id,
             'votes' => $collection->votes_count,
             'month' => $previousMonth->month,
             'year' => $previousMonth->year,
+            'rank' => $index + 1,
             'created_at' => now(),
             'updated_at' => now(),
         ])->toArray();
@@ -63,6 +64,7 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
                             'votes' => fn ($q) => $q->inPreviousMonth(),
                         ])
                         ->limit(3)
+                        ->orderBy('votes_count', 'desc')
                         ->get();
     }
 
