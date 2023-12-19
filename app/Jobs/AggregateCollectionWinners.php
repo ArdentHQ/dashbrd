@@ -56,7 +56,6 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
     private function winners(): LaravelCollection
     {
         return Collection::query()
-                        ->withTrashed()
                         ->eligibleToWin()
                         ->whereHas('votes', fn ($q) => $q->inPreviousMonth())
                         ->withCount([
