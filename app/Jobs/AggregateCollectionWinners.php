@@ -38,16 +38,15 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
             'updated_at' => now(),
         ])->toArray();
 
-        DB::transaction(function () use ($collections, $winners, $previousMonth) {
-            CollectionWinner::upsert($collections, uniqueBy: ['collection_id', 'month', 'year']);
-
+        DB::transaction(function () use ($collections, $previousMonth) {
             // We created the 3 winners, so remove all others for the month and year...
             // This is to prevent accidental bugs if this job runs multiple times in a month...
             CollectionWinner::query()
-                        ->whereNotIn('collection_id', $winners->pluck('id'))
                         ->where('month', $previousMonth->month)
                         ->where('year', $previousMonth->year)
                         ->delete();
+
+            CollectionWinner::upsert($collections, uniqueBy: ['collection_id', 'month', 'year']);
         });
     }
 

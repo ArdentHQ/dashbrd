@@ -60,7 +60,7 @@ class CollectionWinner extends Model
                         ->groupBy(fn ($winner) => $winner->month.'-'.$winner->year);
 
         return $winners->map(function ($winners) {
-            $collections = $winners->sortByDesc('rank')->map(
+            $collections = $winners->sortBy('rank')->map(
                 fn ($winner) => CollectionOfTheMonthData::fromModel($winner)
             )->values();
 
@@ -86,7 +86,7 @@ class CollectionWinner extends Model
                         'collection' => fn ($q) => $q->withTrashed(),
                         'collection.floorPriceToken',
                     ])
-                    ->orderBy('rank', 'desc')
+                    ->orderBy('rank', 'asc')
                     ->limit(3)
                     ->get();
     }
