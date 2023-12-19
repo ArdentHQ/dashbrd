@@ -53,7 +53,7 @@ class CollectionWinner extends Model
     {
         $winners = static::query()
                         ->with([
-                            'collection' => fn ($q) => $q->withTrashed(),
+                            'collection',
                             'collection.floorPriceToken',
                         ])
                         ->get()
@@ -83,7 +83,7 @@ class CollectionWinner extends Model
                     ->where('year', $previousMonth->year)
                     ->where('month', $previousMonth->month)
                     ->with([
-                        'collection' => fn ($q) => $q->withTrashed(),
+                        'collection',
                         'collection.floorPriceToken',
                     ])
                     ->orderBy('rank', 'asc')
