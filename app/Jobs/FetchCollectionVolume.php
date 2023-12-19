@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FetchCollectionVolume implements ShouldQueue
@@ -44,9 +45,17 @@ class FetchCollectionVolume implements ShouldQueue
             contractAddress: $this->collection->address
         );
 
-        $this->collection->update([
-            'volume' => $volume,
-        ]);
+        DB::transaction(function () use ($volume) {
+            $this->collection->update([
+                'volume' => $volume,
+            ]);
+
+            if ($volume !== null) {
+                $this->collection->volumeChanges()->create([
+                    'volume' => $volume,
+                ]);
+            }
+        });
 
         Log::info('FetchCollectionVolume Job: Handled', [
             'collection' => $this->collection->address,
