@@ -91,6 +91,35 @@ it('only keeps 3 winners for the previous month', function () {
     expect($existing->fresh())->toBeNull();
 });
 
+it('only queries collections that have more than 0 votes', function () {
+    Carbon::setTestNow('2023-12-19');
+
+    $previous = now()->subMonth();
+
+    $first = createCollection(votes: 3, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    CollectionVote::factory(3)->create([
+        'voted_at' => now()->addMonth()->startOfMonth(),
+    ]);
+
+    $second = createCollection(votes: 2, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    $job = new AggregateCollectionWinners;
+
+    $job->handle();
+
+    expect(CollectionWinner::count())->toBe(2);
+
+    [$a, $b] = CollectionWinner::orderBy('rank', 'asc')->get();
+
+    expect($a->collection->is($first))->toBeTrue();
+    expect($b->collection->is($second))->toBeTrue();
+});
+
 it('ignores collections that are not eligible for winning', function () {
     Carbon::setTestNow('2023-12-19');
 
