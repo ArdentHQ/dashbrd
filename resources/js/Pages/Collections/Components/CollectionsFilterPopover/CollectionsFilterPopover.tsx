@@ -7,17 +7,17 @@ import {
     type ChainFiltersProperties,
     PeriodFilters,
     type PeriodFiltersProperties,
-} from "@/Pages/Collections/Components/PopularCollectionsFilters";
+} from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import {
-    PopularCollectionsSorting,
-    type PopularCollectionsSortingProperties,
-} from "@/Pages/Collections/Components/PopularCollectionsSorting/PopularCollectionsSorting";
+    type CollectionsSortingProperties,
+    CollectionsSortingTabs,
+} from "@/Pages/Collections/Components/CollectionsSortingTabs/CollectionsSortingTabs";
 
-type Properties = PopularCollectionsSortingProperties &
+type Properties = CollectionsSortingProperties &
     ChainFiltersProperties &
     Pick<PeriodFiltersProperties, "period" | "setPeriod">;
 
-export const PopularCollectionsFilterPopover = ({
+export const CollectionsFilterPopover = ({
     sortBy,
     setSortBy,
     chain,
@@ -52,7 +52,7 @@ export const PopularCollectionsFilterPopover = ({
                                     </div>
 
                                     <div className="space-y-3 px-6 py-3">
-                                        <PopularCollectionsSorting
+                                        <CollectionsSortingTabs
                                             sortBy={sortBy}
                                             setSortBy={setSortBy}
                                         />
