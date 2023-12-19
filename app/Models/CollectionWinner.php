@@ -52,10 +52,7 @@ class CollectionWinner extends Model
     public static function getByMonth(): LaravelCollection
     {
         $winners = static::query()
-                        ->with([
-                            'collection',
-                            'collection.floorPriceToken',
-                        ])
+                        ->with('collection', 'collection.floorPriceToken')
                         ->get()
                         ->groupBy(fn ($winner) => $winner->month.'-'.$winner->year);
 
@@ -82,10 +79,7 @@ class CollectionWinner extends Model
         return static::query()
                     ->where('year', $previousMonth->year)
                     ->where('month', $previousMonth->month)
-                    ->with([
-                        'collection',
-                        'collection.floorPriceToken',
-                    ])
+                    ->with('collection', 'collection.floorPriceToken')
                     ->orderBy('rank', 'asc')
                     ->limit(3)
                     ->get();
