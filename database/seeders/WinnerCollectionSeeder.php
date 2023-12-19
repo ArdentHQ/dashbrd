@@ -29,7 +29,8 @@ class WinnerCollectionSeeder extends Seeder
 
             $existingIds = array_merge($existingIds, $collections->modelKeys());
 
-            $collections->each(fn ($collection) => CollectionWinner::factory()->for($collection)->create([
+            $collections->each(fn ($collection, $index) => CollectionWinner::factory()->for($collection)->create([
+                'rank' => $index + 1,
                 'month' => $month,
                 'year' => $year,
             ]));
