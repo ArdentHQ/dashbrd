@@ -5,17 +5,17 @@ import { useTranslation } from "react-i18next";
 import { type RouteParams } from "ziggy-js";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
+import { CollectionsFilterPopover } from "./Components/CollectionsFilterPopover";
+import { CollectionsSortingTabs } from "./Components/CollectionsSortingTabs";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
-import { PopularCollectionsFilterPopover } from "./Components/PopularCollectionsFilterPopover";
-import { PopularCollectionsSorting } from "./Components/PopularCollectionsSorting";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
 import { Heading } from "@/Components/Heading";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
-import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/PopularCollectionsFilters";
 import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 interface CollectionsIndexProperties extends PageProps {
@@ -71,7 +71,7 @@ const CollectionsIndex = ({
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
                     <div className=" flex space-x-3 sm:relative md-lg:hidden">
-                        <PopularCollectionsFilterPopover
+                        <CollectionsFilterPopover
                             sortBy={currentFilters.sort}
                             setSortBy={setSortBy}
                             chain={currentFilters.chain}
@@ -89,7 +89,7 @@ const CollectionsIndex = ({
 
                 <div className="mt-4 hidden items-center justify-between md-lg:flex">
                     <div className="flex space-x-3">
-                        <PopularCollectionsSorting
+                        <CollectionsSortingTabs
                             sortBy={currentFilters.sort}
                             setSortBy={setSortBy}
                         />
