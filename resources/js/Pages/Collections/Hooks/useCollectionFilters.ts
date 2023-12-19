@@ -4,20 +4,23 @@ import { router } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { useIsFirstRender } from "@/Hooks/useIsFirstRender";
-import { type ChainFilter, type PeriodFilterOptions } from "@/Pages/Collections/Components/PopularCollectionsFilters";
-import { type PopularCollectionsSortBy } from "@/Pages/Collections/Components/PopularCollectionsSorting";
+import { type ChainFilter, type PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
+import { type CollectionsSortByOption } from "@/Pages/Collections/Components/CollectionsSortingTabs";
+
+export type SortByDirection = "asc" | "desc";
 
 export interface Filters extends Record<string, FormDataConvertible> {
     chain?: ChainFilter;
-    sort?: PopularCollectionsSortBy;
+    sort?: CollectionsSortByOption;
     period?: PeriodFilterOptions;
     query?: string;
     perPage?: number;
+    direction?: SortByDirection;
 }
 
 interface CollectionFiltersState {
     currentFilters: Filters;
-    setSortBy: (sort: PopularCollectionsSortBy | undefined) => void;
+    setSortBy: (sort: CollectionsSortByOption | undefined) => void;
     setChain: (sort: ChainFilter | undefined) => void;
     setPeriod: (period: PeriodFilterOptions | undefined) => void;
     searchQuery: string;
@@ -70,11 +73,12 @@ export const useCollectionFilters = ({
         }));
     };
 
-    const setSortBy = (sort: PopularCollectionsSortBy | undefined): void => {
+    const setSortBy = (sort: CollectionsSortByOption | undefined, direction?: SortByDirection): void => {
         setCurrentFilters((filters) => ({
             ...filters,
-            period: sort === "floor-price" ? undefined : filters.period,
+            period: sort === undefined ? filters.period : undefined,
             sort,
+            direction,
         }));
     };
 

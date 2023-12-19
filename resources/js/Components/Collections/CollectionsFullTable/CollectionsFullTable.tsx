@@ -6,14 +6,14 @@ import { type CollectionTableProperties } from "./CollectionsFullTable.contracts
 import { CollectionsFullTableItem } from "./CollectionsFullTableItem";
 import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { type CollectionsSortByOption } from "@/Pages/Collections/Components/CollectionsSortingTabs";
 
 export const CollectionsFullTable = ({
     collections,
     user,
-    activeSort = "",
-    sortDirection = "asc",
-    onSort,
-    selectedChainIds,
+    activeSort,
+    setSortBy,
+    direction,
 }: CollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -92,18 +92,13 @@ export const CollectionsFullTable = ({
             columns={columns}
             initialState={activeSort.length > 0 ? initialState : {}}
             activeSort={activeSort}
-            sortDirection={sortDirection}
+            sortDirection={direction}
             manualSortBy={true}
-            onSort={
-                onSort != null
-                    ? (column) => {
-                          const direction =
-                              column.id === activeSort ? (sortDirection === "asc" ? "desc" : "asc") : "asc";
+            onSort={(column) => {
+                const newDirection = column.id === activeSort ? (direction === "asc" ? "desc" : "asc") : "asc";
 
-                          onSort({ sortBy: column.id, direction, selectedChainIds });
-                      }
-                    : undefined
-            }
+                setSortBy(column.id as CollectionsSortByOption, newDirection);
+            }}
             data={collections}
             row={(collection: App.Data.Collections.CollectionData) => (
                 <CollectionsFullTableItem

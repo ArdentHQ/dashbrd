@@ -8,7 +8,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { useToasts } from "@/Hooks/useToasts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { CollectionDisplayType, CollectionsFilter } from "@/Pages/Collections/Components/CollectionsFilter";
-import { CollectionsHeading } from "@/Pages/Collections/Components/CollectionsHeading";
+import { MyCollectionsHeading } from "@/Pages/Collections/Components/MyCollectionsHeading";
 import { useCollections } from "@/Pages/Collections/Hooks";
 import { getQueryParameters } from "@/Utils/get-query-parameters";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -24,7 +24,7 @@ const sort = ({
     selectedChainIds?: number[];
 }): void => {
     router.get(
-        route("collections"),
+        route("my-collections"),
         {
             ...getQueryParameters(),
             sort: sortBy,
@@ -124,7 +124,7 @@ const CollectionsIndex = ({
             <Head title={title} />
             <div>
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
-                    <CollectionsHeading
+                    <MyCollectionsHeading
                         wallet={auth.wallet}
                         stats={stats}
                         currency={auth.user?.attributes.currency ?? "USD"}

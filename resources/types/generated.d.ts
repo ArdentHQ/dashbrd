@@ -143,6 +143,7 @@ declare namespace App.Data.Collections {
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        supply: number | null;
         image: string | null;
         banner: string | null;
         openSeaSlug: string | null;
@@ -190,7 +191,7 @@ declare namespace App.Data.Collections {
         banner: string | null;
         openSeaSlug: string | null;
         website: string;
-        nftsCount: number;
+        supply: number | null;
         nfts: Array<App.Data.Gallery.GalleryNftData>;
         isFeatured: boolean;
         description: string | null;

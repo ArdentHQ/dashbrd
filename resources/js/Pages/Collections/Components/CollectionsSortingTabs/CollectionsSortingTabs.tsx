@@ -2,15 +2,16 @@ import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs } from "@/Components/Tabs";
+import { type SortByDirection } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
 // null means "top"
-export type PopularCollectionsSortBy = "floor-price";
-export interface PopularCollectionsSortingProperties {
-    sortBy: PopularCollectionsSortBy | undefined;
-    setSortBy: (sortBy: PopularCollectionsSortBy | undefined) => void;
+export type CollectionsSortByOption = "floor-price" | "name" | "value" | "chain";
+export interface CollectionsSortingProperties {
+    sortBy: CollectionsSortByOption | undefined;
+    setSortBy: (sortBy: CollectionsSortByOption | undefined, direction?: SortByDirection) => void;
 }
 
-export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollectionsSortingProperties): JSX.Element => {
+export const CollectionsSortingTabs = ({ sortBy, setSortBy }: CollectionsSortingProperties): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -36,7 +37,7 @@ export const PopularCollectionsSorting = ({ sortBy, setSortBy }: PopularCollecti
                             className="w-1/2 md-lg:w-auto"
                             selected={sortBy === "floor-price"}
                             onClick={() => {
-                                setSortBy("floor-price");
+                                setSortBy("floor-price", "desc");
                             }}
                         >
                             {t("common.floor_price")}

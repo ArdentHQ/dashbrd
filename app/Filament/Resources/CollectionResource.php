@@ -20,6 +20,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class CollectionResource extends Resource
 {
@@ -94,9 +95,11 @@ class CollectionResource extends Resource
                                 ->warning()
                                 ->send();
                             } else {
-                                return $collection->update([
+                                $collection->update([
                                     'is_featured' => ! $collection->is_featured,
                                 ]);
+
+                                Cache::forget('featured-collections');
                             }
                         })
                         ->label(fn (Collection $collection) => $collection->is_featured ? 'Unmark as featured' : 'Mark as featured')

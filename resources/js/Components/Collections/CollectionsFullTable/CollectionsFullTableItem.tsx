@@ -120,7 +120,16 @@ export const CollectionsFullTableItem = ({
                     hoverClassName=""
                 >
                     <div className="text-sm font-medium leading-5.5 text-theme-secondary-900 dark:text-theme-dark-50 md:text-base md:leading-6">
-                        {formatNumbershort(collection.nftsCount)}
+                        {collection.supply !== null ? (
+                            formatNumbershort(collection.supply)
+                        ) : (
+                            <span
+                                data-testid="CollectionsTableItem__unknown-supply"
+                                className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
+                            >
+                                {t("common.na")}
+                            </span>
+                        )}
                     </div>
                 </TableCell>
             )}
