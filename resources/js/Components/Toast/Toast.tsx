@@ -10,6 +10,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
     (
         {
             className,
+            title: toastTitle,
             type = "info",
             message,
             isStatic = false,
@@ -56,10 +57,10 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
                             />
                         </div>
 
-                        <p>{isExpanded ? title : message}</p>
+                        <p>{isExpanded ? toastTitle ?? title : message}</p>
                     </div>
 
-                    {!isStatic && onClose != null && !isLoading && (
+                    {((isStatic && onClose !== undefined) || (!isStatic && onClose != null && !isLoading)) && (
                         <ToastCloseButton
                             type={type}
                             onClick={onClose}
@@ -101,6 +102,7 @@ export const ToastTemplate = ({ isVisible, toastMessage, onClose }: ToastTemplat
     >
         <Toast
             className="w-full max-w-md"
+            title={toastMessage.title}
             message={toastMessage.message}
             type={toastMessage.type}
             isExpanded={toastMessage.isExpanded}

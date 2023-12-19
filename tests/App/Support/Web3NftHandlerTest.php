@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Data\Web3\Web3NftData;
 use App\Enums\NftInfo;
+use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Models\Collection;
 use App\Models\Network;
@@ -565,6 +566,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedAt: null,
         hasError: false,
         info: null,
+        type: TokenType::Erc721,
     );
 
     $collection = Collection::query()->create([
@@ -611,6 +613,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedAt: null,
         hasError: true,
         info: null,
+        type: TokenType::Erc721,
     );
 
     $handler->store(collect([$dataWithError]));
@@ -669,6 +672,7 @@ it('should set save the error for the nft if set', function () {
         mintedAt: null,
         hasError: true,
         info: NftInfo::MetadataOutdated->value,
+        type: TokenType::Erc721,
     );
 
     $collection = Collection::query()->create([
@@ -710,6 +714,7 @@ it('should update the error field for nft', function () {
         tokenAddress: '0x1234',
         tokenNumber: '123',
         networkId: $token->network_id,
+        type: TokenType::Erc721,
         collectionName: 'Collection Name',
         collectionSymbol: 'AME',
         collectionImage: 'test_image',
@@ -787,6 +792,7 @@ it('should update the error field for nft', function () {
         mintedAt: null,
         hasError: true,
         info: null,
+        type: TokenType::Erc721,
     );
 
     $handler->store(collect([$dataWithNoError]));

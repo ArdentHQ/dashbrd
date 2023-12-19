@@ -82,7 +82,9 @@ class Article extends Model implements HasMedia, Viewable
      */
     public function collections(): BelongsToMany
     {
-        return $this->belongsToMany(Collection::class, 'article_collection')->withPivot('order_index');
+        return $this->belongsToMany(Collection::class, 'article_collection')
+                    ->erc721()
+                    ->withPivot('order_index');
     }
 
     /**
