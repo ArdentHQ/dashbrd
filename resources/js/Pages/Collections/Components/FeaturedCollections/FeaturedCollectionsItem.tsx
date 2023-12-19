@@ -55,7 +55,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                             floorPrice={data.floorPrice}
                             floorPriceCurrency={data.floorPriceCurrency}
                             floorPriceDecimals={data.floorPriceDecimals}
-                            nftsCount={data.nftsCount}
+                            nftsCount={data.supply}
                             volume={data.volume}
                         />
 
