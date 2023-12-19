@@ -8,7 +8,8 @@ use App\Models\CollectionVote;
 use App\Models\CollectionWinner;
 use Carbon\Carbon;
 
-function createCollection(int $votes, array $between) {
+function createCollection(int $votes, array $between)
+{
     $collection = Collection::factory()->create();
 
     CollectionVote::factory($votes)->for($collection)->create([
