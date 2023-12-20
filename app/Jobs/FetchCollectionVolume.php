@@ -46,16 +46,30 @@ class FetchCollectionVolume implements ShouldQueue
         );
 
         DB::transaction(function () use ($volume) {
-            $this->collection->update([
-                'volume' => $volume,
-            ]);
-
             if ($volume !== null) {
                 $this->collection->volumeChanges()->create([
                     'volume' => $volume,
                 ]);
 
-                // TODO: Recompute average 24h/7d/1m volume...
+                $this->collection->volume = $volume;
+
+                if ($this->collection->volumeChanges()->where('created_at', '<', now()->subDays(1))->exists()) {
+                    $this->collection->avg_volume_24h = $this->collection->volumeChanges()->where('created_at', '>', now()->subDays(1))->avg('volume');
+                }
+
+                if ($this->collection->volumeChanges()->where('created_at', '<', now()->subDays(7))->exists()) {
+                    $this->collection->avg_volume_7d = $this->collection->volumeChanges()->where('created_at', '>', now()->subDays(7))->avg('volume');
+                }
+
+                if ($this->collection->volumeChanges()->where('created_at', '<', now()->subMonths(1))->exists()) {
+                    $this->collection->avg_volume_1m = $this->collection->volumeChanges()->where('created_at', '>', now()->subMonths(1))->avg('volume');
+                }
+
+                $this->collection->save();
+            } else {
+                $this->collection->update([
+                    'volume' => $volume,
+                ]);
             }
         });
 
