@@ -9,6 +9,7 @@ use App\Data\Web3\Web3NftCollectionTrait;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Chain;
 use App\Enums\Features;
+use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\NotImplementedException;
 use App\Models\Gallery;
@@ -175,6 +176,7 @@ class LiveUserSeeder extends UserSeeder
             mintedBlock: $nft['mintedBlock'],
             hasError: false,
             info: null,
+            type: TokenType::Erc721,
         ));
     }
 

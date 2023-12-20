@@ -33,7 +33,7 @@ it('dispatches a job for collections without opensea slug or fetched date', func
 
     Bus::assertDispatchedTimes(FetchCollectionOpenseaSlug::class, 0);
 
-    $this->artisan('nfts:fetch-collection-opensea-slug');
+    $this->artisan('collections:fetch-opensea-slug');
 
     Bus::assertDispatchedTimes(FetchCollectionOpenseaSlug::class, 2);
 });
@@ -45,7 +45,7 @@ it('dispatches a job for a specific collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionOpenseaSlug::class, 0);
 
-    $this->artisan('nfts:fetch-collection-opensea-slug', [
+    $this->artisan('collections:fetch-opensea-slug', [
         '--collection-id' => $collection->id,
     ]);
 

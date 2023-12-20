@@ -16,7 +16,7 @@ class FetchCollectionTraits extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-traits {--collection-id}';
+    protected $signature = 'collections:fetch-traits {--collection-id}';
 
     /**
      * The console command description.

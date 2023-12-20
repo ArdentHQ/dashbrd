@@ -16,7 +16,7 @@ export const chartColors = {
 
 const labelFont = {
     size: 12,
-    weight: "500",
+    weight: 500,
     color: chartColors.primary.default,
     family: ["Ubuntu", ...defaultTheme.fontFamily.sans].join(", "),
 };
@@ -59,10 +59,10 @@ export const buildChartOptions = ({
             intersect: false,
             displayColors: false,
             titleFont: {
-                weight: "400",
+                weight: 400,
             },
             bodyFont: {
-                weight: "600",
+                weight: 600,
             },
             callbacks: {
                 title: getTooltipTitle,

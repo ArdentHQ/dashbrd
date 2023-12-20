@@ -20,6 +20,7 @@ use App\Data\Token\TokenData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Jobs\FetchCollectionActivity;
@@ -191,6 +192,8 @@ class CollectionController extends Controller
 
     public function show(Request $request, Collection $collection): Response
     {
+        abort_if($collection->type !== TokenType::Erc721, 404);
+
         /** @var User|null $user */
         $user = $request->user();
 

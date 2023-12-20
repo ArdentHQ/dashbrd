@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enums\Chain;
+use App\Enums\TokenType;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Network;
@@ -34,6 +36,7 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
         public Network $network,
         public ?string $cursor = null,
         public ?Carbon $startTimestamp = null,
+        public ?bool $ownsErc1155Nfts = null,
     ) {
         $this->onQueue(Queues::SCHEDULED_WALLET_NFTS);
         $this->startTimestamp = $this->startTimestamp ?? Carbon::now();
@@ -53,6 +56,8 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
 
         $result = $this->getWeb3DataProvider()->getWalletNfts($this->wallet, $this->network, $this->cursor);
 
+        $containsErc1155 = $result->nfts->contains(fn ($nft) => $nft->type === TokenType::Erc1155);
+
         $nftHandler = new Web3NftHandler(wallet: $this->wallet, network: $this->network);
 
         $nftHandler->store($result->nfts, true);
@@ -62,7 +67,8 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
             $this->wallet,
             $this->network,
             $result->nextToken,
-            $this->startTimestamp
+            $this->startTimestamp,
+            $containsErc1155 === true ? true : $this->ownsErc1155Nfts, // If the current set of NFTs contains ERC1155, set to `true`, otherwise proxy through...
         );
 
         if ($result->nextToken === null) {
@@ -74,6 +80,14 @@ class FetchWalletNfts implements ShouldBeUnique, ShouldQueue
             ]);
 
             $nftHandler->cleanupNftsAndGalleries($this->startTimestamp);
+
+            $field = $this->network->chain() === Chain::ETH
+                        ? 'owns_erc1155_tokens_eth'
+                        : 'owns_erc1155_tokens_polygon';
+
+            $this->wallet->update([
+                $field => $this->ownsErc1155Nfts || $containsErc1155,
+            ]);
         }
 
         // clear individual dirty gallery caches so they update ASAP
