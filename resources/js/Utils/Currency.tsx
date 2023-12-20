@@ -19,6 +19,7 @@ interface FiatProperties extends CurrencyProperties {
 interface CryptoProperties {
     value: string;
     token: App.Data.Token.TokenData | Pick<App.Data.Token.TokenData, "symbol" | "name" | "decimals">;
+    maximumFractionDigits?: number;
 }
 
 const fiatValue = ({
@@ -95,6 +96,7 @@ export const formatCrypto = ({
     value,
     token,
     t,
+    maximumFractionDigits = 4,
 }: CryptoProperties & {
     t: TFunction<"translation", undefined, "translation">;
 }): string => {
@@ -105,19 +107,20 @@ export const formatCrypto = ({
             value: {
                 lng: browserLocale(),
                 minimumFractionDigits: 0,
-                maximumFractionDigits: 4,
+                maximumFractionDigits,
             },
         },
     });
 };
 
-export const FormatCrypto = ({ value, token }: CryptoProperties): JSX.Element => {
+export const FormatCrypto = ({ value, token, maximumFractionDigits }: CryptoProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const number = formatCrypto({
         value,
         token,
         t,
+        maximumFractionDigits,
     });
 
     return <>{`${number} ${token.symbol.toUpperCase()}`}</>;

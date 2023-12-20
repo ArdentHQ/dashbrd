@@ -2,6 +2,23 @@ import { ReactComponent as AuthConnectWalletDark } from "@images/auth-connect-wa
 import { ReactComponent as AuthConnectWallet } from "@images/auth-connect-wallet.svg";
 import { ReactComponent as AuthInstallWalletDark } from "@images/auth-install-wallet-dark.svg";
 import { ReactComponent as AuthInstallWallet } from "@images/auth-install-wallet.svg";
+import { ReactComponent as CrownBadgeDark } from "@images/collections/crown-badge-dark.svg";
+import { ReactComponent as CrownBadge } from "@images/collections/crown-badge.svg";
+import { ReactComponent as OneBarChartDark } from "@images/collections/one-bar-chart-dark.svg";
+import { ReactComponent as OneBarChartLgDark } from "@images/collections/one-bar-chart-lg-dark.svg";
+import { ReactComponent as OneBarChartLg } from "@images/collections/one-bar-chart-lg.svg";
+import { ReactComponent as OneBarChart } from "@images/collections/one-bar-chart.svg";
+import { ReactComponent as ThreeBarChartDark } from "@images/collections/three-bar-chart-dark.svg";
+import { ReactComponent as ThreeBarChartLgDark } from "@images/collections/three-bar-chart-lg-dark.svg";
+import { ReactComponent as ThreeBarChartLg } from "@images/collections/three-bar-chart-lg.svg";
+import { ReactComponent as ThreeBarChart } from "@images/collections/three-bar-chart.svg";
+import { ReactComponent as TwoBarChartDark } from "@images/collections/two-bar-chart-dark.svg";
+import { ReactComponent as TwoBarChartLgDark } from "@images/collections/two-bar-chart-lg-dark.svg";
+import { ReactComponent as TwoBarChartLg } from "@images/collections/two-bar-chart-lg.svg";
+import { ReactComponent as TwoBarChart } from "@images/collections/two-bar-chart.svg";
+import { ReactComponent as VoteNextMonthWinnersDark } from "@images/collections/vote-next-month-winners-dark.svg";
+import { ReactComponent as VoteNextMonthWinners } from "@images/collections/vote-next-month-winners.svg";
+import { ReactComponent as CollectionsGrid } from "@images/collections-grid.svg";
 import { ReactComponent as DeleteModal } from "@images/delete-modal.svg";
 import { ReactComponent as Error401 } from "@images/errors/401.svg";
 import { ReactComponent as Error403 } from "@images/errors/403.svg";
@@ -25,6 +42,9 @@ import { ReactComponent as SocialLeftGrid } from "@images/social-grid-left.svg";
 import { ReactComponent as SocialRightGrid } from "@images/social-grid-right.svg";
 import { ReactComponent as WarningExclamationDark } from "@images/warning-exclamation-dark.svg";
 import { ReactComponent as WarningExclamation } from "@images/warning-exclamation.svg";
+import { ReactComponent as WinnerBadgeFirst } from "@images/winner-badge-first.svg";
+import { ReactComponent as WinnerBadgeSecond } from "@images/winner-badge-second.svg";
+import { ReactComponent as WinnerBadgeThird } from "@images/winner-badge-third.svg";
 
 export {
     AuthConnectWallet,
@@ -32,6 +52,8 @@ export {
     AuthInstallWallet,
     AuthInstallWalletDark,
     WarningExclamation,
+    CrownBadge,
+    CrownBadgeDark,
     WarningExclamationDark,
     ImageLoadError,
     ImageLoadErrorPrimary,
@@ -54,4 +76,22 @@ export {
     RightMiddleGrid,
     SocialLeftGrid,
     SocialRightGrid,
+    VoteNextMonthWinners,
+    VoteNextMonthWinnersDark,
+    ThreeBarChart,
+    ThreeBarChartDark,
+    TwoBarChart,
+    TwoBarChartDark,
+    OneBarChart,
+    OneBarChartDark,
+    OneBarChartLgDark,
+    OneBarChartLg,
+    ThreeBarChartLgDark,
+    ThreeBarChartLg,
+    TwoBarChartLgDark,
+    TwoBarChartLg,
+    CollectionsGrid,
+    WinnerBadgeFirst,
+    WinnerBadgeSecond,
+    WinnerBadgeThird,
 };

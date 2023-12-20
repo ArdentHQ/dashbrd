@@ -79,4 +79,19 @@ describe("Dialog", () => {
 
         expect(onClose).toHaveBeenCalled();
     });
+
+    it("should render custom class names for the panel", () => {
+        render(
+            <Dialog
+                isOpen
+                title="test"
+                onClose={vi.fn()}
+                panelClassName="custom-class"
+            >
+                <div data-testid="content"></div>
+            </Dialog>,
+        );
+
+        expect(screen.getByTestId("Dialog__panel")).toHaveClass("custom-class");
+    });
 });

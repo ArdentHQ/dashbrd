@@ -8,9 +8,12 @@ use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
 use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
+use App\Models\Traits\HasFloorPriceHistory;
+use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,16 +37,22 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  * @property ?string $floor_price
  * @property ?string $last_indexed_token_number
  * @property ?string $image
+ * @property \Illuminate\Database\Eloquent\Collection<int,Nft> $cachedNfts
  *
  * @method BelongsToMany<Article> articlesWithCollections()
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasSlug, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
     const DISCORD_URL = 'https://discord.gg/';
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection<int, Nft>
+     */
+    public $cachedNfts;
 
     /**
      * @var array<string>
@@ -67,6 +76,8 @@ class Collection extends Model
         'is_fetching_activity' => 'bool',
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
+        'is_featured' => 'bool',
+        'has_won_at' => 'datetime',
     ];
 
     /**
@@ -83,8 +94,19 @@ class Collection extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
+            ->generateSlugsFrom(fn (self $model) => $this->preventForbiddenSlugs($model))
             ->saveSlugsTo('slug');
+    }
+
+    private function preventForbiddenSlugs(self $model): string
+    {
+        $forbidden = ['collection-of-the-month', 'popular'];
+
+        if (in_array(Str::slug($model->name), $forbidden, true)) {
+            return $model->name.' Collection';
+        }
+
+        return $model->name;
     }
 
     /**
@@ -212,9 +234,11 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeOrderByValue(Builder $query, Wallet $wallet, string $direction, CurrencyCode $currency = CurrencyCode::USD): Builder
+    public function scopeOrderByValue(Builder $query, ?Wallet $wallet, ?string $direction, ?CurrencyCode $currency = CurrencyCode::USD): Builder
     {
         $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+
+        $walletFilter = $wallet ? "WHERE nfts.wallet_id = $wallet->id" : '';
 
         return $query->selectRaw(
             sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
@@ -224,7 +248,7 @@ class Collection extends Model
                     collection_id,
                     count(*) as nfts_count
                 FROM nfts
-                WHERE nfts.wallet_id = $wallet->id
+                {$walletFilter}
                 GROUP BY collection_id
             ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
@@ -317,6 +341,25 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
+    public function scopeFilterByChainId(Builder $query, ?int $chainId): Builder
+    {
+        if (empty($chainId)) {
+            return $query;
+        }
+
+        /** @var Network $network */
+        $network = Network::query()
+            ->select('id')
+            ->where('networks.chain_id', $chainId)
+            ->first();
+
+        return $query->where('collections.network_id', $network->id);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
     public function scopeSearch(Builder $query, User $user, ?string $searchQuery): Builder
     {
         if ($searchQuery === null || $searchQuery === '') {
@@ -339,6 +382,19 @@ class Collection extends Model
                         });
                 });
         });
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeSearchByName(Builder $query, ?string $searchQuery): Builder
+    {
+        if ($searchQuery === null || $searchQuery === '') {
+            return $query;
+        }
+
+        return $query->where('collections.name', 'ilike', sprintf('%%%s%%', $searchQuery));
     }
 
     /**
@@ -550,5 +606,128 @@ class Collection extends Model
     public function isSpam(): bool
     {
         return SpamContract::isSpam($this->address, $this->network);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotableWithRank(Builder $query, CurrencyCode $currency): Builder
+    {
+        $subQuery = Collection::query()
+            ->votable($currency)
+            ->addSelect([
+                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
+            ]);
+
+        return $query->fromSub($subQuery, 'collections');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotable(Builder $query, CurrencyCode $currency, bool $orderByVotes = true): Builder
+    {
+        return $query
+            ->addSelectVolumeFiat($currency)
+            ->addFloorPriceChange()
+            ->addSelect([
+                'collections.*',
+                DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
+                DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
+                DB::raw('COUNT(Distinct collection_votes.id) as votes_count'),
+            ])
+            ->leftJoin('collection_votes', function ($join) {
+                $join->on('collection_votes.collection_id', '=', 'collections.id')
+                    ->whereBetween('collection_votes.voted_at', [
+                        Carbon::now()->startOfMonth(),
+                        Carbon::now()->endOfMonth(),
+                    ]);
+            })
+            ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
+            ->withCount('nfts')
+            ->groupBy('collections.id')
+            ->when($orderByVotes, fn ($q) => $q->orderBy('votes_count', 'desc')->orderByRaw('volume DESC NULLS LAST'));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeAddSelectVolumeFiat(Builder $query, CurrencyCode $currency): Builder
+    {
+        $currencyCode = Str::lower($currency->value);
+
+        return $query->addSelect(
+            DB::raw("
+            (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
+        AS volume_fiat")
+        )->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw("'ETH'"));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeAddFloorPriceChange(Builder $query): Builder
+    {
+        return $query->addSelect(
+            DB::raw("(
+                SELECT
+                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) -
+                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) /
+                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100
+                FROM
+                    floor_price_history fp1
+                WHERE
+                    fp1.collection_id = collections.id AND
+                    fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY') AS price_change_24h
+            ")
+        );
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotedByUserInCurrentMonth(Builder $query, User $user): Builder
+    {
+        return $query->whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $user->wallet_id));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWinnersOfThePreviousMonth(Builder $query): Builder
+    {
+        return $query
+            ->withCount(['votes' => fn ($query) => $query->inPreviousMonth()])
+            // order by votes count excluding nulls
+            ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
+            ->orderBy('votes_count', 'desc');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getFiatValueSum(): array
+    {
+        return DB::select('SELECT
+                key, COALESCE(SUM(value::numeric), 0) as total
+            FROM
+                collections, jsonb_each_text(fiat_value) as currencies(key,value)
+            GROUP BY key;'
+        );
     }
 }

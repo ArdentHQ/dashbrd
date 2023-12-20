@@ -6,144 +6,188 @@ namespace App\Http\Controllers;
 
 use App\Data\Articles\ArticleData;
 use App\Data\Articles\ArticlesData;
-use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionDetailData;
-use App\Data\Collections\CollectionStatsData;
+use App\Data\Collections\CollectionFeaturedData;
+use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
+use App\Data\Collections\PopularCollectionData;
+use App\Data\Collections\VotableCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
-use App\Data\Network\NetworkWithCollectionsData;
 use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
+use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
+use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
+use App\Models\Article;
 use App\Models\Collection;
-use App\Models\Network;
 use App\Models\User;
-use App\Support\Cache\UserCache;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {
+    use HasCollectionFilters;
+
     public function index(Request $request): Response|JsonResponse|RedirectResponse
+    {
+        return Inertia::render('Collections/Index', [
+            'allowsGuests' => true,
+            'filters' => fn () => $this->getFilters($request),
+            'title' => fn () => trans('metatags.collections.title'),
+            'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
+            'collections' => fn () => $this->getPopularCollections($request),
+            'featuredCollections' => fn () => $this->getFeaturedCollections($request),
+            'votedCollection' => fn () => $this->getVotedCollection($request),
+            'votableCollections' => fn () => $this->getVotableCollections($request),
+            'latestArticles' => fn () => $this->getLatestArticles(),
+            'popularArticles' => fn () => $this->getPopularArticles(),
+        ]);
+    }
+
+    /**
+     * @return DataCollection<int, CollectionOfTheMonthData>
+     */
+    private function getCollectionsOfTheMonth(): DataCollection
+    {
+        return CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
+    }
+
+    private function getVotedCollection(Request $request): ?VotableCollectionData
     {
         $user = $request->user();
 
         if ($user === null) {
-            return Inertia::render('Collections/Index', [
-                'title' => trans('metatags.collections.title'),
-                'stats' => new CollectionStatsData(
-                    nfts: 0,
-                    collections: 0,
-                    value: 0,
-                ),
-                'sortBy' => null,
-                'sortDirection' => 'desc',
-                'showHidden' => false,
-                'view' => 'list',
-            ]);
+            return null;
         }
 
-        $hiddenCollections = $user->hiddenCollections->pluck('address');
-        $showHidden = $request->get('showHidden') === 'true';
+        $collection = Collection::votableWithRank($user->currency())->votedByUserInCurrentMonth($user)->first();
 
-        $selectedChainIds = array_filter(explode(',', $request->get('chain', '')));
-        $selectedChainIds = array_filter($selectedChainIds, fn ($id) => is_numeric($id));
+        return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true) : null;
+    }
 
-        if ($showHidden && $hiddenCollections->isEmpty()) {
-            return redirect()->route('collections', $request->except('showHidden'));
-        }
+    /**
+     * @return SupportCollection<int, VotableCollectionData>
+     */
+    private function getVotableCollections(Request $request): SupportCollection
+    {
+        $user = $request->user();
 
-        $cache = new UserCache($user);
+        $currency = $user?->currency() ?? CurrencyCode::USD;
 
-        $sortBy = in_array($request->query('sort'), ['oldest', 'received', 'name', 'floor-price', 'value', 'chain']) ? $request->query('sort') : null;
-        $defaultSortDirection = $sortBy === null ? 'desc' : 'asc';
+        $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
-        $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
-        $networks = NetworkWithCollectionsData::fromModel($user, $showHidden);
+        // 8 collections on the vote table + 5 collections to nominate
+        $collections = Collection::votable($currency)->limit(13)->get();
 
-        $selectedChainIds = array_filter($selectedChainIds, function ($id) use ($networks) {
-            return $networks->firstWhere('chainId', $id)?->collectionsCount > 0;
+        return $collections->map(function (Collection $collection) use ($userVoted, $currency) {
+            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted);
         });
+    }
 
-        if ($request->wantsJson()) {
-            $searchQuery = $request->get('query');
+    /**
+     * @return SupportCollection<int, CollectionFeaturedData>
+     */
+    private function getFeaturedCollections(Request $request): SupportCollection
+    {
+        $currency = $request->user()?->currency() ?? CurrencyCode::USD;
 
-            /** @var LengthAwarePaginator<Collection> $collections */
-            $collections = $user->collections()
-                ->when($showHidden, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
-                ->when(! $showHidden, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
-                ->when(count($selectedChainIds) > 0, fn ($q) => $q->whereIn('collections.network_id', Network::whereIn('chain_id', $selectedChainIds)->pluck('id')))
-                ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
-                ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $user->currency()))
-                ->when($sortBy === 'value', fn ($q) => $q->orderByValue($user->wallet, $sortDirection, $user->currency()))
-                ->when($sortBy === 'chain', fn ($q) => $q->orderByChainId($sortDirection))
-                ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
-                ->when($sortBy === 'received' || $sortBy === null, fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
-                ->search($user, $searchQuery)
-                ->with([
-                    'reports',
-                    'network',
-                    'floorPriceToken',
-                    'nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)->limit(4),
-                ])
-                ->withCount(['nfts' => fn ($q) => $q->where('wallet_id', $user->wallet_id)])
-                ->paginate(25);
+        $collections = Cache::remember(
+            'featured-collections',
+            now()->addHour(),
+            fn () => Collection::featured()
+                        ->with([
+                            'network',
+                            'floorPriceToken',
+                            'nfts' => fn ($q) => $q->inRandomOrder()->limit(3),
+                        ])
+                        ->get()
+        );
 
-            $reportByCollectionAvailableIn = $collections->mapWithKeys(function ($collection) use ($request) {
-                return [$collection->address => RateLimiterHelpers::collectionReportAvailableInHumanReadable($request, $collection)];
-            });
+        return $collections->map(function (Collection $collection) use ($currency) {
+            $collection->nfts->each->setRelation('collection', $collection);
 
-            $alreadyReportedByCollection = $collections->mapWithKeys(function ($collection) use ($user) {
-                return [$collection->address => $collection->wasReportedByUserRecently($user, useRelationship: true)];
-            });
+            return CollectionFeaturedData::fromModel($collection, $currency);
+        });
+    }
 
-            return new JsonResponse([
-                'collections' => CollectionData::collection(
-                    $collections->through(fn ($collection) => CollectionData::fromModel($collection, $user->currency()))
-                ),
-                'reportByCollectionAvailableIn' => $reportByCollectionAvailableIn,
-                'alreadyReportedByCollection' => $alreadyReportedByCollection,
-                'hiddenCollectionAddresses' => $hiddenCollections,
-                'availableNetworks' => $networks,
-                'selectedChainIds' => $selectedChainIds,
-                'stats' => new CollectionStatsData(
-                    nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
-                    collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
-                    value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
-                ),
-            ]);
-        }
+    /**
+     * @return Paginator<PopularCollectionData>
+     */
+    private function getPopularCollections(Request $request): Paginator
+    {
+        $user = $request->user();
 
-        return Inertia::render('Collections/Index', [
-            'title' => trans('metatags.collections.title'),
-            'initialStats' => new CollectionStatsData(
-                nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
-                collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
-                value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
-            ),
-            'sortBy' => $sortBy,
-            'sortDirection' => $sortDirection,
-            'showHidden' => $showHidden,
-            'selectedChainIds' => $selectedChainIds,
-            'view' => $request->get('view') === 'grid' ? 'grid' : 'list',
-            'availableNetworks' => $networks,
-        ]);
+        $chainId = match ($request->query('chain')) {
+            'polygon' => Chain::Polygon->value,
+            'ethereum' => Chain::ETH->value,
+            default => null,
+        };
+
+        $currency = $user ? $user->currency() : CurrencyCode::USD;
+
+        /** @var Paginator<PopularCollectionData> $collections */
+        $collections = Collection::query()
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                                ->filterByChainId($chainId)
+                                ->orderByFloorPrice('desc', $currency)
+                                ->with([
+                                    'network',
+                                    'floorPriceToken',
+                                ])
+                                ->addSelectVolumeFiat($currency)
+                                ->addFloorPriceChange()
+                                ->addSelect('collections.*')
+                                ->groupBy('collections.id')
+                                ->simplePaginate(12);
+
+        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency));
+    }
+
+    /**
+     * @return DataCollection<int, ArticleData>
+     */
+    private function getLatestArticles(): DataCollection
+    {
+        return ArticleData::collection(Article::isPublished()
+                    ->with('media', 'user.media')
+                    ->withRelatedCollections()
+                    ->sortByPublishedDate()
+                    ->limit(8)
+                    ->get());
+
+    }
+
+    /**
+     * @return DataCollection<int, ArticleData>
+     */
+    private function getPopularArticles()
+    {
+        return ArticleData::collection(Article::isPublished()
+                    ->with('media', 'user.media')
+                    ->withRelatedCollections()
+                    ->sortByPopularity()
+                    ->limit(8)
+                    ->get());
+
     }
 
     public function show(Request $request, Collection $collection): Response

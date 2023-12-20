@@ -68,6 +68,14 @@ class Wallet extends Model
     }
 
     /**
+     * @return HasMany<CollectionVote>
+     */
+    public function votes(): HasMany
+    {
+        return $this->hasMany(CollectionVote::class);
+    }
+
+    /**
      * @return HasOne<WalletAddressDetails>
      */
     public function details(): HasOne

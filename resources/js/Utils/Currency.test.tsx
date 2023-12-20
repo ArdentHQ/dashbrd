@@ -82,6 +82,20 @@ describe("Currency helpers", () => {
 
             expect(screen.getByText("123,456.1235 ETH")).toBeTruthy();
         });
+
+        it("should display as many decimals as in maximumFractionDigits", () => {
+            render(
+                <span>
+                    <FormatCrypto
+                        value="123456.1235"
+                        token={{ symbol: "ETH", decimals: 18, name: "Ethereum" }}
+                        maximumFractionDigits={2}
+                    />
+                </span>,
+            );
+
+            expect(screen.getByText("123,456.12 ETH")).toBeTruthy();
+        });
     });
 
     describe("FormatNumber", () => {

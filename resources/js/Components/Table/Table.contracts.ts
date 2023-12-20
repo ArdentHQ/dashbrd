@@ -19,6 +19,7 @@ export interface TableCellProperties extends HTMLAttributes<HTMLTableCellElement
 
 export interface TableProperties<RowDataType extends Record<never, unknown>> {
     className?: string;
+    headerClassName?: string;
     data: RowDataType[];
     columns: Array<Column<RowDataType>>;
     hideHeader?: boolean;

@@ -1,216 +1,175 @@
 import { type PageProps } from "@inertiajs/core";
-import { Head, router, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { Head, usePage } from "@inertiajs/react";
+import cn from "classnames";
 import { useTranslation } from "react-i18next";
-import { useCollections } from "./Hooks";
-import { CollectionsGrid } from "@/Components/Collections/CollectionsGrid";
-import { CollectionsTable } from "@/Components/Collections/CollectionsTable";
-import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
-import { useToasts } from "@/Hooks/useToasts";
+import { type RouteParams } from "ziggy-js";
+import { CollectionsArticles } from "./Components/CollectionsArticles";
+import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
+import { CollectionsFilterPopover } from "./Components/CollectionsFilterPopover";
+import { CollectionsSortingTabs } from "./Components/CollectionsSortingTabs";
+import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
+import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
+import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
+import { Heading } from "@/Components/Heading";
+import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { CollectionDisplayType, CollectionsFilter } from "@/Pages/Collections/Components/CollectionsFilter";
-import { CollectionsHeading } from "@/Pages/Collections/Components/CollectionsHeading";
-import { getQueryParameters } from "@/Utils/get-query-parameters";
-import { isTruthy } from "@/Utils/is-truthy";
-import { replaceUrlQuery } from "@/Utils/replace-url-query";
+import { ChainFilters, PeriodFilters } from "@/Pages/Collections/Components/CollectionsFilterTabs";
+import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
+import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
-const sort = ({
-    sortBy,
-    direction,
-    selectedChainIds,
-}: {
-    sortBy: string;
-    direction?: string;
-    selectedChainIds?: number[];
-}): void => {
-    router.get(
-        route("collections"),
-        {
-            ...getQueryParameters(),
-            sort: sortBy,
-            direction,
-            chain: isTruthy(selectedChainIds) && selectedChainIds.length > 0 ? selectedChainIds.join(",") : undefined,
+interface CollectionsIndexProperties extends PageProps {
+    title: string;
+    collections: PaginationData<App.Data.Collections.PopularCollectionData>;
+    featuredCollections: App.Data.Collections.CollectionFeaturedData[];
+    collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
+    votableCollections: App.Data.Collections.VotableCollectionData[];
+    filters: Filters;
+    collectionsTableResults: App.Data.Collections.CollectionData[];
+    latestArticles: App.Data.Articles.ArticleData[];
+    popularArticles: App.Data.Articles.ArticleData[];
+    votedCollection: App.Data.Collections.VotableCollectionData | null;
+}
+
+const CollectionsIndex = ({
+    title,
+    featuredCollections,
+    collections: { data: collections },
+    collectionsOfTheMonth,
+    votableCollections,
+    votedCollection,
+    auth,
+    filters,
+    latestArticles,
+    popularArticles,
+}: CollectionsIndexProperties): JSX.Element => {
+    const { t } = useTranslation();
+
+    const { props } = usePage();
+
+    const { setPeriod, setSortBy, setChain, currentFilters } = useCollectionFilters({
+        filters,
+        filterRoute: route("collections"),
+        options: {
+            only: ["collections", "filters"],
+            preserveScroll: true,
+            preserveState: true,
         },
-        {
-            preserveState: false,
-        },
+    });
+
+    return (
+        <DefaultLayout
+            wrapperClassName="-mt-6 sm:-mt-8 lg:mt-0 -mb-6 sm:-mb-8 lg:mb-0"
+            toastMessage={props.toast}
+        >
+            <Head title={title} />
+
+            <FeaturedCollectionsCarousel featuredCollections={featuredCollections} />
+
+            <div className="mx-6 mt-8 sm:mx-8 lg:mt-12 2xl:mx-0">
+                <div className="flex items-center justify-between">
+                    <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
+
+                    <div className=" flex space-x-3 sm:relative md-lg:hidden">
+                        <CollectionsFilterPopover
+                            sortBy={currentFilters.sort}
+                            setSortBy={setSortBy}
+                            chain={currentFilters.chain}
+                            setChain={setChain}
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
+                        />
+
+                        <ViewAllButton
+                            className="hidden sm:inline"
+                            filters={currentFilters}
+                        />
+                    </div>
+                </div>
+
+                <div className="mt-4 hidden items-center justify-between md-lg:flex">
+                    <div className="flex space-x-3">
+                        <CollectionsSortingTabs
+                            sortBy={currentFilters.sort}
+                            setSortBy={setSortBy}
+                        />
+
+                        <PeriodFilters
+                            period={currentFilters.period}
+                            setPeriod={setPeriod}
+                            sortBy={currentFilters.sort}
+                        />
+
+                        <ChainFilters
+                            chain={currentFilters.chain}
+                            setChain={setChain}
+                        />
+                    </div>
+
+                    <div>
+                        <ViewAllButton filters={currentFilters} />
+                    </div>
+                </div>
+
+                <div>
+                    <div className="flex sm:space-x-2 md:space-x-3 md-lg:space-x-6">
+                        <div className="flex-1">
+                            <PopularCollectionsTable
+                                collections={collections.slice(0, 6)}
+                                user={auth.user}
+                            />
+                        </div>
+
+                        <div className="hidden flex-1 sm:block">
+                            <PopularCollectionsTable
+                                collections={collections.slice(6, 12)}
+                                user={auth.user}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mt-2 sm:hidden">
+                        <ViewAllButton filters={currentFilters} />
+                    </div>
+                </div>
+                <div
+                    id="votes"
+                    className="mt-12 flex w-full flex-col gap-4 xl:flex-row"
+                >
+                    <VoteCollections
+                        collections={votableCollections}
+                        votedCollection={votedCollection}
+                        user={auth.user}
+                    />
+
+                    <CollectionOfTheMonthWinners
+                        winners={collectionsOfTheMonth}
+                        className="hidden xl:flex"
+                    />
+                </div>
+            </div>
+
+            <CollectionsArticles
+                latest={latestArticles}
+                popular={popularArticles}
+            />
+
+            <CollectionsCallToAction />
+        </DefaultLayout>
     );
 };
 
-const CollectionsIndex = ({
-    auth,
-    initialStats,
-    title,
-    sortBy = "received",
-    sortDirection,
-    selectedChainIds: initialSelectedChainIds,
-}: {
-    title: string;
-    auth: PageProps["auth"];
-    initialStats: App.Data.Collections.CollectionStatsData;
-    sortBy: string | null;
-    sortDirection: "asc" | "desc";
-    selectedChainIds?: string[];
-}): JSX.Element => {
-    const { props } = usePage();
-
+const ViewAllButton = ({ className, filters }: { className?: string; filters: Filters }): JSX.Element => {
     const { t } = useTranslation();
-    const queryParameters = getQueryParameters();
-
-    const [displayType, setDisplayType] = useState(
-        queryParameters.view === "grid" ? CollectionDisplayType.Grid : CollectionDisplayType.List,
-    );
-
-    const { showToast } = useToasts();
-
-    const showHidden = queryParameters.showHidden === "true";
-
-    const {
-        collections,
-        isLoading,
-        loadMore,
-        reload,
-        hiddenCollectionAddresses,
-        alreadyReportedByCollection,
-        reportByCollectionAvailableIn,
-        availableNetworks,
-        query,
-        stats,
-        search,
-        isSearching,
-        reportCollection,
-        selectedChainIds,
-        setSelectedChainIds,
-    } = useCollections({
-        showHidden,
-        sortBy,
-        view: displayType,
-        initialStats,
-        onSearchError: () => {
-            showToast({
-                message: t("pages.collections.search.error"),
-                type: "error",
-            });
-        },
-        initialSelectedChainIds,
-    });
-
-    const selectDisplayTypeHandler = (displayType: CollectionDisplayType): void => {
-        setDisplayType(displayType);
-
-        replaceUrlQuery({
-            view: displayType,
-        });
-    };
-
-    const handleSelectedChainIds = (chainId: number): void => {
-        const chainIds = selectedChainIds.includes(chainId)
-            ? selectedChainIds.filter((id) => id !== chainId)
-            : [...selectedChainIds, chainId];
-
-        setSelectedChainIds(chainIds);
-    };
-
-    useEffect(() => {
-        if (!auth.authenticated) {
-            return;
-        }
-
-        reload({ selectedChainIds });
-    }, [selectedChainIds, auth.authenticated, auth.wallet?.address]);
 
     return (
-        <DefaultLayout toastMessage={props.toast}>
-            <Head title={title} />
-            <div>
-                <div className="mx-6 sm:mx-8 2xl:mx-0">
-                    <CollectionsHeading
-                        wallet={auth.wallet}
-                        stats={stats}
-                        currency={auth.user?.attributes.currency ?? "USD"}
-                    />
-
-                    <CollectionsFilter
-                        isLoading={isLoading}
-                        displayType={displayType}
-                        disabled={stats.collections === 0}
-                        onSelectDisplayType={selectDisplayTypeHandler}
-                        showHidden={showHidden}
-                        hiddenCount={hiddenCollectionAddresses.length}
-                        searchQuery={query}
-                        setSearchQuery={search}
-                        activeSort={sortBy ?? "received"}
-                        onSort={sort}
-                        onChangeVisibilityStatus={(isHidden) => {
-                            reload({ showHidden: isHidden, selectedChainIds, page: 1 });
-                        }}
-                        availableNetworks={availableNetworks}
-                        handleSelectedChainIds={handleSelectedChainIds}
-                        selectedChainIds={selectedChainIds}
-                        collectionsCount={collections.length}
-                    />
-                </div>
-
-                <div className="mx-6 mt-4 sm:mx-8 2xl:mx-0">
-                    {!isLoading && collections.length === 0 && (
-                        <div className="mt-7">
-                            {isSearching ? (
-                                <EmptyBlock>{t("pages.collections.search.loading_results")}</EmptyBlock>
-                            ) : (
-                                <>
-                                    {query !== "" ? (
-                                        <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
-                                    ) : (
-                                        <>
-                                            {hiddenCollectionAddresses.length === 0 ? (
-                                                <EmptyBlock>{t("pages.collections.no_collections")}</EmptyBlock>
-                                            ) : (
-                                                <EmptyBlock>{t("pages.collections.all_collections_hidden")}</EmptyBlock>
-                                            )}
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </div>
-                    )}
-
-                    {displayType === CollectionDisplayType.List && (
-                        <CollectionsTable
-                            activeSort={sortBy ?? undefined}
-                            sortDirection={sortDirection}
-                            onSort={sort}
-                            isLoading={isLoading}
-                            collections={collections}
-                            hiddenCollectionAddresses={hiddenCollectionAddresses}
-                            user={auth.user}
-                            reportByCollectionAvailableIn={reportByCollectionAvailableIn}
-                            alreadyReportedByCollection={alreadyReportedByCollection}
-                            reportReasons={props.reportReasons}
-                            onLoadMore={loadMore}
-                            onChanged={() => {
-                                reload({ page: 1 });
-                            }}
-                            onReportCollection={reportCollection}
-                            selectedChainIds={selectedChainIds}
-                        />
-                    )}
-
-                    {displayType === CollectionDisplayType.Grid && (
-                        <CollectionsGrid
-                            isLoading={isLoading}
-                            collections={collections}
-                            hiddenCollectionAddresses={hiddenCollectionAddresses}
-                            reportByCollectionAvailableIn={reportByCollectionAvailableIn}
-                            alreadyReportedByCollection={alreadyReportedByCollection}
-                            reportReasons={props.reportReasons}
-                            onLoadMore={loadMore}
-                            onChanged={reload}
-                            onReportCollection={reportCollection}
-                        />
-                    )}
-                </div>
-            </div>
-        </DefaultLayout>
+        <ButtonLink
+            variant="secondary"
+            href={route("popular-collections", filters as RouteParams)}
+            className={cn("w-full justify-center sm:w-auto", className)}
+        >
+            {t("common.view_all")}
+        </ButtonLink>
     );
 };
 

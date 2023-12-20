@@ -61,6 +61,17 @@ return [
             'description' => 'Immerse yourself in the intricate details of :name collection, featuring remarkable digital assets. Start your NFT journey today!',
             'image' => '/images/meta/nft-collection.png',
         ],
+        'of-the-month' => [
+            'title' => 'Collection of the Month :month | Dashbrd',
+        ],
+    ],
+
+    'my-collections' => [
+        'title' => 'My Collections | Dashbrd',
+    ],
+
+    'popular-collections' => [
+        'title' => 'Popular NFT Collections | Dashbrd',
     ],
 
     'nfts' => [

@@ -40,9 +40,11 @@ return [
         'audio_version' => 'Audio version',
         'consists_of_collections' => '{0} This article highlights :count collections|{1} This article highlights :count collection|[2,*] This article highlights :count collections',
     ],
+
     'collections' => [
         'title' => 'Collections',
         'collections' => 'Collections',
+        'popular_collections' => 'Popular Collections',
         'collection_value' => 'Collection Value',
         'nfts_owned' => 'NFTs Owned',
         'header_title' => 'You own <0>:nftsCount</0> :nfts across <0>:collectionsCount</0> :collections, worth about <0><1>:worth</1></0>',
@@ -54,6 +56,7 @@ return [
         'value' => 'Value',
         'rarity' => 'Rarity',
         'report' => 'Report',
+        'search_by_name' => 'Search by Collection Name',
         'hide_collection' => 'Hide Collection',
         'unhide_collection' => 'Unhide Collection',
         'no_collections' => 'You do not own any NFTs yet. Once you do they will be shown here.',
@@ -74,7 +77,28 @@ return [
                 'LABEL_BURN' => 'Burn',
             ],
         ],
+        'collection_of_the_month' => [
+            'title' => 'Collection of the Month :month',
+            'winners_month' => 'Winners: :month',
+            'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
+            'view_previous_winners' => 'View Previous Winners',
+            'previous_winners' => 'Previous Winners',
+            'vote_received_modal' => [
+                'title' => 'Vote Received',
+                'description' => 'Your vote has been recorded. Share your vote on X and let everyone know!',
+                'share_vote' => 'Share Vote',
+                'img_alt' => 'I voted for Dashbrd Project of the Month',
+                'x_text' => 'I voted for :collection for collection of the month @dashbrdapp! Go show your support!',
+            ],
+            'vote_success' => 'Your vote has been successfully submitted',
+            'content_to_be_added' => [
+                'title' => 'Content to be added',
+                'description' => 'There will be a list of previous month winners here soon!',
+            ],
+            'has_won_already' => 'This collection has already <br> won Collection of the Month.',
+        ],
         'articles' => [
+            'heading' => 'Latest NFT News & Features',
             'no_articles' => 'No articles have been linked to this collection as of now.',
             'no_articles_with_filters' => 'We could not find any articles matching your search criteria, please try again!',
             'search_placeholder' => 'Search in Articles',
@@ -87,6 +111,15 @@ return [
             'no_results_with_filters' => 'We could not find anything matching your filters, please try again!',
             'no_results_ownership' => 'You do not own any NFTs in this collection',
             'error' => 'Could not load search results. Please try again later.',
+        ],
+        'vote' => [
+            'vote_for_top_collection' => 'Vote for Top Collection of the Month',
+            'vote' => 'Vote',
+            'time_left' => 'Time Left',
+            'or_nominate_collection' => 'Or nominate a collection',
+            'nominate_collection' => 'Nominate a collection',
+            'vote_to_reveal' => 'Vote to reveal data',
+            'already_voted' => 'You’ve already nominated. Come back next month!',
         ],
         'sorting' => [
             'token_number' => 'Token Number',
@@ -120,6 +153,15 @@ return [
             'notice' => 'You can refresh data every 15 minutes.',
             'notice_wait' => 'Please wait. You can refresh data every 15 minutes.',
             'toast' => "We're updating information for your collection.",
+        ],
+        'featured' => [
+            'title' => 'Featured Collections',
+            'button' => 'Explore Collection',
+        ],
+        'footer' => [
+            'heading_broken' => ['Connect with MetaMask', '& Manage Your Collection'],
+            'subtitle' => 'Explore, Filter, & Share your favorite NFTs with Dashbrd.',
+            'button' => 'Manage Collections',
         ],
     ],
 
@@ -373,5 +415,9 @@ return [
 
     'terms_of_service' => [
         'title' => 'Terms of Service',
+    ],
+    'popular_collections' => [
+        'title' => 'Popular NFT Collections',
+        'header_title' => '<0>:nftsCount</0> :nfts from <0>:collectionsCount</0> :collections, worth about <0><1>:worth</1></0>',
     ],
 ];

@@ -101,4 +101,7 @@
 
     /* Black */
     --theme-color-black: 22 23 28; /* #16171c */
+
+    /* Vote */
+    --theme-color-vote-background: 39 43 50; /* #272B32 */
 }

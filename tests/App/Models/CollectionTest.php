@@ -7,6 +7,8 @@ use App\Enums\NftTransferType;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
+use App\Models\CollectionVote;
+use App\Models\FloorPriceHistory;
 use App\Models\Gallery;
 use App\Models\Network;
 use App\Models\Nft;
@@ -14,6 +16,7 @@ use App\Models\NftActivity;
 use App\Models\SpamContract;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
 it('can create a basic collection', function () {
@@ -173,6 +176,26 @@ it('filters the collections by collection name', function () {
     expect(Collection::search($user, 'Another')->count())->toBe(1);
 });
 
+it('should search collections by collection name', function () {
+    $collection1 = Collection::factory()->create([
+        'name' => 'Test name',
+    ]);
+
+    $collection2 = Collection::factory()->create([
+        'name' => 'Test name 2',
+    ]);
+
+    $collection3 = Collection::factory()->create([
+        'name' => 'Another',
+    ]);
+
+    expect(Collection::searchByName('Test')->count())->toBe(2)
+        ->and(Collection::searchByName('Test')->get()->pluck('id')->toArray())
+        ->toEqualCanonicalizing([$collection1->id, $collection2->id])
+        ->and(Collection::searchByName('Another')->count())->toBe(1);
+
+});
+
 it('filters the collections by a nft name', function () {
     $user = createUser();
 
@@ -252,6 +275,37 @@ it('filters the collections by nft token number', function () {
         ->toEqualCanonicalizing([$collection1->id, $collection3->id]);
 
     expect(Collection::search($user, '9999')->count())->toBe(1);
+});
+
+it('should filter collections by chainId', function () {
+    $ethNetwork = Network::query()->where('chain_id', 1)->first();
+    $polygonNetwork = Network::query()->where('chain_id', 137)->first();
+
+    Collection::factory()->create([
+        'name' => 'Collection 1',
+        'network_id' => $ethNetwork->id,
+    ]);
+
+    Collection::factory()->create([
+        'name' => 'Collection 2',
+        'network_id' => $polygonNetwork->id,
+    ]);
+
+    $ethCollections = Collection::query()->filterByChainId(1)->get();
+
+    expect($ethCollections->count())->toBe(1)
+        ->and($ethCollections->first()->name)->toBe('Collection 1');
+
+    $polygonCollections = Collection::query()->filterByChainId(137)->get();
+
+    expect($polygonCollections->count())->toBe(1)
+        ->and($polygonCollections->first()->name)->toBe('Collection 2');
+
+    $allCollections = Collection::query()->filterByChainId(null)->orderBy('id')->get();
+
+    expect($allCollections->count())->toBe(2)
+        ->and($allCollections[0]->name)->toBe('Collection 1')
+        ->and($allCollections[1]->name)->toBe('Collection 2');
 });
 
 it('filters the collections by nft concatenated name', function () {
@@ -1151,4 +1205,287 @@ it('can determine whether collection has its activities indexed', function () {
         'address' => '0x123456',
         'supply' => 100000,
     ])->indexesActivities())->toBeFalse();
+});
+
+it('can determine if a collection is featured or not using its scope', function () {
+    $featuredCollection1 = Collection::factory()->create(['is_featured' => true]);
+    $featuredCollection2 = Collection::factory()->create(['is_featured' => true]);
+    $nonFeaturedCollection = Collection::factory()->create(['is_featured' => false]);
+
+    $featuredCollections = Collection::featured()->get();
+
+    $this->assertTrue($featuredCollections->contains($featuredCollection1));
+    $this->assertTrue($featuredCollections->contains($featuredCollection2));
+    $this->assertFalse($featuredCollections->contains($nonFeaturedCollection));
+
+    $this->assertEquals(2, Collection::featured()->count());
+});
+
+it('returns the collections with most votes in the same month first for votable', function () {
+    $collectionWith5Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collectionWith5Votes->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collectionWith1Vote = Collection::factory()->create();
+    CollectionVote::factory()->count(1)->create([
+        'collection_id' => $collectionWith1Vote->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collectionWith8Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(8)->create([
+        'collection_id' => $collectionWith8Votes->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collectionWithoutVotes = Collection::factory()->create();
+
+    $collectionWith3Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $collectionWith3Votes->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        $collectionWith8Votes->id,
+        $collectionWith5Votes->id,
+        $collectionWith3Votes->id,
+        $collectionWith1Vote->id,
+        $collectionWithoutVotes->id,
+    ]);
+});
+
+it('only considers the votes on the same votes for votables', function () {
+    $collection1 = Collection::factory()->create();
+    // 5 votes previous to this month
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collection1->id,
+        'voted_at' => Carbon::now()->subMonths(2),
+    ]);
+    // 5 votes this month
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collection1->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collection2 = Collection::factory()->create();
+    // 2 votes previous to this month
+    CollectionVote::factory()->count(2)->create([
+        'collection_id' => $collection2->id,
+        'voted_at' => Carbon::now()->subMonths(2),
+    ]);
+    // 6 votes this month
+    CollectionVote::factory()->count(6)->create([
+        'collection_id' => $collection2->id,
+        'voted_at' => Carbon::now(),
+    ]);
+
+    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        // 6 votes this month
+        $collection2->id,
+        // 5 votes this month
+        $collection1->id,
+    ]);
+});
+
+it('sorts by volume if collections have the same amount of votes', function () {
+    $mediumVolume = Collection::factory()->create([
+        'volume' => 100,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $mediumVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+
+    $highVolume = Collection::factory()->create([
+        'volume' => 1000,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $highVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+
+    $noVolume = Collection::factory()->create([
+        'volume' => null,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $noVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+
+    $lowVolume = Collection::factory()->create([
+        'volume' => 1,
+    ]);
+    CollectionVote::factory()->count(3)->create(['collection_id' => $lowVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+
+    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        $highVolume->id,
+        $mediumVolume->id,
+        $lowVolume->id,
+        $noVolume->id,
+    ]);
+});
+
+it('returns the collection of the month by most votes in the last month', function () {
+    $collectionWith5Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collectionWith5Votes->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    $collectionWith1Vote = Collection::factory()->create();
+    CollectionVote::factory()->count(1)->create([
+        'collection_id' => $collectionWith1Vote->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    $collectionWith8Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(8)->create([
+        'collection_id' => $collectionWith8Votes->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    // Not included
+    $collectionWithoutVotes = Collection::factory()->create();
+
+    $collectionWith3Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $collectionWith3Votes->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    $collectionsIds = Collection::winnersOfThePreviousMonth()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        $collectionWith8Votes->id,
+        $collectionWith5Votes->id,
+        $collectionWith3Votes->id,
+        $collectionWith1Vote->id,
+    ]);
+});
+
+it('has floor price history', function () {
+    $collection = Collection::factory()->create();
+
+    FloorPriceHistory::factory()->count(3)->create([
+        'collection_id' => $collection->id,
+    ]);
+
+    FloorPriceHistory::factory()->count(2)->create();
+
+    expect($collection->floorPriceHistory()->count())->toBe(3);
+
+    expect($collection->floorPriceHistory()->first())->toBeInstanceOf(FloorPriceHistory::class);
+});
+
+it('should get sum of fiat values of collections', function () {
+    Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 10,
+            'EUR' => 20,
+        ],
+    ]);
+
+    Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 20,
+            'EUR' => 30,
+            'AZN' => 45,
+        ],
+    ]);
+
+    Collection::factory()->create([
+        'fiat_value' => [
+            'EUR' => 30,
+        ],
+    ]);
+
+    Collection::factory()->create();
+
+    $fiatValues = collect(Collection::getFiatValueSum());
+
+    expect($fiatValues->where('key', 'USD')->first()->total)->toBeString(30);
+    expect($fiatValues->where('key', 'EUR')->first()->total)->toBeString(80);
+    expect($fiatValues->where('key', 'AZN')->first()->total)->toBeString(45);
+});
+
+it('should sort collections', function () {
+    // 4 eur * 2 nft = 8 eur
+    $collection1 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 5,
+            'EUR' => 4,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection1,
+    ]);
+
+    // 1 eur * 2 nft = 2 eur
+    $collection2 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 3,
+            'EUR' => 1,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection2,
+    ]);
+
+    // 5 eur * 2 = 10 eur
+    $collection3 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 8,
+            'EUR' => 5,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection3,
+    ]);
+
+    // 1 eur * 10 nft = 10 eur
+    $collection4 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => null,
+            'EUR' => 1,
+        ],
+    ])->id;
+
+    Nft::factory()->count(10)->create([
+        'collection_id' => $collection4,
+    ]);
+
+    // 0 eur * 7 nft = 0
+    $collection5 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 1,
+            'EUR' => 0,
+        ],
+    ])->id;
+
+    Nft::factory()->count(7)->create([
+        'collection_id' => $collection5,
+    ]);
+
+    $ordered = Collection::query()->orderByValue(null, 'asc', CurrencyCode::EUR)->pluck('id')->toArray();
+
+    expect($ordered)->toEqual([
+        $collection5, // 0
+        $collection2, // 1
+        $collection1, // 4
+        $collection3, // 8
+        $collection4, // 10
+    ]);
+
+    $ordered = Collection::query()->orderByValue(null, 'desc', CurrencyCode::EUR)->pluck('id')->toArray();
+
+    expect($ordered)->toEqual([
+        $collection4, // 10
+        $collection3, // 8
+        $collection1, // 4
+        $collection2, // 1
+        $collection5, // 0
+    ]);
 });
