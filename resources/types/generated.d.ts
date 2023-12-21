@@ -213,7 +213,6 @@ declare namespace App.Data.Collections {
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
         name: string | null;
-        hasWonAt: string | null;
         slug: string;
     };
     export type CollectionStatsData = {
@@ -235,6 +234,11 @@ declare namespace App.Data.Collections {
         value: string;
         displayType: string;
         nftsCount: number;
+    };
+    export type CollectionWinnersData = {
+        month: number;
+        year: number;
+        winners: App.Data.Collections.CollectionOfTheMonthData[];
     };
     export type PopularCollectionData = {
         id: number;
