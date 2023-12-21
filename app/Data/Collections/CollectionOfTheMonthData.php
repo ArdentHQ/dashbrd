@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
-use App\Models\Collection;
+use App\Models\CollectionWinner;
 use App\Transformers\IpfsGatewayUrlTransformer;
-use DateTime;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -23,23 +22,21 @@ class CollectionOfTheMonthData extends Data
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
         public ?string $name,
-        public ?DateTime $hasWonAt,
         public string $slug,
     ) {
     }
 
-    public static function fromModel(Collection $collection): self
+    public static function fromModel(CollectionWinner $winner): self
     {
         return new self(
-            image: $collection->extra_attributes->get('image'),
-            votes: $collection->votes()->inPreviousMonth()->count(),
-            volume: $collection->volume,
-            floorPrice: $collection->floor_price,
-            floorPriceCurrency: $collection->floorPriceToken?->symbol,
-            floorPriceDecimals: $collection->floorPriceToken?->decimals,
-            name: $collection->name,
-            hasWonAt: $collection->has_won_at,
-            slug: $collection->slug
+            image: $winner->collection->extra_attributes->get('image'),
+            votes: $winner->votes,
+            volume: $winner->collection->volume,
+            floorPrice: $winner->collection->floor_price,
+            floorPriceCurrency: $winner->collection->floorPriceToken?->symbol,
+            floorPriceDecimals: $winner->collection->floorPriceToken?->decimals,
+            name: $winner->collection->name,
+            slug: $winner->collection->slug,
         );
     }
 }

@@ -8,7 +8,7 @@ import {
 export const WinnerCollections = ({
     collections,
 }: {
-    collections: App.Data.Collections.CollectionOfTheMonthData[];
+    collections: App.Data.Collections.CollectionWinnersData[];
 }): JSX.Element => {
     const { availableYears, availableMonths, selectedYear, setSelectedYear, filterCollections } = useWinnerCollections({
         collections,
@@ -28,7 +28,7 @@ export const WinnerCollections = ({
 
             {availableMonths(selectedYear).map((month) => (
                 <WinnerCollectionsTable
-                    collections={filterCollections({ year: selectedYear, month })}
+                    collections={filterCollections({ year: selectedYear, month })[0]}
                     month={month}
                     key={month}
                 />

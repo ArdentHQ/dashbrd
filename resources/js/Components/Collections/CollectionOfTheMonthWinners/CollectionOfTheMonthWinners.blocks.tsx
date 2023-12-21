@@ -148,12 +148,12 @@ export const WinnersChart = ({
     winners,
     large = false,
 }: {
-    winners: App.Data.Collections.CollectionOfTheMonthData[];
+    winners: App.Data.Collections.CollectionWinnersData;
     large?: boolean;
 }): JSX.Element => {
     const { isDark } = useDarkModeContext();
 
-    if (winners.length === 0) {
+    if (winners.winners.length === 0) {
         if (isDark) {
             return <VoteNextMonthWinnersDark />;
         }
@@ -161,7 +161,7 @@ export const WinnersChart = ({
         return <VoteNextMonthWinners />;
     }
 
-    const totalWinners: 1 | 2 | 3 = winners.length as 1 | 2 | 3;
+    const totalWinners: 1 | 2 | 3 = winners.winners.length as 1 | 2 | 3;
 
     const chart = (
         <CollectionOfTheMonthWinnersChart
@@ -183,12 +183,12 @@ export const WinnersChart = ({
                     })}
                 >
                     <CollectionOfTheMonthWinnersCollectionAvatar
-                        image={winners[0].image}
+                        image={winners.winners[0].image}
                         large={large}
                     />
 
                     <CollectionOfTheMonthWinnersVotesLabel
-                        votes={winners[0].votes}
+                        votes={winners.winners[0].votes}
                         large={large}
                     />
                 </CollectionOfTheMonthWinnersWinnerWrapper>
@@ -204,7 +204,7 @@ export const WinnersChart = ({
                 })}
                 chart={chart}
             >
-                {winners.map((winner, index) => (
+                {winners.winners.map((winner, index) => (
                     <CollectionOfTheMonthWinnersWinnerWrapper
                         className={cn(
                             {
@@ -251,7 +251,7 @@ export const WinnersChart = ({
             })}
             chart={chart}
         >
-            {[winners[1], winners[0], winners[2]].map((winner, index) => (
+            {[winners.winners[1], winners.winners[0], winners.winners[2]].map((winner, index) => (
                 <CollectionOfTheMonthWinnersWinnerWrapper
                     className={cn(
                         {
