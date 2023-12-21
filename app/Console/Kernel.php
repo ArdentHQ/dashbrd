@@ -170,7 +170,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(AggregateCollectionWinners::class)
                 ->monthly();
 
-        $schedule->command(ResetCollectionMonthlyVotesAndRank::class)
+        $schedule->job(ResetCollectionMonthlyVotesAndRank::class)
             ->monthlyOn(dayOfMonth: 1, time: '0:0');
 
         $schedule
