@@ -77,7 +77,6 @@ class Collection extends Model
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
         'is_featured' => 'bool',
-        'has_won_at' => 'datetime',
     ];
 
     /**
@@ -716,6 +715,15 @@ class Collection extends Model
             // order by votes count excluding nulls
             ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
             ->orderBy('votes_count', 'desc');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeEligibleToWin(Builder $query): Builder
+    {
+        return $query->whereNotIn('id', CollectionWinner::ineligibleCollectionIds());
     }
 
     /**

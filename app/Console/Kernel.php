@@ -28,6 +28,7 @@ use App\Console\Commands\UpdateGalleriesScore;
 use App\Console\Commands\UpdateGalleriesValue;
 use App\Console\Commands\UpdateTwitterFollowers;
 use App\Enums\Features;
+use App\Jobs\AggregateCollectionWinners;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Laravel\Pennant\Feature;
@@ -165,6 +166,9 @@ class Kernel extends ConsoleKernel
 
     private function scheduleJobsForCollections(Schedule $schedule): void
     {
+        $schedule->job(AggregateCollectionWinners::class)
+                ->monthly();
+
         $schedule
             ->command(UpdateCollectionsFiatValue::class)
             ->withoutOverlapping()
