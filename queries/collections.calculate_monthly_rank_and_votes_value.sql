@@ -1,6 +1,7 @@
 WITH RankedCollections AS (
     SELECT 
         collections.id,
+        COUNT(Distinct cv.id) as votes_count,
         ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT cv.id) DESC, collections.volume DESC NULLS LAST) AS new_rank
     FROM 
         collections
@@ -13,7 +14,8 @@ WITH RankedCollections AS (
 UPDATE 
     collections
 SET 
-    monthly_rank = ranked_collections.new_rank
+    monthly_rank = ranked_collections.new_rank,
+    monthly_votes = ranked_collections.votes_count
 FROM 
     RankedCollections ranked_collections
 WHERE 

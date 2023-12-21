@@ -477,9 +477,9 @@ class Collection extends Model
             ->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
     }
 
-    public static function updateMonthlyRank(): void
+    public static function updateMonthlyRankAndVotes(): void
     {
-        $calculateRankQUery = get_query('collections.calculate_monthly_rank_value');
+        $calculateRankQUery = get_query('collections.calculate_monthly_rank_and_votes_value');
 
         DB::update($calculateRankQUery);
     }
@@ -632,7 +632,7 @@ class Collection extends Model
         $subQuery = Collection::query()
             ->votable($currency)
             ->addSelect([
-                DB::raw('1 as rank'),
+                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
             ]);
 
         return $query->fromSub($subQuery, 'collections');
