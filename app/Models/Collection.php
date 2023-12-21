@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
+use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\HasFloorPriceHistory;
 use App\Models\Traits\HasWalletVotes;
@@ -65,6 +66,7 @@ class Collection extends Model
      */
     protected $casts = [
         'description' => StrippedHtml::class,
+        'type' => TokenType::class,
         'floor_price_retrieved_at' => 'datetime',
         'extra_attributes' => SchemalessAttributes::class,
         'fiat_value' => 'json',
@@ -216,6 +218,15 @@ class Collection extends Model
     public function fiatValue(CurrencyCode $currency): ?float
     {
         return Arr::get($this->fiat_value, $currency->value);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeErc721(Builder $query): Builder
+    {
+        return $query->where('collections.type', TokenType::Erc721);
     }
 
     /**
