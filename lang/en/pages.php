@@ -91,6 +91,7 @@ return [
                 'x_text' => 'I voted for :collection for collection of the month @dashbrdapp! Go show your support!',
             ],
             'vote_success' => 'Your vote has been successfully submitted',
+            'vote_failed' => 'You already cast your vote',
             'content_to_be_added' => [
                 'title' => 'Content to be added',
                 'description' => 'There will be a list of previous month winners here soon!',

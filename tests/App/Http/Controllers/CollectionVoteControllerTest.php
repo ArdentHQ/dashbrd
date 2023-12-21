@@ -57,7 +57,7 @@ describe('user with a signed wallet', function () {
 
         $this->actingAs($user)
             ->post(route('collection-votes.create', $collection))
-            ->assertStatus(403);
+            ->assertStatus(302);
 
         expect($collection->votes()->count())->toBe(1);
     });
