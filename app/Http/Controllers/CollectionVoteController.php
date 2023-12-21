@@ -16,6 +16,8 @@ class CollectionVoteController extends Controller
             return back()->toast(trans('pages.collections.collection_of_the_month.vote_failed'), type: 'error');
         }
 
+        $collection->addVote($request->wallet());
+
         Collection::updateMonthlyRankAndVotes();
 
         return back()->toast(trans('pages.collections.collection_of_the_month.vote_success'), type: 'success');
