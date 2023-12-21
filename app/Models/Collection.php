@@ -639,7 +639,7 @@ class Collection extends Model
             ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
             ->withCount('nfts')
             ->groupBy('collections.id')
-            ->when($orderByVotes, fn ($q) => $q->orderBy('monthly_votes', 'desc')->orderBy('monthly_rank', 'desc'));
+            ->when($orderByVotes, fn ($q) => $q->orderBy('monthly_votes', 'desc')->orderByRaw('volume DESC NULLS LAST'));
     }
 
     /**
