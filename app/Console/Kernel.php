@@ -29,6 +29,7 @@ use App\Console\Commands\UpdateGalleriesValue;
 use App\Console\Commands\UpdateTwitterFollowers;
 use App\Enums\Features;
 use App\Jobs\AggregateCollectionWinners;
+use App\Jobs\ResetCollectionMonthlyVotesAndRank;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Laravel\Pennant\Feature;
@@ -168,6 +169,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->job(AggregateCollectionWinners::class)
                 ->monthly();
+
+        $schedule->job(ResetCollectionMonthlyVotesAndRank::class)
+            ->monthlyOn(dayOfMonth: 1, time: '0:0');
 
         $schedule
             ->command(UpdateCollectionsFiatValue::class)

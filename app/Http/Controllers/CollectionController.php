@@ -82,7 +82,7 @@ class CollectionController extends Controller
             return null;
         }
 
-        $collection = Collection::votableWithRank($user->currency())->votedByUserInCurrentMonth($user)->first();
+        $collection = Collection::votable($user->currency())->votedByUserInCurrentMonth($user)->first();
 
         return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true) : null;
     }
