@@ -13,7 +13,6 @@ use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -627,21 +626,6 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeVotableWithRank(Builder $query, CurrencyCode $currency): Builder
-    {
-        $subQuery = Collection::query()
-            ->votable($currency)
-            ->addSelect([
-                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
-            ]);
-
-        return $query->fromSub($subQuery, 'collections');
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
     public function scopeVotable(Builder $query, CurrencyCode $currency, bool $orderByVotes = true): Builder
     {
         return $query
@@ -651,19 +635,11 @@ class Collection extends Model
                 'collections.*',
                 DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
                 DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
-                DB::raw('COUNT(Distinct collection_votes.id) as votes_count'),
             ])
-            ->leftJoin('collection_votes', function ($join) {
-                $join->on('collection_votes.collection_id', '=', 'collections.id')
-                    ->whereBetween('collection_votes.voted_at', [
-                        Carbon::now()->startOfMonth(),
-                        Carbon::now()->endOfMonth(),
-                    ]);
-            })
             ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
             ->withCount('nfts')
             ->groupBy('collections.id')
-            ->when($orderByVotes, fn ($q) => $q->orderBy('votes_count', 'desc')->orderByRaw('volume DESC NULLS LAST'));
+            ->when($orderByVotes, fn ($q) => $q->orderBy('monthly_votes', 'desc')->orderBy('monthly_rank', 'desc'));
     }
 
     /**

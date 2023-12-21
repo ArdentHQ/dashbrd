@@ -43,11 +43,11 @@ class VotableCollectionData extends Data
          */
         return new self(
             id: $collection->id,
-            rank: $collection->rank,
+            rank: $collection->monthly_rank,
             name: $collection->name,
             address: $collection->address,
             image: $collection->extra_attributes->get('image'),
-            votes: $showVotes ? $collection->votes_count : null,
+            votes: $showVotes ? $collection->monthly_votes : null,
             floorPrice: $collection->floor_price,
             floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floor_price_symbol,
