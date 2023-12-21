@@ -59,7 +59,9 @@ class VotableCollectionData extends Data
             volumeCurrency: 'ETH',
             volumeDecimals: 18,
             nftsCount: $collection->nfts_count,
-            twitterUsername: $collection->twitter(),
+            // We are not using the `->twitter` method because we need the username
+            // not the twitter url
+            twitterUsername: $collection->extra_attributes->get('socials.twitter')
         );
     }
 }
