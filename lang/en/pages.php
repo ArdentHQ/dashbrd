@@ -121,6 +121,7 @@ return [
             'nominate_collection' => 'Nominate a collection',
             'vote_to_reveal' => 'Vote to reveal data',
             'already_voted' => 'You’ve already nominated. Come back next month!',
+            'select_collection' => 'Please, select a collection to nominate',
         ],
         'sorting' => [
             'token_number' => 'Token Number',

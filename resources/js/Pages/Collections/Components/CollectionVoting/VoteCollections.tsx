@@ -166,6 +166,7 @@ export const VoteCollections = ({
                     setIsOpen={setIsDialogOpen}
                     initialCollections={nominatableCollections}
                     user={user}
+                    votedCollection={votedCollection}
                 />
             </div>
 
