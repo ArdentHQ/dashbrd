@@ -477,6 +477,13 @@ class Collection extends Model
             ->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
     }
 
+    public static function updateMonthlyRank(): void
+    {
+        $calculateRankQUery = get_query('collections.calculate_monthly_rank_value');
+
+        DB::update($calculateRankQUery);
+    }
+
     /**
      * @return HasMany<NftActivity>
      */
@@ -625,7 +632,7 @@ class Collection extends Model
         $subQuery = Collection::query()
             ->votable($currency)
             ->addSelect([
-                DB::raw('ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT collection_votes.id) DESC, volume DESC NULLS LAST) as rank'),
+                DB::raw('1 as rank'),
             ]);
 
         return $query->fromSub($subQuery, 'collections');
