@@ -21,6 +21,8 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
 
     const month = t(`common.months.${latestMonthWinners.month - 1}`);
 
+    winners = winners.filter((w) => w.month !== latestMonthWinners.month && w.year !== latestMonthWinners.year);
+
     return (
         <DefaultLayout>
             <Head title={title} />
