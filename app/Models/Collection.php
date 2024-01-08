@@ -721,4 +721,12 @@ class Collection extends Model
             GROUP BY key;'
         );
     }
+
+    /**
+     * @return HasMany<VolumeChange>
+     */
+    public function volumeChanges(): HasMany
+    {
+        return $this->hasMany(VolumeChange::class);
+    }
 }

@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FetchCollectionVolume implements ShouldQueue
@@ -44,9 +45,33 @@ class FetchCollectionVolume implements ShouldQueue
             contractAddress: $this->collection->address
         );
 
-        $this->collection->update([
-            'volume' => $volume,
-        ]);
+        DB::transaction(function () use ($volume) {
+            if ($volume !== null) {
+                $this->collection->volumeChanges()->create([
+                    'volume' => $volume,
+                ]);
+
+                $this->collection->volume = $volume;
+
+                if ($this->collection->volumeChanges()->where('created_at', '<', now()->subDays(1))->exists()) {
+                    $this->collection->avg_volume_24h = $this->collection->volumeChanges()->where('created_at', '>', now()->subDays(1))->avg('volume');
+                }
+
+                if ($this->collection->volumeChanges()->where('created_at', '<', now()->subDays(7))->exists()) {
+                    $this->collection->avg_volume_7d = $this->collection->volumeChanges()->where('created_at', '>', now()->subDays(7))->avg('volume');
+                }
+
+                if ($this->collection->volumeChanges()->where('created_at', '<', now()->subMonths(1))->exists()) {
+                    $this->collection->avg_volume_1m = $this->collection->volumeChanges()->where('created_at', '>', now()->subMonths(1))->avg('volume');
+                }
+
+                $this->collection->save();
+            } else {
+                $this->collection->update([
+                    'volume' => $volume,
+                ]);
+            }
+        });
 
         Collection::updateMonthlyRankAndVotes();
 
