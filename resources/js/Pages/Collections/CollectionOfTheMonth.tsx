@@ -1,6 +1,7 @@
 import { type PageProps, router } from "@inertiajs/core";
 import { Head } from "@inertiajs/react";
 import cn from "classnames";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { WinnerCollections } from "./Components/WinnerCollections";
 import { IconButton } from "@/Components/Buttons";
@@ -17,11 +18,14 @@ interface CollectionOfTheMonthProperties extends PageProps {
 const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const latestMonthWinners = winners.filter(
-        (winner) => winner.month === new Date().getMonth() && winner.year === new Date().getFullYear(),
-    )[0];
+    const latestMonthWinners = winners[0];
 
     const month = t(`common.months.${latestMonthWinners.month - 1}`);
+
+    const winnersWithoutLatest = useMemo(
+        () => winners.filter((w) => w.month !== latestMonthWinners.month || w.year !== latestMonthWinners.year),
+        [winners],
+    );
 
     return (
         <DefaultLayout>
@@ -71,7 +75,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
                         </div>
                     </div>
 
-                    <WinnerCollections collections={winners} />
+                    <WinnerCollections collections={winnersWithoutLatest} />
                 </div>
             </div>
         </DefaultLayout>
