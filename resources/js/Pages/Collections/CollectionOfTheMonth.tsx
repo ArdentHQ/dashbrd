@@ -8,6 +8,7 @@ import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinne
 import { Heading } from "@/Components/Heading";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
+import { useMemo } from "react";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
@@ -21,7 +22,10 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
 
     const month = t(`common.months.${latestMonthWinners.month - 1}`);
 
-    winners = winners.filter((w) => w.month !== latestMonthWinners.month && w.year !== latestMonthWinners.year);
+    const winnersWithoutLatest = useMemo(
+        () => winners.filter((w) => w.month !== latestMonthWinners.month || w.year !== latestMonthWinners.year),
+        [winners],
+    );
 
     return (
         <DefaultLayout>
@@ -71,7 +75,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
                         </div>
                     </div>
 
-                    <WinnerCollections collections={winners} />
+                    <WinnerCollections collections={winnersWithoutLatest} />
                 </div>
             </div>
         </DefaultLayout>
