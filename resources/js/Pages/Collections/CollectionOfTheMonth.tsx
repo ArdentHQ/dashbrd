@@ -17,9 +17,7 @@ interface CollectionOfTheMonthProperties extends PageProps {
 const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const latestMonthWinners = winners.filter(
-        (winner) => winner.month === new Date().getMonth() && winner.year === new Date().getFullYear(),
-    )[0];
+    const latestMonthWinners = winners[0];
 
     const month = t(`common.months.${latestMonthWinners.month - 1}`);
 
