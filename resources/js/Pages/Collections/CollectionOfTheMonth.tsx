@@ -1,6 +1,7 @@
 import { type PageProps, router } from "@inertiajs/core";
 import { Head } from "@inertiajs/react";
 import cn from "classnames";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { WinnerCollections } from "./Components/WinnerCollections";
 import { IconButton } from "@/Components/Buttons";
@@ -8,7 +9,6 @@ import { WinnersChart } from "@/Components/Collections/CollectionOfTheMonthWinne
 import { Heading } from "@/Components/Heading";
 import { Link } from "@/Components/Link";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
-import { useMemo } from "react";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
