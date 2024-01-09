@@ -14,19 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('volume_changes', function (Blueprint $table) {
+        Schema::create('trading_volumes', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Collection::class)->constrained()->cascadeOnDelete();
             $table->string('volume');
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('volume_changes');
     }
 };

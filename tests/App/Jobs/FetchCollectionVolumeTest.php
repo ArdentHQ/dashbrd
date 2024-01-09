@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Jobs\FetchCollectionVolume;
 use App\Models\Collection;
 use App\Models\Network;
-use App\Models\VolumeChange;
+use App\Models\TradingVolume;
 use App\Support\Facades\Mnemonic;
 use Illuminate\Support\Facades\Http;
 
@@ -42,14 +42,14 @@ it('logs volume changes', function () {
 
     $collection->refresh();
 
-    expect($collection->volumeChanges()->count())->toBe(1);
-    expect($collection->volumeChanges()->first()->volume)->toBe('12300000000000000000');
+    expect($collection->volumes()->count())->toBe(1);
+    expect($collection->volumes()->first()->volume)->toBe('12300000000000000000');
 
     (new FetchCollectionVolume($collection))->handle();
 
     $collection->refresh();
 
-    expect($collection->volumeChanges()->count())->toBe(2);
+    expect($collection->volumes()->count())->toBe(2);
 });
 
 it('does not log volume changes if there is no volume', function () {
@@ -63,7 +63,7 @@ it('does not log volume changes if there is no volume', function () {
 
     $collection->refresh();
 
-    expect(VolumeChange::count())->toBe(0);
+    expect(TradingVolume::count())->toBe(0);
 });
 
 it('has a retry limit', function () {

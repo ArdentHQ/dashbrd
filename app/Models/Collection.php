@@ -732,10 +732,10 @@ class Collection extends Model
     }
 
     /**
-     * @return HasMany<VolumeChange>
+     * @return HasMany<TradingVolume>
      */
-    public function volumeChanges(): HasMany
+    public function volumes(): HasMany
     {
-        return $this->hasMany(VolumeChange::class);
+        return $this->hasMany(TradingVolume::class);
     }
 }

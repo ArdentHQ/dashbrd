@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class VolumeChange extends Model
+class TradingVolume extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
     /**
-     * @return BelongsTo<Collection, VolumeChange>
+     * @return BelongsTo<Collection, TradingVolume>
      */
     public function collection(): BelongsTo
     {
