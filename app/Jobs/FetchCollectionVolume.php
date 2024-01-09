@@ -39,20 +39,26 @@ class FetchCollectionVolume implements ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
-        $volume = Mnemonic::getNftCollectionVolume(
+        $volumes = Mnemonic::getNftCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
 
-        $this->collection->update([
-            'volume' => $volume,
-        ]);
+        $data = array_filter([
+            'volume' => $volumes['1d'],
+            'volume_7d' => $volumes['7d'],
+            'volume_1m' => $volumes['1m'],
+        ], fn ($value) => $value !== null);
+
+        $this->collection->update($data);
 
         Collection::updateMonthlyRankAndVotes();
 
         Log::info('FetchCollectionVolume Job: Handled', [
             'collection' => $this->collection->address,
-            'volume' => $volume,
+            'volume_1d' => $volumes['1d'],
+            'volume_7d' => $volumes['7d'],
+            'volume_1m' => $volumes['1m'],
         ]);
     }
 

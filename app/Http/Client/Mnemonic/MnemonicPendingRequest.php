@@ -24,6 +24,7 @@ use App\Support\Web3NftHandler;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Promise\Promise;
 use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
@@ -35,6 +36,13 @@ use Throwable;
 
 class MnemonicPendingRequest extends PendingRequest
 {
+    /**
+     * The factory instance.
+     *
+     * @var MnemonicFactory|null
+     */
+    protected $factory;
+
     protected string $apiUrl;
 
     private static string $apiUrlPlaceholder = '{CHAIN-NETWORK}';
@@ -46,9 +54,11 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(?Factory $factory = null)
+    public function __construct(?MnemonicFactory $factory = null, ?MnemonicChain $chain = null)
     {
         parent::__construct($factory);
+
+        $this->chain = $chain;
 
         // The placeholder is dynamically replaced at runtime when the chain is known.
         // example url: https://polygon-rest.mnemonichq.com/
@@ -63,13 +73,34 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     /**
+     * Send a pool of asynchronous requests concurrently.
+     *
+     * @see parent::pool()
+     *
+     * @return array<array-key, Response>
+     */
+    public function pool(callable $callback)
+    {
+        $results = [];
+
+        // Modified from parent::pool() to use our own pool class
+        $requests = tap(new MnemonicPool($this->factory->withChain($this->chain)), $callback)->getRequests();
+
+        foreach ($requests as $key => $item) {
+            $results[$key] = $item instanceof static ? $item->getPromise()->wait() : $item->wait();
+        }
+
+        return $results;
+    }
+
+    /**
      * Send the request to the given URL.
      *
      * @param  array<mixed>  $options
      *
      * @throws \Exception
      */
-    public function send(string $method, string $path, array $options = []): Response
+    public function send(string $method, string $path, array $options = []): Response|Promise
     {
         if (is_null($this->chain)) {
             throw new MnemonicUnknownChainException();
@@ -231,23 +262,49 @@ class MnemonicPendingRequest extends PendingRequest
         return intval($data['ownersCount']);
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
-    public function getNftCollectionVolume(Chain $chain, string $contractAddress): ?string
+    /**
+     * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
+     *
+     * @return array{ "1d": string|null, "7d": string|null, "1m": string|null }
+     */
+    public function getNftCollectionVolume(Chain $chain, string $contractAddress): array
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        /** @var array<string, mixed> $data */
-        $data = self::get(sprintf(
-            '/collections/v1beta2/%s/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY',
-            $contractAddress,
-        ), [])->json();
+        $responses = self::pool(
+            fn (MnemonicPool $pool) => [
+                $pool->getNftCollectionVolumeRequest(
+                    contractAddress: $contractAddress,
+                    duration: 'DURATION_1_DAY'
+                ),
+                $pool->getNftCollectionVolumeRequest(
+                    contractAddress: $contractAddress,
+                    duration: 'DURATION_7_DAYS'
+                ),
+                $pool->getNftCollectionVolumeRequest(
+                    contractAddress: $contractAddress,
+                    duration: 'DURATION_30_DAYS'
+                ),
+            ]
+        );
 
-        $volume = Arr::get($data, 'dataPoints.0.volume');
+        return [
+            '1d' => $this->extractNftCollectionVolume($responses[0], $chain),
+            '7d' => $this->extractNftCollectionVolume($responses[1], $chain),
+            '1m' => $this->extractNftCollectionVolume($responses[2], $chain),
+        ];
+    }
+
+    private function extractNftCollectionVolume(Response $response, Chain $chain): ?string
+    {
+        $volume = $response->json('dataPoints.0.volume');
+
         if (empty($volume)) {
             return null;
         }
 
         $currency = $chain->nativeCurrency();
+
         $decimals = CryptoCurrencyDecimals::forCurrency($currency);
 
         return CryptoUtils::convertToWei($volume, $decimals);
