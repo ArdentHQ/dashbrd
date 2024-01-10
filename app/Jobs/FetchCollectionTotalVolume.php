@@ -8,6 +8,7 @@ use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
 use App\Support\Facades\Opensea;
 use App\Support\Queues;
+use DateTime;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,5 +42,10 @@ class FetchCollectionTotalVolume implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return static::class.':'.$this->collection->id;
+    }
+
+    public function retryUntil(): DateTime
+    {
+        return now()->addMinutes(20);
     }
 }
