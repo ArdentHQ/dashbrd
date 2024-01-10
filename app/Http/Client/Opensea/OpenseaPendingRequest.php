@@ -132,7 +132,7 @@ class OpenseaPendingRequest extends PendingRequest
      */
     public function getCollectionTotalVolume(Collection $collection): int
     {
-        $response = $this->makeCollectionStatsRequest($collection->opensea_slug);
+        $response = $this->makeCollectionStatsRequest($collection->openSeaSlug());
 
         return (int) round($response->json('stats.total.volume'), precision: 0);
     }
