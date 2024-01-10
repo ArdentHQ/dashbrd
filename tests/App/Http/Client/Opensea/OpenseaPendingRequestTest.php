@@ -123,7 +123,24 @@ it('can get total volume for a collection', function () {
         ],
     ]);
 
-    $response = Opensea::getCollectionTotalVolume($collection);
+    expect(Opensea::getCollectionTotalVolume($collection))->toBe('288921605076300000000000');
+});
 
-    expect($response)->toBe('288921605076300000000000');
+it('can get total volume for a collection, if the total volume is 0', function () {
+    $response = fixtureData('opensea.collection_stats');
+
+    $response['stats']['total_volume'] = null;
+
+    Opensea::fake([
+        'https://api.opensea.io/api/v1/collection*' => Opensea::response($response),
+    ]);
+
+    $collection = new Collection([
+        'address' => '0x670fd103b1a08628e9557cd66b87ded841115190',
+        'extra_attributes' => [
+            'opensea_slug' => 'test',
+        ],
+    ]);
+
+    expect(Opensea::getCollectionTotalVolume($collection))->toBeNull();
 });
