@@ -6,7 +6,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\FetchCollectionTotalVolume as FetchCollectionTotalVolumeJob;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 
 class FetchCollectionTotalVolume extends Command
 {
@@ -31,7 +30,7 @@ class FetchCollectionTotalVolume extends Command
      */
     public function handle(): int
     {
-        $queryCallback = fn (Builder $query) => $query->whereNotNull('extra_attributes->opensea_slug');
+        $queryCallback = fn ($query) => $query->whereNotNull('extra_attributes->opensea_slug');
 
         $this->forEachCollection(function ($collection) {
             FetchCollectionTotalVolumeJob::dispatch($collection);
