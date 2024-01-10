@@ -130,11 +130,15 @@ class OpenseaPendingRequest extends PendingRequest
     /**
      * @see https://docs.opensea.io/reference/get_collection_stats
      */
-    public function getCollectionTotalVolume(Collection $collection): int
+    public function getCollectionTotalVolume(Collection $collection): ?string
     {
         $response = $this->makeCollectionStatsRequest($collection->openSeaSlug());
 
-        return (int) round($response->json('stats.total_volume'), precision: 0);
+        $volume = $response->json('stats.total_volume');
+
+        return $volume === null
+                    ? null
+                    : CryptoUtils::convertToWei($volume, CryptoCurrencyDecimals::ETH->value);
     }
 
     private function makeCollectionStatsRequest(string $collectionSlug): Response

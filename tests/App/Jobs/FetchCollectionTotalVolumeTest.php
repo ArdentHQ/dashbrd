@@ -10,12 +10,12 @@ it('should fetch total volume for the collection', function () {
     Opensea::shouldReceive('getCollectionTotalVolume')->andReturn(753);
 
     $collection = Collection::factory()->create([
-        'total_volume' => 254,
+        'total_volume' => "254",
     ]);
 
     (new FetchCollectionTotalVolume($collection))->handle();
 
-    expect($collection->fresh()->total_volume)->toBe(753);
+    expect($collection->fresh()->total_volume)->toBe("753");
 });
 
 it('has a unique ID', function () {

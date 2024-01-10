@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->unsignedBigInteger('total_volume')->nullable();
+            $table->string('total_volume')->nullable();
         });
     }
 };

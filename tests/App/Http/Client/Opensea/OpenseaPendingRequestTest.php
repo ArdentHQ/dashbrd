@@ -125,5 +125,5 @@ it('can get total volume for a collection', function () {
 
     $response = Opensea::getCollectionTotalVolume($collection);
 
-    expect($response)->toBe(288922);
+    expect($response)->toBe('288921605076300000000000');
 });
