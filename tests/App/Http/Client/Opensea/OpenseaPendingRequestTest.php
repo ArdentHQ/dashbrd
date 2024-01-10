@@ -6,6 +6,7 @@ use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Enums\Chain;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
+use App\Models\Collection;
 use App\Support\Facades\Opensea;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Http;
@@ -109,3 +110,20 @@ it('handles not found exception for nft', function () {
         identifier: $identifier
     );
 })->throws(ClientException::class);
+
+it('can get total volume for a collection', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats')),
+    ]);
+
+    $collection = new Collection([
+        'address' => '0x670fd103b1a08628e9557cd66b87ded841115190',
+        'extra_attributes' => [
+            'opensea_slug' => 'test',
+        ],
+    ]);
+
+    $response = Opensea::getCollectionTotalVolume($collection);
+
+    expect($response)->toBe(288922);
+});
