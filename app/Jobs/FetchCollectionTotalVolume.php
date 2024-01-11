@@ -34,9 +34,11 @@ class FetchCollectionTotalVolume implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        $this->collection->update([
-            'total_volume' => Opensea::getCollectionTotalVolume($this->collection),
-        ]);
+        if ($this->collection->openSeaSlug() !== null) {
+            $this->collection->update([
+                'total_volume' => Opensea::getCollectionTotalVolume($this->collection),
+            ]);
+        }
     }
 
     public function uniqueId(): string
