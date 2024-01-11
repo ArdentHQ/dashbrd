@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Img } from "@/Components/Image";
 import { Link } from "@/Components/Link";
+import { Tooltip } from "@/Components/Tooltip";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import {
     CrownBadge,
@@ -52,19 +53,32 @@ export const CollectionOfTheMonthWinnersWinnerWrapper = ({
 export const CollectionOfTheMonthWinnersCollectionAvatar = ({
     image,
     large,
+    slug,
+    name,
 }: {
     image: string | null;
     large: boolean;
+    slug: string;
+    name: string | null;
 }): JSX.Element => (
-    <Img
-        wrapperClassName={cn("aspect-square relative", {
-            "h-20 w-20": !large,
-            "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
-        })}
-        className="rounded-full"
-        src={image}
-        isCircle
-    />
+    <Tooltip content={name}>
+        <div className="flex">
+            <Link
+                href={route("collections.view", slug)}
+                className="transition-default rounded-full border-[3px] border-transparent hover:border-theme-primary-100 dark:hover:border-theme-dark-500"
+            >
+                <Img
+                    wrapperClassName={cn("aspect-square relative", {
+                        "h-20 w-20": !large,
+                        "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
+                    })}
+                    className="rounded-full"
+                    src={image}
+                    isCircle
+                />
+            </Link>
+        </div>
+    </Tooltip>
 );
 
 export const CollectionOfTheMonthWinnersChart = ({
@@ -178,13 +192,15 @@ export const WinnersChart = ({
             >
                 <CollectionOfTheMonthWinnersWinnerWrapper
                     className={cn({
-                        "bottom-[107px] space-y-[124px]": !large,
-                        "bottom-[61px] space-y-[70px] sm:bottom-[164px] sm:space-y-[174px]": large,
+                        "bottom-[107px] space-y-[121px]": !large,
+                        "bottom-[61px] space-y-[70px] sm:bottom-[164px] sm:space-y-[171px]": large,
                     })}
                 >
                     <CollectionOfTheMonthWinnersCollectionAvatar
                         image={winners.winners[0].image}
                         large={large}
+                        slug={winners.winners[0].slug}
+                        name={winners.winners[0].name}
                     />
 
                     <CollectionOfTheMonthWinnersVotesLabel
@@ -208,8 +224,8 @@ export const WinnersChart = ({
                     <CollectionOfTheMonthWinnersWinnerWrapper
                         className={cn(
                             {
-                                "space-y-[124px]": !large,
-                                "space-y-[76px] sm:space-y-[174px]": large,
+                                "space-y-[121px]": !large,
+                                "space-y-[71px] sm:space-y-[171px]": large,
                             },
                             [
                                 large
@@ -228,6 +244,8 @@ export const WinnersChart = ({
                         <CollectionOfTheMonthWinnersCollectionAvatar
                             image={winner.image}
                             large={large}
+                            slug={winner.slug}
+                            name={winner.name}
                         />
 
                         <CollectionOfTheMonthWinnersVotesLabel
@@ -255,8 +273,8 @@ export const WinnersChart = ({
                 <CollectionOfTheMonthWinnersWinnerWrapper
                     className={cn(
                         {
-                            "space-y-[124px]": !large,
-                            "space-y-[76px] sm:space-y-[174px]": large,
+                            "space-y-[121px]": !large,
+                            "space-y-[71px] sm:space-y-[171px]": large,
                         },
                         [
                             large
@@ -277,6 +295,8 @@ export const WinnersChart = ({
                     <CollectionOfTheMonthWinnersCollectionAvatar
                         image={winner.image}
                         large={large}
+                        slug={winner.slug}
+                        name={winner.name}
                     />
 
                     <CollectionOfTheMonthWinnersVotesLabel
