@@ -266,4 +266,17 @@ describe("CollectionsFullTable", () => {
 
         expect(getByTestId("CollectionsTableItem__unknown-supply")).toBeInTheDocument();
     });
+
+    it("should show supply if it exists", () => {
+        const { queryByTestId } = render(
+            <CollectionsFullTable
+                collections={[{ ...collection, supply: 10 }]}
+                user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
+            />,
+        );
+
+        expect(queryByTestId("CollectionsTableItem__unknown-supply")).not.toBeInTheDocument();
+    });
 });
