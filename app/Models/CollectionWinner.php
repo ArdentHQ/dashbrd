@@ -53,6 +53,8 @@ class CollectionWinner extends Model
     {
         $winners = static::query()
                         ->with('collection', 'collection.floorPriceToken')
+                        ->orderBy('year', 'desc')
+                        ->orderBy('month', 'desc')
                         ->get()
                         ->groupBy(fn ($winner) => $winner->month.'-'.$winner->year);
 
