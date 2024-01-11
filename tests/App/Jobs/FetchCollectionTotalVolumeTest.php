@@ -11,11 +11,29 @@ it('should fetch total volume for the collection', function () {
 
     $collection = Collection::factory()->create([
         'total_volume' => '254',
+        'extra_attributes' => [
+            'opensea_slug' => 'test',
+        ],
     ]);
 
     (new FetchCollectionTotalVolume($collection))->handle();
 
     expect($collection->fresh()->total_volume)->toBe('753');
+});
+
+it('does not run for collections without an OpenSea slug', function () {
+    Opensea::shouldReceive('getCollectionTotalVolume')->never();
+
+    $collection = Collection::factory()->create([
+        'total_volume' => null,
+        'extra_attributes' => [
+            'opensea_slug' => null,
+        ],
+    ]);
+
+    (new FetchCollectionTotalVolume($collection))->handle();
+
+    expect($collection->fresh()->total_volume)->toBeNull();
 });
 
 it('has a unique ID', function () {
