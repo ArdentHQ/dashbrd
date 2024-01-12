@@ -56,7 +56,7 @@ const getTabClasses = ({
             baseClassName,
             "justify-center select-none rounded-full px-4 h-8 text-sm -outline-offset-[3px]",
             {
-                "border-transparent bg-white text-theme-secondary-900 shadow-sm dark:bg-theme-dark-800 dark:text-theme-dark-50":
+                "border-transparent bg-white text-theme-primary-900 shadow-sm dark:bg-theme-dark-800 dark:text-theme-dark-50":
                     selected,
                 "active:bg-theme-secondary-200 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-900 dark:text-theme-dark-200":
                     !selected && !disabled,
