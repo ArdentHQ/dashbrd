@@ -12,7 +12,7 @@ class CollectionVoteController extends Controller
 {
     public function store(Request $request, Collection $collection): RedirectResponse
     {
-        if ($request->wallet()->votes()->where('voted_at', '>=', now()->subMonth())->exists()) {
+        if ($request->wallet()->votes()->inCurrentMonth()->exists()) {
             return back()->toast(trans('pages.collections.collection_of_the_month.vote_failed'), type: 'error');
         }
 
