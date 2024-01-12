@@ -7,7 +7,7 @@ import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
 
 export const calculateCircleCount = (totalCount: number, availableWidth: number): number => {
-    const circleWidth = 20;
+    const circleWidth = 22;
     const overlapWidth = 4;
     const hiddenLabelWidth = 29;
 
