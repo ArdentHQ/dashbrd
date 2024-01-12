@@ -96,7 +96,7 @@ export const VoteCollections = ({
 
     return (
         <>
-            <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
+            <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:px-8 lg:pb-0 lg:pt-8 xl:border xl:pb-8">
                 <Heading
                     level={1}
                     as="h2"
