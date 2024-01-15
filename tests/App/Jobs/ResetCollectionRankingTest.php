@@ -41,3 +41,9 @@ it('stores collections that have the most votes', function () {
     expect($collection3->monthly_votes)->toBe(3);
     expect($collection3->monthly_rank)->toBe(1);
 });
+
+it('has unique ID', function () {
+    $job = new ResetCollectionRanking;
+
+    expect($job->uniqueId())->toBeString();
+});

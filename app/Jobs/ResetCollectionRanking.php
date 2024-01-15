@@ -23,4 +23,9 @@ class ResetCollectionRanking implements ShouldBeUnique, ShouldQueue
     {
         DB::update(get_query('collections.calculate_monthly_rank_and_votes_value'));
     }
+
+    public function uniqueId(): string
+    {
+        return static::class;
+    }
 }
