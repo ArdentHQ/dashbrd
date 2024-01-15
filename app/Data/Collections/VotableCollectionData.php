@@ -33,10 +33,11 @@ class VotableCollectionData extends Data
         public int $volumeDecimals,
         public int $nftsCount,
         public ?string $twitterUsername,
+        public bool $alreadyWon,
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false): self
     {
         /**
          * @var mixed $collection
@@ -61,7 +62,8 @@ class VotableCollectionData extends Data
             nftsCount: $collection->nfts_count,
             // We are not using the `->twitter` method because we need the username
             // not the twitter url
-            twitterUsername: $collection->extra_attributes->get('socials.twitter')
+            twitterUsername: $collection->extra_attributes->get('socials.twitter'),
+            alreadyWon: $alreadyWon,
         );
     }
 }
