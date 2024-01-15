@@ -43,6 +43,7 @@ export interface PaginationData<T> {
 }
 
 export interface PaginationProperties<T> extends HTMLAttributes<HTMLDivElement> {
+    responsiveBreakpoint?: "xs"|"sm"|"md"|"lg";
     data: PaginationData<T>;
     onPageChange?: (page: number) => void;
 }
