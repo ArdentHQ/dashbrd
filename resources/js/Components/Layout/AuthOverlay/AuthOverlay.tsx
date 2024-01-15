@@ -52,7 +52,7 @@ export const AuthOverlay = ({
         <Overlay
             data-testid="AuthOverlay"
             {...properties}
-            showOverlay={show}
+            isOpen={show}
             showCloseButton={showCloseButton}
         >
             <div className="px-5 text-center xs:px-8">
