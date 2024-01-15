@@ -25,11 +25,13 @@ export const Overlay = ({
         />
 
         <div className="fixed inset-0 z-[60] flex items-start justify-center sm:items-center">
-            <div className="w-full rounded-none border border-theme-secondary-100 bg-white shadow-3xl dark:border-theme-dark-800 dark:bg-theme-dark-900 dark:shadow-[0px_15px_35px_0px_rgba(18,18,19,0.4)] sm:w-[29rem] sm:rounded-3xl">
-                <Dialog.Panel className="mt-8 flex flex-col items-center space-y-6">{children}</Dialog.Panel>
-            </div>
+            <div>
+                <div className="w-full rounded-none border border-theme-secondary-100 bg-white shadow-3xl dark:border-theme-dark-800 dark:bg-theme-dark-900 dark:shadow-[0px_15px_35px_0px_rgba(18,18,19,0.4)] sm:w-[29rem] sm:rounded-3xl">
+                    <Dialog.Panel className="mt-8 flex flex-col items-center space-y-6">{children}</Dialog.Panel>
+                </div>
 
-            {belowContent}
+                {belowContent}
+            </div>
         </div>
     </Dialog>
 );
