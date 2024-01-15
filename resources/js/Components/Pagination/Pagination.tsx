@@ -1,4 +1,5 @@
 import { router } from "@inertiajs/react";
+import cn from "classnames";
 import { type FormEvent, useMemo, useState } from "react";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { IconButton } from "@/Components/Buttons/IconButton";
@@ -9,7 +10,6 @@ import { PageInput } from "@/Components/Pagination/PageInput";
 import { PageLink } from "@/Components/Pagination/PageLink";
 import { type PaginationProperties } from "@/Components/Pagination/Pagination.contracts";
 import { PreviousPageLink } from "@/Components/Pagination/PreviousPageLink";
-import cn from "classnames";
 
 export const Pagination = <T,>({
     data,
