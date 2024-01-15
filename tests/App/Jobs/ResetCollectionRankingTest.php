@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Jobs\ResetCollectionMonthlyVotesAndRank;
+use App\Jobs\ResetCollectionRanking;
 use App\Models\Collection;
 use App\Models\CollectionVote;
 use Carbon\Carbon;
@@ -26,7 +26,7 @@ it('stores collections that have the most votes', function () {
     expect(Collection::pluck('monthly_votes')->toArray())->toEqual([null, null, null]);
     expect(Collection::pluck('monthly_rank')->toArray())->toEqual([null, null, null]);
 
-    ResetCollectionMonthlyVotesAndRank::dispatch();
+    ResetCollectionRanking::dispatch();
 
     $collection->refresh();
     $collection2->refresh();
