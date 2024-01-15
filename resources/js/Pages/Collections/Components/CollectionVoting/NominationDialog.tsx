@@ -9,6 +9,7 @@ import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { LoadingBlock } from "@/Components/LoadingBlock/LoadingBlock";
 import { Tooltip } from "@/Components/Tooltip";
+import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { CollectionsVoteReceivedModal } from "@/Pages/Collections/Components/CollectionsVoteReceivedModal";
 
@@ -87,6 +88,8 @@ export const NominationDialog = ({
     const [selectedCollection, setSelectedCollection] = useState(0);
     const [collections, setCollections] = useState(initialCollections);
 
+    const { signedAction } = useAuthorizedAction();
+
     const [debouncedQuery] = useDebounce(query, 500);
 
     const searchCollections = async (): Promise<void> => {
@@ -130,22 +133,24 @@ export const NominationDialog = ({
     );
 
     const vote = (): void => {
-        setLoading(true);
+        void signedAction((): void => {
+            setLoading(true);
 
-        router.post(
-            route("collection-votes.create", collection),
-            {},
-            {
-                preserveState: true,
-                preserveScroll: true,
-                onFinish: () => {
-                    setLoading(false);
-                    setIsOpen(false);
+            router.post(
+                route("collection-votes.create", collection),
+                {},
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    onFinish: () => {
+                        setLoading(false);
+                        setIsOpen(false);
 
-                    setShowConfirmationDialog(true);
+                        setShowConfirmationDialog(true);
+                    },
                 },
-            },
-        );
+            );
+        });
     };
 
     return (
