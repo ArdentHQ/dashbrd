@@ -50,12 +50,14 @@ export const AuthOverlay = ({
 
     return (
         <Overlay
-            data-testid="AuthOverlay"
             {...properties}
             isOpen={show}
             showCloseButton={showCloseButton}
         >
-            <div className="px-5 text-center xs:px-8">
+            <div
+                data-testid="AuthOverlay"
+                className="px-5 text-center xs:px-8"
+            >
                 <div className="mb-1 text-theme-secondary-900 dark:text-theme-dark-50">
                     <Heading
                         level={3}
@@ -79,6 +81,7 @@ export const AuthOverlay = ({
                     )}
                 </p>
             </div>
+
             {needsMetaMask && <>{isDark ? <AuthInstallWalletDark /> : <AuthInstallWallet />}</>}
             {!needsMetaMask && (
                 <>
