@@ -65,23 +65,25 @@ export const VoteCollections = ({
     };
 
     const collectionsWithVote = useMemo(() => {
+        const eligibleCollections = collections.filter((c) => !c.alreadyWon);
+
         const shouldMergeUserVote =
             votedCollection !== null &&
-            !collections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
+            !eligibleCollections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
 
         if (shouldMergeUserVote) {
             if (isSmAndAbove) {
-                return [...collections.slice(0, 7), votedCollection];
+                return [...eligibleCollections.slice(0, 7), votedCollection];
             } else {
-                return [...collections.slice(0, 3), votedCollection];
+                return [...eligibleCollections.slice(0, 3), votedCollection];
             }
         }
 
         if (isSmAndAbove) {
-            return collections.slice(0, 8);
+            return eligibleCollections.slice(0, 8);
         }
 
-        return collections.slice(0, 4);
+        return eligibleCollections.slice(0, 4);
     }, [isSmAndAbove, collections, votedCollection]);
 
     const nominatableCollections = useMemo(() => {
