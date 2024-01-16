@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Number;
-
 it('returns the content of the sql file', function () {
     $contents = get_query('gallery.calculate_score');
 
