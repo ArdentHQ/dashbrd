@@ -232,7 +232,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
-    public function getNftCollectionVolume(Chain $chain, string $contractAddress): ?string
+    public function getCollectionVolume(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 

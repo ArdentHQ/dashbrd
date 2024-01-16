@@ -121,7 +121,7 @@ it('should get volume', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionVolume(Chain::Polygon, $collection->address);
 
     expect($data)->toBe('12300000000000000000');
 });
@@ -138,7 +138,7 @@ it('should handle no volume', function ($request) {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionVolume(Chain::Polygon, $collection->address);
 
     expect($data)->toBe(null);
 })->with([
