@@ -15,7 +15,7 @@ export const CollectionName = ({ collection }: { collection: App.Data.Collection
             data-testid="CollectionName"
             className="group relative h-11 w-full cursor-pointer md:h-20"
         >
-            <div className="absolute flex w-full  items-center space-x-4">
+            <div className="absolute flex w-full items-center space-x-4">
                 <div className="relative h-8 w-8 shrink-0 md:h-20 md:w-20">
                     <Img
                         wrapperClassName="aspect-square"

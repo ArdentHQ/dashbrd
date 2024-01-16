@@ -57,6 +57,7 @@ export const CollectionsFullTableItem = ({
             <TableCell
                 variant="start-list"
                 innerClassName="py-4"
+                className="w-full"
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
