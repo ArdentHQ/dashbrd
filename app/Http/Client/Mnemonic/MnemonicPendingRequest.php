@@ -99,7 +99,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/marketplacesservice_getfloorprice
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         $this->chain = MnemonicChain::fromChain($chain);
 

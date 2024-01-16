@@ -49,10 +49,10 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return $this->fromCache(
-            static fn () => Mnemonic::getNftCollectionFloorPrice($chain, $contractAddress),
+            static fn () => Mnemonic::getCollectionFloorPrice($chain, $contractAddress),
             [$chain->name, $contractAddress]
         );
     }

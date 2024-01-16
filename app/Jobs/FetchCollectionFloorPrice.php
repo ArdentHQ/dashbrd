@@ -53,7 +53,7 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
         $collection->save();
 
         $web3DataProvider = $this->getWeb3DataProvider();
-        $floorPrice = $web3DataProvider->getNftCollectionFloorPrice(
+        $floorPrice = $web3DataProvider->getCollectionFloorPrice(
             Chain::from($this->chainId), $this->address
         );
 
