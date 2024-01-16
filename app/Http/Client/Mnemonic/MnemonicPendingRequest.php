@@ -258,7 +258,7 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * @return Collection<int, Web3NftCollectionTrait>
      */
-    public function getNftCollectionTraits(Chain $chain, string $contractAddress): Collection
+    public function getCollectionTraits(Chain $chain, string $contractAddress): Collection
     {
         //  {
         //      "name": "string",

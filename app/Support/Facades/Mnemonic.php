@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Http;
  * @method static string | null getNftCollectionBanner(Chain $chain, string $contractAddress)
  * @method static int | null getNftCollectionOwners(Chain $chain, string $contractAddress)
  * @method static string | null getNftCollectionVolume(Chain $chain, string $contractAddress)
- * @method static Collection<int, Web3NftCollectionTrait> getNftCollectionTraits(Chain $chain, string $contractAddress)
+ * @method static Collection<int, Web3NftCollectionTrait> getCollectionTraits(Chain $chain, string $contractAddress)
  * @method static Collection<int, CollectionActivity> getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  * @method static Collection<int, CollectionActivity> getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  *

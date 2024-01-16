@@ -171,7 +171,7 @@ it('should fetch nft collection traits', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(25);
 });
@@ -198,7 +198,7 @@ it('should fetch nft collection traits with pagination', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(500 + 500 + 0 + 0);
 });
@@ -219,7 +219,7 @@ it('should fetch nft collection traits and deduplicate', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(1);
 });
@@ -240,7 +240,7 @@ it('should circuit break when fetching nft collection traits', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(1);
 });

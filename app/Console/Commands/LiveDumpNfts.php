@@ -300,7 +300,7 @@ class LiveDumpNfts extends Command
 
         $fs = Storage::disk(self::diskName);
 
-        $traits = Mnemonic::getNftCollectionTraits($chain, $address);
+        $traits = Mnemonic::getCollectionTraits($chain, $address);
 
         $path = $this->prepareCollectionPath($chain, $address);
 
