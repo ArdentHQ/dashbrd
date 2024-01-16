@@ -304,6 +304,11 @@ class LiveDumpNfts extends Command
         $this->info('Fetched collection traits, file: '.$fileName);
     }
 
+    /**
+     * @param  array<mixed>  $data
+     * @param  array<mixed>  $attributes
+     * @return array<mixed>
+     */
     private function filteredAttributes(array $data, array $attributes): array
     {
         foreach ($data as $key => $value) {
