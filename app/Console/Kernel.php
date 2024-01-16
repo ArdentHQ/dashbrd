@@ -12,6 +12,7 @@ use App\Console\Commands\FetchCollectionMetadata;
 use App\Console\Commands\FetchCollectionNfts;
 use App\Console\Commands\FetchCollectionOpenseaSlug;
 use App\Console\Commands\FetchCollectionTotalVolume;
+use App\Console\Commands\FetchCollectionVolume;
 use App\Console\Commands\FetchEnsDetails;
 use App\Console\Commands\FetchNativeBalances;
 use App\Console\Commands\FetchTokens;
@@ -123,9 +124,12 @@ class Kernel extends ConsoleKernel
             ->hourly();
 
         $schedule
-            // Command only fetches collections that don't have a slug yet
-            // so in most cases it will not run any request
             ->command(FetchCollectionTotalVolume::class)
+            ->withoutOverlapping()
+            ->daily();
+
+        $schedule
+            ->command(FetchCollectionVolume::class)
             ->withoutOverlapping()
             ->daily();
 

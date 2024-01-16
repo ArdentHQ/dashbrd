@@ -35,21 +35,23 @@ it('logs volume changes', function () {
     $network = Network::polygon();
 
     $collection = Collection::factory()->for($network)->create([
-        'volume' => null,
+        'volume' => '11000000000000000000',
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '11000000000000000000',
+        'created_at' => now()->subHours(10),
     ]);
 
     (new FetchCollectionVolume($collection))->handle();
 
     $collection->refresh();
 
-    expect($collection->volumes()->count())->toBe(1);
-    expect($collection->volumes()->first()->volume)->toBe('12300000000000000000');
-
-    (new FetchCollectionVolume($collection))->handle();
-
-    $collection->refresh();
-
     expect($collection->volumes()->count())->toBe(2);
+    expect($collection->volumes()->oldest('id')->pluck('volume')->toArray())->toBe(['11000000000000000000', '12300000000000000000']);
+    expect($collection->avg_volume_24h)->toBe('11650000000000000000');
+    expect($collection->avg_volume_7d)->toBe('11650000000000000000');
+    expect($collection->avg_volume_1m)->toBe('11650000000000000000');
 });
 
 it('does not log volume changes if there is no volume', function () {
