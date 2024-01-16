@@ -67,7 +67,7 @@ it('should return null on 404 when getting nft floor price', function () {
         'https://deep-index.moralis.io/api/v2/nft/*/lowestprice?*' => Http::response(null, 404),
     ]);
 
-    expect(Moralis::getNftCollectionFloorPrice(Chain::ETH, '1'))->toBeNull();
+    expect(Moralis::getCollectionFloorPrice(Chain::ETH, '1'))->toBeNull();
 });
 
 it('should throw any non-404 error when getting nft floor price', function () {
@@ -75,5 +75,5 @@ it('should throw any non-404 error when getting nft floor price', function () {
         'https://deep-index.moralis.io/api/v2/nft/*/lowestprice?*' => Http::response(null, 400),
     ]);
 
-    expect(fn () => Moralis::getNftCollectionFloorPrice(Chain::ETH, '1'))->toThrow('400 Bad Request');
+    expect(fn () => Moralis::getCollectionFloorPrice(Chain::ETH, '1'))->toThrow('400 Bad Request');
 });

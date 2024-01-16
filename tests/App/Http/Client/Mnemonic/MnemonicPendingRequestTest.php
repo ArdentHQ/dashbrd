@@ -36,7 +36,7 @@ it('should throw a custom exception on connection failures', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(ConnectionException::class);
 
 it('should throw on 401', function () {
@@ -50,7 +50,7 @@ it('should throw on 401', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(Exception::class);
 
 it('should throw a custom exception on rate limits', function () {
@@ -66,7 +66,7 @@ it('should throw a custom exception on rate limits', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(RateLimitException::class);
 
 it('should not retry request on 400', function () {
@@ -472,5 +472,5 @@ it('should return null floor price on 400', function () {
         'network_id' => $network->id,
     ]);
 
-    expect(Mnemonic::getNftCollectionFloorPrice(Chain::ETH, $collection->address))->toBeNull();
+    expect(Mnemonic::getCollectionFloorPrice(Chain::ETH, $collection->address))->toBeNull();
 });
