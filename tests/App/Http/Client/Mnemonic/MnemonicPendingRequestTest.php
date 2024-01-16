@@ -100,7 +100,7 @@ it('should get owners', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionOwners(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionOwners(Chain::Polygon, $collection->address);
 
     expect($data)->toBe(789);
 });

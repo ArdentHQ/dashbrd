@@ -215,7 +215,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getownerscount
-    public function getNftCollectionOwners(Chain $chain, string $contractAddress): ?int
+    public function getCollectionOwners(Chain $chain, string $contractAddress): ?int
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
