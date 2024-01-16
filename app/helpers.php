@@ -28,28 +28,3 @@ if (! function_exists('get_query')) {
         return Blade::render($contents, $params);
     }
 }
-
-// @codeCoverageIgnoreStart
-if (! function_exists('filterAttributes')) {
-    // @codeCoverageIgnoreEnd
-
-    /**
-     * @param  array<mixed>  $data
-     * @param  array<mixed>  $attributes
-     * @return array<mixed>
-     */
-    function filterAttributes($data, $attributes): array
-    {
-        foreach ($data as $key => $value) {
-            if (is_array($value) && isset($attributes[$key])) {
-                if (is_array($attributes[$key])) {
-                    $data[$key] = filterAttributes($data[$key], $attributes[$key]);
-                }
-            } elseif (! in_array($key, $attributes)) {
-                unset($data[$key]);
-            }
-        }
-
-        return $data;
-    }
-}

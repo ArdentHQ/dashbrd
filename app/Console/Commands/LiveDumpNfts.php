@@ -204,15 +204,6 @@ class LiveDumpNfts extends Command
         return $nft;
     }
 
-    /**
-     * @param  array<mixed>  $nft
-     * @return array<mixed>
-     */
-    private function filterNftAttributes(array $nft): array
-    {
-        return $this->removeEncodedAttributes(filterAttributes($nft, $this->requiredAttributes));
-    }
-
     private function getCollectionNftsAndPersist(
         NftCollection $collection,
         Chain $chain,
@@ -234,7 +225,9 @@ class LiveDumpNfts extends Command
 
             $data = Alchemy::collectionNftsRaw($collection, $cursor);
 
-            $data['nfts'] = array_map(fn ($nft) => $this->filterNftAttributes($nft), $data['nfts']);
+            $data['nfts'] = array_map(fn ($nft) => $this->removeEncodedAttributes(
+                $this->filteredAttributes($nft, $this->requiredAttributes)
+            ), $data['nfts']);
 
             $fileName = $path.$chunk.'.json';
 
@@ -309,5 +302,18 @@ class LiveDumpNfts extends Command
         $fs->put($fileName, (string) json_encode($traits, JSON_PRETTY_PRINT));
 
         $this->info('Fetched collection traits, file: '.$fileName);
+    }
+
+    private function filteredAttributes(array $data, array $attributes): array
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value) && isset($attributes[$key]) && is_array($attributes[$key])) {
+                $data[$key] = $this->filteredAttributes($data[$key], $attributes[$key]);
+            } elseif (! in_array($key, $attributes)) {
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
     }
 }
