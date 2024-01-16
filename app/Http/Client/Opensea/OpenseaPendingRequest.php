@@ -11,6 +11,7 @@ use App\Enums\OpenseaChain;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Http\Client\Opensea\Data\OpenseaNftDetails;
+use App\Models\Collection;
 use App\Support\CryptoUtils;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
@@ -19,6 +20,7 @@ use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Cache;
 use Throwable;
 
 class OpenseaPendingRequest extends PendingRequest
@@ -97,7 +99,7 @@ class OpenseaPendingRequest extends PendingRequest
     public function getNftCollectionFloorPrice(string $collectionSlug): ?Web3NftCollectionFloorPrice
     {
         try {
-            $response = self::get(sprintf('collection/%s/stats', $collectionSlug));
+            $response = $this->makeCollectionStatsRequest($collectionSlug);
 
             $floorPrice = $response->json('stats.floor_price');
 
@@ -123,5 +125,30 @@ class OpenseaPendingRequest extends PendingRequest
 
             throw $exception;
         }
+    }
+
+    /**
+     * @see https://docs.opensea.io/reference/get_collection_stats
+     */
+    public function getCollectionTotalVolume(Collection $collection): ?string
+    {
+        $response = $this->makeCollectionStatsRequest($collection->openSeaSlug());
+
+        $volume = $response->json('stats.total_volume');
+
+        return $volume === null
+                    ? null
+                    : CryptoUtils::convertToWei($volume, CryptoCurrencyDecimals::ETH->value);
+    }
+
+    private function makeCollectionStatsRequest(string $collectionSlug): Response
+    {
+        // We cache for an hour because floor price job runs every hour...
+        // But we cache it just so that we can reuse the response for total volume without needing to hit an API endpoint again...
+        $ttl = now()->addMinutes(59);
+
+        return Cache::remember('opensea:collection-stats:'.$collectionSlug, $ttl, function () use ($collectionSlug) {
+            return self::get(sprintf('collection/%s/stats', $collectionSlug));
+        });
     }
 }

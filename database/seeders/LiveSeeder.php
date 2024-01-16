@@ -16,8 +16,6 @@ class LiveSeeder extends Seeder
         $this->call(DatabaseSeeder::class);
         $this->call(LiveUserSeeder::class);
 
-        $this->call(WinnerCollectionSeeder::class);
-
         Cache::clear();
     }
 }

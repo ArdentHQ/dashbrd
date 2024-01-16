@@ -33,21 +33,22 @@ class VotableCollectionData extends Data
         public int $volumeDecimals,
         public int $nftsCount,
         public ?string $twitterUsername,
+        public bool $alreadyWon,
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false): self
     {
         /**
          * @var mixed $collection
          */
         return new self(
             id: $collection->id,
-            rank: $collection->rank,
+            rank: $collection->monthly_rank,
             name: $collection->name,
             address: $collection->address,
             image: $collection->extra_attributes->get('image'),
-            votes: $showVotes ? $collection->votes_count : null,
+            votes: $showVotes ? $collection->monthly_votes : null,
             floorPrice: $collection->floor_price,
             floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floor_price_symbol,
@@ -59,7 +60,10 @@ class VotableCollectionData extends Data
             volumeCurrency: 'ETH',
             volumeDecimals: 18,
             nftsCount: $collection->nfts_count,
-            twitterUsername: $collection->twitter(),
+            // We are not using the `->twitter` method because we need the username
+            // not the twitter url
+            twitterUsername: $collection->extra_attributes->get('socials.twitter'),
+            alreadyWon: $alreadyWon,
         );
     }
 }

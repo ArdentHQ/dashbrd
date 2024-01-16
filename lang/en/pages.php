@@ -91,6 +91,8 @@ return [
                 'x_text' => 'I voted for :collection for collection of the month @dashbrdapp! Go show your support!',
             ],
             'vote_success' => 'Your vote has been successfully submitted',
+            'vote_failed' => 'You already cast your vote',
+            'already_won' => 'This collecction has already won Collection of the Month.',
             'content_to_be_added' => [
                 'title' => 'Content to be added',
                 'description' => 'There will be a list of previous month winners here soon!',
@@ -120,6 +122,7 @@ return [
             'nominate_collection' => 'Nominate a collection',
             'vote_to_reveal' => 'Vote to reveal data',
             'already_voted' => 'You’ve already nominated. Come back next month!',
+            'select_collection' => 'Please, select a collection to nominate',
         ],
         'sorting' => [
             'token_number' => 'Token Number',

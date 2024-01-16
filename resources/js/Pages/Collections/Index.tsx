@@ -22,7 +22,7 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     collections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
-    collectionsOfTheMonth: App.Data.Collections.CollectionOfTheMonthData[];
+    collectionsOfTheMonth: App.Data.Collections.CollectionWinnersData;
     votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
     collectionsTableResults: App.Data.Collections.CollectionData[];
@@ -132,9 +132,10 @@ const CollectionsIndex = ({
                         <ViewAllButton filters={currentFilters} />
                     </div>
                 </div>
+
                 <div
                     id="votes"
-                    className="mt-12 flex w-full flex-col gap-4 xl:flex-row"
+                    className="mt-12 flex w-full flex-col rounded-xl border-theme-secondary-300 dark:border-theme-dark-700 lg:border xl:flex-row xl:gap-4 xl:border-0"
                 >
                     <VoteCollections
                         collections={votableCollections}

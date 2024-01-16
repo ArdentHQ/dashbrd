@@ -65,23 +65,25 @@ export const VoteCollections = ({
     };
 
     const collectionsWithVote = useMemo(() => {
+        const eligibleCollections = collections.filter((c) => !c.alreadyWon);
+
         const shouldMergeUserVote =
             votedCollection !== null &&
-            !collections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
+            !eligibleCollections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
 
         if (shouldMergeUserVote) {
             if (isSmAndAbove) {
-                return [...collections.slice(0, 7), votedCollection];
+                return [...eligibleCollections.slice(0, 7), votedCollection];
             } else {
-                return [...collections.slice(0, 3), votedCollection];
+                return [...eligibleCollections.slice(0, 3), votedCollection];
             }
         }
 
         if (isSmAndAbove) {
-            return collections.slice(0, 8);
+            return eligibleCollections.slice(0, 8);
         }
 
-        return collections.slice(0, 4);
+        return eligibleCollections.slice(0, 4);
     }, [isSmAndAbove, collections, votedCollection]);
 
     const nominatableCollections = useMemo(() => {
@@ -96,7 +98,7 @@ export const VoteCollections = ({
 
     return (
         <>
-            <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:border lg:p-8">
+            <div className="flex w-full min-w-0 flex-col justify-center gap-4 rounded-xl border-theme-secondary-300 p-0 dark:border-theme-dark-700 lg:gap-6 lg:px-8 lg:pb-0 lg:pt-8 xl:border xl:pb-8">
                 <Heading
                     level={1}
                     as="h2"
@@ -166,6 +168,7 @@ export const VoteCollections = ({
                     setIsOpen={setIsDialogOpen}
                     initialCollections={nominatableCollections}
                     user={user}
+                    votedCollection={votedCollection}
                 />
             </div>
 

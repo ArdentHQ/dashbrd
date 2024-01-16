@@ -10,6 +10,7 @@ use App\Data\Collections\CollectionDetailData;
 use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
+use App\Data\Collections\CollectionWinnersData;
 use App\Data\Collections\PopularCollectionData;
 use App\Data\Collections\VotableCollectionData;
 use App\Data\Gallery\GalleryNftData;
@@ -28,6 +29,7 @@ use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
 use App\Models\Article;
 use App\Models\Collection;
+use App\Models\CollectionWinner;
 use App\Models\User;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
@@ -63,12 +65,13 @@ class CollectionController extends Controller
         ]);
     }
 
-    /**
-     * @return DataCollection<int, CollectionOfTheMonthData>
-     */
-    private function getCollectionsOfTheMonth(): DataCollection
+    private function getCollectionsOfTheMonth(): CollectionWinnersData
     {
-        return CollectionOfTheMonthData::collection(Collection::winnersOfThePreviousMonth()->limit(3)->get());
+        return new CollectionWinnersData(
+            year: now()->subMonth()->year,
+            month: now()->subMonth()->month,
+            winners: CollectionWinner::current()->map(fn ($winner) => CollectionOfTheMonthData::fromModel($winner))
+        );
     }
 
     private function getVotedCollection(Request $request): ?VotableCollectionData
@@ -79,7 +82,7 @@ class CollectionController extends Controller
             return null;
         }
 
-        $collection = Collection::votableWithRank($user->currency())->votedByUserInCurrentMonth($user)->first();
+        $collection = Collection::votable($user->currency())->votedByUserInCurrentMonth($user)->first();
 
         return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true) : null;
     }
@@ -98,8 +101,10 @@ class CollectionController extends Controller
         // 8 collections on the vote table + 5 collections to nominate
         $collections = Collection::votable($currency)->limit(13)->get();
 
-        return $collections->map(function (Collection $collection) use ($userVoted, $currency) {
-            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted);
+        $winners = CollectionWinner::ineligibleCollectionIds();
+
+        return $collections->map(function (Collection $collection) use ($userVoted, $currency, $winners) {
+            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted, alreadyWon: $winners->contains($collection->id));
         });
     }
 

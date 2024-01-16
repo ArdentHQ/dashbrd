@@ -11,11 +11,11 @@ export const CollectionOfTheMonthWinners = ({
     winners,
 }: {
     className?: string;
-    winners: App.Data.Collections.CollectionOfTheMonthData[];
+    winners: App.Data.Collections.CollectionWinnersData;
 }): JSX.Element => {
     const { t } = useTranslation();
 
-    const showWinners = winners.length > 0;
+    const showWinners = winners.winners.length > 0;
 
     const date = new Date();
     date.setMonth(date.getMonth() - 1);
@@ -23,9 +23,9 @@ export const CollectionOfTheMonthWinners = ({
 
     return (
         <>
-            {winners.length > 0 && (
+            {winners.winners.length > 0 && (
                 <WinnersChartMobile
-                    winner={winners[0]}
+                    winner={winners.winners[0]}
                     previousMonth={previousMonth}
                 />
             )}
@@ -52,8 +52,8 @@ export const CollectionOfTheMonthWinners = ({
 
                 <div
                     className={cn("flex flex-1 justify-center", {
-                        "items-end": winners.length > 0,
-                        "items-center": winners.length === 0,
+                        "items-end": winners.winners.length > 0,
+                        "items-center": winners.winners.length === 0,
                     })}
                 >
                     <WinnersChart winners={winners} />

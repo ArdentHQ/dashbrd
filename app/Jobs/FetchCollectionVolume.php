@@ -66,6 +66,8 @@ class FetchCollectionVolume implements ShouldQueue
             }
         });
 
+        Collection::updateMonthlyRankAndVotes();
+
         Log::info('FetchCollectionVolume Job: Handled', [
             'collection' => $this->collection->address,
             'volume' => $volume,
