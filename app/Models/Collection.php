@@ -736,7 +736,6 @@ class Collection extends Model
         return $this->volumes()
                     ->selectRaw('avg(volume::numeric) as aggregate')
                     ->where('created_at', '>', $date)
-                    ->first()
-                    ->aggregate;
+                    ->value('aggregate');
     }
 }
