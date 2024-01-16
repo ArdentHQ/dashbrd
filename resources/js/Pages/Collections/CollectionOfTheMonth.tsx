@@ -1,7 +1,7 @@
-import { DateTime } from "@ardenthq/sdk-intl";
 import { type PageProps, router } from "@inertiajs/core";
 import { Head } from "@inertiajs/react";
 import cn from "classnames";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { WinnerCollections } from "./Components/WinnerCollections";
 import { IconButton } from "@/Components/Buttons";
@@ -12,18 +12,20 @@ import { DefaultLayout } from "@/Layouts/DefaultLayout";
 
 interface CollectionOfTheMonthProperties extends PageProps {
     title: string;
-    winners: App.Data.Collections.CollectionOfTheMonthData[];
+    winners: App.Data.Collections.CollectionWinnersData[];
 }
 
 const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties): JSX.Element => {
     const { t } = useTranslation();
 
-    const latestMonthWinners = winners.filter(
-        (winner) =>
-            DateTime.make(winner.hasWonAt ?? undefined).format("MMMM:YYYY") === DateTime.make().format("MMMM:YYYY"),
-    );
+    const latestMonthWinners = winners[0];
 
-    const month = DateTime.make(latestMonthWinners[0]?.hasWonAt ?? undefined).format("MMMM");
+    const month = t(`common.months.${latestMonthWinners.month - 1}`);
+
+    const winnersWithoutLatest = useMemo(
+        () => winners.filter((w) => w.month !== latestMonthWinners.month || w.year !== latestMonthWinners.year),
+        [winners],
+    );
 
     return (
         <DefaultLayout>
@@ -73,7 +75,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
                         </div>
                     </div>
 
-                    <WinnerCollections collections={winners} />
+                    <WinnerCollections collections={winnersWithoutLatest} />
                 </div>
             </div>
         </DefaultLayout>

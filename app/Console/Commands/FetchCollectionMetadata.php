@@ -25,7 +25,7 @@ class FetchCollectionMetadata extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-metadata';
+    protected $signature = 'collections:fetch-metadata';
 
     /**
      * The console command description.

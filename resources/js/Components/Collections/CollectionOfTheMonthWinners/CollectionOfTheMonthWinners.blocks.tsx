@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Img } from "@/Components/Image";
 import { Link } from "@/Components/Link";
+import { Tooltip } from "@/Components/Tooltip";
 import { useDarkModeContext } from "@/Contexts/DarkModeContext";
 import {
     CrownBadge,
@@ -52,19 +53,32 @@ export const CollectionOfTheMonthWinnersWinnerWrapper = ({
 export const CollectionOfTheMonthWinnersCollectionAvatar = ({
     image,
     large,
+    slug,
+    name,
 }: {
     image: string | null;
     large: boolean;
+    slug: string;
+    name: string | null;
 }): JSX.Element => (
-    <Img
-        wrapperClassName={cn("aspect-square relative", {
-            "h-20 w-20": !large,
-            "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
-        })}
-        className="rounded-full"
-        src={image}
-        isCircle
-    />
+    <Tooltip content={name}>
+        <div className="flex">
+            <Link
+                href={route("collections.view", slug)}
+                className="transition-default rounded-full border-[3px] border-transparent hover:border-theme-primary-100 dark:hover:border-theme-dark-500"
+            >
+                <Img
+                    wrapperClassName={cn("aspect-square relative", {
+                        "h-20 w-20": !large,
+                        "sm:h-[115px] sm:w-[115px] w-[52px] h-[52px]": large,
+                    })}
+                    className="rounded-full"
+                    src={image}
+                    isCircle
+                />
+            </Link>
+        </div>
+    </Tooltip>
 );
 
 export const CollectionOfTheMonthWinnersChart = ({
@@ -148,12 +162,12 @@ export const WinnersChart = ({
     winners,
     large = false,
 }: {
-    winners: App.Data.Collections.CollectionOfTheMonthData[];
+    winners: App.Data.Collections.CollectionWinnersData;
     large?: boolean;
 }): JSX.Element => {
     const { isDark } = useDarkModeContext();
 
-    if (winners.length === 0) {
+    if (winners.winners.length === 0) {
         if (isDark) {
             return <VoteNextMonthWinnersDark />;
         }
@@ -161,7 +175,7 @@ export const WinnersChart = ({
         return <VoteNextMonthWinners />;
     }
 
-    const totalWinners: 1 | 2 | 3 = winners.length as 1 | 2 | 3;
+    const totalWinners: 1 | 2 | 3 = winners.winners.length as 1 | 2 | 3;
 
     const chart = (
         <CollectionOfTheMonthWinnersChart
@@ -178,17 +192,19 @@ export const WinnersChart = ({
             >
                 <CollectionOfTheMonthWinnersWinnerWrapper
                     className={cn({
-                        "bottom-[107px] space-y-[124px]": !large,
-                        "bottom-[61px] space-y-[70px] sm:bottom-[164px] sm:space-y-[174px]": large,
+                        "bottom-[107px] space-y-[121px]": !large,
+                        "bottom-[61px] space-y-[70px] sm:bottom-[164px] sm:space-y-[171px]": large,
                     })}
                 >
                     <CollectionOfTheMonthWinnersCollectionAvatar
-                        image={winners[0].image}
+                        image={winners.winners[0].image}
                         large={large}
+                        slug={winners.winners[0].slug}
+                        name={winners.winners[0].name}
                     />
 
                     <CollectionOfTheMonthWinnersVotesLabel
-                        votes={winners[0].votes}
+                        votes={winners.winners[0].votes}
                         large={large}
                     />
                 </CollectionOfTheMonthWinnersWinnerWrapper>
@@ -204,12 +220,12 @@ export const WinnersChart = ({
                 })}
                 chart={chart}
             >
-                {winners.map((winner, index) => (
+                {winners.winners.map((winner, index) => (
                     <CollectionOfTheMonthWinnersWinnerWrapper
                         className={cn(
                             {
-                                "space-y-[124px]": !large,
-                                "space-y-[76px] sm:space-y-[174px]": large,
+                                "space-y-[121px]": !large,
+                                "space-y-[71px] sm:space-y-[171px]": large,
                             },
                             [
                                 large
@@ -228,6 +244,8 @@ export const WinnersChart = ({
                         <CollectionOfTheMonthWinnersCollectionAvatar
                             image={winner.image}
                             large={large}
+                            slug={winner.slug}
+                            name={winner.name}
                         />
 
                         <CollectionOfTheMonthWinnersVotesLabel
@@ -251,12 +269,12 @@ export const WinnersChart = ({
             })}
             chart={chart}
         >
-            {[winners[1], winners[0], winners[2]].map((winner, index) => (
+            {[winners.winners[1], winners.winners[0], winners.winners[2]].map((winner, index) => (
                 <CollectionOfTheMonthWinnersWinnerWrapper
                     className={cn(
                         {
-                            "space-y-[124px]": !large,
-                            "space-y-[76px] sm:space-y-[174px]": large,
+                            "space-y-[121px]": !large,
+                            "space-y-[71px] sm:space-y-[171px]": large,
                         },
                         [
                             large
@@ -277,6 +295,8 @@ export const WinnersChart = ({
                     <CollectionOfTheMonthWinnersCollectionAvatar
                         image={winner.image}
                         large={large}
+                        slug={winner.slug}
+                        name={winner.name}
                     />
 
                     <CollectionOfTheMonthWinnersVotesLabel
@@ -305,39 +325,41 @@ export const WinnersChartMobile = ({
     const { t } = useTranslation();
 
     return (
-        <div className="mt-6 border-t border-theme-secondary-300 pt-6 dark:border-theme-dark-700 xl:hidden">
-            <div className="collection-of-the-month-mobile flex flex-col items-center rounded-xl px-4 py-3 sm:flex-row sm:justify-between  ">
-                <div className="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-x-3.5 sm:space-y-0">
-                    <div className="flex">
-                        <div className="relative">
-                            <Img
-                                wrapperClassName="aspect-square h-10 w-10 "
-                                className="rounded-full"
-                                src={winner.image}
-                                isCircle
-                            />
+        <div className="lg:px-8 lg:pb-8 xl:hidden">
+            <div className="mt-6 border-t border-theme-secondary-300 pt-6 dark:border-theme-dark-700">
+                <div className="collection-of-the-month-mobile flex flex-col items-center rounded-xl px-4 py-3 sm:flex-row sm:justify-between  ">
+                    <div className="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-x-3.5 sm:space-y-0">
+                        <div className="flex">
+                            <div className="relative">
+                                <Img
+                                    wrapperClassName="aspect-square h-10 w-10 "
+                                    className="rounded-full"
+                                    src={winner.image}
+                                    isCircle
+                                />
+                            </div>
+
+                            <div className="relative -my-1 -ml-2.5 rounded-full bg-[#eef] p-1 dark:bg-theme-dark-800">
+                                {isDark ? <CrownBadgeDark /> : <CrownBadge />}
+                            </div>
                         </div>
 
-                        <div className="relative -my-1 -ml-2.5 rounded-full bg-[#eef] p-1 dark:bg-theme-dark-800">
-                            {isDark ? <CrownBadgeDark /> : <CrownBadge />}
-                        </div>
+                        <span className="collection-of-the-month-legend text-lg font-medium">
+                            {t("pages.collections.collection_of_the_month.winners_month", {
+                                month: previousMonth,
+                            })}
+                        </span>
                     </div>
 
-                    <span className="collection-of-the-month-legend text-lg font-medium">
-                        {t("pages.collections.collection_of_the_month.winners_month", {
-                            month: previousMonth,
-                        })}
-                    </span>
+                    <Link
+                        variant="link"
+                        textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
+                        href={route("collection-of-the-month")}
+                        fontSize="text-base"
+                    >
+                        {t("pages.collections.collection_of_the_month.view_previous_winners")}
+                    </Link>
                 </div>
-
-                <Link
-                    variant="link"
-                    textColor="text-theme-primary-600 dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500"
-                    href={route("collection-of-the-month")}
-                    fontSize="text-base"
-                >
-                    {t("pages.collections.collection_of_the_month.view_previous_winners")}
-                </Link>
             </div>
         </div>
     );

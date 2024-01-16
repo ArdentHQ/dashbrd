@@ -16,7 +16,7 @@ class FetchCollectionVolume extends Command
      *
      * @var string
      */
-    protected $signature = 'nfts:fetch-collection-volume {--collection-id=}';
+    protected $signature = 'collections:fetch-volume {--collection-id=}';
 
     /**
      * The console command description.

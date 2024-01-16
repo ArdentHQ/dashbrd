@@ -93,7 +93,7 @@ export const VoteCountdown = ({ hasUserVoted, onSubmit, isDisabled }: Properties
                 </Button>
             )}
 
-            <div className="my-3 flex items-center justify-center text-sm font-semibold leading-4 text-theme-secondary-700 dark:text-theme-dark-300 sm:px-5 md:text-base">
+            <div className="my-3 flex items-center justify-center text-sm font-medium leading-4 text-theme-secondary-700 dark:text-theme-dark-300 sm:px-5 md:text-base">
                 {t("pages.collections.vote.time_left")}
                 {": "}
                 {countdownDisplay}

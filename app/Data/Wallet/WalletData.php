@@ -23,6 +23,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
     'timestamps' => '{tokens_fetched_at: number|null, native_balances_fetched_at: number|null}',
     'isRefreshingCollections' => 'boolean',
     'canRefreshCollections' => 'boolean',
+    'hasErc1155Nfts' => '{eth: boolean, polygon: boolean}',
 ])]
 class WalletData extends Data
 {
@@ -45,6 +46,10 @@ class WalletData extends Data
 
         public bool $isRefreshingCollections,
         public bool $canRefreshCollections,
+        /**
+         * @var array{eth: bool, polygon: bool} $hasErc1155Nfts
+         */
+        public array $hasErc1155Nfts,
     ) {
     }
 
@@ -70,6 +75,10 @@ class WalletData extends Data
             ],
             isRefreshingCollections: (bool) $wallet->is_refreshing_collections,
             canRefreshCollections: $wallet->canRefreshCollections(),
+            hasErc1155Nfts: [
+                'eth' => $wallet->owns_erc1155_tokens_eth ?? false,
+                'polygon' => $wallet->owns_erc1155_tokens_polygon ?? false,
+            ],
         );
     }
 }

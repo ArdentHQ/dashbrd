@@ -8,6 +8,7 @@ import { Dialog } from "@/Components/Dialog";
 import { EmptyBlock } from "@/Components/EmptyBlock/EmptyBlock";
 import { SearchInput } from "@/Components/Form/SearchInput";
 import { LoadingBlock } from "@/Components/LoadingBlock/LoadingBlock";
+import { Tooltip } from "@/Components/Tooltip";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { CollectionsVoteReceivedModal } from "@/Pages/Collections/Components/CollectionsVoteReceivedModal";
 
@@ -17,12 +18,14 @@ const NominationDialogFooter = ({
     setSelectedCollection,
     onSubmit,
     isDisabled,
+    votedCollection,
 }: {
     setIsOpen: (isOpen: boolean) => void;
     selectedCollection: number;
     setSelectedCollection: (selectedCollection: number) => void;
     onSubmit: () => void;
     isDisabled: boolean;
+    votedCollection: null | App.Data.Collections.VotableCollectionData;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -40,14 +43,24 @@ const NominationDialogFooter = ({
                     {t("common.cancel")}
                 </Button>
 
-                <Button
-                    variant="primary"
-                    onClick={onSubmit}
-                    disabled={selectedCollection === 0 || isDisabled}
-                    className="w-full items-end justify-center md:px-8"
+                <Tooltip
+                    content={
+                        votedCollection !== null
+                            ? t("pages.collections.vote.already_voted")
+                            : t("pages.collections.vote.select_collection")
+                    }
                 >
-                    {t("common.vote")}
-                </Button>
+                    <div>
+                        <Button
+                            variant="primary"
+                            onClick={onSubmit}
+                            disabled={selectedCollection === 0 || isDisabled || votedCollection !== null}
+                            className="w-full items-end justify-center md:px-8"
+                        >
+                            {t("common.vote")}
+                        </Button>
+                    </div>
+                </Tooltip>
             </div>
         </div>
     );
@@ -58,11 +71,13 @@ export const NominationDialog = ({
     setIsOpen,
     initialCollections,
     user,
+    votedCollection,
 }: {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     initialCollections: App.Data.Collections.VotableCollectionData[];
     user: App.Data.UserData | null;
+    votedCollection: null | App.Data.Collections.VotableCollectionData;
 }): JSX.Element => {
     const { t } = useTranslation();
     const [query, setQuery] = useState("");
@@ -151,6 +166,7 @@ export const NominationDialog = ({
                         setSelectedCollection={setSelectedCollection}
                         onSubmit={vote}
                         isDisabled={loading || searching}
+                        votedCollection={votedCollection}
                     />
                 }
             >

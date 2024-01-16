@@ -11,7 +11,7 @@ describe("CollectionOfTheMonthWinners", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
 
-        render(<CollectionOfTheMonthWinners winners={[]} />);
+        render(<CollectionOfTheMonthWinners winners={{ winners: [], year: 2023, month: 1 }} />);
 
         expect(screen.getByTestId("CollectionOfTheMonthWinners")).toBeInTheDocument();
 
@@ -23,7 +23,7 @@ describe("CollectionOfTheMonthWinners", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
 
-        render(<CollectionOfTheMonthWinners winners={[]} />);
+        render(<CollectionOfTheMonthWinners winners={{ winners: [], year: 2023, month: 1 }} />);
 
         expect(screen.getByTestId("CollectionOfTheMonthWinners")).toBeInTheDocument();
 
@@ -37,7 +37,7 @@ describe("CollectionOfTheMonthWinners", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
 
-        render(<CollectionOfTheMonthWinners winners={collections} />);
+        render(<CollectionOfTheMonthWinners winners={{ winners: collections, year: 2023, month: 2 }} />);
 
         expect(screen.getByTestId("CollectionOfTheMonthWinners")).toBeInTheDocument();
 
@@ -51,7 +51,7 @@ describe("CollectionOfTheMonthWinners", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
 
-        render(<CollectionOfTheMonthWinners winners={collections} />);
+        render(<CollectionOfTheMonthWinners winners={{ winners: collections, year: 2023, month: 2 }} />);
 
         expect(screen.getByTestId("CollectionOfTheMonthWinners")).toBeInTheDocument();
 
@@ -65,7 +65,15 @@ describe("WinnersChart", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
 
-        render(<WinnersChart winners={[]} />);
+        render(
+            <WinnersChart
+                winners={{
+                    year: 2023,
+                    month: 1,
+                    winners: [],
+                }}
+            />,
+        );
 
         expect(screen.queryByTestId("WinnersChart")).not.toBeInTheDocument();
 
@@ -77,7 +85,15 @@ describe("WinnersChart", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
 
-        render(<WinnersChart winners={[]} />);
+        render(
+            <WinnersChart
+                winners={{
+                    year: 2023,
+                    month: 1,
+                    winners: [],
+                }}
+            />,
+        );
 
         expect(screen.queryByTestId("WinnersChart")).not.toBeInTheDocument();
 
@@ -91,7 +107,7 @@ describe("WinnersChart", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: false, toggleDarkMode: vi.fn() });
 
-        render(<WinnersChart winners={collections} />);
+        render(<WinnersChart winners={{ winners: collections, year: 2023, month: 2 }} />);
 
         expect(screen.getByTestId("WinnersChart")).toBeInTheDocument();
 
@@ -105,7 +121,7 @@ describe("WinnersChart", () => {
             .spyOn(useDarkModeContext, "useDarkModeContext")
             .mockReturnValue({ isDark: true, toggleDarkMode: vi.fn() });
 
-        render(<WinnersChart winners={collections} />);
+        render(<WinnersChart winners={{ winners: collections, year: 2023, month: 2 }} />);
 
         expect(screen.getByTestId("WinnersChart")).toBeInTheDocument();
 
@@ -121,7 +137,7 @@ describe("WinnersChart", () => {
 
         render(
             <WinnersChart
-                winners={collections}
+                winners={{ winners: collections, year: 2023, month: 2 }}
                 large
             />,
         );
@@ -140,7 +156,7 @@ describe("WinnersChart", () => {
 
         render(
             <WinnersChart
-                winners={collections}
+                winners={{ winners: collections, year: 2023, month: 2 }}
                 large
             />,
         );

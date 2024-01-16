@@ -213,7 +213,6 @@ declare namespace App.Data.Collections {
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
         name: string | null;
-        hasWonAt: string | null;
         slug: string;
     };
     export type CollectionStatsData = {
@@ -235,6 +234,11 @@ declare namespace App.Data.Collections {
         value: string;
         displayType: string;
         nftsCount: number;
+    };
+    export type CollectionWinnersData = {
+        month: number;
+        year: number;
+        winners: App.Data.Collections.CollectionOfTheMonthData[];
     };
     export type PopularCollectionData = {
         id: number;
@@ -274,6 +278,7 @@ declare namespace App.Data.Collections {
         volumeDecimals: number;
         nftsCount: number;
         twitterUsername: string | null;
+        alreadyWon: boolean;
     };
 }
 declare namespace App.Data.Gallery {
@@ -571,6 +576,7 @@ declare namespace App.Data.Wallet {
         timestamps: { tokens_fetched_at: number | null; native_balances_fetched_at: number | null };
         isRefreshingCollections: boolean;
         canRefreshCollections: boolean;
+        hasErc1155Nfts: { eth: boolean; polygon: boolean };
     };
 }
 declare namespace App.Enums {

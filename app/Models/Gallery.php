@@ -79,8 +79,8 @@ class Gallery extends Model implements Viewable
     public function nfts(): BelongsToMany
     {
         return $this->belongsToMany(Nft::class, 'nft_gallery')
-            ->whereNull('nft_gallery.deleted_at')
-            ->withPivot('order_index');
+                    ->whereNull('nft_gallery.deleted_at')
+                    ->withPivot('order_index');
     }
 
     public function value(CurrencyCode $currency): ?float
@@ -95,7 +95,7 @@ class Gallery extends Model implements Viewable
      */
     public function collections(): Collection
     {
-        return CollectionModel::with('network')->whereIn('id', function ($query) {
+        return CollectionModel::erc721()->with('network')->whereIn('id', function ($query) {
             return $query->select('collection_id')->from('nfts')->whereIn('nfts.id', function ($query) {
                 return $query->select('nft_id')->from('nft_gallery')->where('gallery_id', $this->id);
             });

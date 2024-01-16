@@ -19,6 +19,10 @@ if (! function_exists('get_query')) {
             throw new Exception(sprintf('Cannot read file: %s', $name));
         }
 
+        if (count($params) === 0) {
+            return $contents;
+        }
+
         // @codeCoverageIgnoreEnd
 
         return Blade::render($contents, $params);

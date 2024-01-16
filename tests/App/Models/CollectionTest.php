@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\CollectionVote;
+use App\Models\CollectionWinner;
 use App\Models\FloorPriceHistory;
 use App\Models\Gallery;
 use App\Models\Network;
@@ -1248,6 +1249,8 @@ it('returns the collections with most votes in the same month first for votable'
         'voted_at' => Carbon::now(),
     ]);
 
+    Collection::updateMonthlyRankAndVotes();
+
     $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
@@ -1284,6 +1287,8 @@ it('only considers the votes on the same votes for votables', function () {
         'voted_at' => Carbon::now(),
     ]);
 
+    Collection::updateMonthlyRankAndVotes();
+
     $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
@@ -1314,6 +1319,8 @@ it('sorts by volume if collections have the same amount of votes', function () {
         'volume' => 1,
     ]);
     CollectionVote::factory()->count(3)->create(['collection_id' => $lowVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+
+    Collection::updateMonthlyRankAndVotes();
 
     $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
 
@@ -1375,6 +1382,32 @@ it('has floor price history', function () {
     expect($collection->floorPriceHistory()->count())->toBe(3);
 
     expect($collection->floorPriceHistory()->first())->toBeInstanceOf(FloorPriceHistory::class);
+});
+
+it('can scope the query to only include collections eligible for winning "collection of the month"', function () {
+    CollectionWinner::factory()->create([
+        'rank' => 1,
+        'month' => 10,
+        'year' => 2023,
+    ]);
+
+    CollectionWinner::factory()->create([
+        'rank' => 1,
+        'month' => 9,
+        'year' => 2023,
+    ]);
+
+    $winner = CollectionWinner::factory()->create([
+        'rank' => 2,
+        'month' => 10,
+        'year' => 2023,
+    ]);
+
+    $collections = Collection::eligibleToWin()->get();
+
+    expect(Collection::count())->toBe(3);
+    expect($collections)->toHaveCount(1);
+    expect($collections->contains($winner->collection))->toBeTrue();
 });
 
 it('should get sum of fiat values of collections', function () {

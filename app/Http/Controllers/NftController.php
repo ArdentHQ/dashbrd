@@ -10,6 +10,7 @@ use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Nfts\NftData;
 use App\Data\Token\TokenData;
+use App\Enums\TokenType;
 use App\Models\Collection;
 use App\Models\Nft;
 use App\Models\User;
@@ -22,6 +23,8 @@ class NftController extends Controller
 {
     public function show(Request $request, Collection $collection, Nft $nft): Response
     {
+        abort_if($collection->type !== TokenType::Erc721, 404);
+
         /** @var User|null $user */
         $user = $request->user();
 

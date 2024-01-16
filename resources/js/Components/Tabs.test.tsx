@@ -82,7 +82,7 @@ describe("Tabs", () => {
             </Tabs.Button>,
         );
 
-        expect(screen.getByTestId("test").parentElement?.className).toContain("text-theme-secondary-900");
+        expect(screen.getByTestId("test").parentElement?.className).toContain("text-theme-primary-900");
     });
 
     it("marks button as disabled", () => {

@@ -3,17 +3,12 @@
 declare(strict_types=1);
 
 use App\Models\Collection;
-use App\Models\CollectionVote;
+use App\Models\CollectionWinner;
 
 it('opens the collection of the month page', function () {
-    $collection = Collection::factory()->create([
-        'has_won_at' => now()->subMonth()->subDay(),
-    ]);
+    $collection = Collection::factory()->create();
 
-    CollectionVote::factory()->create([
-        'collection_id' => $collection->id,
-        'voted_at' => now()->subMonth()->subDay(),
-    ]);
+    CollectionWinner::factory()->for($collection)->create();
 
     $this->get(route('collection-of-the-month'))->assertOk();
 });

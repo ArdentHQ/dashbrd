@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\TokenType;
 use App\Models\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ class CollectionReportController extends Controller
 {
     public function store(Request $request, Collection $collection): RedirectResponse
     {
+        abort_if($collection->type !== TokenType::Erc721, 404);
+
         $request->validate([
             'reason' => ['required', 'string', Rule::in(config('dashbrd.reports.reasons'))],
         ]);

@@ -16,7 +16,7 @@ it('dispatches a job for collections', closure: function () {
 
     Bus::assertDispatchedTimes(FetchCollectionMetadataJob::class, 0);
 
-    $this->artisan('nfts:fetch-collection-metadata');
+    $this->artisan('collections:fetch-metadata');
 
     Bus::assertDispatchedTimes(FetchCollectionMetadataJob::class, 1);
 });
