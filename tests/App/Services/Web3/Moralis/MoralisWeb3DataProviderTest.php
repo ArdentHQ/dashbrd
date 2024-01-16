@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3CollectionFloorPrice;
+use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Client\Moralis;
 
 use App\Data\Wallet\WalletBalance;
-use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3CollectionFloorPrice;
+use App\Data\Web3\Web3Erc20TokenData;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
