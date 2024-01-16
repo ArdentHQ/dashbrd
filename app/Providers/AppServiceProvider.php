@@ -19,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -54,6 +55,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Str::macro('isEncodedImage', function (string $value) {
+            return Str::startsWith($value, 'data:image');
+        });
+
         // `$type` needs to be an instance of ToastType. However, adding that makes PHPStan fail with Internal Error...
         // Make sure to check this from time to time if this has been fixed... We'd much more prefer to have an enum instead of string..
         RedirectResponse::macro('toast', function (string $message, string $type = 'info', bool $expanded = false, bool $loading = false) {

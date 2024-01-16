@@ -196,7 +196,7 @@ class LiveDumpNfts extends Command
 
         foreach ($potentiallyEncodedAttributes as $attribute) {
             $value = Arr::get($nft, $attribute);
-            if ($value !== null && isBase64EncodedImage($value)) {
+            if ($value !== null && Str::isEncodedImage($value)) {
                 Arr::set($nft, $attribute, null);
             }
         }

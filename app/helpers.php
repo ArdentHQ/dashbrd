@@ -30,16 +30,6 @@ if (! function_exists('get_query')) {
 }
 
 // @codeCoverageIgnoreStart
-if (! function_exists('isBase64EncodedImage')) {
-    // @codeCoverageIgnoreEnd
-
-    function isBase64EncodedImage(string $string): bool
-    {
-        return str_starts_with($string, 'data:image');
-    }
-}
-
-// @codeCoverageIgnoreStart
 if (! function_exists('filterAttributes')) {
     // @codeCoverageIgnoreEnd
 

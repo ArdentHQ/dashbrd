@@ -600,8 +600,8 @@ class AlchemyPendingRequest extends PendingRequest
         $original = Arr::get($nft, 'image.cachedUrl');
 
         return [
-            'originalRaw' => empty($originalRaw) || isBase64EncodedImage($originalRaw) ? null : $originalRaw,
-            'original' => empty($original) || isBase64EncodedImage($original) ? null : $original,
+            'originalRaw' => empty($originalRaw) || Str::isEncodedImage($originalRaw) ? null : $originalRaw,
+            'original' => empty($original) || Str::isEncodedImage($original) ? null : $original,
         ];
     }
 
@@ -620,7 +620,7 @@ class AlchemyPendingRequest extends PendingRequest
         foreach ($imageKeys as $imageKey) {
             $imageUrl = Arr::get($nft, $imageKey);
 
-            if (! empty($imageUrl) && ! isBase64EncodedImage($imageUrl)) {
+            if (! empty($imageUrl) && ! Str::isEncodedImage($imageUrl)) {
                 return $imageUrl;
             }
         }

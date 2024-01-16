@@ -20,11 +20,6 @@ it('can compile blade template', function () {
     expect($contents)->toBe("select * from users where id = 'test'".PHP_EOL);
 });
 
-it('should detect if the given string is base64 encoded', function () {
-    expect(isBase64EncodedImage('data:image/png;base64,iVBhEUgAAAREDACTED'))->toBeTrue()
-        ->and(isBase64EncodedImage('https://cats.com/'))->toBeFalse();
-});
-
 it('format_amount_for_display', function ($amount, $expected) {
     expect(format_amount_for_display($amount))->toEqual($expected);
 })->with([
