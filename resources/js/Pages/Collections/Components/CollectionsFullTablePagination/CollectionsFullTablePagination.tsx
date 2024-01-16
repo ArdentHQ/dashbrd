@@ -29,6 +29,7 @@ export const CollectionsFullTablePagination = ({ pagination, onPageLimitChange }
                 <Pagination
                     data={pagination}
                     className="w-full xs:w-fit"
+                    responsiveBreakpoint="md"
                 />
             )}
         </div>
