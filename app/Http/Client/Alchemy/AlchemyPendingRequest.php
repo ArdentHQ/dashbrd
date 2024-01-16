@@ -6,7 +6,7 @@ namespace App\Http\Client\Alchemy;
 
 use App\Data\Web3\Web3ContractMetadata;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\AlchemyChain;
@@ -435,7 +435,7 @@ class AlchemyPendingRequest extends PendingRequest
             description: $description,
             extraAttributes: $this->getNftExtraAttributes($nft),
             floorPrice: $extractedFloorPrice ?
-                new Web3NftCollectionFloorPrice(
+                new Web3CollectionFloorPrice(
                     $extractedFloorPrice,
                     'eth', // always eth here
                     Carbon::now(),
@@ -484,7 +484,7 @@ class AlchemyPendingRequest extends PendingRequest
     }
 
     // https://docs.alchemy.com/reference/getfloorprice
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         // Only ETH is supported at the moment since this API is still considered in beta:
 
@@ -539,7 +539,7 @@ class AlchemyPendingRequest extends PendingRequest
             return null;
         }
 
-        return new Web3NftCollectionFloorPrice(
+        return new Web3CollectionFloorPrice(
             CryptoUtils::convertToWei($priceInfo['floorPrice'], CryptoCurrencyDecimals::forCurrency($priceInfo['priceCurrency'])),
             Str::lower($priceInfo['priceCurrency']),
             Carbon::parse($priceInfo['retrievedAt']),

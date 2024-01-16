@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;
@@ -61,7 +61,7 @@ it('can get nft floor price', function () {
 
     $provider = new MoralisWeb3DataProvider();
 
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, ''))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getNftCollectionFloorPrice(Chain::ETH, ''))->toEqual(new Web3CollectionFloorPrice(
         '1000000000000000',
         'eth',
         Carbon::parse('2021-06-04T16:00:15'),

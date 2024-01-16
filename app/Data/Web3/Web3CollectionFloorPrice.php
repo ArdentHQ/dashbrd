@@ -6,7 +6,7 @@ namespace App\Data\Web3;
 
 use Carbon\Carbon;
 
-class Web3NftCollectionFloorPrice
+class Web3CollectionFloorPrice
 {
     public function __construct(
         // WEI

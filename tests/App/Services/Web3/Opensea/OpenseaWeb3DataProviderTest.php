@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;
 use App\Jobs\Middleware\RateLimited;
@@ -44,7 +44,7 @@ it('should getNftCollectionFloorPrice  ', function () {
 
     $data = $provider->getNftCollectionFloorPrice(Chain::ETH, $contractAddress);
 
-    expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
+    expect($data)->toBeInstanceOf(Web3CollectionFloorPrice::class);
 });
 
 it('should getWalletTokens and throw NotImplementedException', function () {

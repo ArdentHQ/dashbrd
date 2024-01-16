@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Enums\Chain;
 use App\Http\Client\Mnemonic\MnemonicUnknownChainException;
 use App\Models\Collection;
@@ -22,7 +22,7 @@ it('can use the facade', function () {
     ]);
     $data = Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
 
-    expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
+    expect($data)->toBeInstanceOf(Web3CollectionFloorPrice::class);
 });
 
 it('throws if unknown chain', function () {

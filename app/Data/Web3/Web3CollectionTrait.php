@@ -6,7 +6,7 @@ namespace App\Data\Web3;
 
 use App\Enums\TraitDisplayType;
 
-class Web3NftCollectionTrait
+class Web3CollectionTrait
 {
     public function __construct(
         public string $name,

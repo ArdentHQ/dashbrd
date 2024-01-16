@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Client\Opensea;
 
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\OpenseaChain;
@@ -96,7 +96,7 @@ class OpenseaPendingRequest extends PendingRequest
     /**
      * @see https://docs.opensea.io/v1.0/reference/retrieving-collection-stats
      */
-    public function getNftCollectionFloorPrice(string $collectionSlug): ?Web3NftCollectionFloorPrice
+    public function getNftCollectionFloorPrice(string $collectionSlug): ?Web3CollectionFloorPrice
     {
         try {
             $response = $this->makeCollectionStatsRequest($collectionSlug);
@@ -110,7 +110,7 @@ class OpenseaPendingRequest extends PendingRequest
                 return null;
             }
 
-            return new Web3NftCollectionFloorPrice(
+            return new Web3CollectionFloorPrice(
                 price: CryptoUtils::convertToWei($floorPrice, CryptoCurrencyDecimals::forCurrency($currency)),
                 currency: $currency,
                 // For the rest of the providers we get the timestamp from the response

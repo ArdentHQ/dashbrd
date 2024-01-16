@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Contracts;
 
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
 use App\Models\Collection as CollectionModel;
@@ -38,5 +38,5 @@ interface Web3DataProvider
      */
     public function getMiddleware(): array;
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice;
+    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice;
 }
