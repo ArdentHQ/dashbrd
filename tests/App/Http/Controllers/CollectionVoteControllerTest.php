@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Collection;
 use App\Models\CollectionVote;
+use App\Models\CollectionWinner;
 use App\Support\Facades\Signature;
 use Carbon\Carbon;
 
@@ -82,5 +83,20 @@ describe('user with a signed wallet', function () {
             ->assertStatus(302);
 
         expect($collection->votes()->count())->toBe(2);
+    });
+
+    it('disallows votes for collection that have already previously won', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
+
+        CollectionWinner::factory()->for($collection)->create();
+
+        expect($collection->votes()->count())->toBe(0);
+
+        $this->actingAs($user)
+            ->post(route('collection-votes.create', $collection))
+            ->assertStatus(302);
+
+        expect($collection->votes()->count())->toBe(0);
     });
 });

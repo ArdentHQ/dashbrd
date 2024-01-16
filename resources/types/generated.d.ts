@@ -278,6 +278,7 @@ declare namespace App.Data.Collections {
         volumeDecimals: number;
         nftsCount: number;
         twitterUsername: string | null;
+        alreadyWon: boolean;
     };
 }
 declare namespace App.Data.Gallery {
