@@ -21,6 +21,7 @@ export default class VotableCollectionDataFactory extends ModelFactory<App.Data.
             volumeDecimals: 18,
             nftsCount: faker.datatype.number({ min: 1, max: 100 }),
             twitterUsername: null,
+            alreadyWon: false,
         };
     }
 }
