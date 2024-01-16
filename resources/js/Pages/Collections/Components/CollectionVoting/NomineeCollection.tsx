@@ -1,5 +1,5 @@
 import cn from "classnames";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { Trans } from "react-i18next";
 import { NominateCollectionName } from "@/Components/Collections/CollectionName";
 import {
@@ -25,8 +25,7 @@ export const NomineeCollection = ({
 }): JSX.Element => {
     const reference = useRef(null);
 
-    // @TODO hook up with real data
-    const isDisabled = collection.id === 9;
+    const isDisabled = useMemo(() => collection.alreadyWon, [collection]);
 
     const selectHandler = isDisabled
         ? undefined

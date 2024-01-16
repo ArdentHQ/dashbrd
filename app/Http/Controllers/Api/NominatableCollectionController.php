@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Data\Collections\VotableCollectionData;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
+use App\Models\CollectionWinner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,9 +28,11 @@ class NominatableCollectionController extends Controller
                                 ->orderBy('name', 'asc')
                                 ->get();
 
+        $winners = CollectionWinner::ineligibleCollectionIds();
+
         return response()->json([
             'collections' => $collections->map(
-                fn ($collection) => VotableCollectionData::fromModel($collection, $currency, showVotes: false)
+                fn ($collection) => VotableCollectionData::fromModel($collection, $currency, showVotes: false, alreadyWon: $winners->contains($collection->id))
             ),
         ]);
     }

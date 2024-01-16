@@ -1,4 +1,5 @@
 import { router } from "@inertiajs/react";
+import cn from "classnames";
 import { type FormEvent, useMemo, useState } from "react";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { IconButton } from "@/Components/Buttons/IconButton";
@@ -10,7 +11,12 @@ import { PageLink } from "@/Components/Pagination/PageLink";
 import { type PaginationProperties } from "@/Components/Pagination/Pagination.contracts";
 import { PreviousPageLink } from "@/Components/Pagination/PreviousPageLink";
 
-export const Pagination = <T,>({ data, onPageChange, ...properties }: PaginationProperties<T>): JSX.Element => {
+export const Pagination = <T,>({
+    data,
+    responsiveBreakpoint = "xs",
+    onPageChange,
+    ...properties
+}: PaginationProperties<T>): JSX.Element => {
     const [showInput, setShowInput] = useState(false);
     const [page, setPage] = useState(data.meta.current_page.toString());
 
@@ -91,7 +97,17 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
             className="w-full sm:w-fit"
             {...properties}
         >
-            <div className="mt-3 xs:hidden">
+            <div
+                className={cn(
+                    "mt-3",
+                    {
+                        xs: "xs:hidden",
+                        sm: "sm:hidden",
+                        md: "md:hidden",
+                        lg: "lg:hidden",
+                    }[responsiveBreakpoint],
+                )}
+            >
                 <MobileButton
                     page={pageAsNumber}
                     totalPages={totalPages}
@@ -111,7 +127,17 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                 />
             ) : (
                 <>
-                    <div className="mt-3 hidden items-center space-x-3 xs:flex xs:space-x-1 sm:w-fit  md:mt-0 ">
+                    <div
+                        className={cn(
+                            "mt-3 hidden items-center space-x-3 xs:space-x-1 sm:w-fit md:mt-0",
+                            {
+                                xs: "xs:flex",
+                                sm: "sm:flex",
+                                md: "md:flex",
+                                lg: "lg:flex",
+                            }[responsiveBreakpoint],
+                        )}
+                    >
                         {data.meta.current_page > 1 && (
                             <ButtonLink
                                 onClick={(event) => {
@@ -193,9 +219,19 @@ export const Pagination = <T,>({ data, onPageChange, ...properties }: Pagination
                         )}
                     </div>
 
-                    <div className="mt-3 xs:hidden">
+                    <div
+                        className={cn(
+                            "mt-3",
+                            {
+                                xs: "xs:hidden",
+                                sm: "sm:hidden",
+                                md: "md:hidden",
+                                lg: "lg:hidden",
+                            }[responsiveBreakpoint],
+                        )}
+                    >
                         <div className="flex w-full flex-col items-center gap-3">
-                            <div className="flex w-full flex-row items-center justify-between">
+                            <div className="flex w-full flex-row items-center justify-between gap-3">
                                 <ButtonLink
                                     onClick={(event) => {
                                         handlePageChange(event, 1);

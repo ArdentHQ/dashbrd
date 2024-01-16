@@ -8,9 +8,11 @@ use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Enums\Chain;
 use App\Http\Client\Opensea\Data\OpenseaNftDetails;
 use App\Http\Client\Opensea\OpenseaFactory;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Http;
 
 /**
+ * @method static string getCollectionTotalVolume(Collection $collection)
  * @method static Web3NftCollectionFloorPrice | null getNftCollectionFloorPrice(string $collectionSlug)
  * @method static OpenseaNftDetails | null nft(Chain $chain, string $address, string $identifier)
  *

@@ -101,8 +101,10 @@ class CollectionController extends Controller
         // 8 collections on the vote table + 5 collections to nominate
         $collections = Collection::votable($currency)->limit(13)->get();
 
-        return $collections->map(function (Collection $collection) use ($userVoted, $currency) {
-            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted);
+        $winners = CollectionWinner::ineligibleCollectionIds();
+
+        return $collections->map(function (Collection $collection) use ($userVoted, $currency, $winners) {
+            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted, alreadyWon: $winners->contains($collection->id));
         });
     }
 
