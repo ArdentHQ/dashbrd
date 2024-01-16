@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Number;
+
 it('returns the content of the sql file', function () {
     $contents = get_query('gallery.calculate_score');
 
@@ -19,18 +21,6 @@ it('can compile blade template', function () {
 
     expect($contents)->toBe("select * from users where id = 'test'".PHP_EOL);
 });
-
-it('format_amount_for_display', function ($amount, $expected) {
-    expect(format_amount_for_display($amount))->toEqual($expected);
-})->with([
-    [6_543, '6.5k'],
-    [12_320_000, '12.3m'],
-    [1, '1'],
-    [2, '2'],
-    [124, '124'],
-    [1232, '1.2k'],
-    [2_540_123, '2.5m'],
-]);
 
 it('should filter attributes', function () {
     $requiredAttributes = [

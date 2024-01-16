@@ -53,21 +53,3 @@ if (! function_exists('filterAttributes')) {
         return $data;
     }
 }
-
-// @codeCoverageIgnoreStart
-if (! function_exists('format_amount_for_display')) {
-    // @codeCoverageIgnoreEnd
-
-    function format_amount_for_display(int $number): string
-    {
-        if ($number >= 1000000) {
-            return number_format($number / 1000000, 1).'m';
-        }
-
-        if ($number >= 1000) {
-            return number_format($number / 1000, 1).'k';
-        }
-
-        return (string) $number;
-    }
-}
