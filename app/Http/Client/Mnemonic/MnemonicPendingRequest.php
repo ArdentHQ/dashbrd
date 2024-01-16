@@ -180,7 +180,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getmetadata
-    public function getNftCollectionBanner(Chain $chain, string $contractAddress): ?string
+    public function getCollectionBanner(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
