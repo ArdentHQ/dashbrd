@@ -12,7 +12,7 @@ use App\Models\Wallet;
 use App\Services\Web3\Opensea\OpenseaWeb3DataProvider;
 use App\Support\Facades\Opensea;
 
-it('should getNftCollectionFloorPrice if no open sea slug', function () {
+it('should getCollectionFloorPrice if no open sea slug', function () {
     Collection::factory()->create([
         'address' => '0x23581767a106ae21c074b2276D25e5C3e136a68b',
         'network_id' => Network::where('chain_id', Chain::ETH->value)->first()->id,
@@ -22,12 +22,12 @@ it('should getNftCollectionFloorPrice if no open sea slug', function () {
 
     $provider = new OpenseaWeb3DataProvider();
 
-    $data = $provider->getNftCollectionFloorPrice(Chain::ETH, $contractAddress);
+    $data = $provider->getCollectionFloorPrice(Chain::ETH, $contractAddress);
 
     expect($data)->toBeNull();
 });
 
-it('should getNftCollectionFloorPrice  ', function () {
+it('should getCollectionFloorPrice  ', function () {
     Collection::factory()->create([
         'address' => '0x23581767a106ae21c074b2276D25e5C3e136a68b',
         'network_id' => Network::where('chain_id', Chain::ETH->value)->first()->id,
@@ -42,7 +42,7 @@ it('should getNftCollectionFloorPrice  ', function () {
 
     $provider = new OpenseaWeb3DataProvider();
 
-    $data = $provider->getNftCollectionFloorPrice(Chain::ETH, $contractAddress);
+    $data = $provider->getCollectionFloorPrice(Chain::ETH, $contractAddress);
 
     expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
 });

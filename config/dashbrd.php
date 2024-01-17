@@ -81,19 +81,19 @@ return [
     'cache_ttl' => [
         'alchemy' => [
             'getBlockTimestamp' => 60 * 60 * 24 * 10, // 10 days... Creation date for blocks will never change, so we can safely cache in a distant future...
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'moralis' => [
             'getEnsDomain' => 60, // 1 minute
             'getBlockTimestamp' => 60 * 60 * 24 * 10, // 10 days... Creation date for blocks will never change, so we can safely cache in a distant future...
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'mnemonic' => [
             'getBlockTimestamp' => 60 * 60 * 24 * 10, // 10 days... Creation date for blocks will never change, so we can safely cache in a distant future...
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'opensea' => [
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'coingecko' => [
             'getPriceHistory' => [

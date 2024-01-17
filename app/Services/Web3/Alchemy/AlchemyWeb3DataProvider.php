@@ -82,10 +82,10 @@ class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
         return [];
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return $this->fromCache(
-            static fn () => Alchemy::getNftCollectionFloorPrice($chain, $contractAddress),
+            static fn () => Alchemy::getCollectionFloorPrice($chain, $contractAddress),
             [$chain->name, $contractAddress]
         );
     }

@@ -39,7 +39,7 @@ class FetchCollectionOwners implements ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
-        $owners = Mnemonic::getNftCollectionOwners(
+        $owners = Mnemonic::getCollectionOwners(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );

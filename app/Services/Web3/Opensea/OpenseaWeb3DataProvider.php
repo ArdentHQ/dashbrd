@@ -50,7 +50,7 @@ final class OpenseaWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return $this->fromCache(
             function () use ($contractAddress, $chain) {
@@ -64,7 +64,7 @@ final class OpenseaWeb3DataProvider extends AbstractWeb3DataProvider
                     return null;
                 }
 
-                return Opensea::getNftCollectionFloorPrice($openseaSlug);
+                return Opensea::getCollectionFloorPrice($openseaSlug);
             },
             [$chain->name, $contractAddress]
         );

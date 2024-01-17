@@ -36,7 +36,7 @@ it('should throw a custom exception on connection failures', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(ConnectionException::class);
 
 it('should throw on 401', function () {
@@ -50,7 +50,7 @@ it('should throw on 401', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(Exception::class);
 
 it('should throw a custom exception on rate limits', function () {
@@ -66,7 +66,7 @@ it('should throw a custom exception on rate limits', function () {
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
 })->throws(RateLimitException::class);
 
 it('should not retry request on 400', function () {
@@ -100,7 +100,7 @@ it('should get owners', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionOwners(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionOwners(Chain::Polygon, $collection->address);
 
     expect($data)->toBe(789);
 });
@@ -121,7 +121,7 @@ it('should get volume', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionVolume(Chain::Polygon, $collection->address);
 
     expect($data)->toBe('12300000000000000000');
 });
@@ -138,7 +138,7 @@ it('should handle no volume', function ($request) {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionVolume(Chain::Polygon, $collection->address);
 
     expect($data)->toBe(null);
 })->with([
@@ -171,7 +171,7 @@ it('should fetch nft collection traits', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(25);
 });
@@ -198,7 +198,7 @@ it('should fetch nft collection traits with pagination', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(500 + 500 + 0 + 0);
 });
@@ -219,7 +219,7 @@ it('should fetch nft collection traits and deduplicate', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(1);
 });
@@ -240,7 +240,7 @@ it('should circuit break when fetching nft collection traits', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getNftCollectionTraits(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionTraits(Chain::Polygon, $collection->address);
 
     expect($data)->toHaveCount(1);
 });
@@ -472,5 +472,5 @@ it('should return null floor price on 400', function () {
         'network_id' => $network->id,
     ]);
 
-    expect(Mnemonic::getNftCollectionFloorPrice(Chain::ETH, $collection->address))->toBeNull();
+    expect(Mnemonic::getCollectionFloorPrice(Chain::ETH, $collection->address))->toBeNull();
 });
