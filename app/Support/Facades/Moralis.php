@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Http;
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Collection<int, WalletBalance> getNativeBalances(array $walletAddresses, Network $network)
  * @method static Carbon getBlockTimestamp(Network $network, int $blockNumber)
- * @method static Web3CollectionFloorPrice | null getNftCollectionFloorPrice(Chain $chain, string $contractAddress)
+ * @method static Web3CollectionFloorPrice | null getCollectionFloorPrice(Chain $chain, string $contractAddress)
  *
  * @see App\Http\Client\Moralis\MoralisPendingRequest
  */

@@ -242,7 +242,7 @@ class MoralisPendingRequest extends PendingRequest
      * @see https://docs.moralis.io/web3-data-api/evm/reference/get-nft-lowest-price
      * Get the lowest executed price for an NFT contract for the last x days (only trades paid in ETH).
      */
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         try {
             $data = self::get(sprintf('nft/%s/lowestprice', $contractAddress), [

@@ -38,5 +38,5 @@ interface Web3DataProvider
      */
     public function getMiddleware(): array;
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice;
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice;
 }

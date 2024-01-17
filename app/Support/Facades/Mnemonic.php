@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Http;
 
 /**
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
- * @method static Web3CollectionFloorPrice | null getNftCollectionFloorPrice(Chain $chain, string $contractAddress)
- * @method static string | null getNftCollectionBanner(Chain $chain, string $contractAddress)
- * @method static int | null getNftCollectionOwners(Chain $chain, string $contractAddress)
- * @method static string | null getNftCollectionVolume(Chain $chain, string $contractAddress)
- * @method static Collection<int, Web3CollectionTrait> getNftCollectionTraits(Chain $chain, string $contractAddress)
+ * @method static Web3CollectionFloorPrice | null getCollectionFloorPrice(Chain $chain, string $contractAddress)
+ * @method static string | null getCollectionBanner(Chain $chain, string $contractAddress)
+ * @method static int | null getCollectionOwners(Chain $chain, string $contractAddress)
+ * @method static string | null getCollectionVolume(Chain $chain, string $contractAddress)
+ * @method static Collection<int, Web3CollectionTrait> getCollectionTraits(Chain $chain, string $contractAddress)
  * @method static Collection<int, CollectionActivity> getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  * @method static Collection<int, CollectionActivity> getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  *

@@ -84,7 +84,7 @@ class LiveDumpWallets extends Command
 
                     $collectionFloorPrices = $collectionAddresses
                         ->mapWithKeys(fn (string $collectionAddress
-                        ) => [$collectionAddress => Mnemonic::getNftCollectionFloorPrice($chain, $collectionAddress)]);
+                        ) => [$collectionAddress => Mnemonic::getCollectionFloorPrice($chain, $collectionAddress)]);
 
                     // modify `network` and `retrievedAt` to make output stable between reruns as these change independent
                     // of the API response.
@@ -114,7 +114,7 @@ class LiveDumpWallets extends Command
         // Download traits for each collection
         $allTraits = $nftCollections->mapWithKeys(function ($collectionAddresses, $chainId) {
             $traits = $collectionAddresses->unique()
-                ->mapWithKeys(fn ($collectionAddress) => [$collectionAddress => Mnemonic::getNftCollectionTraits(Chain::from($chainId), $collectionAddress)]);
+                ->mapWithKeys(fn ($collectionAddress) => [$collectionAddress => Mnemonic::getCollectionTraits(Chain::from($chainId), $collectionAddress)]);
 
             return [$chainId => $traits];
         });

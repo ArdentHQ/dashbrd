@@ -82,7 +82,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
                 name: $nft->name,
                 description: null,
                 extraAttributes: $nft['extra_attributes']->toArray(),
-                floorPrice: $this->getNftCollectionFloorPrice(Chain::ETH, $wallet->address),
+                floorPrice: $this->getCollectionFloorPrice(Chain::ETH, $wallet->address),
                 traits: [],
                 mintedBlock: random_int(1, 10000),
                 mintedAt: now(),
@@ -114,7 +114,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
         return now();
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         return new Web3CollectionFloorPrice((string) (random_int(50, 1000) * 1e18), 'eth', Carbon::now());
     }
