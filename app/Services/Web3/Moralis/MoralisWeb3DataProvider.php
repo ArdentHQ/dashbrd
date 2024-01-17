@@ -76,10 +76,10 @@ final class MoralisWeb3DataProvider extends AbstractWeb3DataProvider
         return [new RateLimited(Service::Moralis)];
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         return $this->fromCache(
-            static fn () => Moralis::getNftCollectionFloorPrice($chain, $contractAddress),
+            static fn () => Moralis::getCollectionFloorPrice($chain, $contractAddress),
             [$chain->name, $contractAddress]
         );
     }

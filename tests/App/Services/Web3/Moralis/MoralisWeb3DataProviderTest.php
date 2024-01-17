@@ -61,7 +61,7 @@ it('can get nft floor price', function () {
 
     $provider = new MoralisWeb3DataProvider();
 
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, ''))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getCollectionFloorPrice(Chain::ETH, ''))->toEqual(new Web3NftCollectionFloorPrice(
         '1000000000000000',
         'eth',
         Carbon::parse('2021-06-04T16:00:15'),
@@ -74,7 +74,7 @@ it('handles 404 when calling nft floor price', function () {
     ]);
 
     $provider = new MoralisWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toBeNull();
+    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toBeNull();
 });
 
 it('can get native balance for a wallet', function () {

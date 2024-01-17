@@ -40,7 +40,7 @@ class FetchCollectionVolume implements ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
-        $volume = Mnemonic::getNftCollectionVolume(
+        $volume = Mnemonic::getCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );

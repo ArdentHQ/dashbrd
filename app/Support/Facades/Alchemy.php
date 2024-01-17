@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Http;
  * @method static Web3NftData parseNft(array $nft, int $networkId)
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Carbon getBlockTimestamp(Network $network, int $blockNumber)
- * @method static Web3NftCollectionFloorPrice | null getNftCollectionFloorPrice(Chain $chain, string $contractAddress)
+ * @method static Web3NftCollectionFloorPrice | null getCollectionFloorPrice(Chain $chain, string $contractAddress)
  *
  * @see App\Http\Client\Alchemy\AlchemyPendingRequest
  */

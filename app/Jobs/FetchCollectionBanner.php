@@ -40,7 +40,7 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
-        $banner = Mnemonic::getNftCollectionBanner(
+        $banner = Mnemonic::getCollectionBanner(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );

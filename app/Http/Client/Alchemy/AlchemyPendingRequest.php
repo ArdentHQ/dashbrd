@@ -484,7 +484,7 @@ class AlchemyPendingRequest extends PendingRequest
     }
 
     // https://docs.alchemy.com/reference/getfloorprice
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         // Only ETH is supported at the moment since this API is still considered in beta:
 

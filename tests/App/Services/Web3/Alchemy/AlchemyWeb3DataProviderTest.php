@@ -246,7 +246,7 @@ it('can get nft floor price', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
         '1235000000000000000',
         'eth',
         Carbon::parse('2023-03-30T04:08:09.791Z'),
@@ -259,7 +259,7 @@ it('can get nft floor price with some errors', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
         '1247200000000000000',
         'eth',
         Carbon::parse('2023-03-30T03:59:09.707Z'),
@@ -275,7 +275,7 @@ it('handles error when calling nft floor price', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toBeNull();
+    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toBeNull();
 });
 
 it('returns null for unsupported network when calling nft floor price', function () {
@@ -290,7 +290,7 @@ it('returns null for unsupported network when calling nft floor price', function
     collect(Chain::cases())
         ->filter(fn ($case) => $case !== Chain::ETH)
         ->each(
-            fn ($case) => expect($provider->getNftCollectionFloorPrice($case, 'asdf'))
+            fn ($case) => expect($provider->getCollectionFloorPrice($case, 'asdf'))
                 ->toBeNull()
         );
 });
