@@ -56,6 +56,48 @@ it('logs volume changes', function () {
     // expect($collection->avg_volume_30d)->toBe('11650000000000000000');
 });
 
+it('calculates average volume when there is enough historical data', function () {
+    Mnemonic::fake([
+        '*' => Http::response([
+            'dataPoints' => [[
+                'volume' => '12.3',
+            ]],
+        ], 200),
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create([
+        'volume' => '11000000000000000000',
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '10000000000000000000',
+        'created_at' => now()->subDays(2),
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '11000000000000000000',
+        'created_at' => now()->subDays(8),
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '12000000000000000000',
+        'created_at' => now()->subDays(31),
+    ]);
+
+    (new FetchCollectionVolume($collection))->handle();
+
+    $collection->refresh();
+
+    expect($collection->volumes()->count())->toBe(4);
+    expect($collection->volumes()->oldest('id')->pluck('volume')->toArray())->toBe(['10000000000000000000', '11000000000000000000', '12000000000000000000', '12300000000000000000']);
+
+    expect($collection->avg_volume_1d)->toBe('12300000000000000000');
+    expect($collection->avg_volume_7d)->toBe('11150000000000000000');
+    expect($collection->avg_volume_30d)->toBe('11100000000000000000');
+});
+
 it('does not log volume changes if there is no volume', function () {
     Mnemonic::shouldReceive('getCollectionVolume')->andReturn(null);
 
