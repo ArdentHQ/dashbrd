@@ -49,11 +49,6 @@ it('logs volume changes', function () {
 
     expect($collection->volumes()->count())->toBe(2);
     expect($collection->volumes()->oldest('id')->pluck('volume')->toArray())->toBe(['11000000000000000000', '12300000000000000000']);
-
-    // TODO: ...
-    // expect($collection->avg_volume_1d)->toBe('11650000000000000000');
-    // expect($collection->avg_volume_7d)->toBe('11650000000000000000');
-    // expect($collection->avg_volume_30d)->toBe('11650000000000000000');
 });
 
 it('calculates average volume when there is enough historical data', function () {

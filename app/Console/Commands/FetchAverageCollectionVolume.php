@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Enums\Period;
-use App\Jobs\FetchInitialAverageVolume as FetchInitialAverageVolumeJob;
+use App\Jobs\FetchAverageCollectionVolume as FetchAverageCollectionVolumeJob;
 use Exception;
 use Illuminate\Console\Command;
 
-class FetchInitialAverageVolume extends Command
+class FetchAverageCollectionVolume extends Command
 {
     use InteractsWithCollections;
 
@@ -18,7 +18,7 @@ class FetchInitialAverageVolume extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-initial-volume-averages {--collection-id=} {--period=}';
+    protected $signature = 'collections:fetch-average-volumes {--collection-id=} {--period=}';
 
     /**
      * The console command description.
@@ -34,14 +34,14 @@ class FetchInitialAverageVolume extends Command
     {
         $period = $this->option('period');
 
-        if ($period !== null && ! in_array($period, ['1d, 7d, 30d'])) {
+        if ($period !== null && ! in_array($period, ['1d', '7d', '30d'])) {
             $this->error('Invalid period value. Supported: 1d, 7d, 30d');
 
             return Command::FAILURE;
         }
 
         $this->forEachCollection(function ($collection) {
-            collect($this->periods())->each(fn ($period) => FetchInitialAverageVolumeJob::dispatch($collection, $period));
+            collect($this->periods())->each(fn ($period) => FetchAverageCollectionVolumeJob::dispatch($collection, $period));
         });
 
         return Command::SUCCESS;

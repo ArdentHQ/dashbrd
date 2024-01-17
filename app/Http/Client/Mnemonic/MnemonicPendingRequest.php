@@ -234,8 +234,6 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     /**
-     * TODO:
-     *
      * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
      */
     public function getAverageCollectionVolume(Chain $chain, string $contractAddress, Period $period): ?string

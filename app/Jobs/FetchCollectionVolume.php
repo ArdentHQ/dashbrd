@@ -16,7 +16,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class FetchCollectionVolume implements ShouldQueue
 {
@@ -36,10 +35,6 @@ class FetchCollectionVolume implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('FetchCollectionVolume Job: Processing', [
-            'collection' => $this->collection->address,
-        ]);
-
         $volume = Mnemonic::getCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
@@ -52,7 +47,7 @@ class FetchCollectionVolume implements ShouldQueue
 
             $this->collection->volume = $volume;
 
-            // TODO: ...
+            // We only want to update average volumes in the given period if we have enough data for that period...
 
             if ($this->collection->volumes()->where('created_at', '<', now()->subDays(1))->exists()) {
                 $this->collection->avg_volume_1d = $this->collection->averageVolumeSince(now()->subDays(1));
@@ -70,11 +65,6 @@ class FetchCollectionVolume implements ShouldQueue
         });
 
         ResetCollectionRanking::dispatch();
-
-        Log::info('FetchCollectionVolume Job: Handled', [
-            'collection' => $this->collection->address,
-            'volume' => $volume,
-        ]);
     }
 
     public function uniqueId(): string

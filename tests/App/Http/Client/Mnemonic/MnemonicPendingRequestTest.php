@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\Chain;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection;
@@ -124,6 +125,48 @@ it('should get volume', function () {
     $data = Mnemonic::getCollectionVolume(Chain::Polygon, $collection->address);
 
     expect($data)->toBe('12300000000000000000');
+});
+
+it('should get average volume', function () {
+    Mnemonic::fake([
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
+            ->push([
+                'dataPoints' => [
+                    ['volume' => '12.3'],
+                ],
+            ], 200),
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $data = Mnemonic::getAverageCollectionVolume(Chain::Polygon, $collection->address, Period::WEEK);
+
+    expect($data)->toBe('12300000000000000000');
+});
+
+it('should get no average volume', function () {
+    Mnemonic::fake([
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
+            ->push([
+                'dataPoints' => [
+                    ['volume' => null],
+                ],
+            ], 200),
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $data = Mnemonic::getAverageCollectionVolume(Chain::Polygon, $collection->address, Period::WEEK);
+
+    expect($data)->toBeNull();
 });
 
 it('should handle no volume', function ($request) {

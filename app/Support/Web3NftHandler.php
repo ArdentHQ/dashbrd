@@ -6,8 +6,10 @@ namespace App\Support;
 
 use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
+use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Jobs\DetermineCollectionMintingDate;
+use App\Jobs\FetchAverageCollectionVolume;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Models\Collection as CollectionModel;
@@ -195,13 +197,20 @@ class Web3NftHandler
                 });
 
                 // Index activity only for newly created collections...
-                CollectionModel::query()
-                            ->where('is_fetching_activity', false)
-                            ->whereNull('activity_updated_at')
-                            ->whereIn('id', $ids)
-                            ->chunkById(100, function ($collections) {
-                                $collections->each(fn ($collection) => FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS));
-                            });
+                CollectionModel::whereIn('id', $ids)->chunkById(100, function ($collections) {
+                    $collections->each(function ($collection) {
+                        if (! $collection->is_fetching_activity && $collection->activity_updated_at === null) {
+                            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+                        }
+
+                        // If the collection has just been created, then prefill average volumes until we have enough data...
+                        if ($collection->created_at->gte(now()->subMinutes(3))) {
+                            FetchAverageCollectionVolume::dispatch($collection, Period::DAY);
+                            FetchAverageCollectionVolume::dispatch($collection, Period::WEEK);
+                            FetchAverageCollectionVolume::dispatch($collection, Period::MONTH);
+                        }
+                    });
+                });
             }
 
             // Passing an empty array means we update all collections which is undesired here.
