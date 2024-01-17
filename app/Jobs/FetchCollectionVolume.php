@@ -46,24 +46,27 @@ class FetchCollectionVolume implements ShouldQueue
         );
 
         DB::transaction(function () use ($volume) {
-            if ($volume !== null) {
-                $this->collection->volumes()->create([
-                    'volume' => $volume,
-                ]);
+            $this->collection->volumes()->create([
+                'volume' => $volume ?? '0',
+            ]);
 
-                $this->collection->update([
-                    'volume' => $volume,
-                    'avg_volume_1d' => $this->collection->averageVolumeSince(now()->subDays(1)),
-                    'avg_volume_7d' => $this->collection->averageVolumeSince(now()->subDays(7)),
-                    'avg_volume_30d' => $this->collection->averageVolumeSince(now()->subDays(30)),
-                ]);
+            $this->collection->volume = $volume;
 
-                $this->collection->save();
-            } else {
-                $this->collection->update([
-                    'volume' => $volume,
-                ]);
+            // TODO: ...
+
+            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(1))->exists()) {
+                $this->collection->avg_volume_1d = $this->collection->averageVolumeSince(now()->subDays(1));
             }
+
+            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(7))->exists()) {
+                $this->collection->avg_volume_7d = $this->collection->averageVolumeSince(now()->subDays(7));
+            }
+
+            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(30))->exists()) {
+                $this->collection->avg_volume_30d = $this->collection->averageVolumeSince(now()->subDays(30));
+            }
+
+            $this->collection->save();
         });
 
         ResetCollectionRanking::dispatch();
