@@ -18,7 +18,7 @@ it('should throw a custom exception on internal server error', function () {
 
     $collectionSlug = 'doodles-official';
 
-    Opensea::getNftCollectionFloorPrice($collectionSlug);
+    Opensea::getCollectionFloorPrice($collectionSlug);
 })->throws(ConnectionException::class);
 
 it('should throw a custom exception when rate limited', function () {
@@ -28,7 +28,7 @@ it('should throw a custom exception when rate limited', function () {
 
     $collectionSlug = 'doodles-official';
 
-    Opensea::getNftCollectionFloorPrice($collectionSlug);
+    Opensea::getCollectionFloorPrice($collectionSlug);
 })->throws(RateLimitException::class);
 
 it('should throw a custom exception on client error', function () {
@@ -38,7 +38,7 @@ it('should throw a custom exception on client error', function () {
 
     $collectionSlug = 'doodles-official';
 
-    Opensea::getNftCollectionFloorPrice($collectionSlug);
+    Opensea::getCollectionFloorPrice($collectionSlug);
 })->throws(ClientException::class);
 
 it('can get floor price for the collection', function () {
@@ -48,7 +48,7 @@ it('can get floor price for the collection', function () {
 
     $collectionSlug = 'doodles-official';
 
-    $data = Opensea::getNftCollectionFloorPrice($collectionSlug);
+    $data = Opensea::getCollectionFloorPrice($collectionSlug);
 
     expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
 });

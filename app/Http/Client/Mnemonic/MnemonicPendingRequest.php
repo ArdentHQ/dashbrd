@@ -99,7 +99,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/marketplacesservice_getfloorprice
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -180,7 +180,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getmetadata
-    public function getNftCollectionBanner(Chain $chain, string $contractAddress): ?string
+    public function getCollectionBanner(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -215,7 +215,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getownerscount
-    public function getNftCollectionOwners(Chain $chain, string $contractAddress): ?int
+    public function getCollectionOwners(Chain $chain, string $contractAddress): ?int
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -232,7 +232,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
-    public function getNftCollectionVolume(Chain $chain, string $contractAddress): ?string
+    public function getCollectionVolume(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -258,7 +258,7 @@ class MnemonicPendingRequest extends PendingRequest
     /**
      * @return Collection<int, Web3NftCollectionTrait>
      */
-    public function getNftCollectionTraits(Chain $chain, string $contractAddress): Collection
+    public function getCollectionTraits(Chain $chain, string $contractAddress): Collection
     {
         //  {
         //      "name": "string",

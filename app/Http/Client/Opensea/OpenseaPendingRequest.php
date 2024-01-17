@@ -96,7 +96,7 @@ class OpenseaPendingRequest extends PendingRequest
     /**
      * @see https://docs.opensea.io/v1.0/reference/retrieving-collection-stats
      */
-    public function getNftCollectionFloorPrice(string $collectionSlug): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(string $collectionSlug): ?Web3NftCollectionFloorPrice
     {
         try {
             $response = $this->makeCollectionStatsRequest($collectionSlug);

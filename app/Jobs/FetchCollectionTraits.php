@@ -41,7 +41,7 @@ class FetchCollectionTraits implements ShouldBeUnique, ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
-        $traits = Mnemonic::getNftCollectionTraits(
+        $traits = Mnemonic::getCollectionTraits(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
