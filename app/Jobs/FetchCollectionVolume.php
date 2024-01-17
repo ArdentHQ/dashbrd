@@ -53,9 +53,9 @@ class FetchCollectionVolume implements ShouldQueue
 
                 $this->collection->update([
                     'volume' => $volume,
-                    'avg_volume_24h' => $this->collection->averageVolumeSince(now()->subDays(1)),
+                    'avg_volume_1d' => $this->collection->averageVolumeSince(now()->subDays(1)),
                     'avg_volume_7d' => $this->collection->averageVolumeSince(now()->subDays(7)),
-                    'avg_volume_1m' => $this->collection->averageVolumeSince(now()->subMonths(1)),
+                    'avg_volume_30d' => $this->collection->averageVolumeSince(now()->subDays(30)),
                 ]);
 
                 $this->collection->save();
