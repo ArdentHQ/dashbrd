@@ -1,5 +1,5 @@
 export interface OverlayProperties extends React.HTMLAttributes<HTMLDivElement> {
-    showOverlay: boolean;
+    isOpen: boolean;
     showCloseButton: boolean;
     belowContent?: React.ReactNode;
 }

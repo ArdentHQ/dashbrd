@@ -28,10 +28,13 @@ export const NoNftsOverlay = ({ show }: { show: boolean }): JSX.Element => {
 
     return (
         <Overlay
-            showOverlay={show}
+            isOpen={show}
             showCloseButton={false}
             belowContent={
-                <div className="flex max-w-sm flex-col p-8">
+                <div
+                    className="mx-auto flex max-w-sm flex-col p-8"
+                    data-testid="Overlay"
+                >
                     <div className="text-center font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                         {t("pages.galleries.create.can_purchase")}
                     </div>
