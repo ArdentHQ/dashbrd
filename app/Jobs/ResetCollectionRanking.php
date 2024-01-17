@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Models\Collection;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
-class ResetCollectionMonthlyVotesAndRank implements ShouldBeUnique, ShouldQueue
+class ResetCollectionRanking implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,6 +21,11 @@ class ResetCollectionMonthlyVotesAndRank implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        Collection::updateMonthlyRankAndVotes();
+        DB::update(get_query('collections.calculate_monthly_rank_and_votes_value'));
+    }
+
+    public function uniqueId(): string
+    {
+        return static::class;
     }
 }
