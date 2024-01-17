@@ -10,7 +10,7 @@ use App\Support\Facades\Mnemonic;
 use Illuminate\Support\Facades\Http;
 
 it('should fetch nft collection volume', function () {
-    Mnemonic::shouldReceive('getNftCollectionVolume')->andReturn('10');
+    Mnemonic::shouldReceive('getCollectionVolume')->andReturn('10');
 
     $collection = Collection::factory()->for(Network::polygon())->create([
         'volume' => null,
@@ -55,7 +55,7 @@ it('logs volume changes', function () {
 });
 
 it('does not log volume changes if there is no volume', function () {
-    Mnemonic::shouldReceive('getNftCollectionVolume')->andReturn(null);
+    Mnemonic::shouldReceive('getCollectionVolume')->andReturn(null);
 
     $collection = Collection::factory()->for(Network::polygon())->create([
         'volume' => '10',
