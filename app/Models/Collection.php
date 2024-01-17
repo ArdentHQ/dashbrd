@@ -476,13 +476,6 @@ class Collection extends Model
             ->update(['fiat_value' => DB::raw($calculateFiatValueQuery)]);
     }
 
-    public static function updateMonthlyRankAndVotes(): void
-    {
-        $calculateRankQUery = get_query('collections.calculate_monthly_rank_and_votes_value');
-
-        DB::update($calculateRankQUery);
-    }
-
     /**
      * @return HasMany<NftActivity>
      */

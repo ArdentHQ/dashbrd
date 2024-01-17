@@ -1,6 +1,6 @@
 import { type OverlayProperties } from "@/Components/Layout/Overlay/Overlay.contracts";
 
-export interface AuthOverlayProperties extends Omit<OverlayProperties, "showOverlay"> {
+export interface AuthOverlayProperties extends Omit<OverlayProperties, "isOpen"> {
     show: boolean;
     closeOverlay: () => void;
     mustBeSigned?: boolean;
