@@ -44,7 +44,6 @@ class RefreshWalletCollections implements ShouldBeUnique, ShouldQueue
             new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address),
             new FetchCollectionTraits($collection),
             new FetchCollectionOwners($collection),
-            new FetchCollectionVolume($collection),
             new FetchCollectionTotalVolume($collection),
         ]))->finally(function () use ($wallet) {
             $wallet->update([

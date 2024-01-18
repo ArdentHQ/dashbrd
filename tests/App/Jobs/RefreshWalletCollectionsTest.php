@@ -24,7 +24,7 @@ it('can dispatch batch of jobs to refresh collections', function () {
     $job->handle();
 
     Bus::assertBatched(function (PendingBatch $batch) {
-        return $batch->jobs->count() === 10;
+        return $batch->jobs->count() === 8;
     });
 
     $user->wallet->refresh();

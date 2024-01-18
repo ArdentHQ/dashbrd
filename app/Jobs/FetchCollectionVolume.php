@@ -15,7 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class FetchCollectionVolume implements ShouldQueue
 {
@@ -35,25 +35,36 @@ class FetchCollectionVolume implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('FetchCollectionVolume Job: Processing', [
-            'collection' => $this->collection->address,
-        ]);
-
         $volume = Mnemonic::getCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
 
-        $this->collection->update([
-            'volume' => $volume,
-        ]);
+        DB::transaction(function () use ($volume) {
+            $this->collection->volumes()->create([
+                'volume' => $volume ?? '0',
+            ]);
+
+            $this->collection->volume = $volume;
+
+            // We only want to update average volumes in the given period if we have enough data for that period...
+
+            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(1))->exists()) {
+                $this->collection->avg_volume_1d = $this->collection->averageVolumeSince(now()->subDays(1));
+            }
+
+            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(7))->exists()) {
+                $this->collection->avg_volume_7d = $this->collection->averageVolumeSince(now()->subDays(7));
+            }
+
+            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(30))->exists()) {
+                $this->collection->avg_volume_30d = $this->collection->averageVolumeSince(now()->subDays(30));
+            }
+
+            $this->collection->save();
+        });
 
         ResetCollectionRanking::dispatch();
-
-        Log::info('FetchCollectionVolume Job: Handled', [
-            'collection' => $this->collection->address,
-            'volume' => $volume,
-        ]);
     }
 
     public function uniqueId(): string
