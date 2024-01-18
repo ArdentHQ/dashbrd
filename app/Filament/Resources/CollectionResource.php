@@ -89,11 +89,16 @@ class CollectionResource extends Resource
                 ActionGroup::make([
                     Action::make('updateIsFeatured')
                         ->action(function (Collection $collection) {
-                            if (! $collection->is_featured && Collection::featured()->count() >= 4) {
+                            if ($collection->nfts()->count() === 0 && ! $collection->is_featured) {
                                 Notification::make()
-                                ->title('There are already 4 collections marked as featured. Please remove one before selecting a new one.')
-                                ->warning()
-                                ->send();
+                                            ->title('Collections with no NFTs cannot be marked as featured.')
+                                            ->danger()
+                                            ->send();
+                            } elseif (! $collection->is_featured && Collection::featured()->count() >= 4) {
+                                Notification::make()
+                                            ->title('There are already 4 collections marked as featured. Please remove one before selecting a new one.')
+                                            ->warning()
+                                            ->send();
                             } else {
                                 $collection->update([
                                     'is_featured' => ! $collection->is_featured,
