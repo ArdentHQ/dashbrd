@@ -172,6 +172,9 @@ return [
     '24h' => '24h',
     '7d' => '7d',
     '30d' => '30d',
+    'volume_24h' => 'Volume (24h)',
+    'volume_7d' => 'Volume (7d)',
+    'volume_30d' => 'Volume (30d)',
     'months' => [
         'January',
         'February',

@@ -164,13 +164,13 @@ class CollectionController extends Controller
                                     'network',
                                     'floorPriceToken',
                                 ])
-                                ->addSelectVolumeFiat($currency)
+                                ->addSelectVolumeFiat($currency, $volumeColumn, useEthereum: $chainId === Chain::ETH->value)
                                 ->addFloorPriceChange()
                                 ->addSelect('collections.*')
                                 ->groupBy('collections.id')
                                 ->simplePaginate(12);
 
-        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency));
+        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency, $volumeColumn));
     }
 
     /**

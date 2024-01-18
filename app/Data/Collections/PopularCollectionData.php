@@ -35,7 +35,7 @@ class PopularCollectionData extends Data
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, string $volumeColumn = 'volume'): self
     {
         /** @var mixed $collection (volume_fiat is added with the `scopeAddSelectVolumeFiat` and `price_change_24h` with the `scopeAddFloorPriceChange`) */
         return new self(
@@ -47,11 +47,11 @@ class PopularCollectionData extends Data
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: $collection->volume,
+            volume: $collection->getAttribute($volumeColumn),
             volumeFiat: (float) $collection->volume_fiat,
             // Volume is normalized to `ETH`
-            volumeCurrency: 'ETH',
-            volumeDecimals: 18,
+            volumeCurrency: $collection->network->nativeToken->symbol,
+            volumeDecimals: $collection->network->nativeToken->decimals,
             image: $collection->extra_attributes->get('image'),
         );
     }
