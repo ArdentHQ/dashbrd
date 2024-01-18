@@ -201,37 +201,43 @@ export const VoteCollection = ({
 
     return (
         <div className={cn("rounded-lg", { "border border-transparent": variant === undefined })}>
-            <div
+            <button
+                type="button"
                 onClick={() => {
-                    if (!isTruthy(votedId)) {
+                    if (!hasVoted) {
                         setSelectedCollectionId(collection.id);
                     }
                 }}
-                tabIndex={0}
-                className={cn("relative overflow-hidden rounded-lg px-4 py-4 focus:outline-none md:py-3", {
-                    "border-2 border-theme-primary-600 dark:border-theme-hint-400":
-                        variant === "selected" || variant === "voted",
-                    "pointer-events-none bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
-                    "border border-theme-secondary-300 dark:border-theme-dark-700": variant === undefined,
-                    "cursor-pointer": !hasVoted,
-                    "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
-                        !hasVoted && variant === undefined,
-                })}
+                disabled={hasVoted}
+                className={cn(
+                    "relative w-full overflow-hidden rounded-lg px-4 py-4 text-left focus:outline-none md:py-3",
+                    {
+                        "border-2 border-theme-primary-600 dark:border-theme-hint-400":
+                            variant === "selected" || variant === "voted",
+                        "bg-theme-primary-50 dark:bg-theme-dark-800": variant === "voted",
+                        "border border-theme-secondary-300 dark:border-theme-dark-700": variant === undefined,
+                        "cursor-pointer": !hasVoted,
+                        "cursor-default": hasVoted,
+                        "hover:outline hover:outline-theme-hint-100 focus:ring focus:ring-theme-hint-100 dark:hover:outline-theme-dark-500 dark:focus:ring-theme-dark-500":
+                            !hasVoted && variant === undefined,
+                    },
+                )}
                 data-testid="VoteCollectionTrigger"
             >
                 {variant === "voted" && (
-                    <div className="absolute -right-px -top-px">
+                    <span className="absolute -right-px -top-px">
                         <Icon
                             name="VotedCollectionCheckmark"
                             size="xl"
                             className="text-theme-primary-600 dark:text-theme-hint-400"
                         />
-                    </div>
+                    </span>
                 )}
-                <div className="flex items-center justify-between">
-                    <div className="flex min-w-0 flex-1 items-center space-x-3">
-                        <div className="flex">
-                            <div
+
+                <span className="flex items-center justify-between">
+                    <span className="flex min-w-0 flex-1 items-center space-x-3">
+                        <span className="flex">
+                            <span
                                 className={cn(
                                     "relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full dark:bg-theme-vote-background xs:h-12 xs:w-12",
                                     {
@@ -243,8 +249,9 @@ export const VoteCollection = ({
                                 <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                                     {collection.rank ?? index}
                                 </span>
-                            </div>
-                            <div className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
+                            </span>
+
+                            <span className="relative -ml-2 h-8 w-8 shrink-0 xs:h-12 xs:w-12">
                                 <Img
                                     wrapperClassName="aspect-square"
                                     className={cn(
@@ -257,17 +264,18 @@ export const VoteCollection = ({
                                     isCircle
                                     src={collection.image}
                                 />
-                            </div>
-                        </div>
+                            </span>
+                        </span>
 
-                        <div className="break-word-legacy min-w-0 space-y-0.5 ">
-                            <p
+                        <span className="break-word-legacy min-w-0 space-y-0.5 ">
+                            <span
                                 data-testid="CollectionName__name"
-                                className="truncate text-base font-medium text-theme-secondary-900 dark:text-theme-dark-50 md-lg:text-base"
+                                className="block truncate text-base font-medium text-theme-secondary-900 dark:text-theme-dark-50 md-lg:text-base"
                             >
                                 {collection.name}
-                            </p>
-                            <p className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
+                            </span>
+
+                            <span className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
                                 {t("common.vol")}:{" "}
                                 <FormatCrypto
                                     value={collection.volume ?? "0"}
@@ -277,26 +285,27 @@ export const VoteCollection = ({
                                         decimals: 18,
                                     }}
                                 />
-                            </p>
-                            <div className="mt-0.5 md-lg:hidden">
+                            </span>
+
+                            <span className="mt-0.5 md-lg:hidden">
                                 <VoteCount
                                     iconClass="h-6 w-8"
                                     textClass="text-sm md:text-sm"
                                     voteCount={collection.votes}
                                     showVoteCount={hasVoted}
                                 />
-                            </div>
-                        </div>
-                    </div>
+                            </span>
+                        </span>
+                    </span>
 
-                    <div className="ml-2 hidden md-lg:block">
+                    <span className="ml-2 hidden md-lg:block">
                         <VoteCount
                             voteCount={collection.votes}
                             showVoteCount={hasVoted}
                         />
-                    </div>
-                </div>
-            </div>
+                    </span>
+                </span>
+            </button>
         </div>
     );
 };
