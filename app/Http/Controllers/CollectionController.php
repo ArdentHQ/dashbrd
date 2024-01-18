@@ -151,7 +151,11 @@ class CollectionController extends Controller
 
         /** @var Paginator<PopularCollectionData> $collections */
         $collections = Collection::query()
-                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderBy('volume', 'desc')) // TODO: order by top...
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByWithNulls(match ($request->query('period')) {
+                                    '7d' => 'avg_volume_7d',
+                                    '30d' => 'avg_volume_30d',
+                                    default => 'avg_volume_1d',
+                                }, 'desc'))
                                 ->filterByChainId($chainId)
                                 ->orderByFloorPrice('desc', $currency)
                                 ->with([
