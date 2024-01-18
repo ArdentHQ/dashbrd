@@ -17,7 +17,7 @@ export const Overlay = ({
     >
         <div
             className={cn(
-                "fixed inset-0 z-50 bg-white backdrop-blur dark:bg-theme-dark-900/90",
+                "fixed inset-0 z-[51] bg-white backdrop-blur dark:bg-theme-dark-900/90",
                 className,
                 showCloseButton ? "bg-opacity-90" : "bg-opacity-60",
             )}
