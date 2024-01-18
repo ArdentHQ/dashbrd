@@ -5,34 +5,107 @@ declare(strict_types=1);
 use App\Jobs\FetchCollectionVolume;
 use App\Models\Collection;
 use App\Models\Network;
+use App\Models\TradingVolume;
 use App\Support\Facades\Mnemonic;
 use Illuminate\Support\Facades\Http;
 
 it('should fetch nft collection volume', function () {
-    Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::response([
-            'dataPoints' => [
-                ['volume' => '12.3'],
-            ],
-        ], 200),
-    ]);
+    Mnemonic::shouldReceive('getCollectionVolume')->andReturn('10');
 
-    $network = Network::polygon();
-
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
+    $collection = Collection::factory()->for(Network::polygon())->create([
         'volume' => null,
     ]);
-
-    $this->assertDatabaseCount('collections', 1);
 
     expect($collection->volume)->toBeNull();
 
     (new FetchCollectionVolume($collection))->handle();
 
+    expect($collection->fresh()->volume)->toBe('10');
+});
+
+it('logs volume changes', function () {
+    Mnemonic::fake([
+        '*' => Http::response([
+            'dataPoints' => [[
+                'volume' => '12.3',
+            ]],
+        ], 200),
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create([
+        'volume' => '11000000000000000000',
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '11000000000000000000',
+        'created_at' => now()->subHours(10),
+    ]);
+
+    (new FetchCollectionVolume($collection))->handle();
+
     $collection->refresh();
 
-    expect($collection->volume)->toBe('12300000000000000000');
+    expect($collection->volumes()->count())->toBe(2);
+    expect($collection->volumes()->oldest('id')->pluck('volume')->toArray())->toBe(['11000000000000000000', '12300000000000000000']);
+});
+
+it('calculates average volume when there is enough historical data', function () {
+    Mnemonic::fake([
+        '*' => Http::response([
+            'dataPoints' => [[
+                'volume' => '12.3',
+            ]],
+        ], 200),
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create([
+        'volume' => '11000000000000000000',
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '10000000000000000000',
+        'created_at' => now()->subDays(2),
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '11000000000000000000',
+        'created_at' => now()->subDays(8),
+    ]);
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '12000000000000000000',
+        'created_at' => now()->subDays(31),
+    ]);
+
+    (new FetchCollectionVolume($collection))->handle();
+
+    $collection->refresh();
+
+    expect($collection->volumes()->count())->toBe(4);
+    expect($collection->volumes()->oldest('id')->pluck('volume')->toArray())->toBe(['10000000000000000000', '11000000000000000000', '12000000000000000000', '12300000000000000000']);
+
+    expect($collection->avg_volume_1d)->toBe('12300000000000000000');
+    expect($collection->avg_volume_7d)->toBe('11150000000000000000');
+    expect($collection->avg_volume_30d)->toBe('11100000000000000000');
+});
+
+it('does not log volume changes if there is no volume', function () {
+    Mnemonic::shouldReceive('getCollectionVolume')->andReturn(null);
+
+    $collection = Collection::factory()->for(Network::polygon())->create([
+        'volume' => '10',
+    ]);
+
+    (new FetchCollectionVolume($collection))->handle();
+
+    $collection->refresh();
+
+    expect(TradingVolume::count())->toBe(1);
+    expect(TradingVolume::first()->volume)->toBe('0');
 });
 
 it('has a retry limit', function () {

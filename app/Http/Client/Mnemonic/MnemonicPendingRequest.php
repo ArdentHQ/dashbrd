@@ -13,6 +13,7 @@ use App\Enums\CurrencyCode;
 use App\Enums\ImageSize;
 use App\Enums\MnemonicChain;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
@@ -22,6 +23,7 @@ use App\Support\CryptoUtils;
 use App\Support\NftImageUrl;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
@@ -231,18 +233,45 @@ class MnemonicPendingRequest extends PendingRequest
         return intval($data['ownersCount']);
     }
 
+    /**
+     * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
+     */
+    public function getAverageCollectionVolume(Chain $chain, string $contractAddress, Period $period): ?string
+    {
+        $this->chain = MnemonicChain::fromChain($chain);
+
+        $duration = match ($period) {
+            Period::DAY => 'DURATION_1_DAY',
+            Period::WEEK => 'DURATION_7_DAYS',
+            Period::MONTH => 'DURATION_30_DAYS',
+            default => throw new Exception('Unsupported period value'),
+        };
+
+        $volume = self::get(sprintf(
+            '/collections/v1beta2/%s/sales_volume/'.$duration.'/GROUP_BY_PERIOD_1_DAY',
+            $contractAddress,
+        ), [])->json('dataPoints.0.volume');
+
+        if (empty($volume)) {
+            return null;
+        }
+
+        $currency = $chain->nativeCurrency();
+        $decimals = CryptoCurrencyDecimals::forCurrency($currency);
+
+        return CryptoUtils::convertToWei($volume, $decimals);
+    }
+
     // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
     public function getCollectionVolume(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        /** @var array<string, mixed> $data */
-        $data = self::get(sprintf(
+        $volume = self::get(sprintf(
             '/collections/v1beta2/%s/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY',
             $contractAddress,
-        ), [])->json();
+        ), [])->json('dataPoints.0.volume');
 
-        $volume = Arr::get($data, 'dataPoints.0.volume');
         if (empty($volume)) {
             return null;
         }

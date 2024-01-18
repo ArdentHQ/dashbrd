@@ -13,6 +13,7 @@ use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -713,5 +714,21 @@ class Collection extends Model
                 collections, jsonb_each_text(fiat_value) as currencies(key,value)
             GROUP BY key;'
         );
+    }
+
+    /**
+     * @return HasMany<TradingVolume>
+     */
+    public function volumes(): HasMany
+    {
+        return $this->hasMany(TradingVolume::class);
+    }
+
+    public function averageVolumeSince(Carbon $date): string
+    {
+        return $this->volumes()
+                    ->selectRaw('avg(volume::numeric) as aggregate')
+                    ->where('created_at', '>', $date)
+                    ->value('aggregate');
     }
 }
