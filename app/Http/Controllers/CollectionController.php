@@ -149,13 +149,15 @@ class CollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
+        $volumeColumn = match ($request->query('period')) {
+            '7d' => 'avg_volume_7d',
+            '30d' => 'avg_volume_30d',
+            default => 'avg_volume_1d',
+        };
+
         /** @var Paginator<PopularCollectionData> $collections */
         $collections = Collection::query()
-                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByWithNulls(match ($request->query('period')) {
-                                    '7d' => 'avg_volume_7d',
-                                    '30d' => 'avg_volume_30d',
-                                    default => 'avg_volume_1d',
-                                }, 'desc'))
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByWithNulls($volumeColumn.'::numeric', 'desc'))
                                 ->filterByChainId($chainId)
                                 ->orderByFloorPrice('desc', $currency)
                                 ->with([
