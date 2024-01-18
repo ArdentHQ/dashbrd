@@ -1,4 +1,4 @@
-import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs"
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 
 export interface PopularCollectionTableItemProperties {
     collection: App.Data.Collections.PopularCollectionData;

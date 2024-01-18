@@ -4,19 +4,23 @@ import { type Column } from "react-table";
 import { type PopularCollectionTableProperties } from "./PopularCollectionsTable.contract";
 import { PopularCollectionsTableItem } from "./PopularCollectionsTableItem";
 import { Table } from "@/Components/Table";
-import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs"
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 
-export const PopularCollectionsTable = ({ collections, user, period }: PopularCollectionTableProperties): JSX.Element => {
+export const PopularCollectionsTable = ({
+    collections,
+    user,
+    period,
+}: PopularCollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const volumeLabel = useMemo(() => {
-        console.log("Changed")
+        console.log("Changed");
         if (period === PeriodFilterOptions["30d"]) {
-            return t("common.volume_30d")
+            return t("common.volume_30d");
         }
 
         if (period === PeriodFilterOptions["7d"]) {
-            return t("common.volume_7d")
+            return t("common.volume_7d");
         }
 
         return t("common.volume_24h");
