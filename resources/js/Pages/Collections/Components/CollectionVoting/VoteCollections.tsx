@@ -149,9 +149,7 @@ export const VoteCollections = ({
                     {votedCollection === null && (
                         <LinkButton
                             onClick={(): void => {
-                                void signedAction(() => {
-                                    setIsDialogOpen(true);
-                                });
+                                setIsDialogOpen(true);
                             }}
                             variant="link"
                             className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
