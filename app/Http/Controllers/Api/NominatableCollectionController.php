@@ -38,7 +38,6 @@ class NominatableCollectionController extends Controller
                     $currency,
                     showVotes: false,
                     alreadyWon: $winners->contains($collection->id),
-                    showVolume: true,
                 )
             ),
         ]);

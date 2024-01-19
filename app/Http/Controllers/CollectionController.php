@@ -96,7 +96,6 @@ class CollectionController extends Controller
             $collection,
             $user->currency(),
             showVotes: true,
-            showVolume: false
         );
     }
 
@@ -123,7 +122,6 @@ class CollectionController extends Controller
             $currency,
             showVotes: $userVoted,
             alreadyWon: $winners->contains($collection->id),
-            showVolume: true
         ));
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Models\Collection;
@@ -28,23 +29,19 @@ class VotableCollectionData extends Data
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
         public ?float $floorPriceChange,
-        public ?string $volume,
-        public ?float $volumeFiat,
-        public string $volumeCurrency,
-        public int $volumeDecimals,
+        public VolumeData $volume,
         public int $nftsCount,
         public ?string $twitterUsername,
         public bool $alreadyWon,
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false, bool $showVolume = false): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false): self
     {
-        $volume = $showVolume ? $collection->getVolume(Period::MONTH) : null;
+        // For votable collections, we only care about the volume in the last 30 days...
+        $volume = $collection->getVolume(Period::MONTH);
+        $token = $collection->nativeToken();
 
-        /**
-         * @var mixed $collection
-         */
         return new self(
             id: $collection->id,
             rank: $collection->monthly_rank,
@@ -57,10 +54,12 @@ class VotableCollectionData extends Data
             floorPriceCurrency: $collection->floor_price_symbol,
             floorPriceDecimals: $collection->floor_price_decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: $volume,
-            volumeFiat: $showVolume ? $collection->nativeToken()->toCurrentFiat($volume, $currency)?->toFloat() : null,
-            volumeCurrency: $collection->nativeToken()->symbol,
-            volumeDecimals: $collection->nativeToken()->decimals,
+            volume: new VolumeData(
+                value: $volume,
+                fiat: $token->toCurrentFiat($volume, $currency)?->toFloat(),
+                currency: $token->symbol,
+                decimals: $token->decimals,
+            ),
             nftsCount: $collection->nfts_count,
             // We are not using the `->twitter` method because we need the username
             // not the twitter url

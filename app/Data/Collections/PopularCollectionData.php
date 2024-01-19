@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Models\Collection;
@@ -27,10 +28,7 @@ class PopularCollectionData extends Data
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
         public ?float $floorPriceChange,
-        public ?string $volume,
-        public ?float $volumeFiat,
-        public ?string $volumeCurrency,
-        public ?int $volumeDecimals,
+        public VolumeData $volume,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
     ) {
@@ -39,6 +37,7 @@ class PopularCollectionData extends Data
     public static function fromModel(Collection $collection, CurrencyCode $currency, Period $volumePeriod): self
     {
         $volume = $collection->getVolume($volumePeriod);
+        $token = $collection->nativeToken();
 
         /** @var mixed $collection (`price_change_24h` is added with the `scopeAddFloorPriceChange`) */
         return new self(
@@ -50,10 +49,12 @@ class PopularCollectionData extends Data
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: $volume,
-            volumeFiat: $collection->nativeToken()->toCurrentFiat($volume, $currency)?->toFloat(),
-            volumeCurrency: $collection->nativeToken()->symbol,
-            volumeDecimals: $collection->nativeToken()->decimals,
+            volume: new VolumeData(
+                value: $volume,
+                fiat: $token->toCurrentFiat($volume, $currency)?->toFloat(),
+                currency: $token->symbol,
+                decimals: $token->decimals,
+            ),
             image: $collection->extra_attributes->get('image'),
         );
     }

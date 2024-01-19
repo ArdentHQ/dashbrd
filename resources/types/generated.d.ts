@@ -86,6 +86,12 @@ declare namespace App.Data {
     export type UserData = {
         attributes: Attributes;
     };
+    export type VolumeData = {
+        value: string | null;
+        fiat: number | null;
+        currency: string;
+        decimals: number;
+    };
 }
 declare namespace App.Data.Articles {
     export type ArticleData = {
@@ -249,10 +255,7 @@ declare namespace App.Data.Collections {
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
         floorPriceChange: number | null;
-        volume: string | null;
-        volumeFiat: number | null;
-        volumeCurrency: string | null;
-        volumeDecimals: number | null;
+        volume: App.Data.VolumeData;
         image: string | null;
     };
     export type SimpleNftData = {
@@ -272,10 +275,7 @@ declare namespace App.Data.Collections {
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
         floorPriceChange: number | null;
-        volume: string | null;
-        volumeFiat: number | null;
-        volumeCurrency: string;
-        volumeDecimals: number;
+        volume: App.Data.VolumeData;
         nftsCount: number;
         twitterUsername: string | null;
         alreadyWon: boolean;
