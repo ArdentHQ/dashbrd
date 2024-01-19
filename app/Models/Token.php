@@ -292,6 +292,8 @@ class Token extends Model
             return null;
         }
 
+        // (amount * price) / 10^decimals
+
         return BigDecimal::of($value)
                         ->multipliedBy($price)
                         ->dividedBy(BigInteger::ten()->power($this->decimals), roundingMode: RoundingMode::DOWN);
