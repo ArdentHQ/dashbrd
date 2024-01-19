@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Data\Collections;
 
 use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
 use Spatie\LaravelData\Attributes\WithTransformer;
@@ -37,8 +38,10 @@ class VotableCollectionData extends Data
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false, bool $showVolume = false): self
     {
+        $volume = $showVolume ? $collection->getVolume(Period::MONTH) : null;
+
         /**
          * @var mixed $collection
          */
@@ -54,11 +57,10 @@ class VotableCollectionData extends Data
             floorPriceCurrency: $collection->floor_price_symbol,
             floorPriceDecimals: $collection->floor_price_decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: $collection->volume,
-            volumeFiat: (float) $collection->volume_fiat,
-            // Volume is normalized to `ETH`
-            volumeCurrency: 'ETH',
-            volumeDecimals: 18,
+            volume: $volume,
+            volumeFiat: $showVolume ? $collection->nativeToken()->toCurrentFiat($volume, $currency)?->toFloat() : null,
+            volumeCurrency: $collection->nativeToken()->symbol,
+            volumeDecimals: $collection->nativeToken()->decimals,
             nftsCount: $collection->nfts_count,
             // We are not using the `->twitter` method because we need the username
             // not the twitter url
