@@ -14,7 +14,6 @@ export const PopularCollectionsTable = ({
     const { t } = useTranslation();
 
     const volumeLabel = useMemo(() => {
-        console.log("Changed");
         if (period === PeriodFilterOptions["30d"]) {
             return t("common.volume_30d");
         }
