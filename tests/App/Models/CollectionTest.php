@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Jobs\ResetCollectionRanking;
 use App\Models\Article;
 use App\Models\Collection;
@@ -1522,4 +1523,18 @@ it('should sort collections', function () {
         $collection2, // 1
         $collection5, // 0
     ]);
+});
+
+it('can get volume based on the period', function () {
+    $collection = Collection::factory()->create([
+        'total_volume' => '1',
+        'avg_volume_1d' => '2',
+        'avg_volume_7d' => '3',
+        'avg_volume_30d' => '4',
+    ]);
+
+    expect($collection->getVolume())->toBe('1');
+    expect($collection->getVolume(Period::DAY))->toBe('2');
+    expect($collection->getVolume(Period::WEEK))->toBe('3');
+    expect($collection->getVolume(Period::MONTH))->toBe('4');
 });

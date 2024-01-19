@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\HasFloorPriceHistory;
@@ -716,6 +717,24 @@ class Collection extends Model
                     ->selectRaw('avg(volume::numeric) as aggregate')
                     ->where('created_at', '>', $date)
                     ->value('aggregate');
+    }
+
+    /**
+     * Scope the query to order the collections by the volume, but respecting the volume in the given period.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByVolume(Builder $query, ?Period $period = null): Builder
+    {
+        $column = match ($period) {
+            Period::WEEK => 'avg_volume_7d',
+            Period::MONTH => 'avg_volume_30d',
+            Period::DAY => 'avg_volume_1d',
+            default => 'total_volume',
+        };
+
+        return $query->orderByWithNulls($column.'::numeric', 'desc');
     }
 
     /**
