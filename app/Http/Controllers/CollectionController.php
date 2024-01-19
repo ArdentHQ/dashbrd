@@ -83,7 +83,7 @@ class CollectionController extends Controller
             return null;
         }
 
-        $collection = Collection::votable($user->currency())->with('network.nativeToken')->votedByUserInCurrentMonth($user)->first();
+        $collection = Collection::votable()->with('network.nativeToken')->votedByUserInCurrentMonth($user)->first();
 
         return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true, showVolume: false) : null;
     }
@@ -100,7 +100,7 @@ class CollectionController extends Controller
         $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
         // 8 collections on the vote table + 5 collections to nominate
-        $collections = Collection::votable($currency)->with('network.nativeToken')->limit(13)->get();
+        $collections = Collection::votable()->with('network.nativeToken')->limit(13)->get();
 
         $winners = CollectionWinner::ineligibleCollectionIds();
 
