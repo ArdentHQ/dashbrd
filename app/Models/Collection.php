@@ -606,10 +606,9 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeVotable(Builder $query, CurrencyCode $currency, bool $orderByVotes = true): Builder
+    public function scopeVotable(Builder $query, bool $orderByVotes = true): Builder
     {
         return $query
-            ->addSelectVolumeFiat($currency)
             ->addFloorPriceChange()
             ->addSelect([
                 'collections.*',
@@ -620,21 +619,6 @@ class Collection extends Model
             ->withCount('nfts')
             ->groupBy('collections.id')
             ->when($orderByVotes, fn ($q) => $q->orderBy('monthly_votes', 'desc')->orderByRaw('volume DESC NULLS LAST'));
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeAddSelectVolumeFiat(Builder $query, CurrencyCode $currency, string $volumeColumn = 'volume', bool $useEthereum = true): Builder
-    {
-        $currencyCode = Str::lower($currency->value);
-
-        return $query->addSelect(
-            DB::raw("
-            (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.{$volumeColumn}::numeric / (10 ^ MAX(eth_token.decimals)))
-        AS volume_fiat")
-        )->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw($useEthereum ? "'ETH'" : "'MATIC'"));
     }
 
     /**
