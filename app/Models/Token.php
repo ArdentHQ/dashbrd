@@ -9,6 +9,9 @@ use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\BelongsToTokenGuid;
+use Brick\Math\BigDecimal;
+use Brick\Math\BigInteger;
+use Brick\Math\RoundingMode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -264,5 +267,33 @@ class Token extends Model
             'ath' => $resolve('ath'),
             'atl' => $resolve('atl'),
         ];
+    }
+
+    /**
+     * Get the current fiat price of a token in the given currency.
+     */
+    public function currentPrice(CurrencyCode $currency): ?float
+    {
+        return $this->extra_attributes->get('market_data.current_prices')[$currency->canonical()] ?? null;
+    }
+
+    /**
+     * Calculate the current fiat price of a value of a token in a given currency.
+     */
+    public function toCurrentFiat(?string $value, CurrencyCode $currency = CurrencyCode::USD): ?BigDecimal
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $price = $this->currentPrice($currency);
+
+        if ($price === null) {
+            return null;
+        }
+
+        return BigDecimal::of($value)
+                        ->multipliedBy($price)
+                        ->dividedBy(BigInteger::ten()->power($this->decimals), roundingMode: RoundingMode::DOWN);
     }
 }

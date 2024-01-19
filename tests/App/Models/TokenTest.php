@@ -318,3 +318,37 @@ it('prioritize tokens by online status', function () {
         $tokenWith0->id,
     ]);
 });
+
+it('can get current price of a token in a specific currency', function () {
+    $token = Token::factory()->create([
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10.51,
+                ]
+            ],
+        ],
+    ]);
+
+    expect($token->currentPrice(CurrencyCode::USD))->toBe(10.51);
+    expect($token->currentPrice(CurrencyCode::EUR))->toBeNull();
+});
+
+it('can convert value to a current price of a token in a specific currency', function () {
+    $token = Token::factory()->create([
+        'decimals' => 18,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 1701.51,
+                ]
+            ],
+        ],
+    ]);
+
+    // (6780914114355034300*1701.51)/1e18
+
+    expect($token->toCurrentFiat('6780914114355034300', CurrencyCode::USD)->toFloat())->toBe(11537.79);
+    expect($token->toCurrentFiat('6780914114355034300', CurrencyCode::EUR))->toBeNull();
+    expect($token->toCurrentFiat(null, CurrencyCode::EUR))->toBeNull();
+});
