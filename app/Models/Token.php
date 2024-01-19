@@ -280,12 +280,8 @@ class Token extends Model
     /**
      * Calculate the current fiat price of a value of a token in a given currency.
      */
-    public function toCurrentFiat(?string $value, CurrencyCode $currency = CurrencyCode::USD): ?BigDecimal
+    public function toCurrentFiat(string $value, CurrencyCode $currency = CurrencyCode::USD): ?BigDecimal
     {
-        if ($value === null) {
-            return null;
-        }
-
         $price = $this->currentPrice($currency);
 
         if ($price === null) {

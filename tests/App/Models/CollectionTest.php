@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Jobs\ResetCollectionRanking;
 use App\Models\Article;
 use App\Models\Collection;
@@ -16,6 +18,7 @@ use App\Models\Network;
 use App\Models\Nft;
 use App\Models\NftActivity;
 use App\Models\SpamContract;
+use App\Models\Token;
 use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
@@ -1522,4 +1525,18 @@ it('should sort collections', function () {
         $collection2, // 1
         $collection5, // 0
     ]);
+});
+
+it('can create volume data for a collection', function () {
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create([
+        'avg_volume_30d' => '3',
+    ]);
+
+    expect($collection->createVolumeData(Period::MONTH, CurrencyCode::USD))->toBeInstanceOf(VolumeData::class);
 });

@@ -6,15 +6,14 @@ namespace App\Models;
 
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
-use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\HasFloorPriceHistory;
+use App\Models\Traits\HasVolume;
 use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,7 +43,8 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory,
+        HasSlug, HasVolume, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
@@ -685,54 +685,6 @@ class Collection extends Model
                 collections, jsonb_each_text(fiat_value) as currencies(key,value)
             GROUP BY key;'
         );
-    }
-
-    /**
-     * @return HasMany<TradingVolume>
-     */
-    public function volumes(): HasMany
-    {
-        return $this->hasMany(TradingVolume::class);
-    }
-
-    public function averageVolumeSince(Carbon $date): string
-    {
-        return $this->volumes()
-                    ->selectRaw('avg(volume::numeric) as aggregate')
-                    ->where('created_at', '>', $date)
-                    ->value('aggregate');
-    }
-
-    /**
-     * Get the collection volume, but respecting the volume in the given period.
-     * If no period is provided, get the total collection volume.
-     */
-    public function getVolume(?Period $period = null): ?string
-    {
-        return match ($period) {
-            Period::DAY => $this->avg_volume_1d,
-            Period::WEEK => $this->avg_volume_7d,
-            Period::MONTH => $this->avg_volume_30d,
-            default => $this->total_volume,
-        };
-    }
-
-    /**
-     * Scope the query to order the collections by the volume, but respecting the volume in the given period.
-     *
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeOrderByVolume(Builder $query, ?Period $period = null): Builder
-    {
-        $column = match ($period) {
-            Period::DAY => 'avg_volume_1d',
-            Period::WEEK => 'avg_volume_7d',
-            Period::MONTH => 'avg_volume_30d',
-            default => 'total_volume',
-        };
-
-        return $query->orderByWithNulls($column.'::numeric', 'desc');
     }
 
     /**

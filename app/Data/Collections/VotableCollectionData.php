@@ -38,10 +38,6 @@ class VotableCollectionData extends Data
 
     public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false): self
     {
-        // For votable collections, we only care about the volume in the last 30 days...
-        $volume = $collection->getVolume(Period::MONTH);
-        $token = $collection->nativeToken();
-
         /** @var mixed $collection */
         return new self(
             id: $collection->id,
@@ -55,12 +51,7 @@ class VotableCollectionData extends Data
             floorPriceCurrency: $collection->floor_price_symbol,
             floorPriceDecimals: $collection->floor_price_decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: new VolumeData(
-                value: $volume,
-                fiat: $token->toCurrentFiat($volume, $currency)?->toFloat(),
-                currency: $token->symbol,
-                decimals: $token->decimals,
-            ),
+            volume: $collection->createVolumeData(Period::MONTH), // For votable collections, we only care about the volume in the last 30 days...
             nftsCount: $collection->nfts_count,
             // We are not using the `->twitter` method because we need the username
             // not the twitter url

@@ -36,9 +36,6 @@ class PopularCollectionData extends Data
 
     public static function fromModel(Collection $collection, CurrencyCode $currency, Period $volumePeriod): self
     {
-        $volume = $collection->getVolume($volumePeriod);
-        $token = $collection->nativeToken();
-
         /** @var mixed $collection (`price_change_24h` is added with the `scopeAddFloorPriceChange`) */
         return new self(
             id: $collection->id,
@@ -49,12 +46,7 @@ class PopularCollectionData extends Data
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: new VolumeData(
-                value: $volume,
-                fiat: $token->toCurrentFiat($volume, $currency)?->toFloat(),
-                currency: $token->symbol,
-                decimals: $token->decimals,
-            ),
+            volume: $collection->createVolumeData($volumePeriod, $currency),
             image: $collection->extra_attributes->get('image'),
         );
     }
