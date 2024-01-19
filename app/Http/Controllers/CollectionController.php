@@ -83,9 +83,21 @@ class CollectionController extends Controller
             return null;
         }
 
-        $collection = Collection::votable()->with('network.nativeToken')->votedByUserInCurrentMonth($user)->first();
+        $collection = Collection::votable()
+                                ->with('network.nativeToken')
+                                ->votedByUserInCurrentMonth($user)
+                                ->first();
 
-        return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true, showVolume: false) : null;
+        if ($collection === null) {
+            return null;
+        }
+
+        return VotableCollectionData::fromModel(
+            $collection,
+            $user->currency(),
+            showVotes: true,
+            showVolume: false
+        );
     }
 
     /**
@@ -99,14 +111,20 @@ class CollectionController extends Controller
 
         $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
-        // 8 collections on the vote table + 5 collections to nominate
-        $collections = Collection::votable()->with('network.nativeToken')->limit(13)->get();
+        $collections = Collection::votable()
+                                ->with('network.nativeToken')
+                                ->limit(13) // 8 collections on the vote table + 5 collections to nominate
+                                ->get();
 
         $winners = CollectionWinner::ineligibleCollectionIds();
 
-        return $collections->map(function (Collection $collection) use ($userVoted, $currency, $winners) {
-            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted, alreadyWon: $winners->contains($collection->id), showVolume: true);
-        });
+        return $collections->map(fn ($collection) => VotableCollectionData::fromModel(
+            $collection,
+            $currency,
+            showVotes: $userVoted,
+            alreadyWon: $winners->contains($collection->id),
+            showVolume: true
+        ));
     }
 
     /**
