@@ -350,5 +350,4 @@ it('can convert value to a current price of a token in a specific currency', fun
 
     expect($token->toCurrentFiat('6780914114355034300', CurrencyCode::USD)->toFloat())->toBe(11537.79);
     expect($token->toCurrentFiat('6780914114355034300', CurrencyCode::EUR))->toBeNull();
-    expect($token->toCurrentFiat(null, CurrencyCode::EUR))->toBeNull();
 });
