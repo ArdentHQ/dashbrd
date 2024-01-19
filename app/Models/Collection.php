@@ -44,7 +44,7 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 class Collection extends Model
 {
     use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory,
-        HasSlug, HasWalletVotes, Reportable, SoftDeletes, HasVolume;
+        HasSlug, HasVolume, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
