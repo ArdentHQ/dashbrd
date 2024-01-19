@@ -42,6 +42,7 @@ class VotableCollectionData extends Data
         $volume = $collection->getVolume(Period::MONTH);
         $token = $collection->nativeToken();
 
+        /** @var mixed $collection */
         return new self(
             id: $collection->id,
             rank: $collection->monthly_rank,
