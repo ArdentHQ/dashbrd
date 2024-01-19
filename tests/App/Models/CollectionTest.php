@@ -1252,7 +1252,7 @@ it('returns the collections with most votes in the same month first for votable'
 
     (new ResetCollectionRanking)->handle();
 
-    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         $collectionWith8Votes->id,
@@ -1290,7 +1290,7 @@ it('only considers the votes on the same votes for votables', function () {
 
     (new ResetCollectionRanking)->handle();
 
-    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         // 6 votes this month
@@ -1323,7 +1323,7 @@ it('sorts by volume if collections have the same amount of votes', function () {
 
     (new ResetCollectionRanking)->handle();
 
-    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         $highVolume->id,
