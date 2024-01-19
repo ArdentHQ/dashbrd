@@ -235,8 +235,6 @@ class Collection extends Model
      */
     public function scopeOrderByValue(Builder $query, ?Wallet $wallet, ?string $direction, ?CurrencyCode $currency = CurrencyCode::USD): Builder
     {
-        $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
-
         $walletFilter = $wallet ? "WHERE nfts.wallet_id = $wallet->id" : '';
 
         return $query->selectRaw(
@@ -251,7 +249,7 @@ class Collection extends Model
                 GROUP BY collection_id
             ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
-            ->orderByRaw("total_value {$direction} {$nullsPosition}")
+            ->orderByWithNulls('total_value', $direction)
             ->orderBy('collections.id', $direction);
     }
 
@@ -262,11 +260,9 @@ class Collection extends Model
      */
     public function scopeOrderByFloorPrice(Builder $query, string $direction, CurrencyCode $currency = CurrencyCode::USD): Builder
     {
-        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
-
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
-        )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
+        )->orderByWithNulls('total_floor_price', $direction);
     }
 
     /**
@@ -276,9 +272,7 @@ class Collection extends Model
      */
     public function scopeOrderByName(Builder $query, string $direction): Builder
     {
-        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
-
-        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
+        return $query->orderByWithNulls('lower(collections.name)', $direction);
     }
 
     /**
@@ -288,11 +282,7 @@ class Collection extends Model
      */
     public function scopeOrderByMintDate(Builder $query, string $direction): Builder
     {
-        if ($direction === 'asc') {
-            return $query->orderByRaw('minted_at ASC NULLS FIRST');
-        }
-
-        return $query->orderByRaw('minted_at DESC NULLS LAST');
+        return $query->orderByWithNulls('minted_at', $direction);
     }
 
     /**
@@ -314,11 +304,7 @@ class Collection extends Model
             ->addSelect(DB::raw('MAX(nft_activity.timestamp) as received_at'))
             ->groupBy('collections.id');
 
-        if ($direction === 'asc') {
-            return $query->orderByRaw('received_at ASC NULLS FIRST');
-        }
-
-        return $query->orderByRaw('received_at DESC NULLS LAST');
+        return $query->orderByWithNulls('received_at', $direction);
     }
 
     /**
@@ -581,7 +567,7 @@ class Collection extends Model
      */
     public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
     {
-        return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
+        return $query->orderByWithNulls('extra_attributes->>\'nft_last_fetched_at\'', 'asc');
     }
 
     /**
@@ -590,7 +576,7 @@ class Collection extends Model
      */
     public function scopeOrderByFloorPriceLastFetchedAt(Builder $query): Builder
     {
-        return $query->orderByRaw('extra_attributes->>\'floor_price_last_fetched_at\' ASC NULLS FIRST');
+        return $query->orderByWithNulls('extra_attributes->>\'floor_price_last_fetched_at\'', 'asc');
     }
 
     /**
@@ -599,7 +585,7 @@ class Collection extends Model
      */
     public function scopeOrderByOpenseaSlugLastFetchedAt(Builder $query): Builder
     {
-        return $query->orderByRaw('extra_attributes->>\'opensea_slug_last_fetched_at\' ASC NULLS FIRST');
+        return $query->orderByWithNulls('extra_attributes->>\'opensea_slug_last_fetched_at\'', 'asc');
     }
 
     public function isSpam(): bool
@@ -730,5 +716,22 @@ class Collection extends Model
                     ->selectRaw('avg(volume::numeric) as aggregate')
                     ->where('created_at', '>', $date)
                     ->value('aggregate');
+    }
+
+    /**
+     * Modify the query to apply ORDER BY, but with respect to NULL values.
+     * If direction is ascending, the query will order NULL values first,
+     * otherwise it will order NULL values last.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByWithNulls(Builder $query, string $column, string $direction): Builder
+    {
+        $nullsPosition = strtolower($direction) === 'asc'
+                        ? 'NULLS FIRST'
+                        : 'NULLS LAST';
+
+        return $query->orderByRaw("{$column} {$direction} {$nullsPosition}");
     }
 }
