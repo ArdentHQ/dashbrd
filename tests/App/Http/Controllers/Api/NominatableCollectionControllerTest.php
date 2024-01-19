@@ -8,7 +8,9 @@ use App\Models\Token;
 use App\Models\User;
 
 it('can get all collections that can be nominated', function () {
-    Token::factory()->matic()->create();
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
 
     $network = Network::polygon();
 

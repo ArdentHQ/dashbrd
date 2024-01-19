@@ -29,7 +29,9 @@ it('can render the collections overview page as guest', function () {
 });
 
 it('can return featured collections', function () {
-    Token::factory()->matic()->create();
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
 
     $user = createUser();
 
