@@ -29,13 +29,17 @@ it('can render the collections overview page as guest', function () {
 });
 
 it('can return featured collections', function () {
+    Token::factory()->matic()->create();
+
     $user = createUser();
 
-    Collection::factory(8)->create([
+    $network = Network::polygon();
+
+    Collection::factory(8)->for($network)->create([
         'is_featured' => false,
     ]);
 
-    Collection::factory(2)->create([
+    Collection::factory(2)->for($network)->create([
         'is_featured' => true,
     ]);
 

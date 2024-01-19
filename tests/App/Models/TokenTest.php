@@ -325,7 +325,7 @@ it('can get current price of a token in a specific currency', function () {
             'market_data' => [
                 'current_prices' => [
                     'usd' => 10.51,
-                ]
+                ],
             ],
         ],
     ]);
@@ -341,7 +341,7 @@ it('can convert value to a current price of a token in a specific currency', fun
             'market_data' => [
                 'current_prices' => [
                     'usd' => 1701.51,
-                ]
+                ],
             ],
         ],
     ]);
