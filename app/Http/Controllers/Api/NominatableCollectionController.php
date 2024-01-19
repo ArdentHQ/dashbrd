@@ -24,7 +24,8 @@ class NominatableCollectionController extends Controller
         $collections = Collection::query()
                                 ->searchByName($request->get('query'))
                                 ->limit(15)
-                                ->votable($currency, orderByVotes: false)
+                                ->votable(orderByVotes: false)
+                                ->with('network.nativeToken')
                                 ->orderBy('name', 'asc')
                                 ->get();
 
@@ -32,7 +33,13 @@ class NominatableCollectionController extends Controller
 
         return response()->json([
             'collections' => $collections->map(
-                fn ($collection) => VotableCollectionData::fromModel($collection, $currency, showVotes: false, alreadyWon: $winners->contains($collection->id))
+                fn ($collection) => VotableCollectionData::fromModel(
+                    $collection,
+                    $currency,
+                    showVotes: false,
+                    alreadyWon: $winners->contains($collection->id),
+                    showVolume: true,
+                )
             ),
         ]);
     }
