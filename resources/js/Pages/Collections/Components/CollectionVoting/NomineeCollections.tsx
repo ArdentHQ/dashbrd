@@ -1,4 +1,3 @@
-import { BigNumber } from "@ardenthq/sdk-helpers";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { type Column, type TableState } from "react-table";
