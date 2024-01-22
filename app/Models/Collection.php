@@ -9,11 +9,11 @@ use App\Enums\CurrencyCode;
 use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\HasFloorPriceHistory;
+use App\Models\Traits\HasVolume;
 use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,7 +43,8 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory,
+        HasSlug, HasVolume, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
@@ -700,22 +701,6 @@ class Collection extends Model
                 collections, jsonb_each_text(fiat_value) as currencies(key,value)
             GROUP BY key;'
         );
-    }
-
-    /**
-     * @return HasMany<TradingVolume>
-     */
-    public function volumes(): HasMany
-    {
-        return $this->hasMany(TradingVolume::class);
-    }
-
-    public function averageVolumeSince(Carbon $date): string
-    {
-        return $this->volumes()
-                    ->selectRaw('avg(volume::numeric) as aggregate')
-                    ->where('created_at', '>', $date)
-                    ->value('aggregate');
     }
 
     /**

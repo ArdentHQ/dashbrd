@@ -21,6 +21,7 @@ use App\Data\Token\TokenData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Http\Controllers\Traits\HasCollectionFilters;
@@ -149,15 +150,15 @@ class CollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
-        $volumeColumn = match ($request->query('period')) {
-            '7d' => 'avg_volume_7d',
-            '30d' => 'avg_volume_30d',
-            default => 'avg_volume_1d',
+        $period = match ($request->query('period')) {
+            '7d' => Period::WEEK,
+            '30d' => Period::MONTH,
+            default => Period::DAY,
         };
 
         /** @var Paginator<PopularCollectionData> $collections */
         $collections = Collection::query()
-                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByWithNulls($volumeColumn.'::numeric', 'desc'))
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByVolume($period))
                                 ->filterByChainId($chainId)
                                 ->orderByFloorPrice('desc', $currency)
                                 ->with([
