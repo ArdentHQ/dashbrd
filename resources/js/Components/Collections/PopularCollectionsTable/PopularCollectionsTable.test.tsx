@@ -6,7 +6,7 @@ import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularColle
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
-import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs"
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 
 let useAuthorizedActionSpy: SpyInstance;
 const signedActionMock = vi.fn();
