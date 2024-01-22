@@ -14,9 +14,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->string('avg_volume_1d')->nullable();
-            $table->string('avg_volume_7d')->nullable();
-            $table->string('avg_volume_30d')->nullable();
+            $table->string('volume_1d')->nullable();
+            $table->string('volume_7d')->nullable();
+            $table->string('volume_30d')->nullable();
+
+            $table->dropColumn([
+                'avg_volume_1d',
+                'avg_volume_7d',
+                'avg_volume_30d',
+            ]);
         });
     }
 };
