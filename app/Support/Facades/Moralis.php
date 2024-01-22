@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Support\Facades;
 
 use App\Data\Wallet\WalletBalance;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
 use App\Http\Client\Moralis\MoralisFactory;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Http;
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Collection<int, WalletBalance> getNativeBalances(array $walletAddresses, Network $network)
  * @method static Carbon getBlockTimestamp(Network $network, int $blockNumber)
- * @method static Web3NftCollectionFloorPrice | null getCollectionFloorPrice(Chain $chain, string $contractAddress)
+ * @method static Web3CollectionFloorPrice | null getCollectionFloorPrice(Chain $chain, string $contractAddress)
  *
  * @see App\Http\Client\Moralis\MoralisPendingRequest
  */

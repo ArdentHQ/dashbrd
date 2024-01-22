@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Data\Web3\Web3NftCollectionFloorPrice;
-use App\Data\Web3\Web3NftCollectionTrait;
+use App\Data\Web3\Web3CollectionFloorPrice;
+use App\Data\Web3\Web3CollectionTrait;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Chain;
 use App\Enums\Features;
@@ -19,7 +19,7 @@ use App\Models\Wallet;
 use App\Rules\WalletAddress;
 use App\Services\Web3\Alchemy\AlchemyWeb3DataProvider;
 use App\Services\Web3\Moralis\MoralisWeb3DataProvider;
-use App\Support\Web3NftCollectionHandler;
+use App\Support\Web3CollectionHandler;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -162,7 +162,7 @@ class LiveUserSeeder extends UserSeeder
             name: $nft['name'],
             description: $nft['description'],
             extraAttributes: $nft['extraAttributes'],
-            floorPrice: $nft['floorPrice'] ? new Web3NftCollectionFloorPrice(
+            floorPrice: $nft['floorPrice'] ? new Web3CollectionFloorPrice(
                 $nft['floorPrice']['price'],
                 $nft['floorPrice']['currency'],
                 Carbon::parse($nft['floorPrice']['retrievedAt']),
@@ -190,7 +190,7 @@ class LiveUserSeeder extends UserSeeder
         /** @var array<int, mixed> $array */
         $array = json_decode($contents, true);
 
-        $handler = new Web3NftCollectionHandler();
+        $handler = new Web3CollectionHandler();
         collect($array)->each(function ($collections, $chainId) use ($handler) {
             /** @var array<int, mixed> $traits */
             collect($collections)->filter(fn ($traits) => ! collect($traits)->isEmpty())
@@ -206,7 +206,7 @@ class LiveUserSeeder extends UserSeeder
                         return;
                     }
 
-                    $restored = collect($traits)->map(fn ($trait) => new Web3NftCollectionTrait(
+                    $restored = collect($traits)->map(fn ($trait) => new Web3CollectionTrait(
                         name: $trait['name'],
                         value: $trait['value'],
                         valueMin: $trait['valueMin'] ?? 0,

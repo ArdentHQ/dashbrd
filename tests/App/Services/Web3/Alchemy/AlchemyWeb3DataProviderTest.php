@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
@@ -153,7 +153,7 @@ it('should getWalletNfts', function () {
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
         ->and($tokens[0]->tokenAddress)->toBe('0x684E4ED51D350b4d76A3a07864dF572D24e6dC4c')
         ->and($tokens[2]->floorPrice)
-        ->toBeInstanceOf(Web3NftCollectionFloorPrice::class)
+        ->toBeInstanceOf(Web3CollectionFloorPrice::class)
         ->and($tokens[2]->floorPrice->price)->toEqual('3000000000000000')
         ->and($tokens[2]->floorPrice->currency)->toEqual('eth');
 });
@@ -246,7 +246,7 @@ it('can get nft floor price', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3CollectionFloorPrice(
         '1235000000000000000',
         'eth',
         Carbon::parse('2023-03-30T04:08:09.791Z'),
@@ -259,7 +259,7 @@ it('can get nft floor price with some errors', function () {
     ]);
 
     $provider = new AlchemyWeb3DataProvider();
-    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toEqual(new Web3CollectionFloorPrice(
         '1247200000000000000',
         'eth',
         Carbon::parse('2023-03-30T03:59:09.707Z'),

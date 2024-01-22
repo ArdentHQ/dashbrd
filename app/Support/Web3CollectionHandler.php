@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Support;
 
-use App\Data\Web3\Web3NftCollectionTrait;
+use App\Data\Web3\Web3CollectionTrait;
 use App\Models\CollectionTrait;
 use Illuminate\Support\Collection;
 
-class Web3NftCollectionHandler
+class Web3CollectionHandler
 {
     public function __construct()
     {
@@ -16,13 +16,13 @@ class Web3NftCollectionHandler
     }
 
     /**
-     * @param  Collection<int, Web3NftCollectionTrait>  $traits
+     * @param  Collection<int, Web3CollectionTrait>  $traits
      */
     public function storeTraits(int $collectionId, Collection $traits): void
     {
         $filteredTraits = $traits->filter(fn ($trait) => CollectionTrait::isValidValue($trait->value));
 
-        CollectionTrait::upsert($filteredTraits->map(function (Web3NftCollectionTrait $trait) use ($collectionId) {
+        CollectionTrait::upsert($filteredTraits->map(function (Web3CollectionTrait $trait) use ($collectionId) {
             return [
                 'collection_id' => $collectionId,
                 'name' => $trait->name,
