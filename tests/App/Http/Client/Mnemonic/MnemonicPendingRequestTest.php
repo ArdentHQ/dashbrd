@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Enums\Chain;
 use App\Enums\NftTransferType;
-use App\Enums\Period;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection;
