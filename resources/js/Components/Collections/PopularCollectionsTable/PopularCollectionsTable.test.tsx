@@ -131,7 +131,7 @@ describe("PopularCollectionsTable", () => {
         expect(container2).toHaveTextContent("Volume (30d)");
     });
 
-    it("renders the volume fiat in USD if user is not logged in", function () {
+    it("renders the volume fiat in USD if user is not logged in", () => {
         const { container } = render(
             <PopularCollectionVolume
                 collection={{
