@@ -117,6 +117,8 @@ const CollectionsIndex = ({
                             <PopularCollectionsTable
                                 collections={collections.slice(0, 6)}
                                 user={auth.user}
+                                period={currentFilters.period}
+                                activePeriod={filters.period}
                             />
                         </div>
 
@@ -124,6 +126,8 @@ const CollectionsIndex = ({
                             <PopularCollectionsTable
                                 collections={collections.slice(6, 12)}
                                 user={auth.user}
+                                period={currentFilters.period}
+                                activePeriod={filters.period}
                             />
                         </div>
                     </div>

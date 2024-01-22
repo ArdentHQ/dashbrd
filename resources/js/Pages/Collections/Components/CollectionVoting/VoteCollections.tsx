@@ -278,11 +278,11 @@ export const VoteCollection = ({
                             <span className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
                                 {t("common.vol")}:{" "}
                                 <FormatCrypto
-                                    value={collection.volume ?? "0"}
+                                    value={collection.volume.value ?? "0"}
                                     token={{
-                                        symbol: "ETH",
-                                        name: "ETH",
-                                        decimals: 18,
+                                        symbol: collection.volume.currency,
+                                        name: collection.volume.currency,
+                                        decimals: collection.volume.decimals,
                                     }}
                                 />
                             </span>

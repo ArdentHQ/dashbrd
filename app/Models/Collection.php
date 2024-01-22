@@ -9,11 +9,11 @@ use App\Enums\CurrencyCode;
 use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
 use App\Models\Traits\HasFloorPriceHistory;
+use App\Models\Traits\HasVolume;
 use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,7 +43,8 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory, HasSlug, HasWalletVotes, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory,
+        HasSlug, HasVolume, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
@@ -606,10 +607,9 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeVotable(Builder $query, CurrencyCode $currency, bool $orderByVotes = true): Builder
+    public function scopeVotable(Builder $query, bool $orderByVotes = true): Builder
     {
         return $query
-            ->addSelectVolumeFiat($currency)
             ->addFloorPriceChange()
             ->addSelect([
                 'collections.*',
@@ -620,21 +620,6 @@ class Collection extends Model
             ->withCount('nfts')
             ->groupBy('collections.id')
             ->when($orderByVotes, fn ($q) => $q->orderBy('monthly_votes', 'desc')->orderByRaw('volume DESC NULLS LAST'));
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeAddSelectVolumeFiat(Builder $query, CurrencyCode $currency): Builder
-    {
-        $currencyCode = Str::lower($currency->value);
-
-        return $query->addSelect(
-            DB::raw("
-            (MIN(eth_token.extra_attributes -> 'market_data' -> 'current_prices' ->> '{$currencyCode}')::numeric * collections.volume::numeric / (10 ^ MAX(eth_token.decimals)))
-        AS volume_fiat")
-        )->leftJoin('tokens as eth_token', 'eth_token.symbol', '=', DB::raw("'ETH'"));
     }
 
     /**
@@ -700,22 +685,6 @@ class Collection extends Model
                 collections, jsonb_each_text(fiat_value) as currencies(key,value)
             GROUP BY key;'
         );
-    }
-
-    /**
-     * @return HasMany<TradingVolume>
-     */
-    public function volumes(): HasMany
-    {
-        return $this->hasMany(TradingVolume::class);
-    }
-
-    public function totalVolumeSince(Carbon $date): string
-    {
-        return $this->volumes()
-                    ->selectRaw('sum(volume::numeric) as total')
-                    ->where('created_at', '>', $date)
-                    ->value('total');
     }
 
     /**

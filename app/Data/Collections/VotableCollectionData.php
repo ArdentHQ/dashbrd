@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
 use Spatie\LaravelData\Attributes\WithTransformer;
@@ -27,10 +29,7 @@ class VotableCollectionData extends Data
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
         public ?float $floorPriceChange,
-        public ?string $volume,
-        public ?float $volumeFiat,
-        public string $volumeCurrency,
-        public int $volumeDecimals,
+        public VolumeData $volume,
         public int $nftsCount,
         public ?string $twitterUsername,
         public bool $alreadyWon,
@@ -39,9 +38,7 @@ class VotableCollectionData extends Data
 
     public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false): self
     {
-        /**
-         * @var mixed $collection
-         */
+        /** @var mixed $collection */
         return new self(
             id: $collection->id,
             rank: $collection->monthly_rank,
@@ -54,11 +51,7 @@ class VotableCollectionData extends Data
             floorPriceCurrency: $collection->floor_price_symbol,
             floorPriceDecimals: $collection->floor_price_decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: $collection->volume,
-            volumeFiat: (float) $collection->volume_fiat,
-            // Volume is normalized to `ETH`
-            volumeCurrency: 'ETH',
-            volumeDecimals: 18,
+            volume: $collection->createVolumeData(Period::MONTH, $currency), // For votable collections, we only care about the volume in the last 30 days...
             nftsCount: $collection->nfts_count,
             // We are not using the `->twitter` method because we need the username
             // not the twitter url

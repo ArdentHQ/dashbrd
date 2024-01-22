@@ -8,6 +8,7 @@ use App\Data\Collections\CollectionData;
 use App\Data\Collections\CollectionStatsData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Models\Collection;
 use App\Models\Nft;
@@ -42,9 +43,15 @@ class PopularCollectionController extends Controller
 
         $sortDirection = in_array($request->query('direction'), ['asc', 'desc']) ? $request->query('direction') : $defaultSortDirection;
 
+        $period = match ($request->query('period')) {
+            '7d' => Period::WEEK,
+            '30d' => Period::MONTH,
+            default => Period::DAY,
+        };
+
         $collections = Collection::query()
             ->searchByName($request->get('query'))
-            ->when($sortBy === null, fn ($q) => $q->orderBy('volume', 'desc')) // @TODO handle top sorting
+            ->when($sortBy === null, fn ($q) => $q->orderByVolume($period))
             ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
             ->when($sortBy === 'value', fn ($q) => $q->orderByValue(null, $sortDirection, $currency))
             ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $currency))
@@ -57,7 +64,6 @@ class PopularCollectionController extends Controller
                 'nfts' => fn ($q) => $q->limit(4),
             ])
             ->withCount('nfts')
-            ->addSelectVolumeFiat($currency)
             ->addSelect('collections.*')
             ->groupBy('collections.id')
             ->paginate($perPage)

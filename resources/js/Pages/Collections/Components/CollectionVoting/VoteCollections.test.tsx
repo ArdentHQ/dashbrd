@@ -14,7 +14,12 @@ const demoCollection = new VotableCollectionDataFactory().create({
     id: 1,
     rank: 1,
     name: "AlphaDogs",
-    volume: "256.000000000000000000",
+    volume: {
+        value: "256.000000000000000000",
+        fiat: 0,
+        currency: "ETH",
+        decimals: 18,
+    },
 });
 
 const collections = new VotableCollectionDataFactory().createMany(8, {

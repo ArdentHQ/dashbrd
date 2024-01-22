@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
+import VolumeFactory from "@/Tests/Factories/VolumeFactory";
 
 export default class PopularCollectionFactory extends ModelFactory<App.Data.Collections.PopularCollectionData> {
     protected factory(): App.Data.Collections.PopularCollectionData {
@@ -12,10 +13,7 @@ export default class PopularCollectionFactory extends ModelFactory<App.Data.Coll
             floorPriceCurrency: this.optional(this.cryptoCurrency()),
             floorPriceDecimals: this.optional(18),
             floorPriceChange: this.optional(faker.datatype.number({ min: -100, max: 100 })),
-            volume: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
-            volumeFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
-            volumeCurrency: this.optional(this.cryptoCurrency()),
-            volumeDecimals: this.optional(18),
+            volume: new VolumeFactory().create(),
             image: this.optional(faker.image.avatar(), 0.9),
         };
     }
@@ -38,19 +36,13 @@ export default class PopularCollectionFactory extends ModelFactory<App.Data.Coll
 
     withVolume(): this {
         return this.state(() => ({
-            volume: faker.finance.amount(1 * 1e18, 25 * 1e18, 0),
-            volumeFiat: Number(faker.finance.amount(1, 1500, 2)),
-            volumeCurrency: this.cryptoCurrency(),
-            volumeDecimals: 18,
+            volume: new VolumeFactory().create(),
         }));
     }
 
     withoutVolume(): this {
         return this.state(() => ({
-            volume: null,
-            volumeFiat: null,
-            volumeCurrency: null,
-            volumeDecimals: null,
+            volume: new VolumeFactory().empty().create(),
         }));
     }
 }

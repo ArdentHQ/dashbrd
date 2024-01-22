@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Jobs\ResetCollectionRanking;
 use App\Models\Article;
 use App\Models\Collection;
@@ -1253,7 +1255,7 @@ it('returns the collections with most votes in the same month first for votable'
 
     (new ResetCollectionRanking)->handle();
 
-    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         $collectionWith8Votes->id,
@@ -1291,7 +1293,7 @@ it('only considers the votes on the same votes for votables', function () {
 
     (new ResetCollectionRanking)->handle();
 
-    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         // 6 votes this month
@@ -1324,7 +1326,7 @@ it('sorts by volume if collections have the same amount of votes', function () {
 
     (new ResetCollectionRanking)->handle();
 
-    $collectionsIds = Collection::votable(CurrencyCode::USD)->get()->pluck('id')->toArray();
+    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 
     expect($collectionsIds)->toBe([
         $highVolume->id,
@@ -1523,6 +1525,34 @@ it('should sort collections', function () {
         $collection2, // 1
         $collection5, // 0
     ]);
+});
+
+it('can create volume data for a collection', function () {
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create([
+        'avg_volume_30d' => '3',
+    ]);
+
+    expect($collection->createVolumeData(Period::MONTH, CurrencyCode::USD))->toBeInstanceOf(VolumeData::class);
+});
+
+it('can get volume based on the period', function () {
+    $collection = Collection::factory()->create([
+        'total_volume' => '1',
+        'avg_volume_1d' => '2',
+        'avg_volume_7d' => '3',
+        'avg_volume_30d' => '4',
+    ]);
+
+    expect($collection->getVolume())->toBe('1');
+    expect($collection->getVolume(Period::DAY))->toBe('2');
+    expect($collection->getVolume(Period::WEEK))->toBe('3');
+    expect($collection->getVolume(Period::MONTH))->toBe('4');
 });
 
 it('can get native token for a network', function () {

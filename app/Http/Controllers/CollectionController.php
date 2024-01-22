@@ -21,6 +21,7 @@ use App\Data\Token\TokenData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Http\Controllers\Traits\HasCollectionFilters;
@@ -82,9 +83,20 @@ class CollectionController extends Controller
             return null;
         }
 
-        $collection = Collection::votable($user->currency())->votedByUserInCurrentMonth($user)->first();
+        $collection = Collection::votable()
+                                ->with('network.nativeToken')
+                                ->votedByUserInCurrentMonth($user)
+                                ->first();
 
-        return $collection !== null ? VotableCollectionData::fromModel($collection, $user->currency(), showVotes: true) : null;
+        if ($collection === null) {
+            return null;
+        }
+
+        return VotableCollectionData::fromModel(
+            $collection,
+            $user->currency(),
+            showVotes: true,
+        );
     }
 
     /**
@@ -98,14 +110,19 @@ class CollectionController extends Controller
 
         $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
-        // 8 collections on the vote table + 5 collections to nominate
-        $collections = Collection::votable($currency)->limit(13)->get();
+        $collections = Collection::votable()
+                                ->with('network.nativeToken')
+                                ->limit(13) // 8 collections on the vote table + 5 collections to nominate
+                                ->get();
 
         $winners = CollectionWinner::ineligibleCollectionIds();
 
-        return $collections->map(function (Collection $collection) use ($userVoted, $currency, $winners) {
-            return VotableCollectionData::fromModel($collection, $currency, showVotes: $userVoted, alreadyWon: $winners->contains($collection->id));
-        });
+        return $collections->map(fn ($collection) => VotableCollectionData::fromModel(
+            $collection,
+            $currency,
+            showVotes: $userVoted,
+            alreadyWon: $winners->contains($collection->id),
+        ));
     }
 
     /**
@@ -149,28 +166,27 @@ class CollectionController extends Controller
 
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
-        $volumeColumn = match ($request->query('period')) {
-            '7d' => 'volume_7d',
-            '30d' => 'volume_30d',
-            default => 'volume_1d',
+        $period = match ($request->query('period')) {
+            '7d' => Period::WEEK,
+            '30d' => Period::MONTH,
+            default => Period::DAY,
         };
 
         /** @var Paginator<PopularCollectionData> $collections */
         $collections = Collection::query()
-                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByWithNulls($volumeColumn.'::numeric', 'desc'))
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByVolume($period))
                                 ->filterByChainId($chainId)
                                 ->orderByFloorPrice('desc', $currency)
                                 ->with([
                                     'network',
                                     'floorPriceToken',
                                 ])
-                                ->addSelectVolumeFiat($currency)
                                 ->addFloorPriceChange()
                                 ->addSelect('collections.*')
                                 ->groupBy('collections.id')
                                 ->simplePaginate(12);
 
-        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency));
+        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency, $period));
     }
 
     /**

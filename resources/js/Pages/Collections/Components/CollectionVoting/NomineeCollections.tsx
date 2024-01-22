@@ -1,4 +1,3 @@
-import { BigNumber } from "@ardenthq/sdk-helpers";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { type Column, type TableState } from "react-table";
@@ -57,13 +56,11 @@ export const NomineeCollections = ({
         // @TODO fix 0s below collection.floorPriceFiat && nfts_count
         if (isMdAndAbove) {
             columns.splice(-1, 0, {
-                Header: t("common.volume").toString(),
+                Header: t("common.volume_30d").toString(),
                 id: "value",
-                accessor: (collection) =>
-                    BigNumber.make(collection.floorPriceFiat).times(collection.nftsCount).toString(),
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
-                className: "justify-end",
+                className: "justify-end min-w-[7rem]",
                 disableSortBy: true,
             });
 

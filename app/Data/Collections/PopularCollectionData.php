@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
 use Illuminate\Support\Str;
@@ -26,18 +28,15 @@ class PopularCollectionData extends Data
         public ?string $floorPriceCurrency,
         public ?int $floorPriceDecimals,
         public ?float $floorPriceChange,
-        public ?string $volume,
-        public ?float $volumeFiat,
-        public ?string $volumeCurrency,
-        public ?int $volumeDecimals,
+        public VolumeData $volume,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, Period $volumePeriod): self
     {
-        /** @var mixed $collection (volume_fiat is added with the `scopeAddSelectVolumeFiat` and `price_change_24h` with the `scopeAddFloorPriceChange`) */
+        /** @var mixed $collection (`price_change_24h` is added with the `scopeAddFloorPriceChange`) */
         return new self(
             id: $collection->id,
             name: $collection->name,
@@ -47,11 +46,7 @@ class PopularCollectionData extends Data
             floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
             floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
-            volume: $collection->volume,
-            volumeFiat: (float) $collection->volume_fiat,
-            // Volume is normalized to `ETH`
-            volumeCurrency: 'ETH',
-            volumeDecimals: 18,
+            volume: $collection->createVolumeData($volumePeriod, $currency),
             image: $collection->extra_attributes->get('image'),
         );
     }
