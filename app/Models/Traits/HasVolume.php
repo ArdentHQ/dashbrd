@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Traits;
 
+use App\Data\VolumeData;
+use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Models\TradingVolume;
 use Carbon\Carbon;
@@ -43,6 +45,22 @@ trait HasVolume
             Period::MONTH => $this->avg_volume_30d,
             default => $this->total_volume,
         };
+    }
+
+    /**
+     * Create a volume DTO based on the volume in the given period.
+     */
+    public function createVolumeData(Period $period, CurrencyCode $currency): VolumeData
+    {
+        $volume = $this->getVolume($period);
+        $token = $this->nativeToken();
+
+        return new VolumeData(
+            value: $volume,
+            fiat: $volume !== null ? $token->toCurrentFiat($volume, $currency)?->toFloat() : null,
+            currency: $token->symbol,
+            decimals: $token->decimals,
+        );
     }
 
     /**

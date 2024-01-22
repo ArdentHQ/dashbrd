@@ -49,11 +49,11 @@ export const NominateCollectionName = ({
                         data-testid="CollectionName__volume"
                     >
                         <FormatCrypto
-                            value={collection.volume ?? "0"}
+                            value={collection.volume.value ?? "0"}
                             token={{
-                                symbol: collection.volumeCurrency,
-                                name: collection.volumeCurrency,
-                                decimals: collection.volumeDecimals,
+                                symbol: collection.volume.currency,
+                                name: collection.volume.currency,
+                                decimals: collection.volume.decimals,
                             }}
                         />
                     </p>

@@ -4,9 +4,27 @@ import { type Column } from "react-table";
 import { type PopularCollectionTableProperties } from "./PopularCollectionsTable.contract";
 import { PopularCollectionsTableItem } from "./PopularCollectionsTableItem";
 import { Table } from "@/Components/Table";
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 
-export const PopularCollectionsTable = ({ collections, user }: PopularCollectionTableProperties): JSX.Element => {
+export const PopularCollectionsTable = ({
+    collections,
+    user,
+    period,
+    activePeriod,
+}: PopularCollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
+
+    const volumeLabel = useMemo(() => {
+        if (activePeriod === PeriodFilterOptions["30d"]) {
+            return t("common.volume_30d");
+        }
+
+        if (activePeriod === PeriodFilterOptions["7d"]) {
+            return t("common.volume_7d");
+        }
+
+        return t("common.volume_24h");
+    }, [activePeriod]);
 
     const columns = useMemo(() => {
         const columns: Array<Column<App.Data.Collections.PopularCollectionData>> = [
@@ -25,14 +43,14 @@ export const PopularCollectionsTable = ({ collections, user }: PopularCollection
             },
             {
                 headerClassName: "hidden md-lg:table-cell",
-                Header: t("common.volume").toString(),
+                Header: volumeLabel,
                 id: "volume",
-                className: "justify-end [&_div]:w-full [&_div]:flex [&_div]:justify-end px-2",
+                className: "justify-end min-w-[7rem] [&_div]:w-full [&_div]:flex [&_div]:justify-end px-2",
             },
         ];
 
         return columns;
-    }, [t]);
+    }, [t, period, volumeLabel]);
 
     if (collections.length === 0) {
         return <></>;

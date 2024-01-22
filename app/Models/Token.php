@@ -282,7 +282,6 @@ class Token extends Model
      */
     public function toCurrentFiat(string $value, CurrencyCode $currency = CurrencyCode::USD): ?BigDecimal
     {
-
         $price = $this->currentPrice($currency);
 
         if ($price === null) {
