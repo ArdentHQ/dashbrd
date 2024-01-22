@@ -295,7 +295,7 @@ class CoingeckoProvider implements MarketDataProvider
     }
 
     /**
-     * @param  CoingeckoTokens  $tokens The complete token list from Coingecko
+     * @param  CoingeckoTokens  $tokens  The complete token list from Coingecko
      * @return array<int, array{id: string, symbol: string, name: string, platforms: string}>
      */
     private function filterTokens(CoingeckoTokens $tokens): array

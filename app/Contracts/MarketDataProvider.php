@@ -48,7 +48,7 @@ interface MarketDataProvider
      * IMPORTANT: When implementing this method, make sure to set the timestamp
      * for every PriceHistoryData object in the collection in Unix milliseconds
      *
-     * @param  int|null  $sampleCount The max number of samples to return. If null, all samples will be returned.
+     * @param  int|null  $sampleCount  The max number of samples to return. If null, all samples will be returned.
      * @return DataCollection<int, PriceHistoryData>
      */
     public function getPriceHistory(Token $token, CurrencyCode $currency, Period $period, ?int $sampleCount = null): DataCollection;
@@ -58,7 +58,7 @@ interface MarketDataProvider
      * for every PriceHistoryData object in the collection in Unix milliseconds
      *
      * @param  Collection<int, Token>  $tokens
-     * @param  int|null  $sampleCount The max number of samples to return. If null, all samples will be returned.
+     * @param  int|null  $sampleCount  The max number of samples to return. If null, all samples will be returned.
      * @return Collection<string, DataCollection<int, PriceHistoryData>>
      */
     public function getBatchPriceHistory(Collection $tokens, CurrencyCode $currency, Period $period, ?int $sampleCount = null): Collection;
