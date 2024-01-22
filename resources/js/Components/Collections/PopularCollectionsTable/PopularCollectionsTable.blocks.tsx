@@ -5,7 +5,6 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { CollectionImageWithIcon } from "@/Pages/Collections/Components/CollectionImage";
 import { FormatCrypto, FormatFiat } from "@/Utils/Currency";
-import { isTruthy } from "@/Utils/is-truthy";
 
 export const PopularCollectionName = ({
     collection,
