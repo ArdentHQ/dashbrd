@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Enums\Chain;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
@@ -50,7 +50,7 @@ it('can get floor price for the collection', function () {
 
     $data = Opensea::getCollectionFloorPrice($collectionSlug);
 
-    expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
+    expect($data)->toBeInstanceOf(Web3CollectionFloorPrice::class);
 });
 
 it('can get nft collection slug', function () {

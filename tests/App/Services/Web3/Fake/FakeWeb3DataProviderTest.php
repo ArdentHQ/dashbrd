@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Exceptions\NotImplementedException;
 use App\Models\Collection;
@@ -47,7 +47,7 @@ it('should getWalletNfts', function () {
         expect($nft)
             ->toBeInstanceOf(Web3NftData::class)
             ->and($nft->floorPrice)
-            ->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
+            ->toBeInstanceOf(Web3CollectionFloorPrice::class);
     });
 });
 

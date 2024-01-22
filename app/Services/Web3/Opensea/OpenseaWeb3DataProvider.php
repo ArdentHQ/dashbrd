@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Web3\Opensea;
 
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
 use App\Enums\Service;
@@ -50,7 +50,7 @@ final class OpenseaWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         return $this->fromCache(
             function () use ($contractAddress, $chain) {
