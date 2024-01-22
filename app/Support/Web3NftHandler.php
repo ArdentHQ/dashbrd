@@ -9,9 +9,9 @@ use App\Enums\Features;
 use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Jobs\DetermineCollectionMintingDate;
-use App\Jobs\FetchAverageCollectionVolume;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
+use App\Jobs\FetchCollectionVolumeForPeriod;
 use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
 use App\Models\Network;
@@ -203,11 +203,11 @@ class Web3NftHandler
                             FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
                         }
 
-                        // If the collection has just been created, then prefill average volumes until we have enough data...
+                        // If the collection has just been created, then prefill total periodic volumes until we have enough data...
                         if ($collection->created_at->gte(now()->subMinutes(3))) {
-                            FetchAverageCollectionVolume::dispatch($collection, Period::DAY);
-                            FetchAverageCollectionVolume::dispatch($collection, Period::WEEK);
-                            FetchAverageCollectionVolume::dispatch($collection, Period::MONTH);
+                            FetchCollectionVolumeForPeriod::dispatch($collection, Period::DAY);
+                            FetchCollectionVolumeForPeriod::dispatch($collection, Period::WEEK);
+                            FetchCollectionVolumeForPeriod::dispatch($collection, Period::MONTH);
                         }
                     });
                 });

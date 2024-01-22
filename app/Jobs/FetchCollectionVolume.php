@@ -47,18 +47,18 @@ class FetchCollectionVolume implements ShouldQueue
 
             $this->collection->volume = $volume;
 
-            // We only want to update average volumes in the given period if we have enough data for that period...
+            // We only want to update total volumes in the given period if we have enough data for that period...
 
             if ($this->collection->volumes()->where('created_at', '<', now()->subDays(1))->exists()) {
-                $this->collection->avg_volume_1d = $this->collection->averageVolumeSince(now()->subDays(1));
+                $this->collection->volume_1d = $this->collection->totalVolumeSince(now()->subDays(1));
             }
 
             if ($this->collection->volumes()->where('created_at', '<', now()->subDays(7))->exists()) {
-                $this->collection->avg_volume_7d = $this->collection->averageVolumeSince(now()->subDays(7));
+                $this->collection->volume_7d = $this->collection->totalVolumeSince(now()->subDays(7));
             }
 
             if ($this->collection->volumes()->where('created_at', '<', now()->subDays(30))->exists()) {
-                $this->collection->avg_volume_30d = $this->collection->averageVolumeSince(now()->subDays(30));
+                $this->collection->volume_30d = $this->collection->totalVolumeSince(now()->subDays(30));
             }
 
             $this->collection->save();

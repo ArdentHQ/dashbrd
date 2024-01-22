@@ -710,12 +710,12 @@ class Collection extends Model
         return $this->hasMany(TradingVolume::class);
     }
 
-    public function averageVolumeSince(Carbon $date): string
+    public function totalVolumeSince(Carbon $date): string
     {
         return $this->volumes()
-                    ->selectRaw('avg(volume::numeric) as aggregate')
+                    ->selectRaw('sum(volume::numeric) as total')
                     ->where('created_at', '>', $date)
-                    ->value('aggregate');
+                    ->value('total');
     }
 
     /**

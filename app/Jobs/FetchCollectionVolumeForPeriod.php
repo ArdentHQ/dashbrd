@@ -18,7 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class FetchAverageCollectionVolume implements ShouldQueue
+class FetchCollectionVolumeForPeriod implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
@@ -37,7 +37,7 @@ class FetchAverageCollectionVolume implements ShouldQueue
      */
     public function handle(): void
     {
-        $volume = Mnemonic::getAverageCollectionVolume(
+        $volume = Mnemonic::getCollectionVolumeForPeriod(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address,
             period: $this->period,
@@ -53,9 +53,9 @@ class FetchAverageCollectionVolume implements ShouldQueue
     private function field(): string
     {
         return match ($this->period) {
-            Period::DAY => 'avg_volume_1d',
-            Period::WEEK => 'avg_volume_7d',
-            Period::MONTH => 'avg_volume_30d',
+            Period::DAY => 'volume_1d',
+            Period::WEEK => 'volume_7d',
+            Period::MONTH => 'volume_30d',
             default => throw new Exception('Unsupported period value'),
         };
     }

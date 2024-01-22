@@ -127,7 +127,7 @@ it('should get volume', function () {
     expect($data)->toBe('12300000000000000000');
 });
 
-it('should get average volume', function () {
+it('should get total periodic volume', function () {
     Mnemonic::fake([
         'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
             ->push([
@@ -143,12 +143,12 @@ it('should get average volume', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getAverageCollectionVolume(Chain::Polygon, $collection->address, Period::WEEK);
+    $data = Mnemonic::getCollectionVolumeForPeriod(Chain::Polygon, $collection->address, Period::WEEK);
 
     expect($data)->toBe('12300000000000000000');
 });
 
-it('should get no average volume', function () {
+it('should get no total periodic volume', function () {
     Mnemonic::fake([
         'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
             ->push([
@@ -164,7 +164,7 @@ it('should get no average volume', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getAverageCollectionVolume(Chain::Polygon, $collection->address, Period::WEEK);
+    $data = Mnemonic::getCollectionVolumeForPeriod(Chain::Polygon, $collection->address, Period::WEEK);
 
     expect($data)->toBeNull();
 });

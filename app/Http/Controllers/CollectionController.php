@@ -150,9 +150,9 @@ class CollectionController extends Controller
         $currency = $user ? $user->currency() : CurrencyCode::USD;
 
         $volumeColumn = match ($request->query('period')) {
-            '7d' => 'avg_volume_7d',
-            '30d' => 'avg_volume_30d',
-            default => 'avg_volume_1d',
+            '7d' => 'volume_7d',
+            '30d' => 'volume_30d',
+            default => 'volume_1d',
         };
 
         /** @var Paginator<PopularCollectionData> $collections */
