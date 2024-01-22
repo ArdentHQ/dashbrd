@@ -1,3 +1,4 @@
+import { type PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import { type CollectionsSortByOption } from "@/Pages/Collections/Components/CollectionsSortingTabs";
 import { type SortByDirection } from "@/Pages/Collections/Hooks/useCollectionFilters";
 
@@ -13,4 +14,5 @@ export interface CollectionTableProperties {
     setSortBy: (sortBy: CollectionsSortByOption | undefined, direction?: SortByDirection) => void;
     activeSort: CollectionsSortByOption | "";
     direction?: SortByDirection;
+    activePeriod?: PeriodFilterOptions;
 }

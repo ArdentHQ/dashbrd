@@ -101,6 +101,7 @@ const Index = ({
                         setSortBy={setSortBy}
                         activeSort={currentFilters.sort ?? ""}
                         direction={currentFilters.direction}
+                        activePeriod={filters.period}
                     />
 
                     {collections.data.length === 0 && (
