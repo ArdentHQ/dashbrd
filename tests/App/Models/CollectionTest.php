@@ -16,6 +16,7 @@ use App\Models\Network;
 use App\Models\Nft;
 use App\Models\NftActivity;
 use App\Models\SpamContract;
+use App\Models\Token;
 use App\Models\User;
 use App\Models\Wallet;
 use Carbon\Carbon;
@@ -1522,4 +1523,16 @@ it('should sort collections', function () {
         $collection2, // 1
         $collection5, // 0
     ]);
+});
+
+it('can get native token for a network', function () {
+    $token = Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create();
+
+    expect($collection->nativeToken()->is($token))->toBeTrue();
 });

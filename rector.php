@@ -24,7 +24,6 @@ use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\PhpVersion;
 use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
@@ -34,6 +33,7 @@ use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRecto
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
+use Rector\ValueObject\PhpVersion;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([

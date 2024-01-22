@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Client\Mnemonic;
 
 use App\Data\Web3\CollectionActivity;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
-use App\Data\Web3\Web3NftCollectionTrait;
+use App\Data\Web3\Web3CollectionFloorPrice;
+use App\Data\Web3\Web3CollectionTrait;
 use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\CurrencyCode;
@@ -101,7 +101,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/marketplacesservice_getfloorprice
-    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -160,7 +160,7 @@ class MnemonicPendingRequest extends PendingRequest
                 }
             }
 
-            return new Web3NftCollectionFloorPrice(
+            return new Web3CollectionFloorPrice(
                 CryptoUtils::convertToWei($value, $decimals),
                 Str::lower($currency),
                 Carbon::now(),
@@ -285,7 +285,7 @@ class MnemonicPendingRequest extends PendingRequest
     // https://docs.mnemonichq.com/reference/collectionsservice_getnumerictraits
     // https://docs.mnemonichq.com/reference/collectionsservice_getstringtraits
     /**
-     * @return Collection<int, Web3NftCollectionTrait>
+     * @return Collection<int, Web3CollectionTrait>
      */
     public function getCollectionTraits(Chain $chain, string $contractAddress): Collection
     {
@@ -295,7 +295,7 @@ class MnemonicPendingRequest extends PendingRequest
         //      "nftsCount": "283",
         //      "nftsPercentage": 2.8302830283028304
         //  }
-        $stringTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'string', static fn (array $trait) => new Web3NftCollectionTrait(
+        $stringTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'string', static fn (array $trait) => new Web3CollectionTrait(
             name: $trait['name'],
             value: $trait['value'],
             valueMin: null,
@@ -311,7 +311,7 @@ class MnemonicPendingRequest extends PendingRequest
         //      "valueMin": 0,
         //      "valueMax": 0
         //  }
-        $numericTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'numeric', static fn (array $trait) => new Web3NftCollectionTrait(
+        $numericTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'numeric', static fn (array $trait) => new Web3CollectionTrait(
             name: $trait['name'],
             value: Web3NftHandler::$numericTraitPlaceholder,
             valueMin: $trait['valueMin'],
@@ -325,7 +325,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     /**
-     * @return Collection<int, Web3NftCollectionTrait>
+     * @return Collection<int, Web3CollectionTrait>
      */
     private function fetchCollectionTraits(Chain $chain, string $contractAddress, string $kind, callable $mapper): Collection
     {
@@ -346,7 +346,7 @@ class MnemonicPendingRequest extends PendingRequest
 
             $result = $result->merge(
                 collect($data)->map(function ($trait) use ($mapper) {
-                    /** @var Web3NftCollectionTrait $result */
+                    /** @var Web3CollectionTrait $result */
                     $result = $mapper($trait);
 
                     // This ensures we deduplicate dates/numerics properly, so we do not end up with thousands of unique traits
