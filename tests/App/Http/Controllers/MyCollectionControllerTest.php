@@ -24,7 +24,9 @@ it('should render collections overview page with collections and NFTs', function
 
     $secondaryUser = createUser();
 
-    $collection = Collection::factory()->create();
+    $network = Network::factory()->withNativeToken()->create();
+
+    $collection = Collection::factory()->for($network)->create();
 
     collect([$secondaryUser->wallet_id, $user->wallet_id, $user->wallet_id])
         ->map(fn ($walletId) => Nft::factory()->create(['wallet_id' => $walletId, 'collection_id' => $collection->id]));
@@ -41,15 +43,17 @@ it('should render collections overview page with collections and NFTs', function
 it('filters the collections by a search query', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'Test Collection',
     ]);
 
-    $userCollection2 = Collection::factory()->create([
+    $userCollection2 = Collection::factory()->for($network)->create([
         'name' => 'Another Collection',
     ]);
 
-    $userCollection3 = Collection::factory()->create([
+    $userCollection3 = Collection::factory()->for($network)->create([
         'name' => 'Test Collection 2',
     ]);
 
@@ -76,7 +80,9 @@ it('filters the collections by a search query', function () {
 it('filters the collections by a search query on json requests', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'Test Collection',
     ]);
 
@@ -99,7 +105,9 @@ it('filters the collections by a search query on json requests', function () {
 it('removes the showIndex parameter if user has no hidden collections', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'Test Collection',
     ]);
 
@@ -121,7 +129,9 @@ it('removes the showIndex parameter if user has no hidden collections', function
 it('filters hidden collections by a search query on json requests', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'Test Collection',
     ]);
 
@@ -130,7 +140,7 @@ it('filters hidden collections by a search query on json requests', function () 
         'collection_id' => $userCollection->id,
     ]);
 
-    $hiddenCollection = Collection::factory()->create();
+    $hiddenCollection = Collection::factory()->for($network)->create();
     $user->hiddenCollections()->attach($hiddenCollection);
 
     $this->actingAs($user)
@@ -145,15 +155,17 @@ it('filters hidden collections by a search query on json requests', function () 
 it('can sort by oldest collection', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'Test Collection',
     ]);
 
-    $userCollection2 = Collection::factory()->create([
+    $userCollection2 = Collection::factory()->for($network)->create([
         'name' => 'Another Collection',
     ]);
 
-    $userCollection3 = Collection::factory()->create([
+    $userCollection3 = Collection::factory()->for($network)->create([
         'name' => 'Test Collection 2',
     ]);
 
@@ -181,15 +193,17 @@ it('can sort by oldest collection', function () {
 it('can sort by recently received', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'Test Collection',
     ]);
 
-    $userCollection2 = Collection::factory()->create([
+    $userCollection2 = Collection::factory()->for($network)->create([
         'name' => 'Another Collection',
     ]);
 
-    $userCollection3 = Collection::factory()->create([
+    $userCollection3 = Collection::factory()->for($network)->create([
         'name' => 'Test Collection 2',
     ]);
 
@@ -217,15 +231,17 @@ it('can sort by recently received', function () {
 it('can sort by collection name', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'A',
     ]);
 
-    $userCollection2 = Collection::factory()->create([
+    $userCollection2 = Collection::factory()->for($network)->create([
         'name' => 'B',
     ]);
 
-    $userCollection3 = Collection::factory()->create([
+    $userCollection3 = Collection::factory()->for($network)->create([
         'name' => 'C',
     ]);
 
@@ -253,15 +269,17 @@ it('can sort by collection name', function () {
 it('can sort by floor price', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'A',
     ]);
 
-    $userCollection2 = Collection::factory()->create([
+    $userCollection2 = Collection::factory()->for($network)->create([
         'name' => 'B',
     ]);
 
-    $userCollection3 = Collection::factory()->create([
+    $userCollection3 = Collection::factory()->for($network)->create([
         'name' => 'C',
     ]);
 
@@ -289,15 +307,17 @@ it('can sort by floor price', function () {
 it('can sort by chain ID', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'A',
     ]);
 
-    $userCollection2 = Collection::factory()->create([
+    $userCollection2 = Collection::factory()->for($network)->create([
         'name' => 'B',
     ]);
 
-    $userCollection3 = Collection::factory()->create([
+    $userCollection3 = Collection::factory()->for($network)->create([
         'name' => 'C',
     ]);
 
@@ -325,15 +345,17 @@ it('can sort by chain ID', function () {
 it('can sort by value', function () {
     $user = createUser();
 
-    $userCollection = Collection::factory()->create([
+    $network = Network::factory()->withNativeToken()->create();
+
+    $userCollection = Collection::factory()->for($network)->create([
         'name' => 'A',
     ]);
 
-    $userCollection2 = Collection::factory()->create([
+    $userCollection2 = Collection::factory()->for($network)->create([
         'name' => 'B',
     ]);
 
-    $userCollection3 = Collection::factory()->create([
+    $userCollection3 = Collection::factory()->for($network)->create([
         'name' => 'C',
     ]);
 
@@ -360,8 +382,8 @@ it('can sort by value', function () {
 
 it('should remove selected chains where its network has no collections in its count', function () {
     $user = createUser();
-    $network1 = Network::factory()->create();
-    $network2 = Network::factory()->create();
+    $network1 = Network::factory()->withNativeToken()->create();
+    $network2 = Network::factory()->withNativeToken()->create();
 
     $collection1 = Collection::factory()->create(['network_id' => $network1->id]);
     $collection2 = Collection::factory()->create(['network_id' => $network2->id]);
@@ -390,13 +412,15 @@ it('should remove selected chains where its network has no collections in its co
 it('can get stats', function () {
     $user = createUser();
 
-    $collection1 = Collection::factory()->create();
+    $network = Network::factory()->withNativeToken()->create();
+
+    $collection1 = Collection::factory()->for($network)->create();
     Nft::factory()->for($collection1)->for($user->wallet)->create();
 
-    $collection2 = Collection::factory()->create();
+    $collection2 = Collection::factory()->for($network)->create();
     Nft::factory()->for($collection2)->for($user->wallet)->create();
 
-    $hidden = Collection::factory()->create();
+    $hidden = Collection::factory()->for($network)->create();
     Nft::factory()->for($hidden)->for($user->wallet)->create();
 
     $user->hiddenCollections()->attach($hidden);

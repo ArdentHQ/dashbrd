@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Token;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,5 +26,18 @@ class NetworkFactory extends Factory
             'explorer_url' => fn () => 'https://mumbai.polygonscan.com',
             'is_mainnet' => fn () => fake()->boolean(),
         ];
+    }
+
+    /**
+     * Modify the model factory to create a native token after network was created.
+     * This is done to prevent bugs for missing native tokens, as every network has one.
+     */
+    public function withNativeToken(): self
+    {
+        return $this->afterCreating(function ($network) {
+            Token::factory()->for($network)->create([
+                'is_native_token' => true,
+            ]);
+        });
     }
 }
