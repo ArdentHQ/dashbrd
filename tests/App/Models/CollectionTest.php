@@ -1529,16 +1529,18 @@ it('should sort collections', function () {
 
 it('can create volume data for a collection', function () {
     Token::factory()->matic()->create([
-      
+        'is_native_token' => true,
+    ]);
+
     $network = Network::polygon();
-      
+
     $collection = Collection::factory()->for($network)->create([
         'avg_volume_30d' => '3',
     ]);
 
     expect($collection->createVolumeData(Period::MONTH, CurrencyCode::USD))->toBeInstanceOf(VolumeData::class);
 });
-      
+
 it('can get native token for a network', function () {
     $token = Token::factory()->matic()->create([
         'is_native_token' => true,
