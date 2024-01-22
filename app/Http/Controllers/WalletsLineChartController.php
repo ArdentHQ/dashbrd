@@ -16,7 +16,7 @@ use Spatie\LaravelData\DataCollection;
 class WalletsLineChartController extends Controller
 {
     /**
-     * @return  Collection<string, DataCollection<int, PriceHistoryData>>
+     * @return Collection<string, DataCollection<int, PriceHistoryData>>
      */
     public function __invoke(Request $request, MarketDataProvider $provider): Collection
     {

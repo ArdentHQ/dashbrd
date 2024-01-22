@@ -74,9 +74,9 @@ final class TokenSpam
     }
 
     /**
-     * @param  Token  $token - the token we are checking
-     * @param  mixed  $addressByNetwork - json_decode of the platforms field from coingecko
-     * @param  string  $network - the network we are checking
+     * @param  Token  $token  - the token we are checking
+     * @param  mixed  $addressByNetwork  - json_decode of the platforms field from coingecko
+     * @param  string  $network  - the network we are checking
      */
     private static function matchesCoingeckoTokenAddress(Token $token, mixed $addressByNetwork, string $network): bool
     {
@@ -88,8 +88,8 @@ final class TokenSpam
     }
 
     /**
-     * @param  Token  $token - the token we are checking
-     * @param  CoingeckoToken  $coingeckoToken - the coingecko token we are checking against
+     * @param  Token  $token  - the token we are checking
+     * @param  CoingeckoToken  $coingeckoToken  - the coingecko token we are checking against
      */
     private static function validateAddressByNetwork(Token $token, CoingeckoToken $coingeckoToken): bool
     {
