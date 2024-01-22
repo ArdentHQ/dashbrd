@@ -21,4 +21,9 @@ enum Chain: int
             self::Polygon, self::Mumbai => 'MATIC',
         };
     }
+
+    public function nativeCurrencyDecimals(): int
+    {
+        return CryptoCurrencyDecimals::forCurrency($this->nativeCurrency());
+    }
 }

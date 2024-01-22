@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\Period;
+use App\Data\Web3\Web3Volume;
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
+use App\Models\TradingVolume;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
-use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class FetchCollectionVolumeForPeriod implements ShouldQueue
+class FetchCollectionVolumeHistory implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels;
 
@@ -26,8 +26,7 @@ class FetchCollectionVolumeForPeriod implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public Collection $collection,
-        public Period $period,
+        public Collection $collection
     ) {
         $this->onQueue(Queues::SCHEDULED_COLLECTIONS);
     }
@@ -37,27 +36,24 @@ class FetchCollectionVolumeForPeriod implements ShouldQueue
      */
     public function handle(): void
     {
-        $volume = Mnemonic::getCollectionVolumeForPeriod(
+        $volumes = Mnemonic::getCollectionVolumeHistory(
             chain: $this->collection->network->chain(),
-            contractAddress: $this->collection->address,
-            period: $this->period,
+            address: $this->collection->address,
         );
 
+        TradingVolume::upsert($volumes->map(fn (Web3Volume $volume) => [
+            'collection_id' => $this->collection->id,
+            'volume' => $volume->value,
+            'created_at' => $volume->date->toDateString(),
+        ])->toArray(), uniqueBy: ['collection_id', 'created_at']);
+
         $this->collection->update([
-            $this->field() => $volume ?? 0,
+            'volume_1d' => $volumes->sortByDesc(fn ($volume) => $volume->date->timestamp)->first()->value,
+            'volume_7d' => $this->collection->totalVolumeSince(now()->subDays(7)),
+            'volume_30d' => $this->collection->totalVolumeSince(now()->subDays(30)),
         ]);
 
         ResetCollectionRanking::dispatch();
-    }
-
-    private function field(): string
-    {
-        return match ($this->period) {
-            Period::DAY => 'volume_1d',
-            Period::WEEK => 'volume_7d',
-            Period::MONTH => 'volume_30d',
-            default => throw new Exception('Unsupported period value'),
-        };
     }
 
     public function uniqueId(): string

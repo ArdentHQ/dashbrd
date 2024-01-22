@@ -7,13 +7,13 @@ namespace App\Http\Client\Mnemonic;
 use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3CollectionTrait;
+use App\Data\Web3\Web3Volume;
 use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\CurrencyCode;
 use App\Enums\ImageSize;
 use App\Enums\MnemonicChain;
 use App\Enums\NftTransferType;
-use App\Enums\Period;
 use App\Enums\TraitDisplayType;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
@@ -23,7 +23,6 @@ use App\Support\CryptoUtils;
 use App\Support\NftImageUrl;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
-use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\Client\ConnectionException as LaravelConnectionException;
@@ -234,52 +233,51 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     /**
+     * Retrieve the 30-day volume history for the collection address.
+     *
      * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
+     *
+     * @return Collection<int, Web3Volume>
      */
-    public function getCollectionVolumeForPeriod(Chain $chain, string $contractAddress, Period $period): ?string
+    public function getCollectionVolumeHistory(Chain $chain, string $address): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        $duration = match ($period) {
-            Period::DAY => 'DURATION_1_DAY',
-            Period::WEEK => 'DURATION_7_DAYS',
-            Period::MONTH => 'DURATION_30_DAYS',
-            default => throw new Exception('Unsupported period value'),
-        };
+        /** @var array{timestamp: string, volume: string}[] */
+        $response = $this->get(
+            '/collections/v1beta2/'.$address.'/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY'
+        )->json('dataPoints');
 
-        $volume = self::get(sprintf(
-            '/collections/v1beta2/%s/sales_volume/'.$duration.'/GROUP_BY_PERIOD_1_DAY',
-            $contractAddress,
-        ), [])->json('dataPoints.0.volume');
-
-        if (empty($volume)) {
-            return null;
-        }
-
-        $currency = $chain->nativeCurrency();
-        $decimals = CryptoCurrencyDecimals::forCurrency($currency);
-
-        return CryptoUtils::convertToWei($volume, $decimals);
+        return collect($response)->map(fn ($dataPoint) => new Web3Volume(
+            value: CryptoUtils::convertToWei($dataPoint['volume'], $chain->nativeCurrencyDecimals()),
+            date: Carbon::parse($dataPoint['timestamp']),
+        ));
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
-    public function getCollectionVolume(Chain $chain, string $contractAddress): ?string
+    /**
+     * Retrieve the latest sales volume amount for the collection address.
+     *
+     * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
+     */
+    public function getLatestCollectionVolume(Chain $chain, string $contractAddress): Web3Volume
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        $volume = self::get(sprintf(
-            '/collections/v1beta2/%s/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY',
-            $contractAddress,
-        ), [])->json('dataPoints.0.volume');
+        $response = $this->get(
+            '/collections/v1beta2/'.$contractAddress.'/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY'
+        )->json('dataPoints.0');
 
-        if (empty($volume)) {
-            return null;
+        if (empty($response)) {
+            return new Web3Volume(
+                value: '0',
+                date: today(),
+            );
         }
 
-        $currency = $chain->nativeCurrency();
-        $decimals = CryptoCurrencyDecimals::forCurrency($currency);
-
-        return CryptoUtils::convertToWei($volume, $decimals);
+        return new Web3Volume(
+            value: CryptoUtils::convertToWei($response['volume'] ?? '0', $chain->nativeCurrencyDecimals()),
+            date: Carbon::parse($response['timestamp'] ?? today()),
+        );
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getnumerictraits
