@@ -31,6 +31,9 @@ class LandingPageDataController extends Controller
 
     private function format(int $amount): string
     {
-        return strtolower(Number::abbreviate($amount, maxPrecision: 1));
+        /** @var string */
+        $value = Number::abbreviate($amount, maxPrecision: 1);
+
+        return strtolower($value);
     }
 }
