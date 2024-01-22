@@ -10,20 +10,21 @@ export const PopularCollectionsTable = ({
     collections,
     user,
     period,
+    activePeriod,
 }: PopularCollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
     const volumeLabel = useMemo(() => {
-        if (period === PeriodFilterOptions["30d"]) {
+        if (activePeriod === PeriodFilterOptions["30d"]) {
             return t("common.volume_30d");
         }
 
-        if (period === PeriodFilterOptions["7d"]) {
+        if (activePeriod === PeriodFilterOptions["7d"]) {
             return t("common.volume_7d");
         }
 
         return t("common.volume_24h");
-    }, [period]);
+    }, [activePeriod]);
 
     const columns = useMemo(() => {
         const columns: Array<Column<App.Data.Collections.PopularCollectionData>> = [
@@ -49,7 +50,7 @@ export const PopularCollectionsTable = ({
         ];
 
         return columns;
-    }, [t, period]);
+    }, [t, period, volumeLabel]);
 
     if (collections.length === 0) {
         return <></>;

@@ -6,6 +6,7 @@ import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularColle
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs"
 
 let useAuthorizedActionSpy: SpyInstance;
 const signedActionMock = vi.fn();
@@ -105,5 +106,27 @@ describe("PopularCollectionsTable", () => {
         expect(routerSpy).toHaveBeenCalled();
 
         routerSpy.mockRestore();
+    });
+
+    it("renders the table header for volume based on the actively selected period", () => {
+        const { container } = render(
+            <PopularCollectionsTable
+                collections={collections}
+                user={user}
+                activePeriod={PeriodFilterOptions["7d"]}
+            />,
+        );
+
+        expect(container).toHaveTextContent("Volume (7d)");
+
+        const { container: container2 } = render(
+            <PopularCollectionsTable
+                collections={collections}
+                user={user}
+                activePeriod={PeriodFilterOptions["30d"]}
+            />,
+        );
+
+        expect(container2).toHaveTextContent("Volume (30d)");
     });
 });
