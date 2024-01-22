@@ -1541,6 +1541,20 @@ it('can create volume data for a collection', function () {
     expect($collection->createVolumeData(Period::MONTH, CurrencyCode::USD))->toBeInstanceOf(VolumeData::class);
 });
 
+it('can get volume based on the period', function () {
+    $collection = Collection::factory()->create([
+        'total_volume' => '1',
+        'avg_volume_1d' => '2',
+        'avg_volume_7d' => '3',
+        'avg_volume_30d' => '4',
+    ]);
+
+    expect($collection->getVolume())->toBe('1');
+    expect($collection->getVolume(Period::DAY))->toBe('2');
+    expect($collection->getVolume(Period::WEEK))->toBe('3');
+    expect($collection->getVolume(Period::MONTH))->toBe('4');
+});
+
 it('can get native token for a network', function () {
     $token = Token::factory()->matic()->create([
         'is_native_token' => true,
