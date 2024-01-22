@@ -33,7 +33,7 @@ class Web3NftData
         public ?string $name,
         public ?string $description,
         public array $extraAttributes,
-        public ?Web3NftCollectionFloorPrice $floorPrice,
+        public ?Web3CollectionFloorPrice $floorPrice,
         public array $traits,
         public int $mintedBlock,
         public ?Carbon $mintedAt,

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Web3\Moralis;
 
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
 use App\Enums\Service;
@@ -76,7 +76,7 @@ final class MoralisWeb3DataProvider extends AbstractWeb3DataProvider
         return [new RateLimited(Service::Moralis)];
     }
 
-    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         return $this->fromCache(
             static fn () => Moralis::getCollectionFloorPrice($chain, $contractAddress),
