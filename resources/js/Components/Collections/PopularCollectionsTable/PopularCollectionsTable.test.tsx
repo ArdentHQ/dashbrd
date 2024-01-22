@@ -7,6 +7,7 @@ import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularColle
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
+import { PopularCollectionVolume } from "./PopularCollectionsTable.blocks";
 
 let useAuthorizedActionSpy: SpyInstance;
 const signedActionMock = vi.fn();
@@ -128,5 +129,24 @@ describe("PopularCollectionsTable", () => {
         );
 
         expect(container2).toHaveTextContent("Volume (30d)");
+    });
+
+    it("renders the volume fiat in USD if user is not logged in", function () {
+        const { container } = render(
+            <PopularCollectionVolume
+                collection={{
+                    ...collections[0],
+                    volume: {
+                        value: "50",
+                        fiat: 10000,
+                        currency: "ETH",
+                        decimals: 18,
+                    },
+                }}
+                user={null}
+            />,
+        );
+
+        expect(container).toHaveTextContent("$10,000.00");
     });
 });
