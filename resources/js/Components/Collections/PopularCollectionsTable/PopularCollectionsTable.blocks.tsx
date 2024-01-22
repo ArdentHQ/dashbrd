@@ -136,9 +136,9 @@ export const PopularCollectionVolume = ({
                 data-testid="PopularCollectionVolume__fiat"
                 className="text-sm text-theme-secondary-500 dark:text-theme-dark-300"
             >
-                {collection.volume.fiat !== null && isTruthy(user) && (
+                {collection.volume.fiat !== null && (
                     <FormatFiat
-                        user={user}
+                        user={user ?? undefined}
                         value={collection.volume.fiat.toString()}
                     />
                 )}
