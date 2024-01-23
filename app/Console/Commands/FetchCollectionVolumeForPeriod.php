@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Enums\Period;
-use App\Jobs\FetchAverageCollectionVolume as FetchAverageCollectionVolumeJob;
+use App\Jobs\FetchCollectionVolumeForPeriod as FetchCollectionVolumeForPeriodJob;
 use Exception;
 use Illuminate\Console\Command;
 
-class FetchAverageCollectionVolume extends Command
+class FetchCollectionVolumeForPeriod extends Command
 {
     use InteractsWithCollections;
 
@@ -18,14 +18,14 @@ class FetchAverageCollectionVolume extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-average-volumes {--collection-id=} {--period=}';
+    protected $signature = 'collections:fetch-periodic-volume {--collection-id=} {--period=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Fetch the initial average volume stats for collections';
+    protected $description = 'Fetch the initial periodic volume stats for collections';
 
     /**
      * Execute the console command.
@@ -41,7 +41,7 @@ class FetchAverageCollectionVolume extends Command
         }
 
         $this->forEachCollection(function ($collection) {
-            collect($this->periods())->each(fn ($period) => FetchAverageCollectionVolumeJob::dispatch($collection, $period));
+            collect($this->periods())->each(fn ($period) => FetchCollectionVolumeForPeriodJob::dispatch($collection, $period));
         });
 
         return Command::SUCCESS;

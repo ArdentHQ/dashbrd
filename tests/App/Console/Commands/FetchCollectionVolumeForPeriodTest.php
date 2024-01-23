@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Jobs\FetchAverageCollectionVolume;
+use App\Jobs\FetchCollectionVolumeForPeriod;
 use App\Models\Collection;
 use Illuminate\Support\Facades\Bus;
 
@@ -11,11 +11,11 @@ it('dispatches job for all supported periods for all collections', function () {
 
     Collection::factory()->count(3)->create();
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 0);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 0);
 
-    $this->artisan('collections:fetch-average-volumes');
+    $this->artisan('collections:fetch-periodic-volume');
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 9);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 9);
 });
 
 it('dispatches job for all supported periods for a specific collection', function () {
@@ -23,13 +23,13 @@ it('dispatches job for all supported periods for a specific collection', functio
 
     $collection = Collection::factory()->create();
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 0);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 0);
 
-    $this->artisan('collections:fetch-average-volumes', [
+    $this->artisan('collections:fetch-periodic-volume', [
         '--collection-id' => $collection->id,
     ]);
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 3);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 3);
 });
 
 it('dispatches job for specific period for all collections', function () {
@@ -37,13 +37,13 @@ it('dispatches job for specific period for all collections', function () {
 
     Collection::factory()->count(3)->create();
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 0);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 0);
 
-    $this->artisan('collections:fetch-average-volumes', [
+    $this->artisan('collections:fetch-periodic-volume', [
         '--period' => '7d',
     ]);
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 3);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 3);
 });
 
 it('dispatches job for specific period for a specific collection', function () {
@@ -51,14 +51,14 @@ it('dispatches job for specific period for a specific collection', function () {
 
     $collection = Collection::factory()->create();
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 0);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 0);
 
-    $this->artisan('collections:fetch-average-volumes', [
+    $this->artisan('collections:fetch-periodic-volume', [
         '--collection-id' => $collection->id,
         '--period' => '7d',
     ]);
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 1);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 1);
 });
 
 it('handles unsupported period values', function () {
@@ -66,12 +66,12 @@ it('handles unsupported period values', function () {
 
     $collection = Collection::factory()->create();
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 0);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 0);
 
-    $this->artisan('collections:fetch-average-volumes', [
+    $this->artisan('collections:fetch-periodic-volume', [
         '--collection-id' => $collection->id,
         '--period' => '1m',
     ]);
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 0);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 0);
 });
