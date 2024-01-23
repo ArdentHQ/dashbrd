@@ -1,12 +1,12 @@
 import { router } from "@inertiajs/react";
 import { expect } from "vitest";
 import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable/CollectionsFullTable";
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import SimpleNftDataFactory from "@/Tests/Factories/Collections/SimpleNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
-import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs"
 
 describe("CollectionsFullTable", () => {
     const collections = new CollectionFactory().withPrices().createMany(3);
