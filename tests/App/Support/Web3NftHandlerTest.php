@@ -6,7 +6,7 @@ use App\Data\Web3\Web3NftData;
 use App\Enums\NftInfo;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
-use App\Jobs\FetchAverageCollectionVolume;
+use App\Jobs\FetchCollectionVolumeForPeriod;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\NftTrait;
@@ -803,7 +803,7 @@ it('should update the error field for nft', function () {
     expect($collection->nfts->first()->info)->toBe(null);
 });
 
-it('should dispatch jobs to fetch average collection volume when collection is first added', function () {
+it('should dispatch jobs to fetch periodic collection volume when collection is first added', function () {
     Bus::fake();
 
     $network = Network::polygon();
@@ -892,5 +892,5 @@ it('should dispatch jobs to fetch average collection volume when collection is f
 
     expect(Collection::count())->toBe(2);
 
-    Bus::assertDispatchedTimes(FetchAverageCollectionVolume::class, 3);
+    Bus::assertDispatchedTimes(FetchCollectionVolumeForPeriod::class, 3);
 });

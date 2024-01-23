@@ -23,14 +23,14 @@ trait HasVolume
     }
 
     /**
-     * Calculate the average collection volume since the given time period.
+     * Calculate the total collection volume since the given time period.
      */
-    public function averageVolumeSince(Carbon $date): string
+    public function totalVolumeSince(Carbon $date): string
     {
         return $this->volumes()
-                    ->selectRaw('avg(volume::numeric) as aggregate')
+                    ->selectRaw('sum(volume::numeric) as total')
                     ->where('created_at', '>', $date)
-                    ->value('aggregate');
+                    ->value('total');
     }
 
     /**
@@ -40,9 +40,9 @@ trait HasVolume
     public function getVolume(?Period $period = null): ?string
     {
         return match ($period) {
-            Period::DAY => $this->avg_volume_1d,
-            Period::WEEK => $this->avg_volume_7d,
-            Period::MONTH => $this->avg_volume_30d,
+            Period::DAY => $this->volume_1d,
+            Period::WEEK => $this->volume_7d,
+            Period::MONTH => $this->volume_30d,
             default => $this->total_volume,
         };
     }
@@ -72,9 +72,9 @@ trait HasVolume
     public function scopeOrderByVolume(Builder $query, ?Period $period = null): Builder
     {
         $column = match ($period) {
-            Period::DAY => 'avg_volume_1d',
-            Period::WEEK => 'avg_volume_7d',
-            Period::MONTH => 'avg_volume_30d',
+            Period::DAY => 'volume_1d',
+            Period::WEEK => 'volume_7d',
+            Period::MONTH => 'volume_30d',
             default => 'total_volume',
         };
 

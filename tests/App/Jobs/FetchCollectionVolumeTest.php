@@ -51,7 +51,7 @@ it('logs volume changes', function () {
     expect($collection->volumes()->oldest('id')->pluck('volume')->toArray())->toBe(['11000000000000000000', '12300000000000000000']);
 });
 
-it('calculates average volume when there is enough historical data', function () {
+it('calculates periodic volume when there is enough historical data', function () {
     Mnemonic::fake([
         '*' => Http::response([
             'dataPoints' => [[
@@ -88,9 +88,9 @@ it('calculates average volume when there is enough historical data', function ()
     expect($collection->volumes()->count())->toBe(4);
     expect($collection->volumes()->oldest('id')->pluck('volume')->toArray())->toBe(['10000000000000000000', '11000000000000000000', '12000000000000000000', '12300000000000000000']);
 
-    expect($collection->avg_volume_1d)->toBe('12300000000000000000');
-    expect($collection->avg_volume_7d)->toBe('11150000000000000000');
-    expect($collection->avg_volume_30d)->toBe('11100000000000000000');
+    expect($collection->volume_1d)->toBe('12300000000000000000');
+    expect($collection->volume_7d)->toBe('22300000000000000000');
+    expect($collection->volume_30d)->toBe('33300000000000000000');
 });
 
 it('does not log volume changes if there is no volume', function () {

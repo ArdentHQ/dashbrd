@@ -1535,7 +1535,7 @@ it('can create volume data for a collection', function () {
     $network = Network::polygon();
 
     $collection = Collection::factory()->for($network)->create([
-        'avg_volume_30d' => '3',
+        'volume_30d' => '3',
     ]);
 
     expect($collection->createVolumeData(Period::MONTH, CurrencyCode::USD))->toBeInstanceOf(VolumeData::class);
@@ -1544,9 +1544,9 @@ it('can create volume data for a collection', function () {
 it('can get volume based on the period', function () {
     $collection = Collection::factory()->create([
         'total_volume' => '1',
-        'avg_volume_1d' => '2',
-        'avg_volume_7d' => '3',
-        'avg_volume_30d' => '4',
+        'volume_1d' => '2',
+        'volume_7d' => '3',
+        'volume_30d' => '4',
     ]);
 
     expect($collection->getVolume())->toBe('1');

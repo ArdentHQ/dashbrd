@@ -5,7 +5,6 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { CollectionImageWithIcon } from "@/Pages/Collections/Components/CollectionImage";
 import { FormatCrypto, FormatFiat } from "@/Utils/Currency";
-import { isTruthy } from "@/Utils/is-truthy";
 
 export const PopularCollectionName = ({
     collection,
@@ -136,9 +135,9 @@ export const PopularCollectionVolume = ({
                 data-testid="PopularCollectionVolume__fiat"
                 className="text-sm text-theme-secondary-500 dark:text-theme-dark-300"
             >
-                {collection.volume.fiat !== null && isTruthy(user) && (
+                {collection.volume.fiat !== null && (
                     <FormatFiat
-                        user={user}
+                        user={user ?? undefined}
                         value={collection.volume.fiat.toString()}
                     />
                 )}
