@@ -51,7 +51,7 @@ class PopularCollectionController extends Controller
 
         $collections = Collection::query()
             ->searchByName($request->get('query'))
-            ->when($sortBy === null, fn ($q) => $q->orderByVolume($period))
+            ->when($sortBy === null, fn ($q) => $q->orderByVolume($period, currency: $chainId === null ? $currency : null))
             ->when($sortBy === 'name', fn ($q) => $q->orderByName($sortDirection))
             ->when($sortBy === 'value', fn ($q) => $q->orderByValue(null, $sortDirection, $currency))
             ->when($sortBy === 'floor-price', fn ($q) => $q->orderByFloorPrice($sortDirection, $currency))
@@ -64,8 +64,6 @@ class PopularCollectionController extends Controller
                 'nfts' => fn ($q) => $q->limit(4),
             ])
             ->withCount('nfts')
-            ->addSelect('collections.*')
-            ->groupBy('collections.id')
             ->paginate($perPage)
             ->withQueryString();
 

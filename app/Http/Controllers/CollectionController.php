@@ -174,7 +174,7 @@ class CollectionController extends Controller
 
         /** @var Paginator<PopularCollectionData> $collections */
         $collections = Collection::query()
-                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByVolume($period))
+                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByVolume($period, currency: $chainId === null ? $currency : null))
                                 ->filterByChainId($chainId)
                                 ->orderByFloorPrice('desc', $currency)
                                 ->with([
@@ -182,8 +182,6 @@ class CollectionController extends Controller
                                     'floorPriceToken',
                                 ])
                                 ->addFloorPriceChange()
-                                ->addSelect('collections.*')
-                                ->groupBy('collections.id')
                                 ->simplePaginate(12);
 
         return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency, $period));
