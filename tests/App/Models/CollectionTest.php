@@ -1566,3 +1566,101 @@ it('can get native token for a network', function () {
 
     expect($collection->nativeToken()->is($token))->toBeTrue();
 });
+
+it('can order collections based on the total fiat amount of sales volume', function () {
+    $ethereum = Network::firstWhere('chain_id', 1);
+    $polygon = Network::firstWhere('chain_id', 137);
+
+    $eth = Token::factory()->create([
+        'network_id' => $ethereum->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10,
+                ],
+            ],
+        ],
+    ]);
+
+    $matic = Token::factory()->create([
+        'network_id' => $polygon->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 20,
+                ],
+            ],
+        ],
+    ]);
+
+    $first = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '10', // total: 100
+    ]);
+
+    $second = Collection::factory()->for($polygon)->create([
+        'volume_7d' => '7', // total: 140
+    ]);
+
+    $third = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '11', // total: 110
+    ]);
+
+    $collections = Collection::orderByVolume(period: Period::WEEK, currency: CurrencyCode::USD)->get();
+
+    expect($collections->modelKeys())->toBe([
+        $second->id, $third->id, $first->id,
+    ]);
+});
+
+it('can order collections based on the sales volume amount, ignoring the fiat value', function () {
+    $ethereum = Network::firstWhere('chain_id', 1);
+    $polygon = Network::firstWhere('chain_id', 137);
+
+    $eth = Token::factory()->create([
+        'network_id' => $ethereum->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10,
+                ],
+            ],
+        ],
+    ]);
+
+    $matic = Token::factory()->create([
+        'network_id' => $polygon->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 20,
+                ],
+            ],
+        ],
+    ]);
+
+    $first = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '10',
+    ]);
+
+    $second = Collection::factory()->for($polygon)->create([
+        'volume_7d' => '7',
+    ]);
+
+    $third = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '11',
+    ]);
+
+    $collections = Collection::orderByVolume(period: Period::WEEK)->get();
+
+    expect($collections->modelKeys())->toBe([
+        $third->id, $first->id, $second->id,
+    ]);
+});
