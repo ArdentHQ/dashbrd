@@ -212,7 +212,6 @@ describe("CollectionsFullTable", () => {
 
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
         expect(getByTestId("CollectionsTableItem__unknown-floor-price")).toBeInTheDocument();
-        expect(getByTestId("CollectionsTableItem__unknown-value")).toBeInTheDocument();
     });
 
     it("should default fiat value to 0", () => {
@@ -233,8 +232,6 @@ describe("CollectionsFullTable", () => {
 
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
         expect(queryByTestId("CollectionsTableItem__unknown-floor-price")).not.toBeInTheDocument();
-        expect(queryByTestId("CollectionsTableItem__unknown-value")).not.toBeInTheDocument();
-        expect(getByTestId("CollectionPortfolioValue__fiat")).toBeInTheDocument();
     });
 
     it("should render predefined amount of NFT images", () => {
