@@ -6,6 +6,7 @@ import SimpleNftDataFactory from "@/Tests/Factories/Collections/SimpleNftDataFac
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs"
 
 describe("CollectionsFullTable", () => {
     const collections = new CollectionFactory().withPrices().createMany(3);
@@ -48,6 +49,32 @@ describe("CollectionsFullTable", () => {
         );
 
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+    });
+
+    it("renders the table header for volume based on the actively selected period", () => {
+        const { container } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
+                activePeriod={PeriodFilterOptions["7d"]}
+            />,
+        );
+
+        expect(container).toHaveTextContent("Volume (7d)");
+
+        const { container: container2 } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
+                activePeriod={PeriodFilterOptions["30d"]}
+            />,
+        );
+
+        expect(container2).toHaveTextContent("Volume (30d)");
     });
 
     it("should render when custom sorting options are passed", () => {
