@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Enums\Chain;
 use App\Enums\NftTransferType;
-use App\Enums\Period;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Collection;
@@ -16,9 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
-    Token::factory()->
-    withGuid()->
-    create([
+    Token::factory()->withGuid()->create([
         'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
         'symbol' => 'ETH',
         'is_native_token' => 1,
@@ -111,7 +108,7 @@ it('should get volume', function () {
         'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
             ->push([
                 'dataPoints' => [
-                    ['volume' => '12.3'],
+                    ['volume' => '12.3', 'timestamp' => '2024-01-05T00:00:00Z'],
                 ],
             ], 200),
     ]);
@@ -122,17 +119,18 @@ it('should get volume', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getLatestCollectionVolume(Chain::Polygon, $collection->address);
 
-    expect($data)->toBe('12300000000000000000');
+    expect($data->value)->toBe('12300000000000000000');
+    expect($data->date->toDateString())->toBe('2024-01-05');
 });
 
 it('should get total periodic volume', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
             ->push([
                 'dataPoints' => [
-                    ['volume' => '12.3'],
+                    ['volume' => '12.3', 'timestamp' => '2024-01-05T00:00:00Z'],
                 ],
             ], 200),
     ]);
@@ -143,30 +141,10 @@ it('should get total periodic volume', function () {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getCollectionVolumeForPeriod(Chain::Polygon, $collection->address, Period::WEEK);
+    $data = Mnemonic::getCollectionVolumeHistory(Chain::Polygon, $collection->address);
 
-    expect($data)->toBe('12300000000000000000');
-});
-
-it('should get no total periodic volume', function () {
-    Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_7_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
-            ->push([
-                'dataPoints' => [
-                    ['volume' => null],
-                ],
-            ], 200),
-    ]);
-
-    $network = Network::polygon();
-
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-    ]);
-
-    $data = Mnemonic::getCollectionVolumeForPeriod(Chain::Polygon, $collection->address, Period::WEEK);
-
-    expect($data)->toBeNull();
+    expect($data->first()->value)->toBe('12300000000000000000');
+    expect($data->first()->date->toDateString())->toBe('2024-01-05');
 });
 
 it('should handle no volume', function ($request) {
@@ -181,9 +159,9 @@ it('should handle no volume', function ($request) {
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getLatestCollectionVolume(Chain::Polygon, $collection->address);
 
-    expect($data)->toBe(null);
+    expect($data->value)->toBe('0');
 })->with([
     'null volume' => [[
         'dataPoints' => [

@@ -29,8 +29,8 @@ trait HasVolume
     {
         return $this->volumes()
                     ->selectRaw('sum(volume::numeric) as total')
-                    ->where('created_at', '>', $date)
-                    ->value('total');
+                    ->where('created_at', '>=', $date->startOfDay())
+                    ->value('total') ?? '0';
     }
 
     /**

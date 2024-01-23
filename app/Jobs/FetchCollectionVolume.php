@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
+use App\Models\TradingVolume;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
@@ -15,7 +16,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
 class FetchCollectionVolume implements ShouldQueue
 {
@@ -35,34 +35,23 @@ class FetchCollectionVolume implements ShouldQueue
      */
     public function handle(): void
     {
-        $volume = Mnemonic::getCollectionVolume(
+        $volume = Mnemonic::getLatestCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
 
-        DB::transaction(function () use ($volume) {
-            $this->collection->volumes()->create([
-                'volume' => $volume ?? '0',
-            ]);
+        TradingVolume::upsert([
+            'collection_id' => $this->collection->id,
+            'volume' => $volume->value,
+            'created_at' => $volume->date->toDateString(),
+        ], uniqueBy: ['collection_id', 'created_at']);
 
-            $this->collection->volume = $volume;
-
-            // We only want to update total volumes in the given period if we have enough data for that period...
-
-            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(1))->exists()) {
-                $this->collection->volume_1d = $this->collection->totalVolumeSince(now()->subDays(1));
-            }
-
-            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(7))->exists()) {
-                $this->collection->volume_7d = $this->collection->totalVolumeSince(now()->subDays(7));
-            }
-
-            if ($this->collection->volumes()->where('created_at', '<', now()->subDays(30))->exists()) {
-                $this->collection->volume_30d = $this->collection->totalVolumeSince(now()->subDays(30));
-            }
-
-            $this->collection->save();
-        });
+        $this->collection->update([
+            'volume' => $volume->value,
+            'volume_1d' => $this->collection->totalVolumeSince(now()->subDays(1)),
+            'volume_7d' => $this->collection->totalVolumeSince(now()->subDays(7)),
+            'volume_30d' => $this->collection->totalVolumeSince(now()->subDays(30)),
+        ]);
 
         ResetCollectionRanking::dispatch();
     }
