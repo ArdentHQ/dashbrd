@@ -14,6 +14,8 @@ test('collection has many votes', function () {
 
     expect($collection->votes()->count())->toBe(0);
 
+    Carbon::setTestNow();
+
     $collection->addVote($wallet);
 
     expect($collection->votes()->count())->toBe(1);
