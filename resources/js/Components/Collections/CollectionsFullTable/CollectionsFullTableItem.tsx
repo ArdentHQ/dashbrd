@@ -1,12 +1,11 @@
-import { BigNumber } from "@ardenthq/sdk-helpers";
 import { router } from "@inertiajs/react";
 import React, { useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { type CollectionTableItemProperties } from "./CollectionsFullTable.contracts";
-import { CollectionPortfolioValue } from "@/Components/Collections//CollectionPortfolioValue";
 import { CollectionFloorPrice } from "@/Components/Collections/CollectionFloorPrice";
 import { CollectionImages } from "@/Components/Collections/CollectionImages";
 import { CollectionName } from "@/Components/Collections/CollectionsFullTable/CollectionName";
+import { PopularCollectionVolume } from "@/Components/Collections/PopularCollectionsTable/PopularCollectionsTable.blocks";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { TableCell, TableRow } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
@@ -90,28 +89,14 @@ export const CollectionsFullTableItem = ({
             )}
 
             <TableCell
-                innerClassName="justify-end"
+                innerClassName="justify-end min-w-[7rem]"
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
-                {collection.floorPrice === null || user === null ? (
-                    <span
-                        data-testid="CollectionsTableItem__unknown-value"
-                        className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
-                    >
-                        {t("common.na")}
-                    </span>
-                ) : (
-                    <CollectionPortfolioValue
-                        user={user}
-                        value={BigNumber.make(collection.floorPrice).times(collection.nftsCount).toString()}
-                        convertedValue={BigNumber.make(collection.floorPriceFiat ?? 0)
-                            .times(collection.nftsCount)
-                            .toString()}
-                        token={token}
-                        variant="list"
-                    />
-                )}
+                <PopularCollectionVolume
+                    collection={collection}
+                    user={user}
+                />
             </TableCell>
 
             {isMdAndAbove && (

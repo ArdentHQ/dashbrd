@@ -60,6 +60,7 @@ class PopularCollectionController extends Controller
             ->orderByFloorPrice('desc', $currency)
             ->with([
                 'network',
+                'network.nativeToken',
                 'floorPriceToken',
                 'nfts' => fn ($q) => $q->limit(4),
             ])
@@ -81,7 +82,7 @@ class PopularCollectionController extends Controller
             'title' => trans('metatags.popular-collections.title'),
             'allowsGuests' => true,
             'collections' => CollectionData::collection(
-                $collections->through(fn ($collection) => CollectionData::fromModel($collection, $currency))
+                $collections->through(fn ($collection) => CollectionData::fromModel($collection, $currency, volumePeriod: $period))
             ),
             'stats' => new CollectionStatsData(
                 nfts: $stats['nftsCount'],

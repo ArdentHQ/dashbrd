@@ -1,4 +1,3 @@
-import { BigNumber } from "@ardenthq/sdk-helpers";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { type Column, type TableState } from "react-table";
@@ -6,6 +5,7 @@ import { type CollectionTableProperties } from "./CollectionsFullTable.contracts
 import { CollectionsFullTableItem } from "./CollectionsFullTableItem";
 import { Table } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import { type CollectionsSortByOption } from "@/Pages/Collections/Components/CollectionsSortingTabs";
 
 export const CollectionsFullTable = ({
@@ -14,6 +14,7 @@ export const CollectionsFullTable = ({
     activeSort,
     setSortBy,
     direction,
+    activePeriod,
 }: CollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -31,6 +32,18 @@ export const CollectionsFullTable = ({
         [],
     );
 
+    const volumeLabel = useMemo(() => {
+        if (activePeriod === PeriodFilterOptions["30d"]) {
+            return t("common.volume_30d");
+        }
+
+        if (activePeriod === PeriodFilterOptions["7d"]) {
+            return t("common.volume_7d");
+        }
+
+        return t("common.volume_24h");
+    }, [activePeriod]);
+
     const columns = useMemo(() => {
         const columns: Array<Column<App.Data.Collections.CollectionData>> = [
             {
@@ -42,15 +55,11 @@ export const CollectionsFullTable = ({
                 paddingClassName: "py-2 px-2 md:px-5",
             },
             {
-                Header: t("common.value").toString(),
-                id: "value",
-                accessor: (collection) =>
-                    BigNumber.make(collection.floorPriceFiat ?? 0)
-                        .times(collection.nftsCount)
-                        .toString(),
+                Header: volumeLabel,
+                id: "volume",
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
-                className: "justify-end",
+                className: "min-w-[7rem] [&>div]:inline-flex [&>div]:w-full [&>div]:justify-end justify-end",
             },
         ];
 
@@ -83,7 +92,7 @@ export const CollectionsFullTable = ({
         }
 
         return columns;
-    }, [t, isMdAndAbove, isLgAndAbove]);
+    }, [t, isMdAndAbove, isLgAndAbove, volumeLabel]);
 
     return (
         <Table

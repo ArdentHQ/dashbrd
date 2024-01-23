@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
+import VolumeFactory from "@/Tests/Factories/VolumeFactory";
 
 export default class CollectionFactory extends ModelFactory<App.Data.Collections.CollectionData> {
     protected factory(): App.Data.Collections.CollectionData {
@@ -20,6 +21,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             website: faker.internet.url(),
             nftsCount: 0,
             nfts: [],
+            volume: new VolumeFactory().create(),
         };
     }
 

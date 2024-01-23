@@ -156,6 +156,7 @@ declare namespace App.Data.Collections {
         website: string;
         nftsCount: number;
         nfts: Array<App.Data.Collections.SimpleNftData>;
+        volume: App.Data.VolumeData;
     };
     export type CollectionDetailData = {
         name: string;

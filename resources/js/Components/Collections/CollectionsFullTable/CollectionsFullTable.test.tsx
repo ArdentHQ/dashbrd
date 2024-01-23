@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { expect } from "vitest";
 import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTable/CollectionsFullTable";
+import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import SimpleNftDataFactory from "@/Tests/Factories/Collections/SimpleNftDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
@@ -48,6 +49,32 @@ describe("CollectionsFullTable", () => {
         );
 
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+    });
+
+    it("renders the table header for volume based on the actively selected period", () => {
+        const { container } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
+                activePeriod={PeriodFilterOptions["7d"]}
+            />,
+        );
+
+        expect(container).toHaveTextContent("Volume (7d)");
+
+        const { container: container2 } = render(
+            <CollectionsFullTable
+                collections={collections}
+                user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
+                activePeriod={PeriodFilterOptions["30d"]}
+            />,
+        );
+
+        expect(container2).toHaveTextContent("Volume (30d)");
     });
 
     it("should render when custom sorting options are passed", () => {
@@ -212,7 +239,6 @@ describe("CollectionsFullTable", () => {
 
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
         expect(getByTestId("CollectionsTableItem__unknown-floor-price")).toBeInTheDocument();
-        expect(getByTestId("CollectionsTableItem__unknown-value")).toBeInTheDocument();
     });
 
     it("should default fiat value to 0", () => {
@@ -233,8 +259,6 @@ describe("CollectionsFullTable", () => {
 
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
         expect(queryByTestId("CollectionsTableItem__unknown-floor-price")).not.toBeInTheDocument();
-        expect(queryByTestId("CollectionsTableItem__unknown-value")).not.toBeInTheDocument();
-        expect(getByTestId("CollectionPortfolioValue__fiat")).toBeInTheDocument();
     });
 
     it("should render predefined amount of NFT images", () => {

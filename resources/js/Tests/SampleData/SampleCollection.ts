@@ -1,3 +1,5 @@
+import VolumeFactory from "@/Tests/Factories/VolumeFactory";
+
 export const SampleCollection: App.Data.Collections.CollectionData = {
     id: 1,
     name: "Moonbirds",
@@ -15,4 +17,5 @@ export const SampleCollection: App.Data.Collections.CollectionData = {
     nftsCount: 1,
     openSeaSlug: "proof-moonbirds",
     nfts: [],
+    volume: new VolumeFactory().create(),
 };
