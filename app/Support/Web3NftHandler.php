@@ -6,12 +6,11 @@ namespace App\Support;
 
 use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
-use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Jobs\DetermineCollectionMintingDate;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
-use App\Jobs\FetchCollectionVolumeForPeriod;
+use App\Jobs\FetchCollectionVolumeHistory;
 use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
 use App\Models\Network;
@@ -203,11 +202,9 @@ class Web3NftHandler
                             FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
                         }
 
-                        // If the collection has just been created, then prefill total periodic volumes until we have enough data...
+                        // If the collection has just been created, pre-fetch the 30-day volume history...
                         if ($collection->created_at->gte(now()->subMinutes(3))) {
-                            FetchCollectionVolumeForPeriod::dispatch($collection, Period::DAY);
-                            FetchCollectionVolumeForPeriod::dispatch($collection, Period::WEEK);
-                            FetchCollectionVolumeForPeriod::dispatch($collection, Period::MONTH);
+                            FetchCollectionVolumeHistory::dispatch($collection);
                         }
                     });
                 });
