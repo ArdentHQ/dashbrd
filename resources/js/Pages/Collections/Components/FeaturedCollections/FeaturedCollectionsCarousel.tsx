@@ -23,14 +23,16 @@ export const FeaturedCollectionsCarousel = ({
     return (
         <div className={className}>
             <div className="relative">
-                <div className="hidden lg:block">
-                    <div className="absolute inset-y-0 left-3 z-10 flex h-full items-center 2xl:-left-5">
-                        <CarouselPreviousButton
-                            carouselKey="featuredCollections"
-                            className="border-none shadow-carousel-button-light disabled:opacity-0 dark:bg-theme-dark-700 dark:shadow-carousel-button-dark"
-                        />
+                {featuredCollections.length > 1 && (
+                    <div className="hidden lg:block">
+                        <div className="absolute inset-y-0 left-3 z-10 flex h-full items-center 2xl:-left-5">
+                            <CarouselPreviousButton
+                                carouselKey="featuredCollections"
+                                className="border-none shadow-carousel-button-light disabled:opacity-0 dark:bg-theme-dark-700 dark:shadow-carousel-button-dark"
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <Carousel
                     carouselKey="featuredCollections"
@@ -51,22 +53,26 @@ export const FeaturedCollectionsCarousel = ({
                     ))}
                 </Carousel>
 
-                <div className="hidden lg:block">
-                    <div className="absolute inset-y-0 right-3 z-10 flex h-full items-center 2xl:-right-5">
-                        <CarouselNextButton
-                            carouselKey="featuredCollections"
-                            className="border-none shadow-carousel-button-light disabled:opacity-0 dark:bg-theme-dark-700 dark:shadow-carousel-button-dark"
-                        />
+                {featuredCollections.length > 1 && (
+                    <div className="hidden lg:block">
+                        <div className="absolute inset-y-0 right-3 z-10 flex h-full items-center 2xl:-right-5">
+                            <CarouselNextButton
+                                carouselKey="featuredCollections"
+                                className="border-none shadow-carousel-button-light disabled:opacity-0 dark:bg-theme-dark-700 dark:shadow-carousel-button-dark"
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
-            <div className="mx-auto -mt-6 max-w-[16.5rem] md-lg:mt-2">
-                <CarouselPagination
-                    carouselInstance={carousel}
-                    autoplayDelay={autoplayDelay}
-                />
-            </div>
+            {featuredCollections.length > 1 && (
+                <div className="mx-auto -mt-6 max-w-[16.5rem] md-lg:mt-2">
+                    <CarouselPagination
+                        carouselInstance={carousel}
+                        autoplayDelay={autoplayDelay}
+                    />
+                </div>
+            )}
         </div>
     );
 };
