@@ -21,6 +21,9 @@ Route::get('/landing-data', Controllers\LandingPageDataController::class)->name(
 Route::get('/galleries-overview', [Api\GalleryOverviewController::class, 'index'])
         ->name('galleries-overview.index');
 
+Route::get('/nominatable-collections', [Api\NominatableCollectionController::class, 'index'])
+    ->name('nominatable-collections');
+
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
     Route::get('/tokens', [Controllers\TokenController::class, 'list'])->name('tokens.list');
@@ -47,9 +50,6 @@ Route::middleware('auth:sanctum')->group(function () {
             ->middleware('signed_wallet');
 
     Route::get('/user/nfts', Api\UserNftController::class)->name('user.nfts');
-
-    Route::get('/nominatable-collections', [Api\NominatableCollectionController::class, 'index'])
-            ->name('nominatable-collections');
 
     Route::post('/collections/{collection:slug}/{nft:token_number}/refresh', Controllers\RefreshedNftController::class)
             ->name('nft.refresh')

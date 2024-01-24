@@ -107,7 +107,7 @@ export const NominationDialog = ({
             collections: App.Data.Collections.VotableCollectionData[];
         }>(route("nominatable-collections", { query: debouncedQuery }));
 
-        setCollections(data.collections);
+        setCollections(data.collections.reverse());
         setSearching(false);
     };
 

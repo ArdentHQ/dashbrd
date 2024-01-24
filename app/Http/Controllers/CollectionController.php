@@ -112,8 +112,9 @@ class CollectionController extends Controller
 
         $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
-        $collections = Collection::votable()
-                                ->orderBy('monthly_rank')
+        $collections = Collection::votable(orderByRank: false)
+                                ->orderBy('monthly_votes', 'desc')
+                                ->orderByVolume(Period::MONTH, $currency)
                                 ->with('network.nativeToken')
                                 ->limit(13) // 8 collections on the vote table + 5 collections to nominate
                                 ->get();
