@@ -75,6 +75,9 @@ class CollectionController extends Controller
         );
     }
 
+    /**
+     * Get only the collection that the user has voted for in the current month.
+     */
     private function getVotedCollection(Request $request): ?VotableCollectionData
     {
         $user = $request->user();

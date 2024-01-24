@@ -12,14 +12,16 @@ import {
 export const FeaturedCollectionsCarousel = ({
     featuredCollections,
     autoplayDelay = 5000,
+    className,
 }: {
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     autoplayDelay?: number;
+    className?: string;
 }): JSX.Element => {
     const [carousel, setCarousel] = useState<Swiper>();
 
     return (
-        <div>
+        <div className={className}>
             <div className="relative">
                 <div className="hidden lg:block">
                     <div className="absolute inset-y-0 left-3 z-10 flex h-full items-center 2xl:-left-5">

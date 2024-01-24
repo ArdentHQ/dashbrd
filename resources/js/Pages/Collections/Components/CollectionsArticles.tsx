@@ -3,6 +3,7 @@ import cn from "classnames";
 import { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArticleCard } from "@/Components/Articles/ArticleCard";
+import { ArticleCardSkeleton } from "@/Components/Articles/ArticleCard/ArticleCardSkeleton";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Carousel, CarouselControls, CarouselItem } from "@/Components/Carousel";
 import { Heading } from "@/Components/Heading";
@@ -65,6 +66,15 @@ export const CollectionsArticles = ({ latest, popular }: Properties): JSX.Elemen
                         </div>
                     </CarouselItem>
                 ))}
+
+                {slidesPerView > articles.length &&
+                    Array.from({ length: slidesPerView - articles.length }).map((_, index) => (
+                        <CarouselItem key={index}>
+                            <div className="h-full p-1">
+                                <ArticleCardSkeleton isLoading={false} />
+                            </div>
+                        </CarouselItem>
+                    ))}
             </Carousel>
 
             <div className="mt-4 px-6 sm:hidden">
