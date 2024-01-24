@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -37,7 +37,7 @@ jobs:
           coverage: none
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
           key: dependencies-composer-${{ hashFiles('composer.lock') }}
@@ -51,7 +51,7 @@ jobs:
       - name: Run Rector
         run: ./vendor/bin/rector process
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "refactor: code quality assurance"
           commit_author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
@@ -69,7 +69,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -82,7 +82,7 @@ jobs:
           coverage: none
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
           key: dependencies-composer-${{ hashFiles('composer.lock') }}
@@ -96,7 +96,7 @@ jobs:
       - name: Run Laravel Pint
         run: ./vendor/bin/pint
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "style: resolve style guide violations"
           commit_author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
@@ -114,7 +114,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -124,7 +124,7 @@ jobs:
           coverage: none
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
           key: dependencies-composer-${{ hashFiles('composer.lock') }}
@@ -166,7 +166,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -182,7 +182,7 @@ jobs:
           coverage: pcov
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
           key: dependencies-composer-${{ hashFiles('composer.lock') }}
@@ -192,7 +192,7 @@ jobs:
 
       - name: Restore Build Output
         id: restore_build_output
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: public/build
           # Notice that the cache key include all the files that may affect the
@@ -212,7 +212,7 @@ jobs:
       # (see `steps.restore_build_output.outputs.cache-hit != 'true'` condition)
       - name: Cache pnpm dependencies
         if: steps.restore_build_output.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -235,7 +235,7 @@ jobs:
         run: pnpm build
 
       - name: Cache Build Output
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: steps.restore_build_output.outputs.cache-hit != 'true'
         with:
           path: public/build
