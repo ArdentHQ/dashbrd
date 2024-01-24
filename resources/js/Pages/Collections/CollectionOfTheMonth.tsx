@@ -63,8 +63,9 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
                 <div className="mt-4 flex flex-col overflow-hidden border-theme-secondary-300 dark:border-theme-dark-700 sm:border-b sm:border-t lg:rounded-xl lg:border ">
                     <div className="collection-of-the-month-overview flex flex-col items-center justify-center pt-8">
                         <Heading level={1}>
-                            {t("pages.collections.collection_of_the_month.winners_month", {
+                            {t("pages.collections.collection_of_the_month.winners_month_year", {
                                 month,
+                                year: latestMonthWinners.year,
                             })}
                         </Heading>
                         <div className="mt-11">
