@@ -4,9 +4,17 @@ declare(strict_types=1);
 
 use App\Models\Collection;
 use App\Models\CollectionWinner;
+use App\Models\Network;
+use App\Models\Token;
 
 it('opens the collection of the month page', function () {
-    $collection = Collection::factory()->create();
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create();
 
     CollectionWinner::factory()->for($collection)->create();
 
