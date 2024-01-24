@@ -80,6 +80,7 @@ return [
         'collection_of_the_month' => [
             'title' => 'Collection of the Month :month',
             'winners_month' => 'Winners: :month',
+            'winners_month_year' => 'Winners: :month :year',
             'vote_for_next_months_winners' => 'Vote now for next month\'s winners',
             'view_previous_winners' => 'View Previous Winners',
             'previous_winners' => 'Previous Winners',
