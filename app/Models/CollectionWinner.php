@@ -81,7 +81,7 @@ class CollectionWinner extends Model
         return static::query()
                     ->where('year', $previousMonth->year)
                     ->where('month', $previousMonth->month)
-                    ->with('collection', 'collection.floorPriceToken')
+                    ->with('collection', 'collection.floorPriceToken', 'collection.network.nativeToken')
                     ->orderBy('rank', 'asc')
                     ->limit(3)
                     ->get();
