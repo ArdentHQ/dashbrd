@@ -1322,7 +1322,7 @@ it('sorts by volume if collections have the same amount of votes', function () {
     ]);
     CollectionVote::factory()->count(3)->create([
         'collection_id' => $mediumVolume->id,
-        'voted_at' => Carbon::now()->subMonths(2)
+        'voted_at' => Carbon::now()->subMonths(2),
     ]);
 
     $highVolume = Collection::factory()->for($network)->create([
@@ -1330,7 +1330,7 @@ it('sorts by volume if collections have the same amount of votes', function () {
     ]);
     CollectionVote::factory()->count(3)->create([
         'collection_id' => $highVolume->id,
-        'voted_at' => Carbon::now()->subMonths(2)
+        'voted_at' => Carbon::now()->subMonths(2),
     ]);
 
     $noVolume = Collection::factory()->for($network)->create([
@@ -1338,7 +1338,7 @@ it('sorts by volume if collections have the same amount of votes', function () {
     ]);
     CollectionVote::factory()->count(3)->create([
         'collection_id' => $noVolume->id,
-        'voted_at' => Carbon::now()->subMonths(2)
+        'voted_at' => Carbon::now()->subMonths(2),
     ]);
 
     $lowVolume = Collection::factory()->for($network)->create([
@@ -1346,7 +1346,7 @@ it('sorts by volume if collections have the same amount of votes', function () {
     ]);
     CollectionVote::factory()->count(3)->create([
         'collection_id' => $lowVolume->id,
-        'voted_at' => Carbon::now()->subMonths(2)
+        'voted_at' => Carbon::now()->subMonths(2),
     ]);
 
     (new ResetCollectionRanking)->handle();
