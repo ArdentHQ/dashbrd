@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Data\Collections\VotableCollectionData;
+use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Models\CollectionWinner;
@@ -19,14 +21,15 @@ class NominatableCollectionController extends Controller
             'query' => 'nullable|string',
         ]);
 
-        $currency = $request->user()->currency();
+        $currency = $request->user()?->currency() ?? CurrencyCode::USD;
 
         $collections = Collection::query()
+                                ->with('network.nativeToken')
                                 ->searchByName($request->get('query'))
                                 ->limit(15)
-                                ->votable()
-                                ->with('network.nativeToken')
-                                ->orderBy('name', 'asc')
+                                ->votable(orderByRank: false)
+                                ->orderBy('monthly_votes', 'desc')
+                                ->orderByVolume(period: Period::MONTH, currency: $currency)
                                 ->get();
 
         $winners = CollectionWinner::ineligibleCollectionIds();
