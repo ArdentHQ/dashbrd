@@ -154,10 +154,12 @@ const CollectionsIndex = ({
                 </div>
             </div>
 
-            <CollectionsArticles
-                latest={latestArticles}
-                popular={popularArticles}
-            />
+            {latestArticles.length > 0 && (
+                <CollectionsArticles
+                    latest={latestArticles}
+                    popular={popularArticles}
+                />
+            )}
 
             <CollectionsCallToAction />
         </DefaultLayout>
