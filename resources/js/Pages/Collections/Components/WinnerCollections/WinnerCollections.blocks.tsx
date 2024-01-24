@@ -69,7 +69,7 @@ export const WinnerCollectionMainInfo = ({
 
                 <p
                     className={cn(
-                        "line-clamp-2 w-full text-sm font-medium text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400",
+                        "line-clamp-2 w-full text-sm font-medium text-theme-secondary-900 group-hover:text-theme-primary-700 dark:text-theme-dark-50 dark:group-hover:text-theme-primary-400",
                     )}
                 >
                     {collection.name}
@@ -79,8 +79,12 @@ export const WinnerCollectionMainInfo = ({
             <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 lg:hidden">
                 <WinnerCollectionLabel label={t("common.volume")}>
                     <FormatCrypto
-                        value={collection.volume ?? "0"}
-                        token={token}
+                        value={collection.volume.value ?? "0"}
+                        token={{
+                            symbol: collection.volume.currency,
+                            name: collection.volume.currency,
+                            decimals: collection.volume.decimals,
+                        }}
                     />
                 </WinnerCollectionLabel>
 
@@ -248,8 +252,12 @@ export const WinnerCollectionTableRow = ({
             >
                 <WinnerCollectionLabel label={t("common.volume")}>
                     <FormatCrypto
-                        value={collection.volume ?? "0"}
-                        token={token}
+                        value={collection.volume.value ?? "0"}
+                        token={{
+                            symbol: collection.volume.currency,
+                            name: collection.volume.currency,
+                            decimals: collection.volume.decimals,
+                        }}
                     />
                 </WinnerCollectionLabel>
             </TableCell>

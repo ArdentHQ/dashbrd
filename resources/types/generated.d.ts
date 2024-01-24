@@ -215,7 +215,7 @@ declare namespace App.Data.Collections {
     export type CollectionOfTheMonthData = {
         image: string | null;
         votes: number;
-        volume: string | null;
+        volume: App.Data.VolumeData;
         floorPrice: string | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
