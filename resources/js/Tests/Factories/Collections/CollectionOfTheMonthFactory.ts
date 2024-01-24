@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import VolumeFactory from "@/Tests/Factories/VolumeFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
+import VolumeFactory from "@/Tests/Factories/VolumeFactory";
 
 export default class CollectionOfTheMonthFactory extends ModelFactory<App.Data.Collections.CollectionOfTheMonthData> {
     protected factory(): App.Data.Collections.CollectionOfTheMonthData {
