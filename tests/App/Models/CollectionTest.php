@@ -1255,9 +1255,9 @@ it('returns the collections with most votes in the same month first for votable'
 
     (new ResetCollectionRanking)->handle();
 
-    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
+    $collections = Collection::votable()->get();
 
-    expect($collectionsIds)->toBe([
+    expect($collections->modelKeys())->toBe([
         $collectionWith8Votes->id,
         $collectionWith5Votes->id,
         $collectionWith3Votes->id,
@@ -1304,25 +1304,50 @@ it('only considers the votes on the same votes for votables', function () {
 });
 
 it('sorts by volume if collections have the same amount of votes', function () {
-    $mediumVolume = Collection::factory()->create([
-        'volume' => 100,
+    $token = Token::factory()->matic()->create([
+        'is_native_token' => true,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10,
+                ],
+            ],
+        ],
     ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $mediumVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
 
-    $highVolume = Collection::factory()->create([
-        'volume' => 1000,
-    ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $highVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+    $network = Network::polygon();
 
-    $noVolume = Collection::factory()->create([
-        'volume' => null,
+    $mediumVolume = Collection::factory()->for($network)->create([
+        'volume_30d' => 100,
     ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $noVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $mediumVolume->id,
+        'voted_at' => Carbon::now()->subMonths(2)
+    ]);
 
-    $lowVolume = Collection::factory()->create([
-        'volume' => 1,
+    $highVolume = Collection::factory()->for($network)->create([
+        'volume_30d' => 1000,
     ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $lowVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $highVolume->id,
+        'voted_at' => Carbon::now()->subMonths(2)
+    ]);
+
+    $noVolume = Collection::factory()->for($network)->create([
+        'volume_30d' => null,
+    ]);
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $noVolume->id,
+        'voted_at' => Carbon::now()->subMonths(2)
+    ]);
+
+    $lowVolume = Collection::factory()->for($network)->create([
+        'volume_30d' => 1,
+    ]);
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $lowVolume->id,
+        'voted_at' => Carbon::now()->subMonths(2)
+    ]);
 
     (new ResetCollectionRanking)->handle();
 

@@ -36,7 +36,6 @@ use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection as SupportCollection;
@@ -50,7 +49,7 @@ class CollectionController extends Controller
 {
     use HasCollectionFilters;
 
-    public function index(Request $request): Response|JsonResponse|RedirectResponse
+    public function index(Request $request): Response
     {
         return Inertia::render('Collections/Index', [
             'allowsGuests' => true,
@@ -114,6 +113,7 @@ class CollectionController extends Controller
         $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
         $collections = Collection::votable()
+                                ->orderBy('monthly_rank')
                                 ->with('network.nativeToken')
                                 ->limit(13) // 8 collections on the vote table + 5 collections to nominate
                                 ->get();

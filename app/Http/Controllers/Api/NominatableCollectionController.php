@@ -24,7 +24,7 @@ class NominatableCollectionController extends Controller
         $collections = Collection::query()
                                 ->searchByName($request->get('query'))
                                 ->limit(15)
-                                ->votable(orderByVotes: false)
+                                ->votable()
                                 ->with('network.nativeToken')
                                 ->orderBy('name', 'asc')
                                 ->get();
