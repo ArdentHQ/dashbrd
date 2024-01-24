@@ -23,7 +23,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -43,7 +43,7 @@ jobs:
       - name: Run eslint
         run: pnpm run lint
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "style: resolve linting violations"
           branch: ${{ github.head_ref }}
@@ -56,7 +56,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -84,7 +84,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -104,7 +104,7 @@ jobs:
       - name: Run prettier
         run: pnpm run prettier --write 'resources/**/*.{css,js,vue}'
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "style: resolve style guide violations"
           branch: ${{ github.head_ref }}
@@ -117,7 +117,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -135,7 +135,7 @@ jobs:
         run: |
           pnpm add -g rustywind
           rustywind --write resources/views
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "style: resolve style guide violations"
           branch: ${{ github.head_ref }}
@@ -149,7 +149,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -163,7 +163,7 @@ jobs:
           svgo-config: .svgo.js
 
       - name: Commit optimizations
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{steps.svgo.outputs.DID_OPTIMIZE}}
         with:
           commit_message: Optimize ${{steps.svgo.outputs.OPTIMIZED_COUNT}} SVG(s)
@@ -178,7 +178,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
@@ -200,7 +200,7 @@ jobs:
           coverage: none
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
           key: dependencies-composer-${{ hashFiles('composer.lock') }}
@@ -210,7 +210,7 @@ jobs:
 
       - name: Restore Build Output
         id: restore_build_output
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: public/build
           # @see same step `ci.yml` for details
@@ -220,7 +220,7 @@ jobs:
 
       - name: Cache pnpm dependencies
         if: steps.restore_build_output.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
@@ -243,13 +243,13 @@ jobs:
         run: pnpm build
 
       - name: Cache Build Output
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: steps.restore_build_output.outputs.cache-hit != 'true'
         with:
           path: public/build
           key: ${{ runner.os }}-build-output-${{ hashFiles('**/pnpm-lock.yml', 'resources/**', 'lang/**') }}
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: rebuild assets"
           branch: ${{ github.head_ref }}
