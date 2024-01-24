@@ -64,9 +64,14 @@ const CollectionsIndex = ({
         >
             <Head title={title} />
 
-            <FeaturedCollectionsCarousel featuredCollections={featuredCollections} />
+            {featuredCollections.length > 0 && (
+                <FeaturedCollectionsCarousel
+                    className="mb-8 lg:mb-12"
+                    featuredCollections={featuredCollections}
+                />
+            )}
 
-            <div className="mx-6 mt-8 sm:mx-8 lg:mt-12 2xl:mx-0">
+            <div className="mx-6 sm:mx-8 2xl:mx-0">
                 <div className="flex items-center justify-between">
                     <Heading level={1}>{t("pages.collections.popular_collections")}</Heading>
 
