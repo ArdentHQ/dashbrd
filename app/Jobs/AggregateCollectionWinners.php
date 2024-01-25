@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Models\Collection;
 use App\Models\CollectionWinner;
 use Illuminate\Bus\Queueable;
@@ -63,6 +65,7 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
                         ])
                         ->limit(3)
                         ->orderBy('votes_count', 'desc')
+                        ->orderByVolume(Period::MONTH, currency: CurrencyCode::USD)
                         ->get();
     }
 
