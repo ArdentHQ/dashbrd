@@ -6,7 +6,6 @@ use App\Jobs\FetchCollectionOwners;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Support\Facades\Mnemonic;
-use Illuminate\Support\Facades\Http;
 
 it('should fetch nft collection owners', function () {
     Mnemonic::shouldReceive('getCollectionOwners')->andReturn(789);
