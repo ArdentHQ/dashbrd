@@ -9,7 +9,7 @@ use App\Models\CollectionWinner;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
-// @codeCoverageIgnore
+// @codeCoverageIgnoreStart
 class AggregateWinners extends Command
 {
     /**
@@ -73,3 +73,4 @@ class AggregateWinners extends Command
                             ->get();
     }
 }
+// @codeCoverageIgnoreEnd
