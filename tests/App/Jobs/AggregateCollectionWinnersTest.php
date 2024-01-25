@@ -6,6 +6,8 @@ use App\Jobs\AggregateCollectionWinners;
 use App\Models\Collection;
 use App\Models\CollectionVote;
 use App\Models\CollectionWinner;
+use App\Models\Network;
+use App\Models\Token;
 use Carbon\Carbon;
 
 function createCollection(int $votes, array $between)
@@ -204,6 +206,122 @@ it('only counts votes from the previous month', function () {
 
     expect($winner->collection->is($collection))->toBeTrue();
     expect($winner->votes)->toBe(3);
+});
+
+it('orders by 30-day volume if collections have the same vote count', function () {
+    Carbon::setTestNow('2023-12-19');
+
+    $previous = now()->subMonth();
+
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10,
+                ],
+            ],
+        ],
+    ]);
+
+    $network = Network::polygon();
+
+    $third = createCollection(votes: 1, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    $third->update([
+        'network_id' => $network->id,
+        'volume_30d' => '20',
+    ]);
+
+    $second = createCollection(votes: 3, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    $second->update([
+        'network_id' => $network->id,
+        'volume_30d' => '5',
+    ]);
+
+    $first = createCollection(votes: 3, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    $first->update([
+        'network_id' => $network->id,
+        'volume_30d' => '10',
+    ]);
+
+    $job = new AggregateCollectionWinners;
+
+    $job->handle();
+
+    expect(CollectionWinner::count())->toBe(3);
+
+    [$a, $b, $c] = CollectionWinner::orderBy('rank', 'asc')->get();
+
+    expect($a->collection->is($first))->toBeTrue();
+    expect($b->collection->is($second))->toBeTrue();
+    expect($c->collection->is($third))->toBeTrue();
+});
+
+it('can aggregate winners for the current month', function () {
+    Carbon::setTestNow('2023-12-19');
+
+    $previous = now();
+
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10,
+                ],
+            ],
+        ],
+    ]);
+
+    $network = Network::polygon();
+
+    $third = createCollection(votes: 1, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    $third->update([
+        'network_id' => $network->id,
+        'volume_30d' => '20',
+    ]);
+
+    $second = createCollection(votes: 3, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    $second->update([
+        'network_id' => $network->id,
+        'volume_30d' => '5',
+    ]);
+
+    $first = createCollection(votes: 3, between: [
+        $previous->startOfMonth(), $previous->endOfMonth(),
+    ]);
+
+    $first->update([
+        'network_id' => $network->id,
+        'volume_30d' => '10',
+    ]);
+
+    $job = new AggregateCollectionWinners(currentMonth: true);
+
+    $job->handle();
+
+    expect(CollectionWinner::count())->toBe(3);
+
+    [$a, $b, $c] = CollectionWinner::orderBy('rank', 'asc')->get();
+
+    expect($a->collection->is($first))->toBeTrue();
+    expect($b->collection->is($second))->toBeTrue();
+    expect($c->collection->is($third))->toBeTrue();
 });
 
 it('has a unique ID', function () {
