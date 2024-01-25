@@ -13,7 +13,7 @@ class CollectionVoteController extends Controller
 {
     public function store(Request $request, Collection $collection): RedirectResponse
     {
-        if (CollectionWinner::where('collection_id', $collection->id)->exists()) {
+        if (CollectionWinner::where('collection_id', $collection->id)->where('rank', 1)->exists()) {
             return back()->toast(trans('pages.collections.collection_of_the_month.already_won'), type: 'error');
         }
 
