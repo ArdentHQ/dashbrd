@@ -51,6 +51,8 @@ class CollectionController extends Controller
 
     public function index(Request $request): Response
     {
+        $votableCollections = $this->getVotableCollections($request);
+
         return Inertia::render('Collections/Index', [
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
@@ -58,8 +60,8 @@ class CollectionController extends Controller
             'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
             'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
-            'votedCollection' => fn () => $this->getVotedCollection($request),
-            'votableCollections' => fn () => $this->getVotableCollections($request),
+            'votedCollection' => fn () => $this->getVotedCollection($request, $votableCollections),
+            'votableCollections' => $votableCollections,
             'latestArticles' => fn () => $this->getLatestArticles(),
             'popularArticles' => fn () => $this->getPopularArticles(),
         ]);
@@ -76,8 +78,10 @@ class CollectionController extends Controller
 
     /**
      * Get only the collection that the user has voted for in the current month.
+     *
+     * @param  SupportCollection<int, VotableCollectionData>  $votableCollections
      */
-    private function getVotedCollection(Request $request): ?VotableCollectionData
+    private function getVotedCollection(Request $request, SupportCollection $votableCollections): ?VotableCollectionData
     {
         $user = $request->user();
 
@@ -86,6 +90,7 @@ class CollectionController extends Controller
         }
 
         $collection = Collection::votable()
+                                ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
                                 ->with('network.nativeToken')
                                 ->votedByUserInCurrentMonth($user)
                                 ->first();
@@ -94,10 +99,14 @@ class CollectionController extends Controller
             return null;
         }
 
+        /** @var int|false */
+        $index = $votableCollections->search(fn ($c) => $c->id === $collection->id);
+
         return VotableCollectionData::fromModel(
             $collection,
             $user->currency(),
             showVotes: true,
+            rank: $index === false ? null : ($index + 1),
         );
     }
 
@@ -112,16 +121,16 @@ class CollectionController extends Controller
 
         $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
 
-        $collections = Collection::votable(orderByRank: false)
-                                ->orderBy('monthly_votes', 'desc')
+        $collections = Collection::votable()
+                                ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
+                                ->orderBy('votes_count', 'desc')
                                 ->orderByVolume(Period::MONTH, $currency)
                                 ->with('network.nativeToken')
-                                ->limit(13) // 8 collections on the vote table + 5 collections to nominate
                                 ->get();
 
         $winners = CollectionWinner::ineligibleCollectionIds();
 
-        return $collections->map(fn ($collection) => VotableCollectionData::fromModel(
+        return $collections->take(13)->map(fn ($collection) => VotableCollectionData::fromModel(
             $collection,
             $currency,
             showVotes: $userVoted,

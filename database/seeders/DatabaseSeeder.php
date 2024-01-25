@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Enums\Features;
-use App\Jobs\ResetCollectionRanking;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Pennant\Feature;
@@ -48,6 +47,5 @@ class DatabaseSeeder extends Seeder
         }
 
         Cache::clear();
-        ResetCollectionRanking::dispatchSync();
     }
 }

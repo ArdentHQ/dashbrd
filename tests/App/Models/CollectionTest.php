@@ -6,7 +6,6 @@ use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\Period;
-use App\Jobs\ResetCollectionRanking;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
@@ -1253,8 +1252,6 @@ it('returns the collections with most votes in the same month first for votable'
         'voted_at' => Carbon::now(),
     ]);
 
-    (new ResetCollectionRanking)->handle();
-
     $collections = Collection::votable()->get();
 
     expect($collections->modelKeys())->toBe([
@@ -1290,8 +1287,6 @@ it('only considers the votes on the same votes for votables', function () {
         'collection_id' => $collection2->id,
         'voted_at' => Carbon::now(),
     ]);
-
-    (new ResetCollectionRanking)->handle();
 
     $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 
@@ -1348,8 +1343,6 @@ it('sorts by volume if collections have the same amount of votes', function () {
         'collection_id' => $lowVolume->id,
         'voted_at' => Carbon::now()->subMonths(2),
     ]);
-
-    (new ResetCollectionRanking)->handle();
 
     $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
 

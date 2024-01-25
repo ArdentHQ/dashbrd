@@ -88,10 +88,10 @@ export const VoteCollections = ({
 
     const nominatableCollections = useMemo(() => {
         if (isSmAndAbove) {
-            return collections.slice(8, 13);
+            return collections.slice(8, 13).reverse();
         }
 
-        return collections.slice(4, 9);
+        return collections.slice(4, 9).reverse();
     }, [isSmAndAbove, collections]);
 
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -129,7 +129,7 @@ export const VoteCollections = ({
                         {collectionsWithVote.slice(4, 8).map((collection, index) => (
                             <VoteCollection
                                 key={index}
-                                index={index + 4}
+                                index={index + 5}
                                 collection={collection}
                                 setSelectedCollectionId={setSelectedCollectionId}
                                 votedId={votedCollection?.id}

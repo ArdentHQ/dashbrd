@@ -36,16 +36,16 @@ class VotableCollectionData extends Data
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false): self
+    public static function fromModel(Collection $collection, CurrencyCode $currency, bool $showVotes, bool $alreadyWon = false, ?int $rank = null): self
     {
         /** @var mixed $collection */
         return new self(
             id: $collection->id,
-            rank: $collection->monthly_rank,
+            rank: $rank,
             name: $collection->name,
             address: $collection->address,
             image: $collection->extra_attributes->get('image'),
-            votes: $showVotes ? $collection->monthly_votes : null,
+            votes: $showVotes ? $collection->votes_count : null,
             floorPrice: $collection->floor_price,
             floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floor_price_symbol,

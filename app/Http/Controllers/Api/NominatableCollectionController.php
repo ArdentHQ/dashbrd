@@ -27,8 +27,9 @@ class NominatableCollectionController extends Controller
                                 ->with('network.nativeToken')
                                 ->searchByName($request->get('query'))
                                 ->limit(15)
-                                ->votable(orderByRank: false)
-                                ->orderBy('monthly_votes', 'desc')
+                                ->votable()
+                                ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
+                                ->orderBy('votes_count', 'desc')
                                 ->orderByVolume(period: Period::MONTH, currency: $currency)
                                 ->get();
 

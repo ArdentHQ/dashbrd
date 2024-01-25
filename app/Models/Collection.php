@@ -607,7 +607,7 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeVotable(Builder $query, bool $orderByRank = true): Builder
+    public function scopeVotable(Builder $query): Builder
     {
         return $query->addFloorPriceChange()
                     ->addSelect([
@@ -616,7 +616,6 @@ class Collection extends Model
                         DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
                     ])
                     ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
-                    ->when($orderByRank, fn ($q) => $q->orderBy('monthly_rank', 'asc'))
                     ->withCount('nfts')
                     ->groupBy('collections.id');
     }
