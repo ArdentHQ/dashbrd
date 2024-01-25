@@ -31,6 +31,14 @@ class AggregateWinners extends Command
      */
     public function handle(): int
     {
+        // Note: This command is only used for testing purposes, to quickly generate "Collection of the Month" winners based on previous/current month's votes...
+
+        if (! app()->isLocal()) {
+            $this->error('This command can only run in local environment.');
+
+            return Command::FAILURE;
+        }
+
         $date = $this->option('current-month') ? now() : now()->subMonth();
 
         $winners = $this->winners();
