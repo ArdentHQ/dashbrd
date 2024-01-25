@@ -73,4 +73,5 @@ class AggregateWinners extends Command
                             ->get();
     }
 }
+
 // @codeCoverageIgnoreEnd
