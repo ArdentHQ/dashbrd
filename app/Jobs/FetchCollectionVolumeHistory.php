@@ -51,8 +51,6 @@ class FetchCollectionVolumeHistory implements ShouldQueue
             'volume_7d' => $this->collection->totalVolumeSince(now()->subDays(7)),
             'volume_30d' => $this->collection->totalVolumeSince(now()->subDays(30)),
         ]);
-
-        ResetCollectionRanking::dispatch();
     }
 
     public function uniqueId(): string

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ResetCollectionRanking;
 use App\Models\Collection;
 use App\Models\CollectionWinner;
 use Illuminate\Http\RedirectResponse;
@@ -23,8 +22,6 @@ class CollectionVoteController extends Controller
         }
 
         $collection->addVote($request->wallet());
-
-        ResetCollectionRanking::dispatch();
 
         return back()->toast(trans('pages.collections.collection_of_the_month.vote_success'), type: 'success');
     }

@@ -8,11 +8,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->unsignedInteger('monthly_rank')->nullable();
-            $table->unsignedInteger('monthly_votes')->nullable();
+            $table->dropColumn([
+                'monthly_rank',
+                'monthly_votes',
+            ]);
         });
     }
 };
