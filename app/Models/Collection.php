@@ -669,7 +669,7 @@ class Collection extends Model
      */
     public function scopeEligibleToWin(Builder $query): Builder
     {
-        return $query->whereNotIn('id', CollectionWinner::ineligibleCollectionIds());
+        return $query->whereNotIn('collections.id', CollectionWinner::ineligibleCollectionIds());
     }
 
     /**

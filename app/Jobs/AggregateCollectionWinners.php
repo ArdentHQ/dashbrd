@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Enums\CurrencyCode;
+use App\Enums\Period;
 use App\Models\Collection;
 use App\Models\CollectionWinner;
 use Illuminate\Bus\Queueable;
@@ -19,12 +21,19 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public function __construct(
+        public bool $currentMonth = false
+    ) {
+    }
+
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $previousMonth = now()->subMonth();
+        $previousMonth = $this->currentMonth
+                        ? now()
+                        : now()->subMonth();
 
         $winners = $this->winners();
 
@@ -57,12 +66,13 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
     {
         return Collection::query()
                         ->eligibleToWin()
-                        ->whereHas('votes', fn ($q) => $q->inPreviousMonth())
+                        ->whereHas('votes', fn ($q) => $this->currentMonth ? $q->inCurrentMonth() : $q->inPreviousMonth())
                         ->withCount([
-                            'votes' => fn ($q) => $q->inPreviousMonth(),
+                            'votes' => fn ($q) => $this->currentMonth ? $q->inCurrentMonth() : $q->inPreviousMonth(),
                         ])
                         ->limit(3)
                         ->orderBy('votes_count', 'desc')
+                        ->orderByVolume(Period::MONTH, currency: CurrencyCode::USD)
                         ->get();
     }
 
