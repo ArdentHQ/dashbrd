@@ -89,7 +89,9 @@ describe('user with a signed wallet', function () {
         $user = createUser();
         $collection = Collection::factory()->create();
 
-        CollectionWinner::factory()->for($collection)->create();
+        CollectionWinner::factory()->for($collection)->create([
+            'rank' => 1,
+        ]);
 
         expect($collection->votes()->count())->toBe(0);
 
@@ -98,5 +100,20 @@ describe('user with a signed wallet', function () {
             ->assertStatus(302);
 
         expect($collection->votes()->count())->toBe(0);
+    });
+
+    it('allows votes for collection that have not won first place in cotm', function () {
+        $user = createUser();
+        $collection = Collection::factory()->create();
+
+        CollectionWinner::factory()->for($collection)->create([
+            'rank' => 2,
+        ]);
+
+        expect($collection->votes()->count())->toBe(0);
+
+        $this->actingAs($user)->post(route('collection-votes.create', $collection));
+
+        expect($collection->votes()->count())->toBe(1);
     });
 });
