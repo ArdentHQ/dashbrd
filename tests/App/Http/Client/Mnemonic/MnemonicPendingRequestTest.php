@@ -102,6 +102,54 @@ it('should get owners', function () {
     expect($data)->toBe(789);
 });
 
+it('should get banner URL for the collection', function () {
+    Mnemonic::fake([
+        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
+            'nftContracts' => [[
+                'bannerImageUrl' => 'https://example.com',
+            ]],
+        ]),
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $banner = Mnemonic::getCollectionBanner(Chain::Polygon, $collection->address);
+
+    expect($banner)->toBe('https://example.com');
+});
+
+it('should normalize the banner URL for the collection', function () {
+    Mnemonic::fake([
+        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
+            'nftContracts' => [[
+                'bannerImageUrl' => 'https://i.seadn.io/gae/test?w=150&auto=format',
+            ]],
+        ]),
+    ]);
+
+    $banner = Mnemonic::getCollectionBanner(Chain::Polygon, '0x123');
+
+    expect($banner)->toBe('https://i.seadn.io/gae/test?w=1378&auto=format');
+});
+
+it('can handle empty banner URLs', function () {
+    Mnemonic::fake([
+        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
+            'nftContracts' => [[
+                'bannerImageUrl' => '',
+            ]],
+        ]),
+    ]);
+
+    $banner = Mnemonic::getCollectionBanner(Chain::Polygon, '0x123');
+
+    expect($banner)->toBeNull();
+});
+
 it('should get volume', function () {
     Mnemonic::fake([
         'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
