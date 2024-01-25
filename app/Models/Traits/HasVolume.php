@@ -51,7 +51,7 @@ trait HasVolume
     /**
      * Create a volume DTO based on the volume in the given period.
      */
-    public function createVolumeData(Period $period, CurrencyCode $currency): VolumeData
+    public function createVolumeData(Period $period, ?CurrencyCode $currency = CurrencyCode::USD): VolumeData
     {
         $volume = $this->getVolume($period);
         $token = $this->nativeToken();
