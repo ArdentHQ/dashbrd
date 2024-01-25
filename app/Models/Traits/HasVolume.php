@@ -90,7 +90,7 @@ trait HasVolume
                     ->addSelect('collections.*')
                     ->leftJoin(
                         'tokens as native_token',
-                        fn ($join) => $join->on('native_token.network_id', '=', 'collections.network_id')->where('is_native_token', true)
+                        fn ($join) => $join->on('native_token.network_id', '=', 'collections.network_id')->where('native_token.is_native_token', true)
                     )
                     ->addSelect($subselect)
                     ->groupBy('collections.id')

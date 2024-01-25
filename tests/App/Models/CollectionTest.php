@@ -6,7 +6,6 @@ use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\Period;
-use App\Jobs\ResetCollectionRanking;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
@@ -1224,116 +1223,6 @@ it('can determine if a collection is featured or not using its scope', function 
     $this->assertFalse($featuredCollections->contains($nonFeaturedCollection));
 
     $this->assertEquals(2, Collection::featured()->count());
-});
-
-it('returns the collections with most votes in the same month first for votable', function () {
-    $collectionWith5Votes = Collection::factory()->create();
-    CollectionVote::factory()->count(5)->create([
-        'collection_id' => $collectionWith5Votes->id,
-        'voted_at' => Carbon::now(),
-    ]);
-
-    $collectionWith1Vote = Collection::factory()->create();
-    CollectionVote::factory()->count(1)->create([
-        'collection_id' => $collectionWith1Vote->id,
-        'voted_at' => Carbon::now(),
-    ]);
-
-    $collectionWith8Votes = Collection::factory()->create();
-    CollectionVote::factory()->count(8)->create([
-        'collection_id' => $collectionWith8Votes->id,
-        'voted_at' => Carbon::now(),
-    ]);
-
-    $collectionWithoutVotes = Collection::factory()->create();
-
-    $collectionWith3Votes = Collection::factory()->create();
-    CollectionVote::factory()->count(3)->create([
-        'collection_id' => $collectionWith3Votes->id,
-        'voted_at' => Carbon::now(),
-    ]);
-
-    (new ResetCollectionRanking)->handle();
-
-    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
-
-    expect($collectionsIds)->toBe([
-        $collectionWith8Votes->id,
-        $collectionWith5Votes->id,
-        $collectionWith3Votes->id,
-        $collectionWith1Vote->id,
-        $collectionWithoutVotes->id,
-    ]);
-});
-
-it('only considers the votes on the same votes for votables', function () {
-    $collection1 = Collection::factory()->create();
-    // 5 votes previous to this month
-    CollectionVote::factory()->count(5)->create([
-        'collection_id' => $collection1->id,
-        'voted_at' => Carbon::now()->subMonths(2),
-    ]);
-    // 5 votes this month
-    CollectionVote::factory()->count(5)->create([
-        'collection_id' => $collection1->id,
-        'voted_at' => Carbon::now(),
-    ]);
-
-    $collection2 = Collection::factory()->create();
-    // 2 votes previous to this month
-    CollectionVote::factory()->count(2)->create([
-        'collection_id' => $collection2->id,
-        'voted_at' => Carbon::now()->subMonths(2),
-    ]);
-    // 6 votes this month
-    CollectionVote::factory()->count(6)->create([
-        'collection_id' => $collection2->id,
-        'voted_at' => Carbon::now(),
-    ]);
-
-    (new ResetCollectionRanking)->handle();
-
-    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
-
-    expect($collectionsIds)->toBe([
-        // 6 votes this month
-        $collection2->id,
-        // 5 votes this month
-        $collection1->id,
-    ]);
-});
-
-it('sorts by volume if collections have the same amount of votes', function () {
-    $mediumVolume = Collection::factory()->create([
-        'volume' => 100,
-    ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $mediumVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
-
-    $highVolume = Collection::factory()->create([
-        'volume' => 1000,
-    ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $highVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
-
-    $noVolume = Collection::factory()->create([
-        'volume' => null,
-    ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $noVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
-
-    $lowVolume = Collection::factory()->create([
-        'volume' => 1,
-    ]);
-    CollectionVote::factory()->count(3)->create(['collection_id' => $lowVolume->id, 'voted_at' => Carbon::now()->subMonths(2)]);
-
-    (new ResetCollectionRanking)->handle();
-
-    $collectionsIds = Collection::votable()->get()->pluck('id')->toArray();
-
-    expect($collectionsIds)->toBe([
-        $highVolume->id,
-        $mediumVolume->id,
-        $lowVolume->id,
-        $noVolume->id,
-    ]);
 });
 
 it('returns the collection of the month by most votes in the last month', function () {
