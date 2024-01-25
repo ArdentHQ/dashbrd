@@ -9,11 +9,7 @@ use App\Support\Facades\Mnemonic;
 use Illuminate\Support\Facades\Http;
 
 it('should fetch nft collection owners', function () {
-    Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/metadata?includeStats=1' => Http::response([
-            'ownersCount' => '789',
-        ], 200),
-    ]);
+    Mnemonic::shouldReceive('getCollectionOwners')->andReturn(789);
 
     $network = Network::polygon();
 
@@ -34,11 +30,7 @@ it('should fetch nft collection owners', function () {
 });
 
 it('should handle null owner count', function () {
-    Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/metadata?includeStats=1' => Http::response([
-            'ownersCount' => null,
-        ], 200),
-    ]);
+    Mnemonic::shouldReceive('getCollectionOwners')->andReturn(0);
 
     $network = Network::polygon();
 
@@ -55,7 +47,7 @@ it('should handle null owner count', function () {
 
     $collection->refresh();
 
-    expect($collection->owners)->toBeNull();
+    expect($collection->owners)->toBe(0);
 });
 
 it('has a unique ID', function () {

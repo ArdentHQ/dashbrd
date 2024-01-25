@@ -6,12 +6,9 @@ use App\Jobs\FetchCollectionBanner;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Support\Facades\Mnemonic;
-use Illuminate\Support\Facades\Http;
 
 it('should fetch nft collection banner', function () {
-    Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/metadata' => Http::response(fixtureData('mnemonic.nft_metadata'), 200),
-    ]);
+    Mnemonic::shouldReceive('getCollectionBanner')->andReturn('https://i.seadn.io/gcs/files/f0d3006fb5a1f09d1619a024762f5aee.png?w=1378&auto=format');
 
     $network = Network::polygon();
 
@@ -31,17 +28,12 @@ it('should fetch nft collection banner', function () {
 
     $collection->refresh();
 
-    expect($collection->banner())->toBe('https://i.seadn.io/gcs/files/f0d3006fb5a1f09d1619a024762f5aee.png?w=1378&auto=format')
-        ->and($collection->image())->toBe('image-url');
+    expect($collection->banner())->toBe('https://i.seadn.io/gcs/files/f0d3006fb5a1f09d1619a024762f5aee.png?w=1378&auto=format');
+    expect($collection->image())->toBe('image-url');
 });
 
 it('should fetch nft collection banner in case no image', function () {
-    $response = fixtureData('mnemonic.nft_metadata');
-    $response['metadata'] = [];
-
-    Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/metadata' => Http::response($response, 200),
-    ]);
+    Mnemonic::shouldReceive('getCollectionBanner')->andReturn(null);
 
     $network = Network::polygon();
 

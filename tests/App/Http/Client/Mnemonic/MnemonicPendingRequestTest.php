@@ -88,8 +88,7 @@ it('should not retry request on 400', function () {
 
 it('should get owners', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/metadata?includeStats=1' => Http::sequence()
-            ->push(['ownersCount' => '789'], 200),
+        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/totals' => Http::response(['ownersCount' => '789']),
     ]);
 
     $network = Network::polygon();
