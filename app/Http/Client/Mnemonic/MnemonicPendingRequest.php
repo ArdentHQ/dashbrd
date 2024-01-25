@@ -180,56 +180,39 @@ class MnemonicPendingRequest extends PendingRequest
         }
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getmetadata
+    /**
+     * Fetch the banner image for the collection.
+     *
+     * @see https://docs.mnemonichq.com/reference/foundationalservice_getnftcontracts
+     */
     public function getCollectionBanner(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        /** @var array<string, mixed> $data */
-        $data = self::get(sprintf('/collections/v1beta2/%s/metadata', $contractAddress), [])->json('metadata');
+        $url = $this->get('/foundational/v1beta2/nft_contracts', [
+            'contractAddresses' => $contractAddress,
+        ])->json('nftContracts.0.bannerImageUrl');
 
-        $metadata = collect($data)->mapWithKeys(fn ($item) => [$item['type'] => $item['value']]);
-
-        // *Note:* The API also returns an image for `TYPE_BANNER_IMAGE_URL`,
-        // however, I noticed that, (at least with the collections we have for
-        // testing), all images that return a value for
-        // `TYPE_ORIGINAL_BANNER_IMAGE_URL` also return a value for
-        // `TYPE_BANNER_IMAGE_URL`. On the other hand, images that don't return
-        // anything for `TYPE_ORIGINAL_BANNER_IMAGE_URL` do return a
-        // `TYPE_BANNER_IMAGE_URL` URL, but that URL shows an
-        // "Image metadata not found" message. Additionally, the image that
-        // comes from TYPE_BANNER_IMAGE_URL is too small to display in the header.
-        // In addition to that the image that comes from
-        // TYPE_ORIGINAL_BANNER_IMAGE_URL are urls from the OpenSea CDN,which
-        // seems to use the `imgix.com` API (or something similar).
-        // This means we can use GET attributes to resize the image to a more
-        // appropriate size for our banners.
-        $image = $metadata->get('TYPE_ORIGINAL_BANNER_IMAGE_URL');
-
-        if ($image === null) {
+        if ($url === null || $url === '') {
             return null;
         }
 
-        // The image from `TYPE_ORIGINAL_BANNER_IMAGE_URL` includes a w= parameter
-        // that we can use to store a bigger image in our db.
-        return NftImageUrl::get($image, ImageSize::Banner);
+        // The URL includes a w= parameter. We want to normalize it, so that we can store a higher resolution image...
+        return NftImageUrl::get($url, ImageSize::Banner);
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getownerscount
-    public function getCollectionOwners(Chain $chain, string $contractAddress): ?int
+    /**
+     * Retrieve the number of owners of the collection.
+     *
+     * @see https://docs.mnemonichq.com/reference/collectionsservice_gettotals
+     */
+    public function getCollectionOwners(Chain $chain, string $contractAddress): int
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        /** @var array<string, mixed> $data */
-        $data = self::get(sprintf('/collections/v1beta2/%s/metadata', $contractAddress), [
-            'includeStats' => true,
-        ])->json();
-
-        if (! is_numeric($data['ownersCount'])) {
-            return null;
-        }
-
-        return intval($data['ownersCount']);
+        return (int) $this->get(
+            '/collections/v1beta2/'.$contractAddress.'/totals'
+        )->json('ownersCount');
     }
 
     /**
