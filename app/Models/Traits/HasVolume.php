@@ -91,6 +91,7 @@ trait HasVolume
                     ->leftJoin(
                         'tokens as native_token',
                         'native_token.id',
+                        '=',
                         DB::raw('(select max(id) from tokens where "tokens"."network_id" = "collections"."network_id" and is_native_token = true limit 1)')
                     )
                     ->addSelect($subselect)
