@@ -200,3 +200,30 @@ it('should clear the meta description cache when an article is published', funct
         'published_at' => now()->subMinutes(2),
     ]);
 });
+
+it('clears cache when article is deleted', function () {
+    $article = Article::factory()->create([
+        'content' => 'Hello World',
+        'meta_description' => 'Hello World',
+        'published_at' => now()->subMinutes(2),
+    ]);
+
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
+
+    $article->delete();
+});
+
+it('clears cache when article is restored', function () {
+    $article = Article::factory()->create([
+        'content' => 'Hello World',
+        'meta_description' => 'Hello World',
+        'published_at' => now()->subMinutes(2),
+        'deleted_at' => now(),
+    ]);
+
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
+
+    $article->restore();
+});
