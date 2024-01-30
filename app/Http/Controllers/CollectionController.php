@@ -72,7 +72,7 @@ class CollectionController extends Controller
      */
     private function getCollectionWinners(): CollectionWinnersData
     {
-        $ttl = now()->addHours(24);
+        $ttl = now()->endOfDay();
 
         return Cache::remember('collection-winners:current', $ttl, fn () => new CollectionWinnersData(
             year: now()->subMonth()->year,
