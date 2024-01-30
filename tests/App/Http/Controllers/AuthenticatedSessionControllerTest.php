@@ -74,7 +74,7 @@ it('should throw a validation exception when nonce is not available in session',
         'chainId' => $network->chain_id,
     ])->assertSessionHasErrors([
         'address' => trans('auth.session_timeout'),
-    ])->assertRedirect(route('galleries'));
+    ])->assertRedirect(route('collections'));
 });
 
 it('should throw a validation exception if signature cannot be verified', function () {
@@ -98,7 +98,7 @@ it('should throw a validation exception if signature cannot be verified', functi
         'chainId' => $network->chain_id,
     ])->assertSessionHasErrors([
         'address' => trans('auth.failed'),
-    ])->assertRedirect(route('galleries'));
+    ])->assertRedirect(route('collections'));
 });
 
 it('should handle an incoming authentication request for a new user', function () {
@@ -138,7 +138,7 @@ it('should handle invalid credentials', function () {
     $this->post(route('login'), [
         'address' => '0x1231231231231231231231231231231231231231',
         'chainId' => $network->chain_id,
-    ])->assertRedirect(route('galleries'));
+    ])->assertRedirect(route('collections'));
 });
 
 it('should handle an incoming authentication request for a user with a new wallet', function () {
@@ -195,7 +195,7 @@ it('should handle an invalid incoming authentication request', function () {
         'chainId' => $network->chain_id,
     ])->assertSessionHasErrors([
         'address' => trans('auth.validation.invalid_address'),
-    ])->assertRedirect(route('galleries'));
+    ])->assertRedirect(route('collections'));
 });
 
 it('should validate data on incoming authentication request', function () {
@@ -285,7 +285,7 @@ it('should destroy the session and redirect', function () {
 
     $this->actingAs($user)
         ->post(route('logout'))
-        ->assertRedirect(route('galleries'));
+        ->assertRedirect(route('collections'));
 });
 
 it('should destroy the session and return response', function () {
@@ -299,7 +299,7 @@ it('should destroy the session and return response', function () {
         ->postJson(route('logout'), [], ['Referer' => '/collections']);
 
     expect($response->status())->toBe(200)
-        ->and($response->json('redirectTo'))->toBe('galleries');
+        ->and($response->json('redirectTo'))->toBeNull();
 
 });
 

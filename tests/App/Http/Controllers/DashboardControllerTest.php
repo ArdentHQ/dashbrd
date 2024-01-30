@@ -15,7 +15,7 @@ it('should show the dashboard', function () {
     $this->get(route('dashboard'))->assertStatus(200);
 });
 
-it('should redirect to galleries if porfolio is disabled', function () {
+it('should redirect to collections if porfolio is disabled', function () {
     Feature::shouldReceive('all')
         ->andReturn([
             Features::Galleries->value => true,
@@ -26,14 +26,14 @@ it('should redirect to galleries if porfolio is disabled', function () {
         ->with(Features::Portfolio->value)
         ->andReturn(false)
         ->shouldReceive('active')
-        ->with(Features::Galleries->value)
+        ->with(Features::Collections->value)
         ->andReturn(true);
 
     $user = createUser();
 
     $this->actingAs($user)
         ->get(route('dashboard'))
-        ->assertRedirect(route('galleries'));
+        ->assertRedirect(route('collections'));
 });
 
 it('should redirect to collections if porfolio and galleries are disabled', function () {

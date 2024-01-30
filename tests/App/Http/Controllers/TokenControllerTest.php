@@ -32,7 +32,7 @@ it('should not allow access to non authenticated users', function () {
     $user->save();
 
     $this->get(route('tokens.list'))
-        ->assertRedirect(route('galleries'));
+        ->assertRedirect(route('collections'));
 });
 
 it('should return user portfolio breakdown', function () {
