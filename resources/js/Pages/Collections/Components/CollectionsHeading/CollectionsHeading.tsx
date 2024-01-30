@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Heading } from "@/Components/Heading";
 import { formatFiat } from "@/Utils/Currency";
@@ -11,6 +12,8 @@ export const CollectionsHeading = ({
     currency: string;
 }): JSX.Element => {
     const { t } = useTranslation();
+
+    const formatNumber = useCallback((number: number) => new Intl.NumberFormat("en-US").format(number), []);
 
     return (
         <div className="text-left">
@@ -27,8 +30,8 @@ export const CollectionsHeading = ({
                 <Trans
                     i18nKey="pages.popular_collections.header_title"
                     values={{
-                        nftsCount: stats.nfts,
-                        collectionsCount: stats.collections,
+                        nftsCount: formatNumber(stats.nfts),
+                        collectionsCount: formatNumber(stats.collections),
                         collections: tp("common.n_collections", stats.collections),
                         nfts: tp("common.n_nfts", stats.nfts),
                         worth: formatFiat({
