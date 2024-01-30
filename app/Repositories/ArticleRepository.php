@@ -18,6 +18,8 @@ class ArticleRepository
      */
     public function latest(): DataCollection
     {
+        // TTL is mostly irrelevant here as the cache will be flushed whenever any article is
+        // updated and whenever we update the view count (once an hour)...
         $ttl = now()->addHours(24);
 
         return Cache::remember('articles:latest', $ttl, function () {
@@ -39,6 +41,8 @@ class ArticleRepository
      */
     public function popular(): DataCollection
     {
+        // TTL is mostly irrelevant here as the cache will be flushed whenever any article is
+        // updated and whenever we update the view count (once an hour)...
         $ttl = now()->addHours(24);
 
         return Cache::remember('articles:popular', $ttl, function () {
