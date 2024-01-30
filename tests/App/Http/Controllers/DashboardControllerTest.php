@@ -36,11 +36,11 @@ it('should redirect to collections if porfolio is disabled', function () {
         ->assertRedirect(route('collections'));
 });
 
-it('should redirect to collections if porfolio and galleries are disabled', function () {
+it('should redirect to galleries if porfolio and collections are disabled', function () {
     Feature::shouldReceive('all')
         ->andReturn([
-            Features::Galleries->value => false,
-            Features::Collections->value => true,
+            Features::Galleries->value => true,
+            Features::Collections->value => false,
             Features::Portfolio->value => false,
         ])
         ->shouldReceive('active')
@@ -48,16 +48,16 @@ it('should redirect to collections if porfolio and galleries are disabled', func
         ->andReturn(false)
         ->shouldReceive('active')
         ->with(Features::Galleries->value)
-        ->andReturn(false)
+        ->andReturn(true)
         ->shouldReceive('active')
         ->with(Features::Collections->value)
-        ->andReturn(true);
+        ->andReturn(false);
 
     $user = createUser();
 
     $this->actingAs($user)
         ->get(route('dashboard'))
-        ->assertRedirect(route('collections'));
+        ->assertRedirect(route('galleries'));
 });
 
 it('should redirect to user settings if porfolio, galleries and collections are disabled', function () {
