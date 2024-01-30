@@ -49,8 +49,14 @@ class CollectionController extends Controller
 {
     use HasCollectionFilters;
 
-    public function index(Request $request): Response
+    public function index(Request $request): Response|JsonResponse
     {
+        if ($request->wantsJson()) {
+            return response()->json([
+                'collections' => $this->getPopularCollections($request),
+            ]);
+        }
+
         $votableCollections = $this->getVotableCollections($request);
 
         return Inertia::render('Collections/Index', [
@@ -58,7 +64,6 @@ class CollectionController extends Controller
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
             'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
-            'collections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votedCollection' => fn () => $this->getVotedCollection($request, $votableCollections),
             'votableCollections' => $votableCollections,
