@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 
 class FetchCollectionVolume implements ShouldQueue
 {
@@ -52,6 +53,8 @@ class FetchCollectionVolume implements ShouldQueue
             'volume_7d' => $this->collection->totalVolumeSince(now()->subDays(7)),
             'volume_30d' => $this->collection->totalVolumeSince(now()->subDays(30)),
         ]);
+
+        Cache::tags('votable-collections')->flush();
     }
 
     public function uniqueId(): string

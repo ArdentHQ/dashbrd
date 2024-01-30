@@ -20,7 +20,7 @@ import { type Filters, useCollectionFilters } from "@/Pages/Collections/Hooks/us
 
 interface CollectionsIndexProperties extends PageProps {
     title: string;
-    collections: PaginationData<App.Data.Collections.PopularCollectionData>;
+    popularCollections: PaginationData<App.Data.Collections.PopularCollectionData>;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     collectionsOfTheMonth: App.Data.Collections.CollectionWinnersData;
     votableCollections: App.Data.Collections.VotableCollectionData[];
@@ -34,7 +34,7 @@ interface CollectionsIndexProperties extends PageProps {
 const CollectionsIndex = ({
     title,
     featuredCollections,
-    collections: { data: collections },
+    popularCollections,
     collectionsOfTheMonth,
     votableCollections,
     votedCollection,
@@ -51,7 +51,7 @@ const CollectionsIndex = ({
         filters,
         filterRoute: route("collections"),
         options: {
-            only: ["collections", "filters"],
+            only: ["popularCollections", "filters"],
             preserveScroll: true,
             preserveState: true,
         },
@@ -120,7 +120,7 @@ const CollectionsIndex = ({
                     <div className="flex sm:space-x-2 md:space-x-3 md-lg:space-x-6">
                         <div className="flex-1">
                             <PopularCollectionsTable
-                                collections={collections.slice(0, 6)}
+                                collections={popularCollections.data.slice(0, 6)}
                                 user={auth.user}
                                 period={currentFilters.period}
                                 activePeriod={filters.period}
@@ -129,7 +129,7 @@ const CollectionsIndex = ({
 
                         <div className="hidden flex-1 sm:block">
                             <PopularCollectionsTable
-                                collections={collections.slice(6, 12)}
+                                collections={popularCollections.data.slice(6, 12)}
                                 user={auth.user}
                                 period={currentFilters.period}
                                 activePeriod={filters.period}

@@ -8,6 +8,7 @@ use App\Models\CollectionVote;
 use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 trait HasWalletVotes
 {
@@ -25,5 +26,7 @@ trait HasWalletVotes
             'wallet_id' => $wallet->id,
             'voted_at' => Carbon::now(),
         ]);
+
+        Cache::tags('votable-collections')->flush();
     }
 }

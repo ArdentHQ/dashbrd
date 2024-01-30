@@ -32,6 +32,7 @@ use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionWinner;
 use App\Models\User;
+use App\Repositories\CollectionRepository;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
@@ -58,7 +59,7 @@ class CollectionController extends Controller
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
             'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
-            'collections' => fn () => $this->getPopularCollections($request),
+            'popularCollections' => fn () => $this->getPopularCollections($request),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votedCollection' => fn () => $this->getVotedCollection($request, $votableCollections),
             'votableCollections' => $votableCollections,
@@ -115,28 +116,7 @@ class CollectionController extends Controller
      */
     private function getVotableCollections(Request $request): SupportCollection
     {
-        $user = $request->user();
-
-        $currency = $user?->currency() ?? CurrencyCode::USD;
-
-        $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
-
-        $collections = Collection::votable()
-                                ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
-                                ->orderBy('votes_count', 'desc')
-                                ->orderByVolume(Period::MONTH, $currency)
-                                ->with('network.nativeToken')
-                                ->when($user === null, fn ($q) => $q->limit(13))
-                                ->get();
-
-        $winners = CollectionWinner::ineligibleCollectionIds();
-
-        return $collections->take(13)->map(fn ($collection) => VotableCollectionData::fromModel(
-            $collection,
-            $currency,
-            showVotes: $userVoted,
-            alreadyWon: $winners->contains($collection->id),
-        ));
+        return app(CollectionRepository::class)->votable($request->user());
     }
 
     /**
@@ -146,17 +126,7 @@ class CollectionController extends Controller
     {
         $currency = $request->user()?->currency() ?? CurrencyCode::USD;
 
-        $collections = Cache::remember(
-            'featured-collections',
-            now()->addHour(),
-            fn () => Collection::featured()
-                        ->with([
-                            'network',
-                            'floorPriceToken',
-                            'nfts' => fn ($q) => $q->inRandomOrder()->limit(3),
-                        ])
-                        ->get()
-        );
+        $collections = app(CollectionRepository::class)->featured();
 
         return $collections->map(function (Collection $collection) use ($currency) {
             $collection->nfts->each->setRelation('collection', $collection);

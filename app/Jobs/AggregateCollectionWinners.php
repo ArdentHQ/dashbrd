@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection as LaravelCollection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
@@ -57,6 +58,8 @@ class AggregateCollectionWinners implements ShouldBeUnique, ShouldQueue
 
             CollectionWinner::upsert($collections, uniqueBy: ['collection_id', 'month', 'year']);
         });
+
+        Cache::tags('votable-collections')->flush();
     }
 
     /**
