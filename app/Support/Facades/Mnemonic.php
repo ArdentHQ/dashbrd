@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Http;
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Web3CollectionFloorPrice | null getCollectionFloorPrice(Chain $chain, string $contractAddress)
  * @method static string | null getCollectionBanner(Chain $chain, string $contractAddress)
- * @method static int | null getCollectionOwners(Chain $chain, string $contractAddress)
+ * @method static int getCollectionOwners(Chain $chain, string $contractAddress)
  * @method static Web3Volume getLatestCollectionVolume(Chain $chain, string $contractAddress)
  * @method static Collection<int, Web3Volume> getCollectionVolumeHistory(Chain $chain, string $address)
  * @method static Collection<int, Web3CollectionTrait> getCollectionTraits(Chain $chain, string $contractAddress)
