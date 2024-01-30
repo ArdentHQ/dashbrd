@@ -26,6 +26,21 @@ class ArticleObserver
 
     public function saved(): void
     {
+        $this->flushCache();
+    }
+
+    public function deleted(): void
+    {
+        $this->flushCache();
+    }
+
+    public function restored(): void
+    {
+        $this->flushCache();
+    }
+
+    private function flushCache(): void
+    {
         // Flush the cached articles used on the "Collections" page...
         Cache::forget('articles:latest');
         Cache::forget('articles:popular');
