@@ -24,6 +24,13 @@ class ArticleObserver
         $this->forgetMetaDescriptionCache($article);
     }
 
+    public function saved(): void
+    {
+        // Flush the cached articles used on the "Collections" page...
+        Cache::forget('articles:latest');
+        Cache::forget('articles:popular');
+    }
+
     private function prepareArticleSpeech(Article $article): void
     {
         if (! config('dashbrd.text_to_speech.enabled')) {
