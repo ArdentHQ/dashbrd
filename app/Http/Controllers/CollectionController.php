@@ -126,6 +126,7 @@ class CollectionController extends Controller
                                 ->orderBy('votes_count', 'desc')
                                 ->orderByVolume(Period::MONTH, $currency)
                                 ->with('network.nativeToken')
+                                ->when($user === null, fn ($q) => $q->limit(13))
                                 ->get();
 
         $winners = CollectionWinner::ineligibleCollectionIds();
