@@ -120,7 +120,8 @@ it('should not start preparing audio on creation if tts is disabled via job', fu
 });
 
 it('should not clear the meta description cache if article is not published', function () {
-    Cache::shouldReceive('forget')->never();
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
 
     Article::factory()->create([
         'content' => 'Hello World',
@@ -136,7 +137,8 @@ it('should not clear the meta description cache if article content or meta descr
         'published_at' => now()->subMinutes(2),
     ])->fresh();
 
-    Cache::shouldReceive('forget')->never();
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
 
     $article->update([
         'title' => 'Updated title',
@@ -144,6 +146,8 @@ it('should not clear the meta description cache if article content or meta descr
 });
 
 it('should clear the meta description cache when an article created', function () {
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
     Cache::shouldReceive('forget')->with('article:1:meta_description')->once();
 
     Article::factory()->create([
@@ -158,6 +162,8 @@ it('should clear the meta description cache when an article content is updated',
         'published_at' => now()->subMinutes(2),
     ]);
 
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
     Cache::shouldReceive('forget')->with('article:1:meta_description')->once();
 
     $article->update([
@@ -171,6 +177,8 @@ it('should clear the meta description cache when an article meta_description is 
         'published_at' => now()->subMinutes(2),
     ]);
 
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
     Cache::shouldReceive('forget')->with('article:1:meta_description')->once();
 
     $article->update([
@@ -184,6 +192,8 @@ it('should clear the meta description cache when an article is published', funct
         'published_at' => null,
     ]);
 
+    Cache::shouldReceive('forget')->once()->with('articles:latest');
+    Cache::shouldReceive('forget')->once()->with('articles:popular');
     Cache::shouldReceive('forget')->with('article:1:meta_description')->once();
 
     $article->update([
