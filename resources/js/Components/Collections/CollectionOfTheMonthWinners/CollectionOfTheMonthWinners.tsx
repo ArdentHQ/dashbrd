@@ -20,7 +20,7 @@ export const CollectionOfTheMonthWinners = ({
     const date = new Date();
     date.setMonth(date.getMonth() - 1);
 
-    const month = t(`common.months.${date.getMonth()}`)
+    const month = t(`common.months.${date.getMonth()}`);
     const previousMonth = `${month} ${date.getFullYear()}`;
 
     return (
