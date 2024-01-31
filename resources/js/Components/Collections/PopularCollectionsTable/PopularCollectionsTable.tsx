@@ -28,7 +28,7 @@ export const PopularCollectionsTable = ({
     }, [activePeriod]);
 
     const columns = useMemo(() => {
-        const columns: Array<Column<number>> = [
+        const columns: Array<Column<{ index: number }|App.Data.Collections.PopularCollectionData>> = [
             {
                 Header: t("common.collection").toString(),
                 id: "name",
@@ -59,10 +59,10 @@ export const PopularCollectionsTable = ({
                 data-testid="PopularCollectionsTable"
                 headerClassName="hidden md-lg:table-header-group"
                 variant="list"
-                columns={columns}
+                columns={columns as Column<{ index: number }>[]}
                 manualSortBy={true}
-                data={Array.from({ length: 6 }, (x, index) => index)}
-                row={(index) => <PopularCollectionsTableItemSkeleton index={index} />}
+                data={Array.from({ length: 6 }, (x, index) => ({ index }))}
+                row={({ index }) => <PopularCollectionsTableItemSkeleton index={index} />}
             />
         );
     }
@@ -76,7 +76,7 @@ export const PopularCollectionsTable = ({
             data-testid="PopularCollectionsTable"
             headerClassName="hidden md-lg:table-header-group"
             variant="list"
-            columns={columns}
+            columns={columns as Column<App.Data.Collections.PopularCollectionData>[]}
             manualSortBy={true}
             data={collections}
             row={(collection: App.Data.Collections.PopularCollectionData) => (
