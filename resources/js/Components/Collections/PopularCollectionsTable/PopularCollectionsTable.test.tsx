@@ -151,8 +151,8 @@ describe("PopularCollectionsTable", () => {
         expect(container).toHaveTextContent("$10,000.00");
     });
 
-    it("can render the skeleton for the table item", () => {
-        const { getByTestId } = render(<PopularCollectionsTableItemSkeleton index={1} />);
+    it.each(allBreakpoints)("can render the skeleton for the table item", (breakpoint) => {
+        const { getByTestId } = render(<PopularCollectionsTableItemSkeleton index={1} />, { breakpoint });
 
         expect(getByTestId("PopularCollectionsTableItemSkeleton")).toBeInTheDocument();
     });
