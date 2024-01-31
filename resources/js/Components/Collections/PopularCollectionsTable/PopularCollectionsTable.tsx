@@ -59,7 +59,7 @@ export const PopularCollectionsTable = ({
                 data-testid="PopularCollectionsTable"
                 headerClassName="hidden md-lg:table-header-group"
                 variant="list"
-                columns={columns as Column<{ index: number }>[]}
+                columns={columns as Array<Column<{ index: number }>>}
                 manualSortBy={true}
                 data={Array.from({ length: 6 }, (x, index) => ({ index }))}
                 row={({ index }) => <PopularCollectionsTableItemSkeleton index={index} />}
@@ -76,7 +76,7 @@ export const PopularCollectionsTable = ({
             data-testid="PopularCollectionsTable"
             headerClassName="hidden md-lg:table-header-group"
             variant="list"
-            columns={columns as Column<App.Data.Collections.PopularCollectionData>[]}
+            columns={columns as Array<Column<App.Data.Collections.PopularCollectionData>>}
             manualSortBy={true}
             data={collections}
             row={(collection: App.Data.Collections.PopularCollectionData) => (
