@@ -26,7 +26,7 @@ const NominationDialogFooter = ({
     setSelectedCollection: (selectedCollection: number) => void;
     onSubmit: () => void;
     isDisabled: boolean;
-    votedCollection: null | App.Data.Collections.VotableCollectionData;
+    votedCollection?: null | App.Data.Collections.VotableCollectionData;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -73,12 +73,14 @@ export const NominationDialog = ({
     initialCollections,
     user,
     votedCollection,
+    onSubmit,
 }: {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     initialCollections: App.Data.Collections.VotableCollectionData[];
     user: App.Data.UserData | null;
-    votedCollection: null | App.Data.Collections.VotableCollectionData;
+    votedCollection?: null | App.Data.Collections.VotableCollectionData;
+    onSubmit: () => void;
 }): JSX.Element => {
     const { t } = useTranslation();
     const [query, setQuery] = useState("");
@@ -147,6 +149,8 @@ export const NominationDialog = ({
                         setIsOpen(false);
 
                         setShowConfirmationDialog(true);
+
+                        onSubmit();
                     },
                 },
             );

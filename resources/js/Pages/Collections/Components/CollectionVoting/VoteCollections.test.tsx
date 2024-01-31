@@ -1,13 +1,6 @@
-import { within } from "@testing-library/react";
 import { expect } from "vitest";
-import MetaMaskContextProvider from "@/Contexts/MetaMaskContext";
-import {
-    VoteCollection,
-    VoteCollections,
-    VoteCount,
-} from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
+import { VoteCollection, VoteCount } from "@/Pages/Collections/Components/CollectionVoting/VoteCollections";
 import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableCollectionDataFactory";
-import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 const demoCollection = new VotableCollectionDataFactory().create({
@@ -22,31 +15,6 @@ const demoCollection = new VotableCollectionDataFactory().create({
     },
 });
 
-const collections = new VotableCollectionDataFactory().createMany(8, {
-    name: "AlphaDogs",
-});
-
-describe("VoteCollections", () => {
-    const user = new UserDataFactory().create();
-
-    it("should render collections in two block, 4 collection in each", () => {
-        render(
-            <MetaMaskContextProvider>
-                <VoteCollections
-                    collections={collections}
-                    votedCollection={null}
-                    user={user}
-                />
-            </MetaMaskContextProvider>,
-        );
-
-        const leftBlock = screen.getByTestId("VoteCollections_Left");
-        const rightBlock = screen.getByTestId("VoteCollections_Right");
-
-        expect(within(leftBlock).getAllByText("AlphaDogs").length).toBe(4);
-        expect(within(rightBlock).getAllByText("AlphaDogs").length).toBe(4);
-    });
-});
 describe("VoteCollection", () => {
     it("should render the component", () => {
         render(

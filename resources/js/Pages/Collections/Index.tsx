@@ -13,20 +13,16 @@ interface CollectionsIndexProperties extends PageProps {
     title: string;
     featuredCollections: App.Data.Collections.CollectionFeaturedData[];
     collectionsOfTheMonth: App.Data.Collections.CollectionWinnersData;
-    votableCollections: App.Data.Collections.VotableCollectionData[];
     filters: Filters;
     collectionsTableResults: App.Data.Collections.CollectionData[];
     latestArticles: App.Data.Articles.ArticleData[];
     popularArticles: App.Data.Articles.ArticleData[];
-    votedCollection: App.Data.Collections.VotableCollectionData | null;
 }
 
 const CollectionsIndex = ({
     title,
     featuredCollections,
     collectionsOfTheMonth,
-    votableCollections,
-    votedCollection,
     auth,
     filters,
     latestArticles,
@@ -58,11 +54,7 @@ const CollectionsIndex = ({
                     id="votes"
                     className="mt-12 flex w-full flex-col rounded-xl border-theme-secondary-300 dark:border-theme-dark-700 lg:border xl:flex-row xl:gap-4 xl:border-0"
                 >
-                    <VoteCollections
-                        collections={votableCollections}
-                        votedCollection={votedCollection}
-                        user={auth.user}
-                    />
+                    <VoteCollections user={auth.user} />
 
                     <CollectionOfTheMonthWinners
                         winners={collectionsOfTheMonth}

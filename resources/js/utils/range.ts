@@ -9,5 +9,5 @@ export const range = (start: number, end?: number): number[] => {
         length: end - start,
     })
         .map((_, index) => index)
-        .map((i) => i + start);
+        .map((index) => index + start);
 };

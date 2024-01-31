@@ -1,4 +1,6 @@
 import { router } from "@inertiajs/core";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import cn from "classnames";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,24 +11,18 @@ import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
 import { LinkButton } from "@/Components/Link";
+import { Skeleton } from "@/Components/Skeleton";
 import { Tooltip } from "@/Components/Tooltip";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { CollectionsVoteReceivedModal } from "@/Pages/Collections/Components/CollectionsVoteReceivedModal";
 import { FormatCrypto } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
+import { range } from "@/utils/range";
 
 type VoteCollectionVariants = "selected" | "voted" | undefined;
 
-export const VoteCollections = ({
-    collections,
-    votedCollection,
-    user,
-}: {
-    collections: App.Data.Collections.VotableCollectionData[];
-    votedCollection: App.Data.Collections.VotableCollectionData | null;
-    user: App.Data.UserData | null;
-}): JSX.Element => {
+export const VoteCollections = ({ user }: { user: App.Data.UserData | null }): JSX.Element => {
     const { t } = useTranslation();
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
@@ -34,13 +30,28 @@ export const VoteCollections = ({
     const { isSmAndAbove } = useBreakpoint();
     const { signedAction } = useAuthorizedAction();
 
+    const { data, isLoading, isRefetching, refetch } = useQuery({
+        queryKey: ["votable-collections"],
+        refetchOnWindowFocus: false,
+        select: ({ data }) => data,
+        queryFn: async () =>
+            await axios.get<{
+                votedCollection: App.Data.Collections.VotableCollectionData | null;
+                collections: App.Data.Collections.VotableCollectionData[];
+            }>(route("api:votable-collections")),
+    });
+
     const collection = useMemo(
-        () => collections.filter((c) => c.id === selectedCollectionId)[0],
-        [collections, selectedCollectionId],
+        () => data?.collections.filter((c) => c.id === selectedCollectionId)[0],
+        [data, selectedCollectionId],
     );
 
     const getVariant = (collectionId: number): VoteCollectionVariants =>
-        votedCollection?.id === collectionId ? "voted" : selectedCollectionId === collectionId ? "selected" : undefined;
+        data?.votedCollection?.id === collectionId
+            ? "voted"
+            : selectedCollectionId === collectionId
+              ? "selected"
+              : undefined;
 
     const [loading, setLoading] = useState(false);
 
@@ -58,6 +69,10 @@ export const VoteCollections = ({
                         setLoading(false);
 
                         setShowConfirmationDialog(true);
+
+                        void (async () => {
+                            await refetch();
+                        })();
                     },
                 },
             );
@@ -65,17 +80,17 @@ export const VoteCollections = ({
     };
 
     const collectionsWithVote = useMemo(() => {
-        const eligibleCollections = collections.filter((c) => !c.alreadyWon);
+        const eligibleCollections = data?.collections.filter((c) => !c.alreadyWon) ?? [];
 
         const shouldMergeUserVote =
-            votedCollection !== null &&
-            !eligibleCollections.slice(0, 8).some((collection) => collection.id === votedCollection.id);
+            data?.votedCollection !== null &&
+            !eligibleCollections.slice(0, 8).some((collection) => collection.id === data?.votedCollection?.id);
 
-        if (shouldMergeUserVote) {
+        if (shouldMergeUserVote && data?.votedCollection !== undefined && data.votedCollection !== null) {
             if (isSmAndAbove) {
-                return [...eligibleCollections.slice(0, 7), votedCollection];
+                return [...eligibleCollections.slice(0, 7), data.votedCollection];
             } else {
-                return [...eligibleCollections.slice(0, 3), votedCollection];
+                return [...eligibleCollections.slice(0, 3), data.votedCollection];
             }
         }
 
@@ -84,15 +99,15 @@ export const VoteCollections = ({
         }
 
         return eligibleCollections.slice(0, 4);
-    }, [isSmAndAbove, collections, votedCollection]);
+    }, [isSmAndAbove, data]);
 
     const nominatableCollections = useMemo(() => {
         if (isSmAndAbove) {
-            return collections.slice(8, 13).reverse();
+            return data?.collections.slice(8, 13).reverse() ?? [];
         }
 
-        return collections.slice(4, 9).reverse();
-    }, [isSmAndAbove, collections]);
+        return data?.collections.slice(4, 9).reverse() ?? [];
+    }, [isSmAndAbove, data]);
 
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -106,69 +121,80 @@ export const VoteCollections = ({
                     {t("pages.collections.vote.vote_for_top_collection")}
                 </Heading>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
-                    <div
-                        className="max-w-full flex-1 space-y-2"
-                        data-testid="VoteCollections_Left"
-                    >
-                        {collectionsWithVote.slice(0, 4).map((collection, index) => (
-                            <VoteCollection
-                                key={index}
-                                index={index + 1}
-                                collection={collection}
-                                setSelectedCollectionId={setSelectedCollectionId}
-                                votedId={votedCollection?.id}
-                                variant={getVariant(collection.id)}
+                {(isLoading || isRefetching) && <LoadingScreen />}
+
+                {!isLoading && !isRefetching && (
+                    <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
+                            <div
+                                className="max-w-full flex-1 space-y-2"
+                                data-testid="VoteCollections_Left"
+                            >
+                                {collectionsWithVote.slice(0, 4).map((collection, index) => (
+                                    <VoteCollection
+                                        key={index}
+                                        index={index + 1}
+                                        collection={collection}
+                                        setSelectedCollectionId={setSelectedCollectionId}
+                                        votedId={data?.votedCollection?.id}
+                                        variant={getVariant(collection.id)}
+                                    />
+                                ))}
+                            </div>
+                            <div
+                                className="hidden flex-1 space-y-2 sm:block"
+                                data-testid="VoteCollections_Right"
+                            >
+                                {collectionsWithVote.slice(4, 8).map((collection, index) => (
+                                    <VoteCollection
+                                        key={index}
+                                        index={index + 5}
+                                        collection={collection}
+                                        setSelectedCollectionId={setSelectedCollectionId}
+                                        votedId={data?.votedCollection?.id}
+                                        variant={getVariant(collection.id)}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
+                            <VoteCountdown
+                                onSubmit={vote}
+                                isDisabled={loading || selectedCollectionId === undefined}
+                                hasUserVoted={data?.votedCollection !== null}
                             />
-                        ))}
-                    </div>
-                    <div
-                        className="hidden flex-1 space-y-2 sm:block"
-                        data-testid="VoteCollections_Right"
-                    >
-                        {collectionsWithVote.slice(4, 8).map((collection, index) => (
-                            <VoteCollection
-                                key={index}
-                                index={index + 5}
-                                collection={collection}
-                                setSelectedCollectionId={setSelectedCollectionId}
-                                votedId={votedCollection?.id}
-                                variant={getVariant(collection.id)}
-                            />
-                        ))}
-                    </div>
-                </div>
 
-                <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
-                    <VoteCountdown
-                        onSubmit={vote}
-                        isDisabled={loading || selectedCollectionId === undefined}
-                        hasUserVoted={votedCollection !== null}
-                    />
-
-                    {votedCollection === null && (
-                        <LinkButton
-                            onClick={(): void => {
-                                setIsDialogOpen(true);
-                            }}
-                            variant="link"
-                            className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
-                            fontSize="!text-base"
-                            textColor="!text-theme-primary-600 dark:!text-theme-primary-400"
-                        >
-                            {t("pages.collections.vote.or_nominate_collection")}
-                        </LinkButton>
-                    )}
-                </div>
-
-                <NominationDialog
-                    isOpen={isDialogOpen}
-                    setIsOpen={setIsDialogOpen}
-                    initialCollections={nominatableCollections}
-                    user={user}
-                    votedCollection={votedCollection}
-                />
+                            {data?.votedCollection === null && (
+                                <LinkButton
+                                    onClick={(): void => {
+                                        setIsDialogOpen(true);
+                                    }}
+                                    variant="link"
+                                    className="font-medium leading-6 dark:hover:decoration-theme-primary-400"
+                                    fontSize="!text-base"
+                                    textColor="!text-theme-primary-600 dark:!text-theme-primary-400"
+                                >
+                                    {t("pages.collections.vote.or_nominate_collection")}
+                                </LinkButton>
+                            )}
+                        </div>
+                    </>
+                )}
             </div>
+
+            <NominationDialog
+                isOpen={isDialogOpen}
+                setIsOpen={setIsDialogOpen}
+                initialCollections={nominatableCollections}
+                user={user}
+                votedCollection={data?.votedCollection}
+                onSubmit={() => {
+                    void (async () => {
+                        await refetch();
+                    })();
+                }}
+            />
 
             <CollectionsVoteReceivedModal
                 isOpen={showConfirmationDialog}
@@ -350,3 +376,65 @@ export const VoteCount = ({
         </div>
     );
 };
+
+const LoadingScreen = (): JSX.Element => (
+    <>
+        <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-2.5">
+            <div className="max-w-full flex-1 space-y-2">
+                {range(4).map((index) => (
+                    <LoadingItem key={index} />
+                ))}
+            </div>
+
+            <div className="hidden flex-1 space-y-2 sm:block">
+                {range(4).map((index) => (
+                    <LoadingItem key={index} />
+                ))}
+            </div>
+        </div>
+
+        <div className="flex h-12 w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
+            <Skeleton
+                className="h-8 w-72"
+                animated
+            />
+        </div>
+    </>
+);
+
+const LoadingItem = (): JSX.Element => (
+    <div className="flex h-[84px] items-center justify-between rounded-lg border border-theme-secondary-300 p-4 md:h-[76px]">
+        <div className="flex items-center">
+            <Skeleton
+                isCircle
+                className="h-12 w-12"
+                animated
+            />
+
+            <div className="relative -ml-2 rounded-full ring-4 ring-white">
+                <Skeleton
+                    isCircle
+                    className="h-12 w-12"
+                    animated
+                />
+            </div>
+
+            <div className="ml-4 flex flex-col space-y-1">
+                <Skeleton
+                    className="h-4 w-32"
+                    animated
+                />
+
+                <Skeleton
+                    className="h-3 w-20"
+                    animated
+                />
+            </div>
+        </div>
+
+        <Skeleton
+            className="hidden h-5 w-16 lg:block"
+            animated
+        />
+    </div>
+);
