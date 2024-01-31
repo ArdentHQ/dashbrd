@@ -19,7 +19,9 @@ export const CollectionOfTheMonthWinners = ({
 
     const date = new Date();
     date.setMonth(date.getMonth() - 1);
-    const previousMonth = `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+
+    const month = t(`common.months.${date.getMonth()}`)
+    const previousMonth = `${month} ${date.getFullYear()}`;
 
     return (
         <>
