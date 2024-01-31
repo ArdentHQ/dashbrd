@@ -22,7 +22,10 @@ Route::get('/galleries-overview', [Api\GalleryOverviewController::class, 'index'
         ->name('galleries-overview.index');
 
 Route::get('/nominatable-collections', [Api\NominatableCollectionController::class, 'index'])
-    ->name('nominatable-collections');
+        ->name('nominatable-collections');
+
+Route::get('/popular-collections', [Api\PopularCollectionController::class, 'index'])
+        ->name('api:popular-collections');
 
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...

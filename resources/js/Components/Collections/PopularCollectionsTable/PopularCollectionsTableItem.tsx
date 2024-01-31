@@ -6,8 +6,8 @@ import {
     PopularCollectionVolume,
 } from "./PopularCollectionsTable.blocks";
 import { type PopularCollectionTableItemProperties } from "./PopularCollectionsTable.contract";
-import { TableCell, TableRow } from "@/Components/Table";
 import { Skeleton } from "@/Components/Skeleton";
+import { TableCell, TableRow } from "@/Components/Table";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 
 export const PopularCollectionsTableItem = ({
@@ -65,7 +65,7 @@ export const PopularCollectionsTableItem = ({
     );
 };
 
-export const PopularCollectionsTableItemSkeleton = ({ index }: { index: number }) => {
+export const PopularCollectionsTableItemSkeleton = ({ index }: { index: number }): JSX.Element => {
     const { isLgAndAbove, isXlAndAbove } = useBreakpoint();
 
     return (

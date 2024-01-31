@@ -11,5 +11,5 @@ export interface PopularCollectionTableProperties {
     user: App.Data.UserData | null;
     period?: PeriodFilterOptions;
     activePeriod?: PeriodFilterOptions;
-    isLoading?: boolean
+    isLoading?: boolean;
 }

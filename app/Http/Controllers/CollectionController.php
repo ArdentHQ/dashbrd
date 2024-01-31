@@ -11,14 +11,12 @@ use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Collections\CollectionWinnersData;
-use App\Data\Collections\PopularCollectionData;
 use App\Data\Collections\VotableCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
 use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
-use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
 use App\Enums\Period;
@@ -37,7 +35,6 @@ use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -51,12 +48,6 @@ class CollectionController extends Controller
 
     public function index(Request $request): Response|JsonResponse
     {
-        if ($request->wantsJson()) {
-            return response()->json([
-                'collections' => $this->getPopularCollections($request),
-            ]);
-        }
-
         $votableCollections = $this->getVotableCollections($request);
 
         return Inertia::render('Collections/Index', [
@@ -168,42 +159,6 @@ class CollectionController extends Controller
 
             return CollectionFeaturedData::fromModel($collection, $currency);
         });
-    }
-
-    /**
-     * @return Paginator<PopularCollectionData>
-     */
-    private function getPopularCollections(Request $request): Paginator
-    {
-        $user = $request->user();
-
-        $chainId = match ($request->query('chain')) {
-            'polygon' => Chain::Polygon->value,
-            'ethereum' => Chain::ETH->value,
-            default => null,
-        };
-
-        $currency = $user ? $user->currency() : CurrencyCode::USD;
-
-        $period = match ($request->query('period')) {
-            '7d' => Period::WEEK,
-            '30d' => Period::MONTH,
-            default => Period::DAY,
-        };
-
-        /** @var Paginator<PopularCollectionData> $collections */
-        $collections = Collection::query()
-                                ->when($request->query('sort') !== 'floor-price', fn ($q) => $q->orderByVolume($period, currency: $chainId === null ? $currency : null))
-                                ->filterByChainId($chainId)
-                                ->orderByFloorPrice('desc', $currency)
-                                ->with([
-                                    'network',
-                                    'floorPriceToken',
-                                ])
-                                ->addFloorPriceChange()
-                                ->simplePaginate(12);
-
-        return $collections->through(fn ($collection) => PopularCollectionData::fromModel($collection, $currency, $period));
     }
 
     /**

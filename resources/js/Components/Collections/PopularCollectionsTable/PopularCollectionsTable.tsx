@@ -5,7 +5,6 @@ import { type PopularCollectionTableProperties } from "./PopularCollectionsTable
 import { PopularCollectionsTableItem, PopularCollectionsTableItemSkeleton } from "./PopularCollectionsTableItem";
 import { Table } from "@/Components/Table";
 import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
-import { CollectionsTableItemSkeleton } from "../CollectionsTable/CollectionsTableItemSkeleton";
 
 export const PopularCollectionsTable = ({
     collections,
@@ -29,7 +28,7 @@ export const PopularCollectionsTable = ({
     }, [activePeriod]);
 
     const columns = useMemo(() => {
-        const columns: Array<Column<Number>> = [
+        const columns: Array<Column<number>> = [
             {
                 Header: t("common.collection").toString(),
                 id: "name",
@@ -62,7 +61,7 @@ export const PopularCollectionsTable = ({
                 variant="list"
                 columns={columns}
                 manualSortBy={true}
-                data={Array.from({length: 6}, (x, i) => i)}
+                data={Array.from({ length: 6 }, (x, index) => index)}
                 row={(index) => <PopularCollectionsTableItemSkeleton index={index} />}
             />
         );

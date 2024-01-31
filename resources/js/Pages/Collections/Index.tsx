@@ -1,17 +1,13 @@
 import { type PageProps } from "@inertiajs/core";
 import { Head, usePage } from "@inertiajs/react";
-import cn from "classnames";
-import { useTranslation } from "react-i18next";
-import { type RouteParams } from "ziggy-js";
 import { CollectionsArticles } from "./Components/CollectionsArticles";
 import { CollectionsCallToAction } from "./Components/CollectionsCallToAction";
 import { FeaturedCollectionsCarousel } from "./Components/FeaturedCollections";
-import { ButtonLink } from "@/Components/Buttons/ButtonLink";
+import { PopularCollections } from "./PopularCollections";
 import { CollectionOfTheMonthWinners } from "@/Components/Collections/CollectionOfTheMonthWinners";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { VoteCollections } from "@/Pages/Collections/Components/CollectionVoting";
 import { type Filters } from "@/Pages/Collections/Hooks/useCollectionFilters";
-import { PopularCollections } from "./PopularCollections";
 
 interface CollectionsIndexProperties extends PageProps {
     title: string;
@@ -84,20 +80,6 @@ const CollectionsIndex = ({
 
             <CollectionsCallToAction />
         </DefaultLayout>
-    );
-};
-
-export const ViewAllButton = ({ className, filters }: { className?: string; filters: Filters }): JSX.Element => {
-    const { t } = useTranslation();
-
-    return (
-        <ButtonLink
-            variant="secondary"
-            href={route("popular-collections", filters as RouteParams)}
-            className={cn("w-full justify-center sm:w-auto", className)}
-        >
-            {t("common.view_all")}
-        </ButtonLink>
     );
 };
 

@@ -1,26 +1,30 @@
-import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
-import { ChainFilter, ChainFilters, PeriodFilterOptions, PeriodFilters } from "./Components/CollectionsFilterTabs";
-import { CollectionsSortByOption, CollectionsSortingTabs } from "./Components/CollectionsSortingTabs";
-import { ViewAllButton } from "./Index";
-import { Filters, SortByDirection, useCollectionFilters } from "./Hooks/useCollectionFilters";
-import { PaginationData } from "@/Components/Pagination/Pagination.contracts";
-import { Heading } from "@/Components/Heading";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { type RouteParamsWithQueryOverload } from "ziggy-js";
 import { CollectionsFilterPopover } from "./Components/CollectionsFilterPopover";
-import { useEffect, useState } from "react";
-import axios from "axios"
+import {
+    type ChainFilter,
+    ChainFilters,
+    type PeriodFilterOptions,
+    PeriodFilters,
+} from "./Components/CollectionsFilterTabs";
+import { type CollectionsSortByOption, CollectionsSortingTabs } from "./Components/CollectionsSortingTabs";
+import { type Filters, type SortByDirection } from "./Hooks/useCollectionFilters";
+import { ViewAllButton } from "./ViewAllButton";
+import { PopularCollectionsTable } from "@/Components/Collections/PopularCollectionsTable";
+import { Heading } from "@/Components/Heading";
+import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 
-interface Props {
+interface Properties {
     auth: App.Data.AuthData;
     filters: Filters;
 }
 
-export const PopularCollections = ({ auth, filters }: Props) => {
-    const [collections, setCollections] = useState<PaginationData<App.Data.Collections.PopularCollectionData>>()
-
+export const PopularCollections = ({ auth, filters }: Properties): JSX.Element => {
     const { t } = useTranslation();
     const [currentFilters, setCurrentFilters] = useState(filters);
-    const [loading, setLoading] = useState(true);
 
     const setChain = (chain: ChainFilter | undefined): void => {
         setCurrentFilters((filters) => ({
@@ -45,22 +49,21 @@ export const PopularCollections = ({ auth, filters }: Props) => {
         }));
     };
 
-    useEffect(() => {
+    const { data, isLoading } = useQuery({
+        queryKey: ["popular-collections", currentFilters],
+        refetchOnWindowFocus: false,
+        select: ({ data }) => data.collections.data,
+        queryFn: async () => {
+            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+            const url = route("api:popular-collections", {
+                _query: currentFilters,
+            } as RouteParamsWithQueryOverload);
 
-        (async () => {
-            setLoading(true);
-
-            const { data } = await axios.get<{
-                collections: PaginationData<App.Data.Collections.PopularCollectionData>
-            }>(route("collections", {
-                _query: currentFilters
-            }))
-
-            setCollections(data.collections)
-
-            setLoading(false);
-        })()
-    }, [currentFilters])
+            return await axios.get<{
+                collections: PaginationData<App.Data.Collections.PopularCollectionData>;
+            }>(url);
+        },
+    });
 
     return (
         <section>
@@ -112,21 +115,21 @@ export const PopularCollections = ({ auth, filters }: Props) => {
                 <div className="flex sm:space-x-2 md:space-x-3 md-lg:space-x-6">
                     <div className="flex-1">
                         <PopularCollectionsTable
-                            collections={collections?.data.slice(0, 6) ?? []}
+                            collections={data?.slice(0, 6) ?? []}
                             user={auth.user}
                             period={currentFilters.period}
                             activePeriod={filters.period}
-                            isLoading={loading}
+                            isLoading={isLoading}
                         />
                     </div>
 
                     <div className="hidden flex-1 sm:block">
                         <PopularCollectionsTable
-                            collections={collections?.data.slice(6, 12) ?? []}
+                            collections={data?.slice(6, 12) ?? []}
                             user={auth.user}
                             period={currentFilters.period}
                             activePeriod={filters.period}
-                            isLoading={loading}
+                            isLoading={isLoading}
                         />
                     </div>
                 </div>
