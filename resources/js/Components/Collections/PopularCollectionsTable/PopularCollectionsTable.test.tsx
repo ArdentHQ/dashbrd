@@ -8,6 +8,7 @@ import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularColle
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
+import { PopularCollectionsTableItemSkeleton } from "./PopularCollectionsTableItem";
 
 let useAuthorizedActionSpy: SpyInstance;
 const signedActionMock = vi.fn();
@@ -148,5 +149,23 @@ describe("PopularCollectionsTable", () => {
         );
 
         expect(container).toHaveTextContent("$10,000.00");
+    });
+
+    it("can render the skeleton for the table item", () => {
+        const { getByTestId } = render(<PopularCollectionsTableItemSkeleton index={1} />);
+
+        expect(getByTestId("PopularCollectionsTableItemSkeleton")).toBeInTheDocument();
+    });
+
+    it("renders the loaders if table has not fully loaded", () => {
+        const { getAllByTestId } = render(
+            <PopularCollectionsTable
+                isLoading={true}
+                user={null}
+                collections={[]}
+            />,
+        );
+
+        expect(getAllByTestId("PopularCollectionsTableItemSkeleton")).toHaveLength(6);
     });
 });

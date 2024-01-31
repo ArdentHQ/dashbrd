@@ -14,7 +14,7 @@ use Illuminate\Pagination\Paginator;
 class PopularCollectionController extends Controller
 {
     /**
-     * Get the latest popular collections.
+     * Get the top 12 collections.
      */
     public function index(FilterableCollectionRequest $request): JsonResponse
     {
