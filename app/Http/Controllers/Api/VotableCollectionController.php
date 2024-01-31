@@ -51,6 +51,8 @@ class VotableCollectionController extends Controller
 
     /**
      * Get the collection that the user has voted on in the current month.
+     *
+     * @param  EloquentCollection<int, Collection>  $collections
      */
     private function getVotedCollection(User $user, EloquentCollection $collections): ?VotableCollectionData
     {
