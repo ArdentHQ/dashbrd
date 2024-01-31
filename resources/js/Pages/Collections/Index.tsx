@@ -54,7 +54,7 @@ const CollectionsIndex = ({
                     id="votes"
                     className="mt-12 flex w-full flex-col rounded-xl border-theme-secondary-300 dark:border-theme-dark-700 lg:border xl:flex-row xl:gap-4 xl:border-0"
                 >
-                    <VoteCollections user={auth.user} />
+                    <VoteCollections auth={auth} />
 
                     <CollectionOfTheMonthWinners
                         winners={collectionsOfTheMonth}

@@ -22,7 +22,7 @@ import { range } from "@/utils/range";
 
 type VoteCollectionVariants = "selected" | "voted" | undefined;
 
-export const VoteCollections = ({ user }: { user: App.Data.UserData | null }): JSX.Element => {
+export const VoteCollections = ({ auth }: { auth: App.Data.AuthData | null }): JSX.Element => {
     const { t } = useTranslation();
 
     const [selectedCollectionId, setSelectedCollectionId] = useState<number | undefined>(undefined);
@@ -31,7 +31,7 @@ export const VoteCollections = ({ user }: { user: App.Data.UserData | null }): J
     const { signedAction } = useAuthorizedAction();
 
     const { data, isLoading, isRefetching, refetch } = useQuery({
-        queryKey: ["votable-collections"],
+        queryKey: ["votable-collections", auth?.wallet?.address],
         refetchOnWindowFocus: false,
         select: ({ data }) => data,
         queryFn: async () =>
@@ -187,7 +187,7 @@ export const VoteCollections = ({ user }: { user: App.Data.UserData | null }): J
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
                 initialCollections={nominatableCollections}
-                user={user}
+                user={auth?.user ?? null}
                 votedCollection={data?.votedCollection}
                 onSubmit={() => {
                     void (async () => {
