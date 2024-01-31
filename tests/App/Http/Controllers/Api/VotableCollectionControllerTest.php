@@ -34,7 +34,7 @@ it('can get the votable collections as a guest', function () {
 
     $this->get(route('api:votable-collections'))
         ->assertJson([
-            'votedCollection' => null
+            'votedCollection' => null,
         ]);
 });
 
