@@ -26,10 +26,10 @@ use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\SyncCollection;
-use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionWinner;
 use App\Models\User;
+use App\Repositories\ArticleRepository;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
@@ -39,14 +39,13 @@ use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
-use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
 class CollectionController extends Controller
 {
     use HasCollectionFilters;
 
-    public function index(Request $request): Response|JsonResponse
+    public function index(Request $request, ArticleRepository $articles): Response
     {
         $votableCollections = $this->getVotableCollections($request);
 
@@ -54,22 +53,27 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
-            'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
+            'collectionsOfTheMonth' => fn () => $this->getCollectionWinners(),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votedCollection' => fn () => $this->getVotedCollection($request, $votableCollections),
             'votableCollections' => $votableCollections,
-            'latestArticles' => fn () => $this->getLatestArticles(),
-            'popularArticles' => fn () => $this->getPopularArticles(),
+            'latestArticles' => fn () => $articles->latest(),
+            'popularArticles' => fn () => $articles->popular(),
         ]);
     }
 
-    private function getCollectionsOfTheMonth(): CollectionWinnersData
+    /**
+     * Get all of the collections that won the latest "Collection of the Month".
+     */
+    private function getCollectionWinners(): CollectionWinnersData
     {
-        return new CollectionWinnersData(
+        $ttl = now()->endOfDay();
+
+        return Cache::remember('collection-winners:current', $ttl, fn () => new CollectionWinnersData(
             year: now()->subMonth()->year,
             month: now()->subMonth()->month,
             winners: CollectionWinner::current()->map(fn ($winner) => CollectionOfTheMonthData::fromModel($winner))
-        );
+        ));
     }
 
     /**
@@ -159,34 +163,6 @@ class CollectionController extends Controller
 
             return CollectionFeaturedData::fromModel($collection, $currency);
         });
-    }
-
-    /**
-     * @return DataCollection<int, ArticleData>
-     */
-    private function getLatestArticles(): DataCollection
-    {
-        return ArticleData::collection(Article::isPublished()
-                    ->with('media', 'user.media')
-                    ->withRelatedCollections()
-                    ->sortByPublishedDate()
-                    ->limit(8)
-                    ->get());
-
-    }
-
-    /**
-     * @return DataCollection<int, ArticleData>
-     */
-    private function getPopularArticles()
-    {
-        return ArticleData::collection(Article::isPublished()
-                    ->with('media', 'user.media')
-                    ->withRelatedCollections()
-                    ->sortByPopularity()
-                    ->limit(8)
-                    ->get());
-
     }
 
     public function show(Request $request, Collection $collection): Response
