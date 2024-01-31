@@ -25,5 +25,5 @@ it('should redirect the admin user to homepage on logout', function () {
     $response = $controller->logout($request);
 
     $this->assertInstanceOf(RedirectResponse::class, $response);
-    $this->assertEquals(route('galleries'), $response->getTargetUrl());
+    $this->assertEquals(route('collections'), $response->getTargetUrl());
 });

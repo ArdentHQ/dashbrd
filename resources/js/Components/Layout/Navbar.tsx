@@ -129,7 +129,7 @@ export const Navbar = ({
 const Logo = (): JSX.Element => (
     <div className="flex items-center">
         <Link
-            href={route("galleries")}
+            href="/"
             target="_blank"
             rel="noreferrer"
             className="flex items-center rounded-full outline-none outline-3 outline-offset-4 focus-visible:outline-theme-primary-300"

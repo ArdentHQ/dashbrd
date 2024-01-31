@@ -25,7 +25,7 @@ class ValidateWallet
             if ($user->wallet_id === null) {
                 Auth::guard('web')->logout();
 
-                return redirect()->route('galleries');
+                return redirect('/');
             }
         }
 

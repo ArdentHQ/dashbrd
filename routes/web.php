@@ -28,7 +28,7 @@ use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Middleware\RecordGalleryView;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [GalleryController::class, 'index'])->name('galleries');
+Route::get('/', [CollectionController::class, 'index'])->name('collections');
 
 Route::get('/wallet', DashboardController::class)->name('dashboard');
 
@@ -98,7 +98,7 @@ Route::group(['middleware' => 'features:collections'], function () {
     });
 
     Route::group(['prefix' => 'collections'], function () {
-        Route::get('', [CollectionController::class, 'index'])->name('collections');
+        Route::redirect('/', '/');
 
         Route::get('collection-of-the-month', CollectionOfTheMonthController::class)->name('collection-of-the-month');
         Route::get('popular', [PopularCollectionController::class, 'index'])->name('popular-collections');
@@ -110,7 +110,7 @@ Route::group(['middleware' => 'features:collections'], function () {
 });
 
 Route::group(['prefix' => 'galleries', 'middleware' => 'features:galleries'], function () {
-    Route::redirect('/', '/'); // due to the prefix it's hard to see, but it redirects from /galleries to /
+    Route::get('/', [GalleryController::class, 'index'])->name('galleries');
 
     Route::get('{filter}', [FilteredGalleryController::class, 'index'])
             ->name('filtered-galleries.index')
