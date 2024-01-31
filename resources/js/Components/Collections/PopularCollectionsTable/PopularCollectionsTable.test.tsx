@@ -2,6 +2,7 @@ import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
 import { PopularCollectionsTable } from "./PopularCollectionsTable";
 import { PopularCollectionVolume } from "./PopularCollectionsTable.blocks";
+import { PopularCollectionsTableItemSkeleton } from "./PopularCollectionsTableItem";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularCollectionFactory";
@@ -148,5 +149,23 @@ describe("PopularCollectionsTable", () => {
         );
 
         expect(container).toHaveTextContent("$10,000.00");
+    });
+
+    it.each(allBreakpoints)("can render the skeleton for the table item", (breakpoint) => {
+        const { getByTestId } = render(<PopularCollectionsTableItemSkeleton index={1} />, { breakpoint });
+
+        expect(getByTestId("PopularCollectionsTableItemSkeleton")).toBeInTheDocument();
+    });
+
+    it("renders the loaders if table has not fully loaded", () => {
+        const { getAllByTestId } = render(
+            <PopularCollectionsTable
+                isLoading={true}
+                user={null}
+                collections={[]}
+            />,
+        );
+
+        expect(getAllByTestId("PopularCollectionsTableItemSkeleton")).toHaveLength(6);
     });
 });

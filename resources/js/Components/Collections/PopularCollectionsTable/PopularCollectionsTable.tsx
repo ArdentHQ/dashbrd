@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { type Column } from "react-table";
 import { type PopularCollectionTableProperties } from "./PopularCollectionsTable.contract";
-import { PopularCollectionsTableItem } from "./PopularCollectionsTableItem";
+import { PopularCollectionsTableItem, PopularCollectionsTableItemSkeleton } from "./PopularCollectionsTableItem";
 import { Table } from "@/Components/Table";
 import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 
@@ -11,6 +11,7 @@ export const PopularCollectionsTable = ({
     user,
     period,
     activePeriod,
+    isLoading = false,
 }: PopularCollectionTableProperties): JSX.Element => {
     const { t } = useTranslation();
 
@@ -27,7 +28,7 @@ export const PopularCollectionsTable = ({
     }, [activePeriod]);
 
     const columns = useMemo(() => {
-        const columns: Array<Column<App.Data.Collections.PopularCollectionData>> = [
+        const columns: Array<Column<{ index: number } | App.Data.Collections.PopularCollectionData>> = [
             {
                 Header: t("common.collection").toString(),
                 id: "name",
@@ -39,7 +40,7 @@ export const PopularCollectionsTable = ({
                 Header: t("common.floor_price").toString(),
                 id: "floor-price",
                 headerClassName: "hidden xl:table-cell",
-                className: "justify-end whitespace-nowrap",
+                className: "justify-end whitespace-nowrap [&_div]:w-full [&_div]:flex [&_div]:justify-end",
             },
             {
                 headerClassName: "hidden md-lg:table-cell",
@@ -52,6 +53,24 @@ export const PopularCollectionsTable = ({
         return columns;
     }, [t, period, volumeLabel]);
 
+    if (isLoading) {
+        return (
+            <Table
+                data-testid="PopularCollectionsTable__SkeletonTable"
+                headerClassName="hidden md-lg:table-header-group"
+                variant="list"
+                columns={columns as Array<Column<{ index: number }>>}
+                data={Array.from({ length: 6 }, (x, index) => ({ index }))}
+                row={({ index }) => (
+                    <PopularCollectionsTableItemSkeleton
+                        key={index}
+                        index={index}
+                    />
+                )}
+            />
+        );
+    }
+
     if (collections.length === 0) {
         return <></>;
     }
@@ -61,7 +80,7 @@ export const PopularCollectionsTable = ({
             data-testid="PopularCollectionsTable"
             headerClassName="hidden md-lg:table-header-group"
             variant="list"
-            columns={columns}
+            columns={columns as Array<Column<App.Data.Collections.PopularCollectionData>>}
             manualSortBy={true}
             data={collections}
             row={(collection: App.Data.Collections.PopularCollectionData) => (
