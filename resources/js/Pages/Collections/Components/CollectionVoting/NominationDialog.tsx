@@ -126,6 +126,9 @@ export const NominationDialog = ({
                 setQuery("");
                 setCollections(initialCollections);
             }, 200);
+        } else {
+            setQuery("");
+            setCollections(initialCollections);
         }
     }, [isOpen]);
 

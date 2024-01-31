@@ -165,7 +165,7 @@ export const VoteCollections = ({ user }: { user: App.Data.UserData | null }): J
                                 hasUserVoted={data?.votedCollection !== null}
                             />
 
-                            {data?.votedCollection === null && (
+                            {data?.votedCollection === null && nominatableCollections.length > 0 && (
                                 <LinkButton
                                     onClick={(): void => {
                                         setIsDialogOpen(true);
