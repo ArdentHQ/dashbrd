@@ -28,7 +28,7 @@ export const PopularCollectionsTable = ({
     }, [activePeriod]);
 
     const columns = useMemo(() => {
-        const columns: Array<Column<{ index: number }|App.Data.Collections.PopularCollectionData>> = [
+        const columns: Array<Column<{ index: number } | App.Data.Collections.PopularCollectionData>> = [
             {
                 Header: t("common.collection").toString(),
                 id: "name",
