@@ -403,7 +403,7 @@ const LoadingScreen = (): JSX.Element => (
 );
 
 const LoadingItem = (): JSX.Element => (
-    <div className="flex h-[84px] items-center justify-between rounded-lg border border-theme-secondary-300 p-4 md:h-[76px]">
+    <div className="flex h-[84px] items-center justify-between rounded-lg border border-theme-secondary-300 p-4 dark:border-theme-dark-700 md:h-[76px]">
         <div className="flex items-center">
             <Skeleton
                 isCircle
@@ -411,7 +411,7 @@ const LoadingItem = (): JSX.Element => (
                 animated
             />
 
-            <div className="relative -ml-2 rounded-full ring-4 ring-white">
+            <div className="relative -ml-2 rounded-full ring-4 ring-white dark:ring-theme-dark-900">
                 <Skeleton
                     isCircle
                     className="h-12 w-12"
