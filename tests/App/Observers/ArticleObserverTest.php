@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Jobs\ConvertArticleToSpeech;
 use App\Models\Article;
+use App\Observers\ArticleObserver;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 
@@ -205,13 +206,15 @@ it('clears cache when article is deleted', function () {
     $article = Article::factory()->create([
         'content' => 'Hello World',
         'meta_description' => 'Hello World',
-        'published_at' => now()->subMinutes(2),
+        'published_at' => null,
     ]);
 
-    Cache::shouldReceive('forget')->once()->with('articles:latest');
-    Cache::shouldReceive('forget')->once()->with('articles:popular');
+    $cache = Cache::partialMock();
 
-    $article->delete();
+    $cache->shouldReceive('forget')->once()->with('articles:latest');
+    $cache->shouldReceive('forget')->once()->with('articles:popular');
+
+    (new ArticleObserver)->deleted();
 });
 
 it('clears cache when article is restored', function () {
@@ -225,5 +228,5 @@ it('clears cache when article is restored', function () {
     Cache::shouldReceive('forget')->once()->with('articles:latest');
     Cache::shouldReceive('forget')->once()->with('articles:popular');
 
-    $article->restore();
+    (new ArticleObserver)->restored();
 });
