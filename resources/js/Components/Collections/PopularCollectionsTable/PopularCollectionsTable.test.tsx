@@ -2,13 +2,13 @@ import { router } from "@inertiajs/react";
 import { type SpyInstance } from "vitest";
 import { PopularCollectionsTable } from "./PopularCollectionsTable";
 import { PopularCollectionVolume } from "./PopularCollectionsTable.blocks";
+import { PopularCollectionsTableItemSkeleton } from "./PopularCollectionsTableItem";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularCollectionFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
-import { PopularCollectionsTableItemSkeleton } from "./PopularCollectionsTableItem";
 
 let useAuthorizedActionSpy: SpyInstance;
 const signedActionMock = vi.fn();
