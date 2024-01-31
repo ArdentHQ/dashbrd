@@ -56,13 +56,17 @@ export const PopularCollectionsTable = ({
     if (isLoading) {
         return (
             <Table
-                data-testid="PopularCollectionsTable"
+                data-testid="PopularCollectionsTable__SkeletonTable"
                 headerClassName="hidden md-lg:table-header-group"
                 variant="list"
-                columns={columns as Array<Column<{ index: number }>>}
-                manualSortBy={true}
+                columns={columns as Column<{ index: number }>[]}
                 data={Array.from({ length: 6 }, (x, index) => ({ index }))}
-                row={({ index }) => <PopularCollectionsTableItemSkeleton index={index} />}
+                row={({ index }) => (
+                    <PopularCollectionsTableItemSkeleton
+                        key={index}
+                        index={index}
+                    />
+                )}
             />
         );
     }
@@ -76,7 +80,7 @@ export const PopularCollectionsTable = ({
             data-testid="PopularCollectionsTable"
             headerClassName="hidden md-lg:table-header-group"
             variant="list"
-            columns={columns as Array<Column<App.Data.Collections.PopularCollectionData>>}
+            columns={columns as Column<App.Data.Collections.PopularCollectionData>[]}
             manualSortBy={true}
             data={collections}
             row={(collection: App.Data.Collections.PopularCollectionData) => (

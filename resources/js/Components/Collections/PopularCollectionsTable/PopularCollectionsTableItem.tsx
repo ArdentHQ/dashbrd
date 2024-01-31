@@ -71,7 +71,6 @@ export const PopularCollectionsTableItemSkeleton = ({ index }: { index: number }
     return (
         <TableRow
             data-index={index}
-            key={index}
             borderClass=""
         >
             <TableCell
