@@ -56,8 +56,8 @@ class CollectionController extends Controller
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
-            'collectionsOfTheMonth' => fn () => $this->getCollectionsOfTheMonth(),
             'collections' => fn () => $this->getPopularCollections($request),
+            'collectionsOfTheMonth' => fn () => $this->getCollectionWinners(),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
             'votedCollection' => fn () => $this->getVotedCollection($request, $votableCollections),
             'votableCollections' => $votableCollections,
@@ -66,13 +66,18 @@ class CollectionController extends Controller
         ]);
     }
 
-    private function getCollectionsOfTheMonth(): CollectionWinnersData
+    /**
+     * Get all of the collections that won the latest "Collection of the Month".
+     */
+    private function getCollectionWinners(): CollectionWinnersData
     {
-        return new CollectionWinnersData(
+        $ttl = now()->endOfDay();
+
+        return Cache::remember('collection-winners:current', $ttl, fn () => new CollectionWinnersData(
             year: now()->subMonth()->year,
             month: now()->subMonth()->month,
             winners: CollectionWinner::current()->map(fn ($winner) => CollectionOfTheMonthData::fromModel($winner))
-        );
+        ));
     }
 
     /**
