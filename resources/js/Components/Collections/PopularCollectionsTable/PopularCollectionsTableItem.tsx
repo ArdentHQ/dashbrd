@@ -72,7 +72,7 @@ export const PopularCollectionsTableItemSkeleton = ({ index }: { index: number }
         <TableRow
             data-index={index}
             borderClass=""
-            data-testId="PopularCollectionsTableItemSkeleton"
+            data-testid="PopularCollectionsTableItemSkeleton"
         >
             <TableCell
                 variant="start-list"

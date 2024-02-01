@@ -27,6 +27,9 @@ Route::get('/nominatable-collections', [Api\NominatableCollectionController::cla
 Route::get('/popular-collections', [Api\PopularCollectionController::class, 'index'])
         ->name('api:popular-collections');
 
+Route::get('/votable-collections', [Api\VotableCollectionController::class, 'index'])
+        ->name('api:votable-collections');
+
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
     Route::get('/tokens', [Controllers\TokenController::class, 'list'])->name('tokens.list');

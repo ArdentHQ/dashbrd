@@ -881,39 +881,3 @@ it('should not refresh collection activity if already requested', function () {
 
     Bus::assertNotDispatched(FetchCollectionActivity::class);
 });
-
-it('can get the collection that the user has voted for', function () {
-    Token::factory()->matic()->create([
-        'is_native_token' => true,
-    ]);
-
-    $network = Network::polygon();
-
-    $user = createUser();
-
-    $collection = Collection::factory()->create([
-        'network_id' => $network->id,
-    ]);
-
-    // Guest...
-    $this->get(route('collections'))
-        ->assertInertia(function ($page) {
-            expect($page->toArray()['props']['votedCollection'])->toBeNull();
-        });
-
-    // Did not vote...
-    $this->actingAs($user)
-        ->get(route('collections'))
-        ->assertInertia(function ($page) {
-            expect($page->toArray()['props']['votedCollection'])->toBeNull();
-        });
-
-    $collection->addVote($user->wallet);
-
-    // Did vote...
-    $this->actingAs($user)
-        ->get(route('collections'))
-        ->assertInertia(function ($page) use ($collection) {
-            expect($page->toArray()['props']['votedCollection']['address'])->toBe($collection->address);
-        });
-});
