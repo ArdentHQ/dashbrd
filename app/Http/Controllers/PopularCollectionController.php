@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Collections\CollectionData;
-use App\Data\Collections\CollectionStatsData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Http\Controllers\Traits\HasCollectionFilters;
+use App\Http\Requests\FilterableCollectionRequest;
 use App\Models\Collection;
-use App\Models\Nft;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use App\Repositories\CollectionMetricRepository;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,7 +22,7 @@ class PopularCollectionController extends Controller
     /**
      * Render the table that contains all of popular collections, but paginated.
      */
-    public function index(Request $request, CollectionMetricRepository $metrics): Response
+    public function index(FilterableCollectionRequest $request, CollectionMetricRepository $metrics): Response
     {
         $user = $request->user();
 
