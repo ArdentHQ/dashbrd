@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Collections\CollectionData;
-use App\Data\Collections\CollectionStatsData;
 use App\Data\Network\NetworkWithCollectionsData;
 use App\Models\Collection;
 use App\Models\Network;
-use App\Support\Cache\UserCache;
+use App\Repositories\CollectionMetricRepository;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,18 +19,14 @@ use Inertia\Response;
 
 class MyCollectionsController extends Controller
 {
-    public function index(Request $request): Response|JsonResponse|RedirectResponse
+    public function index(Request $request, CollectionMetricRepository $metrics): Response|JsonResponse|RedirectResponse
     {
         $user = $request->user();
 
         if ($user === null) {
             return Inertia::render('Collections/MyCollections/Index', [
                 'title' => trans('metatags.my-collections.title'),
-                'stats' => new CollectionStatsData(
-                    nfts: 0,
-                    collections: 0,
-                    value: 0,
-                ),
+                'stats' => $metrics->zeros(),
                 'sortBy' => null,
                 'sortDirection' => 'desc',
                 'showHidden' => false,
@@ -48,8 +43,6 @@ class MyCollectionsController extends Controller
         if ($showHidden && $hiddenCollections->isEmpty()) {
             return redirect()->route('my-collections', $request->except('showHidden'));
         }
-
-        $cache = new UserCache($user);
 
         $sortBy = in_array($request->query('sort'), ['oldest', 'received', 'name', 'floor-price', 'value', 'chain']) ? $request->query('sort') : null;
         $defaultSortDirection = $sortBy === null ? 'desc' : 'asc';
@@ -102,21 +95,13 @@ class MyCollectionsController extends Controller
                 'hiddenCollectionAddresses' => $hiddenCollections,
                 'availableNetworks' => $networks,
                 'selectedChainIds' => $selectedChainIds,
-                'stats' => new CollectionStatsData(
-                    nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
-                    collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
-                    value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
-                ),
+                'stats' => $metrics->forUser($request->user(), $showHidden),
             ]);
         }
 
         return Inertia::render('Collections/MyCollections/Index', [
             'title' => trans('metatags.my-collections.title'),
-            'initialStats' => new CollectionStatsData(
-                nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
-                collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
-                value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
-            ),
+            'initialStats' => $metrics->forUser($request->user(), $showHidden),
             'sortBy' => $sortBy,
             'sortDirection' => $sortDirection,
             'showHidden' => $showHidden,
