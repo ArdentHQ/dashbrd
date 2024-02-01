@@ -11,7 +11,6 @@ use App\Data\Collections\CollectionFeaturedData;
 use App\Data\Collections\CollectionOfTheMonthData;
 use App\Data\Collections\CollectionTraitFilterData;
 use App\Data\Collections\CollectionWinnersData;
-use App\Data\Collections\VotableCollectionData;
 use App\Data\Gallery\GalleryNftData;
 use App\Data\Gallery\GalleryNftsData;
 use App\Data\Nfts\NftActivitiesData;
@@ -19,7 +18,6 @@ use App\Data\Nfts\NftActivityData;
 use App\Data\Token\TokenData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
-use App\Enums\Period;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Http\Controllers\Traits\HasCollectionFilters;
@@ -47,16 +45,12 @@ class CollectionController extends Controller
 
     public function index(Request $request, ArticleRepository $articles): Response
     {
-        $votableCollections = $this->getVotableCollections($request);
-
         return Inertia::render('Collections/Index', [
             'allowsGuests' => true,
             'filters' => fn () => $this->getFilters($request),
             'title' => fn () => trans('metatags.collections.title'),
             'collectionsOfTheMonth' => fn () => $this->getCollectionWinners(),
             'featuredCollections' => fn () => $this->getFeaturedCollections($request),
-            'votedCollection' => fn () => $this->getVotedCollection($request, $votableCollections),
-            'votableCollections' => $votableCollections,
             'latestArticles' => fn () => $articles->latest(),
             'popularArticles' => fn () => $articles->popular(),
         ]);
@@ -73,69 +67,6 @@ class CollectionController extends Controller
             year: now()->subMonth()->year,
             month: now()->subMonth()->month,
             winners: CollectionWinner::current()->map(fn ($winner) => CollectionOfTheMonthData::fromModel($winner))
-        ));
-    }
-
-    /**
-     * Get only the collection that the user has voted for in the current month.
-     *
-     * @param  SupportCollection<int, VotableCollectionData>  $votableCollections
-     */
-    private function getVotedCollection(Request $request, SupportCollection $votableCollections): ?VotableCollectionData
-    {
-        $user = $request->user();
-
-        if ($user === null) {
-            return null;
-        }
-
-        $collection = Collection::votable()
-                                ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
-                                ->with('network.nativeToken')
-                                ->votedByUserInCurrentMonth($user)
-                                ->first();
-
-        if ($collection === null) {
-            return null;
-        }
-
-        /** @var int|false */
-        $index = $votableCollections->search(fn ($c) => $c->id === $collection->id);
-
-        return VotableCollectionData::fromModel(
-            $collection,
-            $user->currency(),
-            showVotes: true,
-            rank: $index === false ? null : ($index + 1),
-        );
-    }
-
-    /**
-     * @return SupportCollection<int, VotableCollectionData>
-     */
-    private function getVotableCollections(Request $request): SupportCollection
-    {
-        $user = $request->user();
-
-        $currency = $user?->currency() ?? CurrencyCode::USD;
-
-        $userVoted = $user !== null ? Collection::votedByUserInCurrentMonth($user)->exists() : false;
-
-        $collections = Collection::votable()
-                                ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
-                                ->orderBy('votes_count', 'desc')
-                                ->orderByVolume(Period::MONTH, $currency)
-                                ->with('network.nativeToken')
-                                ->when($user === null, fn ($q) => $q->limit(13))
-                                ->get();
-
-        $winners = CollectionWinner::ineligibleCollectionIds();
-
-        return $collections->take(13)->map(fn ($collection) => VotableCollectionData::fromModel(
-            $collection,
-            $currency,
-            showVotes: $userVoted,
-            alreadyWon: $winners->contains($collection->id),
         ));
     }
 

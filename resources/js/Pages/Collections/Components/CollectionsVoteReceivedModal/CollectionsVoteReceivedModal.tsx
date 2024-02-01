@@ -11,7 +11,7 @@ export const CollectionsVoteReceivedModal = ({
 }: {
     isOpen: boolean;
     onClose: () => void;
-    collection?: App.Data.Collections.VotableCollectionData;
+    collection?: App.Data.Collections.VotableCollectionData | null;
 }): JSX.Element => {
     const { t } = useTranslation();
 
