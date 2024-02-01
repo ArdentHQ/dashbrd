@@ -37,9 +37,9 @@ class AllPopularCollectionController extends Controller
         );
 
         return response()->json([
-            'collections' => $collections->through(
+            'collections' => CollectionData::collection($collections->through(
                 fn ($collection) => CollectionData::fromModel($collection, $currency, volumePeriod: $period)
-            ),
+            )),
         ]);
     }
 }
