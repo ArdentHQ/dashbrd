@@ -11,7 +11,7 @@ use App\Enums\Period;
 use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Http\Requests\FilterableCollectionRequest;
 use App\Models\Collection;
-use App\Repositories\CollectionMetricRepository;
+use App\Repositories\CollectionMetricsRepository;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,7 +22,7 @@ class PopularCollectionController extends Controller
     /**
      * Render the table that contains all of popular collections, but paginated.
      */
-    public function index(FilterableCollectionRequest $request, CollectionMetricRepository $metrics): Response
+    public function index(FilterableCollectionRequest $request, CollectionMetricsRepository $metrics): Response
     {
         $user = $request->user();
 

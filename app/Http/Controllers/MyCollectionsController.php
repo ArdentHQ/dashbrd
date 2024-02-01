@@ -8,7 +8,7 @@ use App\Data\Collections\CollectionData;
 use App\Data\Network\NetworkWithCollectionsData;
 use App\Models\Collection;
 use App\Models\Network;
-use App\Repositories\CollectionMetricRepository;
+use App\Repositories\CollectionMetricsRepository;
 use App\Support\RateLimiterHelpers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +19,7 @@ use Inertia\Response;
 
 class MyCollectionsController extends Controller
 {
-    public function index(Request $request, CollectionMetricRepository $metrics): Response|JsonResponse|RedirectResponse
+    public function index(Request $request, CollectionMetricsRepository $metrics): Response|JsonResponse|RedirectResponse
     {
         $user = $request->user();
 

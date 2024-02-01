@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Support\Cache\UserCache;
 use Illuminate\Support\Facades\Cache;
 
-class CollectionMetricRepository
+class CollectionMetricsRepository
 {
     /**
      * Get the total metrics for collections in a given currency.
