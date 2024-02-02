@@ -124,6 +124,10 @@ const Index = ({
                 page: currentFilters.page === undefined || currentFilters.page === 1 ? "" : String(currentFilters.page),
             });
 
+            if (filters.page !== currentFilters.page) {
+                window.scrollTo({ top: 0 });
+            }
+
             return response;
         },
     });
