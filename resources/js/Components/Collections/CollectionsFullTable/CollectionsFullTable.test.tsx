@@ -303,4 +303,19 @@ describe("CollectionsFullTable", () => {
 
         expect(queryByTestId("CollectionsTableItem__unknown-supply")).not.toBeInTheDocument();
     });
+
+    it.each(allBreakpoints)("should show loading screen if data is loading", (breakpoint) => {
+        const { getByTestId, getAllByTestId } = render(
+            <CollectionsFullTable
+                collections={[{ ...collection, supply: 10 }]}
+                user={user}
+                activeSort={""}
+                setSortBy={vi.fn()}
+                isLoading
+            />, { breakpoint }
+        );
+
+        expect(getByTestId("PopularCollectionsTable__SkeletonTable")).toBeInTheDocument();
+        expect(getAllByTestId("CollectionLoading")).toHaveLength(20);
+    });
 });

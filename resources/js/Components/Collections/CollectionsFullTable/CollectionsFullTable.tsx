@@ -170,6 +170,7 @@ export const CollectionsTableItemSkeleton = ({
             key={index}
             borderClass=""
             className="group cursor-pointer"
+            data-testid="CollectionLoading"
         >
             <TableCell
                 variant="start-list"
