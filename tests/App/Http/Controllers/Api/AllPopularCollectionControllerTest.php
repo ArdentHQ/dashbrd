@@ -19,6 +19,14 @@ it('can get all of the popular collections', function () {
     Collection::factory(3)->for($network)->create();
 
     $this->actingAs($user)
-        ->get(route('api:all-popular-collections'))
+        ->get(route('api:all-popular-collections', [
+            'direction' => 'desc',
+        ]))
+        ->assertOk();
+
+    $this->actingAs($user)
+        ->get(route('api:all-popular-collections', [
+            'direction' => 'test',
+        ]))
         ->assertOk();
 });
