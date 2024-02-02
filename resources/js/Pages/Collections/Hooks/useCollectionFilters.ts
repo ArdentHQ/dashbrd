@@ -16,6 +16,7 @@ export interface Filters extends Record<string, FormDataConvertible> {
     query?: string;
     perPage?: number;
     direction?: SortByDirection;
+    page?: number;
 }
 
 interface CollectionFiltersState {

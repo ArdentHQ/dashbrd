@@ -56,12 +56,14 @@ const Index = ({
         setCurrentFilters((filters) => ({
             ...filters,
             query: debouncedQuery,
+            page: 1,
         }));
     }, [debouncedQuery]);
 
     const setChain = (chain: ChainFilter | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
+            page: 1,
             chain,
         }));
     };
@@ -69,6 +71,7 @@ const Index = ({
     const setPeriod = (period: PeriodFilterOptions | undefined): void => {
         setCurrentFilters((filters) => ({
             ...filters,
+            page: 1,
             period,
         }));
     };
@@ -76,6 +79,7 @@ const Index = ({
     const setSortBy = (sort: CollectionsSortByOption | undefined, direction?: SortByDirection): void => {
         setCurrentFilters((filters) => ({
             ...filters,
+            page: 1,
             period: sort === undefined ? filters.period : undefined,
             sort,
             direction,
@@ -86,6 +90,13 @@ const Index = ({
         setCurrentFilters((filters) => ({
             ...filters,
             perPage,
+        }));
+    };
+
+    const setPage = (page: number): void => {
+        setCurrentFilters((filters) => ({
+            ...filters,
+            page,
         }));
     };
 
@@ -110,6 +121,7 @@ const Index = ({
                 query: currentFilters.query ?? "",
                 perPage: currentFilters.perPage !== undefined ? String(currentFilters.perPage) : "",
                 direction: currentFilters.direction ?? "",
+                page: currentFilters.page === undefined || currentFilters.page === 1 ? "" : String(currentFilters.page),
             });
 
             return response;
@@ -188,6 +200,7 @@ const Index = ({
                             <CollectionsFullTablePagination
                                 pagination={data}
                                 onPageLimitChange={setPerPage}
+                                onPageChange={setPage}
                             />
                         </div>
                     )}
