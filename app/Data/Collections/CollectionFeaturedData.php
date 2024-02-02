@@ -13,6 +13,7 @@ use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelMarkdown\MarkdownRenderer;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -49,6 +50,10 @@ class CollectionFeaturedData extends Data
 
     public static function fromModel(Collection $collection, CurrencyCode $currency): self
     {
+        $description = $collection->description === null
+                    ? null
+                    : html_entity_decode(strip_tags(app(MarkdownRenderer::class)->toHtml($collection->description)));
+
         return new self(
             id: $collection->id,
             name: $collection->name,
@@ -66,7 +71,7 @@ class CollectionFeaturedData extends Data
             nfts: GalleryNftData::collection($collection->nfts),
             supply: $collection->supply,
             isFeatured: $collection->is_featured,
-            description: $collection->description,
+            description: $description,
             volume: $collection->volume,
         );
     }
