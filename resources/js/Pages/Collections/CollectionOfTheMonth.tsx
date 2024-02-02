@@ -46,6 +46,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
                         <span className="font-medium text-theme-secondary-700 dark:text-theme-dark-200">
                             {t("common.back_to")}{" "}
                         </span>
+
                         <Link
                             href={route("collections")}
                             className={cn(
@@ -68,6 +69,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
                                 year: latestMonthWinners.year,
                             })}
                         </Heading>
+
                         <div className="mt-11">
                             <WinnersChart
                                 winners={latestMonthWinners}
