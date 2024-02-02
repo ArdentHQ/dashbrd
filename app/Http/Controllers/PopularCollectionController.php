@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\Collections\CollectionData;
-use App\Data\Collections\CollectionStatsData;
 use App\Enums\Chain;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Http\Controllers\Traits\HasCollectionFilters;
+use App\Http\Requests\FilterableCollectionRequest;
 use App\Models\Collection;
-use App\Models\Nft;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use App\Repositories\CollectionMetricsRepository;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,7 +19,10 @@ class PopularCollectionController extends Controller
 {
     use HasCollectionFilters;
 
-    public function index(Request $request): Response
+    /**
+     * Render the table that contains all of popular collections, but paginated.
+     */
+    public function index(FilterableCollectionRequest $request, CollectionMetricsRepository $metrics): Response
     {
         $user = $request->user();
 
@@ -66,23 +67,13 @@ class PopularCollectionController extends Controller
                             ->paginate($perPage)
                             ->withQueryString();
 
-        $stats = Cache::remember('popular-collections-stats', now()->addHour(), fn () => [
-            'fiatValues' => collect(Collection::getFiatValueSum()),
-            'collectionsCount' => Collection::count(),
-            'nftsCount' => Nft::count(),
-        ]);
-
         return Inertia::render('Collections/CollectionsCatalog/Index', [
             'title' => trans('metatags.popular-collections.title'),
             'allowsGuests' => true,
             'collections' => CollectionData::collection(
                 $collections->through(fn ($collection) => CollectionData::fromModel($collection, $currency, volumePeriod: $period))
             ),
-            'stats' => new CollectionStatsData(
-                nfts: $stats['nftsCount'],
-                collections: $stats['collectionsCount'],
-                value: (float) $stats['fiatValues']->where('key', $currency->value)->first()?->total ?: 0
-            ),
+            'stats' => $metrics->total($request->currency()),
             'filters' => $this->getFilters($request),
         ]);
     }
