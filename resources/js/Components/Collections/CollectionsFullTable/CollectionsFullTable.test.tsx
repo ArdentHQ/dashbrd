@@ -312,7 +312,8 @@ describe("CollectionsFullTable", () => {
                 activeSort={""}
                 setSortBy={vi.fn()}
                 isLoading
-            />, { breakpoint }
+            />,
+            { breakpoint },
         );
 
         expect(getByTestId("PopularCollectionsTable__SkeletonTable")).toBeInTheDocument();
