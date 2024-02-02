@@ -26,6 +26,7 @@ import {
     CollectionsSortingTabs,
 } from "@/Pages/Collections/Components/CollectionsSortingTabs";
 import { type Filters, type SortByDirection } from "@/Pages/Collections/Hooks/useCollectionFilters";
+import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 const Index = ({
     auth,
@@ -88,7 +89,7 @@ const Index = ({
         }));
     };
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, isRefetching } = useQuery({
         queryKey: ["all-popular-collections", currentFilters],
         refetchOnWindowFocus: false,
         select: ({ data }) => data.collections,
@@ -98,9 +99,20 @@ const Index = ({
                 _query: currentFilters,
             } as RouteParamsWithQueryOverload);
 
-            return await axios.get<{
+            const response = await axios.get<{
                 collections: PaginationData<App.Data.Collections.CollectionData>;
             }>(url);
+
+            replaceUrlQuery({
+                chain: currentFilters.chain ?? "",
+                sort: currentFilters.sort ?? "",
+                period: currentFilters.period ?? "",
+                query: currentFilters.query ?? "",
+                perPage: currentFilters.perPage !== undefined ? String(currentFilters.perPage) : "",
+                direction: currentFilters.direction ?? "",
+            });
+
+            return response;
         },
     });
 
@@ -164,14 +176,14 @@ const Index = ({
                         activeSort={currentFilters.sort ?? ""}
                         direction={currentFilters.direction}
                         activePeriod={filters.period}
-                        isLoading={isLoading}
+                        isLoading={isLoading || isRefetching}
                     />
 
                     {!isLoading && data?.data.length === 0 && (
                         <EmptyBlock>{t("pages.collections.search.no_results")}</EmptyBlock>
                     )}
 
-                    {data !== undefined && !isLoading && (
+                    {data?.data !== undefined && !isLoading && (
                         <div className="mt-2">
                             <CollectionsFullTablePagination
                                 pagination={data}
