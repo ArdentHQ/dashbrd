@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Data\Collections\CollectionData;
 use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Http\Requests\FilterableCollectionRequest;
-use App\Models\Collection;
 use App\Repositories\CollectionMetricsRepository;
 use Inertia\Inertia;
 use Inertia\Response;
