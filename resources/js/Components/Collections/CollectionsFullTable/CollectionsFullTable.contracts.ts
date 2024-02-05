@@ -15,4 +15,5 @@ export interface CollectionTableProperties {
     activeSort: CollectionsSortByOption | "";
     direction?: SortByDirection;
     activePeriod?: PeriodFilterOptions;
+    isLoading?: boolean;
 }

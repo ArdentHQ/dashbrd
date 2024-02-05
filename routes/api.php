@@ -30,6 +30,9 @@ Route::get('/popular-collections', [Api\PopularCollectionController::class, 'ind
 Route::get('/votable-collections', [Api\VotableCollectionController::class, 'index'])
         ->name('api:votable-collections');
 
+Route::get('/all-popular-collections', [Api\AllPopularCollectionController::class, 'index'])
+        ->name('api:all-popular-collections');
+
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
     Route::get('/tokens', [Controllers\TokenController::class, 'list'])->name('tokens.list');

@@ -24,6 +24,7 @@ trait HasCollectionFilters
             'period' => $this->getValidValue($request->get('period'), ['24h', '7d', '30d']),
             'query' => boolval($query = $request->get('query')) ? $query : null,
             'direction' => $this->getValidValue($request->get('direction'), ['asc', 'desc']),
+            'page' => $request->integer('page', 1),
         ];
 
         // If value is not defined (or invalid), remove it from the array since

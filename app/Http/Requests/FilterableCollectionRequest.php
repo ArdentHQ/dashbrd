@@ -50,4 +50,25 @@ class FilterableCollectionRequest extends FormRequest
             default => Period::DAY,
         };
     }
+
+    /**
+     * Get the number of collection items in the pagination.
+     */
+    public function perPage(): int
+    {
+        return min($this->integer('perPage', 50), 100);
+    }
+
+    /**
+     * Get the sorting direction for the request.
+     */
+    public function sortDirection(string $default): string
+    {
+        /** @var string|null */
+        $direction = $this->query('direction');
+
+        return in_array($direction, ['asc', 'desc'])
+                    ? $direction
+                    : $default;
+    }
 }
