@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Data\Collections\CollectionData;
 use App\Http\Controllers\Traits\HasCollectionFilters;
 use App\Http\Requests\FilterableCollectionRequest;
 use App\Repositories\CollectionMetricsRepository;
@@ -25,9 +24,6 @@ class PopularCollectionController extends Controller
         return Inertia::render('Collections/CollectionsCatalog/Index', [
             'title' => trans('metatags.popular-collections.title'),
             'allowsGuests' => true,
-            'collections' => CollectionData::collection(
-                $collections->through(fn ($collection) => CollectionData::fromModel($collection, $currency, volumePeriod: $period))
-            ),
             'stats' => $metrics->total($request->currency()),
             'filters' => $this->getFilters($request),
         ]);
