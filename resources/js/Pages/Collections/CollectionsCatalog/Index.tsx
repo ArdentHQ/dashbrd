@@ -191,7 +191,7 @@ const Index = ({
                         setSortBy={setSortBy}
                         activeSort={currentFilters.sort ?? ""}
                         direction={currentFilters.direction}
-                        activePeriod={filters.period}
+                        activePeriod={currentFilters.period}
                         isLoading={isLoading || isRefetching}
                     />
 
