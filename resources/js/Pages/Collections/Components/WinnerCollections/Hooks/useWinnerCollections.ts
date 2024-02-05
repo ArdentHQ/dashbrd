@@ -1,5 +1,4 @@
 import { sortByDesc, uniq } from "@ardenthq/sdk-helpers";
-import { DateTime } from "@ardenthq/sdk-intl";
 import { useState } from "react";
 
 const filterCollections = ({
@@ -38,14 +37,7 @@ export const useWinnerCollections = ({
     const availableMonths = (year: number): number[] => {
         const months = winners.filter((winner) => winner.year === year).map((winner) => winner.month);
 
-        return sortByDesc(uniq(months)).filter((month) => {
-            if (year !== DateTime.make().getYear()) {
-                return true;
-            }
-
-            // Exclude this month.
-            return month !== DateTime.make().getMonth();
-        });
+        return sortByDesc(uniq(months));
     };
 
     return {
