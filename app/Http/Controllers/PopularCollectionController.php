@@ -19,8 +19,6 @@ class PopularCollectionController extends Controller
      */
     public function index(FilterableCollectionRequest $request, CollectionMetricsRepository $metrics): Response
     {
-        $currency = $request->currency();
-
         return Inertia::render('Collections/CollectionsCatalog/Index', [
             'title' => trans('metatags.popular-collections.title'),
             'allowsGuests' => true,
