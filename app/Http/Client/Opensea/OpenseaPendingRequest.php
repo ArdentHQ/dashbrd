@@ -94,14 +94,14 @@ class OpenseaPendingRequest extends PendingRequest
     }
 
     /**
-     * @see https://docs.opensea.io/v1.0/reference/retrieving-collection-stats
+     * @see https://docs.opensea.io/reference/get_collection_stats
      */
     public function getCollectionFloorPrice(string $collectionSlug): ?Web3CollectionFloorPrice
     {
         try {
             $response = $this->makeCollectionStatsRequest($collectionSlug);
 
-            $floorPrice = $response->json('stats.floor_price');
+            $floorPrice = $response->json('total.floor_price');
 
             $currency = 'eth'; // OpenSea reports everything in ETH
 
@@ -134,7 +134,7 @@ class OpenseaPendingRequest extends PendingRequest
     {
         $response = $this->makeCollectionStatsRequest($collection->openSeaSlug());
 
-        $volume = $response->json('stats.total_volume');
+        $volume = $response->json('total.volume');
 
         return $volume === null
                     ? null
@@ -147,8 +147,8 @@ class OpenseaPendingRequest extends PendingRequest
         // But we cache it just so that we can reuse the response for total volume without needing to hit an API endpoint again...
         $ttl = now()->addMinutes(59);
 
-        return Cache::remember('opensea:collection-stats:'.$collectionSlug, $ttl, function () use ($collectionSlug) {
-            return self::get(sprintf('collection/%s/stats', $collectionSlug));
+        return Cache::remember('opensea:collections-stats:'.$collectionSlug, $ttl, function () use ($collectionSlug) {
+            return self::get(sprintf('collections/%s/stats', $collectionSlug), apiVersion: 2);
         });
     }
 }
