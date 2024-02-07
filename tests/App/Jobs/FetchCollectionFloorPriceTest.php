@@ -12,7 +12,7 @@ use Carbon\Carbon;
 
 it('should fetch nft collection floor price', function () {
     Opensea::fake([
-        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats')),
+        'https://api.opensea.io/api/v2/collections*' => Opensea::response(fixtureData('opensea.collection_stats')),
     ]);
 
     $network = Network::where('chain_id', Chain::ETH->value)->first();
@@ -53,7 +53,7 @@ it('should fetch nft collection floor price', function () {
 
 it('should handle null floor price in response', function () {
     Opensea::fake([
-        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_floor_price_null')),
+        'https://api.opensea.io/api/v2/collections*' => Opensea::response(fixtureData('opensea.collection_stats_floor_price_null')),
     ]);
 
     $network = Network::where('chain_id', Chain::ETH->value)->first();
@@ -91,7 +91,7 @@ it('should handle null floor price in response', function () {
 
 it('should handle non existing collection when fetching floor price', function () {
     Opensea::fake([
-        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats_missing_collection'), 404),
+        'https://api.opensea.io/api/v2/collections*' => Opensea::response(fixtureData('opensea.collection_stats_missing_collection'), 404),
     ]);
 
     $network = Network::where('chain_id', Chain::ETH->value)->first();
