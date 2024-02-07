@@ -70,7 +70,7 @@ class CollectionMetricsRepository
      */
     private function totalValueForUser(User $user, ?bool $onlyHidden): float
     {
-        return (float) DB::table('nfts')
+        return (float) Nft::query()
                         ->leftJoin('collections', 'collections.id', '=', 'nfts.collection_id')
                         ->when($onlyHidden === true, fn ($q) => $q->whereIn('collection_id', $user->hiddenCollections->modelKeys()))
                         ->when($onlyHidden === false, fn ($q) => $q->whereNotIn('collection_id', $user->hiddenCollections->modelKeys()))
