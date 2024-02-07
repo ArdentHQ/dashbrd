@@ -35,7 +35,7 @@ it('should getCollectionFloorPrice  ', function () {
     ]);
 
     Opensea::fake([
-        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats')),
+        'https://api.opensea.io/api/v2/collections*' => Opensea::response(fixtureData('opensea.collection_stats')),
     ]);
 
     $contractAddress = '0x23581767a106ae21c074b2276D25e5C3e136a68b';
