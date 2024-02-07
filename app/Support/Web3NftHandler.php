@@ -15,7 +15,6 @@ use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Nft;
-use App\Models\User;
 use App\Models\Wallet;
 use App\Notifications\GalleryNftsChanged;
 use Carbon\Carbon;
@@ -215,24 +214,6 @@ class Web3NftHandler
                 CollectionModel::updateFiatValue($ids->toArray());
             } else {
                 Log::info('Web3NftHandler: skipping updateFiatValue because no ids given', [
-                    'wallet' => $this->wallet?->address,
-                    'collectionId' => $this->collection?->id,
-                    'chainId' => $this->getChainId(),
-                ]);
-            }
-
-            // Users that own NFTs from the collections that were updated
-            $affectedUsersIds = User::whereHas('wallets', function (Builder $walletQuery) use ($ids) {
-                $walletQuery->whereHas('nfts', function (Builder $nftQuery) use ($ids) {
-                    $nftQuery->whereIn('collection_id', $ids);
-                });
-            })->pluck('users.id')->toArray();
-
-            // Passing an empty array means we update all users which is undesired here.
-            if (! empty($affectedUsersIds)) {
-                User::updateCollectionsValue($affectedUsersIds);
-            } else {
-                Log::info('Web3NftHandler: skipping updateCollectionsValue because no user affected', [
                     'wallet' => $this->wallet?->address,
                     'collectionId' => $this->collection?->id,
                     'chainId' => $this->getChainId(),
