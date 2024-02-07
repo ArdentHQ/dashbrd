@@ -76,13 +76,5 @@ class CollectionMetricsRepository
                         ->when($onlyHidden === false, fn ($q) => $q->whereNotIn('collection_id', $user->hiddenCollections->modelKeys()))
                         ->where('wallet_id', $user->wallet_id)
                         ->sum(DB::raw("coalesce((fiat_value->'{$user->currency()->value}')::numeric, 0)"));
-
-        // return (float) DB::table('collections')
-        //                 ->leftJoin('nfts', 'nfts.collection_id', '=', 'collections.id')
-        //                 ->leftJoin('wallets', 'nfts.wallet_id', '=', 'wallets.id')
-        //                 ->when($onlyHidden === true, fn ($q) => $q->whereIn('collections.id', $user->hiddenCollections->modelKeys()))
-        //                 ->when($onlyHidden === false, fn ($q) => $q->whereNotIn('collections.id', $user->hiddenCollections->modelKeys()))
-        //                 ->where('wallets.user_id', $user->id)
-        //                 ->sum(DB::raw("coalesce((collections.fiat_value->'{$user->currency()->value}')::numeric, 0)"));
     }
 }
