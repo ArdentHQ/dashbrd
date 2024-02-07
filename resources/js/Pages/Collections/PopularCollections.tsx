@@ -128,7 +128,7 @@ export const PopularCollections = ({ auth, filters }: Properties): JSX.Element =
                             collections={data?.slice(6, 12) ?? []}
                             user={auth.user}
                             period={currentFilters.period}
-                            activePeriod={filters.period}
+                            activePeriod={currentFilters.period}
                             isLoading={isLoading}
                         />
                     </div>
