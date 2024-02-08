@@ -44,7 +44,7 @@ class CollectionMetricsRepository
                         ? "users:{$user->id}:total-hidden-collection-value"
                         : "users:{$user->id}:total-collection-value";
 
-        $value = Cache::remember($cacheKey, now()->addMinutes(30), fn () => $this->totalValueForUser($user, $showHidden));
+        $value = (float) Cache::remember($cacheKey, now()->addMinutes(30), fn () => $this->totalValueForUser($user, $showHidden));
 
         return new CollectionStatsData(
             nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
