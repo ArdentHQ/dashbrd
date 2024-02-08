@@ -1,58 +1,37 @@
-import { clearAllBodyScrollLocks, disableBodyScroll } from "body-scroll-lock";
+import { Dialog } from "@headlessui/react";
 import cn from "classnames";
-import { useEffect, useRef } from "react";
 import { type OverlayProperties } from "./Overlay.contracts";
-import { useDarkModeContext } from "@/Contexts/DarkModeContext";
+
+const NOOP = /* istanbul ignore next */ (): null => null;
 
 export const Overlay = ({
     className,
-    showOverlay,
+    isOpen,
     showCloseButton,
     children,
     belowContent,
-    ...properties
-}: OverlayProperties): JSX.Element => {
-    const reference = useRef<HTMLDivElement>(null);
-    const { isDark } = useDarkModeContext();
-
-    useEffect(() => {
-        if (!showOverlay || reference.current === null) {
-            clearAllBodyScrollLocks();
-
-            document.querySelector("#layout")?.classList.remove("blur");
-        } else {
-            disableBodyScroll(reference.current);
-
-            if (!isDark) {
-                document.querySelector("#layout")?.classList.add("blur");
-            }
-        }
-
-        return () => {
-            clearAllBodyScrollLocks();
-        };
-    }, [showOverlay, reference]);
-
-    if (!showOverlay) return <></>;
-
-    return (
+}: OverlayProperties): JSX.Element => (
+    <Dialog
+        open={isOpen}
+        onClose={NOOP}
+    >
         <div
-            data-testid="Overlay"
-            ref={reference}
-            {...properties}
             className={cn(
-                "fixed inset-0 z-40 mt-14 flex h-screen w-screen flex-col items-center justify-start overflow-auto bg-white dark:bg-theme-dark-900/90 xs:mt-18 sm:mt-0 sm:justify-center",
+                "fixed inset-0 z-[51] bg-white backdrop-blur dark:bg-theme-dark-900/90",
                 className,
-                {
-                    "bg-opacity-60": !showCloseButton,
-                    "bg-opacity-90": showCloseButton,
-                },
+                showCloseButton ? "bg-opacity-90" : "bg-opacity-60",
             )}
-        >
-            <div className="auth-overlay-shadow w-full rounded-none bg-white dark:bg-theme-dark-900 sm:w-[29rem] sm:rounded-3xl">
-                <div className="mt-8 flex flex-col items-center space-y-6">{children}</div>
+            aria-hidden="true"
+        />
+
+        <div className="fixed inset-0 z-[60] flex items-start justify-center sm:items-center">
+            <div>
+                <div className="w-full rounded-none border border-theme-secondary-100 bg-white shadow-3xl dark:border-theme-dark-800 dark:bg-theme-dark-900 dark:shadow-[0px_15px_35px_0px_rgba(18,18,19,0.4)] sm:w-[29rem] sm:rounded-3xl">
+                    <Dialog.Panel className="mt-8 flex flex-col items-center space-y-6">{children}</Dialog.Panel>
+                </div>
+
+                {belowContent}
             </div>
-            {belowContent}
         </div>
-    );
-};
+    </Dialog>
+);

@@ -1,5 +1,5 @@
+import { useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { RefreshButton } from "./RefreshButton";
 import { Heading } from "@/Components/Heading";
 import { formatFiat } from "@/Utils/Currency";
 import { tp } from "@/Utils/TranslatePlural";
@@ -7,13 +7,13 @@ import { tp } from "@/Utils/TranslatePlural";
 export const CollectionsHeading = ({
     stats,
     currency,
-    wallet,
 }: {
     stats: App.Data.Collections.CollectionStatsData;
     currency: string;
-    wallet: App.Data.Wallet.WalletData | null;
 }): JSX.Element => {
     const { t } = useTranslation();
+
+    const formatNumber = useCallback((number: number) => new Intl.NumberFormat("en-US").format(number), []);
 
     return (
         <div className="text-left">
@@ -22,18 +22,16 @@ export const CollectionsHeading = ({
                     level={1}
                     className="dark:text-theme-dark-50"
                 >
-                    {t("common.my_collection")}
+                    {t("pages.popular_collections.title")}
                 </Heading>
-
-                <RefreshButton wallet={wallet} />
             </div>
 
-            <span className="mt-1 block text-sm font-medium leading-5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-base">
+            <span className="mt-2 block text-sm font-medium leading-5 text-theme-secondary-700 dark:text-theme-dark-200 sm:text-base">
                 <Trans
-                    i18nKey="pages.collections.header_title"
+                    i18nKey="pages.popular_collections.header_title"
                     values={{
-                        nftsCount: stats.nfts,
-                        collectionsCount: stats.collections,
+                        nftsCount: formatNumber(stats.nfts),
+                        collectionsCount: formatNumber(stats.collections),
                         collections: tp("common.n_collections", stats.collections),
                         nfts: tp("common.n_nfts", stats.nfts),
                         worth: formatFiat({

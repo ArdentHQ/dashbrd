@@ -23,6 +23,9 @@ return [
         'report:viewAny' => 'View any Report',
         'report:view' => 'View Report',
         'report:update' => 'Update Report',
+        'collection:viewAny' => 'View any Collection',
+        'collection:view' => 'View Collection',
+        'collection:update' => 'Update Collection',
     ],
 
     'roles' => [
@@ -32,6 +35,7 @@ return [
             'role:assignPermissions',
             'admin:access',
             'report:viewAny', 'report:view', 'report:update',
+            'collection:viewAny', 'collection:view', 'collection:update',
         ],
 
         Role::Admin->value => [
@@ -40,6 +44,7 @@ return [
             'role:assignPermissions',
             'admin:access',
             'report:viewAny', 'report:view', 'report:update',
+            'collection:viewAny', 'collection:view', 'collection:update',
         ],
 
         Role::Editor->value => [

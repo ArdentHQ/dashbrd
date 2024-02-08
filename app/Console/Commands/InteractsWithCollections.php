@@ -14,7 +14,7 @@ trait InteractsWithCollections
      * @param  Closure(Collection, int):void  $callback
      * @param  Closure(Builder<Collection>):Builder<Collection>|null  $queryCallback
      */
-    public function forEachCollection(Closure $callback, Closure $queryCallback = null, int $limit = null): void
+    public function forEachCollection(Closure $callback, ?Closure $queryCallback = null, ?int $limit = null): void
     {
         // Apply `$queryCallback` to modify the query before fetching collections...
 
@@ -23,6 +23,7 @@ trait InteractsWithCollections
                 ->select('collections.*')
                 ->where('collections.id', '=', $this->option('collection-id'))
                 ->withoutSpamContracts()
+                ->erc721()
                 ->first();
 
             $collection && $callback($collection, 0);
@@ -34,6 +35,7 @@ trait InteractsWithCollections
             ->when($queryCallback !== null, $queryCallback)
             ->select('collections.*')
             ->withoutSpamContracts()
+            ->erc721()
             ->when($limit !== null, fn ($query) => $query
                 ->limit($limit)
                 ->get()

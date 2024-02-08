@@ -2,18 +2,25 @@
 
 declare(strict_types=1);
 
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\NftTransferType;
+use App\Enums\Period;
 use App\Models\Article;
 use App\Models\Collection;
 use App\Models\CollectionTrait;
+use App\Models\CollectionVote;
+use App\Models\CollectionWinner;
+use App\Models\FloorPriceHistory;
 use App\Models\Gallery;
 use App\Models\Network;
 use App\Models\Nft;
 use App\Models\NftActivity;
 use App\Models\SpamContract;
+use App\Models\Token;
 use App\Models\User;
 use App\Models\Wallet;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
 it('can create a basic collection', function () {
@@ -173,6 +180,26 @@ it('filters the collections by collection name', function () {
     expect(Collection::search($user, 'Another')->count())->toBe(1);
 });
 
+it('should search collections by collection name', function () {
+    $collection1 = Collection::factory()->create([
+        'name' => 'Test name',
+    ]);
+
+    $collection2 = Collection::factory()->create([
+        'name' => 'Test name 2',
+    ]);
+
+    $collection3 = Collection::factory()->create([
+        'name' => 'Another',
+    ]);
+
+    expect(Collection::searchByName('Test')->count())->toBe(2)
+        ->and(Collection::searchByName('Test')->get()->pluck('id')->toArray())
+        ->toEqualCanonicalizing([$collection1->id, $collection2->id])
+        ->and(Collection::searchByName('Another')->count())->toBe(1);
+
+});
+
 it('filters the collections by a nft name', function () {
     $user = createUser();
 
@@ -252,6 +279,37 @@ it('filters the collections by nft token number', function () {
         ->toEqualCanonicalizing([$collection1->id, $collection3->id]);
 
     expect(Collection::search($user, '9999')->count())->toBe(1);
+});
+
+it('should filter collections by chainId', function () {
+    $ethNetwork = Network::query()->where('chain_id', 1)->first();
+    $polygonNetwork = Network::query()->where('chain_id', 137)->first();
+
+    Collection::factory()->create([
+        'name' => 'Collection 1',
+        'network_id' => $ethNetwork->id,
+    ]);
+
+    Collection::factory()->create([
+        'name' => 'Collection 2',
+        'network_id' => $polygonNetwork->id,
+    ]);
+
+    $ethCollections = Collection::query()->filterByChainId(1)->get();
+
+    expect($ethCollections->count())->toBe(1)
+        ->and($ethCollections->first()->name)->toBe('Collection 1');
+
+    $polygonCollections = Collection::query()->filterByChainId(137)->get();
+
+    expect($polygonCollections->count())->toBe(1)
+        ->and($polygonCollections->first()->name)->toBe('Collection 2');
+
+    $allCollections = Collection::query()->filterByChainId(null)->orderBy('id')->get();
+
+    expect($allCollections->count())->toBe(2)
+        ->and($allCollections[0]->name)->toBe('Collection 1')
+        ->and($allCollections[1]->name)->toBe('Collection 2');
 });
 
 it('filters the collections by nft concatenated name', function () {
@@ -1151,4 +1209,347 @@ it('can determine whether collection has its activities indexed', function () {
         'address' => '0x123456',
         'supply' => 100000,
     ])->indexesActivities())->toBeFalse();
+});
+
+it('can determine if a collection is featured or not using its scope', function () {
+    $featuredCollection1 = Collection::factory()->create(['is_featured' => true]);
+    $featuredCollection2 = Collection::factory()->create(['is_featured' => true]);
+    $nonFeaturedCollection = Collection::factory()->create(['is_featured' => false]);
+
+    $featuredCollections = Collection::featured()->get();
+
+    $this->assertTrue($featuredCollections->contains($featuredCollection1));
+    $this->assertTrue($featuredCollections->contains($featuredCollection2));
+    $this->assertFalse($featuredCollections->contains($nonFeaturedCollection));
+
+    $this->assertEquals(2, Collection::featured()->count());
+});
+
+it('returns the collection of the month by most votes in the last month', function () {
+    $collectionWith5Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(5)->create([
+        'collection_id' => $collectionWith5Votes->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    $collectionWith1Vote = Collection::factory()->create();
+    CollectionVote::factory()->count(1)->create([
+        'collection_id' => $collectionWith1Vote->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    $collectionWith8Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(8)->create([
+        'collection_id' => $collectionWith8Votes->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    // Not included
+    $collectionWithoutVotes = Collection::factory()->create();
+
+    $collectionWith3Votes = Collection::factory()->create();
+    CollectionVote::factory()->count(3)->create([
+        'collection_id' => $collectionWith3Votes->id,
+        'voted_at' => Carbon::now()->subMonth(),
+    ]);
+
+    $collectionsIds = Collection::winnersOfThePreviousMonth()->pluck('id')->toArray();
+
+    expect($collectionsIds)->toBe([
+        $collectionWith8Votes->id,
+        $collectionWith5Votes->id,
+        $collectionWith3Votes->id,
+        $collectionWith1Vote->id,
+    ]);
+});
+
+it('has floor price history', function () {
+    $collection = Collection::factory()->create();
+
+    FloorPriceHistory::factory()->count(3)->create([
+        'collection_id' => $collection->id,
+    ]);
+
+    FloorPriceHistory::factory()->count(2)->create();
+
+    expect($collection->floorPriceHistory()->count())->toBe(3);
+
+    expect($collection->floorPriceHistory()->first())->toBeInstanceOf(FloorPriceHistory::class);
+});
+
+it('can scope the query to only include collections eligible for winning "collection of the month"', function () {
+    CollectionWinner::factory()->create([
+        'rank' => 1,
+        'month' => 10,
+        'year' => 2023,
+    ]);
+
+    CollectionWinner::factory()->create([
+        'rank' => 1,
+        'month' => 9,
+        'year' => 2023,
+    ]);
+
+    $winner = CollectionWinner::factory()->create([
+        'rank' => 2,
+        'month' => 10,
+        'year' => 2023,
+    ]);
+
+    $collections = Collection::eligibleToWin()->get();
+
+    expect(Collection::count())->toBe(3);
+    expect($collections)->toHaveCount(1);
+    expect($collections->contains($winner->collection))->toBeTrue();
+});
+
+it('should get sum of fiat values of collections', function () {
+    Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 10,
+            'EUR' => 20,
+        ],
+    ]);
+
+    Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 20,
+            'EUR' => 30,
+            'AZN' => 45,
+        ],
+    ]);
+
+    Collection::factory()->create([
+        'fiat_value' => [
+            'EUR' => 30,
+        ],
+    ]);
+
+    Collection::factory()->create();
+
+    $fiatValues = collect(Collection::getFiatValueSum());
+
+    expect($fiatValues->where('key', 'USD')->first()->total)->toBeString(30);
+    expect($fiatValues->where('key', 'EUR')->first()->total)->toBeString(80);
+    expect($fiatValues->where('key', 'AZN')->first()->total)->toBeString(45);
+});
+
+it('should sort collections', function () {
+    // 4 eur * 2 nft = 8 eur
+    $collection1 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 5,
+            'EUR' => 4,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection1,
+    ]);
+
+    // 1 eur * 2 nft = 2 eur
+    $collection2 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 3,
+            'EUR' => 1,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection2,
+    ]);
+
+    // 5 eur * 2 = 10 eur
+    $collection3 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 8,
+            'EUR' => 5,
+        ],
+    ])->id;
+
+    Nft::factory()->count(2)->create([
+        'collection_id' => $collection3,
+    ]);
+
+    // 1 eur * 10 nft = 10 eur
+    $collection4 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => null,
+            'EUR' => 1,
+        ],
+    ])->id;
+
+    Nft::factory()->count(10)->create([
+        'collection_id' => $collection4,
+    ]);
+
+    // 0 eur * 7 nft = 0
+    $collection5 = Collection::factory()->create([
+        'fiat_value' => [
+            'USD' => 1,
+            'EUR' => 0,
+        ],
+    ])->id;
+
+    Nft::factory()->count(7)->create([
+        'collection_id' => $collection5,
+    ]);
+
+    $ordered = Collection::query()->orderByValue(null, 'asc', CurrencyCode::EUR)->pluck('id')->toArray();
+
+    expect($ordered)->toEqual([
+        $collection5, // 0
+        $collection2, // 1
+        $collection1, // 4
+        $collection3, // 8
+        $collection4, // 10
+    ]);
+
+    $ordered = Collection::query()->orderByValue(null, 'desc', CurrencyCode::EUR)->pluck('id')->toArray();
+
+    expect($ordered)->toEqual([
+        $collection4, // 10
+        $collection3, // 8
+        $collection1, // 4
+        $collection2, // 1
+        $collection5, // 0
+    ]);
+});
+
+it('can create volume data for a collection', function () {
+    Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create([
+        'volume_30d' => '3',
+    ]);
+
+    expect($collection->createVolumeData(Period::MONTH, CurrencyCode::USD))->toBeInstanceOf(VolumeData::class);
+});
+
+it('can get volume based on the period', function () {
+    $collection = Collection::factory()->create([
+        'total_volume' => '1',
+        'volume_1d' => '2',
+        'volume_7d' => '3',
+        'volume_30d' => '4',
+    ]);
+
+    expect($collection->getVolume())->toBe('1');
+    expect($collection->getVolume(Period::DAY))->toBe('2');
+    expect($collection->getVolume(Period::WEEK))->toBe('3');
+    expect($collection->getVolume(Period::MONTH))->toBe('4');
+});
+
+it('can get native token for a network', function () {
+    $token = Token::factory()->matic()->create([
+        'is_native_token' => true,
+    ]);
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create();
+
+    expect($collection->nativeToken()->is($token))->toBeTrue();
+});
+
+it('can order collections based on the total fiat amount of sales volume', function () {
+    $ethereum = Network::firstWhere('chain_id', 1);
+    $polygon = Network::firstWhere('chain_id', 137);
+
+    $eth = Token::factory()->create([
+        'network_id' => $ethereum->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10,
+                ],
+            ],
+        ],
+    ]);
+
+    $matic = Token::factory()->create([
+        'network_id' => $polygon->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 20,
+                ],
+            ],
+        ],
+    ]);
+
+    $first = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '10', // total: 100
+    ]);
+
+    $second = Collection::factory()->for($polygon)->create([
+        'volume_7d' => '7', // total: 140
+    ]);
+
+    $third = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '11', // total: 110
+    ]);
+
+    $collections = Collection::orderByVolume(period: Period::WEEK, currency: CurrencyCode::USD)->get();
+
+    expect($collections->modelKeys())->toBe([
+        $second->id, $third->id, $first->id,
+    ]);
+});
+
+it('can order collections based on the sales volume amount, ignoring the fiat value', function () {
+    $ethereum = Network::firstWhere('chain_id', 1);
+    $polygon = Network::firstWhere('chain_id', 137);
+
+    $eth = Token::factory()->create([
+        'network_id' => $ethereum->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 10,
+                ],
+            ],
+        ],
+    ]);
+
+    $matic = Token::factory()->create([
+        'network_id' => $polygon->id,
+        'is_native_token' => true,
+        'decimals' => 1,
+        'extra_attributes' => [
+            'market_data' => [
+                'current_prices' => [
+                    'usd' => 20,
+                ],
+            ],
+        ],
+    ]);
+
+    $first = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '10',
+    ]);
+
+    $second = Collection::factory()->for($polygon)->create([
+        'volume_7d' => '7',
+    ]);
+
+    $third = Collection::factory()->for($ethereum)->create([
+        'volume_7d' => '11',
+    ]);
+
+    $collections = Collection::orderByVolume(period: Period::WEEK)->get();
+
+    expect($collections->modelKeys())->toBe([
+        $third->id, $first->id, $second->id,
+    ]);
 });

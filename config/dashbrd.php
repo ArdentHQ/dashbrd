@@ -5,11 +5,6 @@ declare(strict_types=1);
 use App\Enums\Period;
 
 return [
-    'browsershot' => [
-        'timeout' => (int) env('BROWSERSHOT_TIMEOUT', 60),
-        'node_binary' => env('BROWSERSHOT_NODE_BINARY', '/usr/local/bin/node'),
-        'npm_binary' => env('BROWSERSHOT_NPM_BINARY', '/usr/local/bin/npm'),
-    ],
     'contact_email' => env('CONTACT_EMAIL', 'support@ardenthq.com'),
 
     'features' => [
@@ -25,7 +20,6 @@ return [
     'live_dump_wallets' => explode(',', env('LIVE_DUMP_WALLETS', '')),
 
     'user_activity_ttl' => env('USER_ACTIVITY_CACHE_TTL', 60),
-    'galleries_stats_ttl' => env('GALLERIES_STATS_TTL', 60),
 
     'wallets' => [
         // Time since last activity to consider a wallet as active
@@ -81,19 +75,19 @@ return [
     'cache_ttl' => [
         'alchemy' => [
             'getBlockTimestamp' => 60 * 60 * 24 * 10, // 10 days... Creation date for blocks will never change, so we can safely cache in a distant future...
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'moralis' => [
             'getEnsDomain' => 60, // 1 minute
             'getBlockTimestamp' => 60 * 60 * 24 * 10, // 10 days... Creation date for blocks will never change, so we can safely cache in a distant future...
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'mnemonic' => [
             'getBlockTimestamp' => 60 * 60 * 24 * 10, // 10 days... Creation date for blocks will never change, so we can safely cache in a distant future...
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'opensea' => [
-            'getNftCollectionFloorPrice' => 60, // 1 minute
+            'getCollectionFloorPrice' => 60, // 1 minute
         ],
         'coingecko' => [
             'getPriceHistory' => [

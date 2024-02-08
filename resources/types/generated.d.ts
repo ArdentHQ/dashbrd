@@ -86,6 +86,12 @@ declare namespace App.Data {
     export type UserData = {
         attributes: Attributes;
     };
+    export type VolumeData = {
+        value: string | null;
+        fiat: number | null;
+        currency: string;
+        decimals: number;
+    };
 }
 declare namespace App.Data.Articles {
     export type ArticleData = {
@@ -143,12 +149,14 @@ declare namespace App.Data.Collections {
         floorPriceFiat: number | null;
         floorPriceCurrency: string | null;
         floorPriceDecimals: number | null;
+        supply: number | null;
         image: string | null;
         banner: string | null;
         openSeaSlug: string | null;
         website: string;
         nftsCount: number;
         nfts: Array<App.Data.Collections.SimpleNftData>;
+        volume: App.Data.VolumeData;
     };
     export type CollectionDetailData = {
         name: string;
@@ -176,6 +184,26 @@ declare namespace App.Data.Collections {
         activityUpdateRequestedAt: string | null;
         isFetchingActivity: boolean | null;
     };
+    export type CollectionFeaturedData = {
+        id: number;
+        name: string;
+        slug: string;
+        address: string;
+        chainId: App.Enums.Chain;
+        floorPrice: string | null;
+        floorPriceFiat: number | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        image: string | null;
+        banner: string | null;
+        openSeaSlug: string | null;
+        website: string;
+        supply: number | null;
+        nfts: Array<App.Data.Gallery.GalleryNftData>;
+        isFeatured: boolean;
+        description: string | null;
+        volume: string | null;
+    };
     export type CollectionNftData = {
         id: number;
         collectionId: number;
@@ -183,6 +211,16 @@ declare namespace App.Data.Collections {
         tokenNumber: string;
         images: App.Data.Nfts.NftImagesData;
         traits: Array<App.Data.Collections.CollectionTraitData>;
+    };
+    export type CollectionOfTheMonthData = {
+        image: string | null;
+        votes: number;
+        volume: App.Data.VolumeData;
+        floorPrice: string | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        name: string | null;
+        slug: string;
     };
     export type CollectionStatsData = {
         nfts: number;
@@ -204,10 +242,44 @@ declare namespace App.Data.Collections {
         displayType: string;
         nftsCount: number;
     };
+    export type CollectionWinnersData = {
+        month: number;
+        year: number;
+        winners: App.Data.Collections.CollectionOfTheMonthData[];
+    };
+    export type PopularCollectionData = {
+        id: number;
+        name: string;
+        slug: string;
+        chainId: App.Enums.Chain;
+        floorPrice: string | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        floorPriceChange: number | null;
+        volume: App.Data.VolumeData;
+        image: string | null;
+    };
     export type SimpleNftData = {
         id: number;
         tokenNumber: string;
         images: App.Data.Nfts.NftImagesData;
+    };
+    export type VotableCollectionData = {
+        id: number;
+        rank: number | null;
+        name: string;
+        address: string;
+        image: string | null;
+        votes: number | null;
+        floorPrice: string | null;
+        floorPriceFiat: number | null;
+        floorPriceCurrency: string | null;
+        floorPriceDecimals: number | null;
+        floorPriceChange: number | null;
+        volume: App.Data.VolumeData;
+        nftsCount: number;
+        twitterUsername: string | null;
+        alreadyWon: boolean;
     };
 }
 declare namespace App.Data.Gallery {
@@ -505,6 +577,7 @@ declare namespace App.Data.Wallet {
         timestamps: { tokens_fetched_at: number | null; native_balances_fetched_at: number | null };
         isRefreshingCollections: boolean;
         canRefreshCollections: boolean;
+        hasErc1155Nfts: { eth: boolean; polygon: boolean };
     };
 }
 declare namespace App.Enums {

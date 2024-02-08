@@ -24,12 +24,12 @@ class DashboardController extends Controller
 
     private function redirectToEnabledSection(): RedirectResponse
     {
-        if (Feature::active(Features::Galleries->value)) {
-            return redirect()->route('galleries');
+        if (Feature::active(Features::Collections->value)) {
+            return redirect('/');
         }
 
-        if (Feature::active(Features::Collections->value)) {
-            return redirect()->route('collections');
+        if (Feature::active(Features::Galleries->value)) {
+            return redirect()->route('galleries');
         }
 
         return redirect()->route('settings.general');

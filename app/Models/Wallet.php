@@ -46,9 +46,13 @@ class Wallet extends Model
         'onboarded_at',
         'is_refreshing_collections',
         'refreshed_collections_at',
+        'owns_erc1155_tokens_eth',
+        'owns_erc1155_tokens_polygon',
     ];
 
     protected $casts = [
+        'owns_erc1155_tokens_eth' => 'bool',
+        'owns_erc1155_tokens_polygon' => 'bool',
         'extra_attributes' => SchemalessAttributes::class,
         'total_usd' => 'float',
         'last_activity_at' => 'datetime',
@@ -61,6 +65,14 @@ class Wallet extends Model
     public static function findByAddress(string $address): ?self
     {
         return Wallet::where('address', $address)->first();
+    }
+
+    /**
+     * @return HasMany<CollectionVote>
+     */
+    public function votes(): HasMany
+    {
+        return $this->hasMany(CollectionVote::class);
     }
 
     /**

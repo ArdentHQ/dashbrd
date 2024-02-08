@@ -6,9 +6,11 @@ namespace App\Support;
 
 use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
+use App\Enums\TokenType;
 use App\Jobs\DetermineCollectionMintingDate;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
+use App\Jobs\FetchCollectionVolumeHistory;
 use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
 use App\Models\Network;
@@ -86,13 +88,14 @@ class Web3NftHandler
                 json_encode($attributes),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
+                $nftData->type->value,
                 $this->lastRetrievedTokenNumber($nftsInCollection->get($nftData->tokenAddress)),
                 $now,
                 $now,
             ];
         });
 
-        $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
+        $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
 
         $ids = DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $dispatchJobs, $now) {
             // upsert nfts/collections (if any)
@@ -104,7 +107,7 @@ class Web3NftHandler
                 // language=postgresql
                 "
     insert into collections
-        (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, last_indexed_token_number, created_at, updated_at)
+        (address, network_id, name, slug, symbol, description, supply, floor_price, floor_price_token_id, floor_price_retrieved_at, extra_attributes, minted_block, minted_at, type, last_indexed_token_number, created_at, updated_at)
     values {$valuesPlaceholders}
     on conflict (address, network_id) do update
         set name = trim(coalesce(excluded.name, collections.name)),
@@ -116,6 +119,7 @@ class Web3NftHandler
             extra_attributes = coalesce(collections.extra_attributes::jsonb, '{}') || excluded.extra_attributes::jsonb,
             minted_block = excluded.minted_block,
             minted_at = excluded.minted_at,
+            type = coalesce(excluded.type, collections.type),
             last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
     returning id, address, floor_price, supply
      ",
@@ -128,7 +132,7 @@ class Web3NftHandler
             $nfts = $nfts->filter(function ($nft) use ($groupedByAddress) {
                 $collection = $groupedByAddress->get(Str::lower($nft->tokenAddress));
 
-                return $this->shouldKeepNft($collection);
+                return $nft->type === TokenType::Erc721 && $this->shouldKeepNft($collection);
             });
 
             $valuesToUpsert = $nfts->map(function ($nft) use ($groupedByAddress, $now) {
@@ -192,13 +196,18 @@ class Web3NftHandler
                 });
 
                 // Index activity only for newly created collections...
-                CollectionModel::query()
-                            ->where('is_fetching_activity', false)
-                            ->whereNull('activity_updated_at')
-                            ->whereIn('id', $ids)
-                            ->chunkById(100, function ($collections) {
-                                $collections->each(fn ($collection) => FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS));
-                            });
+                CollectionModel::whereIn('id', $ids)->chunkById(100, function ($collections) {
+                    $collections->each(function ($collection) {
+                        if (! $collection->is_fetching_activity && $collection->activity_updated_at === null) {
+                            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+                        }
+
+                        // If the collection has just been created, pre-fetch the 30-day volume history...
+                        if ($collection->created_at->gte(now()->subMinutes(3))) {
+                            FetchCollectionVolumeHistory::dispatch($collection);
+                        }
+                    });
+                });
             }
 
             // Passing an empty array means we update all collections which is undesired here.
@@ -291,7 +300,7 @@ class Web3NftHandler
     /**
      * @param  Collection<int, Web3NftData>  $nfts
      * @param  Collection<string, \App\Models\Collection>  $collectionLookup
-     * NOTE: The caller is responsible for ensuring atomicity. Make sure to always call this inside a `DB::Transaction`.
+     *                                                                        NOTE: The caller is responsible for ensuring atomicity. Make sure to always call this inside a `DB::Transaction`.
      */
     public function upsertTraits(Collection $nfts, Collection $collectionLookup, Carbon $now): void
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Enums\Chain;
+use App\Enums\TokenType;
 use App\Models\Collection as NftCollection;
 use App\Models\Network;
 use App\Models\Token;
@@ -145,6 +146,7 @@ class LiveDumpNfts extends Command
             'network_id' => $network->id,
             'name' => trim($collection->name),
             'slug' => Str::slug($collection->name),
+            'type' => $collection->erc_type === 'erc721' ? TokenType::Erc721 : TokenType::Erc1155,
             'symbol' => $collection->symbol ?? $collection->name,
             'floor_price' => $collection->floor_price * 1e18,
             'floor_price_token_id' => $token->id,
@@ -194,7 +196,7 @@ class LiveDumpNfts extends Command
 
         foreach ($potentiallyEncodedAttributes as $attribute) {
             $value = Arr::get($nft, $attribute);
-            if ($value !== null && isBase64EncodedImage($value)) {
+            if ($value !== null && Str::isEncodedImage($value)) {
                 Arr::set($nft, $attribute, null);
             }
         }
@@ -202,21 +204,12 @@ class LiveDumpNfts extends Command
         return $nft;
     }
 
-    /**
-     * @param  array<mixed>  $nft
-     * @return array<mixed>
-     */
-    private function filterNftAttributes(array $nft): array
-    {
-        return $this->removeEncodedAttributes(filterAttributes($nft, $this->requiredAttributes));
-    }
-
     private function getCollectionNftsAndPersist(
         NftCollection $collection,
         Chain $chain,
         int $itemsTotal,
         int $chunk,
-        string $cursor = null,
+        ?string $cursor = null,
     ): void {
         $perChunkLimit = 100;
 
@@ -232,7 +225,9 @@ class LiveDumpNfts extends Command
 
             $data = Alchemy::collectionNftsRaw($collection, $cursor);
 
-            $data['nfts'] = array_map(fn ($nft) => $this->filterNftAttributes($nft), $data['nfts']);
+            $data['nfts'] = array_map(fn ($nft) => $this->removeEncodedAttributes(
+                $this->filteredAttributes($nft, $this->requiredAttributes)
+            ), $data['nfts']);
 
             $fileName = $path.$chunk.'.json';
 
@@ -298,7 +293,7 @@ class LiveDumpNfts extends Command
 
         $fs = Storage::disk(self::diskName);
 
-        $traits = Mnemonic::getNftCollectionTraits($chain, $address);
+        $traits = Mnemonic::getCollectionTraits($chain, $address);
 
         $path = $this->prepareCollectionPath($chain, $address);
 
@@ -307,5 +302,23 @@ class LiveDumpNfts extends Command
         $fs->put($fileName, (string) json_encode($traits, JSON_PRETTY_PRINT));
 
         $this->info('Fetched collection traits, file: '.$fileName);
+    }
+
+    /**
+     * @param  array<mixed>  $data
+     * @param  array<mixed>  $attributes
+     * @return array<mixed>
+     */
+    private function filteredAttributes(array $data, array $attributes): array
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value) && isset($attributes[$key]) && is_array($attributes[$key])) {
+                $data[$key] = $this->filteredAttributes($data[$key], $attributes[$key]);
+            } elseif (! in_array($key, $attributes)) {
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
     }
 }

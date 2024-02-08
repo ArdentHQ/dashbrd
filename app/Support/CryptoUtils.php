@@ -13,12 +13,10 @@ final class CryptoUtils
 {
     public static function convertToWei(string|float $amount, int $decimals): string
     {
-        return strval(
-            BigDecimal::of($amount)
-                ->toScale($decimals, RoundingMode::DOWN)
-                ->multipliedBy(BigInteger::ten()->power($decimals))
-                ->toBigInteger()
-        );
+        return (string) BigDecimal::of($amount)
+                                    ->toScale($decimals, RoundingMode::DOWN)
+                                    ->multipliedBy(BigInteger::ten()->power($decimals))
+                                    ->toBigInteger();
     }
 
     public static function hexToBigIntStr(string $value): string

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Client\Alchemy;
 
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3ContractMetadata;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\AlchemyChain;
@@ -54,7 +54,7 @@ class AlchemyPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(Factory $factory = null)
+    public function __construct(?Factory $factory = null)
     {
         parent::__construct($factory);
 
@@ -185,7 +185,7 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @see https://docs.alchemy.com/reference/getnfts
      */
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null, int $limit = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null, ?int $limit = null): Web3NftsChunk
     {
         $this->apiUrl = $this->getNftV3ApiUrl();
 
@@ -259,8 +259,8 @@ class AlchemyPendingRequest extends PendingRequest
      */
     public function collectionNfts(
         CollectionModel $collection,
-        string $startToken = null,
-        int $limit = null
+        ?string $startToken = null,
+        ?int $limit = null
     ): Web3NftsChunk {
         $this->apiUrl = $this->getNftV3ApiUrl();
 
@@ -300,7 +300,7 @@ class AlchemyPendingRequest extends PendingRequest
     /**
      * @return array<stdClass>|null
      */
-    public function collectionNftsRaw(CollectionModel $collection, string $startToken = null): ?array
+    public function collectionNftsRaw(CollectionModel $collection, ?string $startToken = null): ?array
     {
         $this->apiUrl = $this->getNftV3ApiUrl();
 
@@ -435,7 +435,7 @@ class AlchemyPendingRequest extends PendingRequest
             description: $description,
             extraAttributes: $this->getNftExtraAttributes($nft),
             floorPrice: $extractedFloorPrice ?
-                new Web3NftCollectionFloorPrice(
+                new Web3CollectionFloorPrice(
                     $extractedFloorPrice,
                     'eth', // always eth here
                     Carbon::now(),
@@ -445,6 +445,7 @@ class AlchemyPendingRequest extends PendingRequest
             mintedAt: $mintTimestamp !== null ? Carbon::createFromTimestampMs($mintTimestamp) : null,
             hasError: ! empty($error),
             info: $nftInfo,
+            type: $this->getTokenType($nft['contract']['tokenType'] ?? ''),
         );
     }
 
@@ -483,7 +484,7 @@ class AlchemyPendingRequest extends PendingRequest
     }
 
     // https://docs.alchemy.com/reference/getfloorprice
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         // Only ETH is supported at the moment since this API is still considered in beta:
 
@@ -538,7 +539,7 @@ class AlchemyPendingRequest extends PendingRequest
             return null;
         }
 
-        return new Web3NftCollectionFloorPrice(
+        return new Web3CollectionFloorPrice(
             CryptoUtils::convertToWei($priceInfo['floorPrice'], CryptoCurrencyDecimals::forCurrency($priceInfo['priceCurrency'])),
             Str::lower($priceInfo['priceCurrency']),
             Carbon::parse($priceInfo['retrievedAt']),
@@ -599,8 +600,8 @@ class AlchemyPendingRequest extends PendingRequest
         $original = Arr::get($nft, 'image.cachedUrl');
 
         return [
-            'originalRaw' => empty($originalRaw) || isBase64EncodedImage($originalRaw) ? null : $originalRaw,
-            'original' => empty($original) || isBase64EncodedImage($original) ? null : $original,
+            'originalRaw' => empty($originalRaw) || Str::isEncodedImage($originalRaw) ? null : $originalRaw,
+            'original' => empty($original) || Str::isEncodedImage($original) ? null : $original,
         ];
     }
 
@@ -619,7 +620,7 @@ class AlchemyPendingRequest extends PendingRequest
         foreach ($imageKeys as $imageKey) {
             $imageUrl = Arr::get($nft, $imageKey);
 
-            if (! empty($imageUrl) && ! isBase64EncodedImage($imageUrl)) {
+            if (! empty($imageUrl) && ! Str::isEncodedImage($imageUrl)) {
                 return $imageUrl;
             }
         }
@@ -696,6 +697,16 @@ class AlchemyPendingRequest extends PendingRequest
             ->toArray();
     }
 
+    private function getTokenType(string $type): TokenType
+    {
+        return match ($type) {
+            'ERC20' => TokenType::Erc20,
+            'ERC721' => TokenType::Erc721,
+            'ERC1155' => TokenType::Erc1155,
+            default => TokenType::Unknown,
+        };
+    }
+
     private function getNftV3ApiUrl(): string
     {
         return 'https://'.self::$apiUrlPlaceholder.'.g.alchemy.com/nft/v3/';
@@ -708,10 +719,6 @@ class AlchemyPendingRequest extends PendingRequest
         }
 
         if (Arr::get($nft, 'raw.error') && $filterError) {
-            return false;
-        }
-
-        if (! TokenType::compare(TokenType::Erc721, Arr::get($nft, 'contract.tokenType', ''))) {
             return false;
         }
 

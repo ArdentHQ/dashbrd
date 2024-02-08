@@ -48,7 +48,7 @@ class CollectionDetailData extends Data
     ) {
     }
 
-    public static function fromModel(Collection $collection, CurrencyCode $currencyCode = null, User $user = null): self
+    public static function fromModel(Collection $collection, ?CurrencyCode $currencyCode = null, ?User $user = null): self
     {
         $symbol = $collection->floorPriceToken?->symbol;
 
@@ -70,7 +70,7 @@ class CollectionDetailData extends Data
             twitter: $collection->twitter(),
             discord: $collection->discord(),
             supply: $collection->supply,
-            volume: $collection->volume,
+            volume: $collection->total_volume,
             owners: $collection->owners,
             nftsCount: $collection->nfts()->when($user !== null, fn ($q) => $q->ownedBy($user))->count(),
             mintedAt: $collection->minted_at?->getTimestampMs(),

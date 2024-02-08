@@ -1,3 +1,5 @@
+import VolumeFactory from "@/Tests/Factories/VolumeFactory";
+
 export const SampleCollection: App.Data.Collections.CollectionData = {
     id: 1,
     name: "Moonbirds",
@@ -9,9 +11,11 @@ export const SampleCollection: App.Data.Collections.CollectionData = {
     floorPriceCurrency: null,
     floorPriceDecimals: null,
     floorPriceFiat: null,
+    supply: 10000,
     image: "https://i.seadn.io/gae/H-eyNE1MwL5ohL-tCfn_Xa1Sl9M9B4612tLYeUlQubzt4ewhr4huJIR5OLuyO3Z5PpJFSwdm7rq-TikAh7f5eUw338A2cy6HRH75?w=500&auto=format",
     website: "https://www.proof.xyz/moonbirds",
     nftsCount: 1,
     openSeaSlug: "proof-moonbirds",
     nfts: [],
+    volume: new VolumeFactory().create(),
 };

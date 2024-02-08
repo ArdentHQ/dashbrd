@@ -6,7 +6,11 @@ namespace App\Models;
 
 use App\Casts\StrippedHtml;
 use App\Enums\CurrencyCode;
+use App\Enums\TokenType;
 use App\Models\Traits\BelongsToNetwork;
+use App\Models\Traits\HasFloorPriceHistory;
+use App\Models\Traits\HasVolume;
+use App\Models\Traits\HasWalletVotes;
 use App\Models\Traits\Reportable;
 use App\Notifications\CollectionReport;
 use App\Support\BlacklistedCollections;
@@ -33,16 +37,23 @@ use Staudenmeir\EloquentEagerLimit\HasEagerLimit;
  * @property ?string $floor_price
  * @property ?string $last_indexed_token_number
  * @property ?string $image
+ * @property \Illuminate\Database\Eloquent\Collection<int,Nft> $cachedNfts
  *
  * @method BelongsToMany<Article> articlesWithCollections()
  */
 class Collection extends Model
 {
-    use BelongsToNetwork, HasEagerLimit, HasFactory, HasSlug, Reportable, SoftDeletes;
+    use BelongsToNetwork, HasEagerLimit, HasFactory, HasFloorPriceHistory,
+        HasSlug, HasVolume, HasWalletVotes, Reportable, SoftDeletes;
 
     const TWITTER_URL = 'https://x.com/';
 
     const DISCORD_URL = 'https://discord.gg/';
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Collection<int, Nft>
+     */
+    public $cachedNfts;
 
     /**
      * @var array<string>
@@ -56,6 +67,7 @@ class Collection extends Model
      */
     protected $casts = [
         'description' => StrippedHtml::class,
+        'type' => TokenType::class,
         'floor_price_retrieved_at' => 'datetime',
         'extra_attributes' => SchemalessAttributes::class,
         'fiat_value' => 'json',
@@ -65,6 +77,7 @@ class Collection extends Model
         'is_fetching_activity' => 'bool',
         'activity_updated_at' => 'datetime',
         'activity_update_requested_at' => 'datetime',
+        'is_featured' => 'bool',
     ];
 
     /**
@@ -81,8 +94,19 @@ class Collection extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('name')
+            ->generateSlugsFrom(fn (self $model) => $this->preventForbiddenSlugs($model))
             ->saveSlugsTo('slug');
+    }
+
+    private function preventForbiddenSlugs(self $model): string
+    {
+        $forbidden = ['collection-of-the-month', 'popular'];
+
+        if (in_array(Str::slug($model->name), $forbidden, true)) {
+            return $model->name.' Collection';
+        }
+
+        return $model->name;
     }
 
     /**
@@ -201,9 +225,18 @@ class Collection extends Model
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
-    public function scopeOrderByValue(Builder $query, Wallet $wallet, string $direction, CurrencyCode $currency = CurrencyCode::USD): Builder
+    public function scopeErc721(Builder $query): Builder
     {
-        $nullsPosition = strtolower($direction) === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
+        return $query->where('collections.type', TokenType::Erc721);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByValue(Builder $query, ?Wallet $wallet, ?string $direction, ?CurrencyCode $currency = CurrencyCode::USD): Builder
+    {
+        $walletFilter = $wallet ? "WHERE nfts.wallet_id = $wallet->id" : '';
 
         return $query->selectRaw(
             sprintf('collections.*, (CAST(collections.fiat_value->>\'%s\' AS float)::float * MAX(nc.nfts_count)::float) as total_value', $currency->value)
@@ -213,11 +246,11 @@ class Collection extends Model
                     collection_id,
                     count(*) as nfts_count
                 FROM nfts
-                WHERE nfts.wallet_id = $wallet->id
+                {$walletFilter}
                 GROUP BY collection_id
             ) nc"), 'collections.id', '=', 'nc.collection_id')
             ->groupBy('collections.id')
-            ->orderByRaw("total_value {$direction} {$nullsPosition}")
+            ->orderByWithNulls('total_value', $direction)
             ->orderBy('collections.id', $direction);
     }
 
@@ -228,11 +261,9 @@ class Collection extends Model
      */
     public function scopeOrderByFloorPrice(Builder $query, string $direction, CurrencyCode $currency = CurrencyCode::USD): Builder
     {
-        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
-
         return $query->selectRaw(
             sprintf('collections.*, CAST(collections.fiat_value->>\'%s\' AS float) as total_floor_price', $currency->value)
-        )->orderByRaw("total_floor_price {$direction} {$nullsPosition}");
+        )->orderByWithNulls('total_floor_price', $direction);
     }
 
     /**
@@ -242,9 +273,7 @@ class Collection extends Model
      */
     public function scopeOrderByName(Builder $query, string $direction): Builder
     {
-        $nullsPosition = $direction === 'asc' ? 'NULLS FIRST' : 'NULLS LAST';
-
-        return $query->orderByRaw("lower(collections.name) {$direction} {$nullsPosition}");
+        return $query->orderByWithNulls('lower(collections.name)', $direction);
     }
 
     /**
@@ -254,11 +283,7 @@ class Collection extends Model
      */
     public function scopeOrderByMintDate(Builder $query, string $direction): Builder
     {
-        if ($direction === 'asc') {
-            return $query->orderByRaw('minted_at ASC NULLS FIRST');
-        }
-
-        return $query->orderByRaw('minted_at DESC NULLS LAST');
+        return $query->orderByWithNulls('minted_at', $direction);
     }
 
     /**
@@ -280,11 +305,7 @@ class Collection extends Model
             ->addSelect(DB::raw('MAX(nft_activity.timestamp) as received_at'))
             ->groupBy('collections.id');
 
-        if ($direction === 'asc') {
-            return $query->orderByRaw('received_at ASC NULLS FIRST');
-        }
-
-        return $query->orderByRaw('received_at DESC NULLS LAST');
+        return $query->orderByWithNulls('received_at', $direction);
     }
 
     /**
@@ -300,6 +321,25 @@ class Collection extends Model
             ->take(1);
 
         return $query->orderBy($select, $direction);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFilterByChainId(Builder $query, ?int $chainId): Builder
+    {
+        if (empty($chainId)) {
+            return $query;
+        }
+
+        /** @var Network $network */
+        $network = Network::query()
+            ->select('id')
+            ->where('networks.chain_id', $chainId)
+            ->first();
+
+        return $query->where('collections.network_id', $network->id);
     }
 
     /**
@@ -328,6 +368,19 @@ class Collection extends Model
                         });
                 });
         });
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeSearchByName(Builder $query, ?string $searchQuery): Builder
+    {
+        if ($searchQuery === null || $searchQuery === '') {
+            return $query;
+        }
+
+        return $query->where('collections.name', 'ilike', sprintf('%%%s%%', $searchQuery));
     }
 
     /**
@@ -515,7 +568,7 @@ class Collection extends Model
      */
     public function scopeOrderByOldestNftLastFetchedAt(Builder $query): Builder
     {
-        return $query->orderByRaw('extra_attributes->>\'nft_last_fetched_at\' ASC NULLS FIRST');
+        return $query->orderByWithNulls('extra_attributes->>\'nft_last_fetched_at\'', 'asc');
     }
 
     /**
@@ -524,7 +577,7 @@ class Collection extends Model
      */
     public function scopeOrderByFloorPriceLastFetchedAt(Builder $query): Builder
     {
-        return $query->orderByRaw('extra_attributes->>\'floor_price_last_fetched_at\' ASC NULLS FIRST');
+        return $query->orderByWithNulls('extra_attributes->>\'floor_price_last_fetched_at\'', 'asc');
     }
 
     /**
@@ -533,11 +586,120 @@ class Collection extends Model
      */
     public function scopeOrderByOpenseaSlugLastFetchedAt(Builder $query): Builder
     {
-        return $query->orderByRaw('extra_attributes->>\'opensea_slug_last_fetched_at\' ASC NULLS FIRST');
+        return $query->orderByWithNulls('extra_attributes->>\'opensea_slug_last_fetched_at\'', 'asc');
     }
 
     public function isSpam(): bool
     {
         return SpamContract::isSpam($this->address, $this->network);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotable(Builder $query): Builder
+    {
+        return $query->addFloorPriceChange()
+                    ->addSelect([
+                        'collections.*',
+                        DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
+                        DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
+                    ])
+                    ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
+                    ->withCount('nfts')
+                    ->groupBy('collections.id');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeAddFloorPriceChange(Builder $query): Builder
+    {
+        return $query->addSelect(
+            DB::raw("(
+                SELECT
+                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) -
+                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) /
+                    NULLIF(AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100, 0)
+                FROM
+                    floor_price_history fp1
+                WHERE
+                    fp1.collection_id = collections.id AND
+                    fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY'
+                ) AS price_change_24h
+            ")
+        );
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeVotedByUserInCurrentMonth(Builder $query, User $user): Builder
+    {
+        return $query->whereHas('votes', fn ($q) => $q->inCurrentMonth()->where('wallet_id', $user->wallet_id));
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeWinnersOfThePreviousMonth(Builder $query): Builder
+    {
+        return $query
+            ->withCount(['votes' => fn ($query) => $query->inPreviousMonth()])
+            // order by votes count excluding nulls
+            ->whereHas('votes', fn ($query) => $query->inPreviousMonth())
+            ->orderBy('votes_count', 'desc');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeEligibleToWin(Builder $query): Builder
+    {
+        return $query->whereNotIn('collections.id', CollectionWinner::ineligibleCollectionIds());
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getFiatValueSum(): array
+    {
+        return DB::select('SELECT
+                key, COALESCE(SUM(value::numeric), 0) as total
+            FROM
+                collections, jsonb_each_text(fiat_value) as currencies(key,value)
+            GROUP BY key;'
+        );
+    }
+
+    /**
+     * Modify the query to apply ORDER BY, but with respect to NULL values.
+     * If direction is ascending, the query will order NULL values first,
+     * otherwise it will order NULL values last.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeOrderByWithNulls(Builder $query, string $column, string $direction): Builder
+    {
+        $nullsPosition = strtolower($direction) === 'asc'
+                        ? 'NULLS FIRST'
+                        : 'NULLS LAST';
+
+        return $query->orderByRaw("{$column} {$direction} {$nullsPosition}");
     }
 }

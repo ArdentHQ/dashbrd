@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;
@@ -49,9 +49,9 @@ it('should getWalletNfts', function () {
     $tokens = $provider->getWalletNfts($wallet, $network)->nfts;
 
     expect($tokens)->toBeInstanceOf(Collection::class)
-        ->and($tokens)->toHaveCount(47)
+        ->and($tokens)->toHaveCount(100)
         ->and($tokens[0])->toBeInstanceOf(Web3NftData::class)
-        ->and($tokens[0]->tokenAddress)->toBe('0x5d666f215a85b87cb042d59662a7ecd2c8cc44e6');
+        ->and($tokens[0]->tokenAddress)->toBe('0x2953399124f0cbb46d2cbacd8a89cf0599974963');
 });
 
 it('can get nft floor price', function () {
@@ -61,7 +61,7 @@ it('can get nft floor price', function () {
 
     $provider = new MoralisWeb3DataProvider();
 
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, ''))->toEqual(new Web3NftCollectionFloorPrice(
+    expect($provider->getCollectionFloorPrice(Chain::ETH, ''))->toEqual(new Web3CollectionFloorPrice(
         '1000000000000000',
         'eth',
         Carbon::parse('2021-06-04T16:00:15'),
@@ -74,7 +74,7 @@ it('handles 404 when calling nft floor price', function () {
     ]);
 
     $provider = new MoralisWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chain::ETH, 'asdf'))->toBeNull();
+    expect($provider->getCollectionFloorPrice(Chain::ETH, 'asdf'))->toBeNull();
 });
 
 it('can get native balance for a wallet', function () {

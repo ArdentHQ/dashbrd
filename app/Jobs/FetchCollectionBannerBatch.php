@@ -51,7 +51,7 @@ class FetchCollectionBannerBatch implements ShouldBeUnique, ShouldQueue
 
         $collections = Collection::query()
             ->whereIn('address', $metadata->pluck('contractAddress'))
-            ->select(['id', 'address', 'extra_attributes'])
+            ->select(['id', 'name', 'address', 'extra_attributes'])
             ->get();
 
         $metadata

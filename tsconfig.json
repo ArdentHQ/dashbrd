@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "forceConsistentCasingInFileNames": false,
         "module": "ESNext",
         "moduleResolution": "Node",
         "esModuleInterop": true,
@@ -16,9 +17,9 @@
         "paths": {
             "@/*": ["resources/js/*"],
             "@icons/*": ["resources/icons/*"],
-            "@images/*": ["resources/images/*"]
-        }
+            "@images/*": ["resources/images/*"],
+        },
     },
     "include": ["resources/**/*.ts", "resources/**/*.d.ts", "resources/**/*.tsx", "./vitest.setup.tsx"],
-    "exclude": ["node_modules", "**/*.spec.ts", "**/*.blade.php"]
+    "exclude": ["node_modules", "**/*.spec.ts", "**/*.blade.php"],
 }

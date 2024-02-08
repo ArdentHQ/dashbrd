@@ -14,9 +14,10 @@ class LogoutController extends FilamentLogoutController
     public function logout(Request $request): RedirectResponse
     {
         Filament::auth()->logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('galleries');
+        return redirect('/');
     }
 }

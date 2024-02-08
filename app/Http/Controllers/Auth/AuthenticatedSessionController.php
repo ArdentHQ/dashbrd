@@ -65,11 +65,11 @@ class AuthenticatedSessionController extends Controller
 
         if ($request->wantsJson()) {
             return response()->json([
-                'redirectTo' => $requiresRedirect ? 'galleries' : null,
+                'redirectTo' => $requiresRedirect ? 'collections' : null,
             ]);
         }
 
-        return $requiresRedirect ? redirect()->route('galleries') : redirect()->back();
+        return $requiresRedirect ? redirect('/') : redirect()->back();
     }
 
     private function getAuthData(Request $request): AuthData

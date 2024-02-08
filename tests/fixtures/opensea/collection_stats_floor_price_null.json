@@ -1,5 +1,5 @@
 {
-    "stats": {
+    "total": {
         "one_minute_volume": 0,
         "one_minute_change": 0,
         "one_minute_sales": 0,
@@ -52,7 +52,7 @@
         "thirty_day_sales": 0,
         "thirty_day_average_price": 0,
         "thirty_day_difference": 0,
-        "total_volume": 0.00309342362905652,
+        "volume": 0.00309342362905652,
         "total_sales": 1,
         "total_supply": 1,
         "count": 1,

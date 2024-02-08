@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use App\Data\Web3\Web3NftData;
 use App\Enums\NftInfo;
+use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionVolumeHistory;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\NftTrait;
@@ -565,6 +567,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedAt: null,
         hasError: false,
         info: null,
+        type: TokenType::Erc721,
     );
 
     $collection = Collection::query()->create([
@@ -611,6 +614,7 @@ it('should not update any already filled fields in DB with empty values if hasEr
         mintedAt: null,
         hasError: true,
         info: null,
+        type: TokenType::Erc721,
     );
 
     $handler->store(collect([$dataWithError]));
@@ -669,6 +673,7 @@ it('should set save the error for the nft if set', function () {
         mintedAt: null,
         hasError: true,
         info: NftInfo::MetadataOutdated->value,
+        type: TokenType::Erc721,
     );
 
     $collection = Collection::query()->create([
@@ -710,6 +715,7 @@ it('should update the error field for nft', function () {
         tokenAddress: '0x1234',
         tokenNumber: '123',
         networkId: $token->network_id,
+        type: TokenType::Erc721,
         collectionName: 'Collection Name',
         collectionSymbol: 'AME',
         collectionImage: 'test_image',
@@ -787,6 +793,7 @@ it('should update the error field for nft', function () {
         mintedAt: null,
         hasError: true,
         info: null,
+        type: TokenType::Erc721,
     );
 
     $handler->store(collect([$dataWithNoError]));
@@ -794,4 +801,96 @@ it('should update the error field for nft', function () {
 
     expect(Collection::count())->toBe(1);
     expect($collection->nfts->first()->info)->toBe(null);
+});
+
+it('should dispatch jobs to fetch collection volume history when collection is first added', function () {
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $token = Token::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $wallet = Wallet::factory()->create();
+
+    $handler = new Web3NftHandler(
+        network: $network,
+        wallet: $wallet,
+    );
+
+    Collection::factory()->for($network)->create([
+        'address' => '0x999',
+        'created_at' => now()->subHour(),
+    ]);
+
+    $oldData = new Web3NftData(
+        tokenAddress: '0x999',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: 3000,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc721,
+    );
+
+    $data = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: 3000,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc721,
+    );
+
+    $handler->store(collect([$data, $oldData]), dispatchJobs: true);
+
+    expect(Collection::count())->toBe(2);
+
+    Bus::assertDispatchedTimes(FetchCollectionVolumeHistory::class, 1);
 });

@@ -107,4 +107,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
         'bucket' => env('AWS_BUCKET'),
     ],
+
+    'browsershot' => [
+        'timeout' => (int) env('BROWSERSHOT_TIMEOUT', 60),
+        'node_binary' => env('BROWSERSHOT_NODE_BINARY', '/usr/local/bin/node'),
+        'npm_binary' => env('BROWSERSHOT_NPM_BINARY', '/usr/local/bin/npm'),
+    ],
+
 ];

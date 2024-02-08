@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Client\Mnemonic;
 
 use App\Data\Web3\CollectionActivity;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
-use App\Data\Web3\Web3NftCollectionTrait;
+use App\Data\Web3\Web3CollectionFloorPrice;
+use App\Data\Web3\Web3CollectionTrait;
+use App\Data\Web3\Web3Volume;
 use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
 use App\Enums\CurrencyCode;
@@ -46,7 +47,7 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return void
      */
-    public function __construct(Factory $factory = null)
+    public function __construct(?Factory $factory = null)
     {
         parent::__construct($factory);
 
@@ -99,7 +100,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     // https://docs.mnemonichq.com/reference/marketplacesservice_getfloorprice
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -158,7 +159,7 @@ class MnemonicPendingRequest extends PendingRequest
                 }
             }
 
-            return new Web3NftCollectionFloorPrice(
+            return new Web3CollectionFloorPrice(
                 CryptoUtils::convertToWei($value, $decimals),
                 Str::lower($currency),
                 Carbon::now(),
@@ -179,86 +180,95 @@ class MnemonicPendingRequest extends PendingRequest
         }
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getmetadata
-    public function getNftCollectionBanner(Chain $chain, string $contractAddress): ?string
+    /**
+     * Fetch the banner image for the collection.
+     *
+     * @see https://docs.mnemonichq.com/reference/foundationalservice_getnftcontracts
+     */
+    public function getCollectionBanner(Chain $chain, string $contractAddress): ?string
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        /** @var array<string, mixed> $data */
-        $data = self::get(sprintf('/collections/v1beta2/%s/metadata', $contractAddress), [])->json('metadata');
+        $url = $this->get('/foundational/v1beta2/nft_contracts', [
+            'contractAddresses' => $contractAddress,
+        ])->json('nftContracts.0.bannerImageUrl');
 
-        $metadata = collect($data)->mapWithKeys(fn ($item) => [$item['type'] => $item['value']]);
-
-        // *Note:* The API also returns an image for `TYPE_BANNER_IMAGE_URL`,
-        // however, I noticed that, (at least with the collections we have for
-        // testing), all images that return a value for
-        // `TYPE_ORIGINAL_BANNER_IMAGE_URL` also return a value for
-        // `TYPE_BANNER_IMAGE_URL`. On the other hand, images that don't return
-        // anything for `TYPE_ORIGINAL_BANNER_IMAGE_URL` do return a
-        // `TYPE_BANNER_IMAGE_URL` URL, but that URL shows an
-        // "Image metadata not found" message. Additionally, the image that
-        // comes from TYPE_BANNER_IMAGE_URL is too small to display in the header.
-        // In addition to that the image that comes from
-        // TYPE_ORIGINAL_BANNER_IMAGE_URL are urls from the OpenSea CDN,which
-        // seems to use the `imgix.com` API (or something similar).
-        // This means we can use GET attributes to resize the image to a more
-        // appropriate size for our banners.
-        $image = $metadata->get('TYPE_ORIGINAL_BANNER_IMAGE_URL');
-
-        if ($image === null) {
+        if ($url === null || $url === '') {
             return null;
         }
 
-        // The image from `TYPE_ORIGINAL_BANNER_IMAGE_URL` includes a w= parameter
-        // that we can use to store a bigger image in our db.
-        return NftImageUrl::get($image, ImageSize::Banner);
+        // The URL includes a w= parameter. We want to normalize it, so that we can store a higher resolution image...
+        return NftImageUrl::get($url, ImageSize::Banner);
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getownerscount
-    public function getNftCollectionOwners(Chain $chain, string $contractAddress): ?int
+    /**
+     * Retrieve the number of owners of the collection.
+     *
+     * @see https://docs.mnemonichq.com/reference/collectionsservice_gettotals
+     */
+    public function getCollectionOwners(Chain $chain, string $contractAddress): int
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        /** @var array<string, mixed> $data */
-        $data = self::get(sprintf('/collections/v1beta2/%s/metadata', $contractAddress), [
-            'includeStats' => true,
-        ])->json();
-
-        if (! is_numeric($data['ownersCount'])) {
-            return null;
-        }
-
-        return intval($data['ownersCount']);
+        return (int) $this->get(
+            '/collections/v1beta2/'.$contractAddress.'/totals'
+        )->json('ownersCount');
     }
 
-    // https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
-    public function getNftCollectionVolume(Chain $chain, string $contractAddress): ?string
+    /**
+     * Retrieve the 30-day volume history for the collection address.
+     *
+     * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
+     *
+     * @return Collection<int, Web3Volume>
+     */
+    public function getCollectionVolumeHistory(Chain $chain, string $address): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
-        /** @var array<string, mixed> $data */
-        $data = self::get(sprintf(
-            '/collections/v1beta2/%s/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY',
-            $contractAddress,
-        ), [])->json();
+        /** @var array{timestamp: string, volume: string}[] */
+        $response = $this->get(
+            '/collections/v1beta2/'.$address.'/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY'
+        )->json('dataPoints');
 
-        $volume = Arr::get($data, 'dataPoints.0.volume');
-        if (empty($volume)) {
-            return null;
+        return collect($response)->map(fn ($dataPoint) => new Web3Volume(
+            value: CryptoUtils::convertToWei($dataPoint['volume'], $chain->nativeCurrencyDecimals()),
+            date: Carbon::parse($dataPoint['timestamp']),
+        ));
+    }
+
+    /**
+     * Retrieve the latest sales volume amount for the collection address.
+     *
+     * @see https://docs.mnemonichq.com/reference/collectionsservice_getsalesvolume
+     */
+    public function getLatestCollectionVolume(Chain $chain, string $contractAddress): Web3Volume
+    {
+        $this->chain = MnemonicChain::fromChain($chain);
+
+        $response = $this->get(
+            '/collections/v1beta2/'.$contractAddress.'/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY'
+        )->json('dataPoints.0');
+
+        if (empty($response)) {
+            return new Web3Volume(
+                value: '0',
+                date: today(),
+            );
         }
 
-        $currency = $chain->nativeCurrency();
-        $decimals = CryptoCurrencyDecimals::forCurrency($currency);
-
-        return CryptoUtils::convertToWei($volume, $decimals);
+        return new Web3Volume(
+            value: CryptoUtils::convertToWei($response['volume'] ?? '0', $chain->nativeCurrencyDecimals()),
+            date: Carbon::parse($response['timestamp'] ?? today()),
+        );
     }
 
     // https://docs.mnemonichq.com/reference/collectionsservice_getnumerictraits
     // https://docs.mnemonichq.com/reference/collectionsservice_getstringtraits
     /**
-     * @return Collection<int, Web3NftCollectionTrait>
+     * @return Collection<int, Web3CollectionTrait>
      */
-    public function getNftCollectionTraits(Chain $chain, string $contractAddress): Collection
+    public function getCollectionTraits(Chain $chain, string $contractAddress): Collection
     {
         //  {
         //      "name": "string",
@@ -266,7 +276,7 @@ class MnemonicPendingRequest extends PendingRequest
         //      "nftsCount": "283",
         //      "nftsPercentage": 2.8302830283028304
         //  }
-        $stringTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'string', static fn (array $trait) => new Web3NftCollectionTrait(
+        $stringTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'string', static fn (array $trait) => new Web3CollectionTrait(
             name: $trait['name'],
             value: $trait['value'],
             valueMin: null,
@@ -282,7 +292,7 @@ class MnemonicPendingRequest extends PendingRequest
         //      "valueMin": 0,
         //      "valueMax": 0
         //  }
-        $numericTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'numeric', static fn (array $trait) => new Web3NftCollectionTrait(
+        $numericTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'numeric', static fn (array $trait) => new Web3CollectionTrait(
             name: $trait['name'],
             value: Web3NftHandler::$numericTraitPlaceholder,
             valueMin: $trait['valueMin'],
@@ -296,7 +306,7 @@ class MnemonicPendingRequest extends PendingRequest
     }
 
     /**
-     * @return Collection<int, Web3NftCollectionTrait>
+     * @return Collection<int, Web3CollectionTrait>
      */
     private function fetchCollectionTraits(Chain $chain, string $contractAddress, string $kind, callable $mapper): Collection
     {
@@ -317,7 +327,7 @@ class MnemonicPendingRequest extends PendingRequest
 
             $result = $result->merge(
                 collect($data)->map(function ($trait) use ($mapper) {
-                    /** @var Web3NftCollectionTrait $result */
+                    /** @var Web3CollectionTrait $result */
                     $result = $mapper($trait);
 
                     // This ensures we deduplicate dates/numerics properly, so we do not end up with thousands of unique traits
@@ -348,7 +358,7 @@ class MnemonicPendingRequest extends PendingRequest
      *
      * @return Collection<int, CollectionActivity>
      */
-    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
     {
         $this->chain = MnemonicChain::fromChain($chain);
 
@@ -381,6 +391,65 @@ class MnemonicPendingRequest extends PendingRequest
 
         /** @var array<string, mixed> $data */
         $data = self::get(sprintf('/foundational/v1beta2/transfers/nft?%s', $labelsQuery), $query)->json('nftTransfers');
+
+        return collect($data)->map(function ($transfer) use ($chain, $contractAddress, $ethToken) {
+            $currency = CurrencyCode::USD;
+
+            $blockchainTimestamp = Carbon::parse($transfer['blockchainEvent']['blockTimestamp']);
+            $prices = $this->extractActivityPrices($chain, $transfer, $currency, $ethToken, $blockchainTimestamp);
+
+            return new CollectionActivity(
+                contractAddress: $contractAddress,
+                tokenId: $transfer['tokenId'],
+                sender: $transfer['sender']['address'],
+                recipient: $transfer['recipient']['address'],
+                txHash: $transfer['blockchainEvent']['txHash'],
+                logIndex: $transfer['blockchainEvent']['logIndex'],
+                type: $this->extractNftTransferType($transfer['labels']),
+                timestamp: $blockchainTimestamp,
+                totalNative: $prices['native'],
+                totalUsd: $prices['usd'],
+                extraAttributes: [
+                    'recipient' => Arr::get($transfer, 'recipient'),
+                    'recipientPaid' => Arr::get($transfer, 'recipientPaid'),
+                    'sender' => Arr::get($transfer, 'sender'),
+                    'senderReceived' => Arr::get($transfer, 'senderReceived'),
+                ]
+            );
+        })->values();
+    }
+
+    /**
+     * @see https://docs.mnemonichq.com/reference/foundationalservice_getnfttransfers
+     *
+     * @return Collection<int, CollectionActivity>
+     */
+    public function getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
+    {
+        // Very similar to `getCollectionActivity` method, however this method only cares about `LABEL_BURN` labels...
+
+        $this->chain = MnemonicChain::fromChain($chain);
+
+        // Grab the ETH token regardless of the chain, because always want to report prices in ETH...
+        $ethToken = Token::query()
+                    ->whereHas('network', fn ($query) => $query->where('chain_id', Chain::ETH->value))
+                    ->where('is_native_token', true)
+                    ->firstOrFail();
+
+        $query = [
+            'limit' => $limit,
+            // Oldest first
+            'sortDirection' => 'SORT_DIRECTION_ASC',
+            'contractAddress' => $contractAddress,
+            'labelsAny' => 'LABEL_BURN',
+        ];
+
+        if ($from !== null) {
+            $query['blockTimestampGt'] = $from->toISOString();
+        }
+
+        /** @var array<string, mixed> $data */
+        $data = self::get('/foundational/v1beta2/transfers/nft', $query)->json('nftTransfers');
 
         return collect($data)->map(function ($transfer) use ($chain, $contractAddress, $ethToken) {
             $currency = CurrencyCode::USD;

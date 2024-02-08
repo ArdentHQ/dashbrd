@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
+use App\Models\TradingVolume;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
 use DateTime;
@@ -15,7 +16,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class FetchCollectionVolume implements ShouldQueue
 {
@@ -35,22 +35,22 @@ class FetchCollectionVolume implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('FetchCollectionVolume Job: Processing', [
-            'collection' => $this->collection->address,
-        ]);
-
-        $volume = Mnemonic::getNftCollectionVolume(
+        $volume = Mnemonic::getLatestCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
 
-        $this->collection->update([
-            'volume' => $volume,
-        ]);
+        TradingVolume::upsert([
+            'collection_id' => $this->collection->id,
+            'volume' => $volume->value,
+            'created_at' => $volume->date->toDateString(),
+        ], uniqueBy: ['collection_id', 'created_at']);
 
-        Log::info('FetchCollectionVolume Job: Handled', [
-            'collection' => $this->collection->address,
-            'volume' => $volume,
+        $this->collection->update([
+            'volume' => $volume->value,
+            'volume_1d' => $this->collection->totalVolumeSince(now()->subDays(1)),
+            'volume_7d' => $this->collection->totalVolumeSince(now()->subDays(7)),
+            'volume_30d' => $this->collection->totalVolumeSince(now()->subDays(30)),
         ]);
     }
 

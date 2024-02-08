@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Web3\Mnemonic;
 
 use App\Data\Web3\CollectionActivity;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
 use App\Enums\Service;
@@ -29,7 +29,7 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null): Web3NftsChunk
     {
         throw new NotImplementedException();
     }
@@ -49,10 +49,10 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
         throw new NotImplementedException();
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         return $this->fromCache(
-            static fn () => Mnemonic::getNftCollectionFloorPrice($chain, $contractAddress),
+            static fn () => Mnemonic::getCollectionFloorPrice($chain, $contractAddress),
             [$chain->name, $contractAddress]
         );
     }
@@ -60,9 +60,17 @@ class MnemonicWeb3DataProvider extends AbstractWeb3DataProvider
     /**
      * @return Collection<int, CollectionActivity>
      */
-    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, Carbon $from = null): Collection
+    public function getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
     {
         return Mnemonic::getCollectionActivity($chain, $contractAddress, $limit, $from);
+    }
+
+    /**
+     * @return Collection<int, CollectionActivity>
+     */
+    public function getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null): Collection
+    {
+        return Mnemonic::getBurnActivity($chain, $contractAddress, $limit, $from);
     }
 
     public function getBlockTimestamp(Network $network, int $blockNumber): Carbon

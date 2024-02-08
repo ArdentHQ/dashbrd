@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Web3\Fake;
 
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftData;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
@@ -58,7 +58,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
         });
     }
 
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null): Web3NftsChunk
     {
         $nfts = Nft::with('collection')
             ->whereHas('collection', static fn ($query) => $query->where('network_id', $network->id))
@@ -82,7 +82,7 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
                 name: $nft->name,
                 description: null,
                 extraAttributes: $nft['extra_attributes']->toArray(),
-                floorPrice: $this->getNftCollectionFloorPrice(Chain::ETH, $wallet->address),
+                floorPrice: $this->getCollectionFloorPrice(Chain::ETH, $wallet->address),
                 traits: [],
                 mintedBlock: random_int(1, 10000),
                 mintedAt: now(),
@@ -114,9 +114,9 @@ final class FakeWeb3DataProvider extends AbstractWeb3DataProvider
         return now();
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
-        return new Web3NftCollectionFloorPrice((string) (random_int(50, 1000) * 1e18), 'eth', Carbon::now());
+        return new Web3CollectionFloorPrice((string) (random_int(50, 1000) * 1e18), 'eth', Carbon::now());
     }
 
     public function getCollectionsNfts(CollectionModel $collection, ?string $startToken): Web3NftsChunk

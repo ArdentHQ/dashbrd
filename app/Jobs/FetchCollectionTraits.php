@@ -8,7 +8,7 @@ use App\Jobs\Traits\RecoversFromProviderErrors;
 use App\Models\Collection;
 use App\Support\Facades\Mnemonic;
 use App\Support\Queues;
-use App\Support\Web3NftCollectionHandler;
+use App\Support\Web3CollectionHandler;
 use DateTime;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -41,12 +41,12 @@ class FetchCollectionTraits implements ShouldBeUnique, ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
-        $traits = Mnemonic::getNftCollectionTraits(
+        $traits = Mnemonic::getCollectionTraits(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address
         );
 
-        (new Web3NftCollectionHandler())->storeTraits($this->collection->id, $traits);
+        (new Web3CollectionHandler())->storeTraits($this->collection->id, $traits);
 
         Log::info('FetchCollectionTraits Job: Handled', [
             'collection' => $this->collection->address,

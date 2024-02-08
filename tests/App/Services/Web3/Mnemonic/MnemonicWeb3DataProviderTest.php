@@ -21,7 +21,7 @@ it('can get nft floor price', function () {
     $collection = Collection::factory()->create();
 
     $provider = new MnemonicWeb3DataProvider();
-    $floorPrice = $provider->getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    $floorPrice = $provider->getCollectionFloorPrice(Chain::Polygon, $collection->address);
     expect($floorPrice->price)->toBe('10267792581881993')
         ->and($floorPrice->currency)->toBe('matic');
 });
@@ -45,7 +45,7 @@ it('can get nft floor price and lookup fungible token', function () {
     ]);
 
     $provider = new MnemonicWeb3DataProvider();
-    $floorPrice = $provider->getNftCollectionFloorPrice(Chain::Polygon, $collection->address);
+    $floorPrice = $provider->getCollectionFloorPrice(Chain::Polygon, $collection->address);
     expect($floorPrice->price)->toBe('6000000000000')
         ->and($floorPrice->currency)->toBe('weth');
 });
@@ -62,7 +62,7 @@ it('can handle missing nft floor price', function () {
     ]);
 
     $provider = new MnemonicWeb3DataProvider();
-    expect($provider->getNftCollectionFloorPrice(Chain::Polygon, $collection->address))
+    expect($provider->getCollectionFloorPrice(Chain::Polygon, $collection->address))
         ->toBeNull();
 });
 
@@ -129,4 +129,23 @@ it('can get collection activity', function () {
     $activity = (new MnemonicWeb3DataProvider)->getCollectionActivity(Chain::Polygon, $collection->address, limit: 10);
 
     expect($activity)->toHaveCount(18);
+});
+
+it('can get burn activity', function () {
+    Mnemonic::fake([
+        '*' => Http::response(fixtureData('mnemonic.burn_transfers'), 200),
+    ]);
+
+    Token::factory()->withGuid()->create([
+        'network_id' => Network::where('chain_id', 1)->firstOrFail()->id,
+        'symbol' => 'ETH',
+        'is_native_token' => 1,
+        'is_default_token' => 1,
+    ]);
+
+    $collection = Collection::factory()->create();
+
+    $activity = (new MnemonicWeb3DataProvider)->getBurnActivity(Chain::Polygon, $collection->address, limit: 10);
+
+    expect($activity)->toHaveCount(8);
 });

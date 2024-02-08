@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
+import VolumeFactory from "@/Tests/Factories/VolumeFactory";
 
 export default class CollectionFactory extends ModelFactory<App.Data.Collections.CollectionData> {
     protected factory(): App.Data.Collections.CollectionData {
@@ -13,12 +14,14 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             floorPriceFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
             floorPriceCurrency: this.optional(this.cryptoCurrency()),
             floorPriceDecimals: this.optional(18),
+            supply: this.optional(faker.datatype.number({ min: 1, max: 100000 })),
             image: this.optional(faker.image.avatar(), 0.9),
             banner: this.optional(faker.image.avatar()),
             openSeaSlug: this.optional(faker.lorem.slug()),
             website: faker.internet.url(),
             nftsCount: 0,
             nfts: [],
+            volume: new VolumeFactory().create(),
         };
     }
 
@@ -28,6 +31,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             floorPriceFiat: Number(faker.finance.amount(1, 1500, 2)),
             floorPriceCurrency: this.cryptoCurrency(),
             floorPriceDecimals: 18,
+            supply: faker.datatype.number({ min: 1, max: 100000 }),
             image: faker.image.avatar(),
             banner: faker.image.avatar(),
             bannerUpdatedAt: faker.date.recent().toISOString(),

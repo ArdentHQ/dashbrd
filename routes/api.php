@@ -21,6 +21,18 @@ Route::get('/landing-data', Controllers\LandingPageDataController::class)->name(
 Route::get('/galleries-overview', [Api\GalleryOverviewController::class, 'index'])
         ->name('galleries-overview.index');
 
+Route::get('/nominatable-collections', [Api\NominatableCollectionController::class, 'index'])
+        ->name('nominatable-collections');
+
+Route::get('/popular-collections', [Api\PopularCollectionController::class, 'index'])
+        ->name('api:popular-collections');
+
+Route::get('/votable-collections', [Api\VotableCollectionController::class, 'index'])
+        ->name('api:votable-collections');
+
+Route::get('/all-popular-collections', [Api\AllPopularCollectionController::class, 'index'])
+        ->name('api:all-popular-collections');
+
 Route::middleware('auth:sanctum')->group(function () {
     // Tokens...
     Route::get('/tokens', [Controllers\TokenController::class, 'list'])->name('tokens.list');

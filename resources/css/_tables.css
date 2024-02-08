@@ -67,10 +67,10 @@
 
 .table-list tbody tr::after {
     content: "";
-    @apply transition-default pointer-events-none absolute inset-0 -mx-3 rounded-xl outline outline-3 outline-transparent dark:hover:outline-theme-dark-500;
+    @apply transition-default pointer-events-none absolute inset-0 -mx-3 rounded-xl outline outline-3 outline-transparent;
 }
 
-.table-list tbody tr:hover::after {
+.table-list tbody tr:not(.disabled-row):hover::after {
     content: "";
     @apply outline-theme-primary-100 dark:outline-theme-dark-500;
 }
@@ -85,6 +85,13 @@
     @apply pointer-events-none absolute right-0 top-0 z-10 -mr-3 block h-full w-3 rounded-r-xl border-y border-r border-theme-secondary-300 dark:border-theme-dark-700;
 }
 
+@media (max-width: 959px) {
+    .table-list tbody tr td.unique-cell-until-md-lg::before {
+        content: "";
+        @apply pointer-events-none absolute inset-0 z-10 -mx-3 block h-full w-auto rounded-xl border-y border-r border-theme-secondary-300 dark:border-theme-dark-700;
+    }
+}
+
 .table-list tbody > tr,
 .table-list tbody > tr > td {
     @apply relative z-0;
@@ -93,4 +100,32 @@
 .table-list tbody tr td.custom-table-cell:after {
     content: "";
     @apply pointer-events-none absolute top-0 z-10 block h-full w-full border-y border-theme-secondary-300 dark:border-theme-dark-700;
+}
+
+.table-list tbody tr.selected-candidate td:first-child::before,
+.table-list tbody tr.selected-candidate td:last-child::before,
+.table-list tbody tr.selected-candidate td.custom-table-cell:after {
+    @apply border-theme-primary-600 dark:border-theme-primary-400;
+}
+
+.table-list tbody tr.selected-candidate td:first-child::before {
+    @apply border-y-2 border-l-2;
+}
+
+.table-list tbody tr.selected-candidate td:last-child::before {
+    @apply border-y-2 border-r-2;
+}
+
+.table-list tbody tr.selected-candidate td.custom-table-cell:after {
+    @apply border-y-2;
+}
+
+.table-list tbody tr.disabled-row td:first-child::before,
+.table-list tbody tr.disabled-row td:last-child::before {
+    @apply bg-theme-secondary-50 dark:bg-theme-dark-800;
+}
+
+.table-list tbody tr.disabled-row td.custom-table-cell div,
+.table-list tbody tr.disabled-row td.custom-table-cell p {
+    @apply text-theme-secondary-500 dark:text-theme-dark-400;
 }

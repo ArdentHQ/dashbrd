@@ -45,6 +45,7 @@ import { ReactComponent as Document } from "@icons/document.svg";
 import { ReactComponent as DoorExit } from "@icons/door-exit.svg";
 import { ReactComponent as DoubleCheck } from "@icons/double-check.svg";
 import { ReactComponent as Ellipsis } from "@icons/ellipsis.svg";
+import { ReactComponent as Ethereum } from "@icons/ethereum.svg";
 import { ReactComponent as ExclamationInTriangle } from "@icons/exclamation-in-triangle.svg";
 import { ReactComponent as Explorer } from "@icons/explorer.svg";
 import { ReactComponent as Eye } from "@icons/eye.svg";
@@ -64,6 +65,7 @@ import { ReactComponent as GridWithPencil } from "@icons/grid-with-pencil.svg";
 import { ReactComponent as Grid } from "@icons/grid.svg";
 import { ReactComponent as Heart } from "@icons/heart.svg";
 import { ReactComponent as HeartbeatInCircle } from "@icons/heartbeat-in-circle.svg";
+import { ReactComponent as HiddenVote } from "@icons/hidden-vote.svg";
 import { ReactComponent as Image } from "@icons/image.svg";
 import { ReactComponent as InfoInCircle } from "@icons/info-in-circle.svg";
 import { ReactComponent as KeyboardDelete } from "@icons/keyboard-delete.svg";
@@ -87,6 +89,7 @@ import { ReactComponent as WalletOpacity } from "@icons/opacity/wallet.svg";
 import { ReactComponent as Pencil } from "@icons/pencil.svg";
 import { ReactComponent as PlusInMagnifyingGlass } from "@icons/plus-in-magnifying-glass.svg";
 import { ReactComponent as Plus } from "@icons/plus.svg";
+import { ReactComponent as Polygon } from "@icons/polygon.svg";
 import { ReactComponent as Redo } from "@icons/redo.svg";
 import { ReactComponent as Refresh } from "@icons/refresh.svg";
 import { ReactComponent as RoundedSquareWithPencil } from "@icons/rounded-square-with-pencil.svg";
@@ -110,6 +113,7 @@ import { ReactComponent as Trash } from "@icons/trash.svg";
 import { ReactComponent as Upload } from "@icons/upload.svg";
 import { ReactComponent as UserTeam } from "@icons/user-team.svg";
 import { ReactComponent as UserWithSpeechBalloon } from "@icons/user-with-speech-balloon.svg";
+import { ReactComponent as VotedCollectionCheckmark } from "@icons/voted-collection-checkmark.svg";
 import { ReactComponent as Wallet } from "@icons/wallet.svg";
 import { ReactComponent as XInCircle } from "@icons/x-in-circle.svg";
 import { ReactComponent as X } from "@icons/x.svg";
@@ -230,4 +234,8 @@ export const SvgCollection = {
     FatDoubleCheck,
     AudioPause,
     AudioPlay,
+    Polygon,
+    Ethereum,
+    HiddenVote,
+    VotedCollectionCheckmark,
 };

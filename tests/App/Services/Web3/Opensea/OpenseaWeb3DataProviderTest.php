@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Data\Web3\Web3NftCollectionFloorPrice;
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;
 use App\Jobs\Middleware\RateLimited;
@@ -12,7 +12,7 @@ use App\Models\Wallet;
 use App\Services\Web3\Opensea\OpenseaWeb3DataProvider;
 use App\Support\Facades\Opensea;
 
-it('should getNftCollectionFloorPrice if no open sea slug', function () {
+it('should getCollectionFloorPrice if no open sea slug', function () {
     Collection::factory()->create([
         'address' => '0x23581767a106ae21c074b2276D25e5C3e136a68b',
         'network_id' => Network::where('chain_id', Chain::ETH->value)->first()->id,
@@ -22,12 +22,12 @@ it('should getNftCollectionFloorPrice if no open sea slug', function () {
 
     $provider = new OpenseaWeb3DataProvider();
 
-    $data = $provider->getNftCollectionFloorPrice(Chain::ETH, $contractAddress);
+    $data = $provider->getCollectionFloorPrice(Chain::ETH, $contractAddress);
 
     expect($data)->toBeNull();
 });
 
-it('should getNftCollectionFloorPrice  ', function () {
+it('should getCollectionFloorPrice  ', function () {
     Collection::factory()->create([
         'address' => '0x23581767a106ae21c074b2276D25e5C3e136a68b',
         'network_id' => Network::where('chain_id', Chain::ETH->value)->first()->id,
@@ -35,16 +35,16 @@ it('should getNftCollectionFloorPrice  ', function () {
     ]);
 
     Opensea::fake([
-        'https://api.opensea.io/api/v1/collection*' => Opensea::response(fixtureData('opensea.collection_stats')),
+        'https://api.opensea.io/api/v2/collections*' => Opensea::response(fixtureData('opensea.collection_stats')),
     ]);
 
     $contractAddress = '0x23581767a106ae21c074b2276D25e5C3e136a68b';
 
     $provider = new OpenseaWeb3DataProvider();
 
-    $data = $provider->getNftCollectionFloorPrice(Chain::ETH, $contractAddress);
+    $data = $provider->getCollectionFloorPrice(Chain::ETH, $contractAddress);
 
-    expect($data)->toBeInstanceOf(Web3NftCollectionFloorPrice::class);
+    expect($data)->toBeInstanceOf(Web3CollectionFloorPrice::class);
 });
 
 it('should getWalletTokens and throw NotImplementedException', function () {

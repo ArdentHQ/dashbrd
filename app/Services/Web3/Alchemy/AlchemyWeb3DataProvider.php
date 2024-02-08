@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Web3\Alchemy;
 
+use App\Data\Web3\Web3CollectionFloorPrice;
 use App\Data\Web3\Web3Erc20TokenData;
-use App\Data\Web3\Web3NftCollectionFloorPrice;
 use App\Data\Web3\Web3NftsChunk;
 use App\Enums\Chain;
 use App\Exceptions\NotImplementedException;
@@ -31,15 +31,15 @@ class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
         return Alchemy::getWalletTokens($wallet, $network);
     }
 
-    public function getWalletNfts(Wallet $wallet, Network $network, string $cursor = null, int $limit = null): Web3NftsChunk
+    public function getWalletNfts(Wallet $wallet, Network $network, ?string $cursor = null, ?int $limit = null): Web3NftsChunk
     {
         return Alchemy::getWalletNfts($wallet, $network, $cursor, $limit);
     }
 
     public function getCollectionsNfts(
         CollectionModel $collection,
-        string $startToken = null,
-        int $limit = null
+        ?string $startToken = null,
+        ?int $limit = null
     ): Web3NftsChunk {
         return Alchemy::collectionNfts($collection, $startToken, $limit);
     }
@@ -82,10 +82,10 @@ class AlchemyWeb3DataProvider extends AbstractWeb3DataProvider
         return [];
     }
 
-    public function getNftCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3NftCollectionFloorPrice
+    public function getCollectionFloorPrice(Chain $chain, string $contractAddress): ?Web3CollectionFloorPrice
     {
         return $this->fromCache(
-            static fn () => Alchemy::getNftCollectionFloorPrice($chain, $contractAddress),
+            static fn () => Alchemy::getCollectionFloorPrice($chain, $contractAddress),
             [$chain->name, $contractAddress]
         );
     }
