@@ -16,7 +16,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
 {
@@ -37,10 +36,6 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('FetchCollectionOpenseaSlug Job: Processing', [
-            'collection' => $this->collection->address,
-        ]);
-
         $this->collection->extra_attributes->set('opensea_slug_last_fetched_at', Carbon::now());
         $this->collection->save();
 
@@ -53,18 +48,9 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
         );
 
         if ($result !== null) {
-            Log::info('FetchCollectionOpenseaSlug Job: NFT Details found', [
-                'collection' => $this->collection->address,
-                'opensea_slug' => $result->collectionSlug(),
-            ]);
-
             $this->collection->extra_attributes->set('opensea_slug', $result->collectionSlug());
             $this->collection->save();
         }
-
-        Log::info('FetchCollectionOpenseaSlug Job: Handled', [
-            'collection' => $this->collection->address,
-        ]);
     }
 
     public function uniqueId(): string
