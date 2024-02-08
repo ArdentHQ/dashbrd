@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import CollectionNftDataFactory from "./CollectionNftDataFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
+import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 
 export default class CollectionDetailDataFactory extends ModelFactory<App.Data.Collections.CollectionDetailData> {
     protected factory(): App.Data.Collections.CollectionDetailData {
@@ -25,6 +26,7 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
             volume: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
             owners: this.optional(faker.datatype.number(1000)),
             nftsCount: 0,
+            token: new TokenDataFactory().create(),
             mintedAt: this.optional(faker.date.past().getTime()),
             activityUpdatedAt: this.optional(faker.date.recent().toISOString()),
             activityUpdateRequestedAt: this.optional(faker.date.recent().toISOString()),
