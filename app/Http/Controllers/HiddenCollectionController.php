@@ -8,6 +8,7 @@ use App\Models\Collection;
 use App\Support\Cache\UserCache;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HiddenCollectionController extends Controller
 {
@@ -19,6 +20,10 @@ class HiddenCollectionController extends Controller
             $request->user()->hiddenCollections()->attach($collection);
 
             UserCache::clearAll($request->user());
+
+            // Clear the cache that contains the total collection value, as that value is in currency...
+            Cache::forget("users:{$request->user()->id}:total-collection-value");
+            Cache::forget("users:{$request->user()->id}:total-hidden-collection-value");
         }
 
         return back();
@@ -32,6 +37,10 @@ class HiddenCollectionController extends Controller
             $request->user()->hiddenCollections()->detach($collection);
 
             UserCache::clearAll($request->user());
+
+            // Clear the cache that contains the total collection value, as that value is in currency...
+            Cache::forget("users:{$request->user()->id}:total-collection-value");
+            Cache::forget("users:{$request->user()->id}:total-hidden-collection-value");
         }
 
         return back();

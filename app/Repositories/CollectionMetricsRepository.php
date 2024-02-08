@@ -41,8 +41,8 @@ class CollectionMetricsRepository
         $cache = new UserCache($user);
 
         $cacheKey = $showHidden
-                        ? "users:{$user->id}:{$user->currency()->canonical()}:hidden-collection-value"
-                        : "users:{$user->id}:{$user->currency()->canonical()}:collection-value";
+                        ? "users:{$user->id}:total-hidden-collection-value"
+                        : "users:{$user->id}:total-collection-value";
 
         $value = Cache::remember($cacheKey, now()->addMinutes(30), fn () => $this->totalValueForUser($user, $showHidden));
 
