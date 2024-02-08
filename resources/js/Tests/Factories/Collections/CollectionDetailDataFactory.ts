@@ -40,7 +40,7 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
             token: new TokenDataFactory().create({
                 symbol: currency ?? undefined,
                 decimals,
-            })
+            }),
         }));
     }
 
