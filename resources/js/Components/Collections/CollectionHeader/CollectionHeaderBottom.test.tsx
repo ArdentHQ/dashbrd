@@ -157,6 +157,7 @@ describe("CollectionHeaderBottom", () => {
             <CollectionHeaderBottom
                 collection={new CollectionDetailDataFactory().withCryptoCurrency(null).create({
                     floorPrice: (1 * 1e18).toString(),
+                    volume: null,
                 })}
             />,
         );
