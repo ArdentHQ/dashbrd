@@ -4,7 +4,8 @@ import { CollectionHeaderBottom } from "./CollectionHeaderBottom";
 import * as useAuthOverlay from "@/Hooks/useAuthOverlay";
 import CollectionDetailDataFactory from "@/Tests/Factories/Collections/CollectionDetailDataFactory";
 import { render, screen, within } from "@/Tests/testing-library";
-const collection = new CollectionDetailDataFactory().withCryptoCurrency("DARK").create({
+
+const collection = new CollectionDetailDataFactory().withCryptoCurrency("DARK", 18).create({
     floorPrice: (1 * 1e18).toString(),
     volume: (123 * 1e18).toString(),
     supply: 9999,
@@ -100,7 +101,7 @@ describe("CollectionHeaderBottom", () => {
         const gridElement = screen.getByTestId("CollectionHeaderBottom__volume");
 
         expect(within(gridElement).getByTestId("GridHeader__title")).toHaveTextContent("Volume");
-        expect(within(gridElement).getByTestId("GridHeader__value")).toHaveTextContent("0 DARK");
+        expect(within(gridElement).getByTestId("GridHeader__value")).toHaveTextContent("N/A");
     });
 
     it("should handle no supply value", () => {

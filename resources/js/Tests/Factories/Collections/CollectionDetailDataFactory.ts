@@ -34,9 +34,13 @@ export default class CollectionDetailDataFactory extends ModelFactory<App.Data.C
         };
     }
 
-    withCryptoCurrency(currency: null | string): this {
+    withCryptoCurrency(currency: null | string, decimals?: number): this {
         return this.state(() => ({
             floorPriceCurrency: currency,
+            token: new TokenDataFactory().create({
+                symbol: currency ?? undefined,
+                decimals,
+            })
         }));
     }
 
