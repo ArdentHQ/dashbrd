@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Data\Token\TokenData;
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Models\User;
@@ -45,6 +46,7 @@ class CollectionDetailData extends Data
         public ?Carbon $activityUpdatedAt,
         public ?Carbon $activityUpdateRequestedAt,
         public ?bool $isFetchingActivity,
+        public TokenData $token,
     ) {
     }
 
@@ -77,6 +79,7 @@ class CollectionDetailData extends Data
             activityUpdatedAt: $collection->activity_updated_at,
             activityUpdateRequestedAt: $collection->activity_update_requested_at,
             isFetchingActivity: $collection->is_fetching_activity,
+            token: TokenData::fromModel($collection->nativeToken()),
         );
     }
 }

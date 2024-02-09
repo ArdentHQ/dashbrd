@@ -56,8 +56,8 @@ class VotableCollectionController extends Controller
      */
     private function getVotedCollection(User $user, EloquentCollection $collections): ?VotableCollectionData
     {
-        $collection = Collection::votable()
-                                ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
+        $collection = Collection::query()
+                                ->withCount(['nfts', 'votes' => fn ($q) => $q->inCurrentMonth()])
                                 ->with('network.nativeToken')
                                 ->votedByUserInCurrentMonth($user)
                                 ->first();

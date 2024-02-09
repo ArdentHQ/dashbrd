@@ -631,12 +631,13 @@ class Collection extends Model
                 SELECT
                     (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) -
                     AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) /
-                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100
+                    NULLIF(AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100, 0)
                 FROM
                     floor_price_history fp1
                 WHERE
                     fp1.collection_id = collections.id AND
-                    fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY') AS price_change_24h
+                    fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY'
+                ) AS price_change_24h
             ")
         );
     }
