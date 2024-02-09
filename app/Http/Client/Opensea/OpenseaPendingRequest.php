@@ -25,8 +25,6 @@ use Throwable;
 
 class OpenseaPendingRequest extends PendingRequest
 {
-    protected string $apiUrl;
-
     /**
      * Create a new HTTP Client instance.
      *
@@ -35,8 +33,6 @@ class OpenseaPendingRequest extends PendingRequest
     public function __construct(?Factory $factory = null)
     {
         parent::__construct($factory);
-
-        $this->apiUrl = config('services.opensea.endpoint');
 
         $this->options = [
             'headers' => [
@@ -52,9 +48,9 @@ class OpenseaPendingRequest extends PendingRequest
      * @param  array<mixed>  $query
      * @return Response
      */
-    public function get(string $url, $query = null, int $apiVersion = 1)
+    public function get(string $url, $query = null)
     {
-        $url = sprintf('%sv%d/%s', $this->apiUrl, $apiVersion, $url);
+        $url = 'https://api.opensea.io/api/v2/'.ltrim($url, '/');
 
         try {
             return parent::get($url, $query);
@@ -78,10 +74,9 @@ class OpenseaPendingRequest extends PendingRequest
         try {
             $chain = OpenseaChain::fromChainId($chain->value)->value;
 
-            $response = self::get(
-                url: sprintf('chain/%s/contract/%s/nfts/%s', $chain, $address, $identifier),
-                apiVersion: 2
-            );
+            $response = $this->get(sprintf(
+                '/chain/%s/contract/%s/nfts/%s', $chain, $address, $identifier
+            ));
 
             return new OpenseaNftDetails($response->json('nft'));
         } catch (ClientException $exception) {
@@ -101,7 +96,7 @@ class OpenseaPendingRequest extends PendingRequest
         try {
             $response = $this->makeCollectionStatsRequest($collectionSlug);
 
-            $floorPrice = $response->json('total.floor_price');
+            $floorPrice = $response['total']['floor_price'] ?? null;
 
             $currency = 'eth'; // OpenSea reports everything in ETH
 
@@ -134,21 +129,26 @@ class OpenseaPendingRequest extends PendingRequest
     {
         $response = $this->makeCollectionStatsRequest($collection->openSeaSlug());
 
-        $volume = $response->json('total.volume');
+        $volume = $response['total']['volume'] ?? null;
 
         return $volume === null
                     ? null
                     : CryptoUtils::convertToWei($volume, CryptoCurrencyDecimals::ETH->value);
     }
 
-    private function makeCollectionStatsRequest(string $collectionSlug): Response
+    /**
+     * Make a request to OpenSea endpoint to retrieve the collection statistics, but cache the entire response as it can be reused by another job.
+     *
+     * @return array<mixed>
+     */
+    private function makeCollectionStatsRequest(string $collectionSlug): array
     {
         // We cache for an hour because floor price job runs every hour...
         // But we cache it just so that we can reuse the response for total volume without needing to hit an API endpoint again...
         $ttl = now()->addMinutes(59);
 
-        return Cache::remember('opensea:collections-stats:'.$collectionSlug, $ttl, function () use ($collectionSlug) {
-            return self::get(sprintf('collections/%s/stats', $collectionSlug), apiVersion: 2);
-        });
+        return Cache::remember('opensea:collections-stats:'.$collectionSlug, $ttl, fn () => $this->get(
+            '/collections/'.$collectionSlug.'/stats'
+        )->json());
     }
 }

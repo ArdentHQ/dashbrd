@@ -44,10 +44,12 @@ export const CollectionHeaderBottom = ({ collection }: CollectionHeaderBottomPro
                     className="lg:border-r lg:border-theme-secondary-300 lg:pl-0 lg:pr-6 dark:lg:border-theme-dark-700"
                     title={t("common.volume")}
                     value={
-                        <FormatCrypto
-                            value={collection.volume ?? "0"}
-                            token={token}
-                        />
+                        collection.volume !== null ? (
+                            <FormatCrypto
+                                value={collection.volume}
+                                token={collection.token}
+                            />
+                        ) : null
                     }
                 />
 

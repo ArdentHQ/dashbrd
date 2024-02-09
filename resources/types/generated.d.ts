@@ -183,6 +183,7 @@ declare namespace App.Data.Collections {
         activityUpdatedAt: string | null;
         activityUpdateRequestedAt: string | null;
         isFetchingActivity: boolean | null;
+        token: App.Data.Token.TokenData;
     };
     export type CollectionFeaturedData = {
         id: number;
