@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
 import VolumeFactory from "@/Tests/Factories/VolumeFactory";
 
@@ -10,10 +11,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
             slug: faker.lorem.slug(),
             address: this.generateAddress(),
             chainId: this.chainId(),
-            floorPrice: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
-            floorPriceFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
-            floorPriceCurrency: this.optional(this.cryptoCurrency()),
-            floorPriceDecimals: this.optional(18),
+            floorPrice: new FloorPriceDataFactory().create(),
             supply: this.optional(faker.datatype.number({ min: 1, max: 100000 })),
             image: this.optional(faker.image.avatar(), 0.9),
             banner: this.optional(faker.image.avatar()),
@@ -27,10 +25,7 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
 
     filled(): this {
         return this.state(() => ({
-            floorPrice: faker.finance.amount(1 * 1e18, 25 * 1e18, 0),
-            floorPriceFiat: Number(faker.finance.amount(1, 1500, 2)),
-            floorPriceCurrency: this.cryptoCurrency(),
-            floorPriceDecimals: 18,
+            floorPrice: new FloorPriceDataFactory().create(),
             supply: faker.datatype.number({ min: 1, max: 100000 }),
             image: faker.image.avatar(),
             banner: faker.image.avatar(),
@@ -42,19 +37,13 @@ export default class CollectionFactory extends ModelFactory<App.Data.Collections
 
     withPrices(): this {
         return this.state(() => ({
-            floorPrice: faker.finance.amount(1 * 1e18, 25 * 1e18, 0),
-            floorPriceFiat: Number(faker.finance.amount(1, 1500, 2)),
-            floorPriceCurrency: this.cryptoCurrency(),
-            floorPriceDecimals: 18,
+            floorPrice: new FloorPriceDataFactory().create(),
         }));
     }
 
     withoutPrices(): this {
         return this.state(() => ({
-            floorPrice: null,
-            floorPriceFiat: null,
-            floorPriceCurrency: null,
-            floorPriceDecimals: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         }));
     }
 }

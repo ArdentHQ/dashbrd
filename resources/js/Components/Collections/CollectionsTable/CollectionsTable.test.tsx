@@ -3,6 +3,7 @@ import { type SpyInstance } from "vitest";
 import { CollectionsTable } from "./CollectionsTable";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
@@ -34,22 +35,25 @@ describe("CollectionsTable", () => {
     const collectionsWithNoFloorPriceCurrencyData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPriceCurrency: null,
-            floorPriceDecimals: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         },
     ];
 
     const collectionsWithNullFloorPriceFiatData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPriceFiat: null,
+            floorPrice: new FloorPriceDataFactory().create({
+                fiat: null,
+            }),
         },
     ];
 
     const collectionsWithNullFloorPriceData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPrice: null,
+            floorPrice: new FloorPriceDataFactory().create({
+                fiat: null,
+            }),
         },
     ];
 
@@ -328,8 +332,10 @@ describe("CollectionsTable", () => {
                 collections={[
                     {
                         ...collection,
-                        floorPrice: "1000",
-                        floorPriceFiat: null,
+                        floorPrice: new FloorPriceDataFactory().create({
+                            value: "1000",
+                            fiat: null,
+                        }),
                     },
                 ]}
                 user={user}

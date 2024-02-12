@@ -47,9 +47,9 @@ export const CollectionsTableItem = ({
     }, [isXlAndAbove, isLgAndAbove]);
 
     const token = {
-        symbol: collection.floorPriceCurrency ?? "ETH",
-        name: collection.floorPriceCurrency ?? "ETH",
-        decimals: collection.floorPriceDecimals ?? 18,
+        symbol: collection.floorPrice.currency,
+        name: collection.floorPrice.currency,
+        decimals: collection.floorPrice.decimals,
     };
 
     return (
@@ -84,7 +84,7 @@ export const CollectionsTableItem = ({
                     paddingClassName="px-2 md:px-5"
                     hoverClassName=""
                 >
-                    {collection.floorPrice === null || user === null ? (
+                    {collection.floorPrice.value === null ? (
                         <span
                             data-testid="CollectionsTableItem__unknown-floor-price"
                             className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
@@ -94,8 +94,8 @@ export const CollectionsTableItem = ({
                     ) : (
                         <CollectionFloorPrice
                             collection={collection}
-                            user={user}
-                            fiatValue={collection.floorPriceFiat}
+                            user={user ?? undefined}
+                            fiatValue={collection.floorPrice.fiat}
                             token={token}
                             variant="list"
                         />
@@ -108,7 +108,7 @@ export const CollectionsTableItem = ({
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
-                {collection.floorPrice === null || user === null ? (
+                {collection.floorPrice.value === null ? (
                     <span
                         data-testid="CollectionsTableItem__unknown-value"
                         className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300"
@@ -117,9 +117,9 @@ export const CollectionsTableItem = ({
                     </span>
                 ) : (
                     <CollectionPortfolioValue
-                        user={user}
-                        value={BigNumber.make(collection.floorPrice).times(collection.nftsCount).toString()}
-                        convertedValue={BigNumber.make(collection.floorPriceFiat ?? 0)
+                        user={user ?? undefined}
+                        value={BigNumber.make(collection.floorPrice.value).times(collection.nftsCount).toString()}
+                        convertedValue={BigNumber.make(collection.floorPrice.fiat ?? 0)
                             .times(collection.nftsCount)
                             .toString()}
                         token={token}

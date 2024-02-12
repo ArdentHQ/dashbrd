@@ -4,6 +4,7 @@ import { CollectionsFullTable } from "@/Components/Collections/CollectionsFullTa
 import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
 import SimpleNftDataFactory from "@/Tests/Factories/Collections/SimpleNftDataFactory";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
@@ -16,22 +17,24 @@ describe("CollectionsFullTable", () => {
     const collectionsWithNoFloorPriceCurrencyData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPriceCurrency: null,
-            floorPriceDecimals: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         },
     ];
 
     const collectionsWithNullFloorPriceFiatData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPriceFiat: null,
+            floorPrice: new FloorPriceDataFactory().create({
+                value: "1000",
+                fiat: null,
+            }),
         },
     ];
 
     const collectionsWithNullFloorPriceData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPrice: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         },
     ];
 
@@ -227,28 +230,16 @@ describe("CollectionsFullTable", () => {
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
     });
 
-    it("should render when floor price is null", () => {
-        const { getByTestId } = render(
-            <CollectionsFullTable
-                collections={collectionsWithNullFloorPriceData}
-                user={user}
-                activeSort={""}
-                setSortBy={vi.fn()}
-            />,
-        );
-
-        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-        expect(getByTestId("CollectionsTableItem__unknown-floor-price")).toBeInTheDocument();
-    });
-
     it("should default fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
             <CollectionsFullTable
                 collections={[
                     {
                         ...collection,
-                        floorPrice: "1000",
-                        floorPriceFiat: null,
+                        floorPrice: new FloorPriceDataFactory().create({
+                            value: "1000",
+                            fiat: null,
+                        }),
                     },
                 ]}
                 user={user}

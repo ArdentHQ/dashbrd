@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Traits;
 
+use App\Data\FloorPriceData;
+use App\Enums\CurrencyCode;
 use App\Models\FloorPriceHistory;
 use Brick\Math\BigNumber;
 use Brick\Math\RoundingMode;
@@ -18,6 +20,22 @@ trait HasFloorPriceHistory
     public function floorPriceHistory(): HasMany
     {
         return $this->hasMany(FloorPriceHistory::class);
+    }
+
+    /**
+     * Create a floor price DTO for the collection.
+     */
+    public function createFloorPriceData(?CurrencyCode $currency = CurrencyCode::USD): FloorPriceData
+    {
+        $token = $this->floorPriceToken;
+
+        return new FloorPriceData(
+            value: $this->floor_price,
+            change: $this->relationLoaded('floorPriceHistory') ? $this->floorPriceChange() : null,
+            fiat: $this->floor_price !== null ? $token?->toCurrentFiat($this->floor_price, $currency)?->toFloat() : null,
+            currency: $token?->symbol ?? 'ETH',
+            decimals: $token?->decimals ?? 18,
+        );
     }
 
     /**

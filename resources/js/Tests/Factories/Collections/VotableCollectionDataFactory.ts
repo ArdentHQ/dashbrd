@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import ModelFactory from "@/Tests/Factories/ModelFactory";
 import VolumeFactory from "@/Tests/Factories/VolumeFactory";
 
@@ -11,11 +12,7 @@ export default class VotableCollectionDataFactory extends ModelFactory<App.Data.
             address: this.generateAddress(),
             image: this.optional(faker.image.avatar(), 0.9),
             votes: this.optional(faker.datatype.number({ min: 1, max: 1000 })),
-            floorPrice: this.optional(faker.finance.amount(1 * 1e18, 25 * 1e18, 0)),
-            floorPriceFiat: this.optional(Number(faker.finance.amount(1, 1500, 2))),
-            floorPriceCurrency: this.optional(this.cryptoCurrency()),
-            floorPriceDecimals: this.optional(18),
-            floorPriceChange: this.optional(faker.datatype.number({ min: -100, max: 100 })),
+            floorPrice: new FloorPriceDataFactory().create(),
             volume: new VolumeFactory().create(),
             nftsCount: faker.datatype.number({ min: 1, max: 100 }),
             twitterUsername: null,

@@ -81,6 +81,7 @@ class CollectionRepository
                         'network.nativeToken',
                         'floorPriceToken',
                         'nfts' => fn ($q) => $q->limit(4),
+                        'floorPriceHistory' => fn ($q) => $q->where('retrieved_at', '>=', now()->subDays(1)->startOfDay()),
                     ])
                     ->withCount('nfts')
                     ->paginate($perPage)

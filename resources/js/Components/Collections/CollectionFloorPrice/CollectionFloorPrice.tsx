@@ -37,7 +37,7 @@ export const CollectionFloorPrice = ({
                 })}
             >
                 <FormatCrypto
-                    value={collection.floorPrice ?? "0"}
+                    value={collection.floorPrice.value ?? "0"}
                     token={token}
                 />
             </div>

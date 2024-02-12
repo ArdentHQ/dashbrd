@@ -2,6 +2,7 @@ import { type SpyInstance } from "vitest";
 import { CollectionsGrid } from "./CollectionsGrid";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { render } from "@/Tests/testing-library";
 
@@ -51,20 +52,24 @@ describe("CollectionsGrid", () => {
         const collections = [
             ...ethereumValues.map((cryptoValue) =>
                 new CollectionFactory().create({
-                    floorPrice: cryptoValue !== null ? (cryptoValue * 1e18).toString() : cryptoValue,
-                    floorPriceFiat: cryptoValue !== null ? cryptoValue * ethValue : null,
-                    floorPriceCurrency: "ETH",
-                    floorPriceDecimals: 18,
+                    floorPrice: new FloorPriceDataFactory().create({
+                        value: cryptoValue !== null ? (cryptoValue * 1e18).toString() : cryptoValue,
+                        fiat: cryptoValue !== null ? cryptoValue * ethValue : null,
+                        currency: "ETH",
+                        decimals: 18,
+                    }),
                     nftsCount: 1,
                 }),
             ),
 
             ...usdcValues.map((floorPriceFiat) =>
                 new CollectionFactory().create({
-                    floorPrice: floorPriceFiat !== null ? (floorPriceFiat * 1e6).toString() : floorPriceFiat,
-                    floorPriceFiat,
-                    floorPriceCurrency: "USDC",
-                    floorPriceDecimals: 6,
+                    floorPrice: new FloorPriceDataFactory().create({
+                        value: floorPriceFiat !== null ? (floorPriceFiat * 1e6).toString() : floorPriceFiat,
+                        fiat: floorPriceFiat,
+                        currency: "USDC",
+                        decimals: 6,
+                    }),
                     nftsCount: 1,
                 }),
             ),
@@ -113,15 +118,15 @@ describe("CollectionsGrid", () => {
 
         // Sort by value ascending, if null then first
         const collectionsSortedByFloorPrice = collections.sort((a, b) => {
-            if (a.floorPriceFiat === null) {
+            if (a.floorPrice.fiat === null) {
                 return -1;
             }
 
-            if (b.floorPriceFiat === null) {
+            if (b.floorPrice.fiat === null) {
                 return 1;
             }
 
-            return a.floorPriceFiat - b.floorPriceFiat;
+            return a.floorPrice.fiat - b.floorPrice.fiat;
         });
 
         const sortedGrid = render(

@@ -6,6 +6,7 @@ import { PopularCollectionsTableItemSkeleton } from "./PopularCollectionsTableIt
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import { PeriodFilterOptions } from "@/Pages/Collections/Components/CollectionsFilterTabs";
 import PopularCollectionFactory from "@/Tests/Factories/Collections/PopularCollectionFactory";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, userEvent } from "@/Tests/testing-library";
 import { allBreakpoints } from "@/Tests/utils";
@@ -31,10 +32,14 @@ describe("PopularCollectionsTable", () => {
 
     const collections = [
         ...new PopularCollectionFactory().createMany(2, {
-            floorPriceChange: 50,
+            floorPrice: new FloorPriceDataFactory().create({
+                change: 50,
+            }),
         }),
         ...new PopularCollectionFactory().createMany(2, {
-            floorPriceChange: null,
+            floorPrice: new FloorPriceDataFactory().create({
+                change: null,
+            }),
         }),
     ];
 

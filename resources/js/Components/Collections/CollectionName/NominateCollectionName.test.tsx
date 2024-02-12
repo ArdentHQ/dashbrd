@@ -4,10 +4,6 @@ import VotableCollectionDataFactory from "@/Tests/Factories/Collections/VotableC
 import { render, screen } from "@/Tests/testing-library";
 
 const demoCollection = new VotableCollectionDataFactory().create({
-    floorPriceFiat: 45.25,
-    floorPrice: "0",
-    floorPriceCurrency: "ETH",
-    floorPriceDecimals: 18,
     id: 1,
     name: "AlphaDogs",
     image: "https://i.seadn.io/gcs/files/4ef4a60496c335d66eba069423c0af90.png?w=500&auto=format",
