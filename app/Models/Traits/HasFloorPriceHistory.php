@@ -38,11 +38,15 @@ trait HasFloorPriceHistory
 
         $averageToday = BigNumber::sum(
             ...$today->pluck('floor_price')
-        )->toBigDecimal()->dividedBy($today->count(), scale: 2, roundingMode: RoundingMode::HALF_UP);
+        )->toBigDecimal()->dividedBy(
+            $today->count(), scale: 2, roundingMode: RoundingMode::HALF_UP
+        );
 
         $averageYesterday = BigNumber::sum(
             ...$yesterday->pluck('floor_price')
-        )->toBigDecimal()->dividedBy($yesterday->count(), scale: 2, roundingMode: RoundingMode::HALF_UP);
+        )->toBigDecimal()->dividedBy(
+            $yesterday->count(), scale: 2, roundingMode: RoundingMode::HALF_UP
+        );
 
         return $averageToday->minus($averageYesterday)
                         ->dividedBy($averageYesterday, scale: 2, roundingMode: RoundingMode::HALF_UP)
