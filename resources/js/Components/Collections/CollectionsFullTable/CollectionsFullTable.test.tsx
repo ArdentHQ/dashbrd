@@ -31,13 +31,6 @@ describe("CollectionsFullTable", () => {
         },
     ];
 
-    const collectionsWithNullFloorPriceData: App.Data.Collections.CollectionData[] = [
-        {
-            ...collection,
-            floorPrice: new FloorPriceDataFactory().empty().create(),
-        },
-    ];
-
     const user = new UserDataFactory().create();
 
     it.each(allBreakpoints)("renders without crashing on %s screen", (breakpoint) => {
