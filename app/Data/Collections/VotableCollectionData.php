@@ -50,7 +50,7 @@ class VotableCollectionData extends Data
             floorPriceFiat: (float) $collection->fiatValue($currency),
             floorPriceCurrency: $collection->floorPriceToken?->symbol,
             floorPriceDecimals: $collection->floorPriceToken?->decimals,
-            floorPriceChange: $collection->floorPriceChange(),
+            floorPriceChange: $collection->relationLoaded('floorPriceHistory') ? $collection->floorPriceChange() : null,
             volume: $collection->createVolumeData(Period::MONTH, $currency), // For votable collections, we only care about the volume in the last 30 days...
             nftsCount: $collection->nfts_count,
             // We are not using the `->twitter` method because we need the username
