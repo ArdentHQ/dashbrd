@@ -30,8 +30,8 @@ class PopularCollectionController extends Controller
                                 ->with([
                                     'network',
                                     'floorPriceToken',
+                                    'floorPriceHistory' => fn ($q) => $q->where('retrieved_at', '>=', now()->subDays(1)->startOfDay()),
                                 ])
-                                ->addFloorPriceChange()
                                 ->simplePaginate(12);
 
         return response()->json([
