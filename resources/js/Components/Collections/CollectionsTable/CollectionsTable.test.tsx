@@ -97,6 +97,26 @@ describe("CollectionsTable", () => {
         resetMock();
     });
 
+    it.each(allBreakpoints)("should render if no user", (breakpoint) => {
+        const resetMock = mockAuthContext({});
+
+        render(
+            <CollectionsTable
+                hiddenCollectionAddresses={[]}
+                collections={collections}
+                user={null}
+                alreadyReportedByCollection={{}}
+                reportByCollectionAvailableIn={{}}
+                onChanged={vi.fn()}
+            />,
+            { breakpoint },
+        );
+
+        expect(screen.getByTestId("CollectionsTable")).toBeInTheDocument();
+
+        resetMock();
+    });
+
     it.each(allBreakpoints)("renders without crashing on %s screen", (breakpoint) => {
         const { getByTestId } = render(
             <CollectionsTable
