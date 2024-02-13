@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Heading } from "@/Components/Heading";
-import { isTruthy } from "@/Utils/is-truthy";
 
 export const ErrorContent = ({
     title,
@@ -26,7 +25,7 @@ export const ErrorContent = ({
 
             {showActionButtons && (
                 <div className="mt-6 flex flex-col space-y-3 sm:flex-row sm:justify-center sm:space-x-3 sm:space-y-0">
-                    {isTruthy(contactEmail) && (
+                    {contactEmail !== undefined && (
                         <ButtonLink
                             className="w-full justify-center sm:w-auto"
                             variant="primary"
