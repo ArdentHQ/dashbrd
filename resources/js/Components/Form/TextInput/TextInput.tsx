@@ -84,6 +84,7 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
                         className,
                     )}
                     ref={input}
+                    disabled={disabled}
                     {...properties}
                 />
 
