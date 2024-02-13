@@ -5,7 +5,7 @@ import { Heading } from "@/Components/Heading";
 export const ErrorContent = ({
     title,
     description,
-    contactEmail,
+    contactEmail = "",
     showActionButtons = true,
 }: {
     title?: string;
@@ -25,7 +25,7 @@ export const ErrorContent = ({
 
             {showActionButtons && (
                 <div className="mt-6 flex flex-col space-y-3 sm:flex-row sm:justify-center sm:space-x-3 sm:space-y-0">
-                    {contactEmail !== undefined && (
+                    {contactEmail.length > 0 && (
                         <ButtonLink
                             className="w-full justify-center sm:w-auto"
                             variant="primary"
