@@ -127,13 +127,7 @@ module.exports = {
         "unicorn/prefer-spread": "error",
         "unicorn/prefer-string-slice": "error",
         "unicorn/prefer-ternary": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-ternary.md
-        "unicorn/prefer-top-level-await": "error",
-        "unicorn/prevent-abbreviations": [
-            "error",
-            {
-                ignore: ["i18n"],
-            },
-        ],
+        "unicorn/prefer-top-level-await": "error"
     },
     overrides: [
         {
