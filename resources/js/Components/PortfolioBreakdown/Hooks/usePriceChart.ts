@@ -1,6 +1,7 @@
 import { last } from "@ardenthq/sdk-helpers";
 import { type Chart, type ChartDataset, type Point } from "chart.js";
 import { determineMinMaxDataValues } from "@/Components/Graphs/LineChart";
+import { isTruthy } from "@/Utils/is-truthy";
 
 interface UpdatePriceDataProperties {
     chart?: Chart<"line">;
@@ -10,13 +11,7 @@ interface UpdatePriceDataProperties {
     datasets: Array<ChartDataset<"line", Array<number | Point | null>>>;
 }
 
-const updateChartData = ({
-    chart,
-    labels,
-    values,
-    isPlaceholder = false,
-    datasets,
-}: UpdatePriceDataProperties): void => {
+const updateChartData = ({ chart, labels, values, isPlaceholder, datasets }: UpdatePriceDataProperties): void => {
     if (chart === undefined) {
         return;
     }
@@ -25,7 +20,7 @@ const updateChartData = ({
 
     const isPositive: boolean = values[0] < last(values);
 
-    if (isPlaceholder) {
+    if (isTruthy(isPlaceholder)) {
         chart.data.datasets[0].borderColor = "rgba(196, 200, 207, 1)";
     } else if (isPositive) {
         chart.data.datasets[0].borderColor = "rgba(40, 149, 72, 1)";
