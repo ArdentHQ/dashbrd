@@ -98,7 +98,7 @@ const PoweredBy = (): JSX.Element => {
     );
 };
 
-const SocialIcon = ({ name, href, icon }: { name: string; href: string; icon: IconName }) => (
+const SocialIcon = ({ name, href, icon }: { name: string; href: string; icon: IconName }): JSX.Element => (
     <a
         href={href}
         className={cn(
