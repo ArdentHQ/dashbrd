@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Icon, IconName } from "@/Components/Icon";
+import { Icon, type IconName } from "@/Components/Icon";
 
 interface Provider {
     url: string;
