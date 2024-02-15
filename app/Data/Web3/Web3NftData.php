@@ -54,4 +54,32 @@ class Web3NftData
             'network_id' => $this->networkId,
         ]);
     }
+
+    /**
+     * Generate NFT's meta attributes that are then serialized when persisting the NFT into the database.
+     *
+     * @return array<string, mixed>
+     */
+    public function attributes(): array
+    {
+        $attributes = [
+            'image' => $this->collectionImage,
+            'website' => $this->collectionWebsite,
+            'socials' => $this->collectionSocials,
+            'banner' => $this->collectionBannerImageUrl,
+            'banner_updated_at' => $this->collectionBannerImageUrl ? now() : null,
+        ];
+
+        if ($this->collectionOpenSeaSlug !== null) {
+            $attributes['opensea_slug'] = $this->collectionOpenSeaSlug;
+        }
+
+        if ($this->hasError) {
+            $attributes = array_filter($attributes, function ($value) {
+                return $value !== null;
+            });
+        }
+
+        return $attributes;
+    }
 }

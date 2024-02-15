@@ -56,24 +56,6 @@ class Web3NftHandler
         $collectionsData = $nftsGroupedByCollectionAddress->flatMap(function (Web3NftData $nftData) use ($now, $nftsInCollection) {
             $token = $nftData->token();
 
-            $attributes = [
-                'image' => $nftData->collectionImage,
-                'website' => $nftData->collectionWebsite,
-                'socials' => $nftData->collectionSocials,
-                'banner' => $nftData->collectionBannerImageUrl,
-                'banner_updated_at' => $nftData->collectionBannerImageUrl ? $now : null,
-            ];
-
-            if ($nftData->collectionOpenSeaSlug !== null) {
-                $attributes['opensea_slug'] = $nftData->collectionOpenSeaSlug;
-            }
-
-            if ($nftData->hasError) {
-                $attributes = array_filter($attributes, function ($value) {
-                    return $value !== null;
-                });
-            }
-
             return [
                 $nftData->tokenAddress,
                 $nftData->networkId,
@@ -85,7 +67,7 @@ class Web3NftHandler
                 $token ? $nftData->floorPrice?->price : null,
                 $token?->id,
                 $token ? $nftData->floorPrice?->retrievedAt : null,
-                json_encode($attributes),
+                json_encode($nftData->attributes()),
                 $nftData->mintedBlock,
                 $nftData->mintedAt?->toDateTimeString(),
                 $nftData->type->value,
@@ -97,13 +79,12 @@ class Web3NftHandler
 
         $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
 
-        $ids = DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $dispatchJobs, $now) {
-            // upsert nfts/collections (if any)
+        $collections = DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $now) {
             if ($nfts->isEmpty()) {
                 return collect();
             }
 
-            $dbCollections = collect(DB::select(
+            $collections = CollectionModel::hydrate(DB::select(
                 // language=postgresql
                 "
     insert into collections
@@ -121,13 +102,12 @@ class Web3NftHandler
             minted_at = excluded.minted_at,
             type = coalesce(excluded.type, collections.type),
             last_indexed_token_number = coalesce(excluded.last_indexed_token_number, collections.last_indexed_token_number)
-    returning id, address, floor_price, supply
-     ",
+    returning *
+                ",
                 $collectionsData->toArray(),
             ));
 
-            // Group all NFTs by their address, so the key will be the address of the collection
-            $groupedByAddress = collect($dbCollections)->keyBy(fn ($nft) => Str::lower($nft->address));
+            $groupedByAddress = $collections->keyBy(fn ($nft) => Str::lower($nft->address));
 
             $nfts = $nfts->filter(function ($nft) use ($groupedByAddress) {
                 $collection = $groupedByAddress->get(Str::lower($nft->tokenAddress));
@@ -166,27 +146,11 @@ class Web3NftHandler
 
             Nft::upsert($valuesToUpsert, $uniqueBy, $valuesToUpdateIfExists);
 
-            // Traits only need if collections are enabled
             if (Feature::active(Features::Collections->value)) {
                 $this->upsertTraits($nfts, $groupedByAddress, $now);
             }
 
-            $ids = $dbCollections->pluck('id');
-
-            if ($dispatchJobs) {
-                $groupedByAddress
-                    ->each(function ($dbCollection, string $address) {
-                        if (! empty($dbCollection->floor_price)) {
-                            return;
-                        }
-
-                        FetchCollectionFloorPrice::dispatch($this->getChainId(), $address)
-                                ->onQueue(Queues::NFTS)
-                                ->afterCommit();
-                    });
-            }
-
-            return $ids;
+            return $collections;
         });
 
         if (Feature::active(Features::Collections->value)) {
@@ -196,23 +160,27 @@ class Web3NftHandler
                 });
 
                 // Index activity only for newly created collections...
-                CollectionModel::whereIn('id', $ids)->chunkById(100, function ($collections) {
-                    $collections->each(function ($collection) {
-                        if (! $collection->is_fetching_activity && $collection->activity_updated_at === null) {
-                            FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
-                        }
+                $collections->each(function ($collection) {
+                    if (! $collection->is_fetching_activity && $collection->activity_updated_at === null) {
+                        FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
+                    }
 
-                        // If the collection has just been created, pre-fetch the 30-day volume history...
-                        if ($collection->created_at->gte(now()->subMinutes(3))) {
-                            FetchCollectionVolumeHistory::dispatch($collection);
-                        }
-                    });
+                    if (empty($collection->floor_price)) {
+                        FetchCollectionFloorPrice::dispatch($this->getChainId(), $collection->address)
+                                ->onQueue(Queues::NFTS)
+                                ->afterCommit();
+                    }
+
+                    // If the collection has just been created, pre-fetch the 30-day volume history...
+                    if ($collection->created_at->gte(now()->subMinutes(3))) {
+                        FetchCollectionVolumeHistory::dispatch($collection);
+                    }
                 });
             }
 
             // Passing an empty array means we update all collections which is undesired here.
-            if (! $ids->isEmpty()) {
-                CollectionModel::updateFiatValue($ids->toArray());
+            if (! $collections->isEmpty()) {
+                CollectionModel::updateFiatValue($collections->pluck('id')->toArray());
             } else {
                 Log::info('Web3NftHandler: skipping updateFiatValue because no ids given', [
                     'wallet' => $this->wallet?->address,
@@ -222,10 +190,8 @@ class Web3NftHandler
             }
 
             // Users that own NFTs from the collections that were updated
-            $affectedUsersIds = User::whereHas('wallets', function (Builder $walletQuery) use ($ids) {
-                $walletQuery->whereHas('nfts', function (Builder $nftQuery) use ($ids) {
-                    $nftQuery->whereIn('collection_id', $ids);
-                });
+            $affectedUsersIds = User::whereHas('wallets', function (Builder $query) use ($collections) {
+                return $query->whereHas('nfts', fn ($q) => $q->whereIn('collection_id', $collections->pluck('id')));
             })->pluck('users.id')->toArray();
 
             // Passing an empty array means we update all users which is undesired here.
@@ -241,12 +207,7 @@ class Web3NftHandler
         }
     }
 
-    /**
-     * @param object{
-     *   supply: int|null
-     * } $collection
-     */
-    private function shouldKeepNft(object $collection): bool
+    private function shouldKeepNft(CollectionModel $collection): bool
     {
         // Dont ignore wallet NFTs
         if ($this->wallet !== null) {
