@@ -155,12 +155,12 @@ class Web3NftHandler
 
         if (Feature::active(Features::Collections->value)) {
             if ($dispatchJobs) {
-                $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
-                    DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
-                });
-
-                // Index activity only for newly created collections...
                 $collections->each(function ($collection) {
+                    if ($collection->minted_at === null) {
+                        DetermineCollectionMintingDate::dispatch($collection)->onQueue(Queues::NFTS);
+                    }
+
+                    // Index activity only for newly created collections...
                     if (! $collection->is_fetching_activity && $collection->activity_updated_at === null) {
                         FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
                     }
