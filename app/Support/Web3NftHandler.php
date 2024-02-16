@@ -389,7 +389,7 @@ class Web3NftHandler
 
                     // Write the original value to the pivot table depending on the display type.
                     [$valueString, $valueNumeric, $valueDate] = $trait['displayType']->getValueColumns($trait['value']);
-                    $paramsValueStrings->push($valueString !== null ? StringUtils::doubleQuote($valueString) : 'NULL');
+                    $paramsValueStrings->push($valueString !== null ? Str::wrapInQuotes($valueString) : 'NULL');
                     $paramsValueNumerics->push($valueNumeric ?? 'NULL');
                     $paramsValueDates->push($valueDate ?? 'NULL');
                 });
