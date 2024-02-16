@@ -82,7 +82,6 @@ return [
 
     'opensea' => [
         'key' => env('OPENSEA_API_KEY', null),
-        'endpoint' => env('OPENSEA_API_ENDPOINT', 'https://api.opensea.io/api/'),
 
         // @see https://docs.opensea.io/v1.0/reference/api-overview#api-faqs
         'rate' => [
