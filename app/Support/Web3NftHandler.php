@@ -111,25 +111,17 @@ class Web3NftHandler
                 return $nft->type === TokenType::Erc721 && $this->shouldKeepNft($collection);
             });
 
-            $valuesToUpsert = $nfts->map(function ($nft) use ($groupedByAddress, $now) {
-                $collection = $groupedByAddress->get(Str::lower($nft->tokenAddress));
-
-                $values = [
-                    'wallet_id' => $this->wallet?->id,
-                    'collection_id' => $collection->id,
-                    'token_number' => $nft->tokenNumber,
-                    'description' => $nft->description,
-                    'name' => $nft->name,
-                    'extra_attributes' => json_encode($nft->extraAttributes),
-                    'deleted_at' => null,
-                    'metadata_fetched_at' => $now,
-                    'info' => $nft->hasError ? $nft->info : null,
-                ];
-
-                return $values;
-            })->toArray();
-
-            $uniqueBy = ['collection_id', 'token_number'];
+            $valuesToUpsert = $nfts->map(fn ($nft) => [
+                'wallet_id' => $this->wallet?->id,
+                'collection_id' => $groupedByAddress->get(Str::lower($nft->tokenAddress))->id,
+                'token_number' => $nft->tokenNumber,
+                'description' => $nft->description,
+                'name' => $nft->name,
+                'extra_attributes' => json_encode($nft->extraAttributes),
+                'deleted_at' => null,
+                'metadata_fetched_at' => $now,
+                'info' => $nft->hasError ? $nft->info : null,
+            ])->toArray();
 
             $valuesToUpdateIfExists = ['deleted_at', 'info'];
             $valuesToCheck = ['name', 'description', 'extra_attributes', 'metadata_fetched_at', 'wallet_id'];
@@ -140,7 +132,7 @@ class Web3NftHandler
                 }
             }
 
-            Nft::upsert($valuesToUpsert, $uniqueBy, $valuesToUpdateIfExists);
+            Nft::upsert($valuesToUpsert, uniqueBy: ['collection_id', 'token_number'], update: $valuesToUpdateIfExists);
 
             if (Feature::active(Features::Collections->value)) {
                 $this->upsertTraits($nfts, $groupedByAddress, $now);
