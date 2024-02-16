@@ -79,11 +79,7 @@ class Web3NftHandler
 
         $valuesPlaceholders = $nftsGroupedByCollectionAddress->map(fn () => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->join(',');
 
-        $collections = DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $now) {
-            if ($nfts->isEmpty()) {
-                return collect();
-            }
-
+        $collections = $nfts->isEmpty() ? collect() : DB::transaction(function () use ($nfts, $collectionsData, $valuesPlaceholders, $now) {
             $collections = CollectionModel::hydrate(DB::select(
                 // language=postgresql
                 "
