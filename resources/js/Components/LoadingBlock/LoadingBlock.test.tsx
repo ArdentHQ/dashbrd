@@ -1,11 +1,11 @@
 import React from "react";
 import { LoadingBlock } from "./LoadingBlock";
-import { render, screen } from "@/Tests/testing-library";
+import { render } from "@/Tests/testing-library";
 
 describe("LoadingBlock", () => {
     it("should render", () => {
-        render(<LoadingBlock />);
+        const { getByTestId } = render(<LoadingBlock>Loading...</LoadingBlock>);
 
-        expect(screen.getByTestId("LoadingBlock")).toBeInTheDocument();
+        expect(getByTestId("LoadingBlock")).toBeInTheDocument();
     });
 });

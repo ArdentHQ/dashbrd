@@ -52,7 +52,7 @@ export const NftCollectionSearch = ({ showHidden }: { showHidden: boolean }): JS
                     onChange={setSearchQuery}
                 />
 
-                {isSearchingCollections && <LoadingBlock text={t("common.searching")} />}
+                {isSearchingCollections && <LoadingBlock>{t("common.searching")}</LoadingBlock>}
 
                 {nfts.length === 0 && !loadingCollections && (
                     <EmptyBlock

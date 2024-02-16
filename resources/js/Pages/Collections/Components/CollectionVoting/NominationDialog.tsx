@@ -201,7 +201,7 @@ export const NominationDialog = ({
                                 showHeaderWhenEmpty
                             />
 
-                            <LoadingBlock text={t("pages.collections.search.loading_results")} />
+                            <LoadingBlock>{t("pages.collections.search.loading_results")}</LoadingBlock>
                         </div>
                     )}
 
