@@ -300,7 +300,6 @@ class Web3NftHandler
     /**
      * @param  Collection<int, Web3NftData>  $nfts
      * @param  Collection<string, \App\Models\Collection>  $collectionLookup
-     *                                                                        NOTE: The caller is responsible for ensuring atomicity. Make sure to always call this inside a `DB::Transaction`.
      */
     public function upsertTraits(Collection $nfts, Collection $collectionLookup, Carbon $now): void
     {
@@ -339,16 +338,13 @@ class Web3NftHandler
                 $trait['normalizedValue'],
                 $trait['displayType']->value,
                 0,
-                0,
                 $now,
                 $now,
             ]);
 
-        $placeholders = $params->map(fn ($_) => '(?, ?, ?, ?, ?, ?, ?, ?)')->join(', ');
-
         $query = sprintf(
             get_query('nfts.insert_collection_traits'),
-            $placeholders
+            $params->map(fn ($_) => '(?, ?, ?, ?, ?, ?, ?)')->join(', ')
         );
 
         $dbTraits = collect(DB::select($query, $params->flatten()->toArray()));

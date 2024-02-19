@@ -43,7 +43,6 @@ class CollectionTraitFactory extends Factory
             'value_max' => $valueMax,
 
             'nfts_percentage' => fn () => fake()->randomFloat(3, 0, 100.0),
-            'nfts_count' => fn () => random_int(0, 10000),
         ];
     }
 }

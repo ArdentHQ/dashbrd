@@ -26,18 +26,14 @@ class Web3CollectionHandler
             return [
                 'collection_id' => $collectionId,
                 'name' => $trait->name,
-
                 'value' => $trait->value,
                 'display_type' => $trait->displayType->value,
-
                 'value_min' => $trait->valueMin,
                 'value_max' => $trait->valueMax,
-
-                'nfts_count' => $trait->nftsCount,
                 'nfts_percentage' => $trait->nftsPercentage,
             ];
         })->toArray(),
             ['collection_id', 'name', 'value'],
-            ['display_type', 'value_min', 'value_max', 'nfts_count', 'nfts_percentage']);
+            ['display_type', 'value_min', 'value_max', 'nfts_percentage']);
     }
 }

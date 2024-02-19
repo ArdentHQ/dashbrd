@@ -281,7 +281,6 @@ class MnemonicPendingRequest extends PendingRequest
             value: $trait['value'],
             valueMin: null,
             valueMax: null,
-            nftsCount: $trait['nftsCount'],
             nftsPercentage: $trait['nftsPercentage'],
             displayType: TraitDisplayType::fromMnemonicDisplayType($trait['displayType'] ?? null, $trait['value']),
         ));
@@ -297,7 +296,6 @@ class MnemonicPendingRequest extends PendingRequest
             value: Web3NftHandler::$numericTraitPlaceholder,
             valueMin: $trait['valueMin'],
             valueMax: $trait['valueMax'],
-            nftsCount: $trait['nftsCount'] ?? '0',
             nftsPercentage: $trait['nftsPercentage'] ?? 0,
             displayType: TraitDisplayType::fromMnemonicDisplayType($trait['displayType'] ?? null, null),
         ));

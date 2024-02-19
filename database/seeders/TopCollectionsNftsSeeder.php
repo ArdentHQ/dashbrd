@@ -6,8 +6,8 @@ namespace Database\Seeders;
 
 use App\Enums\Chain;
 use App\Enums\TokenType;
-use App\Models\Collection;
 use App\Models\Collection as NftCollection;
+use App\Models\Collection;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Token;
@@ -72,7 +72,6 @@ class TopCollectionsNftsSeeder extends Seeder
                     'value_max' => $trait['valueMin'],
                     'value_min' => $trait['valueMax'],
                     'display_type' => $trait['displayType'],
-                    'nfts_count' => $trait['nftsCount'],
                     'nfts_percentage' => $trait['nftsPercentage'],
                 ]);
 
