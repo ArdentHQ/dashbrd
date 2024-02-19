@@ -1,7 +1,41 @@
 import { useTranslation } from "react-i18next";
-import { Icon } from "@/Components/Icon";
+import { Icon, type IconName } from "@/Components/Icon";
 
-const PoweredByLink = ({ url, icon, title }: { url: string; icon: React.ReactNode; title: string }): JSX.Element => (
+interface Provider {
+    url: string;
+    icon: IconName;
+    title: string;
+}
+
+export const PoweredByIcons = (): JSX.Element => {
+    const { t } = useTranslation();
+
+    const providers: Provider[] = [
+        { title: "Etherscan", icon: "Etherscan", url: t("urls.etherscan") },
+        { title: "Coingecko", icon: "Coingecko", url: t("urls.coingecko") },
+        { title: "Polygonscan", icon: "Polygonscan", url: t("urls.polygonscan") },
+        { title: "Alchemy", icon: "Alchemy", url: t("urls.alchemy") },
+        { title: "Moralis", icon: "Moralis", url: t("urls.moralis") },
+        { title: "Mnemonic", icon: "Mnemonic", url: t("urls.mnemonic") },
+        { title: "OpenSea", icon: "OpenseaCircle", url: t("urls.opensea") },
+    ];
+
+    return (
+        <ul className="flex items-center space-x-2">
+            {providers.map(({ title, icon, url }, index) => (
+                <li key={index}>
+                    <PoweredByLink
+                        url={url}
+                        title={title}
+                        icon={icon}
+                    />
+                </li>
+            ))}
+        </ul>
+    );
+};
+
+const PoweredByLink = ({ url, icon, title }: Provider): JSX.Element => (
     <a
         href={url}
         className="transition-default text-theme-secondary-700 hover:text-theme-primary-700 dark:text-theme-dark-200 dark:hover:text-theme-dark-300"
@@ -9,99 +43,10 @@ const PoweredByLink = ({ url, icon, title }: { url: string; icon: React.ReactNod
         rel="noopener nofollow noreferrer"
     >
         <span className="sr-only">{title}</span>
-        {icon}
+
+        <Icon
+            name={icon}
+            aria-hidden="true"
+        />
     </a>
 );
-
-export const PoweredByIcons = (): JSX.Element => {
-    const { t } = useTranslation();
-
-    return (
-        <ul className="flex items-center space-x-2">
-            <li>
-                <PoweredByLink
-                    url={t("urls.etherscan")}
-                    title="Etherscan"
-                    icon={
-                        <Icon
-                            name="Etherscan"
-                            aria-hidden="true"
-                        />
-                    }
-                />
-            </li>
-            <li>
-                <PoweredByLink
-                    url={t("urls.coingecko")}
-                    title="Coingecko"
-                    icon={
-                        <Icon
-                            name="Coingecko"
-                            aria-hidden="true"
-                        />
-                    }
-                />
-            </li>
-            <li>
-                <PoweredByLink
-                    url={t("urls.polygonscan")}
-                    title="Polygonscan"
-                    icon={
-                        <Icon
-                            name="Polygonscan"
-                            aria-hidden="true"
-                        />
-                    }
-                />
-            </li>
-            <li>
-                <PoweredByLink
-                    url={t("urls.alchemy")}
-                    title="Alchemy"
-                    icon={
-                        <Icon
-                            name="Alchemy"
-                            aria-hidden="true"
-                        />
-                    }
-                />
-            </li>
-            <li>
-                <PoweredByLink
-                    url={t("urls.moralis")}
-                    title="Moralis"
-                    icon={
-                        <Icon
-                            name="Moralis"
-                            aria-hidden="true"
-                        />
-                    }
-                />
-            </li>
-            <li>
-                <PoweredByLink
-                    url={t("urls.mnemonic")}
-                    title="Mnemonic"
-                    icon={
-                        <Icon
-                            name="Mnemonic"
-                            aria-hidden="true"
-                        />
-                    }
-                />
-            </li>
-            <li>
-                <PoweredByLink
-                    url={t("urls.opensea")}
-                    title="OpenSea"
-                    icon={
-                        <Icon
-                            name="OpenseaCircle"
-                            aria-hidden="true"
-                        />
-                    }
-                />
-            </li>
-        </ul>
-    );
-};
