@@ -7,7 +7,6 @@ namespace Tests;
 use App\Contracts\TextToSpeechProvider;
 use App\Jobs\FetchCollectionBanner;
 use App\Jobs\FetchCollectionFloorPrice;
-use App\Jobs\FetchCollectionTraits;
 use App\Jobs\FetchEnsDetails;
 use App\Jobs\FetchNativeBalances;
 use App\Jobs\FetchTokens;
@@ -63,7 +62,6 @@ abstract class TestCase extends BaseTestCase
             FetchWalletNfts::class,
             FetchCollectionBanner::class,
             FetchCollectionFloorPrice::class,
-            FetchCollectionTraits::class,
             FetchNativeBalances::class,
             FetchEnsDetails::class,
         ]);
