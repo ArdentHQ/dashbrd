@@ -58,6 +58,6 @@ class CalculateTraitRarities implements ShouldQueue
             return $q->where('name', $trait->name)->where('value', $trait->value);
         })->count();
 
-        return round($count / $this->collection->supply, 4);
+        return round($count / $this->collection->supply, 3) * 100;
     }
 }
