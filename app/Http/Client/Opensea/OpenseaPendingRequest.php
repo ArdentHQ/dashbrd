@@ -125,7 +125,7 @@ class OpenseaPendingRequest extends PendingRequest
     /**
      * @see https://docs.opensea.io/reference/get_collection
      */
-    public function getCollectionSupply(string $collectionSlug): ?string
+    public function getCollectionSupply(string $collectionSlug): ?int
     {
         $ttl = now()->addMinutes(60);
 
@@ -133,7 +133,7 @@ class OpenseaPendingRequest extends PendingRequest
             return $this->get('/collections/'.$collectionSlug)->json('total_supply');
         });
 
-        return $supply === null ? null : (string) $supply;
+        return $supply === null ? null : (int) $supply;
     }
 
     /**

@@ -34,7 +34,7 @@ class FetchCollectionSupplyFromOpenSea implements ShouldBeUnique, ShouldQueue
     {
         $slug = $this->collection->openSeaSlug();
 
-        if ($slug === null) {
+        if ($slug === null || $this->collection->supply !== null) {
             return;
         }
 
