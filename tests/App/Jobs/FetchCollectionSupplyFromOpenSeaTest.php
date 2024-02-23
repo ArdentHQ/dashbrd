@@ -58,3 +58,9 @@ it('has a unique ID', function () {
 
     expect((new FetchCollectionSupplyFromOpenSea($collection))->uniqueId())->toBeString();
 });
+
+it('has a retry limit', function () {
+    $collection = Collection::factory()->create();
+
+    expect((new FetchCollectionSupplyFromOpenSea($collection))->retryUntil())->toBeInstanceOf(DateTime::class);
+});
