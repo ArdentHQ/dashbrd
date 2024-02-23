@@ -17,5 +17,6 @@ class CollectionSaved
      */
     public function __construct(
         public Collection $collection,
-    ) {}
+    ) {
+    }
 }

@@ -23,7 +23,7 @@ class DispatchJobsForNewCollections
             FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
         }
 
-        if ($collection->floor_price === null || $collection->floor_price === "") {
+        if ($collection->floor_price === null || $collection->floor_price === '') {
             FetchCollectionFloorPrice::dispatch($collection->network->chain_id, $collection->address)
                                         ->onQueue(Queues::NFTS)
                                         ->afterCommit();
