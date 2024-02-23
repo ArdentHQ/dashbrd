@@ -6,6 +6,7 @@ use App\Data\Web3\Web3NftData;
 use App\Enums\NftInfo;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
+use App\Jobs\FetchCollectionSupplyFromOpenSea;
 use App\Jobs\FetchCollectionVolumeHistory;
 use App\Models\Collection;
 use App\Models\Network;
@@ -893,4 +894,97 @@ it('should dispatch jobs to fetch collection volume history when collection is f
     expect(Collection::count())->toBe(2);
 
     Bus::assertDispatchedTimes(FetchCollectionVolumeHistory::class, 1);
+});
+
+it('should dispatch jobs to fetch collection supply from opensea when collection is first added', function () {
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $token = Token::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $wallet = Wallet::factory()->create();
+
+    $handler = new Web3NftHandler(
+        network: $network,
+        wallet: $wallet,
+    );
+
+    Collection::factory()->for($network)->create([
+        'address' => '0x999',
+        'supply' => null,
+        'created_at' => now()->subHour(),
+    ]);
+
+    $oldData = new Web3NftData(
+        tokenAddress: '0x999',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: null,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: 'test',
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc721,
+    );
+
+    $data = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: null,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc721,
+    );
+
+    $handler->store(collect([$data, $oldData]), dispatchJobs: true);
+
+    expect(Collection::count())->toBe(2);
+
+    Bus::assertDispatchedTimes(FetchCollectionSupplyFromOpenSea::class, 1);
 });
