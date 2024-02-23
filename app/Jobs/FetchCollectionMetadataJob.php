@@ -82,7 +82,7 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
 
             $collection->save();
 
-            if ($collection->supply === null && $data->collectionSlug !== null) {
+            if ($collection->supply === null && $collection->openSeaSlug() !== null) {
                 FetchCollectionSupplyFromOpenSea::dispatch($collection);
             }
         });
