@@ -82,6 +82,8 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
 
             $collection->save();
 
+            // Sometimes, Alchemy can report supply as `null` even though the collection does have a total supply...
+            // In those cases, we want to fallback to OpenSea and use their API to retrieve the supply...
             if ($collection->supply === null && $collection->openSeaSlug() !== null) {
                 FetchCollectionSupplyFromOpenSea::dispatch($collection);
             }
