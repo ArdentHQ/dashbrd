@@ -49,7 +49,7 @@ it('calculates the rarity for a collection', function () {
     $trait2->refresh();
     $trait3->refresh();
 
-    expect($trait1->nfts_percentage)->toBe(1.0);
-    expect($trait2->nfts_percentage)->toBe(0.5);
-    expect($trait3->nfts_percentage)->toBe(0.5);
+    expect($trait1->nfts_percentage)->toBe(100.0);
+    expect($trait2->nfts_percentage)->toBe(50.0);
+    expect($trait3->nfts_percentage)->toBe(50.0);
 });
