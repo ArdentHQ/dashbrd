@@ -126,6 +126,22 @@ describe("Currency helpers", () => {
 
             expect(screen.getByText("123,456.78 BTC")).toBeTruthy();
         });
+
+        it("should render 0 when no value is provided", () => {
+            render(
+                <FormatVolume
+                    volume={{
+                        value: null,
+                        fiat: 0,
+                        currency: "BTC",
+                        decimals: 2,
+                    }}
+                    maximumFractionDigits={2}
+                />,
+            );
+
+            expect(screen.getByText("0 BTC")).toBeTruthy();
+        });
     });
 
     describe("FormatFiat", () => {
