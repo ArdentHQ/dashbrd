@@ -128,7 +128,7 @@ export const FormatCrypto = ({ value, token, maximumFractionDigits }: CryptoProp
 
 export const FormatVolume = ({
     volume,
-    ...props
+    ...properties
 }: { volume: App.Data.VolumeData } & Omit<CryptoProperties, "value" | "token">): JSX.Element => (
     <FormatCrypto
         value={volume.value ?? "0"}
@@ -137,7 +137,7 @@ export const FormatVolume = ({
             name: volume.currency,
             decimals: volume.decimals,
         }}
-        {...props}
+        {...properties}
     />
 );
 
