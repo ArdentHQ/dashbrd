@@ -16,7 +16,7 @@ import { Tooltip } from "@/Components/Tooltip";
 import { useAuthorizedAction } from "@/Hooks/useAuthorizedAction";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { CollectionsVoteReceivedModal } from "@/Pages/Collections/Components/CollectionsVoteReceivedModal";
-import { FormatCrypto } from "@/Utils/Currency";
+import { FormatVolume } from "@/Utils/Currency";
 import { isTruthy } from "@/Utils/is-truthy";
 import { range } from "@/utils/range";
 
@@ -302,15 +302,7 @@ export const VoteCollection = ({
                             </span>
 
                             <span className="hidden text-sm font-medium leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md-lg:block">
-                                {t("common.vol")}:{" "}
-                                <FormatCrypto
-                                    value={collection.volume.value ?? "0"}
-                                    token={{
-                                        symbol: collection.volume.currency,
-                                        name: collection.volume.currency,
-                                        decimals: collection.volume.decimals,
-                                    }}
-                                />
+                                {t("common.vol")}: <FormatVolume volume={collection.volume} />
                             </span>
 
                             <span className="mt-0.5 md-lg:hidden">
