@@ -28,6 +28,7 @@ use App\Models\Collection;
 use App\Models\CollectionWinner;
 use App\Models\User;
 use App\Repositories\ArticleRepository;
+use App\Repositories\CollectionRepository;
 use App\Support\Queues;
 use App\Support\RateLimiterHelpers;
 use Carbon\Carbon;
@@ -77,21 +78,9 @@ class CollectionController extends Controller
     {
         $currency = $request->user()?->currency() ?? CurrencyCode::USD;
 
-        $collections = Cache::remember(
-            'featured-collections',
-            now()->addHour(),
-            fn () => Collection::featured()
-                        ->with([
-                            'network',
-                            'floorPriceToken',
-                            'nfts' => fn ($q) => $q->inRandomOrder()->limit(3),
-                        ])
-                        ->get()
-        );
+        $collections = app(CollectionRepository::class)->featured();
 
         return $collections->map(function (Collection $collection) use ($currency) {
-            $collection->nfts->each->setRelation('collection', $collection);
-
             return CollectionFeaturedData::fromModel($collection, $currency);
         });
     }

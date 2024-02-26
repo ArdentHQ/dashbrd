@@ -15,7 +15,7 @@ export const FeaturedCollectionStats = ({
     floorPriceCurrency: string | null;
     floorPriceDecimals: number | null;
     nftsCount: number | null;
-    volume: string | null;
+    volume: App.Data.VolumeData;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -34,6 +34,7 @@ export const FeaturedCollectionStats = ({
                 value={nftsCount !== null ? formatNumbershort(nftsCount) : null}
             />
             <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700 sm:mx-6" />
+
             <GridHeader
                 className="!px-0"
                 wrapperClassName="w-fit"
@@ -45,15 +46,21 @@ export const FeaturedCollectionStats = ({
                     />
                 }
             />
+
             <div className="mx-4 h-8 w-px bg-theme-secondary-300 dark:bg-theme-dark-700 sm:mx-6" />
+
             <GridHeader
                 className="!px-0"
                 wrapperClassName="w-fit"
-                title={t("common.volume", { frequency: "" })}
+                title={t("common.volume_total")}
                 value={
                     <FormatCrypto
-                        value={volume ?? "0"}
-                        token={token}
+                        value={volume.value ?? "0"}
+                        token={{
+                            name: volume.currency,
+                            symbol: volume.currency,
+                            decimals: volume.decimals,
+                        }}
                         maximumFractionDigits={2}
                     />
                 }

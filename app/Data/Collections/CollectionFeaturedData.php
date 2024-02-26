@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Data\Collections;
 
 use App\Data\Gallery\GalleryNftData;
+use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
@@ -44,7 +45,7 @@ class CollectionFeaturedData extends Data
         public DataCollection $nfts,
         public bool $isFeatured,
         public ?string $description,
-        public ?string $volume,
+        public VolumeData $volume,
     ) {
     }
 
@@ -72,7 +73,7 @@ class CollectionFeaturedData extends Data
             supply: $collection->supply,
             isFeatured: $collection->is_featured,
             description: $description,
-            volume: $collection->volume,
+            volume: $collection->createVolumeData(period: null, currency: $currency),
         );
     }
 }

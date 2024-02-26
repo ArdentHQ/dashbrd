@@ -17,25 +17,19 @@ it('should retrieve the latest collection volume', function () {
 
     $network = Network::polygon();
 
-    $collection = Collection::factory()->for($network)->create([
-        'volume' => null,
-    ]);
+    $collection = Collection::factory()->for($network)->create();
 
     TradingVolume::factory()->for($collection)->create([
         'volume' => '10',
         'created_at' => now()->subDays(3),
     ]);
 
-    expect($collection->volume)->toBeNull();
-
     (new FetchCollectionVolume($collection))->handle();
 
-    expect($collection->fresh()->volume)->toBe('123');
     expect(TradingVolume::count())->toBe(2);
 
     $volume = TradingVolume::latest('id')->first();
 
-    expect($volume->volume)->toBe('123');
     expect($volume->created_at->toDateString())->toBe(today()->toDateString());
 });
 

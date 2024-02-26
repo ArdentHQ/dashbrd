@@ -9,9 +9,36 @@ use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Models\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection as LaravelCollection;
+use Illuminate\Support\Facades\Cache;
 
 class CollectionRepository
 {
+    /**
+     * Get all of the currently featured collections.
+     *
+     * @return LaravelCollection<int, Collection>
+     */
+    public function featured(): LaravelCollection
+    {
+        $ttl = now()->addHour();
+
+        $collections = Cache::remember('featured-collections', $ttl, function () {
+            return Collection::featured()->with([
+                'network',
+                'network.nativeToken',
+                'floorPriceToken',
+                'nfts' => fn ($q) => $q->inRandomOrder()->limit(3),
+            ])->get();
+        });
+
+        return $collections->map(function (Collection $collection) {
+            $collection->nfts->each->setRelation('collection', $collection);
+
+            return $collection;
+        });
+    }
+
     /**
      * Get all of the popular collections that match the given filters.
      *

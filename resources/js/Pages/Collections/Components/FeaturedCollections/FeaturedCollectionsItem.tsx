@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FeaturedCollectionNfts } from "./FeaturedCollectionNfts";
 import { FeaturedCollectionStats } from "./FeaturedCollectionStats";
 import { ButtonLink } from "@/Components/Buttons/ButtonLink";
 import { Heading } from "@/Components/Heading";
@@ -71,7 +70,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                     </div>
                 </div>
 
-                <FeaturedCollectionNfts nfts={data.nfts} />
+                {/* <FeaturedCollectionNfts nfts={data.nfts} /> */}
             </div>
         </div>
     );
