@@ -34,8 +34,10 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use RuntimeException;
 use stdClass;
 use Throwable;
 
@@ -558,6 +560,60 @@ class AlchemyPendingRequest extends PendingRequest
         $timestamp = CryptoUtils::hexToBigIntStr($response['timestamp']);
 
         return Carbon::createFromTimestamp($timestamp);
+    }
+
+    /**
+     * Create a new webhook for listening on collection activity on Alchemy.
+     *
+     * @see https://docs.alchemy.com/reference/create-webhook
+     *
+     * @param  Collection<int, string>  $addresses
+     */
+    public function createActivityWebhook(Network $network, string $url, Collection $addresses): string
+    {
+        $chain = match ($network->chain()) {
+            Chain::ETH => 'ETH_MAINNET',
+            Chain::Polygon => 'MATIC_MAINNET',
+            default => throw new RuntimeException('Unsupported'),
+        };
+
+        $response = Http::withHeader('X-Alchemy-Token', config('services.alchemy.key'))
+                            ->asJson()
+                            ->acceptJson()
+                            ->post('https://dashboard.alchemy.com/api/create-webhook', [
+                                'network' => $chain,
+                                'webhook_type' => 'NFT_ACTIVITY',
+                                'webhook_url' => $url,
+                                'nft_filters' => $addresses->map(fn ($address) => [
+                                    'contract_address' => $address,
+                                ]),
+                            ]);
+
+        return $response->json('data.id');
+    }
+
+    /**
+     * Update the webhook for listening on collection activity on Alchemy.
+     *
+     * @see https://docs.alchemy.com/reference/update-webhook-nft-filters
+     *
+     * @param  Collection<int, string>  $addressesToAdd
+     * @param  Collection<int, string>  $addressesToRemove
+     */
+    public function updateActivityWebhook(string $webhookId, Collection $addressesToAdd, Collection $addressesToRemove): void
+    {
+        Http::withHeader('X-Alchemy-Token', config('services.alchemy.key'))
+                ->asJson()
+                ->acceptJson()
+                ->patch('https://dashboard.alchemy.com/api/update-webhook-nft-filters', [
+                    'webhook_id' => $webhookId,
+                    'nft_filters_to_add' => $addressesToAdd->map(fn ($address) => [
+                        'contract_address' => $address,
+                    ]),
+                    'nft_filters_to_remove' => $addressesToRemove->map(fn ($address) => [
+                        'contract_address' => $address,
+                    ]),
+                ]);
     }
 
     /**

@@ -30,6 +30,9 @@ use Illuminate\Support\Facades\Http;
  * @method static string getNativeBalance(Wallet $wallet, Network $network)
  * @method static Carbon getBlockTimestamp(Network $network, int $blockNumber)
  * @method static Web3CollectionFloorPrice | null getCollectionFloorPrice(Chain $chain, string $contractAddress)
+ * @method static string createActivityWebhook(Network $network, string $url, Collection $addresses)
+ * @method static void updateActivityWebhook(string $webhookId, Collection $addressesToAdd, Collection $addressesToRemove)
+ * @method static void deleteWebhook(string $webhookId)
  *
  * @see App\Http\Client\Alchemy\AlchemyPendingRequest
  */
