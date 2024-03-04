@@ -93,9 +93,9 @@ class PublishAlchemyWebhookForCollectionActivity implements ShouldBeUnique, Shou
     {
         return Collection::query()
                         ->orderBy('address', 'asc')
-                        ->pluck('address')
                         ->withoutSpamContracts()
-                        ->filter->indexesActivities(withSpamCheck: false)
+                        ->pluck('address')
+                        ->filter(fn (Collection $collection) => $collection->indexesActivities(withSpamCheck: false))
                         ->map(fn ($address) => Str::lower($address));
     }
 
