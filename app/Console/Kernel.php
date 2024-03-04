@@ -22,6 +22,7 @@ use App\Console\Commands\MarketData\FetchPriceHistory;
 use App\Console\Commands\MarketData\UpdateTokenDetails;
 use App\Console\Commands\MarketData\VerifySupportedCurrencies;
 use App\Console\Commands\PruneMetaImages;
+use App\Console\Commands\PublishAlchemyWebhooksForAllNetworks;
 use App\Console\Commands\SyncSpamContracts;
 use App\Console\Commands\UpdateArticlesViewCount;
 use App\Console\Commands\UpdateCollectionsFiatValue;
@@ -152,6 +153,7 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->everyFiveMinutes();
 
+        $schedule->command(PublishAlchemyWebhooksForAllNetworks::class)->hourly();
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void

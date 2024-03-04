@@ -11,6 +11,7 @@ use App\Jobs\DetermineCollectionMintingDate;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Jobs\FetchCollectionVolumeHistory;
+use App\Jobs\PublishAlchemyWebhookForCollectionActivity;
 use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
 use App\Models\Network;
@@ -194,6 +195,8 @@ class Web3NftHandler
                 $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
                     DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
                 });
+
+                PublishAlchemyWebhookForCollectionActivity::dispatch(Network::firstWhere('chain_id', $this->getChainId()));
 
                 // Index activity only for newly created collections...
                 CollectionModel::whereIn('id', $ids)->chunkById(100, function ($collections) {
