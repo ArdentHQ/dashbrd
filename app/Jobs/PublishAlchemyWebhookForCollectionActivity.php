@@ -46,7 +46,7 @@ class PublishAlchemyWebhookForCollectionActivity implements ShouldBeUnique, Shou
 
         // There is no "activity" webhook created in Alchemy, so we want to create one...
         if ($webhook === null) {
-            $url = config('app.url').'/api/alchemy-webhooks';
+            $url = route('alchemy-webhook');
 
             $webhookId = Alchemy::createActivityWebhook($this->network, $url, $addresses);
 

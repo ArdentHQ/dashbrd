@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers;
 use App\Http\Controllers\Api;
+use App\Http\Middleware\ValidAlchemyWebhook;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/landing-data', Controllers\LandingPageDataController::class)->name('landing-data');
+
+Route::get('/alchemy-webhook', Api\ReceivedAlchemyWebhookController::class)
+        ->name('alchemy-webhook')
+        ->middleware(ValidAlchemyWebhook::class);
 
 Route::get('/galleries-overview', [Api\GalleryOverviewController::class, 'index'])
         ->name('galleries-overview.index');
