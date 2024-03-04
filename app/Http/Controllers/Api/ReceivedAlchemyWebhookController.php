@@ -13,7 +13,15 @@ class ReceivedAlchemyWebhookController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        ProcessAlchemyWebhook::dispatch($request->collect('event.activity'));
+        if ($request->input('type') !== 'NFT_ACTIVITY') {
+            return response('');
+        }
+
+        if ($request->has('event.activity')) {
+            ProcessAlchemyWebhook::dispatch($request->collect('event.activity'));
+        } else {
+            ProcessAlchemyWebhook::dispatch(collect([$request->input('event')]));
+        }
 
         return response('');
     }
