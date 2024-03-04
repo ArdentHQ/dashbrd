@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Enums\NftTransferType;
 use App\Models\Collection as ModelsCollection;
+use App\Models\Network;
 use App\Models\NftActivity;
 use App\Support\CryptoUtils;
 use Illuminate\Bus\Queueable;
@@ -26,7 +27,8 @@ class ProcessAlchemyWebhook implements ShouldQueue
      * @param  Collection<string, mixed>  $activity
      */
     public function __construct(
-        public Collection $activity
+        public Collection $activity,
+        public Network $network,
     ) {
     }
 
@@ -43,7 +45,7 @@ class ProcessAlchemyWebhook implements ShouldQueue
             'recipient' => $activity['toAddress'],
             'collection_id' => $collections[Str::lower($activity['contractAddress'])]?->id,
             'timestamp' => now(),
-            'total_native' => 0,
+            'total_native' => CryptoUtils::hexToBigIntStr($activity['value'] ?? '0x0'),
             'total_usd' => 0,
             'token_id' => CryptoUtils::hexToBigIntStr($activity['erc721TokenId']),
             'extra_attributes' => [],
@@ -66,15 +68,19 @@ class ProcessAlchemyWebhook implements ShouldQueue
 
     private function determineType(array $activity): NftTransferType
     {
-        if ($activity['fromAddress'] === '0x0000000000000000000000000000000000000000') {
+        if ($activity['fromAddress'] === '0x0000000000000000000000000000000000000000' || $activity['fromAddress'] === '0x000000000000000000000000000000000000dead') {
             return NftTransferType::Mint;
         }
 
-        if ($activity['toAddress'] === '0x0000000000000000000000000000000000000000') {
+        if ($activity['toAddress'] === '0x0000000000000000000000000000000000000000' || $activity['toAddress'] === '0x000000000000000000000000000000000000dead') {
             return NftTransferType::Burn;
         }
 
-        return NftTransferType::Transfer;
+        $value = CryptoUtils::hexToBigIntStr($activity['value'] ?? '0x0');
+
+        return $value !== '0'
+                    ? NftTransferType::Sale
+                    : NftTransferType::Transfer;
     }
 
     /**

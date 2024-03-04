@@ -37,7 +37,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use RuntimeException;
 use stdClass;
 use Throwable;
 
@@ -573,8 +572,9 @@ class AlchemyPendingRequest extends PendingRequest
     {
         $chain = match ($network->chain()) {
             Chain::ETH => 'ETH_MAINNET',
+            Chain::Goerli => 'ETH_GOERLI',
             Chain::Polygon => 'MATIC_MAINNET',
-            default => throw new RuntimeException('Unsupported'),
+            Chain::Mumbai => 'MATIC_MUMBAI',
         };
 
         $response = Http::withHeader('X-Alchemy-Token', config('services.alchemy.key'))
