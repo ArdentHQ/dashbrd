@@ -543,7 +543,7 @@ class Collection extends Model
         return false;
     }
 
-    public function indexesActivities(): bool
+    public function indexesActivities(bool $withSpamCheck = true): bool
     {
         /**
          * @var string[]
@@ -554,7 +554,7 @@ class Collection extends Model
             return false;
         }
 
-        return ! $this->isInvalid();
+        return ! $this->isInvalid($withSpamCheck);
     }
 
     public function isBlacklisted(): bool
