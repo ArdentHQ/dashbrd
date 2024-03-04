@@ -15,7 +15,8 @@ class ValidAlchemyWebhook
      * Validate that the request is a verified Alchemy webhook request.
      *
      * @see https://docs.alchemy.com/reference/notify-api-quickstart#webhook-signature--security
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     *
+     * @param  \Closure(Request):Response  $next
      */
     public function handle(Request $request, Closure $next): Response
     {

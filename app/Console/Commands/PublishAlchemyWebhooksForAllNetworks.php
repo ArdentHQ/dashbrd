@@ -32,7 +32,7 @@ class PublishAlchemyWebhooksForAllNetworks extends Command
         Network::onlyActive()->get()->each(function ($network) {
             PublishAlchemyWebhookForCollectionActivity::dispatch($network);
 
-            $this->info("Publishing an Alchemy webhook for network: ".$network->name);
+            $this->info('Publishing an Alchemy webhook for network: '.$network->name);
         });
 
         return Command::SUCCESS;
