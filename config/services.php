@@ -65,6 +65,7 @@ return [
 
     'alchemy' => [
         'key' => env('ALCHEMY_API_KEY'),
+        'signing_key' => env('ALCHEMY_SIGNING_KEY'),
         'apps' => [
             AlchemyChain::PolygonMainnet->value => [
                 'key' => env('ALCHEMY_API_KEY_POLYGON_MAINNET', null),

@@ -20,7 +20,7 @@ class ValidAlchemyWebhook
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = config('services.alchemy.webhook_signature');
+        $token = config('services.alchemy.signing_key');
 
         $hash = hash_hmac('sha256', $request->getContent(), $token);
 

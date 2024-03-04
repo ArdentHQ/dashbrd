@@ -13,7 +13,7 @@ class ReceivedAlchemyWebhookController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        ProcessAlchemyWebhook::dispatch($request->all());
+        ProcessAlchemyWebhook::dispatch($request->collect('event.activity'));
 
         return response('');
     }
