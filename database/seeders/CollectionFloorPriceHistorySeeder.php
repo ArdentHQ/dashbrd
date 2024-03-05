@@ -24,6 +24,7 @@ class CollectionFloorPriceHistorySeeder extends Seeder
 
             return collect(range(0, $totalEntries))->map(fn ($index) => FloorPriceHistory::factory()->raw([
                 'collection_id' => $collection->id,
+                'token_id' => $collection->floor_price_token_id,
             ]))->sortBy('retrieved_at')->toArray();
         })->toArray();
 
