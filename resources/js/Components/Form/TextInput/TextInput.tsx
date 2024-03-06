@@ -5,7 +5,6 @@ import { TextInputAvatar, TextInputButton } from "./TextInput.blocks";
 import { type TextInputProperties } from "./TextInput.contracts";
 import { textInputDynamicClassnames } from "./TextInput.styles";
 import { useTextInput } from "./useTextInput";
-import { isTruthy } from "@/Utils/is-truthy";
 
 const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
     (
@@ -19,6 +18,7 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
             before,
             onFocus,
             onBlur,
+            disabled = false,
             ...properties
         },
         reference,
@@ -34,8 +34,6 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
                 focusInput();
             }
         }, [focusInput]);
-
-        const isDisabled = isTruthy(properties.disabled);
 
         const [focused, setFocused] = useState(false);
         const { isMouseOver, handleMouseOut, handleMouseOver } = useTextInput({
@@ -67,8 +65,8 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
                 onMouseOut={handleMouseOut}
                 className={cn(
                     "relative flex h-12 items-center space-x-3 rounded-xl border px-4 transition",
-                    { "cursor-not-allowed": isDisabled },
-                    textInputDynamicClassnames({ hasError, isFocused: focused, isMouseOver, isDisabled }),
+                    { "cursor-not-allowed": disabled },
+                    textInputDynamicClassnames({ hasError, isFocused: focused, isMouseOver, isDisabled: disabled }),
                     wrapperClassName,
                     "dark:bg-theme-dark-900",
                 )}
@@ -86,6 +84,7 @@ const TextInputRoot = forwardRef<HTMLInputElement, TextInputProperties>(
                         className,
                     )}
                     ref={input}
+                    disabled={disabled}
                     {...properties}
                 />
 

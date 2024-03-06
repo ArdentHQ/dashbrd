@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Dialog } from "@/Components/Dialog";
 import { Link, LinkButton } from "@/Components/Link";
 import { Tooltip } from "@/Components/Tooltip";
-import { isTruthy } from "@/Utils/is-truthy";
 
 export const CollectionDescription = ({
     name,
@@ -19,70 +18,68 @@ export const CollectionDescription = ({
     const { t } = useTranslation();
     const [showDescriptionModal, setShowDescriptionModal] = useState(false);
 
-    return (
-        <>
-            {!isTruthy(description) && (
-                <Tooltip content={t("common.na")}>
-                    <div>
-                        <LinkButton
-                            data-testid="CollectionHeaderTop__about"
-                            className={cn(
-                                "border-b border-dashed border-theme-secondary-500 text-theme-secondary-500",
-                                linkClassName,
-                            )}
-                            disabled
-                        >
-                            {name}
-                        </LinkButton>
-                    </div>
-                </Tooltip>
-            )}
-
-            {isTruthy(description) && (
-                <>
+    if (description === null || description.length === 0) {
+        return (
+            <Tooltip content={t("common.na")}>
+                <div>
                     <LinkButton
                         data-testid="CollectionHeaderTop__about"
                         className={cn(
-                            "transition-default border-b border-dashed border-theme-secondary-900 hover:border-transparent hover:text-theme-primary-700 dark:border-theme-dark-50 dark:text-theme-dark-50 dark:hover:border-theme-dark-200 dark:hover:text-theme-dark-200",
+                            "border-b border-dashed border-theme-secondary-500 text-theme-secondary-500",
                             linkClassName,
                         )}
-                        onClick={() => {
-                            setShowDescriptionModal(true);
-                        }}
+                        disabled
                     >
                         {name}
                     </LinkButton>
+                </div>
+            </Tooltip>
+        );
+    }
 
-                    <Dialog
-                        title={name}
-                        isOpen={showDescriptionModal}
-                        onClose={() => {
-                            setShowDescriptionModal(false);
+    return (
+        <>
+            <LinkButton
+                data-testid="CollectionHeaderTop__about"
+                className={cn(
+                    "transition-default border-b border-dashed border-theme-secondary-900 hover:border-transparent hover:text-theme-primary-700 dark:border-theme-dark-50 dark:text-theme-dark-50 dark:hover:border-theme-dark-200 dark:hover:text-theme-dark-200",
+                    linkClassName,
+                )}
+                onClick={() => {
+                    setShowDescriptionModal(true);
+                }}
+            >
+                {name}
+            </LinkButton>
+
+            <Dialog
+                title={name}
+                isOpen={showDescriptionModal}
+                onClose={() => {
+                    setShowDescriptionModal(false);
+                }}
+            >
+                <div
+                    data-testid="CollectionHeaderTop__description_modal"
+                    className={cn(
+                        "text-theme-secondary-700 [&_div]:space-y-6",
+                        "dark:text-theme-dark-200 [&_a]:text-theme-primary-600 hover:[&_a]:underline",
+                    )}
+                >
+                    <Markdown
+                        data-testid="CollectionHeaderTop__html"
+                        options={{
+                            disableParsingRawHTML: true,
+                            overrides: {
+                                img: MarkdownImage,
+                                a: MarkdownLink,
+                            },
                         }}
                     >
-                        <div
-                            data-testid="CollectionHeaderTop__description_modal"
-                            className={cn(
-                                "text-theme-secondary-700 [&_div]:space-y-6",
-                                "dark:text-theme-dark-200 [&_a]:text-theme-primary-600 hover:[&_a]:underline",
-                            )}
-                        >
-                            <Markdown
-                                data-testid="CollectionHeaderTop__html"
-                                options={{
-                                    disableParsingRawHTML: true,
-                                    overrides: {
-                                        img: MarkdownImage,
-                                        a: MarkdownLink,
-                                    },
-                                }}
-                            >
-                                {description}
-                            </Markdown>
-                        </div>
-                    </Dialog>
-                </>
-            )}
+                        {description}
+                    </Markdown>
+                </div>
+            </Dialog>
         </>
     );
 };

@@ -11,6 +11,7 @@ use App\Models\Nft;
 use App\Models\User;
 use App\Support\Cache\UserCache;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class CollectionMetricsRepository
 {
@@ -39,10 +40,16 @@ class CollectionMetricsRepository
     {
         $cache = new UserCache($user);
 
+        $cacheKey = $showHidden
+                        ? "users:{$user->id}:total-hidden-collection-value"
+                        : "users:{$user->id}:total-collection-value";
+
+        $value = (float) Cache::remember($cacheKey, now()->addMinutes(30), fn () => $this->totalValueForUser($user, $showHidden));
+
         return new CollectionStatsData(
             nfts: $showHidden ? $cache->hiddenNftsCount() : $cache->shownNftsCount(),
             collections: $showHidden ? $cache->hiddenCollectionsCount() : $cache->shownCollectionsCount(),
-            value: $user->collectionsValue($user->currency(), readFromDatabase: false, onlyHidden: $showHidden),
+            value: $value,
         );
     }
 
@@ -56,5 +63,18 @@ class CollectionMetricsRepository
             collections: 0,
             value: 0,
         );
+    }
+
+    /**
+     * Compute the total fiat value for user's collections by summing up the `fiat_value` columns for all of collections associated with the user.
+     */
+    private function totalValueForUser(User $user, ?bool $onlyHidden): float
+    {
+        return (float) Nft::query()
+                        ->leftJoin('collections', 'collections.id', '=', 'nfts.collection_id')
+                        ->when($onlyHidden === true, fn ($q) => $q->whereIn('collection_id', $user->hiddenCollections->modelKeys()))
+                        ->when($onlyHidden === false, fn ($q) => $q->whereNotIn('collection_id', $user->hiddenCollections->modelKeys()))
+                        ->where('wallet_id', $user->wallet_id)
+                        ->sum(DB::raw("coalesce((fiat_value->'{$user->currency()->value}')::numeric, 0)"));
     }
 }
