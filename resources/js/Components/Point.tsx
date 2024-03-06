@@ -1,15 +1,12 @@
-interface Properties {
-    width?: string;
-    height?: string;
-    color?: string;
-    className?: string;
-}
+import { type ComponentProps } from "react";
+import { twMerge } from "tailwind-merge";
 
-export const Point = ({
-    width = "w-[5px]",
-    height = "h-[5px]",
-    color = "secondary-400",
-    className,
-}: Properties): JSX.Element => (
-    <div className={`${width} ${height} rounded-full bg-theme-${color} dark:bg-theme-dark-700 ${className}`} />
+export const Point = ({ className, ...properties }: ComponentProps<"span">): JSX.Element => (
+    <span
+        className={twMerge(
+            "block h-[5px] w-[5px] rounded-full bg-theme-secondary-400 dark:bg-theme-dark-700",
+            className,
+        )}
+        {...properties}
+    />
 );
