@@ -49,13 +49,12 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
         );
 
         if ($result !== null) {
-            Log::info('FetchCollectionOpenseaSlug Job: NFT Details found', [
-                'collection' => $this->collection->address,
-                'opensea_slug' => $result->collectionSlug(),
-            ]);
-
             $this->collection->extra_attributes->set('opensea_slug', $result->collectionSlug());
             $this->collection->save();
+        } else {
+            Log::info('FetchCollectionOpenseaSlug Job: No slug found', [
+                'collection' => $this->collection->address,
+            ]);
         }
     }
 
