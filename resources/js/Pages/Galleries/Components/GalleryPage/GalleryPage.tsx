@@ -15,6 +15,7 @@ import { GalleryGrid } from "@/Pages/Galleries/Components/GalleryGrid";
 import { GalleryListbox } from "@/Pages/Galleries/Components/GalleryListbox";
 import { GallerySkeletonItem } from "@/Pages/Galleries/Components/GallerySkeleton";
 import { isTruthy } from "@/Utils/is-truthy";
+import { range } from "@/utils/range";
 import { replaceUrlQuery } from "@/Utils/replace-url-query";
 
 const debounceTimeout = 400;
@@ -104,6 +105,7 @@ export const GalleryPage = ({
                         <div className="hidden lg:block">
                             <Heading level={1}>{t("pages.galleries.title")}:</Heading>
                         </div>
+
                         <GalleryListbox
                             selectedOption={selectedOption}
                             searchQuery={searchQuery}
@@ -121,7 +123,7 @@ export const GalleryPage = ({
                 <div className="mx-6 sm:mx-8 2xl:mx-0">
                     {loading && (
                         <div className="-m-1 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-                            {Array.from({ length: 12 }).map((_, index) => (
+                            {range(12).map((index) => (
                                 <GallerySkeletonItem
                                     className="m-1"
                                     key={index}

@@ -126,6 +126,21 @@ export const FormatCrypto = ({ value, token, maximumFractionDigits }: CryptoProp
     return <>{`${number} ${token.symbol.toUpperCase()}`}</>;
 };
 
+export const FormatVolume = ({
+    volume,
+    ...properties
+}: { volume: App.Data.VolumeData } & Omit<CryptoProperties, "value" | "token">): JSX.Element => (
+    <FormatCrypto
+        value={volume.value ?? "0"}
+        token={{
+            symbol: volume.currency,
+            name: volume.currency,
+            decimals: volume.decimals,
+        }}
+        {...properties}
+    />
+);
+
 export const FormatNumber = ({ value }: { value: string | number }): JSX.Element => {
     const { t } = useTranslation();
 

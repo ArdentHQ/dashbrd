@@ -7,7 +7,7 @@ import { CollectionDescription } from "@/Components/Collections/CollectionDescri
 import { Heading } from "@/Components/Heading";
 import { type IconName } from "@/Components/Icon";
 import { Img } from "@/Components/Image";
-import { Marketplaces } from "@/Components/Marketplaces";
+import { MarketplaceList } from "@/Components/MarketplaceList";
 import { Point } from "@/Components/Point";
 import { Report } from "@/Components/Report";
 import { Tooltip } from "@/Components/Tooltip";
@@ -119,7 +119,7 @@ export const CollectionHeaderTop = ({
                                         <Point />
                                     </div>
 
-                                    <Marketplaces
+                                    <MarketplaceList
                                         type="collection"
                                         chainId={collection.chainId}
                                         address={collection.address}
