@@ -249,7 +249,7 @@ class Web3NftHandler
     /**
      * @param  Collection<int, Web3NftData>  $nfts
      * @param  Collection<string, \App\Models\Collection>  $collectionLookup
-     * NOTE: The caller is responsible for ensuring atomicity. Make sure to always call this inside a `DB::Transaction`.
+     *                                                                        NOTE: The caller is responsible for ensuring atomicity. Make sure to always call this inside a `DB::Transaction`.
      */
     public function upsertTraits(Collection $nfts, Collection $collectionLookup, Carbon $now): void
     {
