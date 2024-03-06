@@ -5,7 +5,7 @@ import { CollectionDescription } from "@/Components/Collections/CollectionDescri
 import { NftActions } from "@/Components/Collections/Nfts/NftHeader/NftActions";
 import { NftBasicInfo } from "@/Components/Collections/Nfts/NftHeader/NftBasicInfo";
 import { NftOwner } from "@/Components/Collections/Nfts/NftHeader/NftOwner";
-import { Marketplaces } from "@/Components/Marketplaces";
+import { MarketplaceList } from "@/Components/MarketplaceList";
 import { Point } from "@/Components/Point";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { isTruthy } from "@/Utils/is-truthy";
@@ -51,7 +51,7 @@ export const NftHeader = ({
                             {isTruthy(nft.collection.openSeaSlug) && (
                                 <div className="flex flex-row items-center gap-2">
                                     <Point className="dark:bg-theme-secondary-400" />
-                                    <Marketplaces
+                                    <MarketplaceList
                                         type="nft"
                                         nftId={nft.tokenNumber}
                                         address={nft.collection.address}
@@ -104,7 +104,7 @@ export const NftHeader = ({
                 </div>
                 <div>
                     {isTruthy(nft.collection.openSeaSlug) && (
-                        <Marketplaces
+                        <MarketplaceList
                             type="nft"
                             nftId={nft.tokenNumber}
                             address={nft.collection.address}

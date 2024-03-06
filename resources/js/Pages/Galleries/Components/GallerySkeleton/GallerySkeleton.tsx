@@ -4,6 +4,7 @@ import { CarouselControls } from "@/Components/Carousel";
 import { Heading } from "@/Components/Heading";
 import { Icon } from "@/Components/Icon";
 import { Skeleton } from "@/Components/Skeleton";
+import { range } from "@/utils/range";
 
 export const GallerySkeletonItem = ({ className }: { className?: string }): JSX.Element => {
     const { t } = useTranslation();
@@ -18,7 +19,7 @@ export const GallerySkeletonItem = ({ className }: { className?: string }): JSX.
             >
                 <div className="px-6 pb-3 pt-6">
                     <div className="mb-3 grid aspect-[3/2] grid-cols-3 gap-1">
-                        {Array.from({ length: 6 }).map((_, index) => (
+                        {range(6).map((index) => (
                             <Skeleton
                                 className="aspect-square w-full rounded-xl bg-theme-secondary-100"
                                 key={index}

@@ -8,6 +8,7 @@ import { useNftSelectableContext } from "@/Components/Galleries/Hooks/useNftSele
 import { NftImageGrid } from "@/Components/Galleries/NftGalleryCard.blocks";
 import { Img } from "@/Components/Image";
 import { Skeleton } from "@/Components/Skeleton";
+import { range } from "@/utils/range";
 import { tp } from "@/Utils/TranslatePlural";
 
 interface NftCollectionsProperties {
@@ -126,9 +127,9 @@ export const NftCollections = ({
                     </AccordionItem>
                 ))}
 
-                {Array.from({ length: skeletonCount ?? 0 }).map((_, key) => (
+                {range(skeletonCount ?? 0).map((index) => (
                     <AccordionItem
-                        key={`HeadOnly_Accordion__item-${key}`}
+                        key={`HeadOnly_Accordion__item-${index}`}
                         title={<NftCollectionLoadingSkeleton />}
                     />
                 ))}

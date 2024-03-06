@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { type CollectionTableItemProperties } from "./CollectionsFullTable.contracts";
 import { CollectionFloorPrice } from "@/Components/Collections/CollectionFloorPrice";
 import { CollectionImages } from "@/Components/Collections/CollectionImages";
-import { CollectionName } from "@/Components/Collections/CollectionsFullTable/CollectionName";
+import { CollectionName } from "@/Components/Collections/CollectionName";
 import { PopularCollectionVolume } from "@/Components/Collections/PopularCollectionsTable/PopularCollectionsTable.blocks";
 import { NetworkIcon } from "@/Components/Networks/NetworkIcon";
 import { TableCell, TableRow } from "@/Components/Table";
@@ -60,7 +60,9 @@ export const CollectionsFullTableItem = ({
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
-                <CollectionName collection={collection} />
+                <CollectionName collection={collection}>
+                    {collection.nftsCount} {t("common.items").toLowerCase()}
+                </CollectionName>
             </TableCell>
 
             {isLgAndAbove && (

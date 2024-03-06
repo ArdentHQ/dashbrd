@@ -7,7 +7,6 @@ import { Img } from "@/Components/Image";
 import { DefaultLayout } from "@/Layouts/DefaultLayout";
 import { WaveSurferPlayer } from "@/Pages/Articles/Components/WaveSurferPlayer";
 import { ArticlesScroll } from "@/Pages/Collections/Components/Articles/ArticlesScroll";
-import { isTruthy } from "@/Utils/is-truthy";
 import { tp } from "@/Utils/TranslatePlural";
 
 interface Properties {
@@ -45,7 +44,7 @@ const ArticlesShow = ({ article, popularArticles }: Properties): JSX.Element => 
                                 />
                             </div>
                             <div className="w-full">
-                                {isTruthy(article.audioSrc) && (
+                                {article.audioSrc !== null && (
                                     <div className="mb-4 border-theme-secondary-300 dark:border-theme-dark-700 sm:border-b sm:pb-4">
                                         <WaveSurferPlayer url={article.audioSrc} />
                                     </div>
