@@ -72,10 +72,9 @@ export const CollectionsTableItem = ({
                 paddingClassName="px-2 md:px-5"
                 hoverClassName=""
             >
-                <CollectionName
-                    collection={collection}
-                    ownedCount={collection.nftsCount}
-                />
+                <CollectionName collection={collection}>
+                    {collection.nftsCount} {t("common.owned")}
+                </CollectionName>
             </TableCell>
 
             {isLgAndAbove && (

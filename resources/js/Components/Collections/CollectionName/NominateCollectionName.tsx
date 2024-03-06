@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { Img } from "@/Components/Image";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
-import { FormatCrypto } from "@/Utils/Currency";
+import { FormatVolume } from "@/Utils/Currency";
 
 export const NominateCollectionName = ({
     collection,
@@ -48,14 +48,7 @@ export const NominateCollectionName = ({
                         className="text-sm font-medium text-theme-secondary-700 dark:text-theme-dark-200 md:hidden"
                         data-testid="CollectionName__volume"
                     >
-                        <FormatCrypto
-                            value={collection.volume.value ?? "0"}
-                            token={{
-                                symbol: collection.volume.currency,
-                                name: collection.volume.currency,
-                                decimals: collection.volume.decimals,
-                            }}
-                        />
+                        <FormatVolume volume={collection.volume} />
                     </p>
                 </div>
             </div>

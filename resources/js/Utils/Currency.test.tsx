@@ -1,6 +1,6 @@
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { render, screen } from "@/Tests/testing-library";
-import { FormatCrypto, FormatFiat, FormatFiatShort, FormatNumber } from "@/Utils/Currency";
+import { FormatCrypto, FormatFiat, FormatFiatShort, FormatNumber, FormatVolume } from "@/Utils/Currency";
 
 const createUserWithCurrency = (currency: string): App.Data.UserData =>
     new UserDataFactory().create({
@@ -107,6 +107,40 @@ describe("Currency helpers", () => {
             );
 
             expect(screen.getByText("123,456")).toBeTruthy();
+        });
+    });
+
+    describe("FormatVolume", () => {
+        it("should render a volume value", () => {
+            render(
+                <FormatVolume
+                    volume={{
+                        value: "12345678",
+                        fiat: 0,
+                        currency: "BTC",
+                        decimals: 2,
+                    }}
+                    maximumFractionDigits={2}
+                />,
+            );
+
+            expect(screen.getByText("123,456.78 BTC")).toBeTruthy();
+        });
+
+        it("should render 0 when no value is provided", () => {
+            render(
+                <FormatVolume
+                    volume={{
+                        value: null,
+                        fiat: 0,
+                        currency: "BTC",
+                        decimals: 2,
+                    }}
+                    maximumFractionDigits={2}
+                />,
+            );
+
+            expect(screen.getByText("0 BTC")).toBeTruthy();
         });
     });
 

@@ -14,7 +14,6 @@ import { useEnvironmentContext } from "@/Contexts/EnvironmentContext";
 import { useTransactionSliderContext } from "@/Contexts/TransactionSliderContext";
 import { FormatFiat } from "@/Utils/Currency";
 import { formatAddress } from "@/Utils/format-address";
-import { isTruthy } from "@/Utils/is-truthy";
 import { TruncateMiddle } from "@/Utils/TruncateMiddle";
 
 interface Properties {
@@ -34,7 +33,7 @@ export const MobileMenu = ({
 }: Properties): JSX.Element => {
     const { t } = useTranslation();
 
-    const isAuthenticated = isTruthy(wallet);
+    const isAuthenticated = wallet !== null;
 
     const [isMenuOpen, setMenuOpen] = useState(false);
 
