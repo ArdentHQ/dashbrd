@@ -81,7 +81,7 @@ describe("NftHeader", () => {
 
         render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.sm });
 
-        expect(screen.getByTestId("NftMarketplaces__Opensea")).toBeInTheDocument();
+        expect(screen.getByTestId("NftMarketplaces__OpenSea")).toBeInTheDocument();
         expect(screen.queryByTestId("NftHeader__mobile__marketplaces_point")).toHaveClass("sm:block");
     });
 
@@ -96,7 +96,7 @@ describe("NftHeader", () => {
 
         render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.sm });
 
-        expect(screen.queryByTestId("NftMarketplaces__Opensea")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("NftMarketplaces__OpenSea")).not.toBeInTheDocument();
         expect(screen.queryByTestId("NftHeader__mobile__marketplaces_point")).not.toHaveClass("sm:block");
     });
 
@@ -111,7 +111,7 @@ describe("NftHeader", () => {
 
         render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.xl });
 
-        expect(screen.getByTestId("NftMarketplaces__Opensea")).toBeInTheDocument();
+        expect(screen.getByTestId("NftMarketplaces__OpenSea")).toBeInTheDocument();
     });
 
     it("should not render marketplaces in desktop if openSeaSlug is null", () => {
@@ -125,6 +125,6 @@ describe("NftHeader", () => {
 
         render(<NftHeader nft={nft} />, { breakpoint: Breakpoint.xl });
 
-        expect(screen.queryByTestId("NftMarketplaces__Opensea")).not.toBeInTheDocument();
+        expect(screen.queryByTestId("NftMarketplaces__OpenSea")).not.toBeInTheDocument();
     });
 });

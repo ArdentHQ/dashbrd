@@ -4,6 +4,7 @@ import { ArticleCardSkeleton } from "@/Components/Articles/ArticleCard/ArticleCa
 import { Carousel, CarouselItem } from "@/Components/Carousel";
 import { useBreakpoint } from "@/Hooks/useBreakpoint";
 import { articlesViewDefaults } from "@/Pages/Articles/Components/ArticlesView";
+import { range } from "@/utils/range";
 
 export const HighlightedArticles = ({
     articles,
@@ -24,9 +25,7 @@ export const HighlightedArticles = ({
 
     const { highlightedArticlesCount } = articlesViewDefaults;
 
-    const articlePlaceHolders = Array.from({
-        length: highlightedArticlesCount - articles.length,
-    });
+    const articlePlaceHolders = range(highlightedArticlesCount - articles.length);
 
     const hasEnoughArticles = articles.length === highlightedArticlesCount;
 
@@ -55,7 +54,7 @@ export const HighlightedArticles = ({
                         </CarouselItem>
                     ))}
 
-                    {articlePlaceHolders.map((_v, index) => (
+                    {articlePlaceHolders.map((index) => (
                         <CarouselItem key={index}>
                             <ArticleCardSkeleton
                                 key={index}

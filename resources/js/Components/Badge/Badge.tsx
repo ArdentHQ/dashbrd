@@ -1,14 +1,11 @@
 import cn from "classnames";
+import { type ComponentProps } from "react";
 
-export const Badge = ({
-    type = "info",
-    children,
-    className,
-}: {
-    children: JSX.Element | string;
+interface Props extends ComponentProps<"span"> {
     type?: "info" | "danger";
-    className?: string;
-}): JSX.Element => (
+}
+
+export const Badge = ({ type = "info", children, className, ...props }: Props): JSX.Element => (
     <span
         data-testid="Badge"
         className={cn(
@@ -19,6 +16,7 @@ export const Badge = ({
             },
             className,
         )}
+        {...props}
     >
         {children}
     </span>

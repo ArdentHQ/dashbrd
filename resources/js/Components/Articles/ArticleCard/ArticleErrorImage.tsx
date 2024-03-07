@@ -1,15 +1,14 @@
 import cn from "classnames";
 import { ImageLoadError, ImageLoadErrorDark, ImageLoadErrorPrimary } from "@/images";
-import { isTruthy } from "@/Utils/is-truthy";
 
 export const ArticleErrorImage = ({
     className,
-    isLargeVariant,
+    isLargeVariant = false,
 }: {
     className?: string;
     isLargeVariant?: boolean;
 }): JSX.Element => {
-    if (isTruthy(isLargeVariant)) {
+    if (isLargeVariant) {
         return (
             <div
                 data-testid="ArticleErrorImageLargeVariant"

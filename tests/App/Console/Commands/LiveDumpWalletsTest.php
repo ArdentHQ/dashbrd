@@ -28,8 +28,6 @@ it('fetches NFTs', function () {
 
     Mnemonic::fake([
         'https://*-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
-        'https://*-rest.api.mnemonichq.com/collections/v1beta2/*/traits/string?*' => Http::response(fixtureData('mnemonic.collection_traits_string'), 200),
-        'https://*-rest.api.mnemonichq.com/collections/v1beta2/*/traits/numeric?*' => Http::response(fixtureData('mnemonic.collection_traits_numeric'), 200),
     ]);
 
     Moralis::fake([
@@ -41,7 +39,6 @@ it('fetches NFTs', function () {
     $liveDumps = collect([
         'alchemy_eth_nfts_0x123456789.json',
         'moralis_polygon_nfts_0x123456789.json',
-        'mnemonic_nft_collection_traits.json',
     ]);
 
     $liveDumps->each(fn ($liveDump) => expect($fakeFileSystem->exists($liveDump))->toBeFalse());

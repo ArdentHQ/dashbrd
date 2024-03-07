@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchCollectionTraits as FetchCollectionTraitsJob;
+use App\Jobs\CalculateTraitRaritiesForCollection;
 use Illuminate\Console\Command;
 
-class FetchCollectionTraits extends Command
+class CalculateCollectionTraitRarities extends Command
 {
     use InteractsWithCollections;
 
@@ -16,23 +16,25 @@ class FetchCollectionTraits extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-traits {--collection-id}';
+    protected $signature = 'collections:calculate-trait-rarities {--collection-id=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Fetch the latest traits for collections';
+    protected $description = 'Calculate the trait rarities for collections';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
+        $queryCallback = fn ($query) => $query->withAcceptableSupply();
+
         $this->forEachCollection(function ($collection) {
-            FetchCollectionTraitsJob::dispatch($collection);
-        });
+            CalculateTraitRaritiesForCollection::dispatch($collection);
+        }, $queryCallback);
 
         return Command::SUCCESS;
     }
