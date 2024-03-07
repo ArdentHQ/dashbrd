@@ -28,7 +28,6 @@ class CollectionTrait extends Model
         'value_min',
         'value_max',
         'nfts_percentage',
-        'nfts_count',
     ];
 
     protected $casts = [
