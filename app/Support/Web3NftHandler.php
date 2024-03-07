@@ -158,7 +158,7 @@ class Web3NftHandler
                                 ->onQueue(Queues::NFTS)
                                 ->afterCommit();
                     }
-                  
+
                     // If the collection doesn't have any supply data, try to get the supply from OpenSea...
                     if ($collection->supply === null && $collection->openSeaSlug() !== null) {
                         FetchCollectionSupplyFromOpenSea::dispatch($collection);
