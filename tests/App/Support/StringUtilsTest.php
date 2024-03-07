@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\App\Support;
 
-use App\Support\StringUtils;
+use Illuminate\Support\Str;
 
-it('should double quote string', function ($value, $expected) {
-    expect(StringUtils::doubleQuote($value))->toBe($expected);
+it('should wrap the string in double quotes', function ($value, $expected) {
+    expect(Str::wrapInQuotes($value))->toBe($expected);
 })->with([
     ['', '""'],
     ['a', '"a"'],
