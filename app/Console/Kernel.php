@@ -116,13 +116,6 @@ class Kernel extends ConsoleKernel
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
         $schedule
-            // Command only fetches collections that don't have a slug yet
-            // so in most cases it will not run any request
-            ->command(FetchCollectionOpenseaSlug::class)
-            ->withoutOverlapping()
-            ->hourly();
-
-        $schedule
             ->command(FetchCollectionTotalVolume::class)
             ->withoutOverlapping()
             ->daily();
@@ -151,7 +144,6 @@ class Kernel extends ConsoleKernel
             ->command(FetchCollectionOpenseaSlug::class)
             ->withoutOverlapping()
             ->everyFiveMinutes();
-
     }
 
     private function scheduleJobsForGalleries(Schedule $schedule): void
