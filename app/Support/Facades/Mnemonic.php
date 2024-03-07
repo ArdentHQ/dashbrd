@@ -6,7 +6,6 @@ namespace App\Support\Facades;
 
 use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3CollectionFloorPrice;
-use App\Data\Web3\Web3CollectionTrait;
 use App\Data\Web3\Web3Volume;
 use App\Enums\Chain;
 use App\Http\Client\Mnemonic\MnemonicFactory;
@@ -23,7 +22,6 @@ use Illuminate\Support\Facades\Http;
  * @method static int getCollectionOwners(Chain $chain, string $contractAddress)
  * @method static Web3Volume getLatestCollectionVolume(Chain $chain, string $contractAddress)
  * @method static Collection<int, Web3Volume> getCollectionVolumeHistory(Chain $chain, string $address)
- * @method static Collection<int, Web3CollectionTrait> getCollectionTraits(Chain $chain, string $contractAddress)
  * @method static Collection<int, CollectionActivity> getCollectionActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  * @method static Collection<int, CollectionActivity> getBurnActivity(Chain $chain, string $contractAddress, int $limit, ?Carbon $from = null)
  *
