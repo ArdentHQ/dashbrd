@@ -11,7 +11,6 @@ use App\Models\Collection as NftCollection;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Token;
-use App\Models\User;
 use App\Support\Facades\Alchemy;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
@@ -104,8 +103,6 @@ class TopCollectionsNftsSeeder extends Seeder
         }
 
         Collection::updateFiatValue();
-
-        User::updateCollectionsValue();
     }
 
     private function getTopCollections(int $limit = 25): IlluminateCollection

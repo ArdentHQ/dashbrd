@@ -7,6 +7,7 @@ import { NftCollectionSlider } from "@/Components/Galleries/NftCollection/NftCol
 import { NftGalleryCardEditable } from "@/Components/Galleries/NftGalleryCardEditable";
 import { useSliderContext } from "@/Components/Slider";
 import { isTruthy } from "@/Utils/is-truthy";
+import { range } from "@/utils/range";
 
 export const NftGridEditable = ({
     onChange,
@@ -59,20 +60,18 @@ export const NftGridEditable = ({
                     </li>
                 ))}
 
-                {Array.from({ length: nftLimit - galleryNfts.selected.length })
-                    .fill(null)
-                    .map((_, index) => (
-                        <li
-                            key={index}
-                            data-testid="NftGalleryCardEditable__item--empty"
-                        >
-                            <NftGalleryCardEditable
-                                isSelected={false}
-                                onAdd={handleAdd}
-                                error={index === 0 && galleryNfts.selected.length === 0 ? error : undefined}
-                            />
-                        </li>
-                    ))}
+                {range(nftLimit - galleryNfts.selected.length).map((index) => (
+                    <li
+                        key={index}
+                        data-testid="NftGalleryCardEditable__item--empty"
+                    >
+                        <NftGalleryCardEditable
+                            isSelected={false}
+                            onAdd={handleAdd}
+                            error={index === 0 && galleryNfts.selected.length === 0 ? error : undefined}
+                        />
+                    </li>
+                ))}
             </ReactSortable>
 
             <NftSelectionHook>
