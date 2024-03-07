@@ -88,20 +88,4 @@ it('updates the collection fiat values', function () {
     expect(round($collectionInWeth->fresh()->fiatValue(CurrencyCode::USD), 2))->toBe(round(2.1 * 1769.02, 2));
     expect(round($collectionInMatic->fresh()->fiatValue(CurrencyCode::USD), 2))->toBe(round(3.5 * 1.052, 2));
     expect(round($collectionInSand->fresh()->fiatValue(CurrencyCode::USD), 2))->toBe(round(1.002 * 0.601605, 2));
-
-    // The user collection should be worth the same as the sum of the collections since
-    // it has one NFT from each collection
-    expect(round($user->fresh()->collectionsValue(CurrencyCode::USD), 2))->toBe(round(
-        $collectionInWeth->fresh()->fiatValue(CurrencyCode::USD)
-            + $collectionInMatic->fresh()->fiatValue(CurrencyCode::USD)
-            + $collectionInSand->fresh()->fiatValue(CurrencyCode::USD),
-        2
-    ));
-
-    // For the second user it should be the same as twice the collection in MATIC
-    // since it has two NFTs from that collection
-    expect(round($user2->fresh()->collectionsValue(CurrencyCode::USD), 2))->toBe(round(
-        $collectionInMatic->fresh()->fiatValue(CurrencyCode::USD) * 2,
-        2
-    ));
 });
