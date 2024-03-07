@@ -76,8 +76,7 @@
 
     /* Icon Buttons */
     /* Like */
-    .button-like svg path,
-    .button-save svg path {
+    .button-like svg path {
         @apply transition-default;
     }
 
@@ -98,33 +97,10 @@
         @apply fill-theme-danger-100 stroke-theme-danger-400 dark:fill-theme-danger-400;
     }
 
-    /* Save */
-    .button-save:not([disabled]) {
-        @apply hover:border-theme-primary-100 hover:bg-theme-primary-100 hover:text-theme-primary-600 active:border-theme-secondary-400 active:bg-theme-secondary-400;
-    }
-    .button-save:not(.button-save-selected) svg path {
-        @apply fill-transparent stroke-theme-primary-900;
-    }
-    .button-save:not(.button-save-selected):not([disabled]):hover svg path {
-        @apply stroke-theme-primary-600;
-    }
-    .button-save:not([disabled]):active {
-        @apply border-theme-secondary-400 bg-theme-secondary-400;
-    }
-
-    .button-save-selected {
-        @apply border-theme-primary-100 bg-theme-primary-50 text-theme-primary-600;
-    }
-    .button-save-selected svg path {
-        @apply fill-theme-primary-200 stroke-theme-primary-600;
-    }
-
-    .button-like[disabled] svg path,
-    .button-save[disabled] svg path {
+    .button-like[disabled] svg path {
         @apply fill-transparent stroke-theme-secondary-500;
     }
-    .button-like:not([disabled]):active svg path,
-    .button-save:not([disabled]):active svg path {
+    .button-like:not([disabled]):active svg path {
         @apply fill-transparent;
     }
 }

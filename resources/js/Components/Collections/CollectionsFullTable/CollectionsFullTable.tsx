@@ -260,15 +260,13 @@ export const CollectionsTableItemSkeleton = ({
                     hoverClassName=""
                 >
                     <div className="flex items-center space-x-2">
-                        {Array.from({ length: nftsToShow })
-                            .fill({})
-                            .map((_, key) => (
-                                <Skeleton
-                                    key={key}
-                                    className="h-20 w-20"
-                                    animated={animated}
-                                />
-                            ))}
+                        {range(nftsToShow).map((index_) => (
+                            <Skeleton
+                                key={index_}
+                                className="h-20 w-20"
+                                animated={animated}
+                            />
+                        ))}
                     </div>
                 </TableCell>
             )}

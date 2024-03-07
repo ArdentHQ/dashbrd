@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Spatie\LaravelData\WithData;
@@ -66,7 +65,6 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName
      */
     protected $casts = [
         'extra_attributes' => SchemalessAttributes::class,
-        'collections_value' => 'json',
     ];
 
     public function registerMediaCollections(): void
@@ -126,38 +124,6 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName
     public function hiddenCollections(): BelongsToMany
     {
         return $this->belongsToMany(Collection::class, 'hidden_collections');
-    }
-
-    public function collectionsValue(CurrencyCode $currency, bool $readFromDatabase = true, ?bool $onlyHidden = null): ?float
-    {
-        if (! $readFromDatabase) {
-            $query = get_query($onlyHidden ? 'users.calculate_collections_value_hidden' : 'users.calculate_collections_value_shown', [
-                'hiddenCollectionIds' => $this->hiddenCollections->modelKeys(),
-            ]);
-
-            return json_decode(DB::table('users')
-                ->selectRaw($query)
-                ->where('users.id', $this->id)
-                ->value('result'), true)[$currency->value] ?? null;
-        }
-
-        return Arr::get($this->collections_value, $currency->value);
-    }
-
-    /**
-     * @param  array<int>  $usersIds
-     */
-    public static function updateCollectionsValue(array $usersIds = []): void
-    {
-        $calculateValueQuery = get_query('users.calculate_collections_value');
-
-        $usersIds = implode(',', $usersIds);
-
-        User::query()
-            ->when(! empty($usersIds), function ($query) use ($usersIds) {
-                $query->whereRaw("users.id IN (SELECT users.id FROM users WHERE users.id IN ({$usersIds}) FOR UPDATE SKIP LOCKED)");
-            })
-            ->update(['collections_value' => DB::raw($calculateValueQuery)]);
     }
 
     /**

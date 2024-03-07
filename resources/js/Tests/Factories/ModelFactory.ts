@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { ethers } from "ethers";
 import { ExplorerChains } from "@/Utils/Explorer";
+import { range } from "@/utils/range";
+
 export default abstract class ModelFactory<T extends Record<string, unknown>> {
     protected states: Array<(data: T) => Partial<T>> = [];
 
@@ -27,7 +29,7 @@ export default abstract class ModelFactory<T extends Record<string, unknown>> {
     protected cryptoCurrency = (): string => faker.helpers.arrayElement(["ETH", "MATIC", "USDC"]);
 
     createMany(count: number, overrides: Partial<T> = {}): T[] {
-        return Array.from({ length: count }, () => this.create(overrides));
+        return range(count).map(() => this.create(overrides));
     }
 
     create(overrides: Partial<T> = {}): T {
