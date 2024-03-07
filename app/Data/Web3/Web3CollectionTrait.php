@@ -13,7 +13,6 @@ class Web3CollectionTrait
         public string $value,
         public ?float $valueMin,
         public ?float $valueMax,
-        public string $nftsCount,
         public float $nftsPercentage,
         public TraitDisplayType $displayType,
     ) {
