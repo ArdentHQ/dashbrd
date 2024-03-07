@@ -19,7 +19,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
 
 class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
 {
@@ -42,11 +41,6 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('FetchCollectionNfts Job: Processing', [
-            'collection' => $this->collection->address,
-            'startToken' => $this->startToken,
-        ]);
-
         if ($this->skipIfPotentiallyFull && $this->collection->isPotentiallyFull()) {
             return;
         }
@@ -68,17 +62,12 @@ class FetchCollectionNfts implements ShouldBeUnique, ShouldQueue
                 '--collection-id' => $this->collection->id,
                 '--start-token' => $result->nextToken,
             ]);
+        } else {
+            CalculateTraitRaritiesForCollection::dispatch($this->collection);
         }
 
         $this->collection->extra_attributes->set('nft_last_fetched_at', Carbon::now());
         $this->collection->save();
-
-        Log::info('FetchCollectionNfts Job: Handled', [
-            'collection' => $this->collection->address,
-            'startToken' => $this->startToken,
-            'nfts_count' => $result->nfts->count(),
-            'nextToken' => $result->nextToken,
-        ]);
     }
 
     public function uniqueId(): string

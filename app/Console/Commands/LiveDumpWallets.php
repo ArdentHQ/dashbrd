@@ -111,17 +111,6 @@ class LiveDumpWallets extends Command
             }
         }
 
-        // Download traits for each collection
-        $allTraits = $nftCollections->mapWithKeys(function ($collectionAddresses, $chainId) {
-            $traits = $collectionAddresses->unique()
-                ->mapWithKeys(fn ($collectionAddress) => [$collectionAddress => Mnemonic::getCollectionTraits(Chain::from($chainId), $collectionAddress)]);
-
-            return [$chainId => $traits];
-        });
-
-        $fs->put('mnemonic_nft_collection_traits.json', (string) json_encode($allTraits, JSON_PRETTY_PRINT));
-        $progressBar->advance();
-
         $progressBar->finish();
 
         return Command::SUCCESS;

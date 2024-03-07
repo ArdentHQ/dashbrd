@@ -13,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Bus;
 
-class SyncCollection implements ShouldBeUnique, ShouldQueue
+class CalculateTraitRaritiesForCollection implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,9 +30,13 @@ class SyncCollection implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        Bus::batch([
-            new FetchCollectionOwners($this->collection),
-        ])->name('Syncing Collection #'.$this->collection->id)->dispatch();
+        if ($this->collection->isInvalid()) {
+            return;
+        }
+
+        Bus::batch($this->collection->traits->chunk(500)->map(
+            fn ($chunk) => new CalculateTraitRarities($this->collection, $chunk)
+        ))->name('Calculating rarities for collection #'.$this->collection->id)->dispatch();
     }
 
     public function uniqueId(): string
