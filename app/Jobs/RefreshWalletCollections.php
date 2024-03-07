@@ -42,7 +42,6 @@ class RefreshWalletCollections implements ShouldBeUnique, ShouldQueue
 
         Bus::batch($this->collections()->flatMap(fn ($collection) => [
             new FetchCollectionFloorPrice($collection->network->chain_id, $collection->address),
-            new FetchCollectionTraits($collection),
             new FetchCollectionOwners($collection),
             new FetchCollectionTotalVolume($collection),
         ]))->finally(function () use ($wallet) {

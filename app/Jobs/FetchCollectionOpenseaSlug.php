@@ -37,10 +37,6 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('FetchCollectionOpenseaSlug Job: Processing', [
-            'collection' => $this->collection->address,
-        ]);
-
         $this->collection->extra_attributes->set('opensea_slug_last_fetched_at', Carbon::now());
         $this->collection->save();
 
@@ -53,18 +49,13 @@ class FetchCollectionOpenseaSlug implements ShouldBeUnique, ShouldQueue
         );
 
         if ($result !== null) {
-            Log::info('FetchCollectionOpenseaSlug Job: NFT Details found', [
-                'collection' => $this->collection->address,
-                'opensea_slug' => $result->collectionSlug(),
-            ]);
-
             $this->collection->extra_attributes->set('opensea_slug', $result->collectionSlug());
             $this->collection->save();
+        } else {
+            Log::info('FetchCollectionOpenseaSlug Job: No slug found', [
+                'collection' => $this->collection->address,
+            ]);
         }
-
-        Log::info('FetchCollectionOpenseaSlug Job: Handled', [
-            'collection' => $this->collection->address,
-        ]);
     }
 
     public function uniqueId(): string

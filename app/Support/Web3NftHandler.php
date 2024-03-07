@@ -15,7 +15,6 @@ use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Nft;
-use App\Models\User;
 use App\Models\Wallet;
 use App\Notifications\GalleryNftsChanged;
 use Carbon\Carbon;
@@ -176,22 +175,6 @@ class Web3NftHandler
                     'chainId' => $this->getChainId(),
                 ]);
             }
-
-            // Users that own NFTs from the collections that were updated
-            $affectedUsersIds = User::whereHas('wallets', function (Builder $query) use ($collections) {
-                return $query->whereHas('nfts', fn ($q) => $q->whereIn('collection_id', $collections->pluck('id')));
-            })->pluck('users.id')->toArray();
-
-            // Passing an empty array means we update all users which is undesired here.
-            if (! empty($affectedUsersIds)) {
-                User::updateCollectionsValue($affectedUsersIds);
-            } else {
-                Log::info('Web3NftHandler: skipping updateCollectionsValue because no user affected', [
-                    'wallet' => $this->wallet?->address,
-                    'collectionId' => $this->collection?->id,
-                    'chainId' => $this->getChainId(),
-                ]);
-            }
         }
     }
 
@@ -338,7 +321,7 @@ class Web3NftHandler
 
                     // Write the original value to the pivot table depending on the display type.
                     [$valueString, $valueNumeric, $valueDate] = $trait['displayType']->getValueColumns($trait['value']);
-                    $paramsValueStrings->push($valueString !== null ? StringUtils::doubleQuote($valueString) : 'NULL');
+                    $paramsValueStrings->push($valueString !== null ? Str::wrapInQuotes($valueString) : 'NULL');
                     $paramsValueNumerics->push($valueNumeric ?? 'NULL');
                     $paramsValueDates->push($valueDate ?? 'NULL');
                 });

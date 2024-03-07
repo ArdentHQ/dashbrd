@@ -6,7 +6,6 @@ namespace App\Http\Client\Mnemonic;
 
 use App\Data\Web3\CollectionActivity;
 use App\Data\Web3\Web3CollectionFloorPrice;
-use App\Data\Web3\Web3CollectionTrait;
 use App\Data\Web3\Web3Volume;
 use App\Enums\Chain;
 use App\Enums\CryptoCurrencyDecimals;
@@ -14,14 +13,12 @@ use App\Enums\CurrencyCode;
 use App\Enums\ImageSize;
 use App\Enums\MnemonicChain;
 use App\Enums\NftTransferType;
-use App\Enums\TraitDisplayType;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Token;
 use App\Models\TokenPriceHistory;
 use App\Support\CryptoUtils;
 use App\Support\NftImageUrl;
-use App\Support\Web3NftHandler;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -261,96 +258,6 @@ class MnemonicPendingRequest extends PendingRequest
             value: CryptoUtils::convertToWei($response['volume'] ?? '0', $chain->nativeCurrencyDecimals()),
             date: Carbon::parse($response['timestamp'] ?? today()),
         );
-    }
-
-    // https://docs.mnemonichq.com/reference/collectionsservice_getnumerictraits
-    // https://docs.mnemonichq.com/reference/collectionsservice_getstringtraits
-    /**
-     * @return Collection<int, Web3CollectionTrait>
-     */
-    public function getCollectionTraits(Chain $chain, string $contractAddress): Collection
-    {
-        //  {
-        //      "name": "string",
-        //      "value": "blindeded",
-        //      "nftsCount": "283",
-        //      "nftsPercentage": 2.8302830283028304
-        //  }
-        $stringTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'string', static fn (array $trait) => new Web3CollectionTrait(
-            name: $trait['name'],
-            value: $trait['value'],
-            valueMin: null,
-            valueMax: null,
-            nftsCount: $trait['nftsCount'],
-            nftsPercentage: $trait['nftsPercentage'],
-            displayType: TraitDisplayType::fromMnemonicDisplayType($trait['displayType'] ?? null, $trait['value']),
-        ));
-
-        //  {
-        //      "name": "string",
-        //      "displayType": "DISPLAY_TYPE_STAT",
-        //      "valueMin": 0,
-        //      "valueMax": 0
-        //  }
-        $numericTraits = $this->fetchCollectionTraits($chain, $contractAddress, 'numeric', static fn (array $trait) => new Web3CollectionTrait(
-            name: $trait['name'],
-            value: Web3NftHandler::$numericTraitPlaceholder,
-            valueMin: $trait['valueMin'],
-            valueMax: $trait['valueMax'],
-            nftsCount: $trait['nftsCount'] ?? '0',
-            nftsPercentage: $trait['nftsPercentage'] ?? 0,
-            displayType: TraitDisplayType::fromMnemonicDisplayType($trait['displayType'] ?? null, null),
-        ));
-
-        return $stringTraits->merge($numericTraits)->unique(static fn ($trait) => $trait->name.'_'.$trait->value);
-    }
-
-    /**
-     * @return Collection<int, Web3CollectionTrait>
-     */
-    private function fetchCollectionTraits(Chain $chain, string $contractAddress, string $kind, callable $mapper): Collection
-    {
-        $this->chain = MnemonicChain::fromChain($chain);
-
-        // https://ethereum-rest.api.mnemonichq.com/collections/v1beta2/:contractAddress/traits/numeric?limit=string&offset=string
-
-        $limit = 500;
-        $offset = 0;
-        $result = collect();
-
-        do {
-            /** @var array<string, mixed> $data */
-            $data = self::get(sprintf('/collections/v1beta2/%s/traits/%s', $contractAddress, $kind), [
-                'limit' => $limit,
-                'offset' => $offset,
-            ])->json('traits');
-
-            $result = $result->merge(
-                collect($data)->map(function ($trait) use ($mapper) {
-                    /** @var Web3CollectionTrait $result */
-                    $result = $mapper($trait);
-
-                    // This ensures we deduplicate dates/numerics properly, so we do not end up with thousands of unique traits
-                    // per different number.
-                    if ($result->displayType->isNumeric()) {
-                        $result->value = Web3NftHandler::$numericTraitPlaceholder;
-                    }
-
-                    return $result;
-                }
-                )
-            );
-
-            $offset += count($data);
-
-            // circuit break to not cause infinite loop in case of bug
-            if ($offset / $limit >= 10) {
-                break;
-            }
-
-        } while ($limit <= count($data));
-
-        return $result;
     }
 
     /**

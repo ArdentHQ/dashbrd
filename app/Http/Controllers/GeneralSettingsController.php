@@ -10,6 +10,7 @@ use App\Support\Currency;
 use App\Support\Timezone;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Inertia\Inertia;
@@ -44,6 +45,10 @@ class GeneralSettingsController extends Controller
         ]);
 
         $request->user()->save();
+
+        // Clear the cache that contains the total collection value, as that value is in currency...
+        Cache::forget("users:{$request->user()->id}:total-collection-value");
+        Cache::forget("users:{$request->user()->id}:total-hidden-collection-value");
 
         return back()->toast(trans('pages.settings.general.saved'), ToastType::Success->value);
     }
