@@ -271,16 +271,13 @@ class Web3NftHandler
                 $trait['normalizedValue'],
                 $trait['displayType']->value,
                 0,
-                0,
                 $now,
                 $now,
             ]);
 
-        $placeholders = $params->map(fn ($_) => '(?, ?, ?, ?, ?, ?, ?, ?)')->join(', ');
-
         $query = sprintf(
             get_query('nfts.insert_collection_traits'),
-            $placeholders
+            $params->map(fn ($_) => '(?, ?, ?, ?, ?, ?, ?)')->join(', ')
         );
 
         $dbTraits = collect(DB::select($query, $params->flatten()->toArray()));
