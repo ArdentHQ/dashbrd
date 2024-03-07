@@ -16,7 +16,6 @@ it('adds traits', function () {
         value: 'Blue',
         valueMin: null,
         valueMax: null,
-        nftsCount: '0',
         nftsPercentage: 0,
         displayType: TraitDisplayType::Property,
     );
@@ -26,7 +25,6 @@ it('adds traits', function () {
         value: 'Black',
         valueMin: null,
         valueMax: null,
-        nftsCount: '0',
         nftsPercentage: 0,
         displayType: TraitDisplayType::Property,
     );

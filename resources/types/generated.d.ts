@@ -234,7 +234,6 @@ declare namespace App.Data.Collections {
         /** Use the displayType to infer the actual type. */ value: string | number;
         /** Only present for numeric displayTypes. */ valueMin: ?number;
         /** Only present for numeric displayTypes. */ valueMax: ?number;
-        nftsCount: number;
         nftsPercentage: number;
     };
     export type CollectionTraitFilterData = {

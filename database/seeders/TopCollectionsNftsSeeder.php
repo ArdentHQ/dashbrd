@@ -71,7 +71,6 @@ class TopCollectionsNftsSeeder extends Seeder
                     'value_max' => $trait['valueMin'],
                     'value_min' => $trait['valueMax'],
                     'display_type' => $trait['displayType'],
-                    'nfts_count' => $trait['nftsCount'],
                     'nfts_percentage' => $trait['nftsPercentage'],
                 ]);
 
