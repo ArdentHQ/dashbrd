@@ -89,8 +89,6 @@ class NftSeeder extends Seeder
 
         if (Feature::active(Features::Collections->value)) {
             Collection::updateFiatValue();
-
-            User::updateCollectionsValue();
         }
     }
 
