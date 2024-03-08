@@ -10,6 +10,7 @@ use App\Enums\TokenType;
 use App\Jobs\DetermineCollectionMintingDate;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
+use App\Jobs\FetchCollectionSupplyFromOpenSea;
 use App\Jobs\FetchCollectionVolumeHistory;
 use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
@@ -156,6 +157,11 @@ class Web3NftHandler
                         FetchCollectionFloorPrice::dispatch($this->getChainId(), $collection->address)
                                 ->onQueue(Queues::NFTS)
                                 ->afterCommit();
+                    }
+
+                    // If the collection doesn't have any supply data, try to get the supply from OpenSea...
+                    if ($collection->supply === null && $collection->openSeaSlug() !== null) {
+                        FetchCollectionSupplyFromOpenSea::dispatch($collection);
                     }
 
                     // If the collection has just been created, pre-fetch the 30-day volume history...

@@ -53,6 +53,30 @@ it('can get floor price for the collection', function () {
     expect($data)->toBeInstanceOf(Web3CollectionFloorPrice::class);
 });
 
+it('can get supply for the collection', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v2/collections/doodles-official' => Opensea::response([
+            'total_supply' => '1000',
+        ]),
+    ]);
+
+    $data = Opensea::getCollectionSupply('doodles-official');
+
+    expect($data)->toBe(1000);
+});
+
+it('can get supply if null', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v2/collections/doodles-official' => Opensea::response([
+            'total_supply' => null,
+        ]),
+    ]);
+
+    $data = Opensea::getCollectionSupply('doodles-official');
+
+    expect($data)->toBeNull();
+});
+
 it('can get nft collection slug', function () {
     Opensea::fake([
         'https://api.opensea.io/api/v2*' => Opensea::response(fixtureData('opensea.nft')),
