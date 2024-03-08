@@ -8,6 +8,7 @@ use App\Events\CollectionSaved;
 use App\Jobs\DetermineCollectionMintingDate;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
+use App\Jobs\FetchCollectionSupplyFromOpenSea;
 use App\Jobs\FetchCollectionVolumeHistory;
 use App\Support\Queues;
 
@@ -35,6 +36,11 @@ class DispatchJobsForNewCollections
         // If the collection has just been created, pre-fetch the 30-day volume history...
         if ($event->collection->volumes()->count() === 0) {
             FetchCollectionVolumeHistory::dispatch($collection);
+        }
+
+        // If the collection doesn't have any supply data, try to get the supply from OpenSea...
+        if ($collection->supply === null && $collection->openSeaSlug() !== null) {
+            FetchCollectionSupplyFromOpenSea::dispatch($collection);
         }
     }
 }
