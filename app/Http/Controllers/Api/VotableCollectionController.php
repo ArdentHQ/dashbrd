@@ -32,6 +32,7 @@ class VotableCollectionController extends Controller
                                 ->orderBy('votes_count', 'desc')
                                 ->orderByVolume(Period::MONTH, $request->currency())
                                 ->with('network.nativeToken')
+                                ->erc721()
                                 ->when($user === null, fn ($q) => $q->limit(13))
                                 ->when($user !== null, fn ($q) => $q->limit(700))
                                 ->get();
