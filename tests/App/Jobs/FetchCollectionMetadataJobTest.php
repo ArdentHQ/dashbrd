@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Data\Web3\Web3ContractMetadata;
 use App\Jobs\FetchCollectionMetadataJob;
+use App\Jobs\FetchCollectionSupplyFromOpenSea;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Support\Facades\Alchemy;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
 
 it('should update nft collection metadata', function () {
@@ -17,7 +20,7 @@ it('should update nft collection metadata', function () {
     $now = Carbon::now();
     Carbon::setTestNow($now);
 
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     /** @var Collection $collection */
     $collection = Collection::factory()->create([
@@ -75,8 +78,74 @@ it('should skip updating column if metadata is null', function () {
         ->and($collection->description)->toBe('hello');
 });
 
+it('dispatches a job to fetch total supply from opensea if alchemy does not give supply or collection slug', function () {
+    $network = Network::polygon();
+
+    Collection::factory()->for($network)->create([
+        'supply' => null,
+        'address' => '0x123',
+    ]);
+
+    $collection = Collection::factory()->for($network)->create([
+        'supply' => null,
+        'address' => '0x234',
+    ]);
+
+    Collection::factory()->for($network)->create([
+        'supply' => null,
+        'address' => '0x345',
+        'extra_attributes' => [
+            'opensea_slug' => null,
+        ],
+    ]);
+
+    Alchemy::shouldReceive('getContractMetadataBatch')->andReturn(collect([
+        new Web3ContractMetadata(
+            contractAddress: '0x123',
+            collectionName: 'First',
+            totalSupply: 100,
+            mintedBlock: null,
+            collectionSlug: 'first',
+            imageUrl: null,
+            floorPrice: null,
+            bannerImageUrl: null,
+            description: null,
+        ),
+        new Web3ContractMetadata(
+            contractAddress: '0x234',
+            collectionName: 'Second',
+            totalSupply: null,
+            mintedBlock: null,
+            collectionSlug: 'second',
+            imageUrl: null,
+            floorPrice: null,
+            bannerImageUrl: null,
+            description: null,
+        ),
+        new Web3ContractMetadata(
+            contractAddress: '0x345',
+            collectionName: 'Third',
+            totalSupply: null,
+            mintedBlock: null,
+            collectionSlug: null,
+            imageUrl: null,
+            floorPrice: null,
+            bannerImageUrl: null,
+            description: null,
+        ),
+    ]));
+
+    Bus::fake();
+
+    (new FetchCollectionMetadataJob(['0x123', '0x234', '0x345'], $network))->handle();
+
+    Bus::assertDispatched(FetchCollectionSupplyFromOpenSea::class, function ($job) use ($collection) {
+        return $job->collection->is($collection);
+    });
+});
+
 it('should use the collection addresses and network id as a unique job identifier', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection1 = Collection::factory()->create([
         'address' => '0xbhello',
@@ -94,7 +163,7 @@ it('should use the collection addresses and network id as a unique job identifie
 });
 
 it('has a retry limit', function () {
-    $network = Network::polygon()->firstOrFail();
+    $network = Network::polygon();
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
