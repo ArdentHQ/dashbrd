@@ -139,7 +139,7 @@ class Web3NftHandler
 
         if (Feature::active(Features::Collections->value)) {
             if ($dispatchJobs) {
-                $collections->each(fn ($collection) => event(new CollectionSaved($collection)));
+                $collections->each(fn ($collection) => event(new CollectionSaved($collection, chainId: $this->getChainId())));
             }
 
             // Passing an empty array means we update all collections which is undesired here.

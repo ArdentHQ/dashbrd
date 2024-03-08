@@ -29,7 +29,7 @@ class DispatchJobsForNewCollections
         }
 
         if ($collection->floor_price === null || $collection->floor_price === '') {
-            FetchCollectionFloorPrice::dispatch($collection->network->chain_id, $collection->address)->onQueue(Queues::NFTS);
+            FetchCollectionFloorPrice::dispatch($event->chainId, $collection->address)->onQueue(Queues::NFTS);
         }
 
         // If the collection has just been created, pre-fetch the 30-day volume history...
