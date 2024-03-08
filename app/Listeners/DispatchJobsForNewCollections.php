@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Listeners;
 
 use App\Events\CollectionSaved;
+use App\Jobs\DetermineCollectionMintingDate;
 use App\Jobs\FetchCollectionActivity;
 use App\Jobs\FetchCollectionFloorPrice;
 use App\Jobs\FetchCollectionVolumeHistory;
@@ -18,6 +19,10 @@ class DispatchJobsForNewCollections
     public function handle(CollectionSaved $event): void
     {
         $collection = $event->collection;
+
+        if ($collection->minted_at === null) {
+            DetermineCollectionMintingDate::dispatch($collection);
+        }
 
         if (! $collection->is_fetching_activity && $collection->activity_updated_at === null) {
             FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
