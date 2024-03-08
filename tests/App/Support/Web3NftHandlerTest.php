@@ -7,6 +7,7 @@ use App\Enums\NftInfo;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Events\CollectionSaved;
+use App\Jobs\FetchCollectionSupplyFromOpenSea;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\NftTrait;
