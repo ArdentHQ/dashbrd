@@ -211,7 +211,6 @@ class LiveUserSeeder extends UserSeeder
                         value: $trait['value'],
                         valueMin: $trait['valueMin'] ?? 0,
                         valueMax: $trait['valueMax'] ?? 0,
-                        nftsCount: $trait['nftsCount'],
                         nftsPercentage: $trait['nftsPercentage'],
                         displayType: TraitDisplayType::from($trait['displayType']),
                     ))->unique(fn ($trait) => '_'.$dbCollection->id.'_'.$trait->name.'_'.$trait->value);
