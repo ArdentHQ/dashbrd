@@ -8,7 +8,6 @@ use App\Data\Web3\Web3NftData;
 use App\Enums\Features;
 use App\Enums\TokenType;
 use App\Events\CollectionSaved;
-use App\Jobs\DetermineCollectionMintingDate;
 use App\Models\Collection as CollectionModel;
 use App\Models\CollectionTrait;
 use App\Models\Network;
@@ -140,9 +139,7 @@ class Web3NftHandler
 
         if (Feature::active(Features::Collections->value)) {
             if ($dispatchJobs) {
-                $collections->each(function ($collection) {
-                    event(new CollectionSaved($collection));
-                });
+                $collections->each(fn ($collection) => event(new CollectionSaved($collection)));
             }
 
             // Passing an empty array means we update all collections which is undesired here.
