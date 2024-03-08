@@ -29,14 +29,12 @@ class DispatchJobsForNewCollections
         }
 
         if ($collection->floor_price === null || $collection->floor_price === '') {
-            FetchCollectionFloorPrice::dispatch($collection->network->chain_id, $collection->address)
-                                        ->onQueue(Queues::NFTS)
-                                        ->afterCommit();
+            FetchCollectionFloorPrice::dispatch($collection->network->chain_id, $collection->address)->onQueue(Queues::NFTS);
         }
 
         // If the collection has just been created, pre-fetch the 30-day volume history...
         if ($event->collection->volumes()->count() === 0) {
-            FetchCollectionVolumeHistory::dispatch($collection)->afterCommit();
+            FetchCollectionVolumeHistory::dispatch($collection);
         }
     }
 }
