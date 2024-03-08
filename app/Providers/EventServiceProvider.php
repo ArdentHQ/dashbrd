@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Events\CollectionSaved;
 use App\Events\WalletBecameActive;
+use App\Listeners\DispatchJobsForNewCollections;
 use App\Listeners\WalletBecameActiveListener;
 use App\Models\Article;
 use App\Models\CoingeckoToken;
@@ -28,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [],
         WalletBecameActive::class => [
             WalletBecameActiveListener::class,
+        ],
+        CollectionSaved::class => [
+            DispatchJobsForNewCollections::class,
         ],
     ];
 
