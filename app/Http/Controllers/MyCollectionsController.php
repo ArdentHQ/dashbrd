@@ -69,6 +69,7 @@ class MyCollectionsController extends Controller
                 ->when($sortBy === 'oldest', fn ($q) => $q->orderByMintDate('asc'))
                 ->when($sortBy === 'received' || $sortBy === null, fn ($q) => $q->orderByReceivedDate($user->wallet, 'desc'))
                 ->search($user, $searchQuery)
+                ->erc721()
                 ->with([
                     'reports',
                     'network',
