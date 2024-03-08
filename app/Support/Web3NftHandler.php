@@ -143,11 +143,11 @@ class Web3NftHandler
 
         if (Feature::active(Features::Collections->value)) {
             if ($dispatchJobs) {
-                $nftsGroupedByCollectionAddress->filter(fn (Web3NftData $nft) => $nft->mintedAt === null)->each(function (Web3NftData $nft) {
-                    DetermineCollectionMintingDate::dispatch($nft)->onQueue(Queues::NFTS);
-                });
-
                 $collections->each(function ($collection) {
+                    if ($collection->minted_at === null) {
+                        DetermineCollectionMintingDate::dispatch($collection)->onQueue(Queues::NFTS);
+                    }
+
                     // Index activity only for newly created collections...
                     if (! $collection->is_fetching_activity && $collection->activity_updated_at === null) {
                         FetchCollectionActivity::dispatch($collection)->onQueue(Queues::NFTS);
@@ -277,16 +277,13 @@ class Web3NftHandler
                 $trait['normalizedValue'],
                 $trait['displayType']->value,
                 0,
-                0,
                 $now,
                 $now,
             ]);
 
-        $placeholders = $params->map(fn ($_) => '(?, ?, ?, ?, ?, ?, ?, ?)')->join(', ');
-
         $query = sprintf(
             get_query('nfts.insert_collection_traits'),
-            $placeholders
+            $params->map(fn ($_) => '(?, ?, ?, ?, ?, ?, ?)')->join(', ')
         );
 
         $dbTraits = collect(DB::select($query, $params->flatten()->toArray()));

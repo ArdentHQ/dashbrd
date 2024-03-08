@@ -16,7 +16,6 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
     '/** Use the displayType to infer the actual type. */ value' => 'string | number',
     '/** Only present for numeric displayTypes. */ valueMin' => '?number',
     '/** Only present for numeric displayTypes. */ valueMax' => '?number',
-    'nftsCount' => 'number',
     'nftsPercentage' => 'number',
 ])]
 class CollectionTraitData extends Data
@@ -27,7 +26,6 @@ class CollectionTraitData extends Data
         public string|float $value,
         public ?float $valueMin,
         public ?float $valueMax,
-        public float $nftsCount,
         public float $nftsPercentage,
     ) {
     }
@@ -40,7 +38,6 @@ class CollectionTraitData extends Data
             value: self::extractValue($trait),
             valueMin: $trait['value_min'] ?? null,
             valueMax: $trait['value_max'] ?? null,
-            nftsCount: $trait['nfts_count'],
             nftsPercentage: $trait['nfts_percentage'],
         );
     }
