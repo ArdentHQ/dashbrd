@@ -28,7 +28,6 @@ class NominatableCollectionController extends Controller
                                 ->searchByName($request->get('query'))
                                 ->limit(15)
                                 ->votable()
-                                ->erc721()
                                 ->withCount(['votes' => fn ($q) => $q->inCurrentMonth()])
                                 ->orderBy('votes_count', 'desc')
                                 ->orderByVolume(period: Period::MONTH, currency: $currency)

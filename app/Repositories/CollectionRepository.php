@@ -35,7 +35,6 @@ class CollectionRepository
                         'floorPriceToken',
                         'nfts' => fn ($q) => $q->limit(4),
                     ])
-                    ->erc721()
                     ->withCount('nfts')
                     ->paginate($perPage)
                     ->withQueryString();

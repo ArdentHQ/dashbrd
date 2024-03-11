@@ -31,7 +31,6 @@ class PopularCollectionController extends Controller
                                     'network',
                                     'floorPriceToken',
                                 ])
-                                ->erc721()
                                 ->addFloorPriceChange()
                                 ->simplePaginate(12);
 
