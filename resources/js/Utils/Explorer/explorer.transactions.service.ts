@@ -19,7 +19,7 @@ export const purgeCacheByAddress = (address: string, isNativeToken: boolean): vo
     const matcher = new RegExp(`.*${matchKeyword}*`);
 
     while (!isTruthy(key.done)) {
-        if (key.value != null && matcher.test(key.value)) {
+        if (typeof key.value === "string" && matcher.test(key.value)) {
             cache.delete(key.value);
         }
 
