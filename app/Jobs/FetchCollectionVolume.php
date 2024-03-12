@@ -47,7 +47,6 @@ class FetchCollectionVolume implements ShouldQueue
         ], uniqueBy: ['collection_id', 'created_at']);
 
         $this->collection->update([
-            'volume' => $volume->value,
             'volume_1d' => $this->collection->totalVolumeSince(now()->subDays(1)),
             'volume_7d' => $this->collection->totalVolumeSince(now()->subDays(7)),
             'volume_30d' => $this->collection->totalVolumeSince(now()->subDays(30)),
