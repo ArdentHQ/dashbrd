@@ -18,7 +18,7 @@ class NftActivity extends Model
     protected $table = 'nft_activity';
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'type',
