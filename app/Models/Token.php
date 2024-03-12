@@ -28,7 +28,7 @@ class Token extends Model
     use BelongsToNetwork, BelongsToTokenGuid, HasFactory, WithData;
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'address',

@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 final class TokenSpam
 {
     /**
-     * @return array{ isSpam: boolean, reason: ?string }
+     * @return array{ isSpam: bool, reason: ?string }
      */
     public static function evaluate(Token $token): array
     {
@@ -58,7 +58,7 @@ final class TokenSpam
     }
 
     /**
-     * @return array{ isSpam: boolean, reason: ?string }
+     * @return array{ isSpam: bool, reason: ?string }
      */
     private static function noSpam(): array
     {
@@ -66,7 +66,7 @@ final class TokenSpam
     }
 
     /**
-     * @return array{ isSpam: boolean, reason: ?string }
+     * @return array{ isSpam: bool, reason: ?string }
      */
     private static function spam(string $reason): array
     {

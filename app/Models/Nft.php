@@ -29,7 +29,7 @@ class Nft extends Model
     use BelongsToWallet, HasEagerLimit, HasFactory, Reportable, SoftDeletes;
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'wallet_id',

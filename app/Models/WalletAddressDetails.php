@@ -15,7 +15,7 @@ class WalletAddressDetails extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'domain',
