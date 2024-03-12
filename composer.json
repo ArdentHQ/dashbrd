@@ -49,9 +49,9 @@
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.27",
         "mockery/mockery": "^1.6",
-        "nunomaduro/larastan": "^2.8",
+        "larastan/larastan": "^2.8",
         "pestphp/pest": "^2.33",
-        "rector/rector": "^0.19",
+        "rector/rector": "^1.0.2",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
