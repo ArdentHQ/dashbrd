@@ -149,7 +149,7 @@ class TopCollectionsNftsSeeder extends Seeder
             'symbol' => $collection->symbol ?? $collection->name,
             'floor_price' => $collection->floor_price * 1e18,
             'floor_price_token_id' => $token->id,
-            'volume' => $collection->volume_total,
+            'total_volume' => $collection->volume_total,
             'supply' => $collection->items_total,
             'type' => $collection->erc_type === 'erc721' ? TokenType::Erc721->value : TokenType::Erc1155->value,
             'minted_block' => $collection->deploy_block_number,

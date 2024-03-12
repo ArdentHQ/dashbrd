@@ -11,6 +11,8 @@ use App\Models\Collection;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as LaravelCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection as LaravelCollection;
+use Illuminate\Support\Facades\Cache;
 
 class CollectionRepository
 {
@@ -57,6 +59,30 @@ class CollectionRepository
                             ->orderBy('votes_count', 'desc')
                             ->orderByVolume(period: Period::MONTH, currency: $currency)
                             ->get();
+    }
+  
+     * Get all of the currently featured collections.
+     *
+     * @return LaravelCollection<int, Collection>
+     */
+    public function featured(): LaravelCollection
+    {
+        $ttl = now()->addHour();
+
+        $collections = Cache::remember('featured-collections', $ttl, function () {
+            return Collection::featured()->with([
+                'network',
+                'network.nativeToken',
+                'floorPriceToken',
+                'nfts' => fn ($q) => $q->inRandomOrder()->limit(3),
+            ])->get();
+        });
+
+        return $collections->map(function (Collection $collection) {
+            $collection->nfts->each->setRelation('collection', $collection);
+
+            return $collection;
+        });
     }
 
     /**

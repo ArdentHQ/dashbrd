@@ -207,7 +207,7 @@ declare namespace App.Data.Collections {
         nfts: Array<App.Data.Gallery.GalleryNftData>;
         isFeatured: boolean;
         description: string | null;
-        volume: string | null;
+        volume: App.Data.VolumeData;
     };
     export type CollectionNftData = {
         id: number;
