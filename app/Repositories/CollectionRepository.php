@@ -60,7 +60,8 @@ class CollectionRepository
                             ->orderByVolume(period: Period::MONTH, currency: $currency)
                             ->get();
     }
-  
+
+    /*
      * Get all of the currently featured collections.
      *
      * @return LaravelCollection<int, Collection>
