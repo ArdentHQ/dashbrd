@@ -41,7 +41,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->bootstrapFiles([
-        __DIR__.'/vendor/nunomaduro/larastan/bootstrap.php',
+        __DIR__.'/vendor/larastan/larastan/bootstrap.php',
     ]);
 
     $rectorConfig->phpVersion(PhpVersion::PHP_82);
