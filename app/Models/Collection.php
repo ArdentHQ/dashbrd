@@ -80,6 +80,13 @@ class Collection extends Model
         'is_featured' => 'bool',
     ];
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope('erc721', function (Builder $query) {
+            $query->where('collections.type', TokenType::Erc721->value);
+        });
+    }
+
     /**
      * @return HasOne<Token>
      */
