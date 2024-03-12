@@ -68,41 +68,25 @@ describe("ActionsPopup", () => {
         expect(routerSpy).toHaveBeenCalled();
     });
 
-    // it("should render with default currency settings", () => {
-    //     const collection = new CollectionFactory().create({
-    //         floorPrice: new FloorPriceDataFactory().create({
-    //             value: (123 * 1e18).toString(),
-    //         }),
-    //     });
+    it("should render with custom currency settings", () => {
+        const collection = new CollectionFactory().create({
+            floorPrice: new FloorPriceDataFactory().create({
+                value: (123 * 1e18).toString(),
+                currency: "MATIC",
+                decimals: 16
+            }),
+        });
 
-    //     render(
-    //         <CollectionCard
-    //             isHidden={false}
-    //             collection={collection}
-    //             onChanged={vi.fn()}
-    //         />,
-    //     );
+        render(
+            <CollectionCard
+                isHidden={false}
+                collection={collection}
+                onChanged={vi.fn()}
+            />,
+        );
 
-    //     expect(screen.getByTestId("CollectionFloorPrice__crypto")).toHaveTextContent("123 ETH");
-    // });
-
-    // it("should render with custom currency settings", () => {
-    //     const collection = new CollectionFactory().create({
-    //         floorPrice: new FloorPriceDataFactory().create({
-    //             value: (123 * 1e18).toString(),
-    //         }),
-    //     });
-
-    //     render(
-    //         <CollectionCard
-    //             isHidden={false}
-    //             collection={collection}
-    //             onChanged={vi.fn()}
-    //         />,
-    //     );
-
-    //     expect(screen.getByTestId("CollectionFloorPrice__crypto")).toHaveTextContent("12,300 MATIC");
-    // });
+        expect(screen.getByTestId("CollectionFloorPrice__crypto")).toHaveTextContent("12,300 MATIC");
+    });
 
     it("should render with fallback values", () => {
         const collection = new CollectionFactory().create({

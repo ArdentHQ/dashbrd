@@ -39,23 +39,14 @@ describe("CollectionsTable", () => {
         },
     ];
 
-    // const collectionsWithNullFloorPriceFiatData: App.Data.Collections.CollectionData[] = [
-    //     {
-    //         ...collection,
-    //         floorPrice: new FloorPriceDataFactory().create({
-    //             fiat: null,
-    //         }),
-    //     },
-    // ];
-
-    // const collectionsWithNullFloorPriceData: App.Data.Collections.CollectionData[] = [
-    //     {
-    //         ...collection,
-    //         floorPrice: new FloorPriceDataFactory().create({
-    //             fiat: null,
-    //         }),
-    //     },
-    // ];
+    const collectionsWithNullFloorPriceFiatData: App.Data.Collections.CollectionData[] = [
+        {
+            ...collection,
+            floorPrice: new FloorPriceDataFactory().create({
+                fiat: null,
+            }),
+        },
+    ];
 
     const user = new UserDataFactory().create();
 
@@ -313,37 +304,20 @@ describe("CollectionsTable", () => {
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
     });
 
-    // it("should render when floor price fiat is null", () => {
-    //     const { getByTestId } = render(
-    //         <CollectionsTable
-    //             hiddenCollectionAddresses={[]}
-    //             collections={collectionsWithNullFloorPriceFiatData}
-    //             user={user}
-    //             alreadyReportedByCollection={{}}
-    //             reportByCollectionAvailableIn={{}}
-    //             onChanged={vi.fn()}
-    //         />,
-    //     );
+    it("should render when floor price fiat is null", () => {
+        const { getByTestId } = render(
+            <CollectionsTable
+                hiddenCollectionAddresses={[]}
+                collections={collectionsWithNullFloorPriceFiatData}
+                user={user}
+                alreadyReportedByCollection={{}}
+                reportByCollectionAvailableIn={{}}
+                onChanged={vi.fn()}
+            />,
+        );
 
-    //     expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-    // });
-
-    // it("should render when floor price is null", () => {
-    //     const { getByTestId } = render(
-    //         <CollectionsTable
-    //             hiddenCollectionAddresses={[]}
-    //             collections={collectionsWithNullFloorPriceData}
-    //             user={user}
-    //             alreadyReportedByCollection={{}}
-    //             reportByCollectionAvailableIn={{}}
-    //             onChanged={vi.fn()}
-    //         />,
-    //     );
-
-    //     expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-    //     // expect(getByTestId("CollectionsTableItem__unknown-floor-price")).toBeInTheDocument();
-    //     expect(getByTestId("CollectionsTableItem__unknown-value")).toBeInTheDocument();
-    // });
+        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+    });
 
     it("defaults fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
