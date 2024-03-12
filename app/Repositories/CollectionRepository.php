@@ -9,7 +9,7 @@ use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Models\Collection;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection as LaravelCollection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection as LaravelCollection;
 use Illuminate\Support\Facades\Cache;
@@ -19,9 +19,9 @@ class CollectionRepository
     /**
      * Get all of the collections that the user can vote on.
      *
-     * @return LaravelCollection<int, Collection>
+     * @return EloquentCollection<int, Collection>
      */
-    public function votable(?User $user): LaravelCollection
+    public function votable(?User $user): EloquentCollection
     {
         return Collection::query()
                         ->withCount([
@@ -61,7 +61,7 @@ class CollectionRepository
                             ->get();
     }
 
-    /*
+    /**
      * Get all of the currently featured collections.
      *
      * @return LaravelCollection<int, Collection>
