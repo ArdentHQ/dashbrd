@@ -1,11 +1,14 @@
 import React from "react";
 import { CollectionFloorPrice } from "./CollectionFloorPrice";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import { SampleToken, SampleUser } from "@/Tests/SampleData";
 import { render, screen } from "@/Tests/testing-library";
 
 const collection = new CollectionFactory().create({
-    floorPrice: "1000000000000000000",
+    floorPrice: new FloorPriceDataFactory().create({
+        value: "1000000000000000000",
+    }),
 });
 
 describe("CollectionFloorPrice", () => {
@@ -29,7 +32,7 @@ describe("CollectionFloorPrice", () => {
 
     it("should handle null floor price", () => {
         const collection = new CollectionFactory().create({
-            floorPrice: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         });
         render(
             <CollectionFloorPrice

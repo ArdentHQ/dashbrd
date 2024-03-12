@@ -1553,3 +1553,49 @@ it('can order collections based on the sales volume amount, ignoring the fiat va
         $third->id, $first->id, $second->id,
     ]);
 });
+
+it('throws an exception when trying to calculate floor price change if the relationship has not been eager loaded', function () {
+    $collection = Collection::factory()->create();
+
+    $collection->floorPriceChange();
+})->throws(RuntimeException::class);
+
+it('cannot get floor price change if there is no data for today', function () {
+    $collection = Collection::factory()->create();
+
+    FloorPriceHistory::factory()->create([
+        'collection_id' => $collection->id,
+        'retrieved_at' => now()->subDay(1),
+    ]);
+
+    expect($collection->load('floorPriceHistory')->floorPriceChange())->toBeNull();
+});
+
+it('cannot get floor price change if there is no data for yesterday', function () {
+    $collection = Collection::factory()->create();
+
+    FloorPriceHistory::factory()->create([
+        'collection_id' => $collection->id,
+        'retrieved_at' => now(),
+    ]);
+
+    expect($collection->load('floorPriceHistory')->floorPriceChange())->toBeNull();
+});
+
+it('can get the change in floor price over the last 24 hours', function () {
+    $collection = Collection::factory()->create();
+
+    FloorPriceHistory::factory()->create([
+        'collection_id' => $collection->id,
+        'floor_price' => '5',
+        'retrieved_at' => now()->subDays(1),
+    ]);
+
+    FloorPriceHistory::factory()->create([
+        'collection_id' => $collection->id,
+        'floor_price' => '6',
+        'retrieved_at' => now(),
+    ]);
+
+    expect($collection->load('floorPriceHistory')->floorPriceChange())->toBe(20.0);
+});

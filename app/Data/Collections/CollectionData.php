@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Data\FloorPriceData;
 use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
 use App\Models\Collection;
 use App\Transformers\IpfsGatewayUrlTransformer;
-use Illuminate\Support\Str;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
@@ -30,10 +30,7 @@ class CollectionData extends Data
         public string $address,
         #[LiteralTypeScriptType('App.Enums.Chain')]
         public int $chainId,
-        public ?string $floorPrice,
-        public ?float $floorPriceFiat,
-        public ?string $floorPriceCurrency,
-        public ?int $floorPriceDecimals,
+        public FloorPriceData $floorPrice,
         public ?int $supply,
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
@@ -62,10 +59,7 @@ class CollectionData extends Data
             slug: $collection->slug,
             address: $collection->address,
             chainId: $collection->network->chain_id,
-            floorPrice: $collection->floor_price,
-            floorPriceFiat: (float) $collection->fiatValue($currency),
-            floorPriceCurrency: $collection->floorPriceToken ? Str::lower($collection->floorPriceToken->symbol) : null,
-            floorPriceDecimals: $collection->floorPriceToken?->decimals,
+            floorPrice: $collection->createFloorPriceData($currency),
             supply: $collection->supply,
             image: $collection->extra_attributes->get('image'),
             banner: $collection->extra_attributes->get('banner'),

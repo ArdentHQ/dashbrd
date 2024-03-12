@@ -15,6 +15,13 @@ declare namespace App.Data {
         price: number;
         percentChange24h: number;
     };
+    export type FloorPriceData = {
+        value: string | null;
+        change: number | null;
+        fiat: number | null;
+        currency: string;
+        decimals: number;
+    };
     export type ImagesData = {
         /** 96x96 */ thumb: string | null;
         /** 256x256 */ small: string | null;
@@ -145,10 +152,7 @@ declare namespace App.Data.Collections {
         slug: string;
         address: string;
         chainId: App.Enums.Chain;
-        floorPrice: string | null;
-        floorPriceFiat: number | null;
-        floorPriceCurrency: string | null;
-        floorPriceDecimals: number | null;
+        floorPrice: App.Data.FloorPriceData;
         supply: number | null;
         image: string | null;
         banner: string | null;
@@ -249,13 +253,12 @@ declare namespace App.Data.Collections {
     };
     export type PopularCollectionData = {
         id: number;
+        address: string;
         name: string;
         slug: string;
+        supply: number | null;
         chainId: App.Enums.Chain;
-        floorPrice: string | null;
-        floorPriceCurrency: string | null;
-        floorPriceDecimals: number | null;
-        floorPriceChange: number | null;
+        floorPrice: App.Data.FloorPriceData;
         volume: App.Data.VolumeData;
         image: string | null;
     };
@@ -271,11 +274,7 @@ declare namespace App.Data.Collections {
         address: string;
         image: string | null;
         votes: number | null;
-        floorPrice: string | null;
-        floorPriceFiat: number | null;
-        floorPriceCurrency: string | null;
-        floorPriceDecimals: number | null;
-        floorPriceChange: number | null;
+        floorPrice: App.Data.FloorPriceData;
         volume: App.Data.VolumeData;
         nftsCount: number;
         twitterUsername: string | null;

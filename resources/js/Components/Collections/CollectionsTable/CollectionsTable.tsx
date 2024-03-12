@@ -1,4 +1,3 @@
-import { BigNumber } from "@ardenthq/sdk-helpers";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { type Column, type TableState } from "react-table";
@@ -55,10 +54,6 @@ export const CollectionsTable = ({
             {
                 Header: t("common.value").toString(),
                 id: "value",
-                accessor: (collection) =>
-                    BigNumber.make(collection.floorPriceFiat ?? 0)
-                        .times(collection.nftsCount)
-                        .toString(),
                 headerClassName: "px-2 md:px-5",
                 paddingClassName: "py-2 px-2 md:px-5",
                 className: "justify-end",
@@ -81,7 +76,6 @@ export const CollectionsTable = ({
             columns.splice(-3, 0, {
                 Header: t("common.floor_price").toString(),
                 id: "floor-price",
-                accessor: (collection) => collection.floorPriceFiat,
                 className: "justify-end whitespace-nowrap",
             });
 

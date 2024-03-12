@@ -55,10 +55,7 @@ export const PopularCollectionName = ({
 export const PopularCollectionFloorPrice = ({
     collection,
 }: {
-    collection: Pick<
-        App.Data.Collections.PopularCollectionData,
-        "floorPrice" | "floorPriceCurrency" | "floorPriceDecimals" | "floorPriceChange"
-    >;
+    collection: Pick<App.Data.Collections.PopularCollectionData, "floorPrice">;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -73,11 +70,11 @@ export const PopularCollectionFloorPrice = ({
                     className="text-sm leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6"
                 >
                     <FormatCrypto
-                        value={collection.floorPrice ?? "0"}
+                        value={collection.floorPrice.value ?? "0"}
                         token={{
-                            symbol: collection.floorPriceCurrency ?? "ETH",
-                            name: collection.floorPriceCurrency ?? "ETH",
-                            decimals: collection.floorPriceDecimals ?? 18,
+                            symbol: collection.floorPrice.currency,
+                            name: collection.floorPrice.currency,
+                            decimals: collection.floorPrice.decimals,
                         }}
                     />
                 </div>
@@ -86,8 +83,8 @@ export const PopularCollectionFloorPrice = ({
                     data-testid="PopularCollectionFloorPrice__price-change"
                     className="text-sm"
                 >
-                    {collection.floorPriceChange != null ? (
-                        <PriceChange change={collection.floorPriceChange} />
+                    {collection.floorPrice.change != null ? (
+                        <PriceChange change={collection.floorPrice.change} />
                     ) : (
                         <span className="text-theme-secondary-500 dark:text-theme-dark-300">{t("common.na")}</span>
                     )}

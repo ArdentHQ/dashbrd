@@ -3,8 +3,8 @@ import { Pagination } from "@/Components/Pagination";
 import { type PaginationData } from "@/Components/Pagination/Pagination.contracts";
 import { SelectPageLimit } from "@/Components/Pagination/SelectPageLimit";
 
-interface Properties {
-    pagination: PaginationData<App.Data.Collections.CollectionData>;
+interface Properties<T> {
+    pagination: PaginationData<T>;
     onPageLimitChange: (limit: number) => void;
     onPageChange: (page: number) => void;
 }
@@ -13,7 +13,7 @@ export const CollectionsFullTablePagination = ({
     pagination,
     onPageLimitChange,
     onPageChange,
-}: Properties): JSX.Element => {
+}: Properties<App.Data.Collections.PopularCollectionData>): JSX.Element => {
     const { t } = useTranslation();
 
     if (pagination.meta.total < 25) {

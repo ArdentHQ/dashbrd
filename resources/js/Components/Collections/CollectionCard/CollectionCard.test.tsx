@@ -4,6 +4,7 @@ import { type SpyInstance } from "vitest";
 import { CollectionCard } from "./CollectionCard";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import { render, screen, userEvent } from "@/Tests/testing-library";
 
 const collection = new CollectionFactory().create();
@@ -67,29 +68,13 @@ describe("ActionsPopup", () => {
         expect(routerSpy).toHaveBeenCalled();
     });
 
-    it("should render with default currency settings", () => {
-        const collection = new CollectionFactory().create({
-            floorPriceCurrency: null,
-            floorPriceDecimals: null,
-            floorPrice: (123 * 1e18).toString(),
-        });
-
-        render(
-            <CollectionCard
-                isHidden={false}
-                collection={collection}
-                onChanged={vi.fn()}
-            />,
-        );
-
-        expect(screen.getByTestId("CollectionFloorPrice__crypto")).toHaveTextContent("123 ETH");
-    });
-
     it("should render with custom currency settings", () => {
         const collection = new CollectionFactory().create({
-            floorPriceCurrency: "MATIC",
-            floorPriceDecimals: 16,
-            floorPrice: (123 * 1e18).toString(),
+            floorPrice: new FloorPriceDataFactory().create({
+                value: (123 * 1e18).toString(),
+                currency: "MATIC",
+                decimals: 16,
+            }),
         });
 
         render(
@@ -106,7 +91,7 @@ describe("ActionsPopup", () => {
     it("should render with fallback values", () => {
         const collection = new CollectionFactory().create({
             image: null,
-            floorPrice: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         });
 
         render(
@@ -123,8 +108,7 @@ describe("ActionsPopup", () => {
     it("does not render floor price if null", () => {
         const collection = new CollectionFactory().create({
             image: null,
-            floorPrice: null,
-            floorPriceDecimals: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         });
 
         render(
