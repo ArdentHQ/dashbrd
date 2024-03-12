@@ -39,7 +39,7 @@
         "spatie/laravel-typescript-transformer": "^2.3",
         "staudenmeir/eloquent-eager-limit": "^1.8",
         "tightenco/ziggy": "^1.0",
-        "tpetry/laravel-postgresql-enhanced": "^0.34"
+        "tpetry/laravel-postgresql-enhanced": "^0.36"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9",
