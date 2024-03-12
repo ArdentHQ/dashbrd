@@ -73,7 +73,7 @@ describe("ActionsPopup", () => {
             floorPrice: new FloorPriceDataFactory().create({
                 value: (123 * 1e18).toString(),
                 currency: "MATIC",
-                decimals: 16
+                decimals: 16,
             }),
         });
 
