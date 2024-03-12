@@ -7,6 +7,7 @@ use App\Enums\NftInfo;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
 use App\Events\CollectionSaved;
+use App\Jobs\FetchCollectionSupplyFromOpenSea;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\NftTrait;
@@ -58,9 +59,9 @@ it('trims collection names', function () {
 
     $handler->store(collect([$data]));
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
 
-    $collection = Collection::first();
+    $collection = Collection::withoutGlobalScope('erc721')->first();
 
     expect($collection->name)->toBe('Collection Name');
 });
@@ -229,7 +230,7 @@ it('should handle null values for opensea slug', function () {
         ],
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->name)->toBe($data->collectionName.'-old');
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
 
@@ -237,7 +238,7 @@ it('should handle null values for opensea slug', function () {
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->name)->toBe($data->collectionName);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
 });
@@ -297,14 +298,14 @@ it('should handle opensea slugs', function () {
         ],
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
 
     $handler->store(collect([$data]));
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test456');
 });
 
@@ -367,7 +368,7 @@ it('should not overwrite existing extra_attributes opensea data', function () {
         ],
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
     expect($collection->extra_attributes->image)->toBe('existing_image');
     expect($collection->extra_attributes->banner)->toBe(null);
@@ -378,7 +379,7 @@ it('should not overwrite existing extra_attributes opensea data', function () {
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
     expect($collection->extra_attributes->image)->toBe(null);
     expect($collection->extra_attributes->banner)->toBe('test_banner');
@@ -439,14 +440,14 @@ it('should handle empty extra_attribute objects', function () {
         'extra_attributes' => '{}',
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe(null);
 
     $handler->store(collect([$data]));
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test456');
 });
 
@@ -503,14 +504,14 @@ it('should handle null value for extra_attribute', function () {
         'extra_attributes' => null,
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe(null);
 
     $handler->store(collect([$data]));
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test456');
 });
 
