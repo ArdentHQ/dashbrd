@@ -14,7 +14,7 @@ class TokenGuid extends Model
     public $timestamps = false;
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'address',

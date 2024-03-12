@@ -561,7 +561,7 @@ class AlchemyPendingRequest extends PendingRequest
     }
 
     /**
-     * @param  array<int, array<string, mixed>|string|boolean>  $params
+     * @param  array<int, array<string, mixed>|string|bool>  $params
      * @return array<string, mixed>
      */
     private function payload(string $method, array $params): array
