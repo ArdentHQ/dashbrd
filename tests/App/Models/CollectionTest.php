@@ -1587,7 +1587,25 @@ it('can get the change in floor price over the last 24 hours', function () {
 
     FloorPriceHistory::factory()->create([
         'collection_id' => $collection->id,
-        'floor_price' => '5',
+        'floor_price' => '5.5',
+        'retrieved_at' => now()->subDays(1),
+    ]);
+
+    FloorPriceHistory::factory()->create([
+        'collection_id' => $collection->id,
+        'floor_price' => '6.2',
+        'retrieved_at' => now(),
+    ]);
+
+    expect($collection->load('floorPriceHistory')->floorPriceChange())->toBe(12.73);
+});
+
+it("can handle divison by zero if yesterday's floor price is 0", function () {
+    $collection = Collection::factory()->create();
+
+    FloorPriceHistory::factory()->create([
+        'collection_id' => $collection->id,
+        'floor_price' => '0',
         'retrieved_at' => now()->subDays(1),
     ]);
 
@@ -1597,5 +1615,5 @@ it('can get the change in floor price over the last 24 hours', function () {
         'retrieved_at' => now(),
     ]);
 
-    expect($collection->load('floorPriceHistory')->floorPriceChange())->toBe(20.0);
+    expect($collection->load('floorPriceHistory')->floorPriceChange())->toBeNull();
 });
