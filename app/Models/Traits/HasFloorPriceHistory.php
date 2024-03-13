@@ -66,6 +66,10 @@ trait HasFloorPriceHistory
             $yesterday->count(), scale: 2, roundingMode: RoundingMode::HALF_UP
         );
 
+        if ($averageYesterday->isZero()) {
+            return null;
+        }
+
         return $averageToday->minus($averageYesterday)
                         ->dividedBy($averageYesterday, scale: 2, roundingMode: RoundingMode::HALF_UP)
                         ->multipliedBy(100)
