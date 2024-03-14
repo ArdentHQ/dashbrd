@@ -73,7 +73,6 @@ it('has a retry until', function () {
     expect($job->retryUntil())->toBeInstanceOf(DateTime::class);
 });
 
-
 it('has a unique ID', function () {
     $job = new DetermineCollectionMintingDate(new Collection);
 
