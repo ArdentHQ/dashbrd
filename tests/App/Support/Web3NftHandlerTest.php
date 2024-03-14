@@ -805,7 +805,7 @@ it('should update the error field for nft', function () {
     expect($collection->nfts->first()->info)->toBe(null);
 });
 
-it('should dispatch the event for every collection', function () {
+it('should dispatch the event for every erc721 collection', function () {
     Event::fake([CollectionSaved::class]);
 
     $network = Network::polygon();
@@ -890,7 +890,39 @@ it('should dispatch the event for every collection', function () {
         type: TokenType::Erc721,
     );
 
-    $handler->store(collect([$data, $oldData]), dispatchJobs: true);
+    $erc1155 = new Web3NftData(
+        tokenAddress: '0xerc1155',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: 3000,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc1155,
+    );
+
+    $handler->store(collect([$data, $oldData, $erc1155]), dispatchJobs: true);
 
     Event::assertDispatchedTimes(CollectionSaved::class, 2);
 });
