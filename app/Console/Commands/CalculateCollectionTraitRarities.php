@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\CalculateTraitRaritiesForCollection;
+use App\Models\Collection;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
 
 class CalculateCollectionTraitRarities extends Command
 {
@@ -16,7 +18,7 @@ class CalculateCollectionTraitRarities extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:calculate-trait-rarities {--collection-id=}';
+    protected $signature = 'collections:calculate-trait-rarities {--start=} {--limit=} {--collection-id=}';
 
     /**
      * The console command description.
@@ -30,6 +32,31 @@ class CalculateCollectionTraitRarities extends Command
      */
     public function handle(): int
     {
+        $start = $this->option('start');
+        $limit = $this->option('limit');
+
+        if ($start !== null) {
+            $collections = Collection::query()
+                                    ->withAcceptableSupply()
+                                    ->select('collections.*')
+                                    ->withoutSpamContracts()
+                                    ->where('id', '>=', (int) $start)
+                                    ->when($limit !== null, fn ($q) => $q->limit((int) $limit))
+                                    ->orderBy('id', 'asc')
+                                    ->get();
+
+            $first = $collections->first();
+            $last = $collections->last();
+
+            Bus::batch($collections->mapInto(CalculateTraitRaritiesForCollection::class))
+                    ->name('Calculating rarities for collection IDs '.$first->id .' to '.$last->id)
+                    ->dispatch();
+
+            $this->info('Starting from ID: '.$first->id.' to ID '.$last->id.' collections (inclusive).');
+
+            return Command::SUCCESS;
+        }
+
         $queryCallback = fn ($query) => $query->withAcceptableSupply();
 
         $this->forEachCollection(function ($collection) {

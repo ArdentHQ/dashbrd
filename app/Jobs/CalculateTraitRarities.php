@@ -42,7 +42,7 @@ class CalculateTraitRarities implements ShouldQueue
         DB::transaction(function () use ($values) {
             DB::update('
                 UPDATE collection_traits
-                SET nfts_percentage = c.nfts_percentage
+                SET nfts_percentage = c.nfts_percentage, updated_at = NOW()
                 FROM (values '.$values.') AS c(id, nfts_percentage)
                 WHERE c.id = collection_traits.id
             ');
