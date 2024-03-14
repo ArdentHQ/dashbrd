@@ -114,7 +114,7 @@ class OpenseaPendingRequest extends PendingRequest
                 retrievedAt: Carbon::now(),
             );
         } catch (ClientException $exception) {
-            if ($exception->getCode() === 404) {
+            if ($exception->getCode() === 404 || $exception->getCode() === 400) {
                 return null;
             }
 
