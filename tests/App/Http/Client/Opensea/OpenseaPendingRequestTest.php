@@ -89,6 +89,14 @@ it('can handle missing collections when fetching supply', function () {
     expect($data)->toBeNull();
 });
 
+it('can handle client errors when fetching supply', function () {
+    Opensea::fake([
+        'https://api.opensea.io/api/v2/collections/missing' => Opensea::response([], status: 422),
+    ]);
+
+    Opensea::getCollectionSupply('missing');
+})->throws(ClientException::class);
+
 it('can get nft collection slug', function () {
     Opensea::fake([
         'https://api.opensea.io/api/v2*' => Opensea::response(fixtureData('opensea.nft')),
