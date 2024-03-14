@@ -33,7 +33,7 @@ it('should throw a custom exception when rate limited', function () {
 
 it('should throw a custom exception on client error', function () {
     Opensea::fake([
-        'https://api.opensea.io/api/v2/collections*' => Http::response(null, 400),
+        'https://api.opensea.io/api/v2/collections*' => Http::response(null, 422),
     ]);
 
     $collectionSlug = 'doodles-official';
