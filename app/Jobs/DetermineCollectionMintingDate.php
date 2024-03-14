@@ -9,12 +9,13 @@ use App\Jobs\Traits\WithWeb3DataProvider;
 use App\Models\Collection;
 use DateTime;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class DetermineCollectionMintingDate implements ShouldQueue
+class DetermineCollectionMintingDate implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, RecoversFromProviderErrors, SerializesModels, WithWeb3DataProvider;
 
@@ -44,5 +45,10 @@ class DetermineCollectionMintingDate implements ShouldQueue
     public function retryUntil(): DateTime
     {
         return now()->addMinutes(10);
+    }
+
+    public function uniqueId(): string
+    {
+        return static::class.':'.$this->collection->id;
     }
 }

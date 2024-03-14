@@ -68,8 +68,14 @@ it('has a middleware', function () {
 });
 
 it('has a retry until', function () {
-
     $job = new DetermineCollectionMintingDate(new Collection);
 
     expect($job->retryUntil())->toBeInstanceOf(DateTime::class);
+});
+
+
+it('has a unique ID', function () {
+    $job = new DetermineCollectionMintingDate(new Collection);
+
+    expect($job->uniqueId())->toBeString();
 });
