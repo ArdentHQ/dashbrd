@@ -137,6 +137,8 @@ class Web3NftHandler
             return $collections;
         });
 
+        $collections = $collections->filter(fn ($collection) => $collection->type === TokenType::Erc721);
+
         if (Feature::active(Features::Collections->value)) {
             if ($dispatchJobs) {
                 $collections->each(fn ($collection) => event(new CollectionSaved($collection, chainId: $this->getChainId())));
