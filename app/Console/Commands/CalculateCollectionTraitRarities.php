@@ -49,7 +49,7 @@ class CalculateCollectionTraitRarities extends Command
             $last = $collections->last();
 
             Bus::batch($collections->mapInto(CalculateTraitRaritiesForCollection::class))
-                    ->name('Calculating rarities for collection IDs '.$first->id .' to '.$last->id)
+                    ->name('Calculating rarities for collection IDs '.$first->id.' to '.$last->id)
                     ->dispatch();
 
             $this->info('Starting from ID: '.$first->id.' to ID '.$last->id.' collections (inclusive). Total: '.$collections->count());
