@@ -49,6 +49,10 @@ class FetchCollectionFloorPrice implements ShouldBeUnique, ShouldQueue
             ->whereHas('network', fn ($query) => $query->where('chain_id', $this->chainId))
             ->first();
 
+        if ($collection === null) {
+            return;
+        }
+
         $collection->extra_attributes->set('floor_price_last_fetched_at', Carbon::now());
         $collection->save();
 

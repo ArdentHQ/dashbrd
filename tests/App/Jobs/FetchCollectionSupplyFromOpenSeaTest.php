@@ -53,6 +53,24 @@ it('does not run for collections that do not have a OpenSea slug', function () {
     expect($collection->fresh()->supply)->toBeNull();
 });
 
+it('can handle collections that have been removed from OpenSea', function () {
+    Opensea::fake(Opensea::response([
+        'errors' => ['Collection missing not found'],
+    ], status: 400));
+
+    $collection = Collection::factory()->create([
+        'supply' => 10,
+        'extra_attributes' => [
+            'opensea_slug' => 'missing',
+        ],
+    ]);
+
+    (new FetchCollectionSupplyFromOpenSea($collection))->handle();
+
+    // Does not update, leave previous value...
+    expect($collection->fresh()->supply)->toBe(10);
+});
+
 it('has a unique ID', function () {
     $collection = Collection::factory()->create();
 
