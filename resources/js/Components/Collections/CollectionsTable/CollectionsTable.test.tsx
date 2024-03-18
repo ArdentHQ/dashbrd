@@ -3,6 +3,7 @@ import { type SpyInstance } from "vitest";
 import { CollectionsTable } from "./CollectionsTable";
 import * as useAuthorizedActionMock from "@/Hooks/useAuthorizedAction";
 import CollectionFactory from "@/Tests/Factories/Collections/CollectionFactory";
+import FloorPriceDataFactory from "@/Tests/Factories/FloorPriceDataFactory";
 import UserDataFactory from "@/Tests/Factories/UserDataFactory";
 import { mockViewportVisibilitySensor } from "@/Tests/Mocks/Handlers/viewport";
 import { mockAuthContext, render, screen, userEvent } from "@/Tests/testing-library";
@@ -34,22 +35,16 @@ describe("CollectionsTable", () => {
     const collectionsWithNoFloorPriceCurrencyData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPriceCurrency: null,
-            floorPriceDecimals: null,
+            floorPrice: new FloorPriceDataFactory().empty().create(),
         },
     ];
 
     const collectionsWithNullFloorPriceFiatData: App.Data.Collections.CollectionData[] = [
         {
             ...collection,
-            floorPriceFiat: null,
-        },
-    ];
-
-    const collectionsWithNullFloorPriceData: App.Data.Collections.CollectionData[] = [
-        {
-            ...collection,
-            floorPrice: null,
+            floorPrice: new FloorPriceDataFactory().create({
+                fiat: null,
+            }),
         },
     ];
 
@@ -89,6 +84,26 @@ describe("CollectionsTable", () => {
         );
 
         expect(screen.getByTestId("CollectionsTableSkeleton")).toBeInTheDocument();
+
+        resetMock();
+    });
+
+    it.each(allBreakpoints)("should render if no user", (breakpoint) => {
+        const resetMock = mockAuthContext({});
+
+        render(
+            <CollectionsTable
+                hiddenCollectionAddresses={[]}
+                collections={collections}
+                user={null}
+                alreadyReportedByCollection={{}}
+                reportByCollectionAvailableIn={{}}
+                onChanged={vi.fn()}
+            />,
+            { breakpoint },
+        );
+
+        expect(screen.getByTestId("CollectionsTable")).toBeInTheDocument();
 
         resetMock();
     });
@@ -304,23 +319,6 @@ describe("CollectionsTable", () => {
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
     });
 
-    it("should render when floor price is null", () => {
-        const { getByTestId } = render(
-            <CollectionsTable
-                hiddenCollectionAddresses={[]}
-                collections={collectionsWithNullFloorPriceData}
-                user={user}
-                alreadyReportedByCollection={{}}
-                reportByCollectionAvailableIn={{}}
-                onChanged={vi.fn()}
-            />,
-        );
-
-        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
-        expect(getByTestId("CollectionsTableItem__unknown-floor-price")).toBeInTheDocument();
-        expect(getByTestId("CollectionsTableItem__unknown-value")).toBeInTheDocument();
-    });
-
     it("defaults fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
             <CollectionsTable
@@ -328,8 +326,10 @@ describe("CollectionsTable", () => {
                 collections={[
                     {
                         ...collection,
-                        floorPrice: "1000",
-                        floorPriceFiat: null,
+                        floorPrice: new FloorPriceDataFactory().create({
+                            value: "1000",
+                            fiat: null,
+                        }),
                     },
                 ]}
                 user={user}

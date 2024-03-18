@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Collections;
 
+use App\Data\FloorPriceData;
 use App\Data\VolumeData;
 use App\Enums\CurrencyCode;
 use App\Enums\Period;
@@ -24,11 +25,7 @@ class VotableCollectionData extends Data
         #[WithTransformer(IpfsGatewayUrlTransformer::class)]
         public ?string $image,
         public ?int $votes,
-        public ?string $floorPrice,
-        public ?float $floorPriceFiat,
-        public ?string $floorPriceCurrency,
-        public ?int $floorPriceDecimals,
-        public ?float $floorPriceChange,
+        public FloorPriceData $floorPrice,
         public VolumeData $volume,
         public int $nftsCount,
         public ?string $twitterUsername,
@@ -46,11 +43,7 @@ class VotableCollectionData extends Data
             address: $collection->address,
             image: $collection->extra_attributes->get('image'),
             votes: $showVotes ? $collection->votes_count : null,
-            floorPrice: $collection->floor_price,
-            floorPriceFiat: (float) $collection->fiatValue($currency),
-            floorPriceCurrency: $collection->floor_price_symbol,
-            floorPriceDecimals: $collection->floor_price_decimals,
-            floorPriceChange: $collection->price_change_24h !== null ? (float) $collection->price_change_24h : null,
+            floorPrice: $collection->createFloorPriceData($currency),
             volume: $collection->createVolumeData(Period::MONTH, $currency), // For votable collections, we only care about the volume in the last 30 days...
             nftsCount: $collection->nfts_count,
             // We are not using the `->twitter` method because we need the username

@@ -65,6 +65,7 @@ return [
     'market_cap' => 'Market Cap',
     'volume' => 'Volume',
     'volume_frequency' => 'Volume :frequency',
+    'volume_total' => 'Total Volume',
     'value' => 'Value',
     'last_n_days' => 'Last :count Days',
     'details' => 'Details',

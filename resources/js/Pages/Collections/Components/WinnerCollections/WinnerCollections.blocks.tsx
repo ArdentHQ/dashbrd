@@ -9,7 +9,7 @@ import { Img } from "@/Components/Image";
 import { DropdownButton } from "@/Components/SortDropdown";
 import { Table, TableCell, TableRow } from "@/Components/Table";
 import { WinnerBadgeFirst, WinnerBadgeSecond, WinnerBadgeThird } from "@/images";
-import { FormatCrypto } from "@/Utils/Currency";
+import { FormatCrypto, FormatVolume } from "@/Utils/Currency";
 import { formatNumbershort } from "@/Utils/format-number";
 import { isTruthy } from "@/Utils/is-truthy";
 
@@ -78,14 +78,7 @@ export const WinnerCollectionMainInfo = ({
 
             <div className="mt-4 flex w-full flex-col items-center space-y-4 sm:flex-row sm:justify-between sm:space-y-0 lg:hidden">
                 <WinnerCollectionLabel label={t("common.volume")}>
-                    <FormatCrypto
-                        value={collection.volume.value ?? "0"}
-                        token={{
-                            symbol: collection.volume.currency,
-                            name: collection.volume.currency,
-                            decimals: collection.volume.decimals,
-                        }}
-                    />
+                    <FormatVolume volume={collection.volume} />
                 </WinnerCollectionLabel>
 
                 <WinnerCollectionLabel label={t("common.floor_price")}>
@@ -251,14 +244,7 @@ export const WinnerCollectionTableRow = ({
                 innerClassName="justify-end"
             >
                 <WinnerCollectionLabel label={t("common.volume")}>
-                    <FormatCrypto
-                        value={collection.volume.value ?? "0"}
-                        token={{
-                            symbol: collection.volume.currency,
-                            name: collection.volume.currency,
-                            decimals: collection.volume.decimals,
-                        }}
-                    />
+                    <FormatVolume volume={collection.volume} />
                 </WinnerCollectionLabel>
             </TableCell>
 

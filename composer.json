@@ -39,7 +39,7 @@
         "spatie/laravel-typescript-transformer": "^2.3",
         "staudenmeir/eloquent-eager-limit": "^1.8",
         "tightenco/ziggy": "^1.0",
-        "tpetry/laravel-postgresql-enhanced": "^0.34"
+        "tpetry/laravel-postgresql-enhanced": "^0.36"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9",
@@ -49,9 +49,9 @@
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.27",
         "mockery/mockery": "^1.6",
-        "nunomaduro/larastan": "^2.8",
+        "larastan/larastan": "^2.8",
         "pestphp/pest": "^2.33",
-        "rector/rector": "^0.19",
+        "rector/rector": "^1.0.2",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {

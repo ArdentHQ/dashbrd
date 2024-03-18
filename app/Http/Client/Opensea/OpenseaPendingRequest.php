@@ -114,12 +114,34 @@ class OpenseaPendingRequest extends PendingRequest
                 retrievedAt: Carbon::now(),
             );
         } catch (ClientException $exception) {
-            if ($exception->getCode() === 404) {
+            if ($exception->getCode() === 404 || $exception->getCode() === 400) {
                 return null;
             }
 
             throw $exception;
         }
+    }
+
+    /**
+     * @see https://docs.opensea.io/reference/get_collection
+     */
+    public function getCollectionSupply(string $collectionSlug): ?int
+    {
+        $ttl = now()->addMinutes(60);
+
+        try {
+            $supply = Cache::remember('opensea:collection:'.$collectionSlug, $ttl, function () use ($collectionSlug) {
+                return $this->get('/collections/'.$collectionSlug)->json('total_supply');
+            });
+        } catch (ClientException $e) {
+            if ($e->getCode() === 400) {
+                return null;
+            }
+
+            throw $e;
+        }
+
+        return $supply === null ? null : (int) $supply;
     }
 
     /**

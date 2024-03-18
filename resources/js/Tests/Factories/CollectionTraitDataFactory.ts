@@ -10,7 +10,6 @@ export default class CollectionTraitDataFactory extends ModelFactory<App.Data.Co
             nftsPercentage: faker.datatype.float({ min: 0, max: 100 }),
             valueMax: faker.datatype.number(),
             valueMin: faker.datatype.number(),
-            nftsCount: faker.datatype.number(),
         };
     }
 }

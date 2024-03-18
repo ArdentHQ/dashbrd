@@ -4,7 +4,7 @@ import { PriceChange } from "@/Components/PriceChange/PriceChange";
 import { Tooltip } from "@/Components/Tooltip";
 import { useIsTruncated } from "@/Hooks/useIsTruncated";
 import { CollectionImageWithIcon } from "@/Pages/Collections/Components/CollectionImage";
-import { FormatCrypto, FormatFiat } from "@/Utils/Currency";
+import { FormatCrypto, FormatFiat, FormatVolume } from "@/Utils/Currency";
 
 export const PopularCollectionName = ({
     collection,
@@ -44,15 +44,7 @@ export const PopularCollectionName = ({
                     </Tooltip>
 
                     <p className="block truncate text-xs font-medium leading-4.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-sm md:leading-5.5 md-lg:hidden">
-                        {t("common.volume")}{" "}
-                        <FormatCrypto
-                            value={collection.volume.value ?? "0"}
-                            token={{
-                                symbol: collection.volume.currency,
-                                name: collection.volume.currency,
-                                decimals: collection.volume.decimals,
-                            }}
-                        />
+                        {t("common.volume")} <FormatVolume volume={collection.volume} />
                     </p>
                 </div>
             </div>
@@ -63,10 +55,7 @@ export const PopularCollectionName = ({
 export const PopularCollectionFloorPrice = ({
     collection,
 }: {
-    collection: Pick<
-        App.Data.Collections.PopularCollectionData,
-        "floorPrice" | "floorPriceCurrency" | "floorPriceDecimals" | "floorPriceChange"
-    >;
+    collection: Pick<App.Data.Collections.PopularCollectionData, "floorPrice">;
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -81,11 +70,11 @@ export const PopularCollectionFloorPrice = ({
                     className="text-sm leading-5.5 text-theme-secondary-700 dark:text-theme-dark-200 md:text-base md:leading-6"
                 >
                     <FormatCrypto
-                        value={collection.floorPrice ?? "0"}
+                        value={collection.floorPrice.value ?? "0"}
                         token={{
-                            symbol: collection.floorPriceCurrency ?? "ETH",
-                            name: collection.floorPriceCurrency ?? "ETH",
-                            decimals: collection.floorPriceDecimals ?? 18,
+                            symbol: collection.floorPrice.currency,
+                            name: collection.floorPrice.currency,
+                            decimals: collection.floorPrice.decimals,
                         }}
                     />
                 </div>
@@ -94,8 +83,8 @@ export const PopularCollectionFloorPrice = ({
                     data-testid="PopularCollectionFloorPrice__price-change"
                     className="text-sm"
                 >
-                    {collection.floorPriceChange != null ? (
-                        <PriceChange change={collection.floorPriceChange} />
+                    {collection.floorPrice.change != null ? (
+                        <PriceChange change={collection.floorPrice.change} />
                     ) : (
                         <span className="text-theme-secondary-500 dark:text-theme-dark-300">{t("common.na")}</span>
                     )}
@@ -121,14 +110,7 @@ export const PopularCollectionVolume = ({
                 data-testid="PopularCollectionVolume__crypto"
                 className="text-theme-secondary-900 dark:text-theme-dark-50"
             >
-                <FormatCrypto
-                    value={collection.volume.value ?? "0"}
-                    token={{
-                        symbol: collection.volume.currency,
-                        name: collection.volume.currency,
-                        decimals: collection.volume.decimals,
-                    }}
-                />
+                <FormatVolume volume={collection.volume} />
             </div>
 
             <div

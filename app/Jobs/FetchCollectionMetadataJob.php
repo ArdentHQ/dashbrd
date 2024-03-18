@@ -17,7 +17,6 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
@@ -44,54 +43,51 @@ class FetchCollectionMetadataJob implements ShouldBeUnique, ShouldQueue
         $metadata = Alchemy::getContractMetadataBatch($this->collectionAddresses, $this->network);
 
         $collections = Collection::query()
-            ->whereIn('address', $metadata->pluck('contractAddress'))
-            ->select(['id', 'address', 'extra_attributes'])
-            ->get();
+                                ->whereIn('address', $metadata->pluck('contractAddress'))
+                                ->select(['id', 'address', 'extra_attributes'])
+                                ->get()
+                                ->keyBy(fn ($collection) => Str::lower($collection->address));
 
-        $metadata
-            ->each(function (Web3ContractMetadata $data) use ($collections) {
-                $address = Str::lower($data->contractAddress);
+        $metadata->each(function (Web3ContractMetadata $data) use ($collections) {
+            $collection = $collections->get(Str::lower($data->contractAddress));
 
-                $collection = $collections->first(fn ($collection) => $address === Str::lower($collection->address));
+            if (! $collection) {
+                return;
+            }
 
-                if ($collection) {
-                    Log::info('Updating collection metadata', [
-                        'collection_address' => $address,
-                        'name' => $data->collectionName,
-                        'total_supply' => $data->totalSupply,
-                        'description' => $data->description ? Str::length($data->description) : null,
-                        'banner' => $data->bannerImageUrl,
-                        'opensea_slug' => $data->collectionSlug,
-                    ]);
+            if ($data->collectionName) {
+                $collection->name = $data->collectionName;
+            }
 
-                    if ($data->collectionName) {
-                        $collection->name = $data->collectionName;
-                    }
+            if ($data->totalSupply !== null) {
+                $collection->supply = $data->totalSupply;
+            }
 
-                    if ($data->totalSupply) {
-                        $collection->supply = $data->totalSupply;
-                    }
+            if ($data->mintedBlock) {
+                $collection->minted_block = $data->mintedBlock;
+            }
 
-                    if ($data->mintedBlock) {
-                        $collection->minted_block = $data->mintedBlock;
-                    }
+            if ($data->description) {
+                $collection->description = $data->description;
+            }
 
-                    if ($data->description) {
-                        $collection->description = $data->description;
-                    }
+            if ($data->bannerImageUrl) {
+                $collection->extra_attributes->set('banner', $data->bannerImageUrl);
+                $collection->extra_attributes->set('banner_updated_at', now());
+            }
 
-                    if ($data->bannerImageUrl) {
-                        $collection->extra_attributes->set('banner', $data->bannerImageUrl);
-                        $collection->extra_attributes->set('banner_updated_at', now());
-                    }
+            if ($data->collectionSlug) {
+                $collection->extra_attributes->set('opensea_slug', $data->collectionSlug);
+            }
 
-                    if ($data->collectionSlug) {
-                        $collection->extra_attributes->set('opensea_slug', $data->collectionSlug);
-                    }
+            $collection->save();
 
-                    $collection->save();
-                }
-            });
+            // Sometimes, Alchemy can report supply as `null` even though the collection does have a total supply...
+            // In those cases, we want to fallback to OpenSea and use their API to retrieve the supply...
+            if ($collection->supply === null && $collection->openSeaSlug() !== null) {
+                FetchCollectionSupplyFromOpenSea::dispatch($collection);
+            }
+        });
     }
 
     public function uniqueId(): string

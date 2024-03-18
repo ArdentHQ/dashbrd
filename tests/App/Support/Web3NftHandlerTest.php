@@ -6,7 +6,8 @@ use App\Data\Web3\Web3NftData;
 use App\Enums\NftInfo;
 use App\Enums\TokenType;
 use App\Enums\TraitDisplayType;
-use App\Jobs\FetchCollectionVolumeHistory;
+use App\Events\CollectionSaved;
+use App\Jobs\FetchCollectionSupplyFromOpenSea;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\NftTrait;
@@ -15,6 +16,7 @@ use App\Models\Wallet;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 it('trims collection names', function () {
@@ -57,9 +59,9 @@ it('trims collection names', function () {
 
     $handler->store(collect([$data]));
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
 
-    $collection = Collection::first();
+    $collection = Collection::withoutGlobalScope('erc721')->first();
 
     expect($collection->name)->toBe('Collection Name');
 });
@@ -228,7 +230,7 @@ it('should handle null values for opensea slug', function () {
         ],
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->name)->toBe($data->collectionName.'-old');
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
 
@@ -236,7 +238,7 @@ it('should handle null values for opensea slug', function () {
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->name)->toBe($data->collectionName);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
 });
@@ -296,14 +298,14 @@ it('should handle opensea slugs', function () {
         ],
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
 
     $handler->store(collect([$data]));
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test456');
 });
 
@@ -366,7 +368,7 @@ it('should not overwrite existing extra_attributes opensea data', function () {
         ],
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
     expect($collection->extra_attributes->image)->toBe('existing_image');
     expect($collection->extra_attributes->banner)->toBe(null);
@@ -377,7 +379,7 @@ it('should not overwrite existing extra_attributes opensea data', function () {
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test123');
     expect($collection->extra_attributes->image)->toBe(null);
     expect($collection->extra_attributes->banner)->toBe('test_banner');
@@ -438,14 +440,14 @@ it('should handle empty extra_attribute objects', function () {
         'extra_attributes' => '{}',
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe(null);
 
     $handler->store(collect([$data]));
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test456');
 });
 
@@ -502,14 +504,14 @@ it('should handle null value for extra_attribute', function () {
         'extra_attributes' => null,
     ]);
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe(null);
 
     $handler->store(collect([$data]));
 
     $collection->refresh();
 
-    expect(Collection::count())->toBe(1);
+    expect(Collection::withoutGlobalScope('erc721')->count())->toBe(1);
     expect($collection->extra_attributes->opensea_slug)->toBe('test456');
 });
 
@@ -803,8 +805,8 @@ it('should update the error field for nft', function () {
     expect($collection->nfts->first()->info)->toBe(null);
 });
 
-it('should dispatch jobs to fetch collection volume history when collection is first added', function () {
-    Bus::fake();
+it('should dispatch the event for every erc721 collection', function () {
+    Event::fake([CollectionSaved::class]);
 
     $network = Network::polygon();
 
@@ -888,9 +890,132 @@ it('should dispatch jobs to fetch collection volume history when collection is f
         type: TokenType::Erc721,
     );
 
+    $erc1155 = new Web3NftData(
+        tokenAddress: '0xerc1155',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: 3000,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc1155,
+    );
+
+    $handler->store(collect([$data, $oldData, $erc1155]), dispatchJobs: true);
+
+    Event::assertDispatchedTimes(CollectionSaved::class, 2);
+});
+
+it('should dispatch jobs to fetch collection supply from opensea when collection is first added', function () {
+    Bus::fake();
+
+    $network = Network::polygon();
+
+    $token = Token::factory()->create([
+        'network_id' => $network->id,
+    ]);
+
+    $wallet = Wallet::factory()->create();
+
+    $handler = new Web3NftHandler(
+        network: $network,
+        wallet: $wallet,
+    );
+
+    Collection::factory()->for($network)->create([
+        'address' => '0x999',
+        'supply' => null,
+        'created_at' => now()->subHour(),
+    ]);
+
+    $oldData = new Web3NftData(
+        tokenAddress: '0x999',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: null,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: 'test',
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc721,
+    );
+
+    $data = new Web3NftData(
+        tokenAddress: '0x1234',
+        tokenNumber: '123',
+        networkId: $token->network_id,
+        collectionName: 'Collection Name',
+        collectionSymbol: 'AME',
+        collectionImage: null,
+        collectionWebsite: null,
+        collectionDescription: null,
+        collectionSocials: null,
+        collectionSupply: null,
+        collectionBannerImageUrl: null,
+        collectionBannerUpdatedAt: now(),
+        collectionOpenSeaSlug: null,
+        name: null,
+        description: null,
+        extraAttributes: [
+            'image' => null,
+            'website' => null,
+            'banner' => null,
+            'banner_updated_at' => now(),
+            'opensea_slug' => null,
+        ],
+        floorPrice: null,
+        traits: [],
+        mintedBlock: 1000,
+        mintedAt: null,
+        hasError: true,
+        info: null,
+        type: TokenType::Erc721,
+    );
+
     $handler->store(collect([$data, $oldData]), dispatchJobs: true);
 
     expect(Collection::count())->toBe(2);
 
-    Bus::assertDispatchedTimes(FetchCollectionVolumeHistory::class, 1);
+    Bus::assertDispatchedTimes(FetchCollectionSupplyFromOpenSea::class, 1);
 });

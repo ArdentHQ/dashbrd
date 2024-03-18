@@ -46,13 +46,11 @@ class NftSeeder extends Seeder
 
             if (Feature::active(Features::Collections->value)) {
                 // Add traits
-                foreach ($collectionArray['traits'] as [$traitName, $traitValue, $displayType, $nftsCount, $nftsPercentage]) {
+                foreach ($collectionArray['traits'] as [$traitName, $traitValue, $displayType, $nftsPercentage]) {
                     $collection->traits()->create([
                         'name' => $traitName,
                         'value' => $traitValue,
                         'display_type' => $displayType->value,
-
-                        'nfts_count' => $nftsCount,
                         'nfts_percentage' => $nftsPercentage,
                     ]);
                 }
@@ -89,8 +87,6 @@ class NftSeeder extends Seeder
 
         if (Feature::active(Features::Collections->value)) {
             Collection::updateFiatValue();
-
-            User::updateCollectionsValue();
         }
     }
 
@@ -120,9 +116,9 @@ class NftSeeder extends Seeder
                     ['#2677', 2677, 'https://i.seadn.io/gcs/files/a2fcf5854b49102b078f33ab25cc0a68.png?auto=format&dpr=1&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
-                    ['Background', 'Cosmic Purple', TraitDisplayType::Property, 6, 0.06],
-                    ['Beak', 'Small', TraitDisplayType::Property, 4125, 42.15],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
+                    ['Background', 'Cosmic Purple', TraitDisplayType::Property, 0.06],
+                    ['Beak', 'Small', TraitDisplayType::Property, 42.15],
                 ],
                 'is_featured' => true,
                 'description' => 'Moonbirds are a collection of 10,000 unique NFTs living on the Ethereum blockchain. Each Moonbird is algorithmically generated and has a unique combination of traits, including body, eyes, beak, wings, and background. Moonbirds are a Proof NFT project.',
@@ -142,7 +138,7 @@ class NftSeeder extends Seeder
                     ['#4103', 4103, 'https://i.seadn.io/gae/hcePWfW4TVaTGJJfzUhVr8ryviR4Lwg7FIbTNKC_eon5qSmwBF8s6oQT3DWBVKVm5sZi6HKlwoBcT_Hdbg4rovzN28puYcEoRCGCO70?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
             ],
             [
@@ -160,7 +156,7 @@ class NftSeeder extends Seeder
                     ['11069', 4857, 'https://i.seadn.io/gcs/files/a1fa26a7df84a34f882cf2297f9691d5.png?auto=format&dpr=1&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
                 'is_featured' => true,
                 'description' => 'Tubby Cats are a collection of 10,000 unique NFTs living on the Ethereum blockchain. Each Tubby Cat is algorithmically generated and has a unique combination of traits, including body, eyes, mouth, and background. Tubby Cats are a Proof NFT project.',
@@ -180,7 +176,7 @@ class NftSeeder extends Seeder
                     ['Puppy #0x1403010c120800', 77690396604499968, 'https://i.seadn.io/gcs/files/f50c1a295159aac3686cbf1ff357de50.gif?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
                 'is_featured' => true,
             ],
@@ -215,7 +211,7 @@ class NftSeeder extends Seeder
                     ['Edgehog #3837', 3837, 'https://openseauserdata.com/files/e98f3b298343e59842544a804ec5b82c.svg'],
                 ],
                 'traits' => [
-                    ['Beak', 'Small', TraitDisplayType::Property, 4125, 42.15],
+                    ['Beak', 'Small', TraitDisplayType::Property, 42.15],
                 ],
                 'is_featured' => true,
                 'description' => 'EDGEHOGS are a collection of 10,000 unique NFTs living on the Ethereum blockchain. Each EDGEHOG is algorithmically generated and has a unique combination of traits, including body, eyes, beak, wings, and background. EDGEHOGS are a Proof NFT project.',
@@ -235,7 +231,7 @@ class NftSeeder extends Seeder
                     ['CrypToadz #2531', 2531, 'https://i.seadn.io/gae/UpDI6wrGTeSXluy1i91w5IoPCGTnv-cMRDOIuhJGO_eZb22vuhdith5wfjI9AY1OCg1sR0NEkKCSlFAqC9vLk31H7pjessSQ_vmuyg?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
             ],
             [
@@ -253,7 +249,7 @@ class NftSeeder extends Seeder
                     ['CryptoDickbutt #2531', 2531, 'https://i.seadn.io/gcs/files/74e5f1e7d2ae40e943439e43eba12fa3.png?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
             ],
             [
@@ -271,7 +267,7 @@ class NftSeeder extends Seeder
                     ['tiny dinos #581', 581, 'https://i.seadn.io/gae/-vHk-pTQqrXsPjTgtle2LRLzNygrCtA_ic_6Lx7M6zg87BvGXLzTDaxDD_oxfAYzGBCOM0KOyRI4f5daVwIjDiYfY5WKd_U3BFufiQ?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
             ],
             [
@@ -289,7 +285,7 @@ class NftSeeder extends Seeder
                     ['goblintown #889', 889, 'https://i.seadn.io/gcs/files/af52e099efb9c1a5ba1c08196d7cf695.png?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
             ],
             [
@@ -307,7 +303,7 @@ class NftSeeder extends Seeder
                     ['mfer #4344', 4344, 'https://i.seadn.io/gcs/files/fea86d4a2bb5fb48f8f2f6d2dbfd87d8.png?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Body', 'Golden', TraitDisplayType::Property, 25, 0.25],
+                    ['Body', 'Golden', TraitDisplayType::Property, 0.25],
                 ],
             ],
             [
@@ -325,7 +321,7 @@ class NftSeeder extends Seeder
                     ['Noun 115', 115, 'https://openseauserdata.com/files/611d1af23df5d3b160f4c433c4647c43.svg'],
                 ],
                 'traits' => [
-                    ['Body', 'Brown', TraitDisplayType::Property, 25, 0.25],
+                    ['Body', 'Brown', TraitDisplayType::Property, 0.25],
                 ],
             ],
             [
@@ -343,8 +339,8 @@ class NftSeeder extends Seeder
                     ['rektguy #5150', 5150, 'https://i.seadn.io/gae/vU38seTlfQV5CrNiIup39Mjf4zATupmny2mbbcYiwMD1c8Erq9ZKFKyDobDndJMM92fRrMcXzp3ntIRvzgZI-stfBk_Ip1DetOMK?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
-                    ['Body', 'Brown', TraitDisplayType::Property, 25, 0.25],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
+                    ['Body', 'Brown', TraitDisplayType::Property, 0.25],
                 ],
             ],
             [
@@ -362,8 +358,8 @@ class NftSeeder extends Seeder
                     ['Runner #6936', 6936, 'https://i.seadn.io/gae/qnKGuihB4C-U3yWjDkSDgnnBZ9TsmXll2i7Mmr2TRKxgWkWfToIMAaOin5mieGALZovBs7_miFDR0qGFS5bHpfMKwiCnR-EJAasEG4Y?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
-                    ['Body', 'Brown', TraitDisplayType::Property, 25, 0.25],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
+                    ['Body', 'Brown', TraitDisplayType::Property, 0.25],
                 ],
             ],
             [
@@ -381,8 +377,8 @@ class NftSeeder extends Seeder
                     ['Larva Lad #4431', 4431, 'https://openseauserdata.com/files/d96af1fd4a8ef60daa90267dc3d8273d.svg'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
-                    ['Body', 'Brown', TraitDisplayType::Property, 25, 0.25],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
+                    ['Body', 'Brown', TraitDisplayType::Property, 0.25],
                 ],
             ],
             [
@@ -400,7 +396,7 @@ class NftSeeder extends Seeder
                     ['#1009 - Overloaded Mageglovey', 1009, 'https://i.seadn.io/gcs/files/1184368130e357cd87c741d3c5e29edc.png?auto=format&w=1000'],
                 ],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
                 ],
             ],
 
@@ -416,8 +412,8 @@ class NftSeeder extends Seeder
                 'minted_at' => Carbon::createFromTimestamp(1580345034),
                 'nfts' => [],
                 'traits' => [
-                    ['Background', 'Blue', TraitDisplayType::Property, 1636, 16.36],
-                    ['Strength', '1', TraitDisplayType::Stat, 1636, 16.36],
+                    ['Background', 'Blue', TraitDisplayType::Property, 16.36],
+                    ['Strength', '1', TraitDisplayType::Stat, 16.36],
                 ],
             ],
         ];

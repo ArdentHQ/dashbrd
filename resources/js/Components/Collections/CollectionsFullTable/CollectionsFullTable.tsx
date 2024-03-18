@@ -82,7 +82,7 @@ export const CollectionsFullTable = ({
             columns.splice(-3, 0, {
                 Header: t("common.floor_price").toString(),
                 id: "floor-price",
-                accessor: (collection) => collection.floorPriceFiat,
+                accessor: (collection) => collection.floorPrice,
                 className: "justify-end whitespace-nowrap",
             });
 
@@ -131,7 +131,7 @@ export const CollectionsFullTable = ({
                 setSortBy(column.id as CollectionsSortByOption, newDirection);
             }}
             data={collections}
-            row={(collection: App.Data.Collections.CollectionData) => (
+            row={(collection) => (
                 <CollectionsFullTableItem
                     collection={collection}
                     uniqueKey={collection.slug}
@@ -260,15 +260,13 @@ export const CollectionsTableItemSkeleton = ({
                     hoverClassName=""
                 >
                     <div className="flex items-center space-x-2">
-                        {Array.from({ length: nftsToShow })
-                            .fill({})
-                            .map((_, key) => (
-                                <Skeleton
-                                    key={key}
-                                    className="h-20 w-20"
-                                    animated={animated}
-                                />
-                            ))}
+                        {range(nftsToShow).map((index_) => (
+                            <Skeleton
+                                key={index_}
+                                className="h-20 w-20"
+                                animated={animated}
+                            />
+                        ))}
                     </div>
                 </TableCell>
             )}

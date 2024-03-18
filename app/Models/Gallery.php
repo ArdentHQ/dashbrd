@@ -36,7 +36,7 @@ class Gallery extends Model implements Viewable
     }
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'user_id',

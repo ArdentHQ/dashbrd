@@ -9,6 +9,7 @@ import { Carousel, CarouselControls, CarouselItem } from "@/Components/Carousel"
 import { Heading } from "@/Components/Heading";
 import { Tabs } from "@/Components/Tabs";
 import { useCarousel } from "@/Hooks/useCarousel";
+import { range } from "@/utils/range";
 
 interface Properties {
     latest: App.Data.Articles.ArticleData[];
@@ -68,7 +69,7 @@ export const CollectionsArticles = ({ latest, popular }: Properties): JSX.Elemen
                 ))}
 
                 {slidesPerView > articles.length &&
-                    Array.from({ length: slidesPerView - articles.length }).map((_, index) => (
+                    range(slidesPerView - articles.length).map((index) => (
                         <CarouselItem key={index}>
                             <div className="h-full p-1">
                                 <ArticleCardSkeleton isLoading={false} />

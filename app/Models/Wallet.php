@@ -33,7 +33,7 @@ class Wallet extends Model
     protected string $dataClass = WalletData::class;
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'address',

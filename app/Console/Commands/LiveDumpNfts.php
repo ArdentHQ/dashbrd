@@ -10,7 +10,6 @@ use App\Models\Collection as NftCollection;
 use App\Models\Network;
 use App\Models\Token;
 use App\Support\Facades\Alchemy;
-use App\Support\Facades\Mnemonic;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
@@ -126,8 +125,6 @@ class LiveDumpNfts extends Command
         );
 
         $this->mergeNftChunks($chain, $contractAddress);
-
-        $this->getCollectionTraitsAndPersist($chain, $contractAddress);
 
         return Command::SUCCESS;
     }
@@ -285,23 +282,6 @@ class LiveDumpNfts extends Command
         $nftChunk = json_decode($file, true);
 
         return Arr::get($nftChunk, 'pageKey');
-    }
-
-    private function getCollectionTraitsAndPersist(Chain $chain, string $address): void
-    {
-        $this->info('Fetching collection traits...');
-
-        $fs = Storage::disk(self::diskName);
-
-        $traits = Mnemonic::getCollectionTraits($chain, $address);
-
-        $path = $this->prepareCollectionPath($chain, $address);
-
-        $fileName = $path.'/traits.json';
-
-        $fs->put($fileName, (string) json_encode($traits, JSON_PRETTY_PRINT));
-
-        $this->info('Fetched collection traits, file: '.$fileName);
     }
 
     /**

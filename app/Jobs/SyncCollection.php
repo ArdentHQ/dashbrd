@@ -31,7 +31,6 @@ class SyncCollection implements ShouldBeUnique, ShouldQueue
     public function handle(): void
     {
         Bus::batch([
-            new FetchCollectionTraits($this->collection),
             new FetchCollectionOwners($this->collection),
         ])->name('Syncing Collection #'.$this->collection->id)->dispatch();
     }

@@ -11,7 +11,6 @@ use App\Models\Collection as NftCollection;
 use App\Models\CollectionTrait;
 use App\Models\Network;
 use App\Models\Token;
-use App\Models\User;
 use App\Support\Facades\Alchemy;
 use App\Support\Web3NftHandler;
 use Carbon\Carbon;
@@ -72,7 +71,6 @@ class TopCollectionsNftsSeeder extends Seeder
                     'value_max' => $trait['valueMin'],
                     'value_min' => $trait['valueMax'],
                     'display_type' => $trait['displayType'],
-                    'nfts_count' => $trait['nftsCount'],
                     'nfts_percentage' => $trait['nftsPercentage'],
                 ]);
 
@@ -104,8 +102,6 @@ class TopCollectionsNftsSeeder extends Seeder
         }
 
         Collection::updateFiatValue();
-
-        User::updateCollectionsValue();
     }
 
     private function getTopCollections(int $limit = 25): IlluminateCollection
@@ -153,7 +149,7 @@ class TopCollectionsNftsSeeder extends Seeder
             'symbol' => $collection->symbol ?? $collection->name,
             'floor_price' => $collection->floor_price * 1e18,
             'floor_price_token_id' => $token->id,
-            'volume' => $collection->volume_total,
+            'total_volume' => $collection->volume_total,
             'supply' => $collection->items_total,
             'type' => $collection->erc_type === 'erc721' ? TokenType::Erc721->value : TokenType::Erc1155->value,
             'minted_block' => $collection->deploy_block_number,

@@ -36,9 +36,9 @@ export const CollectionCard = ({
     const { t } = useTranslation();
 
     const token = {
-        symbol: collection.floorPriceCurrency ?? "ETH",
-        name: collection.floorPriceCurrency ?? "ETH",
-        decimals: collection.floorPriceDecimals ?? 18,
+        symbol: collection.floorPrice.currency,
+        name: collection.floorPrice.currency,
+        decimals: collection.floorPrice.decimals,
     };
 
     const collectionNameReference = useRef<HTMLSpanElement>(null);
@@ -115,7 +115,7 @@ export const CollectionCard = ({
                             {t("pages.collections.floor_price")}
                         </span>
 
-                        {collection.floorPrice === null ? (
+                        {collection.floorPrice.value === null ? (
                             <span
                                 data-testid="CollectionCard__unknown-floor-price"
                                 className="text-sm font-medium text-theme-secondary-300 dark:text-theme-dark-700"
@@ -141,7 +141,7 @@ export const CollectionCard = ({
                         </span>
 
                         <span>
-                            {collection.floorPrice === null ? (
+                            {collection.floorPrice.value === null ? (
                                 <span
                                     data-testid="CollectionCard__unknown-value"
                                     className="text-sm font-medium text-theme-secondary-300 dark:text-theme-dark-700"
@@ -150,7 +150,9 @@ export const CollectionCard = ({
                                 </span>
                             ) : (
                                 <CollectionPortfolioValue
-                                    value={BigNumber.make(collection.floorPrice).times(collection.nftsCount).toString()}
+                                    value={BigNumber.make(collection.floorPrice.value)
+                                        .times(collection.nftsCount)
+                                        .toString()}
                                     token={token}
                                     variant="grid"
                                 />

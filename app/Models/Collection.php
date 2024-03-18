@@ -80,6 +80,13 @@ class Collection extends Model
         'is_featured' => 'bool',
     ];
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope('erc721', function (Builder $query) {
+            $query->where('collections.type', TokenType::Erc721->value);
+        });
+    }
+
     /**
      * @return HasOne<Token>
      */
@@ -601,45 +608,6 @@ class Collection extends Model
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeVotable(Builder $query): Builder
-    {
-        return $query->addFloorPriceChange()
-                    ->addSelect([
-                        'collections.*',
-                        DB::raw('MIN(floor_price_token.symbol) as floor_price_symbol'),
-                        DB::raw('MIN(floor_price_token.decimals) as floor_price_decimals'),
-                    ])
-                    ->leftJoin('tokens as floor_price_token', 'collections.floor_price_token_id', '=', 'floor_price_token.id')
-                    ->withCount('nfts')
-                    ->groupBy('collections.id');
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     * @return Builder<self>
-     */
-    public function scopeAddFloorPriceChange(Builder $query): Builder
-    {
-        return $query->addSelect(
-            DB::raw("(
-                SELECT
-                    (AVG(case when fp1.retrieved_at >= CURRENT_DATE then fp1.floor_price end) -
-                    AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end)) /
-                    NULLIF(AVG(case when fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY' AND fp1.retrieved_at < CURRENT_DATE then fp1.floor_price end) * 100, 0)
-                FROM
-                    floor_price_history fp1
-                WHERE
-                    fp1.collection_id = collections.id AND
-                    fp1.retrieved_at >= CURRENT_DATE - INTERVAL '1 DAY'
-                ) AS price_change_24h
-            ")
-        );
     }
 
     /**

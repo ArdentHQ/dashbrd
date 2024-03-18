@@ -23,7 +23,7 @@ class FetchCollectionOpenseaSlug extends Command
      *
      * @var string
      */
-    protected $description = 'Fetch the opensea slug for collections';
+    protected $description = 'Fetch the OpenSea slug for collections';
 
     /**
      * Execute the console command.
@@ -33,6 +33,7 @@ class FetchCollectionOpenseaSlug extends Command
         // Job runs every 5 minutes
         $limit = $this->getLimitPerMinutes(5);
 
+        // We only care about collections that don't have a slug yet, so in most cases it will not run any request...
         $this->forEachCollection(
             callback: function ($collection, $index) {
                 $this->dispatchDelayed(
@@ -43,9 +44,7 @@ class FetchCollectionOpenseaSlug extends Command
             },
             queryCallback: fn ($query) => $query
                 ->orderByOpenseaSlugLastFetchedAt()
-                // Does not have an opensea slug
                 ->whereNull('extra_attributes->opensea_slug')
-                // Has not been fetched
                 ->whereNull('extra_attributes->opensea_slug_last_fetched_at'),
             limit: $limit
         );

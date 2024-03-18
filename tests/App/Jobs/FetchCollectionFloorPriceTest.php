@@ -125,6 +125,12 @@ it('should handle non existing collection when fetching floor price', function (
         ->and($collection->floor_price_retrieved_at->gt($retrievedAt))->toBe(true);
 });
 
+it('should handle collections missing from the database', function () {
+    $network = Network::polygon();
+
+    (new FetchCollectionFloorPrice($network->chain_id, '0x123'))->handle();
+})->throwsNoExceptions();
+
 it('should fetch nft collection floor price and handle null', function () {
     $network = Network::polygon();
     $token = Token::factory()->create(['network_id' => $network->id, 'symbol' => 'eth']);
