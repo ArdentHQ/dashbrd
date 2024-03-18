@@ -19,6 +19,40 @@ it('dispatches a job for collections', function () {
     Bus::assertDispatchedTimes(CalculateTraitRaritiesForCollection::class, 3);
 });
 
+it('can dispatch a job for collections starting from some ID', function () {
+    Bus::fake(CalculateTraitRaritiesForCollection::class);
+
+    $id = Collection::factory()->create([
+        'supply' => 10,
+    ]);
+
+    Collection::factory(5)->create([
+        'supply' => 10,
+    ]);
+
+    Bus::assertNothingBatched();
+
+    $this->artisan('collections:calculate-trait-rarities --start='.$id);
+
+    Bus::assertBatched(function ($batch) {
+        return $batch->jobs->count() === 6;
+    });
+});
+
+it('can dispatch a job for collections starting from some ID, but limited to specific number', function () {
+    Bus::fake(CalculateTraitRaritiesForCollection::class);
+
+    Collection::factory(20)->create();
+
+    Bus::assertNothingBatched();
+
+    $this->artisan('collections:calculate-trait-rarities --start=10 --limit=5');
+
+    Bus::assertBatched(function ($batch) {
+        return $batch->jobs->count() === 5;
+    });
+});
+
 it('should not dispatch a job for a spam collection', function () {
     Bus::fake(CalculateTraitRaritiesForCollection::class);
 
