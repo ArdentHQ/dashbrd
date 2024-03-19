@@ -130,14 +130,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Schedule::macro('spreadCommand', function (string $command, int $total, int $every, ScheduleFrequency $spread, int $offset = 0) {
             /** @var Schedule $this */
-
             if ($spread === ScheduleFrequency::Hourly) {
                 $chunks = 60 / $every;
 
                 $limit = ceil(($total + 1) / $chunks);
 
-                foreach (range(0, $chunks-1) as $chunk) {
-                    $at = (int) (round($chunk*$every) + $offset);
+                foreach (range(0, $chunks - 1) as $chunk) {
+                    $at = (int) (round($chunk * $every) + $offset);
 
                     if ($at >= 60) {
                         $at = $at - 60;
@@ -145,7 +144,7 @@ class AppServiceProvider extends ServiceProvider
 
                     $this->command($command, [
                         '--limit' => (int) $limit,
-                        '--offset' => (int) ($chunk * $limit)
+                        '--offset' => (int) ($chunk * $limit),
                     ])->withoutOverlapping()->hourlyAt($at);
                 }
 
@@ -157,8 +156,8 @@ class AppServiceProvider extends ServiceProvider
 
                 $limit = ceil(($total + 1) / $chunks);
 
-                foreach (range(0, $chunks-1) as $chunk) {
-                    $at = (int) (round($chunk*$every) + $offset);
+                foreach (range(0, $chunks - 1) as $chunk) {
+                    $at = (int) (round($chunk * $every) + $offset);
 
                     $hour = floor($at / 60);
                     $minute = $at % 60;
@@ -175,7 +174,7 @@ class AppServiceProvider extends ServiceProvider
 
                     $this->command($command, [
                         '--limit' => (int) $limit,
-                        '--offset' => (int) ($chunk * $limit)
+                        '--offset' => (int) ($chunk * $limit),
                     ])->withoutOverlapping()->dailyAt($hour.':'.$minute);
                 }
 
