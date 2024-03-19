@@ -18,7 +18,7 @@ class FetchCollectionActivity extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-activity {--collection-id=}';
+    protected $signature = 'collections:fetch-activity {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.

@@ -18,7 +18,7 @@ class FetchBurnActivity extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-burn-activity {--collection-id=}';
+    protected $signature = 'collections:fetch-burn-activity {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.

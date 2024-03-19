@@ -16,7 +16,7 @@ class FetchCollectionBanner extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-banner {--collection-id=}';
+    protected $signature = 'collections:fetch-banner {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.

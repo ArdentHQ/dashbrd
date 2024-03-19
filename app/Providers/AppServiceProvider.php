@@ -162,12 +162,6 @@ class AppServiceProvider extends ServiceProvider
                     $hour = floor($at / 60);
                     $minute = $at % 60;
 
-                    if ($minute >= 60) {
-                        $hour++;
-
-                        $minute = $minute - 60;
-                    }
-
                     if ($hour >= 24) {
                         $hour = $hour - 24;
                     }

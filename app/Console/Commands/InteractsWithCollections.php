@@ -38,7 +38,7 @@ trait InteractsWithCollections
                     ->select('collections.*')
                     ->withoutSpamContracts()
                     ->orderBy('id', 'asc')
-                    ->when($offset !== null, fn ($q) => $q->skip($offset))
+                    ->when($offset !== null, fn ($q) => $q->skip((int) $offset))
                     ->when($limit !== null, function ($query) use ($limit, $callback) {
                         return $query->limit($limit)->get()->each($callback);
                     })
