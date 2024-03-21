@@ -2,7 +2,7 @@ import React from "react";
 import { CollectionPortfolioValue } from "./CollectionPortfolioValue";
 import TokenDataFactory from "@/Tests/Factories/Token/TokenDataFactory";
 import { render, screen } from "@/Tests/testing-library";
-import { Breakpoint, allBreakpoints } from "@/Tests/utils";
+import { allBreakpoints, Breakpoint } from "@/Tests/utils";
 
 describe("CollectionName", () => {
     it.each(allBreakpoints)("should render on %s", (breakpoint) => {
