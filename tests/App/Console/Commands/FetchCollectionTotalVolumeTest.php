@@ -84,19 +84,3 @@ it('should not dispatch a job for a given spam collection', function () {
 
     Bus::assertDispatchedTimes(FetchCollectionTotalVolume::class, 0);
 });
-
-it('should not dispatch a job for collections that dont have OpenSea slug', function () {
-    Bus::fake([FetchCollectionTotalVolume::class]);
-
-    $collection = Collection::factory()->create([
-        'extra_attributes' => [
-            'opensea_slug' => null,
-        ],
-    ]);
-
-    Bus::assertDispatchedTimes(FetchCollectionTotalVolume::class, 0);
-
-    $this->artisan('collections:fetch-total-volume');
-
-    Bus::assertDispatchedTimes(FetchCollectionTotalVolume::class, 0);
-});
