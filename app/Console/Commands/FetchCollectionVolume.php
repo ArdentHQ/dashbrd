@@ -16,7 +16,7 @@ class FetchCollectionVolume extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-volume {--collection-id=}';
+    protected $signature = 'collections:fetch-volume {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.

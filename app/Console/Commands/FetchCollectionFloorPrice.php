@@ -16,7 +16,7 @@ class FetchCollectionFloorPrice extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-floor-price {--collection-id=}';
+    protected $signature = 'collections:fetch-floor-price {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.

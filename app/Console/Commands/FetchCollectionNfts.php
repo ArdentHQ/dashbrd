@@ -17,7 +17,7 @@ class FetchCollectionNfts extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-nfts {--collection-id=} {--start-token=} {--only-signed} {--limit=}';
+    protected $signature = 'collections:fetch-nfts {--limit=} {--offset=} {--collection-id=} {--start-token=} {--only-signed}';
 
     /**
      * The console command description.

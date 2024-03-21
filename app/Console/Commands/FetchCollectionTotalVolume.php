@@ -16,7 +16,7 @@ class FetchCollectionTotalVolume extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-total-volume {--collection-id=}';
+    protected $signature = 'collections:fetch-total-volume {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.
@@ -30,11 +30,9 @@ class FetchCollectionTotalVolume extends Command
      */
     public function handle(): int
     {
-        $queryCallback = fn ($query) => $query->whereNotNull('extra_attributes->opensea_slug');
-
         $this->forEachCollection(function ($collection) {
             FetchCollectionTotalVolumeJob::dispatch($collection);
-        }, queryCallback: $queryCallback);
+        });
 
         return Command::SUCCESS;
     }
