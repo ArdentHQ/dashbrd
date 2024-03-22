@@ -319,6 +319,21 @@ describe("CollectionsTable", () => {
         expect(getByTestId("CollectionsTable")).toBeInTheDocument();
     });
 
+    it("should render when floor price fiat is not null, but the user does not exist", () => {
+        const { getByTestId } = render(
+            <CollectionsTable
+                hiddenCollectionAddresses={[]}
+                collections={collections}
+                user={null}
+                alreadyReportedByCollection={{}}
+                reportByCollectionAvailableIn={{}}
+                onChanged={vi.fn()}
+            />,
+        );
+
+        expect(getByTestId("CollectionsTable")).toBeInTheDocument();
+    });
+
     it("defaults fiat value to 0", () => {
         const { getByTestId, queryByTestId } = render(
             <CollectionsTable
