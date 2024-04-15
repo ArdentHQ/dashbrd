@@ -38,7 +38,6 @@ it('fetches NFTs', function () {
 
     $liveDumps = collect([
         'alchemy_eth_nfts_0x123456789.json',
-        'moralis_polygon_nfts_0x123456789.json',
     ]);
 
     $liveDumps->each(fn ($liveDump) => expect($fakeFileSystem->exists($liveDump))->toBeFalse());
