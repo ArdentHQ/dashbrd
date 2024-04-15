@@ -16,7 +16,6 @@ use App\Enums\NftTransferType;
 use App\Exceptions\ConnectionException;
 use App\Exceptions\RateLimitException;
 use App\Models\Token;
-use App\Models\TokenPriceHistory;
 use App\Support\CryptoUtils;
 use App\Support\NftImageUrl;
 use Carbon\Carbon;
