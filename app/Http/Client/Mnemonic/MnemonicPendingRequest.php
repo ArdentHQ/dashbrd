@@ -399,35 +399,10 @@ class MnemonicPendingRequest extends PendingRequest
         $nativeTotalString = Arr::get($transfer, 'recipientPaid.totalNative');
         $nativePrice = $nativeTotalString ? (float) $nativeTotalString : null;
 
-        if ($chain !== Chain::ETH && $usdPrice !== null) {
-            // On non-ETH chains we get native in e.g. MATIC so normalize it to ETH using our historical price data.
-            $nativePrice = $this->getActivityNativePrice($ethToken, $currency, $blockchainTimestamp, $usdPrice);
-        }
-
         return [
             'usd' => $usdPrice,
             'native' => $nativePrice,
         ];
-    }
-
-    /**
-     * Finds a historical price record and converts USD amount to native
-     */
-    private function getActivityNativePrice(
-        Token $token,
-        CurrencyCode $code,
-        Carbon $timestamp,
-        float $usdPrice
-    ): ?float {
-        /** @var TokenPriceHistory|null $historicalPrice */
-        $historicalPrice = TokenPriceHistory::getHistory($token, $code, $timestamp);
-
-        // no historical price record found
-        if ($historicalPrice === null || $historicalPrice->price == 0) {
-            return null;
-        }
-
-        return $usdPrice / $historicalPrice->price;
     }
 
     /**
