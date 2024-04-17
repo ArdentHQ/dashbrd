@@ -14,6 +14,11 @@ enum Chain: int
     case Polygon = 137;
     case Mumbai = 80001;
 
+    public function isPolygon(): bool
+    {
+        return $this === self::Polygon || $this === self::Mumbai;
+    }
+
     public function nativeCurrency(): string
     {
         return match ($this) {

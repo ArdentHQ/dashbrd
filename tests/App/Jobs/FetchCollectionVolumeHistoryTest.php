@@ -3,10 +3,25 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3Volume;
+use App\Enums\Chain;
 use App\Jobs\FetchCollectionVolumeHistory;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Support\Facades\Mnemonic;
+
+it('does not run for polygon networks', function () {
+    Mnemonic::shouldReceive('getCollectionVolumeHistory')->never();
+
+    $network = Network::firstWhere('chain_id', Chain::Polygon);
+
+    $collection = Collection::factory()->for($network)->create([
+        'volume_1d' => '1',
+        'volume_7d' => '2',
+        'volume_30d' => '3',
+    ]);
+
+    (new FetchCollectionVolumeHistory($collection))->handle();
+});
 
 it('should fetch 30-day volume history for the collection', function () {
     Mnemonic::shouldReceive('getCollectionVolumeHistory')->andReturn(collect([
@@ -14,7 +29,7 @@ it('should fetch 30-day volume history for the collection', function () {
         new Web3Volume(value: '2', date: today()->subDay()),
     ]));
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->for($network)->create([
         'volume_1d' => '1',

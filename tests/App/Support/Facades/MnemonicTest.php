@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\Http;
 
 it('can use the facade', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
+        'https://ethereum-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
-    $data = Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionFloorPrice(Chain::ETH, $collection->address);
 
     expect($data)->toBeInstanceOf(Web3CollectionFloorPrice::class);
 });

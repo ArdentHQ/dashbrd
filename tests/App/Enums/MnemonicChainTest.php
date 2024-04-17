@@ -9,12 +9,12 @@ it('should determine chain from id', function (Chain $chain, MnemonicChain $expe
     expect(MnemonicChain::fromChain($chain))->toBe($expected);
 })->with([
     'ETH' => [Chain::ETH, MnemonicChain::Ethereum],
-    'Polygon' => [Chain::Polygon, MnemonicChain::Polygon],
 ]);
 
 it('should throw exception if chain not supported', function (Chain $chain) {
     expect(fn () => MnemonicChain::fromChain($chain))->toThrow(\InvalidArgumentException::class);
 })->with([
     Chain::Mumbai,
+    Chain::Polygon,
     Chain::Goerli,
 ]);
