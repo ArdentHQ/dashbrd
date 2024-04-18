@@ -40,6 +40,10 @@ class FetchCollectionBanner implements ShouldBeUnique, ShouldQueue
             'collection' => $this->collection->address,
         ]);
 
+        if ($this->collection->network->chain()->isPolygon()) {
+            return;
+        }
+
         $banner = Mnemonic::getCollectionBanner(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address

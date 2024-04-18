@@ -50,6 +50,10 @@ class FetchBurnActivity implements ShouldQueue
             return;
         }
 
+        if ($this->collection->network->chain()->isPolygon()) {
+            return;
+        }
+
         // This collection never had its activity retrieved, so we don't want to fetch only burn activity...
         if ($this->collection->activity_updated_at === null) {
             return;

@@ -65,6 +65,10 @@ class FetchCollectionActivity implements ShouldQueue
             return;
         }
 
+        if ($this->collection->network->chain()->isPolygon()) {
+            return;
+        }
+
         if ($this->collection->is_fetching_activity && ! $this->forced) {
             return;
         }

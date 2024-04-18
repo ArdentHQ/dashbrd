@@ -40,8 +40,25 @@ it('does not run if collection is marked as spam', function () {
     (new FetchBurnActivity($collection))->handle($mock);
 });
 
+it('does not run for polygon networks', function () {
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create([
+        'activity_updated_at' => now(),
+    ]);
+
+    $mock = $this->mock(
+        MnemonicWeb3DataProvider::class,
+        fn ($mock) => $mock->shouldReceive('getBurnActivity')->never()
+    );
+
+    (new FetchBurnActivity($collection))->handle($mock);
+});
+
 it('does not run if collection has never ran the initial activity fetching', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'activity_updated_at' => null,
     ]);
 
@@ -54,7 +71,9 @@ it('does not run if collection has never ran the initial activity fetching', fun
 });
 
 it('does not run if collection is blacklisted from indexing activity', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'activity_updated_at' => now(),
     ]);
 
@@ -73,9 +92,10 @@ it('does not run if collection is blacklisted from indexing activity', function 
 });
 
 it('does not dispatch another job in the chain if there are no activities at all', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => now(),
     ]);
 
@@ -94,9 +114,10 @@ it('does not dispatch another job in the chain if there are no activities at all
 it('does not dispatch another job in the chain if there are less than 500 burn activities returned from the provider', function () {
     Bus::fake([FetchBurnActivity::class]);
 
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => now(),
     ]);
 
@@ -131,9 +152,10 @@ it('does not dispatch another job in the chain if there are less than 500 burn a
 it('does dispatch another job in the chain if there are more than 500 activities returned from the provider', function () {
     Bus::fake([FetchBurnActivity::class]);
 
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => now(),
     ]);
 
@@ -164,9 +186,10 @@ it('does dispatch another job in the chain if there are more than 500 activities
 });
 
 it('starts from the timestamp of the newest burn activity', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => now(),
     ]);
 
@@ -191,7 +214,7 @@ it('starts from the timestamp of the newest burn activity', function () {
     $mock = $this->mock(
         MnemonicWeb3DataProvider::class,
         fn ($mock) => $mock->shouldReceive('getBurnActivity')->once()->withArgs(function ($chain, $address, $limit, $from) use ($date, $collection) {
-            return $chain === Chain::Polygon
+            return $chain === Chain::ETH
                 && $address === $collection->address
                 && $limit === 500
                 && ($from->toDateTimeString() === $date->toDateTimeString());
@@ -202,9 +225,10 @@ it('starts from the timestamp of the newest burn activity', function () {
 });
 
 it('does not dispatch another job in the chain if there are no activities with the proper label', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => now(),
     ]);
 
@@ -235,9 +259,10 @@ it('does not dispatch another job in the chain if there are no activities with t
 });
 
 it('ignores activities without any type (label)', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => now(),
     ]);
 
@@ -285,9 +310,10 @@ it('ignores activities without any type (label)', function () {
 });
 
 it('upserts existing activities', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => now(),
     ]);
 
@@ -327,9 +353,10 @@ it('upserts existing activities', function () {
 });
 
 it('has a retry until', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->id,
         'activity_updated_at' => null,
     ]);
 

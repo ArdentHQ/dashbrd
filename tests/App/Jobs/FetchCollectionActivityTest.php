@@ -22,7 +22,9 @@ beforeEach(function () {
 });
 
 it('does not run if collection is marked as spam', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => true,
     ]);
 
@@ -41,8 +43,25 @@ it('does not run if collection is marked as spam', function () {
     (new FetchCollectionActivity($collection))->handle($mock);
 });
 
+it('does not run for polygon networks', function () {
+    $network = Network::firstWhere('chain_id', Chain::Polygon);
+
+    $collection = Collection::factory()->for($network)->create([
+        'is_fetching_activity' => true,
+    ]);
+
+    $mock = $this->mock(
+        MnemonicWeb3DataProvider::class,
+        fn ($mock) => $mock->shouldReceive('getCollectionActivity')->never()
+    );
+
+    (new FetchCollectionActivity($collection))->handle($mock);
+});
+
 it('does not run if collection is already fetching activity', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => true,
     ]);
 
@@ -55,7 +74,9 @@ it('does not run if collection is already fetching activity', function () {
 });
 
 it('does not run if collection is blacklisted from indexing activity', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
     ]);
 
@@ -74,9 +95,10 @@ it('does not run if collection is blacklisted from indexing activity', function 
 });
 
 it('does run in forced mode if collection is already fetching activity', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => true,
-        'network_id' => Network::polygon()->first()->id,
     ]);
 
     $mock = $this->mock(
@@ -88,9 +110,10 @@ it('does run in forced mode if collection is already fetching activity', functio
 });
 
 it('does not dispatch another job in the chain if there are no activities at all', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -108,9 +131,10 @@ it('does not dispatch another job in the chain if there are no activities at all
 });
 
 it('does not dispatch another job in the chain if there are no activities with the proper label', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -142,9 +166,10 @@ it('does not dispatch another job in the chain if there are no activities with t
 });
 
 it('dispatches the job to sync burned NFTs if there are some burn events', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -190,9 +215,10 @@ it('dispatches the job to sync burned NFTs if there are some burn events', funct
 });
 
 it('does not the job to sync burned NFTs if there are no burn events', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -238,9 +264,10 @@ it('does not the job to sync burned NFTs if there are no burn events', function 
 it('does not dispatch another job in the chain if there are less than 500 activities returned from the provider', function () {
     Bus::fake([FetchCollectionActivity::class]);
 
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -280,9 +307,10 @@ it('does not dispatch another job in the chain if there are less than 500 activi
 it('does dispatch another job in the chain if there are more than 500 activities returned from the provider', function () {
     Bus::fake([FetchCollectionActivity::class]);
 
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -318,9 +346,10 @@ it('does dispatch another job in the chain if there are more than 500 activities
 });
 
 it('starts from the timestamp of the newest activity', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -343,7 +372,7 @@ it('starts from the timestamp of the newest activity', function () {
     $mock = $this->mock(
         MnemonicWeb3DataProvider::class,
         fn ($mock) => $mock->shouldReceive('getCollectionActivity')->once()->withArgs(function ($chain, $address, $limit, $from) use ($date, $collection) {
-            return $chain === Chain::Polygon
+            return $chain === Chain::ETH
                 && $address === $collection->address
                 && $limit === 500
                 && ($from->toDateTimeString() === $date->toDateTimeString());
@@ -359,9 +388,10 @@ it('starts from the timestamp of the newest activity', function () {
 });
 
 it('ignores activities without any type (label)', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -425,9 +455,10 @@ it('ignores activities without any type (label)', function () {
 });
 
 it('upserts existing activities', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -507,9 +538,10 @@ it('upserts existing activities', function () {
 });
 
 it('has a retry until', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => false,
-        'network_id' => Network::polygon()->first()->id,
         'activity_updated_at' => null,
     ]);
 
@@ -517,7 +549,9 @@ it('has a retry until', function () {
 });
 
 it('resets the collection state if the job fails', function () {
-    $collection = Collection::factory()->create([
+    $network = Network::firstWhere('chain_id', Chain::ETH);
+
+    $collection = Collection::factory()->for($network)->create([
         'is_fetching_activity' => true,
         'activity_updated_at' => null,
     ]);

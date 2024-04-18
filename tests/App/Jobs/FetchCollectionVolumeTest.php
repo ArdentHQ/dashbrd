@@ -3,11 +3,29 @@
 declare(strict_types=1);
 
 use App\Data\Web3\Web3Volume;
+use App\Enums\Chain;
 use App\Jobs\FetchCollectionVolume;
 use App\Models\Collection;
 use App\Models\Network;
 use App\Models\TradingVolume;
 use App\Support\Facades\Mnemonic;
+
+it('does not run for polygon network', function () {
+    Mnemonic::shouldReceive('getLatestCollectionVolume')->never();
+
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create();
+
+    TradingVolume::factory()->for($collection)->create([
+        'volume' => '10',
+        'created_at' => now()->subDays(3),
+    ]);
+
+    (new FetchCollectionVolume($collection))->handle();
+
+    expect(TradingVolume::count())->toBe(1);
+});
 
 it('should retrieve the latest collection volume', function () {
     Mnemonic::shouldReceive('getLatestCollectionVolume')->andReturn(new Web3Volume(
@@ -15,7 +33,7 @@ it('should retrieve the latest collection volume', function () {
         date: now(),
     ));
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->for($network)->create();
 

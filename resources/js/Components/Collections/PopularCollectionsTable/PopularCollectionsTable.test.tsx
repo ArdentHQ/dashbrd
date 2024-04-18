@@ -157,7 +157,14 @@ describe("PopularCollectionsTable", () => {
     });
 
     it.each(allBreakpoints)("can render the skeleton for the table item", (breakpoint) => {
-        const { getByTestId } = render(<PopularCollectionsTableItemSkeleton index={1} />, { breakpoint });
+        const { getByTestId } = render(
+            <table>
+                <tbody>
+                    <PopularCollectionsTableItemSkeleton index={1} />
+                </tbody>
+            </table>,
+            { breakpoint },
+        );
 
         expect(getByTestId("PopularCollectionsTableItemSkeleton")).toBeInTheDocument();
     });

@@ -46,7 +46,7 @@ class LiveDumpWallets extends Command
 
         $providers = [new AlchemyWeb3DataProvider(), new MoralisWeb3DataProvider()];
 
-        $chains = [Chain::ETH, Chain::Polygon];
+        $chains = [Chain::ETH];
 
         /** @var string[] */
         $addresses = config('dashbrd.live_dump_wallets');

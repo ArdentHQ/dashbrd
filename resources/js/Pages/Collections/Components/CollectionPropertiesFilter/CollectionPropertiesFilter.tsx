@@ -1,3 +1,4 @@
+import { Root } from "@radix-ui/react-accordion";
 import groupBy from "lodash/groupBy";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,6 +18,8 @@ export const CollectionPropertiesFilter = ({
 
     const groupedTraits = useMemo(() => groupBy(traits, "name"), [traits]);
 
+    const keys = selected !== null ? Object.keys(selected) : [];
+
     return (
         <div className="flex flex-col overflow-hidden border-y border-theme-secondary-300 dark:border-theme-dark-700 xs:rounded-xl xs:border lg:sticky lg:top-4 lg:max-h-screen">
             <div className="bg-theme-secondary-50 px-6 py-3 text-sm font-medium text-theme-secondary-700 dark:bg-theme-dark-950 dark:text-theme-dark-200">
@@ -24,15 +27,20 @@ export const CollectionPropertiesFilter = ({
             </div>
 
             <CustomScroll>
-                {Object.entries(groupedTraits).map(([groupName, traits]) => (
-                    <CollectionPropertiesGroup
-                        key={groupName}
-                        groupName={groupName}
-                        traits={traits}
-                        selected={selected}
-                        onChange={changeHandler}
-                    />
-                ))}
+                <Root
+                    type="multiple"
+                    defaultValue={keys}
+                >
+                    {Object.entries(groupedTraits).map(([groupName, traits]) => (
+                        <CollectionPropertiesGroup
+                            key={groupName}
+                            groupName={groupName}
+                            traits={traits}
+                            selected={selected}
+                            onChange={changeHandler}
+                        />
+                    ))}
+                </Root>
             </CustomScroll>
         </div>
     );

@@ -15,20 +15,20 @@ use Illuminate\Support\Facades\Http;
 
 it('can get nft floor price', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
+        'https://ethereum-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
     ]);
 
     $collection = Collection::factory()->create();
 
     $provider = new MnemonicWeb3DataProvider();
-    $floorPrice = $provider->getCollectionFloorPrice(Chain::Polygon, $collection->address);
+    $floorPrice = $provider->getCollectionFloorPrice(Chain::ETH, $collection->address);
     expect($floorPrice->price)->toBe('10267792581881993')
-        ->and($floorPrice->currency)->toBe('matic');
+        ->and($floorPrice->currency)->toBe('eth');
 });
 
 it('can get nft floor price and lookup fungible token', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
+        'https://ethereum-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price'), 200),
     ]);
 
     $network = Network::polygon();
@@ -45,14 +45,14 @@ it('can get nft floor price and lookup fungible token', function () {
     ]);
 
     $provider = new MnemonicWeb3DataProvider();
-    $floorPrice = $provider->getCollectionFloorPrice(Chain::Polygon, $collection->address);
+    $floorPrice = $provider->getCollectionFloorPrice(Chain::ETH, $collection->address);
     expect($floorPrice->price)->toBe('6000000000000')
         ->and($floorPrice->currency)->toBe('weth');
 });
 
 it('can handle missing nft floor price', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price_null'), 200),
+        'https://ethereum-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response(fixtureData('mnemonic.nft_floor_price_null'), 200),
     ]);
 
     $network = Network::polygon();
@@ -62,7 +62,7 @@ it('can handle missing nft floor price', function () {
     ]);
 
     $provider = new MnemonicWeb3DataProvider();
-    expect($provider->getCollectionFloorPrice(Chain::Polygon, $collection->address))
+    expect($provider->getCollectionFloorPrice(Chain::ETH, $collection->address))
         ->toBeNull();
 });
 
@@ -126,7 +126,7 @@ it('can get collection activity', function () {
 
     $collection = Collection::factory()->create();
 
-    $activity = (new MnemonicWeb3DataProvider)->getCollectionActivity(Chain::Polygon, $collection->address, limit: 10);
+    $activity = (new MnemonicWeb3DataProvider)->getCollectionActivity(Chain::ETH, $collection->address, limit: 10);
 
     expect($activity)->toHaveCount(18);
 });
@@ -145,7 +145,7 @@ it('can get burn activity', function () {
 
     $collection = Collection::factory()->create();
 
-    $activity = (new MnemonicWeb3DataProvider)->getBurnActivity(Chain::Polygon, $collection->address, limit: 10);
+    $activity = (new MnemonicWeb3DataProvider)->getBurnActivity(Chain::ETH, $collection->address, limit: 10);
 
     expect($activity)->toHaveCount(8);
 });

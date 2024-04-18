@@ -35,6 +35,10 @@ class FetchCollectionVolumeHistory implements ShouldQueue
      */
     public function handle(): void
     {
+        if ($this->collection->network->chain()->isPolygon()) {
+            return;
+        }
+
         $volumes = Mnemonic::getCollectionVolumeHistory(
             chain: $this->collection->network->chain(),
             address: $this->collection->address,

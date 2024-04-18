@@ -35,6 +35,10 @@ class FetchCollectionVolume implements ShouldQueue
      */
     public function handle(): void
     {
+        if ($this->collection->network->chain()->isPolygon()) {
+            return;
+        }
+
         $volume = Mnemonic::getLatestCollectionVolume(
             chain: $this->collection->network->chain(),
             contractAddress: $this->collection->address

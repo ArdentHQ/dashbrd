@@ -25,56 +25,56 @@ beforeEach(function () {
 
 it('should throw a custom exception on connection failures', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 500),
+        'https://ethereum-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 500),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::ETH, $collection->address);
 })->throws(ConnectionException::class);
 
 it('should throw on 401', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 401),
+        'https://ethereum-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 401),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::ETH, $collection->address);
 })->throws(Exception::class);
 
 it('should throw a custom exception on rate limits', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 429, [
+        'https://ethereum-rest.api.mnemonichq.com/marketplaces/v1beta2/floors/*' => Http::response([], 429, [
             'Retry-After' => 10,
         ]),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address);
+    Mnemonic::getCollectionFloorPrice(Chain::ETH, $collection->address);
 })->throws(RateLimitException::class);
 
 it('should not retry request on 400', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*blockTimestampGt=*' => Http::sequence()
+        'https://ethereum-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*blockTimestampGt=*' => Http::sequence()
             ->push(null, 400)
             ->push(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $from = Carbon::now();
 
@@ -83,76 +83,76 @@ it('should not retry request on 400', function () {
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
     ]);
 
-    expect(fn () => Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100, $from))->toThrow('400 Bad Request');
+    expect(fn () => Mnemonic::getCollectionActivity(Chain::ETH, $collection->address, 100, $from))->toThrow('400 Bad Request');
 });
 
 it('should get owners', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/totals' => Http::response(['ownersCount' => '789']),
+        'https://ethereum-rest.api.mnemonichq.com/collections/v1beta2/*/totals' => Http::response(['ownersCount' => '789']),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getCollectionOwners(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionOwners(Chain::ETH, $collection->address);
 
     expect($data)->toBe(789);
 });
 
 it('should get banner URL for the collection', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
+        'https://ethereum-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
             'nftContracts' => [[
                 'bannerImageUrl' => 'https://example.com',
             ]],
         ]),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    $banner = Mnemonic::getCollectionBanner(Chain::Polygon, $collection->address);
+    $banner = Mnemonic::getCollectionBanner(Chain::ETH, $collection->address);
 
     expect($banner)->toBe('https://example.com');
 });
 
 it('should normalize the banner URL for the collection', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
+        'https://ethereum-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
             'nftContracts' => [[
                 'bannerImageUrl' => 'https://i.seadn.io/gae/test?w=150&auto=format',
             ]],
         ]),
     ]);
 
-    $banner = Mnemonic::getCollectionBanner(Chain::Polygon, '0x123');
+    $banner = Mnemonic::getCollectionBanner(Chain::ETH, '0x123');
 
     expect($banner)->toBe('https://i.seadn.io/gae/test?w=1378&auto=format');
 });
 
 it('can handle empty banner URLs', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
+        'https://ethereum-rest.api.mnemonichq.com/foundational/v1beta2/nft_contracts?contractAddresses=*' => Http::response([
             'nftContracts' => [[
                 'bannerImageUrl' => '',
             ]],
         ]),
     ]);
 
-    $banner = Mnemonic::getCollectionBanner(Chain::Polygon, '0x123');
+    $banner = Mnemonic::getCollectionBanner(Chain::ETH, '0x123');
 
     expect($banner)->toBeNull();
 });
 
 it('should get volume', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
+        'https://ethereum-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
             ->push([
                 'dataPoints' => [
                     ['volume' => '12.3', 'timestamp' => '2024-01-05T00:00:00Z'],
@@ -160,13 +160,13 @@ it('should get volume', function () {
             ], 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getLatestCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getLatestCollectionVolume(Chain::ETH, $collection->address);
 
     expect($data->value)->toBe('12300000000000000000');
     expect($data->date->toDateString())->toBe('2024-01-05');
@@ -174,7 +174,7 @@ it('should get volume', function () {
 
 it('should get total periodic volume', function () {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
+        'https://ethereum-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_30_DAYS/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
             ->push([
                 'dataPoints' => [
                     ['volume' => '12.3', 'timestamp' => '2024-01-05T00:00:00Z'],
@@ -182,13 +182,13 @@ it('should get total periodic volume', function () {
             ], 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getCollectionVolumeHistory(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getCollectionVolumeHistory(Chain::ETH, $collection->address);
 
     expect($data->first()->value)->toBe('12300000000000000000');
     expect($data->first()->date->toDateString())->toBe('2024-01-05');
@@ -196,17 +196,17 @@ it('should get total periodic volume', function () {
 
 it('should handle no volume', function ($request) {
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
+        'https://ethereum-rest.api.mnemonichq.com/collections/v1beta2/*/sales_volume/DURATION_1_DAY/GROUP_BY_PERIOD_1_DAY' => Http::sequence()
             ->push($request, 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
     ]);
 
-    $data = Mnemonic::getLatestCollectionVolume(Chain::Polygon, $collection->address);
+    $data = Mnemonic::getLatestCollectionVolume(Chain::ETH, $collection->address);
 
     expect($data->value)->toBe('0');
 })->with([
@@ -229,10 +229,10 @@ it('should handle no volume', function ($request) {
 
 it('should fetch the collection activity', function () {
     Mnemonic::fake([
-        'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
+        'https://ethereum-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -240,7 +240,7 @@ it('should fetch the collection activity', function () {
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::ETH, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 
@@ -254,7 +254,7 @@ it('should fetch the collection activity', function () {
     expect($data->logIndex)->toBe('164');
     expect($data->type)->toBe(NftTransferType::Mint);
     expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
-    expect($data->totalNative)->toBe(null);
+    expect($data->totalNative)->toBe(2.5);
     expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
@@ -263,7 +263,7 @@ it('should fetch burn activity', function () {
         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.burn_transfers'), 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -271,7 +271,7 @@ it('should fetch burn activity', function () {
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getBurnActivity(Chain::Polygon, $collection->address, 100, now());
+    $data = Mnemonic::getBurnActivity(Chain::ETH, $collection->address, 100, now());
 
     expect($data)->toHaveCount(8);
 
@@ -285,7 +285,7 @@ it('should fetch burn activity', function () {
     expect($data->logIndex)->toBe('164');
     expect($data->type)->toBe(NftTransferType::Burn);
     expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
-    expect($data->totalNative)->toBe(null);
+    expect($data->totalNative)->toBe(2.5);
     expect($data->totalUsd)->toBe(7547.995011517354);
 
     Mnemonic::assertSent(function ($request) {
@@ -298,7 +298,7 @@ it('should convert total to native currency by using historical price for the gi
         'https://*-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -318,7 +318,7 @@ it('should convert total to native currency by using historical price for the gi
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::ETH, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 
@@ -332,7 +332,7 @@ it('should convert total to native currency by using historical price for the gi
     expect($data->logIndex)->toBe('164');
     expect($data->type)->toBe(NftTransferType::Mint);
     expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
-    expect($data->totalNative)->toBe(5.031996674344903);
+    expect($data->totalNative)->toBe(2.5);
     expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
@@ -342,7 +342,7 @@ it('should convert total to native currency by using historical price for the pe
             200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -370,7 +370,7 @@ it('should convert total to native currency by using historical price for the pe
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::ETH, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 
@@ -384,7 +384,7 @@ it('should convert total to native currency by using historical price for the pe
     expect($data->logIndex)->toBe('164');
     expect($data->type)->toBe(NftTransferType::Mint);
     expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
-    expect($data->totalNative)->toBe(5.031996674344903);
+    expect($data->totalNative)->toBe(2.5);
     expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
@@ -405,7 +405,7 @@ it('should ignore activity with unexpected label', function () {
     ]);
 
     // Note: limit is ignored because the fixture is fixed size
-    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100);
+    $data = Mnemonic::getCollectionActivity(Chain::ETH, $collection->address, 100);
 
     expect($data)->toHaveCount(18);
 });
@@ -414,17 +414,17 @@ it('should fetch activity from date', function () {
     $from = Carbon::now();
 
     Mnemonic::fake([
-        'https://polygon-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*blockTimestampGt=*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
+        'https://ethereum-rest.api.mnemonichq.com/foundational/v1beta2/transfers/nft?*blockTimestampGt=*' => Http::response(fixtureData('mnemonic.nft_transfers'), 200),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
         'address' => '0x23581767a106ae21c074b2276d25e5c3e136a68b',
     ]);
 
-    $data = Mnemonic::getCollectionActivity(Chain::Polygon, $collection->address, 100, $from);
+    $data = Mnemonic::getCollectionActivity(Chain::ETH, $collection->address, 100, $from);
 
     expect($data)->toHaveCount(18);
 
@@ -438,7 +438,7 @@ it('should fetch activity from date', function () {
     expect($data->logIndex)->toBe('164');
     expect($data->type)->toBe(NftTransferType::Mint);
     expect($data->timestamp->toIso8601String())->toBe('2022-04-16T16:39:27+00:00');
-    expect($data->totalNative)->toBe(null);
+    expect($data->totalNative)->toBe(2.5);
     expect($data->totalUsd)->toBe(7547.995011517354);
 });
 
@@ -448,7 +448,7 @@ it('should return null floor price on 400', function () {
             ->push(null, 400),
     ]);
 
-    $network = Network::polygon();
+    $network = Network::firstWhere('chain_id', Chain::ETH);
 
     $collection = Collection::factory()->create([
         'network_id' => $network->id,
@@ -456,3 +456,11 @@ it('should return null floor price on 400', function () {
 
     expect(Mnemonic::getCollectionFloorPrice(Chain::ETH, $collection->address))->toBeNull();
 });
+
+it('prevents from making requests to polygon endpoints', function () {
+    $network = Network::polygon();
+
+    $collection = Collection::factory()->for($network)->create();
+
+    expect(Mnemonic::getCollectionFloorPrice(Chain::Polygon, $collection->address))->toBeNull();
+})->throws(InvalidArgumentException::class);
