@@ -30,19 +30,23 @@ trait InteractsWithCollections
             return;
         }
 
+        $limit = $limit ?? $this->option('limit');
+        $offset = $this->option('offset');
+
         Collection::query()
-            ->when($queryCallback !== null, $queryCallback)
-            ->select('collections.*')
-            ->withoutSpamContracts()
-            ->when($limit !== null, fn ($query) => $query
-                ->limit($limit)
-                ->get()
-                ->each($callback)
-            )
-            ->when($limit == null, fn ($query) => $query->chunkById(
-                100,
-                fn ($collections, $index) => $collections->each($callback, $index),
-                'collections.id', 'id')
-            );
+                    ->when($queryCallback !== null, $queryCallback)
+                    ->select('collections.*')
+                    ->withoutSpamContracts()
+                    ->orderBy('id', 'asc')
+                    ->when($offset !== null, fn ($q) => $q->skip((int) $offset))
+                    ->when($limit !== null, function ($query) use ($limit, $callback) {
+                        return $query->limit($limit)->get()->each($callback);
+                    })
+                    ->when($limit == null, function ($query) use ($callback) {
+                        return $query->chunk(
+                            count: 100,
+                            callback: fn ($chunk, $index) => $chunk->each($callback, $index)
+                        );
+                    });
     }
 }

@@ -16,7 +16,7 @@ class FetchCollectionOpenseaSlug extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-opensea-slug {--collection-id=}';
+    protected $signature = 'collections:fetch-opensea-slug {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.
