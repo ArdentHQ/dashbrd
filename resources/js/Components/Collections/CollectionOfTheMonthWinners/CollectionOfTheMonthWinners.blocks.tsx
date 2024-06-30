@@ -301,9 +301,9 @@ export const WinnersChart = ({
 
                     <CollectionOfTheMonthWinnersVotesLabel
                         className={cn("relative text-center text-white", {
-                            "sm:left-[-4px] ": large && index === 0,
-                            "left-[1px] ": large && index === 1,
-                            "right-[2px] sm:right-[8px] ": large && index === 2,
+                            "sm:left-[-4px]": large && index === 0,
+                            "left-[1px]": large && index === 1,
+                            "right-[2px] sm:right-[8px]": large && index === 2,
                         })}
                         votes={winner.votes}
                         large={large}
@@ -327,7 +327,7 @@ export const WinnersChartMobile = ({
     return (
         <div className="lg:px-8 lg:pb-8 xl:hidden">
             <div className="mt-6 border-t border-theme-secondary-300 pt-6 dark:border-theme-dark-700">
-                <div className="collection-of-the-month-mobile flex flex-col items-center rounded-xl px-4 py-3 sm:flex-row sm:justify-between  ">
+                <div className="collection-of-the-month-mobile flex flex-col items-center rounded-xl px-4 py-3 sm:flex-row sm:justify-between">
                     <div className="flex flex-col items-center space-y-3.5 sm:flex-row sm:space-x-3.5 sm:space-y-0">
                         <div className="flex">
                             <div className="relative">

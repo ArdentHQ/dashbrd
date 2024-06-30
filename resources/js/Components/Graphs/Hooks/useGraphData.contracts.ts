@@ -6,7 +6,7 @@ export const offsetPercentages = (data: Array<GraphDataPoint | null>): GraphData
         0,
     );
 
-    let filteredData = data.filter((dataPoint) => dataPoint != null) as GraphDataPoint[];
+    let filteredData = data.filter((dataPoint) => dataPoint != null);
 
     if (percentageTotal !== 100) {
         filteredData = filteredData.map((dataPoint) => {

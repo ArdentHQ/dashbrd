@@ -30,7 +30,7 @@ export const HighlightedArticles = ({
     const hasEnoughArticles = articles.length === highlightedArticlesCount;
 
     return (
-        <div className={cn("w-full pt-2 ", { "mb-6": !withFullBorder, "lg:mb-6": withFullBorder })}>
+        <div className={cn("w-full pt-2", { "mb-6": !withFullBorder, "lg:mb-6": withFullBorder })}>
             <div
                 className={cn("latest-articles-carousel w-full", {
                     "pb-6": slidesPerView < highlightedArticlesCount,

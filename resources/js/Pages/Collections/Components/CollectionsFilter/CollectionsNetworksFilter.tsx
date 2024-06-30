@@ -22,7 +22,7 @@ const NetworkFilterCheckbox = ({
     isSelected: boolean;
 }): JSX.Element => (
     <label
-        className={cn("group flex  items-center justify-between text-sm", {
+        className={cn("group flex items-center justify-between text-sm", {
             "cursor-not-allowed": count === 0,
             "cursor-pointer": count > 0,
         })}

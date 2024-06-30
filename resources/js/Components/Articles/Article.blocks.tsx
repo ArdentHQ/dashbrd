@@ -113,7 +113,7 @@ export const MoreCollectionsLabel = ({
             <span
                 data-testid="MoreCollectionsLabel"
                 className={cn(
-                    "z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full  px-2 text-xs font-medium ring-2 ",
+                    "z-10 -ml-1 flex h-6 select-none items-center justify-center rounded-full px-2 text-xs font-medium ring-2",
                     {
                         "bg-theme-hint-100 text-theme-hint-900 ring-white dark:bg-theme-secondary-800 dark:text-theme-secondary-200 dark:ring-theme-dark-800":
                             !isLargeVariant,

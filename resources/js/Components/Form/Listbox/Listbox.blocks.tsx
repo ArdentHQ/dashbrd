@@ -129,7 +129,7 @@ export const ListboxButtonIcon = ({
         className={cn(
             "h-3 w-3 transform transition duration-100",
             {
-                "-rotate-180 ": isOpen,
+                "-rotate-180": isOpen,
             },
             isTruthy(isDisabled)
                 ? "text-theme-secondary-500 dark:text-theme-dark-400"
@@ -190,7 +190,7 @@ export const ListboxGradientButton = ({ children }: HTMLAttributes<HTMLDivElemen
                         data-testid="ListboxButtonIcon"
                         name="ChevronDownSmall"
                         className={cn("h-3 w-4 transform text-white transition duration-100 dark:text-theme-dark-900", {
-                            "-rotate-180 ": open,
+                            "-rotate-180": open,
                         })}
                         aria-hidden="true"
                     />
@@ -240,7 +240,7 @@ export const ListboxButton = ({
                         )}
                     </span>
 
-                    <span className="pointer-events-none flex items-center ">
+                    <span className="pointer-events-none flex items-center">
                         <ListboxButtonIcon
                             isNavigation={isNavigation}
                             isOpen={open}

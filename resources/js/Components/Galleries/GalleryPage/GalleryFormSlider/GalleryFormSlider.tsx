@@ -50,7 +50,7 @@ export const GalleryFormSlider = ({
                         </Tab.List>
                         <div className="hidden lg:block">
                             {activeTab === GalleryFormSliderTabs.Template && (
-                                <span className="text-lg font-medium ">
+                                <span className="text-lg font-medium">
                                     {t("pages.galleries.create.templates.select")}
                                 </span>
                             )}
