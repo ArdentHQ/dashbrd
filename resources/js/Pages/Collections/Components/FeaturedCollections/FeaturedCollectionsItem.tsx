@@ -33,7 +33,7 @@ const FeaturedCollectionInfo = ({ data }: { data: App.Data.Collections.Collectio
                             networkClassName="bottom-0 right-0 block ring-theme-secondary-50 dark:ring-theme-dark-800 "
                         />
 
-                        <div className="flex flex-col ">
+                        <div className="flex flex-col">
                             <span className="text-sm font-medium capitalize leading-6 text-theme-secondary-700 dark:text-theme-dark-200">
                                 {t("pages.collections.featured.title")}
                             </span>

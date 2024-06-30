@@ -21,7 +21,7 @@ export const TransactionReceiveForm = ({ wallet }: { wallet: App.Data.Wallet.Wal
                     />
                 </div>
 
-                <div className="flex items-end justify-between border-t border-theme-secondary-400 p-4  dark:border-theme-dark-700">
+                <div className="flex items-end justify-between border-t border-theme-secondary-400 p-4 dark:border-theme-dark-700">
                     <div>
                         <p className="text-sm font-medium text-theme-secondary-500 dark:text-theme-dark-300">
                             {t("common.your_address")}

@@ -257,7 +257,7 @@ const DropdownNavigationLink = ({
         as={as}
         className={cn(
             "transition-default group flex w-full items-center px-5 py-2.5 font-medium text-theme-secondary-700 dark:text-theme-dark-200 dark:hover:text-theme-dark-50 md-lg:px-6",
-            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300 dark:hover:bg-theme-dark-800 dark:focus-visible:outline-theme-primary-700 ",
+            "outline-none outline-3 outline-offset-[-3px] hover:bg-theme-secondary-200 hover:text-theme-secondary-900 focus-visible:outline-theme-primary-300 dark:hover:bg-theme-dark-800 dark:focus-visible:outline-theme-primary-700",
         )}
         {...properties}
     >

@@ -41,7 +41,7 @@ export const CollectionNft = ({
                 />
 
                 <span className="absolute inset-x-0 top-0 m-4 flex">
-                    <span className="flex h-7.5 min-w-0 items-center rounded-3xl bg-theme-primary-50/50 p-1  dark:bg-theme-dark-950/70 dark:text-theme-dark-50">
+                    <span className="flex h-7.5 min-w-0 items-center rounded-3xl bg-theme-primary-50/50 p-1 dark:bg-theme-dark-950/70 dark:text-theme-dark-50">
                         <Tooltip
                             content={<span>#&nbsp;{nft.tokenNumber}</span>}
                             disabled={!isTokenNumberTruncated}

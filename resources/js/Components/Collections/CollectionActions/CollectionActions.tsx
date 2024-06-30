@@ -13,7 +13,7 @@ interface ActionProperties extends Omit<React.HTMLProps<HTMLButtonElement>, "typ
 const Action = ({ ...properties }: ActionProperties): JSX.Element => (
     <button
         type="button"
-        className="transition-default block w-full whitespace-nowrap rounded-sm px-6 py-2.5 text-left text-base font-medium text-theme-secondary-700 outline-none outline-3 outline-offset-[-3px]  focus-visible:outline-theme-primary-300 enabled:cursor-pointer enabled:hover:bg-theme-secondary-100 enabled:hover:text-theme-secondary-900 disabled:text-theme-secondary-500 dark:text-theme-dark-200 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-50 dark:disabled:text-theme-dark-400 dark:disabled:hover:bg-theme-dark-900"
+        className="transition-default block w-full whitespace-nowrap rounded-sm px-6 py-2.5 text-left text-base font-medium text-theme-secondary-700 outline-none outline-3 outline-offset-[-3px] focus-visible:outline-theme-primary-300 enabled:cursor-pointer enabled:hover:bg-theme-secondary-100 enabled:hover:text-theme-secondary-900 disabled:text-theme-secondary-500 dark:text-theme-dark-200 dark:hover:bg-theme-dark-700 dark:hover:text-theme-dark-50 dark:disabled:text-theme-dark-400 dark:disabled:hover:bg-theme-dark-900"
         {...properties}
     />
 );

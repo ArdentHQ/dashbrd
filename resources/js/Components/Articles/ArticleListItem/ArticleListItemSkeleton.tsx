@@ -3,7 +3,7 @@ import { Skeleton } from "@/Components/Skeleton";
 export const ArticleListItemSkeleton = (): JSX.Element => (
     <div
         data-testid="ArticleListItemSkeleton"
-        className="flex space-x-3 border-b-4  border-theme-secondary-100 bg-white p-6 dark:border-theme-dark-700 dark:bg-theme-dark-900 lg:rounded-lg lg:border lg:border-theme-secondary-300"
+        className="flex space-x-3 border-b-4 border-theme-secondary-100 bg-white p-6 dark:border-theme-dark-700 dark:bg-theme-dark-900 lg:rounded-lg lg:border lg:border-theme-secondary-300"
     >
         <div className="aspect-video h-11 flex-shrink-0 overflow-hidden rounded bg-theme-secondary-300 dark:bg-theme-dark-900 sm:h-16">
             <div className="h-full [&>span]:h-full">
