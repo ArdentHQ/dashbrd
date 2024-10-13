@@ -57,7 +57,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProperties>(
                             />
                         </div>
 
-                        <p>{isExpanded ? toastTitle ?? title : message}</p>
+                        <p>{isExpanded ? (toastTitle ?? title) : message}</p>
                     </div>
 
                     {((isStatic && onClose !== undefined) || (!isStatic && onClose != null && !isLoading)) && (

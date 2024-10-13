@@ -32,7 +32,7 @@ const NominationDialogFooter = ({
 
     return (
         <div className="w-full border-t border-theme-secondary-300 px-6 py-4 dark:border-theme-dark-700 sm:flex sm:flex-row sm:justify-end">
-            <div className="flex flex-row items-center justify-center gap-3 ">
+            <div className="flex flex-row items-center justify-center gap-3">
                 <Button
                     variant="secondary"
                     onClick={(): void => {

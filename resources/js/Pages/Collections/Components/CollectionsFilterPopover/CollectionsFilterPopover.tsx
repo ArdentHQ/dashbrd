@@ -43,7 +43,7 @@ export const CollectionsFilterPopover = ({
                     <Popover.Transition show={open}>
                         <div className="absolute inset-x-0 z-20 mt-4 w-full origin-top-right px-6 sm:left-auto sm:right-0 sm:mt-2 sm:w-[288px] sm:px-0">
                             <Popover.Panel
-                                className="flex flex-col gap-2 "
+                                className="flex flex-col gap-2"
                                 baseClassName="bg-transparent"
                             >
                                 <div className="w-full overflow-hidden rounded-xl bg-white shadow-xl dark:border dark:border-theme-dark-700 dark:bg-theme-dark-900">

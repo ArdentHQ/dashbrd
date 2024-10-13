@@ -18,7 +18,7 @@ const WinnerCollectionLabel = ({ label, children }: { label: string; children: R
 
     return (
         <p className="flex w-full justify-between space-x-1 whitespace-nowrap text-sm font-medium sm:w-auto">
-            <span className="text-theme-secondary-700 dark:text-theme-dark-200 ">{label}</span>
+            <span className="text-theme-secondary-700 dark:text-theme-dark-200">{label}</span>
 
             {isTruthy(children) && <span className="text-theme-secondary-900 dark:text-theme-dark-50">{children}</span>}
 
@@ -140,7 +140,7 @@ const YearSelectionDropdown = ({
             {({ open }) => (
                 <button
                     type="button"
-                    className="transition-default flex items-center space-x-3 "
+                    className="transition-default flex items-center space-x-3"
                 >
                     <span className="font-medium hover:text-theme-hint-700 dark:text-theme-hint-400">
                         {selectedYear}

@@ -87,7 +87,7 @@ export const BalanceHeaderMobileSkeleton = ({ animated }: { animated: boolean })
                     <LinkButton
                         data-testid="BalanceHeaderMobile__more-details"
                         className={cn(
-                            "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none ",
+                            "transition-default rounded-sm border-b border-transparent text-sm font-medium leading-none text-theme-primary-600 outline-none",
                             "hover:border-theme-primary-700 hover:text-theme-primary-700",
                             "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-theme-primary-300 focus-visible:ring-offset-2",
                             "dark:text-theme-primary-400 dark:hover:text-theme-primary-500 dark:hover:decoration-theme-primary-500",

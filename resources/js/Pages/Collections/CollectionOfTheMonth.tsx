@@ -32,7 +32,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
             <Head title={title} />
 
             <div className="lg:mx-8 2xl:mx-0">
-                <div className="-mb-4 -mt-6 flex items-center bg-theme-hint-50 px-8 py-4 dark:bg-theme-dark-800 sm:-mt-8 lg:mb-0  lg:mt-0 lg:bg-transparent lg:px-0 lg:py-0 dark:lg:bg-transparent ">
+                <div className="-mb-4 -mt-6 flex items-center bg-theme-hint-50 px-8 py-4 dark:bg-theme-dark-800 sm:-mt-8 lg:mb-0 lg:mt-0 lg:bg-transparent lg:px-0 lg:py-0 dark:lg:bg-transparent">
                     <IconButton
                         icon="ChevronLeftSmall"
                         onClick={() => {
@@ -61,7 +61,7 @@ const CollectionOfTheMonth = ({ title, winners }: CollectionOfTheMonthProperties
                     </span>
                 </div>
 
-                <div className="mt-4 flex flex-col overflow-hidden border-theme-secondary-300 dark:border-theme-dark-700 sm:border-b sm:border-t lg:rounded-xl lg:border ">
+                <div className="mt-4 flex flex-col overflow-hidden border-theme-secondary-300 dark:border-theme-dark-700 sm:border-b sm:border-t lg:rounded-xl lg:border">
                     <div className="collection-of-the-month-overview flex flex-col items-center justify-center pt-8">
                         <Heading level={1}>
                             {t("pages.collections.collection_of_the_month.winners_month_year", {

@@ -49,7 +49,7 @@ export const TokenLogo = ({
                                     isSelected,
                             },
                             {
-                                "border-white group-hover:border-theme-primary-50 ": !isSelected,
+                                "border-white group-hover:border-theme-primary-50": !isSelected,
                             },
                             { "-m-1.5 border-3": networkIconSize === "sm" },
                             { "-m-3 border-4": networkIconSize === "md" },

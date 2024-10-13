@@ -281,7 +281,7 @@ export const VoteCollection = ({
                                 <Img
                                     wrapperClassName="aspect-square"
                                     className={cn(
-                                        "h-full w-full rounded-full bg-white object-cover ring-4  dark:bg-theme-dark-700 dark:ring-theme-dark-900",
+                                        "h-full w-full rounded-full bg-white object-cover ring-4 dark:bg-theme-dark-700 dark:ring-theme-dark-900",
                                         {
                                             "ring-white dark:ring-theme-dark-900": variant !== "voted",
                                             "ring-theme-primary-50 dark:ring-theme-dark-800": variant === "voted",
@@ -293,7 +293,7 @@ export const VoteCollection = ({
                             </span>
                         </span>
 
-                        <span className="break-word-legacy min-w-0 space-y-0.5 ">
+                        <span className="break-word-legacy min-w-0 space-y-0.5">
                             <span
                                 data-testid="CollectionName__name"
                                 className="block truncate text-base font-medium text-theme-secondary-900 dark:text-theme-dark-50 md-lg:text-base"

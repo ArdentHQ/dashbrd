@@ -134,7 +134,7 @@ export const TraitsCarousel = ({
                                 <span className="text-xs leading-4.5 text-theme-secondary-500 dark:text-theme-dark-300 md:text-sm md:leading-5.5">
                                     {trait.name}
                                 </span>
-                                <div className="flex items-center justify-between text-sm leading-5.5 dark:text-theme-dark-50 md:text-base  md:leading-6">
+                                <div className="flex items-center justify-between text-sm leading-5.5 dark:text-theme-dark-50 md:text-base md:leading-6">
                                     <Tooltip
                                         content={trait.value}
                                         disabled={!isValueTruncated}

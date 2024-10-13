@@ -33,7 +33,7 @@ export const Action = ({ asset, onClick }: Omit<Properties, "currency">): JSX.El
                 }}
                 variant="secondary"
             >
-                <div className="transition-default -mx-5 -my-2 px-5 py-2 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-700 ">
+                <div className="transition-default -mx-5 -my-2 px-5 py-2 hover:bg-theme-secondary-300 dark:hover:bg-theme-dark-700">
                     {t("common.details")}
                 </div>
             </Button>

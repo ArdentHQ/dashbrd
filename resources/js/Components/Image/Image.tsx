@@ -74,7 +74,7 @@ export const Img = ({
                         src={src ?? undefined}
                         srcSet={srcSet}
                         alt={alt}
-                        className={twMerge(className, "h-full w-full object-cover ")}
+                        className={twMerge(className, "h-full w-full object-cover")}
                         {...properties}
                     />
                 )}

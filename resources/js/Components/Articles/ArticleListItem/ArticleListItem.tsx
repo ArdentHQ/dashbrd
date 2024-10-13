@@ -14,7 +14,7 @@ export const ArticleListItem = ({ article }: { article: App.Data.Articles.Articl
         <Link
             data-testid="ArticleListItem"
             href={route("articles.view", article.slug)}
-            className="transition-default group flex space-x-3  bg-white p-6 ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500 lg:rounded-lg lg:border lg:border-theme-secondary-300 "
+            className="transition-default group flex space-x-3 bg-white p-6 ring-theme-primary-100 hover:ring dark:border-theme-dark-700 dark:bg-theme-dark-900 dark:hover:ring-theme-dark-500 lg:rounded-lg lg:border lg:border-theme-secondary-300"
         >
             <div className="aspect-video h-11 flex-shrink-0 overflow-hidden rounded bg-theme-secondary-300 dark:bg-theme-dark-900 sm:h-16">
                 <Img
