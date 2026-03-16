@@ -30,9 +30,12 @@ use App\Console\Commands\UpdateGalleriesScore;
 use App\Console\Commands\UpdateGalleriesValue;
 use App\Console\Commands\UpdateTwitterFollowers;
 use App\Enums\Features;
+use App\Enums\ScheduleFrequency;
 use App\Jobs\AggregateCollectionWinners;
+use App\Models\Collection;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Pennant\Feature;
 
 class Kernel extends ConsoleKernel
@@ -115,15 +118,26 @@ class Kernel extends ConsoleKernel
 
     private function scheduleJobsForCollectionsOrGalleries(Schedule $schedule): void
     {
-        $schedule
-            ->command(FetchCollectionTotalVolume::class)
-            ->withoutOverlapping()
-            ->daily();
+        $ttl = now()->addMinutes(30);
 
-        $schedule
-            ->command(FetchCollectionVolume::class)
-            ->withoutOverlapping()
-            ->daily();
+        $totalCollections = (int) Cache::remember('scheduler:total-collections', $ttl, function () {
+            return Collection::withoutSpamContracts()->count();
+        });
+
+        $schedule->spreadCommand(
+            command: FetchCollectionTotalVolume::class,
+            total: $totalCollections,
+            every: 10, // minutes
+            spread: ScheduleFrequency::Daily,
+        );
+
+        $schedule->spreadCommand(
+            command: FetchCollectionVolume::class,
+            total: $totalCollections,
+            every: 10, // minutes
+            offset: 5,
+            spread: ScheduleFrequency::Daily,
+        );
 
         $schedule
             ->command(FetchCollectionActivity::class)

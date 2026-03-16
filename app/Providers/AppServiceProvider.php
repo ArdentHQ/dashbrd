@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Contracts\MarketDataProvider;
 use App\Contracts\TextToSpeechProvider;
 use App\Contracts\Web3DataProvider;
+use App\Enums\ScheduleFrequency;
 use App\Jobs\RefreshNftMetadata;
 use App\Services\MarketData\Providers\CoingeckoProvider;
 use App\Services\TextToSpeech\Polly;
@@ -15,6 +16,7 @@ use Aws\Polly\PollyClient;
 use Aws\S3\S3Client;
 use Exception;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -55,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->registerScheduledMacro();
+
         Str::macro('isEncodedImage', function (string $value) {
             return Str::startsWith($value, 'data:image');
         });
@@ -120,5 +124,56 @@ class AppServiceProvider extends ServiceProvider
             Limit::perMinute(maxAttempts: 50),
             Limit::perMinutes(decayMinutes: 10, maxAttempts: 5),
         ]);
+    }
+
+    private function registerScheduledMacro(): void
+    {
+        Schedule::macro('spreadCommand', function (string $command, int $total, int $every, ScheduleFrequency $spread, int $offset = 0) {
+            /** @var Schedule $this */
+            if ($spread === ScheduleFrequency::Hourly) {
+                $chunks = 60 / $every;
+
+                $limit = ceil(($total + 1) / $chunks);
+
+                foreach (range(0, $chunks - 1) as $chunk) {
+                    $at = (int) (round($chunk * $every) + $offset);
+
+                    if ($at >= 60) {
+                        $at = $at - 60;
+                    }
+
+                    $this->command($command, [
+                        '--limit' => (int) $limit,
+                        '--offset' => (int) ($chunk * $limit),
+                    ])->withoutOverlapping()->hourlyAt($at);
+                }
+
+                return;
+            }
+
+            if ($spread === ScheduleFrequency::Daily) {
+                $chunks = (60 * 24) / $every;
+
+                $limit = ceil(($total + 1) / $chunks);
+
+                foreach (range(0, $chunks - 1) as $chunk) {
+                    $at = (int) (round($chunk * $every) + $offset);
+
+                    $hour = floor($at / 60);
+                    $minute = $at % 60;
+
+                    if ($hour >= 24) {
+                        $hour = $hour - 24;
+                    }
+
+                    $this->command($command, [
+                        '--limit' => (int) $limit,
+                        '--offset' => (int) ($chunk * $limit),
+                    ])->withoutOverlapping()->dailyAt($hour.':'.$minute);
+                }
+
+                return;
+            }
+        });
     }
 }

@@ -16,7 +16,7 @@ class FetchCollectionOwners extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:fetch-owners {--collection-id=}';
+    protected $signature = 'collections:fetch-owners {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.

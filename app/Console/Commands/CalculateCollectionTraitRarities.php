@@ -18,7 +18,7 @@ class CalculateCollectionTraitRarities extends Command
      *
      * @var string
      */
-    protected $signature = 'collections:calculate-trait-rarities {--start=} {--limit=} {--collection-id=}';
+    protected $signature = 'collections:calculate-trait-rarities {--start=} {--limit=} {--offset=} {--collection-id=}';
 
     /**
      * The console command description.
